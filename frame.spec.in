@@ -1,0 +1,58 @@
+Name:		frame
+Summary:	Structural analysis of 2D/3D frames
+Version:	@VERSION@
+
+# Use release 0.* so that other users can do patch releases with a higher number
+# and still have the update occur automatically.
+Release:	0%{?dist}
+
+License:	GPL
+Group:		Applications/Engineering
+Source:		%{name}-%{version}.tar.bz2
+URL:		http://www.duke.edu/~hpgavin/frame/index.html
+
+Prefix:		%{_prefix}
+Packager:	John Pye
+Vendor:		Henri Gavin
+BuildRoot:	%{_tmppath}/%{name}-%{version}-root
+
+BuildRequires: gcc-c++
+BuildRequires: scons >= 0.96.92
+
+%description
+Free software for static and dynamic structural analysis of 2D and 3D frames 
+and trusses with elastic and geometric stiffness. Computes the static
+deflections, reactions, internal element forces, natural frequencies, mode
+shapes and modal participation factors of two- and three- dimensional elastic
+structures using direct stiffness and mass assembly.  Graphical output and
+mode shape animation via Gnuplot version 4.0.
+
+Requires: gnuplot
+
+%prep
+%setup -q
+
+%build
+rm -rf %{buildroot}
+scons %{?_smp_mflags} CXX="%{?ccache} g++" \
+	INSTALL_ROOT=%{buildroot} \
+	INSTALL_PREFIX=%{_prefix}
+
+%install
+scons %{?_smp_mflags} install \
+	INSTALL_ROOT=%{buildroot} \
+	INSTALL_PREFIX=%{_prefix}
+
+%clean
+rm -rf %{buildroot} 
+
+%files
+%defattr(-, root, root)
+%doc doc/*
+%{_bindir}
+%{_datadir}
+
+%changelog
+* Wed Jun 28 2007 John Pye <john@curioussymbols.com> 20070301
+- Initial version
+

@@ -1,0 +1,13 @@
+Import('env')
+
+srcs = ['frame.c','lu_dcmp.c','ldl_dcmp.c','nrutil.c','eig.c']
+
+frame = Program('frame',srcs
+	,LIBS=['m']
+)
+
+bindir=Dir(env.subst("$INSTALL_ROOT$INSTALL_BIN"))
+env.Install(bindir,frame);
+
+env['installdirs'] += [bindir]
+
