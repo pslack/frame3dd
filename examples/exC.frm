@@ -107,6 +107,7 @@ exC.plt                         % plot file name
 
 
 10                              % number of desired dynamic modes of vibration
+1                               % 1: subspace Jacobi     2: Stodola
 0                               % 0: consistent mass ... 1: lumped mass matrix
 /tmp/exC-m                      % mode shape data file
 1e-8                            % mode shape tolerance
@@ -171,14 +172,14 @@ exC.plt                         % plot file name
 
 
 ________________________________________________________________________________
--- FRAME version:   1 Mar 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
+-- FRAME version:   6 Jun 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
                      http://www.duke.edu/~hpgavin/frame/ 
  FRAME is distributed in the hope that it will be useful but with no warranty;
  for details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 a tetrahedral fame - static and dynamic analysis  
-Thu Mar  1 17:31:12 2007
+Thu Jun  7 10:30:55 2007
 ________________________________________________________________________________
 JOINTS: 18    MEMBERS: 48   FIXED JOINTS: 4   PRESCRIBED DISPLACEMENTS: 0
 JOINT LOADS: 0   UNIFORM MEMBER LOADS: 5   CONCENTRATED MEMBER LOADS: 0   
@@ -406,9 +407,9 @@ M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  2.265723e+01     Structural Mass:  2.265723e+01 
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
-     1 1.33643e+04 1.33643e+04 1.33643e+04 1.09778e+02 9.41864e+01 7.53409e+01
+     1 1.33557e+04 1.33557e+04 1.33557e+04 1.09778e+02 9.41864e+01 7.53409e+01
      2 8.06360e-01 8.15070e-01 8.15020e-01 2.18914e+02 2.75384e+02 2.57441e+02
-     3 1.33643e+04 1.33643e+04 1.33643e+04 1.75635e+02 2.41413e+02 1.37724e+02
+     3 1.33557e+04 1.33557e+04 1.33557e+04 1.75635e+02 2.41413e+02 1.37724e+02
      4 1.33038e+00 1.34891e+00 1.35672e+00 3.41672e+02 4.18418e+02 4.58555e+02
      5 5.97079e-01 6.12224e-01 6.09446e-01 1.24800e+02 1.77598e+02 1.51298e+02
      6 1.09426e+00 1.14463e+00 1.10882e+00 2.29707e+02 3.84670e+02 2.49239e+02
@@ -421,9 +422,9 @@ J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
     13 5.61954e-01 5.68606e-01 5.64148e-01 1.10278e+02 1.23158e+02 1.04712e+02
     14 1.20562e+00 1.22648e+00 1.24223e+00 3.00862e+02 3.85804e+02 4.49569e+02
     15 1.25415e+00 1.31068e+00 1.26861e+00 2.85038e+02 4.71725e+02 3.04810e+02
-    16 1.33643e+04 1.33643e+04 1.33643e+04 2.05272e+02 2.21613e+02 2.11856e+02
+    16 1.33557e+04 1.33557e+04 1.33557e+04 2.05272e+02 2.21613e+02 2.11856e+02
     17 3.37373e-01 3.34432e-01 3.38000e-01 6.98484e+01 6.22426e+01 6.73549e+01
-    18 1.33643e+04 1.33643e+04 1.33643e+04 2.29207e+02 3.27128e+02 1.91296e+02
+    18 1.33557e+04 1.33557e+04 1.33557e+04 2.29207e+02 3.27128e+02 1.91296e+02
   Use consistent mass matrix.
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
@@ -591,7 +592,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
     18  -5.273e-09  -8.466e-10   1.130e-08   7.147e-03   4.708e-03   3.639e-03
   MODE     8:   f= 3.618690 Hz,  T= 0.276343 sec
 		X- modal participation factor =  -4.5851e-01 
-		Y- modal participation factor =   3.9273e-04 
+		Y- modal participation factor =   3.9265e-04 
 		Z- modal participation factor =   9.7140e-01 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   0.000e+00   0.000e+00   0.000e+00   5.152e-03  -3.535e-04   4.027e-04
@@ -637,7 +638,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
     18  -7.791e-09  -3.128e-09  -1.858e-09  -1.514e-03   2.043e-03   2.485e-03
   MODE    10:   f= 3.841140 Hz,  T= 0.260339 sec
 		X- modal participation factor =   1.6133e+00 
-		Y- modal participation factor =  -8.4908e-03 
+		Y- modal participation factor =  -8.4907e-03 
 		Z- modal participation factor =   1.4514e-01 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   0.000e+00   0.000e+00   0.000e+00   8.428e-04   7.020e-04  -8.785e-04

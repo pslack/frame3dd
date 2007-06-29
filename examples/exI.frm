@@ -91,6 +91,7 @@ frI.plt                         % mesh annotation file name
 0                               % number of joints with support settlements
 
 4                               % number of desired dynamic modes of vibration
+1                               % 1: subspace Jacobi     2: Stodola
 0                               % 0: consistent mass ... 1: lumped mass matrix
 /tmp/frI-m                      % mode shape data file
 1e-6                            % mode shape tolerance
@@ -130,14 +131,14 @@ frI.plt                         % mesh annotation file name
 
 
 ________________________________________________________________________________
--- FRAME version:   1 Mar 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
+-- FRAME version:   6 Jun 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
                      http://www.duke.edu/~hpgavin/frame/ 
  FRAME is distributed in the hope that it will be useful but with no warranty;
  for details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 A three dimensional frame 
-Thu Mar  1 17:33:05 2007
+Thu Jun  7 10:35:05 2007
 ________________________________________________________________________________
 JOINTS: 15    MEMBERS: 24   FIXED JOINTS: 3   PRESCRIBED DISPLACEMENTS: 0
 JOINT LOADS: 1   UNIFORM MEMBER LOADS: 12   CONCENTRATED MEMBER LOADS: 0   
@@ -296,9 +297,9 @@ M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  9.919573e-02     Structural Mass:  9.919573e-02 
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
-     1 9.44189e+01 9.44189e+01 9.44189e+01 9.44189e+01 9.44189e+01 9.44189e+01
-     2 9.44189e+01 9.44189e+01 9.44189e+01 9.44189e+01 9.44189e+01 9.44189e+01
-     3 9.44189e+01 9.44189e+01 9.44189e+01 9.44189e+01 9.44189e+01 9.44189e+01
+     1 9.35022e+01 9.35022e+01 9.35022e+01 9.35022e+01 9.35022e+01 9.35022e+01
+     2 9.35022e+01 9.35022e+01 9.35022e+01 9.35022e+01 9.35022e+01 9.35022e+01
+     3 9.35022e+01 9.35022e+01 9.35022e+01 9.35022e+01 9.35022e+01 9.35022e+01
      4 5.28132e-03 5.56045e-03 5.39348e-03 6.25794e-01 3.08696e+00 2.82725e+00
      5 5.28132e-03 5.56045e-03 5.39348e-03 6.25794e-01 3.08696e+00 2.82725e+00
      6 4.54882e-03 4.64634e-03 4.52622e-03 7.92387e-01 1.14729e+00 1.05807e+00

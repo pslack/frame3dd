@@ -44,6 +44,7 @@ exB.plt                         % plot file name
 0                               % number of joints with support settlements
 
 6				% number of desired dynamic modes of vibration
+1                               % 1: subspace Jacobi     2: Stodola
 0				% 0: consistent mass ... 1: lumped mass matrix
 /tmp/exB-m			% mode shape data file
 1e-4				% mode shape tolerance
@@ -64,14 +65,14 @@ exB.plt                         % plot file name
 
 
 ________________________________________________________________________________
--- FRAME version:   1 Mar 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
+-- FRAME version:   6 Jun 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
                      http://www.duke.edu/~hpgavin/frame/ 
  FRAME is distributed in the hope that it will be useful but with no warranty;
  for details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 pyramid-shaped frame --- static and dynamic analysis 
-Thu Mar  1 17:31:04 2007
+Thu Jun  7 10:30:34 2007
 ________________________________________________________________________________
 JOINTS: 5    MEMBERS: 4   FIXED JOINTS: 4   PRESCRIBED DISPLACEMENTS: 0
 JOINT LOADS: 1   UNIFORM MEMBER LOADS: 0   CONCENTRATED MEMBER LOADS: 0   
@@ -126,73 +127,73 @@ M O D A L   A N A L Y S I S   R E S U L T S
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
      1 1.79213e-01 1.82997e-01 1.81959e-01 9.17335e+01 1.20839e+02 1.11687e+02
-     2 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02
-     3 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02
-     4 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02
-     5 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02 6.49607e+02
+     2 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02
+     3 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02
+     4 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02
+     5 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02 3.24803e+02
   Use consistent mass matrix.
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
  convergence tolerance: 1.000e-04 
-  MODE     1:   f= 1.816581 Hz,  T= 0.550485 sec
-		X- modal participation factor =   1.2629e-07 
-		Y- modal participation factor =  -1.6865e-07 
-		Z- modal participation factor =   7.6530e-10 
+  MODE     1:   f= 1.816585 Hz,  T= 0.550484 sec
+		X- modal participation factor =   1.3449e-08 
+		Y- modal participation factor =  -1.7942e-08 
+		Z- modal participation factor =   1.6169e-10 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -2.732e-08   2.657e-08  -1.439e-10   1.200e-09   5.087e-10   9.457e-02
-     2   8.478e-07  -1.130e-06   5.716e-13   2.715e-05   2.036e-05  -4.837e-05
-     3   8.476e-07   1.130e-06  -1.951e-12  -2.715e-05   2.036e-05  -4.836e-05
-     4  -8.476e-07   1.130e-06   6.399e-13  -2.715e-05  -2.036e-05  -4.836e-05
-     5  -8.476e-07  -1.130e-06   1.935e-12   2.714e-05  -2.036e-05  -4.836e-05
-  MODE     2:   f= 1.927161 Hz,  T= 0.518898 sec
-		X- modal participation factor =   3.4103e-09 
-		Y- modal participation factor =   5.2956e-01 
-		Z- modal participation factor =  -1.4294e-07 
+     1  -5.996e-09   5.963e-09  -6.109e-11   2.468e-10   1.021e-10   9.457e-02
+     2   8.412e-07  -1.122e-06   2.470e-13   2.694e-05   2.021e-05  -4.799e-05
+     3   8.412e-07   1.122e-06  -8.797e-13  -2.694e-05   2.020e-05  -4.799e-05
+     4  -8.412e-07   1.122e-06   2.785e-13  -2.694e-05  -2.020e-05  -4.799e-05
+     5  -8.412e-07  -1.122e-06   8.659e-13   2.694e-05  -2.020e-05  -4.799e-05
+  MODE     2:   f= 1.927166 Hz,  T= 0.518897 sec
+		X- modal participation factor =  -4.8240e-11 
+		Y- modal participation factor =   5.2790e-01 
+		Z- modal participation factor =  -1.4977e-08 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1   5.112e-08   7.745e-01   4.604e-08   7.860e-02   2.680e-09   2.806e-09
-     2   3.577e-08   1.270e-06  -7.633e-07  -4.474e-05   2.295e-05   3.589e-05
-     3  -3.576e-08   1.269e-06  -7.631e-07  -4.472e-05  -2.294e-05  -3.588e-05
-     4   3.576e-08   1.269e-06   7.631e-07  -4.472e-05   2.294e-05  -3.588e-05
-     5  -3.576e-08   1.269e-06   7.631e-07  -4.472e-05  -2.294e-05   3.588e-05
-  MODE     3:   f= 2.008911 Hz,  T= 0.497782 sec
-		X- modal participation factor =  -4.4128e-01 
-		Y- modal participation factor =   4.1944e-09 
-		Z- modal participation factor =   2.6587e-07 
+     1   1.097e-08   7.745e-01   9.956e-09   7.860e-02   5.544e-10   6.081e-10
+     2   3.546e-08   1.259e-06  -7.566e-07  -4.435e-05   2.275e-05   3.558e-05
+     3  -3.545e-08   1.259e-06  -7.566e-07  -4.434e-05  -2.274e-05  -3.557e-05
+     4   3.545e-08   1.259e-06   7.566e-07  -4.434e-05   2.274e-05  -3.557e-05
+     5  -3.546e-08   1.259e-06   7.566e-07  -4.434e-05  -2.274e-05   3.557e-05
+  MODE     3:   f= 2.008918 Hz,  T= 0.497780 sec
+		X- modal participation factor =  -4.3969e-01 
+		Y- modal participation factor =   1.3859e-09 
+		Z- modal participation factor =   2.8423e-08 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -3.665e-01  -8.573e-08  -7.767e-08   5.315e-09   8.214e-02   2.336e-09
-     2  -1.214e-06  -1.816e-08   1.183e-06   2.610e-05  -6.070e-05   2.574e-05
-     3  -1.213e-06   1.816e-08  -1.183e-06  -2.609e-05  -6.067e-05   2.573e-05
-     4  -1.213e-06  -1.815e-08  -1.182e-06   2.609e-05  -6.067e-05  -2.573e-05
-     5  -1.213e-06   1.815e-08   1.183e-06  -2.609e-05  -6.067e-05  -2.573e-05
-  MODE     4:   f= 3.119372 Hz,  T= 0.320577 sec
-		X- modal participation factor =   6.0069e-07 
-		Y- modal participation factor =   4.8094e-07 
-		Z- modal participation factor =   5.9990e-01 
+     1  -3.665e-01  -1.840e-08  -1.690e-08   1.112e-09   8.214e-02   5.006e-10
+     2  -1.202e-06  -1.798e-08   1.172e-06   2.585e-05  -6.011e-05   2.550e-05
+     3  -1.202e-06   1.798e-08  -1.171e-06  -2.585e-05  -6.011e-05   2.549e-05
+     4  -1.202e-06  -1.798e-08  -1.171e-06   2.585e-05  -6.011e-05  -2.549e-05
+     5  -1.202e-06   1.798e-08   1.171e-06  -2.585e-05  -6.011e-05  -2.549e-05
+  MODE     4:   f= 3.119394 Hz,  T= 0.320575 sec
+		X- modal participation factor =   8.5668e-08 
+		Y- modal participation factor =   7.1311e-08 
+		Z- modal participation factor =   5.9565e-01 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -4.624e-07  -6.864e-07   2.343e+00   6.626e-08  -5.687e-08  -1.547e-10
-     2   3.332e-07   2.499e-07   3.212e-06   6.394e-05  -8.525e-05  -3.144e-10
-     3  -3.324e-07   2.494e-07   3.205e-06   6.379e-05   8.506e-05  -2.403e-09
-     4  -3.324e-07  -2.493e-07   3.205e-06  -6.380e-05   8.506e-05  -3.429e-10
-     5   3.325e-07  -2.493e-07   3.205e-06  -6.379e-05  -8.506e-05   2.423e-09
-  MODE     5:   f= 4.020972 Hz,  T= 0.248696 sec
-		X- modal participation factor =   3.1571e-06 
-		Y- modal participation factor =   2.7999e-01 
-		Z- modal participation factor =   2.2771e-05 
+     1  -1.043e-07  -1.580e-07   2.343e+00   1.517e-08  -1.295e-08  -6.892e-11
+     2   3.252e-07   2.439e-07   3.134e-06   6.239e-05  -8.319e-05  -1.465e-10
+     3  -3.250e-07   2.438e-07   3.133e-06   6.236e-05   8.315e-05  -1.166e-09
+     4  -3.250e-07  -2.437e-07   3.133e-06  -6.236e-05   8.315e-05  -1.601e-10
+     5   3.250e-07  -2.437e-07   3.133e-06  -6.236e-05  -8.314e-05   1.184e-09
+  MODE     5:   f= 4.021047 Hz,  T= 0.248691 sec
+		X- modal participation factor =   4.3050e-07 
+		Y- modal participation factor =   2.7858e-01 
+		Z- modal participation factor =   2.5935e-06 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -1.472e-06   2.962e+00  -3.523e-06  -1.118e-01  -2.475e-07   4.786e-08
-     2   6.454e-07   1.048e-06   5.786e-06   8.352e-05  -1.516e-04   1.738e-05
-     3  -6.413e-07   1.041e-06   5.750e-06   8.304e-05   1.507e-04  -1.725e-05
-     4   6.418e-07   1.041e-06  -5.750e-06   8.303e-05  -1.507e-04  -1.724e-05
-     5  -6.414e-07   1.041e-06  -5.751e-06   8.305e-05   1.507e-04   1.724e-05
-  MODE     6:   f= 4.706665 Hz,  T= 0.212465 sec
-		X- modal participation factor =   4.1912e-01 
-		Y- modal participation factor =   7.8173e-06 
-		Z- modal participation factor =   5.6297e-05 
+     1  -2.868e-07   2.962e+00  -7.805e-07  -1.118e-01  -5.346e-08   1.296e-08
+     2   6.190e-07   1.005e-06   5.548e-06   8.010e-05  -1.454e-04   1.665e-05
+     3  -6.180e-07   1.003e-06   5.540e-06   8.000e-05   1.452e-04  -1.661e-05
+     4   6.182e-07   1.003e-06  -5.540e-06   8.000e-05  -1.452e-04  -1.661e-05
+     5  -6.181e-07   1.003e-06  -5.540e-06   8.001e-05   1.452e-04   1.661e-05
+  MODE     6:   f= 4.706763 Hz,  T= 0.212460 sec
+		X- modal participation factor =   4.1314e-01 
+		Y- modal participation factor =   1.0282e-06 
+		Z- modal participation factor =   6.3788e-06 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1   2.847e+00  -3.120e-06  -6.201e-06   5.984e-07   7.390e-02  -2.481e-07
-     2   4.416e-06   8.767e-07   7.529e-06   1.420e-04  -9.535e-05  -7.134e-05
-     3   4.362e-06  -8.670e-07  -7.443e-06  -1.404e-04  -9.434e-05  -7.043e-05
-     4   4.362e-06   8.674e-07  -7.441e-06   1.403e-04  -9.429e-05   7.043e-05
-     5   4.362e-06  -8.662e-07   7.442e-06  -1.404e-04  -9.431e-05   7.046e-05
+     1   2.848e+00  -5.367e-07  -1.347e-06   1.264e-07   7.391e-02  -5.890e-08
+     2   4.162e-06   8.268e-07   7.098e-06   1.339e-04  -8.991e-05  -6.721e-05
+     3   4.149e-06  -8.247e-07  -7.078e-06  -1.335e-04  -8.971e-05  -6.699e-05
+     4   4.149e-06   8.249e-07  -7.078e-06   1.335e-04  -8.968e-05   6.699e-05
+     5   4.149e-06  -8.243e-07   7.078e-06  -1.335e-04  -8.969e-05   6.700e-05
 M A T R I X    I T E R A T I O N S: 2
-There are 6 modes below 4.706665 Hz. ... All 6 modes were found.
+There are 6 modes below 4.706764 Hz. ... All 6 modes were found.

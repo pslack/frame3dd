@@ -79,7 +79,7 @@ int	n, m,			/* DoF and number of required modes	*/
 		eigsort(),	/* sort e-values and e-vectors		*/
 		mat_mult1(),	/* multiply two matrices		*/
 		mat_mult2(),	/* multiply two matrices		*/
-		xAx(),		/* quadratic matrix multiplication	*/
+		xtAx(),		/* quadratic matrix multiplication	*/
 		exit(),
 		show_matrix(), save_matrix(), free_matrix(), free_vector();
 
@@ -185,8 +185,8 @@ int	n, m,			/* DoF and number of required modes	*/
 			for (i=1; i<=n; i++)	Xb[i][k] = d[i];
 		}
 
-		xAx ( K, Xb, Kb, n,m );		/* Kb = Xb' K Xb (12.11) */
-		xAx ( M, Xb, Mb, n,m );		/* Mb = Xb' M Xb (12.12) */
+		xtAx ( K, Xb, Kb, n,m );	/* Kb = Xb' K Xb (12.11) */
+		xtAx ( M, Xb, Mb, n,m );	/* Mb = Xb' M Xb (12.12) */
 
 		jacobi ( Kb, Mb, w, Qb, m );		/* (12.13) */
 
@@ -222,7 +222,7 @@ int	n, m,			/* DoF and number of required modes	*/
 
 	printf(" %4d sub-space iterations,   error: %.4e \n", *iter, error );
 	for ( k=1; k<=m; k++ ) {
-		printf(" mode: %2d\tDoF: %5d\t %9.4lf Hz\n",
+		printf("  mode: %2d\tDoF: %5d\t %9.4lf Hz\n",
 				k, idx[k], sqrt(w[k])/(2.0*PI) );
 	}
 
@@ -507,7 +507,7 @@ int	n, m, *iter, *ok;	/* DoF and number of required modes	*/
 	    if ( w[k] > shift )	w[k] = w[k] - shift;
 	    else		w[k] = shift - w[k];
 
-	    printf(" mode: %2d\tDoF: %5d\t", k, i_ex );
+	    printf("  mode: %2d\tDoF: %5d\t", k, i_ex );
 	    printf(" %9.4f Hz\t iter: %4d   error: %.4e \n",
 		sqrt(w[k])/(2.0*PI), *iter, (fabs(RQ - RQold)/RQ) );
 	}
@@ -551,11 +551,11 @@ int	n;
 
 
 /*------------------------------------------------------------------------------
-xAx  -  carry out matrix-matrix-matrix multiplication for symmetric A	7nov02
+xtAx -  carry out matrix-matrix-matrix multiplication for symmetric A	7nov02
 	C = X' A X     C is J by J	X is N by J	A is N by N	 
 ------------------------------------------------------------------------------*/
-void	xAx ( A, X, C, N, J )
-float	**X, **A, **C;
+void	xtAx ( A, X, C, N, J )
+float	**A, **X, **C;
 int	N, J;
 {
 	float	**AX, **matrix();
@@ -695,7 +695,7 @@ int	n, m;			/* DoF and number of required modes	*/
 
 	ldl_dcmp ( K, n, d, d, d, 1, 0, &ok );
 
-	fprintf(stderr,"    There are %d modes below %f Hz.",
+	fprintf(stderr,"  There are %d modes below %f Hz.",
 						-ok, sqrt(ws)/(2.0*PI) );
 	if ( -ok > modes ) {
 		fprintf(stderr," ... %d modes were not found.\n", -ok-modes );

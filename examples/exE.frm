@@ -65,6 +65,7 @@ exE.plt                         % plot file name
 
 
 4                               % number of desired dynamic modes of vibration
+1                               % 1: subspace Jacobi     2: Stodola
 0                               % 0: consistent mass ... 1: lumped mass matrix
 /tmp/exE-m                      % mode shape data file
 1e-5                            % mode shape tolerance
@@ -96,21 +97,22 @@ exE.plt                         % plot file name
  1  2  3  4                     % modes to animate
 0                               % don't pan during animation
 
+2    % Condensation Method:   0= none   1= static   2= Guyan   3= Dynamic
 1                               % number of condensed joints
   12    1  1  0   0  0  1	% joint number, 1: condense dof, 0: don't 
 
-
+  1 2 3 			% modes to match for dynamic condensation
 
 
 ________________________________________________________________________________
--- FRAME version:   1 Mar 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
+-- FRAME version:   6 Jun 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
                      http://www.duke.edu/~hpgavin/frame/ 
  FRAME is distributed in the hope that it will be useful but with no warranty;
  for details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 a three dimensional structure showing lateral-torsional dynamic modes 
-Thu Mar  1 17:31:33 2007
+Thu Jun  7 11:00:38 2007
 ________________________________________________________________________________
 JOINTS: 12    MEMBERS: 15   FIXED JOINTS: 3   PRESCRIBED DISPLACEMENTS: 0
 JOINT LOADS: 1   UNIFORM MEMBER LOADS: 0   CONCENTRATED MEMBER LOADS: 0   
@@ -242,7 +244,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      8   5.429e-01   8.853e-02   1.152e-02   3.215e-04   1.605e-04  -1.284e-03
      9   5.344e-25   1.052e-25   7.463e-29  -3.028e-24   1.544e-23  -1.634e-30
     10   5.344e-25  -1.134e-25  -7.572e-29   3.264e-24   1.544e-23  -1.634e-30
-    11   6.246e-25  -4.102e-27   1.115e-30   1.185e-25   1.806e-23  -3.585e-30
+    11   6.246e-25  -4.102e-27   1.145e-30   1.185e-25   1.806e-23  -6.208e-31
     12   5.429e-01  -3.811e-03  -3.596e-06   5.729e-08   1.597e-04  -1.283e-03
   MODE     2:   f= 0.702172 Hz,  T= 1.424152 sec
 		X- modal participation factor =   1.2929e-02 
@@ -259,7 +261,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      8   3.816e-03   5.426e-01  -1.099e-03  -1.945e-05  -3.152e-05   5.496e-06
      9   4.780e-27   6.065e-25   8.216e-29  -1.752e-23   1.377e-25   9.154e-33
     10   4.113e-27   6.070e-25   8.102e-29  -1.754e-23   1.192e-25   2.542e-33
-    11   3.995e-27   6.078e-25  -1.629e-28  -1.756e-23   1.155e-25  -5.355e-30
+    11   3.995e-27   6.078e-25  -1.629e-28  -1.756e-23   1.155e-25   3.607e-30
     12   3.816e-03   5.433e-01   4.416e-04  -6.096e-06   1.540e-06   4.442e-06
   MODE     3:   f= 3.018204 Hz,  T= 0.331323 sec
 		X- modal participation factor =   6.8439e-02 
@@ -276,7 +278,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      8   2.020e-02  -2.477e+00   1.065e-01   2.888e-03   1.480e-03   3.440e-02
      9   2.602e-23  -4.948e-23   9.806e-28   1.432e-21   7.517e-22   8.399e-28
     10   2.602e-23   4.947e-23  -9.845e-28  -1.431e-21   7.517e-22   8.399e-28
-    11  -2.695e-23  -4.367e-27  -3.122e-30   1.261e-25  -7.766e-22   8.356e-28
+    11  -2.695e-23  -4.367e-27  -2.713e-30   1.262e-25  -7.766e-22   7.756e-28
     12   2.020e-02  -2.118e-04  -8.865e-07   3.338e-08   1.477e-03   3.449e-02
   MODE     4:   f= 13.989185 Hz,  T= 0.071484 sec
 		X- modal participation factor =   1.7774e-06 
@@ -293,7 +295,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      8   5.210e-07  -5.856e-04   1.348e-01   2.547e-03  -8.165e-03   4.490e-07
      9   1.715e-22   4.620e-23   7.700e-24  -1.279e-21   4.751e-21   5.335e-31
     10  -1.715e-22   4.622e-23   7.699e-24  -1.280e-21  -4.751e-21  -4.903e-31
-    11   3.983e-27  -2.046e-22   1.545e-23   5.666e-21   1.137e-25   2.979e-31
+    11   3.983e-27  -2.046e-22   1.545e-23   5.666e-21   1.137e-25   2.921e-32
     12   5.246e-07  -4.416e-04   5.433e-01  -9.073e-03  -1.808e-07   4.417e-08
 M A T R I X    I T E R A T I O N S: 2
 There are 4 modes below 13.989185 Hz. ... All 4 modes were found.

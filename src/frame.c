@@ -30,7 +30,7 @@
  Duke University, Box 90287
  Durham, NC  27708--0287
  ---------------------------------------------------------------------------
- version:    1 March 2007
+ version:    6 June 2007
  ---------------------------------------------------------------------------
 
 
@@ -86,6 +86,7 @@ nD		         (number of joints with prescribed displacements nD<=nR)
   J[nD]	Dx[nD]	Dy[nD]	Dz[nD]	Dxx[nD]	Dyy[nD]	Dzz[nD]
 
 modes						       (number of desired modes)
+Mmethod					      ( 1: Subspace Jacobi, 2: Stodola )
 lump						 (0: consistent mass, 1: lumped)
 /tmp/mode_file					     (mode shape data file name)
 tol						  (convergence tolerance ~ 1e-4)
@@ -104,10 +105,12 @@ nA                                     (number of modes to be animated, nA < 20)
   anim[0] ... anim[nA](list of modes to be animated, sorted by increasing freq.)
 pan                                         (1: pan during animation; 0: don't )
 
+Cmethod                           ( matrix condensation method ... 0,1,2, or 3 )
 nC                                                ( number of condensed joints )
   J[1]  cx[1]  cy[1]  cz[1]   cxx[1]  cyy[1]  czz[1]
     :      :      :      :        :       :       :    ( 1: condense; 0: don't )
   J[nC] cx[nC] cy[nC] cz[nC]  cxx[nC] cyy[nC]  czz[nC]
+  m[1]   m[2]   m[3]  ...      ( list of modes matched in dynamic condensation )
 
  ------------------------------------------------------------------------------
 
@@ -119,7 +122,7 @@ to run:		frame 'file-name'
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
-#include <stdlib.h>
+
 
 #ifndef PI
 #define PI	3.141592653589793
@@ -156,9 +159,9 @@ char	*argv[];
 	float	*x, *y, *z,	/* joint coordinates (global)		*/
 		*r,		/* joint size radius, for finite sizes	*/
 		**K, **Ks,	/* global stiffness matrix		*/
-		trK = 0.0,	/* trace of the global stiffness matrix	*/
+		traceK = 0.0,	/* trace of the global stiffness matrix	*/
 		**M,		/* global mass matrix			*/
-		trM = 0.0,	/* trace of the global mass matrix	*/
+		traceM = 0.0,	/* trace of the global mass matrix	*/
 		*Fo_mech,	/* mechanical load vector		*/
 		*Fo_temp,	/* thermal load vector		*/
 		*Fo, *F,	/* a general load vector		*/
@@ -187,6 +190,7 @@ char	*argv[];
 		shift,		/* shift-factor for rigid-body-modes	*/
 		*f, **V,	/* natural frequencies and mode-shapes	*/
 		error = 1.0,	/* rms equilibrium error and reactions	*/
+		Cfreq = 0.0,	/* frequency used for Guyan condensation*/
 		**Kc, **Mc,	/* condensed stiffness and mass matrices*/
 		exagg,		/* exaggerate deformations in mesh data	*/
 		rel_norm(),	/* relative 2-norm between two  vectors	*/
@@ -208,14 +212,17 @@ char	*argv[];
 		anlyz=1,	/* 1: stiffness analysis, 0: data check	*/
 		*R, sumR,	/* reaction data, total no. of reactions*/
 		modes,		/* number of desired modes		*/
+		Mmethod,	/* 1: Subspace Jacobi, 2: Stodola	*/
 		calc_modes,	/* number of modes to calculate		*/
 		lump=1,		/* 1: lumped, 0: consistent mass matrix */
 		iter=0,		/* number of iterations			*/
 		ok=1,		/* number of (-ve) diag. terms of L D L' */
 		anim[20],	/* the modes to be animated		*/
-		pan=1,		/* 1: pan during animation; 0: don't	*/         
-		*q,		/* vector of DoF's to condense		*/
+		pan=1,		/* 1: pan during animation; 0: don't	*/
 		Cdof,		/* number of condensed degrees o freedom*/
+		Cmethod,	/* matrix condensation method		*/
+		*q,		/* vector of DoF's to condense		*/
+		*m,		/* vector of modes to condense		*/
 		temp_mech,	/* counter for temp and mech load cases	*/
 		*ivector();
 
@@ -253,7 +260,7 @@ char	*argv[];
 		exit();		/* exit the program			*/
 
 
-        fprintf(stderr," FRAME version:  1 Mar 2007,");
+        fprintf(stderr," FRAME version:  6 Jun 2007,");
         fprintf(stderr," GPL Copyright (C) 1992-2007, Henri P. Gavin \n");
         fprintf(stderr," http://www.duke.edu/~hpgavin/frame/ \n");
 	fprintf(stderr," This is free software with absolutely no warranty.\n");
@@ -340,34 +347,32 @@ char	*argv[];
 	feF      =  matrix(1,nM,1,12);	/* fixed end forces	*/
 
 	q = ivector(1,DoF); 	/* vector of condensed degrees of freedom */
+	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
 
 	read_input ( fp, nJ, nM, x,y,z,r, L, Le, J1, J2, &anlyz, &geom, Q, 
 	     Ax,Asy,Asz, J,Iy,Iz, E,G, p, &shear, mesh_file,plot_file,&exagg);
-	printf("read input done\n");
+	printf("  input data complete\n");
 
 	read_loads ( fp, nJ, x, y, z, L, Le, Ax,Asy,Asz, Iy,Iz, E, G, p, shear, 
 		 J1, J2, DoF, nM, &nF, &nW, &nP, &nT,
 		 Fo_mech, Fo_temp, W, P, T, feF_mech, feF_temp );
 	for (i=1; i<=DoF; i++)	Fo[i] = Fo_temp[i] + Fo_mech[i];
-	printf("read loads done\n");
+	printf("  load data complete\n");
 
 	read_reactions ( fp, DoF, &nD, &nR, nJ, Dp, R, &sumR );
-	printf("read reactions done\n");
+	printf("  reaction data complete\n");
 
 	read_masses ( fp, nJ, nM, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax, 
-			&total_mass, &struct_mass, &modes, &lump, mode_file,
-			&tol, &shift, anim, &pan );
-	printf("read masses done\n");
+			&total_mass, &struct_mass, &modes, &Mmethod, 
+			&lump, mode_file, &tol, &shift, anim, &pan );
+	printf("  mass data complete\n");
 
-	read_condense ( fp, nJ, &nC, &Cdof, q );
+	read_condense ( fp, nJ, modes, &nC, &Cdof, &Cmethod, q, m );
+
+	printf("  matrix condensation data complete\n");
 
 	fclose (fp);	fp = fopen(IO_file, "a");     /* output appends input */
 
-	if(fp==NULL){
-		fprintf(stderr,"Unable to open input file for writing (appending output data)\n");
-		exit(1);
-	}
- 
 	control_data ( fp, title, nJ,nM, nF,nD,nR,nW,nP,nT, x,y,z,r, J1,J2, 
 		Ax,Asy,Asz, J,Iy,Iz, E,G, p, Fo,Dp,R,W,P,T, shear,anlyz,geom );
 
@@ -410,7 +415,7 @@ char	*argv[];
 		for (i=1;i<=DoF;i++) /* initialize Broyden secant stiffness */
 			for(j=i;j<=DoF;j++)
 				Ks[i][j]=Ks[j][i]=K[i][j];
-	        fprintf(stderr," Non-Linear Elastic Analysis ...\n");
+	        fprintf(stderr,"\n Non-Linear Elastic Analysis ...\n");
 	  }
 	  while ( geom && error > tol && iter < 10 && ok >= 0) { 
 
@@ -454,8 +459,8 @@ char	*argv[];
 		/* error = rel_norm (dD, D, DoF ); /* displacement increment */
 		error = rel_norm ( Fe, F, DoF );	/* force balance */
 
-		fprintf(stderr,"  ... NR iter %2d:  error = %8.2e \n",
-								iter, error );
+		fprintf(stderr,"   NR iteration %3d ---", iter);
+	        fprintf(stderr," RMS equilibrium precision: %8.2e \n", error);
 	  }
 	  if ( geom ) {
 		free_vector(dD, 1, DoF );
@@ -474,7 +479,9 @@ char	*argv[];
 	    fprintf(stderr,"  data check only\n");
 	}
 
-	if ( modes > 0 ) {
+	if ( modes > 0 ) {				/* modal analysis */
+
+	        fprintf(stderr,"\n Modal Analysis ...\n");
 
 		calc_modes = (modes+8)<(2*modes) ? modes+8 : 2*modes;
 
@@ -487,11 +494,16 @@ char	*argv[];
 
 /*		save_matrix ( DoF, DoF, M, "Mf" );	/* free mass matrix */
 
-		for (j=1; j<=DoF; j++) { trK += K[j][j]; trM += M[j][j]; }
+		for (j=1; j<=DoF; j++) {
+			if ( !R[j] ) {
+				traceK += K[j][j];
+				traceM += M[j][j];
+			}
+		}
 		for (i=1; i<=DoF; i++) {
 			if ( R[i] ) {	/* apply reactions to upper triangle */
-				K[i][i] = trK * 1e2; 	
-				M[i][i] = trM; 
+				K[i][i] = traceK * 1e2; 	
+				M[i][i] = traceM; 
 				for (j=i+1; j<=DoF; j++) 
 					K[j][i]=K[i][j]=M[j][i]=M[i][j] = 0.0;
 		    }
@@ -501,10 +513,10 @@ char	*argv[];
 		save_ut_matrix ( DoF, M, "Md" );	/* dynamic mass matx */
 	
 		if (anlyz) {
-		  if (0)
-		    stodola ( K, M, DoF, calc_modes, f, V, tol,shift,&iter,&ok);
-		  if (1)
+		  if ( Mmethod == 1 )
 		    subspace( K, M, DoF, calc_modes, f, V, tol,shift,&iter,&ok);
+		  if ( Mmethod == 2 )
+		    stodola ( K, M, DoF, calc_modes, f, V, tol,shift,&iter,&ok);
 	
 		  for (j=1; j<=calc_modes; j++)	f[j] = sqrt(f[j])/(2.*PI);
 
@@ -526,21 +538,45 @@ char	*argv[];
 		       nJ,nM, DoF, modes, x,y,z,L, p, J1,J2, f,V, exagg, pan );
 	}
 
-	if ( nC > 0 ) {		/* dynamic condensation of stiffness and mass */
+	if ( nC > 0 ) {		/* matrix condensation of stiffness and mass */
+
+	        fprintf(stderr,"\n Matrix Condensation ...\n");
+
+		if ( Cdof > modes && Cmethod == 3 ) {
+		 fprintf(stderr,"  Cdof > modes ... Cdof = %d  modes = %d \n",
+				 Cdof, modes );
+		 fprintf(stderr,"  The number of condensed degrees of freedom");
+		 fprintf(stderr," may not exceed the number of computed modes");
+		 fprintf(stderr," when using dynamic condensation.\n");
+		 exit(1);
+		}
+
 		Kc = matrix(1,Cdof,1,Cdof);
 		Mc = matrix(1,Cdof,1,Cdof);
-		condense ( K, DoF, q, Cdof, Kc);
-		save_matrix ( Cdof, Cdof, Kc, "Kcc" );	
-		if ( modes > 0 && 1 )
-			guyan ( M, K, DoF, q, Cdof, Mc,Kc, f[1] );
-		if ( modes > 0 && 0 )
-			dyn_conden ( M,K, DoF, q, Cdof, Mc,Kc, V,f );
+
+		if ( m[1] > 0 && modes > 0 )	Cfreq = f[m[1]];
+
+		if ( Cmethod == 1 ) {	/* static condensation only	*/
+			condense ( K, DoF, q, Cdof, Kc);
+			printf("  static condensation of K complete\n");
+		}
+		if ( Cmethod == 2 ) {
+			guyan ( M, K, DoF, q, Cdof, Mc,Kc, Cfreq );
+			printf("  Guyan condensation of K and M complete");
+			printf(" ... dynamics matched at %f Hz.\n", Cfreq );
+		}
+		if ( Cmethod == 3 && modes > 0 ) {
+			dyn_conden ( M,K, DoF, R, q, Cdof, Mc,Kc, V,f, m );
+			printf("  dynamic condensation of K and M complete\n");
+		}
 		save_matrix ( Cdof, Cdof, Kc, "Kc" );	
 		save_matrix ( Cdof, Cdof, Mc, "Mc" );  
 
 		free_matrix ( Kc, 1,Cdof,1,Cdof );
 		free_matrix ( Mc, 1,Cdof,1,Cdof );
 	}
+
+	printf("\n");
 
 	deallocate ( x,y,z,r, L,Le, J1, J2, Ax,Asy,Asz, J,Iy,Iz, E, G,
        K,Q,F,D,R,W,P,T, feF,Fo, d,BMs,JMs,JMx,JMy,JMz,M,f,V, nJ,nM,DoF, modes );
@@ -1376,9 +1412,9 @@ int	DoF, *ok;
 		/* exit(1); */
 	} else {				/* back substitute for D */
 		ldl_dcmp( K, DoF, diag, F, D, 0, 1, ok ); /* LDL'  back-sub */
-	        fprintf(stderr,"  RMS matrix error:"); /* improve solution */
+	        fprintf(stderr,"    LDL' RMS matrix precision:");
 		error = *ok = 1;
-		do {
+		do {					/* improve solution */
 			ldl_mprove ( K, DoF, diag, F, D, &error, ok );
 			fprintf(stderr,"%9.2e", error );
 		} while ( *ok );
@@ -1540,6 +1576,7 @@ float	*x, *y, *z, *L, *F, **Q, *p, **feF, *err;
 
 	for (j=1; j<=DoF; j++)	if ( R[j] == 0 )   den += ( F[j]*F[j] );
 	den = sqrt ( den / (float) DoF );
+	if ( den <= 0 ) den = 1;
 
 	for (m=1; m <= nM; m++) {	/* loop over all members */
 
@@ -1594,7 +1631,7 @@ float	*x, *y, *z, *L, *F, **Q, *p, **feF, *err;
 	*err = 0.0;
 	for (j=1; j<=DoF; j++)	if ( R[j] == 0 )	*err += ( F[j]*F[j] );
 	*err = sqrt ( *err / (float) DoF ) / den;
-	fprintf(stderr,"  RMS relative equilibrium error: %9.3e\n", *err );
+	fprintf(stderr,"  RMS relative equilibrium precision: %9.3e\n", *err );
 
 	return;
 }
@@ -1604,58 +1641,90 @@ float	*x, *y, *z, *L, *F, **Q, *p, **feF, *err;
 READ_MASSES  -  read member densities and extra inertial mass data	16aug01
 ------------------------------------------------------------------------------*/
 void read_masses ( fp, nJ, nM, nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax,
-	total_mass, struct_mass, modes, lump, modefile, tol,shift,anim, pan)
+	total_mass, struct_mass, modes, Mmethod, lump, modefile, 
+	tol, shift, anim, pan)
 char	modefile[];
 FILE	*fp;
 float	*d, *BMs, *JMs, *JMx, *JMy, *JMz, *L, *Ax, *tol, *shift,
 	*total_mass, *struct_mass;
-int	nJ, nM, *nI, *modes, *lump, anim[], *pan;
+int	nJ, nM, *nI, *modes, *Mmethod, *lump, anim[], *pan;
 {
+	FILE	*mf;				/* mass data file	*/
 	float	ms = 0.0;
 	int	chk, j, jnt, m, mem, nA;
 	void	dots(), exit();
 
 	*total_mass = *struct_mass = 0.0;	
 
+
 	chk = fscanf ( fp, "%d", modes );
+
 	printf(" number of dynamic modes ");
 	dots(28);
-	printf(" modes = %d\n",*modes);
+	printf(" modes = %d\n", *modes);
+
 	if ( *modes < 1 || chk != 1 ) {
 		*modes = 0;
 		return;
-	} else {
-		fscanf( fp, "%d", lump );
-		fscanf( fp, "%s", modefile );
-		fscanf( fp, "%lf", tol );
-		fscanf( fp, "%lf", shift );
-		for (m=1; m <= nM; m++) {	/* read inertia data	*/
-			fscanf(fp, "%d", &mem );
-			fscanf(fp, "%lf %lf", &d[mem], &BMs[mem] );
-			*total_mass  += d[mem]*Ax[mem]*L[mem] + BMs[mem];
-			*struct_mass += d[mem]*Ax[mem]*L[mem];
-		}
+	}
 
-		/* number of joints with extra inertias */
-		fscanf(fp,"%d", nI );
-		printf(" number of joints with extra lumped inertia ");
-	        dots(9);
-	        printf(" nI = %d\n",*nI);
-		for (j=1; j <= *nI; j++) {
-			fscanf(fp, "%d", &jnt );
-			if ( jnt < 1 || jnt > nJ ) {
-		    		fprintf(stderr,"  error in joint load data: joint number out of range  ");
-		    		fprintf(stderr,"  Joint: %d  \n", j);
-		    		fprintf(stderr,"  Perhaps you did not specify %d extra masses \n", *nI );
-		    		exit(1);
-			}
-			fscanf(fp, "%lf %lf %lf %lf",
-				&JMs[jnt], &JMx[jnt], &JMy[jnt], &JMz[jnt] );
-			*total_mass += JMs[jnt];
+	fscanf( fp, "%d", Mmethod );
 
-			if ( JMs[jnt]==0 && JMx[jnt]==0 && JMy[jnt]==0 && JMz[jnt]==0 )
-		    	fprintf(stderr,"  warning: All extra joint inertia at joint %d  are zero\n", jnt );
+	printf(" modal analysis method ");
+	dots(30);
+	printf(" %d ",*Mmethod);
+	if ( *Mmethod == 1 ) printf(" (Subspace-Jacobi)\n");
+	if ( *Mmethod == 2 ) printf(" (Stodola)\n");
+
+
+	/*
+	mf = fopen("MassData.txt","w");	// open mass data file 
+	if ((mf = fopen ("MassData.txt", "w")) == NULL) {	
+	  fprintf (stderr," error: cannot open file 'MassData.txt'\n");
+	  exit(1);
+	}
+	fprintf(mf,"%% structural mass data \n");
+	fprintf(mf,"%% element\tAx\t\tlength\t\tdensity\t\tmass \n");
+	*/
+
+	fscanf( fp, "%d", lump );
+	fscanf( fp, "%s", modefile );
+	fscanf( fp, "%lf", tol );
+	fscanf( fp, "%lf", shift );
+	for (m=1; m <= nM; m++) {	/* read inertia data	*/
+		fscanf(fp, "%d", &mem );
+		fscanf(fp, "%lf %lf", &d[mem], &BMs[mem] );
+		*total_mass  += d[mem]*Ax[mem]*L[mem] + BMs[mem];
+		*struct_mass += d[mem]*Ax[mem]*L[mem];
+		/*
+		fprintf(mf," %4d\t\t%12.5e\t%12.5e\t%12.5e\t%12.5e \n",
+		 mem, Ax[mem], L[mem], d[mem], d[mem]*Ax[mem]*L[mem] );
+		*/
+	}
+
+	/*
+	fclose(mf);
+	*/
+
+	/* number of joints with extra inertias */
+	fscanf(fp,"%d", nI );
+	printf(" number of joints with extra lumped inertia ");
+        dots(9);
+        printf(" nI = %d\n",*nI);
+	for (j=1; j <= *nI; j++) {
+		fscanf(fp, "%d", &jnt );
+		if ( jnt < 1 || jnt > nJ ) {
+	    		fprintf(stderr,"  error in joint load data: joint number out of range  ");
+	    		fprintf(stderr,"  Joint: %d  \n", j);
+	    		fprintf(stderr,"  Perhaps you did not specify %d extra masses \n", *nI );
+	    		exit(1);
 		}
+		fscanf(fp, "%lf %lf %lf %lf",
+			&JMs[jnt], &JMx[jnt], &JMy[jnt], &JMz[jnt] );
+		*total_mass += JMs[jnt];
+
+		if ( JMs[jnt]==0 && JMx[jnt]==0 && JMy[jnt]==0 && JMz[jnt]==0 )
+	    	fprintf(stderr,"  warning: All extra joint inertia at joint %d  are zero\n", jnt );
 	}
 
 	for (m=1;m<=nM;m++) {			/* check inertia data	*/
@@ -2033,28 +2102,51 @@ float	t1, t2, t3, t4, t5, t6, t7, t8, t9, **m, r1, r2;
 /*------------------------------------------------------------------------------
 READ_CONDENSE   -  read matrix condensation information 	        30aug01
 ------------------------------------------------------------------------------*/
-void read_condense ( fp, nJ, nC, Cdof, q )
+void read_condense ( fp, nJ, modes, nC, Cdof, Cmethod, q, m )
 FILE	*fp;
-int	nJ, *nC, *Cdof, *q;
+int	nJ, modes, *nC, *Cdof, *Cmethod, *q, *m;
 {
-	int	i,j,k,  chk, **qm, *ivector(), **imatrix();
+	int	i,j,k,  chk, **qm, **imatrix();
 	void	dots(),
 		free_imatrix(), exit();
 
-	*Cdof = 0;
+	*Cmethod = *nC = *Cdof = 0;
+
+	if ( (chk = fscanf ( fp, "%d", Cmethod )) != 1 )   {
+		*Cmethod = *nC = *Cdof = 0;
+		return;
+	}
+
+	if ( *Cmethod <= 0 )  {
+		*Cmethod = *nC = *Cdof = 0;
+		return;
+	}
+
+	if ( *Cmethod > 3 ) *Cmethod = 1;	/* default */
+	printf(" condensation method ");
+	dots(32);
+	printf(" %d ", *Cmethod );
+	if ( *Cmethod == 1 )	printf(" (static only) \n");
+	if ( *Cmethod == 2 )	printf(" (Guyan) \n");
+	if ( *Cmethod == 3 )	printf(" (dynamic) \n");
 
 	if ( (chk = fscanf ( fp, "%d", nC )) != 1 )  {
-		*nC = 0;
+		*Cmethod = *nC = *Cdof = 0;
 		return;
 	}
 
-	if ( *nC <= 0 ) {
-		*nC = 0;
-		return;
-	}
 	printf(" number of joints with condensed DoF's ");
 	dots(14);
-	printf(" nC = %d\n",*nC);
+	printf(" nC = %d\n", *nC );
+
+	if ( (*nC) > nJ ) {
+	  fprintf(stderr," error in matrix condensation data: \n");
+	  fprintf(stderr,"  error: nC > nJ ... nC=%d; nJ=%d;\n",*nC,nJ);
+	  fprintf(stderr,"  The number of joints with condensed DoF's ");
+	  fprintf(stderr,"may not exceed the total number of joints.\n");
+	  exit(1);
+	}
+
 
 	qm = imatrix( 1, *nC, 1,7 );
 
@@ -2063,7 +2155,8 @@ int	nJ, *nC, *Cdof, *q;
 	 &qm[i][1],
 	 &qm[i][2], &qm[i][3], &qm[i][4], &qm[i][5], &qm[i][6], &qm[i][7]);
 	 if ( qm[i][1] < 1 || qm[i][1] > nJ ) {		/* error check */
-	  fprintf(stderr," error in matrix condensation data: condensed joint number out of range\n");
+	  fprintf(stderr," error in matrix condensation data: ");
+	  fprintf(stderr," condensed joint number out of range\n");
 	  fprintf(stderr,"  cj[%d] = %d  ... nJ = %d  \n", i, qm[i][1], nJ );
 	  exit(1);
 	 }
@@ -2079,6 +2172,17 @@ int	nJ, *nC, *Cdof, *q;
 				++k;
 			}
 		}
+	}
+
+	for (i=1; i<= *Cdof; i++) {
+	 fscanf( fp, "%d", &m[i] );
+	 if ( (m[i] < 0 || m[i] > modes) && *Cmethod == 3 ) {
+	  fprintf(stderr," error in matrix condensation data: \n");
+	  fprintf(stderr,"  error: m[%d] = %d \n",i,m[i]);
+	  fprintf(stderr,"  The condensed mode number must be between ");
+	  fprintf(stderr,"  1 and %d (modes).\n", modes);
+	  exit(1);
+         }
 	}
 
 	free_imatrix(qm,1, *nC, 1,7);
@@ -2153,33 +2257,32 @@ int	N, n, *q;
 
 
 /*---------------------------------------------------------------------------- 
-GUYAN  -   generalized Guyan reduction of mass and stiffness matrices    7oct01
+GUYAN  -   generalized Guyan reduction of mass and stiffness matrices    6jun07
            matches the response at a particular frequency, sqrt(L)/2/pi
            Guyan, Robert J., ``Reduction of Stiffness and Mass Matrices,''
            AIAA Journal, Vol. 3, No. 2 (1965) p 380.
 -----------------------------------------------------------------------------*/
-void guyan ( M, K, N, q, n, Mc, Kc, L )
-float	**M, **K, **Mc, **Kc, L;
+void guyan ( M, K, N, q, n, Mc, Kc, w2 )
+float	**M, **K, **Mc, **Kc, w2;
 int	N, n, *q;
 {
-	float	**Drr, **Drq, **Mrr, **Mrq, **Ac, **matrix();
-	int	i,j,k, ri,rj,qi,qj, ok, 
+	float	**Drr, **Drq, **invDrrDrq, **T, **matrix();
+	int	i,j,k, ri,rj,qj, ok, 
 		*r, *ivector();
-	void	xtaiy(), /* compute X' * inv(A) * Y	*/
-		aixai(), /* compute inv(A) * X * inv(A)	*/
-		xAx(),	 /* compute X' * A * X	*/
+	void	invAB(),		/* compute inv(Drr) * Drq	*/
+		xtAx(),			/* compute T' * A * T		*/
 		save_matrix(), save_ivector(), save_ut_matrix(),
 		free_matrix(), free_ivector();
 
 	r   = ivector(1,N-n);
 	Drr =  matrix(1,N-n,1,N-n);
 	Drq =  matrix(1,N-n,1,n);
-	Mrr =  matrix(1,N-n,1,N-n);
-	Mrq =  matrix(1,N-n,1,n);
-	Ac  =  matrix(1,n,1,n);
+	invDrrDrq = matrix(1,N-n,1,n);	/* inv(Drr) * Drq	*/
+	T   = matrix(1,N,1,n);	/* coordinate transformation matrix	*/
 
-	L = 4.0 * PI * PI * L * L;	/* eigen-value	*/
+	w2 = 4.0 * PI * PI * w2 * w2;	/* eigen-value ... omega^2 	*/
 
+	/* find "remaining" (r) degrees of freedom, not "qondensed" (q)	*/
 	k = 1;
 	for (i=1; i<=N; i++) {
 		ok = 1;
@@ -2193,13 +2296,12 @@ int	N, n, *q;
 	}
 
 	for (i=1; i<=N-n; i++) {
-		for (j=i; j<=N-n; j++) { /* use only upper triangle of K,M */
+		for (j=1; j<=N-n; j++) { /* use only upper triangle of K,M */
 			ri = r[i];
 			rj = r[j];
-			if ( ri <= rj )	{
-				Mrr[j][i] = Mrr[i][j] = M[ri][rj];
-				Drr[j][i] = Drr[i][j] = K[ri][rj] - L*M[ri][rj];
-			}
+			if ( ri <= rj )	
+				Drr[j][i] = Drr[i][j] = K[ri][rj]-w2*M[ri][rj];
+			else	Drr[j][i] = Drr[i][j] = K[rj][ri]-w2*M[rj][ri];
 		}
 	}
 
@@ -2207,58 +2309,30 @@ int	N, n, *q;
 		for (j=1; j<=n; j++) {	/* use only upper triangle of K,M */
 			ri = r[i];
 			qj = q[j];
-			if ( ri < qj )	{
-				Mrq[i][j] = M[ri][qj];
-				Drq[i][j] = K[ri][qj] - L*M[ri][qj];
-			} else {
-				Mrq[i][j] = M[qj][ri];
-				Drq[i][j] = K[qj][ri] - L*M[qj][ri];
-			}
+			if ( ri < qj )	Drq[i][j] = K[ri][qj] - w2*M[ri][qj];
+			else		Drq[i][j] = K[qj][ri] - w2*M[qj][ri];
 		}
 	}
 
+	invAB ( Drr, Drq, N-n, n, invDrrDrq, &ok );	/* inv(Drr) * Drq	*/
 
-	/* static condensation of the dynamics matrix */
-
-	xtaiy ( Drq, Drr, Drq, N-n, n, Ac );
-
+	/* coordinate transformation matrix	*/	
 	for (i=1; i<=n; i++) {
-		for (j=i; j<=n; j++) { /* use only upper triangle of K */
-			qi = q[i];
-			qj = q[j];
-			if ( qi <= qj ) 
-			 Kc[j][i]=Kc[i][j] = K[qi][qj]-L*M[qi][qj]-Ac[i][j];
-		}
-	}
+		for (j=1; j<=n; j++)	T[q[i]][j] =  0.0;
+		T[q[i]][i] = 1.0;
+	}	
+	for (i=1; i<=N-n; i++) 
+		for (j=1; j<=n; j++)	T[r[i]][j] = -invDrrDrq[i][j];
 
+	xtAx ( K, T, Kc, N, n );		/* Kc = T' * K * T	*/
 
-	/* dynamic reduction of the mass matrix */
-
-	xtaiy ( Mrq, Drr, Drq, N-n, n, Ac );
-
-	for (i=1; i<=n; i++) {
-		for (j=i; j<=n; j++) { /* use only upper triangle of M */
-			qi = q[i];
-			qj = q[j];
-			if ( qi <= qj )
-				Mc[j][i]=Mc[i][j] = M[qi][qj]-Ac[i][j]-Ac[j][i];
-		}
-	}
-	
-	aixai ( Drr, Mrr, N-n );
-
-	xAx ( Mrr, Drq, Ac, N-n, n );
-
-	for (i=1; i<=n; i++)	for (j=1; j<=n; j++)	Mc[i][j] += Ac[i][j];
-
-	for (i=1; i<=n; i++)	for (j=1; j<=n; j++)	Kc[i][j] += L*Mc[i][j];
+	xtAx ( M, T, Mc, N, n );		/* Mc = T' * M * T	*/
 
 	free_ivector ( r,   1, N-n );
 	free_matrix  ( Drr, 1,N-n,1,N-n );
 	free_matrix  ( Drq, 1,N-n,1,n );
-	free_matrix  ( Mrr, 1,N-n,1,N-n );
-	free_matrix  ( Mrq, 1,N-n,1,n );
-	free_matrix  ( Ac,  1,n,1,n);
+	free_matrix  ( invDrrDrq, 1,N-n,1,N-n );
+	free_matrix  ( T, 1,N-n,1,n );
 
 	return;
 }
@@ -2269,47 +2343,109 @@ DYN_CONDEN - dynamic condensation of mass and stiffness matrices    8oct01
 	     matches the response at a set of frequencies
 WARNING: Kc and Mc may be ill-conditioned, and possibly non-positive def.
 -----------------------------------------------------------------------------*/
-void dyn_conden ( M, K, N, p, n, Mc, Kc, V, f )
+void dyn_conden ( M, K, N, R, p, n, Mc, Kc, V, f, m )
 float	**M, **K, **Mc, **Kc, **V, *f;
-int	N, n, *p;
+int	*R, N, n, *p, *m;
 {
-	float	**P, **Pi, **matrix(),
-		tmp;
+	float	**P, **invP, **matrix(),
+		traceM = 0, traceMc = 0, 
+		Aij;		/* temporary storage for matrix mult. */
 	int	i,j,k, pi, ok; 
 	void	pseudo_inv(),	/* pseudo-inverse of a a-symmetric matrix */
 		save_matrix(), 
 		free_vector(), free_matrix(); 
 
-	P   =  matrix(1,n,1,n);
-	Pi  =  matrix(1,n,1,n);
+	P    =  matrix(1,n,1,n);
+	invP =  matrix(1,n,1,n);
 
 	for (i=1; i<=n; i++)	/* first n modal vectors at primary DoF's */
 		for (j=1; j<=n; j++)
-			P[i][j] = V[p[i]][j];
+			P[i][j] = V[p[i]][m[j]];
 
-	pseudo_inv ( P, Pi, n, n, 1.0e-10 );
+	pseudo_inv ( P, invP, n, n, 1e-9 );
+
+	for (i=1; i<=N; i++) if ( !R[i] ) traceM += M[i][i];
 
 	for (i=1; i<=n; i++) { 		/* compute inv(P)' * I * inv(P)	*/
 	    for (j=1; j<=n; j++) {
-		tmp = 0.0;
+		Aij = 0.0;
 	        for (k=1; k<=n; k++)
-			tmp += Pi[k][i] * Pi[k][j];
-		Mc[i][j] = tmp;
+			Aij += invP[k][i] * invP[k][j];
+		Mc[i][j] = Aij;
 	    }
 	}
+
+	for (i=1; i<=n; i++) traceMc += Mc[i][i];
 
 	for (i=1; i<=n; i++) { 		/* compute inv(P)' * W^2 * inv(P) */
 	    for (j=1; j<=n; j++) {
-		tmp = 0.0;
+		Aij = 0.0;
 	        for (k=1; k<=n; k++) 
-			tmp += Pi[k][i] * 4.0*PI*PI*f[k]*f[k] * Pi[k][j];
-		Kc[i][j] = tmp;
+		    Aij += invP[k][i] * 4.0*PI*PI*f[m[k]]*f[m[k]] * invP[k][j];
+		Kc[i][j] = Aij;
 	    }
 	}
 
-	free_matrix  ( P,  1,n,1,n);
-	free_matrix  ( Pi, 1,n,1,n);
+	for (i=1; i<=n; i++)
+	       for (j=1; j<=n; j++)
+		       Mc[i][j] *= (traceM / traceMc);
 
+	for (i=1; i<=n; i++)
+	       for (j=1; j<=n; j++)
+		       Kc[i][j] *= (traceM / traceMc);
+
+	free_matrix  ( P,    1,n,1,n);
+	free_matrix  ( invP, 1,n,1,n);
+
+	return;
+}
+
+
+/*------------------------------------------------------------------------------
+INVAB  -  calculate product inv(A) * B  
+        A is n by n      B is n by m                                    6jun07
+------------------------------------------------------------------------------*/
+void invAB ( A, B, n, m, AiB, ok )
+float	**A, **B, **AiB;
+int	n, m, *ok;
+{
+	float	*diag, *b, *x, *vector(), error;
+	int	i,j,k, disp=1;
+	void	ldl_dcmp(), ldl_mprove(), free_vector();
+
+	diag = vector(1,n);
+	x    = vector(1,n);
+	b    = vector(1,n);
+
+	for (i=1; i<=n; i++) diag[i] = x[i] = 0.0;
+
+	ldl_dcmp( A, n, diag, b, x, 1, 0, ok );		/*  L D L'  decomp */
+	if ( *ok < 0 ) {
+	 	fprintf(stderr," Make sure that all six");
+		fprintf(stderr," rigid body translations are restrained!\n");
+	}
+
+	for (j=1; j<=m; j++) {
+
+		for (k=1; k<=n; k++)  b[k] = B[k][j];
+		ldl_dcmp( A, n, diag, b, x, 0, 1, ok ); /*  L D L'  bksbtn */
+
+		if (disp)
+		 fprintf(stderr,"    LDL' RMS matrix precision:");
+		error = *ok = 1;
+		do {					/*improve the solution*/
+			ldl_mprove ( A, n, diag, b, x, &error, ok );
+			if (disp) fprintf(stderr,"%9.2e", error );
+		} while ( *ok );
+		if (disp) fprintf(stderr,"\n");
+
+		for (i=1; i<=n; i++)	AiB[i][j] = x[i];
+
+	}
+
+	free_vector(diag,1,n);
+	free_vector(x,1,n);
+	free_vector(b,1,n);
 	return;
 }
 
@@ -2322,28 +2458,28 @@ void xtaiy ( X, A, Y, n, m, Ac )
 float	**X, **A, **Y, **Ac;
 int	n, m;
 {
-	float	*diag, *b, *x, *vector(), error;
+	float	*diag, *x, *y, *vector(), error;
 	int	i,j,k, ok, disp=0;
 	void	ldl_dcmp(), ldl_mprove(), free_vector();
 
 	diag = vector(1,n);
 	x    = vector(1,n);
-	b    = vector(1,n);
+	y    = vector(1,n);
 
 	for (i=1; i<=n; i++) diag[i] = x[i] = 0.0;
 
-	ldl_dcmp( A, n, diag, b, x, 1, 0, &ok );	/*  L D L'  decomp */
+	ldl_dcmp( A, n, diag, y, x, 1, 0, &ok );	/*  L D L'  decomp */
 
 	for (j=1; j<=m; j++) {
 
-		for (k=1; k<=n; k++)  b[k] = Y[k][j];
-		ldl_dcmp( A, n, diag, b, x, 0, 1, &ok ); /*  L D L'  bksbtn */
+		for (k=1; k<=n; k++)  y[k] = Y[k][j];
+		ldl_dcmp( A, n, diag, y, x, 0, 1, &ok ); /*  L D L'  bksbtn */
 
 		if (disp)
-		 fprintf(stderr,"  RMS matrix error:"); /*improve the solution*/
+		 fprintf(stderr,"    LDL' RMS matrix precision:");
 		error = ok = 1;
-		do {
-			ldl_mprove ( A, n, diag, b, x, &error, &ok );
+		do {					/*improve the solution*/
+			ldl_mprove ( A, n, diag, y, x, &error, &ok );
 			if (disp) fprintf(stderr,"%9.2e", error );
 		} while ( ok );
 		if (disp) fprintf(stderr,"\n");
@@ -2356,7 +2492,7 @@ int	n, m;
 
 	free_vector(diag,1,n);
 	free_vector(x,1,n);
-	free_vector(b,1,n);
+	free_vector(y,1,n);
 	return;
 }
 
@@ -2369,7 +2505,7 @@ void aixai ( A, X, n )
 float	**A, **X;
 int	n;
 {
-	float	*diag, *b, *x, **Ai, **XAi, tmp, *vector(), **matrix(), error;
+	float	*diag, *b, *x, **Ai, **XAi, Aij, *vector(), **matrix(), error;
 	int	i,j,k, ok, disp=0;
 	void	ldl_dcmp(), ldl_mprove(), free_vector(), free_matrix();
 
@@ -2393,9 +2529,9 @@ int	n;
 		ldl_dcmp( A, n, diag, b, x, 0, 1, &ok ); /*  L D L'  bksbtn */
 
 		if (disp)
-		 fprintf(stderr,"  RMS matrix error:"); /*improve the solution*/
+		 fprintf(stderr,"    LDL' RMS matrix precision:");
 		error = ok = 1;
-		do {
+		do {					/*improve the solution*/
 			ldl_mprove ( A, n, diag, b, x, &error, &ok );
 			if (disp) fprintf(stderr,"%9.2e", error );
 		} while ( ok );
@@ -2410,17 +2546,17 @@ int	n;
 
 	for (i=1; i<=n; i++) { 			/* compute X * inv(A)	*/
 		for (j=1; j<=n; j++) {
-			tmp = 0.0;
-			for (k=1; k<=n; k++)	tmp += X[i][k]*Ai[k][j];
-			XAi[i][j] = tmp;
+			Aij = 0.0;
+			for (k=1; k<=n; k++)	Aij += X[i][k]*Ai[k][j];
+			XAi[i][j] = Aij;
 		}
 	}
 
 	for (i=1; i<=n; i++) {		/* compute inv(A) * X * inv(A)	*/
 		for (j=1; j<=n; j++) {
-			tmp = 0.0;
-			for (k=1; k<=n; k++)	tmp += Ai[i][k] * XAi[k][j];
-			X[i][j] = tmp;
+			Aij = 0.0;
+			for (k=1; k<=n; k++)	Aij += Ai[i][k] * XAi[k][j];
+			X[i][j] = Aij;
 		}
 	}
 	for (i=1; i<=n; i++)				/* make symmetric */
@@ -2454,7 +2590,7 @@ float	*x, *y, *z, *r, *Ax,*Asy,*Asz, *J,*Iy,*Iz, *E,*G,*p, *F,*Dp,**W,**P,**T;
 
 	fprintf(fp,"\n");
 	for (i=1; i<=80; i++)	fprintf(fp,"_");
-	fprintf(fp,"\n-- FRAME version:   1 Mar 2007,");
+	fprintf(fp,"\n-- FRAME version:   6 Jun 2007,");
 	fprintf(fp," GPL Copyright (C) 1992-2007, Henri P. Gavin --\n");
 	fprintf(fp,"                     http://www.duke.edu/~hpgavin/frame/ \n");
 	fprintf(fp," FRAME is distributed in the hope that it will be useful");
@@ -2974,16 +3110,16 @@ float	*x, *y, *z, *L, **M, *f, *p, **V, exg;
 	  fprintf(fpm,"pause -1\n");
 	  fprintf(fpm,"set nolabel\n");
 	  fprintf(fpm,"set title '%s     mode %d     %lf Hz'\n",IO_file,m,f[m]);
-	  fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w lp ", meshfile );
-	  if (!anlyz) fprintf(fpm," lw 2 lt 1 pt 6\n");
-	  else fprintf(fpm," lw 1 lt 5 pt 6, '%s' u 1:2 t 'mode-shape %d' w l lw 2 lt 3\n",
+	  fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w l ", meshfile );
+	  if (!anlyz) fprintf(fpm," lw 2 lt 1 \n");
+	  else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2 t 'mode-shape %d' w l lw 2 lt 3\n",
 								modefl, m );
 	  fprintf(fpm,"%c pause -1\n", D3 );
 	  fprintf(fpm,"%c set nokey\n", D3 );
-	  fprintf(fpm,"%c splot '%s' u 2:3:4 t 'undeformed mesh' w lp ",
+	  fprintf(fpm,"%c splot '%s' u 2:3:4 t 'undeformed mesh' w l ",
 								D3, meshfile);
-	  if (!anlyz) fprintf(fpm," lw 2 lt 1 pt 6\n");
-	  else fprintf(fpm," lw 1 lt 5 pt 6, '%s' u 1:2:3 t 'mode-shape %d' w l lw 2 lt 3\n",
+	  if (!anlyz) fprintf(fpm," lw 2 lt 1 \n");
+	  else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2:3 t 'mode-shape %d' w l lw 2 lt 3\n",
 								modefl, m );
 
 	  fclose(fpm);
@@ -3031,7 +3167,7 @@ float	*x, *y, *z, *L, *p, *f, **V, exg;
 		total_frames,	/* total number of frames in animation */
 		Strcat(), Strcpy();
 	char	D3 = '#',
-		Movie = '#',	/* use '#' for no-movie  -OR-  ' ' for movie */
+		Movie = ' ',	/* use '#' for no-movie  -OR-  ' ' for movie */
 		s1[16], s2[16], modefl[64], framefl[64];
 	void	itoa(), bent_beam(), free_vector(), exit();
 

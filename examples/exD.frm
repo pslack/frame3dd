@@ -81,7 +81,7 @@ exD.plt                         % plot file name
 
 
 14                              % number of desired dynamic modes of vibration
-
+1                               % 1: subspace Jacobi     2: Stodola
 0                               % 0: consistent mass ... 1: lumped mass matrix
 /tmp/exD-m                      % mode shape data file
 5e-5                            % mode shape tolerance
@@ -131,14 +131,14 @@ exD.plt                         % plot file name
 
 
 ________________________________________________________________________________
--- FRAME version:   1 Mar 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
+-- FRAME version:   6 Jun 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
                      http://www.duke.edu/~hpgavin/frame/ 
  FRAME is distributed in the hope that it will be useful but with no warranty;
  for details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 dynamic properties of an un-restrained frame with a triangular section 
-Thu Mar  1 17:31:23 2007
+Thu Jun  7 10:32:17 2007
 ________________________________________________________________________________
 JOINTS: 24    MEMBERS: 30   FIXED JOINTS: 0   PRESCRIBED DISPLACEMENTS: 0
 JOINT LOADS: 0   UNIFORM MEMBER LOADS: 0   CONCENTRATED MEMBER LOADS: 0   
@@ -275,7 +275,7 @@ M E M B E R   E N D   F O R C E S					(local)
     30     19      0.0         0.0        0.0        0.0        0.0        0.0  
 R E A C T I O N S							(global)
   Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
-R M S   E Q U I L I B R I U M    E R R O R:       nan
+R M S   E Q U I L I B R I U M    E R R O R: 0.000e+00
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  4.420668e-01     Structural Mass:  4.420668e-01 
