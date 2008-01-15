@@ -5,14 +5,12 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 
-typedef struct FCOMPLEX {float r,i;} fcomplex; /* */
+#include "nrutil.h"
 
-
-void nrerror(error_text)	/* print error message to stderr	*/
-char error_text[];
-{
-        void	exit();
+/* print error message to stderr	*/
+void nrerror(char error_text[]){
 
 	fprintf(stderr,"Numerical Recipes run-time error...\n");
 	fprintf(stderr,"%s\n",error_text);
@@ -21,9 +19,8 @@ char error_text[];
 }
 
 
-float *vector(nl,nh)	/* allocate storage for a vector		*/
-int nl,nh;
-{
+/* allocate storage for a vector		*/
+float *vector(int nl, int nh){
 	float *v;
 
 	v=(float *)malloc((unsigned) ((nh-nl+1)*sizeof(float)));
