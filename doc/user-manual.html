@@ -85,7 +85,7 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.0.
 
 <hr>
 <h4><font face="Arial, Helvetica, sans-serif" size="2">VERSION DATE</font></h4>
-<font face="Arial, Helvetica, sans-serif" size="2">       June 6, 2007
+<font face="Arial, Helvetica, sans-serif" size="2">       December 20, 2007
 </font><hr>
 <h4><font face="Arial, Helvetica, sans-serif" size="2">GETTING STARTED </font></h4>
 <ol>
@@ -145,7 +145,9 @@ and displays descriptive diagnostic messages when errors are found with the Inpu
 
 </font><ol>
 <font face="Arial, Helvetica, sans-serif" size="2"><li>        Download the <b>FRAME</b> binary file and save as "frame" on your Desktop,
-         or some other directory:<br> | <a href="http://www.duke.edu/%7Ehpgavin/frame/Linux/frame">RIGHT-CLICK-HERE</a> |
+         or some other directory:<br> | <a href="http://www.duke.edu/%7Ehpgavin/frame/Linux/frame">RIGHT-CLICK-HERE-FOR-LINUX</a> | <a href="http://www.duke.edu/%7Ehpgavin/frame/Sun/frame">RIGHT-CLICK-HERE-FOR-SUN</a> |
+<!-- <li>        RPM's for a variety of distributions are <a href="
+http://software.opensuse.org/download/home:/jdpipe/">here</a>. -->
 </li><li>        Download and save an example Input/Output file, such as <font face="courier">exA.frm</font>,
          on your Desktop, or some other directory:<br> | <a href="http://www.duke.edu/%7Ehpgavin/frame/exA.frm">RIGHT-CLICK-HERE</a> |
 </li><li>        Open a terminal window and ...<br>
@@ -163,8 +165,8 @@ and displays descriptive diagnostic messages when errors are found with the Inpu
 
          Open a terminal window and ...<br>
          <font face="courier">     ...$  cd ~/Desktop</font><br>
-         <font face="courier">     ...$  gnuplot</font><br>
-         <font face="courier"> gnuplot&gt;  load 'example.plt'</font><br>
+         <font face="courier">     ...$  gnuplot </font><br>
+         <font face="courier">     gnuplot&gt;  load 'example.plt'</font><br>
          where <font face="courier">example.plt</font> is the name of of the plot file specified in the Input Data. <br>
          Hit the 'Return' key in the Terminal window to see the sequence of plots
          and animations until the <font face="courier"> gnuplot&gt;</font> prompt returns.<br>
@@ -461,12 +463,13 @@ by A. Kassimali.
 <font face="Arial, Helvetica, sans-serif" size="2">     The <b>FRAME</b>
 analysis will optionally include the effects of shear deformation
 and/or geometric stiffness.
-When both shear deformations and geometric stiffness effects are
-included, the geometric stiffness matrix includes shear deformation
-effects. If shear deformation effects are not to be included, simply
-set the <font face="courier">shear</font>
+The geometric stiffness matrix includes the effects of axial forces
+on bending and warping-torsoinal behaviors. When both shear
+deformations and geometric stiffness effects are included, the
+geometric stiffness matrix includes shear deformation effects. If shear
+deformation effects are not to be included, simply set the <font face="courier">shear</font>
      variable to zero (0).  If shear deformation effects are neglected then the
-     values for the shear areas <font face="courier">Asy</font> and <font face="courier">Asz</font> will not be used in the calculations.
+     values for the shear areas <font face="courier">Asy</font> and <font face="courier">Asz</font> will <i>not</i> be used in the calculations.
      Any non-zero value for <font face="courier">Asy</font> and <font face="courier">Asz</font> will do.  
 </font></p>
 
@@ -686,13 +689,13 @@ Sub-space iterations are stopped when the error is less than the specified
 
 <ul>
 <font face="Arial, Helvetica, sans-serif" size="2"><li>       A GUI (ideally GPL'able), currently a <a href="http://www.trolltech.com/products/qt">Qt</a> GUI is in progress (Nov. 8 2004)
-</li><li>       Consistent mass matrix including rotatory inertia and shear deformation
+</li><li>       Consistent mass matrix including the effects of shear deformation on rotatory inertia 
 </li><li>       Dynamic time-history analysis with the HHT-alpha method
 </li><li>       Spectral modal superposition
 </li><li>       Member end joint releases
 </li><li>       Membrane elements 
 </li><li>       Plate elements  
-</li><li>       Sky-line matrix storage
+</li><li>       Sky-line matrix storage and <a href="http://ascendwiki.cheme.cmu.edu/Survey_of_sparse_matrix_software">sparse matrix solvers</a>
 </li><li>       ... your recommendations ... send me an e-mail!
 </li></font></ul>
 
@@ -776,11 +779,12 @@ nC                                                % number of condensed joints
     :      :      :      :        :       :       :    % 1: condense; 0: don't
  J[nC] cx[nC] cy[nC] cz[nC]  cxx[nC] cyy[nC]  czz[nC]
   m[1]   m[2]   m[3]  ...      % list of modes matched in dynamic condensation
+                               % if Cmethod == 1, only mode m[1] is matched.
 
 </pre>
 </font>
 </font><hr>
-<h4><font face="Arial, Helvetica, sans-serif" size="2">DEFINITION OF VARIABLES</font></h4>
+<h4><font face="Arial, Helvetica, sans-serif" size="2">VARIABLE DEFINITIONS</font></h4>
 
 <font face="Arial, Helvetica, sans-serif" size="2"><font face="courier" size="3">
 <pre>       a         - Coefficient of thermal expansion (1/degree)
@@ -924,6 +928,11 @@ The books by <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/q
     elements - an addendum - A bibliography (1996-1999)</a>,''
     Engineering Computations, vol. 17, no. 3, pp. 274-351,  2000.
 
+</li><li> William McGuire, Richard H. Gallagher, and Ronald D. Ziemian,
+<a href="http://www.amazon.com/Structural-Analysis-MASTAN2-William-McGuire/dp/0471376515/ref=pd_bbs_sr_1?ie=UTF8&amp;s=books&amp;qid=1198185313&amp;sr=8-1">
+Matrix Structural Analysis, 2nd ed.</a> John Wiley, 1999.
+ISBN: 0471376515
+
 </li><li> W.D. Pilkey, Weize Kang and Uwe Schramm,
     ``<a href="http://www.duke.edu/%7Ehpgavin/frame/pilkey95.pdf">New structural matrices for a beam element with shear deformation</a>,''
     Finite Elements in Analysis and Design, vol. 19, pp. 25-44,  1995.
@@ -957,16 +966,16 @@ includes functions for frame analysis, LDL' decomposition, LU
 decomposition, Newton-Raphson iteration, sub-space iteration, Stodola
 iteration, Sturm eigen-value check, static condensation, Guyan
 reduction, and dynamic condensation. <font face="courier" size="3">
-</font></font><pre><font face="Arial, Helvetica, sans-serif" size="2"><font face="courier" size="3">    file name      description                                               revision date
+<pre>    file name      description                                               revision date
     -----------    --------------------------------------------------------  -----------------
-    frame.c        K&amp;R C source-code for frame analysis                       6 June     2007
+    frame.c        K&amp;R C source-code for frame analysis                      20 December 2007
     eig.c          K&amp;R C source-code for generalized eigenvalue analysis      7 November 2002
     ldl_dcmp.c     K&amp;R C source-code for LDL' decomposition                  26 December 2001 
     lu_dcmp.c      K&amp;R C source-code for LU decomposition                     5 May      1998
     nrutil.c       K&amp;R C source-code for dynamic memory allocation           23 April    2001
-</font></font></pre>
-
-<p>
+</pre>
+</font>
+</font><p>
 <font face="Arial, Helvetica, sans-serif" size="2"><b>FRAME</b> compiles with the <a href="http://gcc.gnu.org/">gcc compiler</a>,
 the <a href="http://www.delorie.com/djgpp/"> DJGPP gcc compiler</a>,
 and the <a href="http://www.cs.virginia.edu/%7Elcc-win32/"> LCC-win32
@@ -994,18 +1003,18 @@ compiler</a>.
 
 <hr>
 <font face="Verdana, Arial, sans-serif" size="1">
-<p>
-FRAME is free software; you may redistribute it and/or modify it under the terms
+</font><p>
+<font face="Verdana, Arial, sans-serif" size="1">FRAME is free software; you may redistribute it and/or modify it under the terms
 of the GNU General Public License (<a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>) as published by the <a href="http://www.fsf.org/">Free Software Foundation</a>.
 Simply put, the GPL says that anyone who redistributes the software,
 with or without changes, must pass along the freedom to further copy
 and change it. By distributing the complete source code for FRAME under
 the terms of the GPL, we guarantee that you and all other users will
 have the freedom to redistribute and change FRAME.
-</p>
+</font></p>
 
 <p>
-FRAME is distributed in the hope that it will be useful, but WITHOUT ANY
+<font face="Verdana, Arial, sans-serif" size="1">FRAME is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE.
 See the GNU General Public License
@@ -1013,19 +1022,20 @@ See the GNU General Public License
 and the GNU General Public License
 <a href="http://www.gnu.org/copyleft/gpl-faq.html">FAQ</a>
 for more details.
-</p>
+</font></p>
 
 <p>
-Source code is available upon request.  
-</p>
+<font face="Verdana, Arial, sans-serif" size="1">Source code is available upon request.  
+</font></p>
 
 <center>
-Copyright (C) 1992-2007 Henri P. Gavin. 
+<font face="Verdana, Arial, sans-serif" size="1">Copyright (C) 1992-2007 Henri P. Gavin. 
 Verbatim copying and distribution is permitted in any medium, provided this notice is preserved. <br><br>
 Duke University<br> Department of Civil and Environmental Engineering<br> Durham, NC 27708-0287 
-</center>
-<br>updated: May 6 2003, Nov 8 2004, Nov 22 2004, Nov 29 2004, Dec 2
-2004, Dec 10 2004, Dec 6 2006, Feb 22 2007, Mar 1 2007, June 6 2007
+</font></center>
+<font face="Verdana, Arial, sans-serif" size="1"><br>updated: May 6
+2003, Nov 8 2004, Nov 22 2004, Nov 29 2004, Dec 2 2004, Dec 10 2004,
+Dec 6 2006, Feb 22 2007, Mar 1 2007, June 6 2007, December 20 2007
 </font> <br>
 <a href="http://thomer.com/vi/vi.html"><img src="img/vi_logo_by_urmas_reinsalu.png" border="0"></a>
 

@@ -1,5 +1,7 @@
+# CSconstruct for FRAME
+# vim: set syntax=python:
 
-version = '20070301'
+version = '20071220'
 
 env = Environment(
 	tools=['default','disttar']
@@ -45,7 +47,7 @@ env.SConscript('build/SConscript',['env'])
 # install example files
 
 examples = Split("""
-	bckltst.frm  exA.frm  exC.frm  exE.frm  exG.frm  exI.frm  frame.frm   
+	exA.frm  exC.frm  exE.frm  exG.frm  exI.frm
 	exB.frm  exD.frm  exF.frm  exH.frm  
 """)
 
@@ -56,13 +58,13 @@ env['installdirs']+=[datadir]
 env.Alias("install",env['installdirs'])
 
 #------------
-# create distribution tarball
+# create distribution zip-file
 
 env['DISTTAR_FORMAT']='bz2'
 env.Append(
 	DISTTAR_EXCLUDEEXTS=['.o','.os','.so','.a','.dll','.cc','.cache','.pyc'
 		,'.cvsignore','.dblite','.log', '.gz', '.bz2', '.zip']
-	,DISTTAR_EXCLUDEDIRS=['CVS','.svn','.sconf_temp', 'dist','build']
+	,DISTTAR_EXCLUDEDIRS=['CVS','.svn','.sconf_temp', 'dist','build','development','buildings','gui','images','tests']
 )
 
 tar = env.DistTar("dist/frame-"+version

@@ -65,14 +65,14 @@ exB.plt                         % plot file name
 
 
 ________________________________________________________________________________
--- FRAME version:   6 Jun 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
+-- FRAME version:   20 Dec 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
                      http://www.duke.edu/~hpgavin/frame/ 
  FRAME is distributed in the hope that it will be useful but with no warranty;
  for details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 pyramid-shaped frame --- static and dynamic analysis 
-Thu Jun  7 10:30:34 2007
+Thu Dec 20 16:32:20 2007
 ________________________________________________________________________________
 JOINTS: 5    MEMBERS: 4   FIXED JOINTS: 4   PRESCRIBED DISPLACEMENTS: 0
 JOINT LOADS: 1   UNIFORM MEMBER LOADS: 0   CONCENTRATED MEMBER LOADS: 0   

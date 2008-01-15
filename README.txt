@@ -25,6 +25,22 @@ General Public License (GPL) for details.
 
 ---
 
+Included in this distribution:
+
+LICENSE.txt  ... GNU GPL license
+README.txt   ... this file
+SConstruct   ... optionally used for compiling and building distribution
+                 using scons ... http://www.scons.org/
+frame.spec   ... build specification for scons, includes changelog
+saveplot     ... Gnuplot macro for saving Gnuplot plots as PostScript
+
+doc/         ... documentation 
+examples/    ... examples of FRAME input/output files
+scons/       ... used by scons to build distribution
+src/         ... C source code 
+
+---
+
 FRAME author:
 
 (c) 1992-2007 Henri Gavin - Associate Professor 

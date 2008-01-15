@@ -30,7 +30,7 @@
  Duke University, Box 90287
  Durham, NC  27708--0287
  ---------------------------------------------------------------------------
- version:    6 June 2007
+ version:    20 December 2007
  ---------------------------------------------------------------------------
 
 
@@ -260,7 +260,7 @@ char	*argv[];
 		exit();		/* exit the program			*/
 
 
-        fprintf(stderr," FRAME version:  6 Jun 2007,");
+        fprintf(stderr," FRAME version:  20 Dec 2007,");
         fprintf(stderr," GPL Copyright (C) 1992-2007, Henri P. Gavin \n");
         fprintf(stderr," http://www.duke.edu/~hpgavin/frame/ \n");
 	fprintf(stderr," This is free software with absolutely no warranty.\n");
@@ -1164,7 +1164,9 @@ int	*J1, *J2, shear, geom;
 
 		if (geom)
 		 geometric_K( k, x,y,z,r, L[i], Le[i], J1[i], J2[i],
-		  Asy[i],Asz[i], Iy[i],Iz[i], E[i],G[i], p[i], -Q[i][1], shear);
+		           Ax[i], Asy[i],Asz[i], 
+                           J[i], Iy[i], Iz[i], 
+                           E[i],G[i], p[i], -Q[i][1], shear);
 
 		for ( l=1; l <= 12; l++ ) {
 			ii = ind[l][i];
@@ -1257,10 +1259,10 @@ int     j1, j2, shear;
 
 
 /*------------------------------------------------------------------------------
-GEOMETRIC_K - space frame geometric stiffness matrix, global coordnates 12nov02
+GEOMETRIC_K - space frame geometric stiffness matrix, global coordnates 20dec07
 ------------------------------------------------------------------------------*/
-void geometric_K( k, x,y,z,r, L, Le, j1, j2, Asy, Asz, Iy,Iz,E,G, p, T, shear )
-float	**k, *x, *y, *z, *r, L, Le, Asy, Asz, Iy, Iz, E, G, p, T;
+void geometric_K( k, x,y,z,r, L, Le, j1, j2, Ax,Asy, Asz, J,Iy,Iz,E,G, p,T,shear)
+float	**k, *x, *y, *z, *r, L, Le, Ax, Asy, Asz, J, Iy, Iz, E, G, p, T;
 int     j1, j2, shear;
 {
 	float   t1, t2, t3, t4, t5, t6, t7, t8, t9,     /* coord Xformn */
@@ -1291,15 +1293,22 @@ int     j1, j2, shear;
 	}
 
 
+        kg[1][1]  = kg[7][7]   = T/L;
+
 	kg[2][2]  = kg[8][8]   = T/L*(1.2+2.0*Ksy+Ksy*Ksy)/Dsy;
 	kg[3][3]  = kg[9][9]   = T/L*(1.2+2.0*Ksz+Ksz*Ksz)/Dsz;
+	kg[4][4]  = kg[10][10] = T/L*J/Ax;
 	kg[5][5]  = kg[11][11] = T*L*(2.0/15.0+Ksz/6.0+Ksz*Ksz/12.0)/Dsz;
 	kg[6][6]  = kg[12][12] = T*L*(2.0/15.0+Ksy/6.0+Ksy*Ksy/12.0)/Dsy;
 
+        kg[1][7]  = kg[7][1]   = -T/L;
+ 
 	kg[5][3]  = kg[3][5]   =  kg[11][3] = kg[3][11] = -T/10.0/Dsz;
 	kg[9][5]  = kg[5][9]   =  kg[11][9] = kg[9][11] =  T/10.0/Dsz;
 	kg[6][2]  = kg[2][6]   =  kg[12][2] = kg[2][12] =  T/10.0/Dsy;
 	kg[8][6]  = kg[6][8]   =  kg[12][8] = kg[8][12] = -T/10.0/Dsy;
+
+        kg[4][10] = kg[10][4]  = -kg[4][4];
 
 	kg[8][2]  = kg[2][8]   = -T/L*(1.2+2.0*Ksy+Ksy*Ksy)/Dsy;
 	kg[9][3]  = kg[3][9]   = -T/L*(1.2+2.0*Ksz+Ksz*Ksz)/Dsz;
@@ -2590,7 +2599,7 @@ float	*x, *y, *z, *r, *Ax,*Asy,*Asz, *J,*Iy,*Iz, *E,*G,*p, *F,*Dp,**W,**P,**T;
 
 	fprintf(fp,"\n");
 	for (i=1; i<=80; i++)	fprintf(fp,"_");
-	fprintf(fp,"\n-- FRAME version:   6 Jun 2007,");
+	fprintf(fp,"\n-- FRAME version:   20 Dec 2007,");
 	fprintf(fp," GPL Copyright (C) 1992-2007, Henri P. Gavin --\n");
 	fprintf(fp,"                     http://www.duke.edu/~hpgavin/frame/ \n");
 	fprintf(fp," FRAME is distributed in the hope that it will be useful");
@@ -3167,7 +3176,7 @@ float	*x, *y, *z, *L, *p, *f, **V, exg;
 		total_frames,	/* total number of frames in animation */
 		Strcat(), Strcpy();
 	char	D3 = '#',
-		Movie = ' ',	/* use '#' for no-movie  -OR-  ' ' for movie */
+		Movie = '#',	/* use '#' for no-movie  -OR-  ' ' for movie */
 		s1[16], s2[16], modefl[64], framefl[64];
 	void	itoa(), bent_beam(), free_vector(), exit();
 

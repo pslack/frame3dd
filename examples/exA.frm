@@ -88,14 +88,14 @@ exA.plt	                        % plot file name
 
 
 ________________________________________________________________________________
--- FRAME version:   6 Jun 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
+-- FRAME version:   20 Dec 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
                      http://www.duke.edu/~hpgavin/frame/ 
  FRAME is distributed in the hope that it will be useful but with no warranty;
  for details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 linear static analysis of a 2D truss with support settlement 
-Thu Jun  7 10:30:23 2007
+Thu Dec 20 16:32:17 2007
 ________________________________________________________________________________
 JOINTS: 12    MEMBERS: 21   FIXED JOINTS: 12   PRESCRIBED DISPLACEMENTS: 1
 JOINT LOADS: 5   UNIFORM MEMBER LOADS: 0   CONCENTRATED MEMBER LOADS: 0   
