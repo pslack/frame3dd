@@ -6,7 +6,7 @@ srcs = [
 	, 'coordtrans.c'
 ]
 
-frame = Program('frame',srcs
+frame = Program('frame',srcs + ['main.c']
 	,LIBS=['m']
 )
 
