@@ -1,7 +1,7 @@
 # CSconstruct for FRAME
 # vim: set syntax=python:
 
-version = '20071220'
+version = '20080115'
 
 env = Environment(
 	tools=['default','disttar','substinfile']

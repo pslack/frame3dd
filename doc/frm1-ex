@@ -1,0 +1,50 @@
+______________________________________________________________________
+DUKE UNIVERSITY ---- Dept. of Civil and Environmental Engineering
+CE 131 --- Theory of Structures				Fall 1997
+______________________________________________________________________
+
+	INPUT  FILE  DESCRIPTION  FOR  PROGRAM  FRAME  --  EXAMPLE 1
+	
+
+EXAMPLE INPUT FILE:		COMMENTS:
+
+4  3				number of joints      number of members
+
+1  0  0  0  0			joint data:
+2  0  8  0  0			joint no.   X-coord  Y-coord  Z-coord  radius
+3  10 8  0  0
+4  10 0  0  0
+
+				member data:
+				mem.no. joint1 joint2  Ax Ay Az  J Iy Iz  E  G p
+1  1  2  1000 10 10 10 1000  40 100 120 0
+2  2  3  1000 10 10 10 1000 100 100 120 0
+3  3  4  1000 10 10 10 1000  60 100 120 0
+
+0				0: neglect shear deformations,  1: include 
+0                               0: neglect geometric stiffness, 1: include
+
+				graphical output data information:
+/tmp/frm1.msh			frame data mesh file name
+frm1.ann			frame data annotation file name
+10				deflection exageration factor
+1				0: check data only, 1: perform analysis
+
+				load data:
+1				number of concentrated joint loads
+ 2   1.5   0   0   0   0   0    joint no. X-load Y-load Z-load X-mom Y-mom Z-mom
+
+1				number of distributed loads
+ 2   0   -1.2   0		member no. X-frc/lngth  Y-frc/lngth  Z-frc/lngth
+
+0				number of interior point loads
+0				number of temperature loads
+
+				restraint data:
+2				number of restrained joints
+ 1   1 1 1 1 1 0		joint no.  X Y Z  XX YY ZZ  restraints
+ 4   0 1 1 1 1 0		( 0: free   1: fixed )
+
+0				number of prescribed displacements
+0                               number of desired vibratory modes
+
