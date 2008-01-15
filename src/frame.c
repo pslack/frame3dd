@@ -123,13 +123,14 @@ to run:		frame 'file-name'
 #include <math.h>
 #include <time.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "nrutil.h"
 
-
-/* must come after the above */
+/* must come after the above, because of the sneaky #defines in common.h */
 #include "common.h"
 #include "coordtrans.h"
+#include "ldl_dcmp.h"
 
 int main ( argc, argv )
 int	argc;
@@ -139,8 +140,7 @@ char	*argv[];
 		title[256],	/* the title of the analysis		*/
 		mesh_file[96],	/* frame mesh data filename		*/
 		plot_file[96],	/* frame mesh plot filename		*/
-		mode_file[96],	/* mode-shape mesh data filename	*/
-		*strcpy();	/* copy character strings		*/
+		mode_file[96];	/* mode-shape mesh data filename	*/
 
 	FILE	*fp;		/* input/output file pointer		*/
 
@@ -235,7 +235,7 @@ char	*argv[];
 		fprintf (stderr," Please enter the input/output file name: ");
 		scanf("%s", IO_file );
 		fprintf (stderr," You entered file name: %s \n", IO_file );
-	} else strcpy ( IO_file , argv[1] );
+	} else strcpy( IO_file , argv[1] );
 
 	if ((fp = fopen (IO_file, "r")) == NULL) {	/* open input file */
 		fprintf (stderr," error: cannot open file '%s'\n", IO_file);
@@ -824,9 +824,6 @@ int	DoF, *ok;
 {
 	float	*diag,		/* diagonal vector of the L D L' decomp. */
 		error=1.0;	/* error in the solution		*/
-
-	void	ldl_dcmp(),	/* L D L' decompositon and back-sub'n	*/
-		ldl_mprove();	/* iterative improvement to the solution  */
 
 	diag = vector ( 1, DoF );
 
@@ -1518,7 +1515,6 @@ int	n, m, *ok;
 {
 	float	*diag, *b, *x, error;
 	int	i,j,k, disp=1;
-	void	ldl_dcmp(), ldl_mprove();
 
 	diag = vector(1,n);
 	x    = vector(1,n);
@@ -1567,7 +1563,6 @@ int	n, m;
 {
 	float	*diag, *x, *y, error;
 	int	i,j,k, ok, disp=0;
-	void	ldl_dcmp(), ldl_mprove();
 
 	diag = vector(1,n);
 	x    = vector(1,n);
@@ -1614,7 +1609,6 @@ int	n;
 {
 	float	*diag, *b, *x, **Ai, **XAi, Aij, error;
 	int	i,j,k, ok, disp=0;
-	void	ldl_dcmp(), ldl_mprove();
 
 	diag = vector(1,n);
 	x    = vector(1,n);
@@ -1736,66 +1730,11 @@ float	*x,*y,*z, *r, *L, *Le, *Ax, *Asy,*Asz, *J,*Iy,*Iz, *E, *G,  **K,
 	return;
 }
 
+/* itoa moved to frm_io.c */
 
-/*------------------------------------------------------------------------------
-ITOA  -  Convert an integer n to charcters in s, from K&R, 1978,   p. 59-60
-------------------------------------------------------------------------------*/
-void	itoa(n,s,k)
-int	n,k;
-char	s[];
-{
-	int	c, i, j, sign;
+/* removed strcat -- it's in <string.h> in the standard C library */
 
-	if ((sign = n) < 0) 		/* record sign */
-		n = -n;			/* make n positive */
-	i = 0;
-	do {				/* generate digits in reverse order */
-		s[i++] = n % 10 + '0';	/* get next digit */
-	} while ((n /= 10) > 0);	/* delete it */	
-	for (;i<k;)	s[i++] = '0';	/* add leading '0' */
-	if (sign < 0)
-		s[i++] = '-';
-	s[i] = '\0';
-					/* reverse order of string s */
-	j = 0;
-	while ( s[j] != '\0' )	j++;	/* j is length of s - 1 */
-	--j;
+/* removed strcpy -- it's in <string.h> in the standard C library */
 
-	for (i = 0; i < j; i++, j--) {
-		c = s[i];
-		s[i] = s[j];
-		s[j] = c;
-	}
-	return;
-}
+/* dots moved to frm_io.c */
 
-/*------------------------------------------------------------------------------
-STRCAT  -  concatenate string t  to string end of string s, K&R, 1978,   p. 44
-------------------------------------------------------------------------------*/
-int Strcat(s,t)
-char	s[], t[];
-{
-	int	i = 0, j = 0;
-
-	while ( s[i] != '\0' )	i++;	/* find length of s  */
-	while ( s[i++] = t[j++] )  ;
-}
-
-/*------------------------------------------------------------------------------
-STRCPY  -  copy string t  to string s, from K&R, 1978,   p. 101
-------------------------------------------------------------------------------*/
-int Strcpy(s,t)
-char	*s, *t;
-{
-	while ( *s++ = *t++ )	;
-}
-
-/*------------------------------------------------------------------------------
-DOTS  -  print a set of dots (periods) 
-------------------------------------------------------------------------------*/
-void dots(n)
-int	n;
-{
-	int i;
-	for (i=1; i<=n; i++)	printf(".");
-}

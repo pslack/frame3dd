@@ -130,3 +130,6 @@ void bent_beam(
 		, float L, float p, float *D
 		, float exg
 );
+
+void dots(int n);
+

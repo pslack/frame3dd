@@ -31,16 +31,11 @@
 #include <stdio.h>
 #include <math.h>
 
-/* ----------------------- double precision -------------------------------- */
-#define float double
-#define vector dvector
-#define matrix dmatrix
-#define free_vector free_dvector
-#define free_matrix free_dmatrix
-#define save_matrix save_dmatrix
-#define show_matrix show_dmatrix
-#define show_vector show_dvector
-/* ----------------------- double precision -------------------------------- */
+/* NOTE that ldl_dcmp.h includes 'common.h' which does some sneaky #define
+	with the 'float' type!
+*/
+
+#include "ldl_dcmp.h"
 
 /*----------------------------------------------------------------------------- 
 LDL_DCMP  -  Solves [A]{x} = {b} simply and efficiently by performing an 
@@ -132,10 +127,11 @@ LDL_MPROVE  -  Improves a solution vector x[1..n] of the linear set of equations
 
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  4 May 2001
 -----------------------------------------------------------------------------*/
-void ldl_mprove ( A, n, d, b, x, err, ok )
-float   **A, *d, *b, *x, *err;
-int     n, *ok;
-{
+void ldl_mprove(
+		 float **A
+		, int n, float *d, float *b, float *x
+		, float *err, int *ok
+){
 	double  sdp;		/* accumulate the r.h.s. in double precision */
 	float   *r,		/* the residual error		  	*/
 		err_new=0,	/* the RMS error of the solution	*/
@@ -180,10 +176,10 @@ PSEUDO_INV - calculate the pseudo-inverse of A ,
              beta is a regularization factor, which should be small (1e-10)
              A is m by n      Ai is m by n                              8oct01
 -----------------------------------------------------------------------------*/
-void pseudo_inv ( A, Ai, n, m, beta )
-float   **A, **Ai, beta; 
-int     n, m;
-{
+void pseudo_inv(
+		float **A, float **Ai
+		, int n, int m, float beta
+){
 	float	*diag, *b, *x, **AtA, **AtAi, tmp, tr_AtA=0.0,
 		*vector(), **matrix(), error;
 	int     i,j,k, ok, disp=0;

@@ -31,6 +31,11 @@
 
 #include <math.h>
 #include <time.h>
+#include <string.h>
+#include <stdlib.h>
+
+/* forward decls */
+void itoa(int n, char s[], int k);
 
 /*------------------------------------------------------------------------------
 READ_INPUT  -  read material and geometry data, calc lengths		15dec97
@@ -46,7 +51,6 @@ void read_input(
 ){
 
 	int	j1, j2, i, j, X=0, Y=0, Z=0;
-	void	exit();
 
 	for (i=1;i<=nJ;i++) {		/* read joint coordinates	*/
 		fscanf(fp, "%d", &j );
@@ -186,9 +190,7 @@ PARSE_INPUT                                                             7may03
 -----------------------------------------------------------------------------*/
 void parse_input(FILE *fp){
 	FILE	*fpc;		/* cleaned inout/output file pointer	*/
-	void	getline_no_comment();
 	char	line[256];
-	void	exit();
 
 	if ((fpc = fopen ("frame.cln", "w")) == NULL) {	
 		fprintf (stderr," error: cannot open file 'frame.cln'\n");
@@ -255,8 +257,6 @@ void read_loads(
 		hy, hz,			/* section dimensions in local coords */
 		t1, t2, t3, t4, t5, t6, t7, t8, t9;	/* 3D coord Xfrm coef */
 	int	i,j,l,n, j1, j2;
-	void dots(),
-		exit();
 
 	for (j=1; j<=DoF; j++)
 		F_mech[j] = F_temp[j] = 0.0;
@@ -495,7 +495,6 @@ void read_reactions (
 		, int nJ, float *Dp, int *R, int *sumR 
 ){
 	int	i,j,l;
-	void	dots(), exit();
 
 	for (i=1; i<=DoF; i++)  {
 		Dp[i] = 0.0;
@@ -587,7 +586,6 @@ void read_masses(
 	FILE	*mf;				/* mass data file	*/
 	float	ms = 0.0;
 	int	chk, j, jnt, m, mem, nA;
-	void	dots(), exit();
 
 	*total_mass = *struct_mass = 0.0;	
 
@@ -700,9 +698,7 @@ void read_condense (
 		, int nJ, int modes
 		, int *nC, int *Cdof, int *Cmethod, int *q, int *m
 ){
-	int	i,j,k,  chk, **qm, **imatrix();
-	void	dots(),
-		free_imatrix(), exit();
+	int	i,j,k,  chk, **qm;
 
 	*Cmethod = *nC = *Cdof = 0;
 
@@ -799,9 +795,7 @@ void control_data(
 		, int shear, int anlyz, int geom
 ){
 	int	i,j,n;
-        time_t  now;            /* modern time variable type    (DJGPP) */
-
-	(void) time(&now);
+    time_t  now;            /* modern time variable type    (DJGPP) */
 
 	fprintf(fp,"\n");
 	for (i=1; i<=80; i++)	fprintf(fp,"_");
@@ -943,7 +937,6 @@ void save_results (
 	float	disp;
 	int	i,j,n;
 
-
 	if ( ok < 0 ) {
 	 fprintf(fp,"  * The Stiffness Matrix is not positive-definite *\n");
 	 fprintf(fp,"    Check that all six rigid-body translations are restrained\n");
@@ -1036,7 +1029,6 @@ void modal_results(
 	float	mpfX, mpfY, mpfZ,	/* mode participation factors	*/
 		*msX, *msY, *msZ, *vector();
 	float	fs;
-	void	free_vector();
 
 	msX = vector(1,DoF);
 	msY = vector(1,DoF);
@@ -1123,20 +1115,13 @@ void mesh(
 	FILE	*fpmfx, *fpm;
 	float	mx, my, mz,	/* coordinates of the member labels	*/
 		*vector(); 
-	int	j1, j2, i, j, m, X=0, Y=0, Z=0, 
-		Strcat(), Strcpy();
+	int	j1, j2, i, j, m, X=0, Y=0, Z=0;
 	char	meshfl[64], str[10], D3 = '#';
-	void	bent_beam(), free_vector();
-	void	exit();
-        time_t  now;            /* modern time variable type    (DJGPP) */
+    time_t  now;            /* modern time variable type    (DJGPP) */
 
-        (void) time(&now);
- 
-
-
-	Strcpy(meshfl,meshfile);
+	strcpy(meshfl,meshfile);
 	str[0]='f'; str[1]='\0';
-	Strcat(meshfl,str);
+	strcat(meshfl,str);
 
 	if ((fpmfx = fopen (meshfl, "w")) == NULL) {
 		printf (" error: cannot open meshfile: %s\n", meshfile);
@@ -1267,10 +1252,8 @@ void modal_mesh(
 		*v,		/* a mode-shape vector */
 		*vector();
 
-	int	i, j, m,n, X=0, Y=0, Z=0,
-		Strcat(), Strcpy(); 
+	int	i, j, m,n, X=0, Y=0, Z=0;
 	char	D3 = '#', s1[16],  s2[16], modefl[64];
-	void	bent_beam(), itoa(), free_vector(), exit();
 
 
 	msX = vector(1,DoF);
@@ -1289,8 +1272,8 @@ void modal_mesh(
 
 	for (m=1; m<=modes; m++) {
 
-	  Strcpy(modefl,modefile);
-	  s1[0]='-'; s1[1]='\0'; itoa(m,s2,2);  Strcat(s1,s2);  Strcat(modefl,s1);
+	  strcpy(modefl,modefile);
+	  s1[0]='-'; s1[1]='\0'; itoa(m,s2,2);  strcat(s1,s2);  strcat(modefl,s1);
 
 	  if ((fpm = fopen (modefl, "w")) == NULL) {
 		printf (" error: cannot open modal mesh file: %s\n", modefl);
@@ -1391,12 +1374,11 @@ void animate(
 
 	int	fr, i,j, m,n, X=0, Y=0, Z=0, j1,j2, c, CYCLES=3,
 		frame_number = 0,
-		total_frames,	/* total number of frames in animation */
-		Strcat(), Strcpy();
+		total_frames;	/* total number of frames in animation */
+
 	char	D3 = '#',
 		Movie = '#',	/* use '#' for no-movie  -OR-  ' ' for movie */
 		s1[16], s2[16], modefl[64], framefl[64];
-	void	itoa(), bent_beam(), free_vector(), exit();
 
 	for (j=1; j<=nJ; j++) {		/* check for three-dimensional frame */
 		if (x[j] != 0.0) X=1;
@@ -1458,15 +1440,15 @@ void animate(
 	 for ( c=1; c <= CYCLES; c++ ) { 
 	  for ( fr=0; fr<=frames; fr++ ) {
 
-	    Strcpy(modefl,modefile);
-	    Strcpy(framefl,modefile);
-	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  Strcat(s1,s2); 
-	    Strcat(framefl,s1);
-	    Strcat(s1,".");  itoa(fr,s2,3);  Strcat(s1,s2);  Strcat(modefl,s1);
+	    strcpy(modefl,modefile);
+	    strcpy(framefl,modefile);
+	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2); 
+	    strcat(framefl,s1);
+	    strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 	    s1[0] = '-'; s1[1] = 'f'; s1[2] = '-'; s1[3] = '\0';
-	    itoa(frame_number++,s2,3); Strcat(s1,s2); Strcat(framefl,s1);
+	    itoa(frame_number++,s2,3); strcat(s1,s2); strcat(framefl,s1);
 	    s1[0] = '.'; s1[1] = 'p'; s1[2] = 's'; s1[3] = '\0';
-	    Strcat(framefl,s1);
+	    strcat(framefl,s1);
 
 	    if ( D3 == '#' ) {
 		fprintf(fpm,"plot '%s' u 2:3 w l lw 1 lt 5, ", meshfile );
@@ -1487,15 +1469,15 @@ void animate(
 	  }
 	  for ( fr = frames-1; fr > 0; fr-- ) {
 
-	    Strcpy(modefl,modefile);
-	    Strcpy(framefl,modefile);
-	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  Strcat(s1,s2); 
-	    Strcat(framefl,s1);
-	    Strcat(s1,".");  itoa(fr,s2,3);  Strcat(s1,s2);  Strcat(modefl,s1);
+	    strcpy(modefl,modefile);
+	    strcpy(framefl,modefile);
+	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2); 
+	    strcat(framefl,s1);
+	    strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 	    s1[0] = '-'; s1[1] = 'f'; s1[2] = '-'; s1[3] = '\0';
-	    itoa(frame_number++,s2,3); Strcat(s1,s2); Strcat(framefl,s1);
+	    itoa(frame_number++,s2,3); strcat(s1,s2); strcat(framefl,s1);
 	    s1[0] = '.'; s1[1] = 'p'; s1[2] = 's'; s1[3] = '\0';
-	    Strcat(framefl,s1);
+	    strcat(framefl,s1);
 
 	    if ( D3 == '#' ) {
 	 	fprintf(fpm,"plot '%s' u 2:3 w l lw 1 lt 5, ", meshfile );
@@ -1516,9 +1498,9 @@ void animate(
 	 }
 	 fr = 0;
 
-	 Strcpy(modefl,modefile);
-	 s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  Strcat(s1,s2); 
-	 Strcat(s1,".");  itoa(fr,s2,3);  Strcat(s1,s2);  Strcat(modefl,s1);
+	 strcpy(modefl,modefile);
+	 s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2); 
+	 strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 
 	 if ( D3 == '#' ) {
 	 	fprintf(fpm,"plot '%s' u 2:3 w l lw 2 lt 5, ", meshfile );
@@ -1538,9 +1520,9 @@ void animate(
 	while ( (m = anim[i]) != 0 ) { 
 	  for ( fr=0; fr<=frames; fr++ ) {
 
-	    Strcpy(modefl,modefile);
-	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  Strcat(s1,s2); 
-	    Strcat(s1,".");  itoa(fr,s2,3);  Strcat(s1,s2);  Strcat(modefl,s1);
+	    strcpy(modefl,modefile);
+	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2); 
+	    strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 
 	    if ((fpm = fopen (modefl, "w")) == NULL) {
 		printf (" error: cannot open modal mesh file: %s\n", modefl);
@@ -1589,7 +1571,6 @@ void bent_beam(
 		s, v, w, dx, dy, dz,
 		*vector(), **matrix();
 	int	i1, i2, pd;
-	void	lu_dcmp(), free_vector(), free_matrix(), exit();
 
 	A = matrix(1,4,1,4);
 	a = vector(1,4);
@@ -1665,3 +1646,39 @@ void bent_beam(
 }
 
 
+/*------------------------------------------------------------------------------
+ITOA  -  Convert an integer n to charcters in s, from K&R, 1978,   p. 59-60
+------------------------------------------------------------------------------*/
+void itoa(int n, char s[], int k){
+	int	c, i, j, sign;
+
+	if ((sign = n) < 0) 		/* record sign */
+		n = -n;			/* make n positive */
+	i = 0;
+	do {				/* generate digits in reverse order */
+		s[i++] = n % 10 + '0';	/* get next digit */
+	} while ((n /= 10) > 0);	/* delete it */	
+	for (;i<k;)	s[i++] = '0';	/* add leading '0' */
+	if (sign < 0)
+		s[i++] = '-';
+	s[i] = '\0';
+					/* reverse order of string s */
+	j = 0;
+	while ( s[j] != '\0' )	j++;	/* j is length of s - 1 */
+	--j;
+
+	for (i = 0; i < j; i++, j--) {
+		c = s[i];
+		s[i] = s[j];
+		s[j] = c;
+	}
+	return;
+}
+
+/*------------------------------------------------------------------------------
+DOTS  -  print a set of dots (periods) 
+------------------------------------------------------------------------------*/
+void dots(int n){
+	int i;
+	for (i=1; i<=n; i++)	printf(".");
+}
