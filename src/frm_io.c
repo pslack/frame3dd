@@ -24,6 +24,7 @@
 
 /* must be included after nrutil, because of sneaky #define in common.h */
 #include "frm_io.h"
+#include "lu_dcmp.h"
 
 #include <math.h>
 #include <time.h>
