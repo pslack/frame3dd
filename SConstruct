@@ -33,6 +33,7 @@ opts.Update(env)
 env['CCFLAGS']=['-O']
 
 if env.get('DEBUG'):
+	print "DEBUGGING TURNED ON"
 	env.Append(CCFLAGS=['-g'])
 
 #-------------
