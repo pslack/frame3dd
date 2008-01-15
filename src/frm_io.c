@@ -1,32 +1,28 @@
-/*******************************************************************************
- File frm_io.c
- File input/output routines for the '.frm' format.
+/*	FRAME: Static and dynamic structural analysis of 2D & 3D frames and trusses
+	Copyright (C) 1992-2007  Henri P. Gavin
 
- Part of FRAME -- see frame.c for details.
- ---------------------------------------------------------------------------
- Copyright (C) 1992-2007  Henri P. Gavin
- 
- This program is free software; you may redistribute it and/or
- modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2
- of the License, or (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+	This program is free software; you may redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
- http://www.fsf.org/copyleft/gpl.html
- 
- You should have received a copy of the GNU General Public License, gpl.txt,
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- ---------------------------------------------------------------------------
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
- INPUT FORMAT is documented in frame.c
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*//**
+	@file
+	Input/output routines for FRAME. 
 
-******************************************************************************/
+	@note The file format for FRAME is defined in doc/user_manual.html.
+*/
 
+#include "nrutil.h"
+
+/* must be included after nrutil, because of sneaky #define in common.h */
 #include "frm_io.h"
 
 #include <math.h>
@@ -35,7 +31,19 @@
 #include <stdlib.h>
 
 /* forward decls */
-void itoa(int n, char s[], int k);
+static void itoa(int n, char s[], int k);
+
+static void getline_no_comment(
+		FILE *fp            /**< pointer to the file from which to read */
+		,char *s             /**< pointer to the string to which to write */
+		,int lim            /**< the longest anticipated line length  */
+);
+
+static void getline(
+		FILE	*fp
+		, char    *s
+		, int     lim
+);
 
 /*------------------------------------------------------------------------------
 READ_INPUT  -  read material and geometry data, calc lengths		15dec97
@@ -737,7 +745,6 @@ void read_condense (
 	  exit(1);
 	}
 
-
 	qm = imatrix( 1, *nC, 1,7 );
 
 	for ( i=1; i <= *nC; i++) {
@@ -1027,7 +1034,7 @@ void modal_results(
 ){
 	int	i, j, k, m, num_modes;
 	float	mpfX, mpfY, mpfZ,	/* mode participation factors	*/
-		*msX, *msY, *msZ, *vector();
+		*msX, *msY, *msZ;
 	float	fs;
 
 	msX = vector(1,DoF);
@@ -1113,8 +1120,7 @@ void mesh(
 		, float exg, int anlyz
 ){
 	FILE	*fpmfx, *fpm;
-	float	mx, my, mz,	/* coordinates of the member labels	*/
-		*vector(); 
+	float	mx, my, mz;	/* coordinates of the member labels	*/
 	int	j1, j2, i, j, m, X=0, Y=0, Z=0;
 	char	meshfl[64], str[10], D3 = '#';
     time_t  now;            /* modern time variable type    (DJGPP) */
@@ -1249,8 +1255,7 @@ void modal_mesh(
 	float	mx, my, mz,	/* coordinates of the member labels	*/
 		mpfX, mpfY, mpfZ,	/* mode participation factors	*/
 		*msX, *msY, *msZ,
-		*v,		/* a mode-shape vector */
-		*vector();
+		*v;		/* a mode-shape vector */
 
 	int	i, j, m,n, X=0, Y=0, Z=0;
 	char	D3 = '#', s1[16],  s2[16], modefl[64];
@@ -1370,7 +1375,7 @@ void animate(
 		zoom_final = 1.1,	/* final  zoom scale in 3D animation */
 		frames = 25,	/* number of frames in animation	*/
 		ex=10,		/* an exageration factor, for animation */
-		*v, *vector();
+		*v;
 
 	int	fr, i,j, m,n, X=0, Y=0, Z=0, j1,j2, c, CYCLES=3,
 		frame_number = 0,
@@ -1568,8 +1573,7 @@ void bent_beam(
 	float	t1, t2, t3, t4, t5, t6, t7, t8, t9, 	/* coord xfmn	*/
 		u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, 
 		*a, *b, **A,
-		s, v, w, dx, dy, dz,
-		*vector(), **matrix();
+		s, v, w, dx, dy, dz;
 	int	i1, i2, pd;
 
 	A = matrix(1,4,1,4);
@@ -1682,3 +1686,4 @@ void dots(int n){
 	int i;
 	for (i=1; i<=n; i++)	printf(".");
 }
+

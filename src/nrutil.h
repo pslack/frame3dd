@@ -1,3 +1,7 @@
+/** @file
+	Memory allocation functions from Numerical Recipes in C, by Press,
+	Cambridge University Press, 1988
+*/
 #ifndef FRAME_NRUTIL_H
 #define FRAME_NRUTIL_H
 

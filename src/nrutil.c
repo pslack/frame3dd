@@ -1,6 +1,7 @@
-/*			FILE nrutil.c					*/
-/* Memory allocation functions from Numerical Recipes in C, by Press,  	*/
-/* Cambridge University Press, 1988					*/
+/** @file
+	Memory allocation functions from Numerical Recipes in C, by Press,
+	Cambridge University Press, 1988
+*/
 
 #include <malloc.h>
 #include <stdio.h>

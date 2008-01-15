@@ -1,32 +1,22 @@
-/* 
- ---------------------------------------------------------------------------
- FILE   ldl_dcmp.c - routines to perform L D L' - decomposition
- ---------------------------------------------------------------------------
- Copyright (C) 1992-2002  Henri P. Gavin
- 
- This program is free software; you may redistribute it and/or
- modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2
- of the License, or (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- http://www.fsf.org/copyleft/gpl.html
- 
- You should have received a copy of the GNU General Public License, gpl.txt,
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- ---------------------------------------------------------------------------
- Henri P. Gavin                                             hpgavin@duke.edu
- Department of Civil and Environmental Engineering
- Duke University, Box 90287
- Durham, NC  27708--0287
- ---------------------------------------------------------------------------
-*/
+/*	FRAME: Static and dynamic structural analysis of 2D & 3D frames and trusses
+	Copyright (C) 1992-2007  Henri P. Gavin
 
+	This program is free software; you may redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*//**
+	@file
+	routines to perform L D L' - decomposition
+*/
 
 #include <stdio.h>
 #include <math.h>

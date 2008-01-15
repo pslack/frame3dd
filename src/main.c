@@ -1,123 +1,35 @@
-/*******************************************************************************
+/*	FRAME: Static and dynamic structural analysis of 2D & 3D frames and trusses
+	Copyright (C) 1992-2007  Henri P. Gavin
 
- FRAME
- 
- Static and dynamic structural analysis of 2D and 3D frames and trusses with
- elastic and geometric stiffness.
- ---------------------------------------------------------------------------
- http://www.duke.edu/~hpgavin/frame/
- ---------------------------------------------------------------------------
- Copyright (C) 1992-2007  Henri P. Gavin
- 
- This program is free software; you may redistribute it and/or
- modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2
- of the License, or (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+	This program is free software; you may redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
- http://www.fsf.org/copyleft/gpl.html
- 
- You should have received a copy of the GNU General Public License, gpl.txt,
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- ---------------------------------------------------------------------------
- Henri P. Gavin                                             hpgavin@duke.edu   
- Department of Civil and Environmental Engineering
- Duke University, Box 90287
- Durham, NC  27708--0287
- ---------------------------------------------------------------------------
- version:    20 December 2007
- ---------------------------------------------------------------------------
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#define VERSION "20 Dec 2007"
+/**
+	FRAME: a program for static and dynamic structural analysis of 2D and 3D
+	frames and trusses with elastic and geometric stiffness.
 
-Input file format:
+	For more information go to http://www.duke.edu/~hpgavin/frame/
 
+	The input file format for FRAME is defined in doc/user_manual.html
 
-A one line descriptive title of your project 
-
-nJ	nM	 				  (number of joints and members)
-  J[1]	x[1]	y[1]	z[1]	r[1]	
-    :     :       :       :       :		 (joint numbers and coordinates)
-  J[nJ]	x[nJ]	y[nJ]	z[nJ]	r[nJ]
-					    (member numbers, loc'ns, and prop's)
-M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jp[1]  Iy[1]  Iz[1]  E[1]  G[1]  p[1]
-  :      :      :      :       :       :      :      :      :     :     :     ;
-M[nM] J1[nM] J2[nM] Ax[nM] Asy[nM] Asz[nM] Jp[nM] Iy[nM] Iz[nM] E[nM] G[nM] p[nM]
-
-shear						  (1: include shear deformation)
-geom                              (1: consider geometric nonlinearity, 0: don't)
-/tmp/mesh_file						   (mesh data file name)
-plot_file					           (mesh plot file name)
-exagg						  (exaggerate mesh deformations)
-anlyz				     (1: stiffness analysis, 0: data check only)
-
-nF						       (number of loaded joints)
-  J[1]	Fx[1]	Fy[1]	Fz[1]	Mxx[1]	Myy[1]	Mzz[1]
-   :      :       :       :        :       :       :		  (nodal forces)
-  J[nF]	Fx[nF]	Fy[nF]	Fz[nF]	Mxx[nF]	Myy[nF]	Mzz[nF]
-
-nW					   (number of uniform distributed loads)
-  M[1]	Wx[1]	Wy[1]	Wz[1]
-   :      :       :       :	    (uniform member loads in member coordinates)
-  M[nW]	Wx[nW]	Wy[nW]	Wz[nW]
-
-nP					    (number of concentrated point loads)
-  M[1]	Px[1]	Py[1]	Pz[1]	x[1]	    (point loads in member coordinates )
-    :      :       :       :      :	    (and x=distance from coordinate J1 )
-  M[nP]	Px[nP]	Py[nP]	Pz[nP]	x[nP]
-
-nT					 (number of members temperature changes)
-  M[1]	a[1]	hy[1]	hz[1]	Ty+[1]	Ty-[1]	Tz+[1]	Tz-[1]	(member no.,   )
-    :     :        :       :        :       :       :       :   (temp. coef.)
-  M[nT]	a[nT]	hy[nT]	hz[nT]	Ty+[nT]	Ty-[nT]	Tz+[nT]	Tz-[nT] (sizes, & temps)
-
-nR					       (number of joints with reactions)
-  J[1]	Rx[1]	Ry[1]	Rz[1]	Rxx[1]	Ryy[1]	Rzz[1]
-    :      :       :       :        :       :       :	       (0:free, 1:fixed)
-  J[nR]	Rx[nR]	Ry[nR]	Rz[nR]	Rxx[nR]	Ryy[nR]	Rzz[nR]
-
-nD		         (number of joints with prescribed displacements nD<=nR)
-  J[1]	Dx[1]	Dy[1]	Dz[1]	Dxx[1]	Dyy[1]	Dzz[1]
-    :      :       :       :        :       :       : (prescribed displacements)
-  J[nD]	Dx[nD]	Dy[nD]	Dz[nD]	Dxx[nD]	Dyy[nD]	Dzz[nD]
-
-modes						       (number of desired modes)
-Mmethod					      ( 1: Subspace Jacobi, 2: Stodola )
-lump						 (0: consistent mass, 1: lumped)
-/tmp/mode_file					     (mode shape data file name)
-tol						  (convergence tolerance ~ 1e-4)
-shift                                             (eigenvalue shift)
-
-  M[1]	d[1]	BMs[1]
-    :     :         :    (beam density and extra beam masses, without self mass)
-  M[nM]	d[nM]	BMs[nM]
-
-nI                           (number of joints with extra joint mass or inertia)
-  J[1]	JMs[1]    JMx[1]   JMy[1]   JMz[1]  (joint masses and rotatory inertias)
-    :       :         :        :        :		    (global coordinates)
-  J[nI]	JMs[nI]   JMx[nI]  JMy[nI]  JMz[nI]
-
-nA                                     (number of modes to be animated, nA < 20)
-  anim[0] ... anim[nA](list of modes to be animated, sorted by increasing freq.)
-pan                                         (1: pan during animation; 0: don't )
-
-Cmethod                           ( matrix condensation method ... 0,1,2, or 3 )
-nC                                                ( number of condensed joints )
-  J[1]  cx[1]  cy[1]  cz[1]   cxx[1]  cyy[1]  czz[1]
-    :      :      :      :        :       :       :    ( 1: condense; 0: don't )
-  J[nC] cx[nC] cy[nC] cz[nC]  cxx[nC] cyy[nC]  czz[nC]
-  m[1]   m[2]   m[3]  ...      ( list of modes matched in dynamic condensation )
-
- ------------------------------------------------------------------------------
-
-to compile:	gcc -O -o frame frame.c eig.c ldl_dcmp.c lu_dcmp.c nrutil.c -lm
-to run:		frame 'file-name'
-
-*******************************************************************************/
+	---------------------------------------------------------------------------
+	Henri P. Gavin                                             hpgavin@duke.edu   
+	Department of Civil and Environmental Engineering
+	Duke University, Box 90287
+	Durham, NC  27708--0287
+	---------------------------------------------------------------------------
+*/
 
 #include <stdio.h>
 #include <math.h>
@@ -181,8 +93,7 @@ char	*argv[];
 		error = 1.0,	/* rms equilibrium error and reactions	*/
 		Cfreq = 0.0,	/* frequency used for Guyan condensation*/
 		**Kc, **Mc,	/* condensed stiffness and mass matrices*/
-		exagg,		/* exaggerate deformations in mesh data	*/
-		rel_norm();	/* relative 2-norm between two  vectors	*/
+		exagg;		/* exaggerate deformations in mesh data	*/
 
 	int	nJ, nM,		/* number of Joints and Members		*/
 		DoF, i, j, n,	/* number of Degrees of Freedom		*/
@@ -212,11 +123,11 @@ char	*argv[];
 		*m,		/* vector of modes to condense		*/
 		temp_mech;	/* counter for temp and mech load cases	*/
 
-    fprintf(stderr," FRAME version:  20 Dec 2007,");
-    fprintf(stderr," GPL Copyright (C) 1992-2007, Henri P. Gavin \n");
-    fprintf(stderr," http://www.duke.edu/~hpgavin/frame/ \n");
+    fprintf(stderr," FRAME version: " VERSION);
+    fprintf(stderr," GPL Copyright (C) 1992-2007, Henri P. Gavin\n");
+    fprintf(stderr," http://www.duke.edu/~hpgavin/frame/\n");
 	fprintf(stderr," This is free software with absolutely no warranty.\n");
-	fprintf(stderr," For details, see http://www.fsf.org/copyleft/gpl.html \n\n");
+	fprintf(stderr," For details, see http://www.fsf.org/copyleft/gpl.html\n\n");
 
 	if (argc < 2) {
 		fprintf (stderr," Please enter the input/output file name: ");
@@ -301,32 +212,41 @@ char	*argv[];
 	q = ivector(1,DoF); 	/* vector of condensed degrees of freedom */
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
 
-	read_input ( fp, nJ, nM, x,y,z,r, L, Le, J1, J2, &anlyz, &geom, Q, 
-	     Ax,Asy,Asz, J,Iy,Iz, E,G, p, &shear, mesh_file,plot_file,&exagg);
+	read_input(
+			fp, nJ, nM, x,y,z,r, L, Le, J1, J2, &anlyz, &geom, Q
+			, Ax,Asy,Asz, J,Iy,Iz, E,G, p, &shear, mesh_file,plot_file,&exagg
+	);
 	printf("  input data complete\n");
 
-	read_loads ( fp, nJ, x, y, z, L, Le, Ax,Asy,Asz, Iy,Iz, E, G, p, shear, 
-		 J1, J2, DoF, nM, &nF, &nW, &nP, &nT,
-		 Fo_mech, Fo_temp, W, P, T, feF_mech, feF_temp );
+	read_loads(
+			fp, nJ, x, y, z, L, Le, Ax,Asy,Asz, Iy,Iz, E, G, p, shear
+			, J1, J2, DoF, nM, &nF, &nW, &nP, &nT
+			, Fo_mech, Fo_temp, W, P, T, feF_mech, feF_temp
+	);
 	for (i=1; i<=DoF; i++)	Fo[i] = Fo_temp[i] + Fo_mech[i];
 	printf("  load data complete\n");
 
 	read_reactions ( fp, DoF, &nD, &nR, nJ, Dp, R, &sumR );
 	printf("  reaction data complete\n");
 
-	read_masses ( fp, nJ, nM, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax, 
-			&total_mass, &struct_mass, &modes, &Mmethod, 
-			&lump, mode_file, &tol, &shift, anim, &pan );
+	read_masses(
+			fp, nJ, nM, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax
+			, &total_mass, &struct_mass, &modes, &Mmethod
+			, &lump, mode_file, &tol, &shift, anim, &pan
+	);
 	printf("  mass data complete\n");
 
-	read_condense ( fp, nJ, modes, &nC, &Cdof, &Cmethod, q, m );
+	read_condense(fp, nJ, modes, &nC, &Cdof, &Cmethod, q, m);
 
 	printf("  matrix condensation data complete\n");
 
-	fclose (fp);	fp = fopen(IO_file, "a");     /* output appends input */
+	fclose(fp);
+	fp = fopen(IO_file, "a");     /* output appends input */
 
-	control_data ( fp, title, nJ,nM, nF,nD,nR,nW,nP,nT, x,y,z,r, J1,J2, 
-		Ax,Asy,Asz, J,Iy,Iz, E,G, p, Fo,Dp,R,W,P,T, shear,anlyz,geom );
+	control_data(
+			fp, title, nJ,nM, nF,nD,nR,nW,nP,nT, x,y,z,r, J1,J2
+			, Ax,Asy,Asz, J,Iy,Iz, E,G, p, Fo,Dp,R,W,P,T, shear,anlyz,geom
+	);
 
 	if (anlyz) {					/* solve the problem  */
 
