@@ -1,5 +1,8 @@
 Name:		frame
 Summary:	Structural analysis of 2D/3D frames
+
+# This version number is filled in automatically when you run 'scons dist'.
+# You should update it in the 'SConstruct' file, rather than here.
 Version:	@VERSION@
 
 # Use release 0.* so that other users can do patch releases with a higher number
@@ -53,6 +56,9 @@ rm -rf %{buildroot}
 %{_datadir}
 
 %changelog
+* Mon Jan 15 2008 John Pye <john@curioussymbols.com> 20071220
+- Updated to new version received from H Gavin by email.
+
 * Wed Jun 28 2007 John Pye <john@curioussymbols.com> 20070301
 - Initial version
 
