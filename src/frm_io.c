@@ -20,16 +20,19 @@
 	@note The file format for FRAME is defined in doc/user_manual.html.
 */
 
+#include <math.h>
+#include <time.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include "nrutil.h"
 
 /* must be included after nrutil, because of sneaky #define in common.h */
 #include "frm_io.h"
 #include "lu_dcmp.h"
+#include "coordtrans.h"
 
-#include <math.h>
-#include <time.h>
-#include <string.h>
-#include <stdlib.h>
+/* #define MASSDATA_DEBUG */
 
 /* forward decls */
 static void itoa(int n, char s[], int k);
@@ -38,12 +41,6 @@ static void getline_no_comment(
 		FILE *fp            /**< pointer to the file from which to read */
 		,char *s             /**< pointer to the string to which to write */
 		,int lim            /**< the longest anticipated line length  */
-);
-
-static void getline(
-		FILE	*fp
-		, char    *s
-		, int     lim
 );
 
 /*------------------------------------------------------------------------------
@@ -59,7 +56,7 @@ void read_input(
 		, int *shear, char meshfile[], char plotfile[], float *exagg
 ){
 
-	int	j1, j2, i, j, X=0, Y=0, Z=0;
+	int	j1, j2, i, j;
 
 	for (i=1;i<=nJ;i++) {		/* read joint coordinates	*/
 		fscanf(fp, "%d", &j );
@@ -178,7 +175,7 @@ void read_input(
 /*-----------------------------------------------------------------------------
 GETLINE  -  get line into a character string. from K&R                  3feb94
 -----------------------------------------------------------------------------*/
-void getline (
+void frm_getline (
 		FILE	*fp
 		, char    *s
 		, int     lim
@@ -592,8 +589,7 @@ void read_masses(
 		, char modefile[]
 		, float *tol, float *shift, int anim[], int *pan
 ){
-	FILE	*mf;				/* mass data file	*/
-	float	ms = 0.0;
+/*	float	ms = 0.0; */
 	int	chk, j, jnt, m, mem, nA;
 
 	*total_mass = *struct_mass = 0.0;	
@@ -619,7 +615,8 @@ void read_masses(
 	if ( *Mmethod == 2 ) printf(" (Stodola)\n");
 
 
-	/*
+#ifdef MASSDATA_DEBUG
+	FILE	*mf;				// mass data file
 	mf = fopen("MassData.txt","w");	// open mass data file 
 	if ((mf = fopen ("MassData.txt", "w")) == NULL) {	
 	  fprintf (stderr," error: cannot open file 'MassData.txt'\n");
@@ -627,7 +624,7 @@ void read_masses(
 	}
 	fprintf(mf,"%% structural mass data \n");
 	fprintf(mf,"%% element\tAx\t\tlength\t\tdensity\t\tmass \n");
-	*/
+#endif
 
 	fscanf( fp, "%d", lump );
 	fscanf( fp, "%s", modefile );
@@ -638,15 +635,15 @@ void read_masses(
 		fscanf(fp, "%lf %lf", &d[mem], &BMs[mem] );
 		*total_mass  += d[mem]*Ax[mem]*L[mem] + BMs[mem];
 		*struct_mass += d[mem]*Ax[mem]*L[mem];
-		/*
+#ifdef MASSDATA_DEBUG
 		fprintf(mf," %4d\t\t%12.5e\t%12.5e\t%12.5e\t%12.5e \n",
 		 mem, Ax[mem], L[mem], d[mem], d[mem]*Ax[mem]*L[mem] );
-		*/
+#endif
 	}
 
-	/*
+#ifdef MASSDATA_DEBUG
 	fclose(mf);
-	*/
+#endif
 
 	/* number of joints with extra inertias */
 	fscanf(fp,"%d", nI );
@@ -676,8 +673,8 @@ void read_masses(
 		exit(1);
 	    }
 	}
-/*	for (m=1;m<=nM;m++)	ms += BMs[m];/* consistent mass doesn't agree */
-/*	if ( ms > 0.0 )		*lump = 1;  /* with concentrated masses, BMs  */
+/*	for (m=1;m<=nM;m++)	ms += BMs[m]; // consistent mass doesn't agree */
+/*	if ( ms > 0.0 )		*lump = 1;    // with concentrated masses, BMs  */
 
 	printf(" structural mass ");
 	dots(36);
@@ -798,7 +795,7 @@ void control_data(
 		, int *J1, int *J2
 		, float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz
 		, float *E, float *G, float *p, float *F, float *Dp
-		, float *R
+		, int *R
 		, float **W, float **P, float **T
 		, int shear, int anlyz, int geom
 ){
@@ -963,7 +960,7 @@ void save_results (
 		fprintf(fp," %5d", j);
 		for ( i=5; i>=0; i-- ) {
                         if ( fabs(D[6*j-i]) < 1.e-8 )
-                                fprintf (fp, "    0.0     ", D[6*j-i] );
+                                fprintf (fp, "    0.0     ");
                         else    fprintf (fp, " %11.6f",  D[6*j-i] );
 		}
 		fprintf(fp,"\n");
@@ -1117,7 +1114,7 @@ void mesh(
 		char IO_file[], char meshfile[], char plotfile[]
 		, char *title, int nJ, int nM, int DoF
 		, float *x, float *y, float *z, float *L
-		, float *J1, float *J2, float *p, float *D
+		, int *J1, int *J2, float *p, float *D
 		, float exg, int anlyz
 ){
 	FILE	*fpmfx, *fpm;
@@ -1248,15 +1245,14 @@ void modal_mesh(
 		, char plotfile[], char *title
 		, int nJ, int nM, int DoF, int modes
 		, float *x, float *y, float *z, float *L
-		, float *J1, float *J2, float *p
+		, int *J1, int *J2, float *p
 		, float **M, float *f, float **V
 		, float exg, int anlyz
 ){
 	FILE	*fpm;
-	float	mx, my, mz,	/* coordinates of the member labels	*/
-		mpfX, mpfY, mpfZ,	/* mode participation factors	*/
-		*msX, *msY, *msZ,
-		*v;		/* a mode-shape vector */
+	float mpfX, mpfY, mpfZ;	/* mode participation factors	*/
+	float *msX, *msY, *msZ;
+	float *v;		/* a mode-shape vector */
 
 	int	i, j, m,n, X=0, Y=0, Z=0;
 	char	D3 = '#', s1[16],  s2[16], modefl[64];
@@ -1278,73 +1274,71 @@ void modal_mesh(
 
 	for (m=1; m<=modes; m++) {
 
-	  strcpy(modefl,modefile);
-	  s1[0]='-'; s1[1]='\0'; itoa(m,s2,2);  strcat(s1,s2);  strcat(modefl,s1);
+		strcpy(modefl,modefile);
+		s1[0]='-'; s1[1]='\0'; itoa(m,s2,2);  strcat(s1,s2);  strcat(modefl,s1);
 
-	  if ((fpm = fopen (modefl, "w")) == NULL) {
-		printf (" error: cannot open modal mesh file: %s\n", modefl);
-		exit(1);
-	  }
+		if ((fpm = fopen (modefl, "w")) == NULL) {
+			printf (" error: cannot open modal mesh file: %s\n", modefl);
+			exit(1);
+		}
 
-	fprintf(fpm,"# FRAME ANALYSIS RESULTS  http://www.duke.edu/~hpgavin/frame/\n");
-	fprintf(fpm,"# %s\n", title );
-	  fprintf(fpm,"# M O D E   S H A P E   D A T A   F O R   M O D E");
-	  fprintf(fpm,"   %d\t(global coordinates)\n", m );
-	  fprintf(fpm,"# deflection exaggeration: %.1f\n\n", exg );
-	  mpfX = 0.0;	for (i=1; i<=DoF; i++)    mpfX += V[i][m]*msX[i];
-	  mpfY = 0.0;	for (i=1; i<=DoF; i++)    mpfY += V[i][m]*msY[i];
-	  mpfZ = 0.0;	for (i=1; i<=DoF; i++)    mpfZ += V[i][m]*msZ[i];
-	  fprintf(fpm,"# MODE %5d:   f= %lf Hz, T= %lf sec\n", m,f[m],1./f[m]);
-	  fprintf(fpm,"#\t\tX- modal participation factor = %12.4e \n", mpfX);
-	  fprintf(fpm,"#\t\tY- modal participation factor = %12.4e \n", mpfY);
-	  fprintf(fpm,"#\t\tZ- modal participation factor = %12.4e \n", mpfZ);
+		fprintf(fpm,"# FRAME ANALYSIS RESULTS  http://www.duke.edu/~hpgavin/frame/\n");
+		fprintf(fpm,"# %s\n", title );
+		fprintf(fpm,"# M O D E   S H A P E   D A T A   F O R   M O D E");
+		fprintf(fpm,"   %d\t(global coordinates)\n", m );
+		fprintf(fpm,"# deflection exaggeration: %.1f\n\n", exg );
+		mpfX = 0.0;	for (i=1; i<=DoF; i++)    mpfX += V[i][m]*msX[i];
+		mpfY = 0.0;	for (i=1; i<=DoF; i++)    mpfY += V[i][m]*msY[i];
+		mpfZ = 0.0;	for (i=1; i<=DoF; i++)    mpfZ += V[i][m]*msZ[i];
+		fprintf(fpm,"# MODE %5d:   f= %lf Hz, T= %lf sec\n", m,f[m],1./f[m]);
+		fprintf(fpm,"#\t\tX- modal participation factor = %12.4e \n", mpfX);
+		fprintf(fpm,"#\t\tY- modal participation factor = %12.4e \n", mpfY);
+		fprintf(fpm,"#\t\tZ- modal participation factor = %12.4e \n", mpfZ);
 
-	  for (i=1; i<=DoF; i++)	v[i] = V[i][m];
+		for(i=1; i<=DoF; i++)	v[i] = V[i][m];
 
-	  fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
+		fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
 
-	  for (n=1; n<=nM; n++) 
+		for(n=1; n<=nM; n++) 
+			bent_beam ( fpm, J1[n], J2[n], x,y,z, L[n], p[n], v, exg );
 
-		bent_beam ( fpm, J1[n], J2[n], x,y,z, L[n], p[n], v, exg );
+		for ( j=1; j<=nJ; j++ ) {
+			if (x[j] != 0.0) X=1;	/* check for three-dimensional frame */
+			if (y[j] != 0.0) Y=1;
+			if (z[j] != 0.0) Z=1;
+		}
 
-	  for ( j=1; j<=nJ; j++ ) {
-		if (x[j] != 0.0) X=1;	/* check for three-dimensional frame */
-		if (y[j] != 0.0) Y=1;
-		if (z[j] != 0.0) Z=1;
-	  }
-	  if ( X && Y && Z ) D3 = ' ';
+		if ( X && Y && Z ) D3 = ' ';
 
-	  fclose(fpm);
+		fclose(fpm);
 
-	  if ((fpm = fopen (plotfile, "a")) == NULL) {
-		printf (" error: cannot append plot file: %s\n",plotfile);
-		exit(1);
-	  }
-	  fprintf(fpm,"pause -1\n");
-	  fprintf(fpm,"set nolabel\n");
-	  fprintf(fpm,"set title '%s     mode %d     %lf Hz'\n",IO_file,m,f[m]);
-	  fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w l ", meshfile );
-	  if (!anlyz) fprintf(fpm," lw 2 lt 1 \n");
-	  else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2 t 'mode-shape %d' w l lw 2 lt 3\n",
+		if ((fpm = fopen (plotfile, "a")) == NULL) {
+			printf (" error: cannot append plot file: %s\n",plotfile);
+			exit(1);
+		}
+		fprintf(fpm,"pause -1\n");
+		fprintf(fpm,"set nolabel\n");
+		fprintf(fpm,"set title '%s     mode %d     %lf Hz'\n",IO_file,m,f[m]);
+		fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w l ", meshfile );
+		if (!anlyz) fprintf(fpm," lw 2 lt 1 \n");
+		else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2 t 'mode-shape %d' w l lw 2 lt 3\n",
 								modefl, m );
-	  fprintf(fpm,"%c pause -1\n", D3 );
-	  fprintf(fpm,"%c set nokey\n", D3 );
-	  fprintf(fpm,"%c splot '%s' u 2:3:4 t 'undeformed mesh' w l ",
+		fprintf(fpm,"%c pause -1\n", D3 );
+		fprintf(fpm,"%c set nokey\n", D3 );
+		fprintf(fpm,"%c splot '%s' u 2:3:4 t 'undeformed mesh' w l ",
 								D3, meshfile);
-	  if (!anlyz) fprintf(fpm," lw 2 lt 1 \n");
-	  else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2:3 t 'mode-shape %d' w l lw 2 lt 3\n",
+		if (!anlyz) fprintf(fpm," lw 2 lt 1 \n");
+		else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2:3 t 'mode-shape %d' w l lw 2 lt 3\n",
 								modefl, m );
 
-	  fclose(fpm);
+		fclose(fpm);
 
-        }
+	}
 
 	free_vector(msX,1,DoF);
 	free_vector(msY,1,DoF);
 	free_vector(msZ,1,DoF);
 	free_vector(v,1,DoF);
-
-	return;
 }
 
 /*------------------------------------------------------------------------------
@@ -1364,8 +1358,8 @@ void animate(
 	, int pan
 ){
 	FILE	*fpm;
-	float	mx, my, mz,	/* coordinates of the member labels	*/
-		x_min = 0, x_max = 0,
+
+	float x_min = 0, x_max = 0,
 		y_min = 0, y_max = 0,
 		z_min = 0, z_max = 0,
 		rot_x_init = 70,	/* inital x-rotation in 3D animation */
@@ -1378,7 +1372,7 @@ void animate(
 		ex=10,		/* an exageration factor, for animation */
 		*v;
 
-	int	fr, i,j, m,n, X=0, Y=0, Z=0, j1,j2, c, CYCLES=3,
+	int	fr, i,j, m,n, X=0, Y=0, Z=0, c, CYCLES=3,
 		frame_number = 0,
 		total_frames;	/* total number of frames in animation */
 

@@ -1,49 +1,66 @@
-/*
- ---------------------------------------------------------------------------
- FILE	eig.c - routines to solve the generalized eigenvalue problem
- ---------------------------------------------------------------------------
- Copyright (C) 1992-2007  Henri P. Gavin
+/*	FRAME: Static and dynamic structural analysis of 2D & 3D frames and trusses
+	Copyright (C) 1992-2007  Henri P. Gavin
 
- This program is free software; you may redistribute it and/or
- modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2
- of the License, or (at your option) any later version.
+	This program is free software; you may redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
- http://www.fsf.org/copyleft/gpl.html
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*//**
+	@file
+	Routines to solve the generalized eigenvalue problem
 
- You should have received a copy of the GNU General Public License, gpl.txt,
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- ---------------------------------------------------------------------------
  Henri P. Gavin                                             hpgavin@duke.edu
  Department of Civil and Environmental Engineering
  Duke University, Box 90287
  Durham, NC  27708--0287
- ---------------------------------------------------------------------------
 */
 
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-/* ----------------------- double precision --------------------------------- */
-#define float double
-#define vector dvector
-#define matrix dmatrix
-#define free_vector free_dvector
-#define free_matrix free_dmatrix
-#define save_matrix save_dmatrix
-#define show_matrix show_dmatrix
-#define show_vector show_dvector
-/* ----------------------- double precision --------------------------------- */
+#include "nrutil.h"
 
-#ifndef PI
-#define PI      3.141592653589793
-#endif
+/* must be included *after* nrutil.h because of #define float --> double */
+#include "common.h"
+
+#include "eig.h"
+#include "ldl_dcmp.h"
+
+/* #define EIG_DEBUG */
+
+/* forward declarations */
+
+static void jacobi(
+	float **K, float **M, float *E, float **V, int n
+);
+
+static void rotate(
+	float **A, int n, float alpha, float beta
+	, int i, int j
+);
+
+static float xAy1(float *x, float **A, float *y, int n, float *d);
+
+static void mat_mult1(float **A, float **B, float *u, int n, int j);
+
+void mat_mult2(float **A, float **B, float **C, int I, int J, int K);
+
+void eigsort (float *e, float **v, int n, int m);
+
+int sturm(
+	float **K, float **M
+	, int n, int m /* DoF and number of required modes	*/
+	, float shift, float ws
+);
 
 /*-----------------------------------------------------------------------------
 SUBSPACE - Find the lowest m eigen-values, w, and eigen-vectors, V, of the 
@@ -57,32 +74,22 @@ where
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  1 March 2007
  Bathe, Finite Element Procecures in Engineering Analysis, Prentice Hall, 1982
 -----------------------------------------------------------------------------*/
-void subspace( K, M, n, m, w, V, tol, shift, iter, ok )
-float	**K, **M, *w, **V, tol, shift; 
-int	n, m,			/* DoF and number of required modes	*/
-	*iter,			/* sub-space iterations			*/
-	*ok;			/* Sturm check result			*/
-{
+void subspace(
+	float **K, float **M
+	, int n, int m /**< DoF and number of required modes	*/
+	, float *w, float **V
+	, float tol, float shift
+	, int *iter /**< sub-space iterations */
+	, int *ok /**< Sturm check result */
+){
 	float	**Kb, **Mb, **Xb, **Qb, *d, *u, *v, km, km_old,
-		error=1.0, w_old = 0.0,
-		*vector(),
-		**matrix();
+		error=1.0, w_old = 0.0;
+
 	int	i=0, j=0, k=0,
 		modes,
 		disp = 0,	/* display improvements to K X = M V	*/
-		sturm(),	/* sturm eigenvalue check		*/
-		*idx, *ivector();
+		*idx;
 	
-	void	ldl_dcmp(),	/* LDL decomposition K = L D L'		*/
-		ldl_mprove(),	/* improve the solution from ldl_dcmp	*/
-		jacobi(),	/* Jacobi method to solve smaller prblm */
-		eigsort(),	/* sort e-values and e-vectors		*/
-		mat_mult1(),	/* multiply two matrices		*/
-		mat_mult2(),	/* multiply two matrices		*/
-		xtAx(),		/* quadratic matrix multiplication	*/
-		exit(),
-		show_matrix(), save_matrix(), free_matrix(), free_vector();
-
 	if ( m > n ) {
 		fprintf(stderr,"SUBSPACE: Number of eigen-values must be less");
 		fprintf(stderr," than the problem dimension.\n");
@@ -162,8 +169,7 @@ int	n, m,			/* DoF and number of required modes	*/
 		V[idx[k]+i][k] = 0.2; V[idx[k]+j][k] = 0.2;
 	}
 
-/*	for (i=1; i<=n; i++)	V[i][1] = M[i][i];	/* diag(M)	*/
-
+/*	for (i=1; i<=n; i++)	V[i][1] = M[i][i];	// diag(M)	*/
 
 	
 	*iter = 0;
@@ -260,7 +266,6 @@ int	n;
 	float	Kii, Kjj, Kij, Mii, Mjj, Mij, Vki, Vkj, 
 		alpha, beta, gamma,
 		s, tol=0.0;
-	void	rotate(); 
 
 	Kii = Kjj = Kij = Mii = Mjj = Mij = Vki = Vkj = 0.0;
 
@@ -328,9 +333,8 @@ float	**A, alpha, beta;
 int	i, j, n;
 {
 	float	Aii, Ajj, Aij,			/* elements of A	*/
-		*Ai, *Aj, *vector();		/* i-th and j-th rows of A */
+		*Ai, *Aj;		/* i-th and j-th rows of A */
 	int	k;
-	void	free_vector();
 
 
 	Ai = vector(1,n);
@@ -383,22 +387,12 @@ int	n, m, *iter, *ok;	/* DoF and number of required modes	*/
 		*c,		/* coefficients for lower mode purge	*/
 		vMv,		/* factor for mass normalization	*/
 		RQ, RQold=0.0,	/* Raliegh quotient			*/
-		xAy1(),		/* quadratic form calculation		*/
-		error = 1.0,
-		*vector(),
-		**matrix();
+		error = 1.0;
 
 	int	i_ex,		/* location of minimum value of D[i][i]	*/
 		modes,		/* number of desired modes		*/
 		disp = 0,	/* 1: display convergence error; 0: dont*/
-		i,j,k,
-		sturm();	/* Sturm eigenvalue check		*/
-
-	void	ldl_dcmp(),	/* L D L' decomposition K = L D L'	*/
-		ldl_mprove(),	/* improve the solution from ldl_dcmp	*/
-		eigsort(),
-		exit(),
-		save_matrix(), free_matrix(), free_vector();
+		i,j,k;
 
 	D  = matrix(1,n,1,n);
 	d  = vector(1,n);
@@ -435,7 +429,9 @@ int	n, m, *iter, *ok;	/* DoF and number of required modes	*/
 		for (i=1; i<=n; i++)	D[i][j] = d[i];
 	}
 
-/*	save_matrix ( n, n, D, "D" );		/* save dynamics matrix */
+#ifdef EIG_DEBUG
+	save_matrix ( n, n, D, "D" );		/* save dynamics matrix */
+#endif
 
 	*iter = 0;
 	for (i=1; i<=n; i++) if ( D[i][i] > d_max )	d_max = D[i][i];
@@ -516,7 +512,9 @@ int	n, m, *iter, *ok;	/* DoF and number of required modes	*/
 
 	*ok = sturm ( K, M, n, m, shift, w[modes]+tol );
 
-/*	save_matrix ( n, m, V, "V" );	/* save mode shape matrix */
+#ifdef EIG_DEBUG
+	save_matrix ( n, m, V, "V" );	/* save mode shape matrix */
+#endif
 
 	free_matrix(D,1,n,1,n);
 	free_vector(d,1,n);
@@ -531,10 +529,8 @@ int	n, m, *iter, *ok;	/* DoF and number of required modes	*/
 /*------------------------------------------------------------------------------
 xAy1  -  carry out vector-matrix-vector multiplication for symmetric A	7apr94
 ------------------------------------------------------------------------------*/
-float xAy1 ( x, A, y, n, d )
-float	*x, **A, *y, *d;
-int	n;
-{
+float xAy1(float *x, float **A, float *y, int n, float *d){
+
 	float	xtAy = 0.0;
 	int	i,j;
 
@@ -554,13 +550,11 @@ int	n;
 xtAx -  carry out matrix-matrix-matrix multiplication for symmetric A	7nov02
 	C = X' A X     C is J by J	X is N by J	A is N by N	 
 ------------------------------------------------------------------------------*/
-void	xtAx ( A, X, C, N, J )
-float	**A, **X, **C;
-int	N, J;
-{
-	float	**AX, **matrix();
-	int	i,j,k,l;
-	void	free_matrix();
+void xtAx(float **A, float **X, float **C, int N, int J){
+
+	float	**AX;
+	int	i,j,k;
+	/* ,l; -- unused */
 
 	AX = matrix(1,N,1,J);
 
@@ -676,16 +670,13 @@ STURM  -  Determine the number of eigenvalues, w, of the general eigen-problem
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  30 Aug 2001
  Bathe, Finite Element Procecures in Engineering Analysis, Prentice Hall, 1982
 -----------------------------------------------------------------------------*/
-int sturm ( K, M, n, m, shift, ws )
+int sturm( K, M, n, m, shift, ws )
 float	**K, **M, shift, ws;
 int	n, m;			/* DoF and number of required modes	*/
 {
-	float	ws_shift, *d, *vector();
+	float	ws_shift, *d;
 	int	ok=0, i,j, modes;
 	
-	void	ldl_dcmp(),	/* L D L' decomposition of [ K - ws M ]	*/
-		free_vector();
-
 	d  = vector(1,n);
 
 	modes = (int) ( (float)(0.5*m) > (float)(m-8.0) ? (int)(m/2.0) : m-8 );

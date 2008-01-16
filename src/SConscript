@@ -6,22 +6,13 @@ srcs = [
 	, 'coordtrans.c'
 ]
 
-lib = env.SharedLibrary('frame',srcs
-	,LIBS = ['m']
-	,CCFLAGS = ['-g']
-)
-
-frame = env.Program('frame',srcs + ['main.c']
-	,LIBS=['frame']
-	,LIBPATH=['.']
-	,RPATH=['.']
-)
+frame = env.Program('frame',srcs + ['main.c'], LIBS=['m'])
 
 bindir=Dir(env.subst("$INSTALL_ROOT$INSTALL_BIN"))
 env.Install(bindir,frame);
 
-libdir=Dir(env.subst("$INSTALL_ROOT$INSTALL_LIB"))
-env.Install(bindir,lib);
+#libdir=Dir(env.subst("$INSTALL_ROOT$INSTALL_LIB"))
+#env.Install(bindir,lib);
 
 env['installdirs'] += [bindir]
 

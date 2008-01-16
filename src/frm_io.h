@@ -18,6 +18,16 @@
 
 #include <stdio.h>
 
+/**
+	get line into a character string. from K&R.
+	@NOTE this is different from the GNU 'getline'.
+*/
+void frm_getline(
+		FILE	*fp
+		, char    *s
+		, int     lim
+);
+
 /* read input data file			*/
 void read_input(
 		FILE *fp
@@ -74,7 +84,7 @@ void read_masses(
 /**
 	read matrix condensation information
 */
-void read_condense (
+void read_condense(
 		FILE *fp
 		, int nJ, int modes
 		, int *nC, int *Cdof, int *Cmethod, int *q, int *m
@@ -90,7 +100,7 @@ void control_data(
 		, int *J1, int *J2
 		, float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz
 		, float *E, float *G, float *p, float *F, float *Dp
-		, float *R
+		, int *R
 		, float **W, float **P, float **T
 		, int shear, int anlyz, int geom
 );
@@ -98,7 +108,7 @@ void control_data(
 /**
 	save joint displacements and member end forces		15oct98
 */
-void save_results (
+void save_results(
 		FILE *fp, int nJ, int nM, int DoF, int *J1, int *J2
 		, float *F, float *D, int *R
 		, float **Q, float err
@@ -126,7 +136,7 @@ void mesh(
 		char IO_file[], char meshfile[], char plotfile[]
 		, char *title, int nJ, int nM, int DoF
 		, float *x, float *y, float *z, float *L
-		, float *J1, float *J, float *p, float *D
+		, int *J1, int *J, float *p, float *D
 		, float exg, int anlyz
 );
 
@@ -139,7 +149,7 @@ void modal_mesh(
 		, char plotfile[], char *title
 		, int nJ, int nM, int DoF, int modes
 		, float *x, float *y, float *z, float *L
-		, float *J1, float *J2, float *p
+		, int *J1, int *J2, float *p
 		, float **M, float *f, float **V
 		, float exg, int anlyz
 );

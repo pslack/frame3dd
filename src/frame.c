@@ -22,6 +22,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "nrutil.h"
 
@@ -30,6 +31,9 @@
 #include "common.h"
 #include "coordtrans.h"
 #include "ldl_dcmp.h"
+#include "eig.h"
+
+/* #define MATRIX_DEBUG */
 
 /* forward declarations */
 
@@ -79,6 +83,15 @@ static void xtaiy(
 	float **X, float **A, float **Y
 	, int n, int m, float **Ac
 );
+
+/* carry out the coordinate transformation */
+void atma(
+	float t1, float t2, float t3
+	, float t4, float t5, float t6
+	, float t7, float t8, float t9
+	, float **m, float r1, float r2
+);
+
 
 /*------------------------------------------------------------------------------
 ASSEMBLE_K  -  assemble global stiffness matrix from individual elements 23feb94
@@ -183,33 +196,38 @@ void elastic_K(
 	k[11][5] = k[5][11]  = (2.-Ksz)*E*Iy / ( Le*(1.+Ksz) );
 	k[12][6] = k[6][12]  = (2.-Ksy)*E*Iz / ( Le*(1.+Ksy) );
 
-/*	save_matrix ( 12, 12, k, "ke" ); /* element elastic stiffness matrix */
+#ifdef MATRIX_DEBUG
+	save_matrix ( 12, 12, k, "ke" ); /* element elastic stiffness matrix */
+#endif
 
-	atma ( t1,t2,t3,t4,t5,t6,t7,t8,t9, k, r[j1],r[j2] );	/* globalize */
+	atma(t1,t2,t3,t4,t5,t6,t7,t8,t9, k, r[j1],r[j2]);	/* globalize */
 
 	/* check and enforce symmetry */ 
 
 
-	for (i=1; i<=12; i++)
-	    for (j=i+1; j<=12; j++) 
-		if ( k[i][j] != k[j][i] ) {
-		    if (fabs(k[i][j]/k[j][i]-1.0) > 1.0e-6 &&
-		       (fabs(k[i][j]/k[i][i]) > 1e-6 || 
-                        fabs(k[j][i]/k[i][i]) > 1e-6) ) {
-		     fprintf(stderr,"elastic_K: element stiffness matrix not symetric ...\n" ); 
-		     fprintf(stderr," ... k[%d][%d] = %15.6e \n",i,j,k[i][j] ); 
-		     fprintf(stderr," ... k[%d][%d] = %15.6e   ",j,i,k[j][i] ); 
-		     fprintf(stderr," ... relative error = %e \n",  fabs(k[i][j]/k[j][i]-1.0) ); 
-		     fprintf(stderr," ... element matrix saved in file 'kt'\n");
-		     save_matrix ( 12, 12, k, "kt" ); 
-		    }
-		    k[i][j] = k[j][i] = 0.5 * ( k[i][j] + k[j][i] );
+	for(i=1; i<=12; i++){
+	    for (j=i+1; j<=12; j++){
+			if(k[i][j] != k[j][i]){
+				if(fabs(k[i][j]/k[j][i]-1.0) > 1.0e-6 
+					&&(fabs(k[i][j]/k[i][i]) > 1e-6 
+						|| fabs(k[j][i]/k[i][i]) > 1e-6
+					)
+				){
+					fprintf(stderr,"elastic_K: element stiffness matrix not symetric ...\n" ); 
+					fprintf(stderr," ... k[%d][%d] = %15.6e \n",i,j,k[i][j] ); 
+					fprintf(stderr," ... k[%d][%d] = %15.6e   ",j,i,k[j][i] ); 
+					fprintf(stderr," ... relative error = %e \n",  fabs(k[i][j]/k[j][i]-1.0) ); 
+					fprintf(stderr," ... element matrix saved in file 'kt'\n");
+					save_matrix ( 12, 12, k, "kt" ); 
+				}
+
+				k[i][j] = k[j][i] = 0.5 * ( k[i][j] + k[j][i] );
+			}
 		}
-
-
-/*	save_matrix ( 12, 12, k, "ket" );   /* transformed element matx */
-
-	return;
+	}
+#ifdef MATRIX_DEBUG
+	save_matrix ( 12, 12, k, "ket" );   /* transformed element matx */
+#endif
 }
 
 
@@ -269,9 +287,11 @@ void geometric_K(
 	kg[11][5] = kg[5][11]  = -T*L*(1.0/30.0+Ksz/6.0+Ksz*Ksz/12.0)/Dsz;
 	kg[12][6] = kg[6][12]  = -T*L*(1.0/30.0+Ksy/6.0+Ksy*Ksy/12.0)/Dsy;
 
-/*	save_matrix ( 12, 12, kg, "kg" ); /* element geom. stiffness matrix */
+#ifdef MATRIX_DEBUG
+	save_matrix ( 12, 12, kg, "kg" ); /* element geom. stiffness matrix */
+#endif
 
-	atma ( t1,t2,t3,t4,t5,t6,t7,t8,t9, kg, r[j1],r[j2] );	/* globalize */
+	atma(t1,t2,t3,t4,t5,t6,t7,t8,t9, kg, r[j1],r[j2]);	/* globalize */
 
 	/* check and enforce symmetry */ 
 
@@ -283,18 +303,19 @@ void geometric_K(
 /*			fprintf(stderr,"kg[%d][%d] = %e  \n",j,i,kg[j][i] ); */
 		}
 
-/*	save_matrix ( 12, 12, kg, "kgt" );   /* transformed element matx */
+#ifdef MATRIX_DEBUG
+	save_matrix ( 12, 12, kg, "kgt" );   /* transformed element matx */
+#endif
 
 	/* add geometric stiffness matrix to elastic stiffness matrix ... */
 
 	for (i=1; i<=12; i++)   for (j=1; j<=12; j++)	k[i][j] += kg[i][j];
 
 	free_matrix(kg,1,12,1,12);
-
-	return;
 }
 
 
+#if 0 /* DISUSED CODE */
 /*------------------------------------------------------------------------------
 END_RELEASE - apply matrix condensation for one member end force release 20nov04
 ------------------------------------------------------------------------------*/
@@ -313,17 +334,17 @@ int	r;
 
 	return;
 }
-
+#endif
 
 /*------------------------------------------------------------------------------
 APPLY_REACTIONS -  apply fixed joint displacement boundary conditions	23feb94
 The original external load vector, Fo is returned unchanged;
 The load vector modified for prescribed displacements, Dp, is returned as F
 ------------------------------------------------------------------------------*/
-void apply_reactions ( DoF, R, Dp, Fo, F, K )
-int	DoF, *R;
-float	*Dp, *Fo, *F, **K;
-{
+void apply_reactions(
+		int DoF, int *R
+		, float *Dp, float *Fo, float *F, float **K
+){
 	int	i,j;
 
 	for (i=1; i<=DoF; i++)  F[i] = Fo[i];
@@ -345,7 +366,6 @@ float	*Dp, *Fo, *F, **K;
 			}
 		}
 	}
-	return;
 }
 
 
@@ -378,34 +398,35 @@ int	DoF, *ok;
 	}
 
 	free_vector( diag, 1, DoF );
-
-	return;
 }
 
 
 /*------------------------------------------------------------------------------
 END_FORCES  -  evaluate the member end forces for every member		23feb94
 ------------------------------------------------------------------------------*/
-void end_forces ( Q, nM, x,y,z, L, Le,
-			J1,J2, Ax, Asy,Asz, J, Iy,Iz, E, G, p, D, shear, geom )
-int	nM, *J1, *J2, shear, geom;
-float	**Q, *x, *y, *z, *L, *Le, *Ax, *Asy, *Asz, *J, *Iy, *Iz, *E, *G, *p, *D;
-{
+void end_forces(
+		float **Q, int nM, float *x, float *y, float *z
+		, float *L, float *Le
+		, int *J1, int *J2, float *Ax, float *Asy, float *Asz
+		, float *J, float *Iy, float *Iz, float *E, float *G, float *p
+		, float *D, int shear, int geom
+){
 	float	*s;
 	int	i,j;
 
 	s = vector(1,12);
 
-	for (i=1; i <= nM; i++) {
-
-     		member_force ( s, i, x,y,z, L[i], Le[i], J1[i], J2[i],
+	for(i=1; i <= nM; i++){
+     	member_force ( s, i, x,y,z, L[i], Le[i], J1[i], J2[i],
 				Ax[i], Asy[i], Asz[i], J[i], Iy[i], Iz[i],
 					E[i], G[i], p[i], D, shear, geom );
 
-		for (j=1; j<=12; j++)	Q[i][j] = s[j];
+		for(j=1; j<=12; j++){
+			Q[i][j] = s[j];
+		}
 	}
+
 	free_vector(s,1,12);
-	return;
 }
 
 
@@ -413,10 +434,10 @@ float	**Q, *x, *y, *z, *L, *Le, *Ax, *Asy, *Asz, *J, *Iy, *Iz, *E, *G, *p, *D;
 MEMBER_FORCE  -  evaluate the end forces for a member			12nov02
 ------------------------------------------------------------------------------*/
 void member_force(
-	float *s, int M, float *x, float *y, float *z, float L, float Le
-	, int j1, int j2, float Ax, float Asy, float Asz, float J
-	, float Iy, float Iz, float E, float G, float p, float *D
-	, int shear, int geom
+		float *s, int M, float *x, float *y, float *z, float L, float Le
+		, int j1, int j2, float Ax, float Asy, float Asz, float J
+		, float Iy, float Iz, float E, float G, float p, float *D
+		, int shear, int geom
 ){
 	float	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord Xformn	*/
 		d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12,
@@ -510,26 +531,28 @@ void member_force(
 		+ ((2.-Ksy)*E*Iz/(Le*(1.+Ksy)) - 
 		    T*L*(1.0/30.0+Ksy/6.0+Ksy*Ksy/12.0)/Dsy ) * 
 				( d4 *t7 + d5 *t8 + d6 *t9 );
-
-	return;
 }
 
 
 /*----------------------------------------------------------------------------- 
 EQUILIBRIUM  -  perform an equilibrium check, F returned as reactions   18sep02
 ------------------------------------------------------------------------------*/
-void equilibrium ( x, y, z, L, J1, J2, F, R, p, Q, feF, nM, DoF, err )
-int	*J1, *J2, *R, nM, DoF;
-float	*x, *y, *z, *L, *F, **Q, *p, **feF, *err;
-{
+void equilibrium(	
+		float *x, float *y, float *z
+		, float *L, int *J1, int *J2, float *F, int *R, float *p
+		, float **Q, float **feF, int nM, int DoF, float *err
+){
 	float   t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
 		f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12,
 		den = 0.0;			/* normalizes the error	*/
-	int	i,j,m, j1, j2;
+	int	j,m, j1, j2;
 
-	for (j=1; j<=DoF; j++)	if ( R[j] == 0 )   den += ( F[j]*F[j] );
+	for(j=1; j<=DoF; j++){
+		if(R[j] == 0)den += ( F[j]*F[j] );
+	}
+
 	den = sqrt ( den / (float) DoF );
-	if ( den <= 0 ) den = 1;
+	if(den <= 0)den = 1;
 
 	for (m=1; m <= nM; m++) {	/* loop over all members */
 
@@ -540,7 +563,7 @@ float	*x, *y, *z, *L, *F, **Q, *p, **feF, *err;
 
 		j1 = 6*(j1-1);	j2 = 6*(j2-1);
 
-	/* subtract internal forces from external loads	*/
+		/* subtract internal forces from external loads	*/
 
 							/* {F} = [T]' {Q} */
 		F[j1+1] -= ( Q[m][1] *t1 + Q[m][2] *t4 + Q[m][3] *t7 );
@@ -557,7 +580,7 @@ float	*x, *y, *z, *L, *F, **Q, *p, **feF, *err;
 		F[j2+5] -= ( Q[m][10]*t2 + Q[m][11]*t5 + Q[m][12]*t8 );
 		F[j2+6] -= ( Q[m][10]*t3 + Q[m][11]*t6 + Q[m][12]*t9 );
 
-	/* subtract fixed end forces (equivalent loads) from internal loads */
+		/* subtract fixed end forces (equivalent loads) from internal loads */
 	
 		f1 = feF[m][1];		f2 = feF[m][2];		f3 = feF[m][3];
 		f4 = feF[m][4];		f5 = feF[m][5];		f6 = feF[m][6];
@@ -577,27 +600,28 @@ float	*x, *y, *z, *L, *F, **Q, *p, **feF, *err;
 		Q[m][10] -= ( f10*t1 + f11*t2 + f12*t3 );
 		Q[m][11] -= ( f10*t4 + f11*t5 + f12*t6 );
 		Q[m][12] -= ( f10*t7 + f11*t8 + f12*t9 );
-
-
 	}
 
 	*err = 0.0;
-	for (j=1; j<=DoF; j++)	if ( R[j] == 0 )	*err += ( F[j]*F[j] );
+	for(j=1; j<=DoF; j++){
+		if(R[j] == 0)*err += ( F[j]*F[j] );
+	}
+
 	*err = sqrt ( *err / (float) DoF ) / den;
 	fprintf(stderr,"  RMS relative equilibrium precision: %9.3e\n", *err );
-
-	return;
 }
 
 /*------------------------------------------------------------------------------
 ASSEMBLE_M  -  assemble global mass matrix from element mass & inertia  24nov98
 ------------------------------------------------------------------------------*/
-void assemble_M ( M, DoF, nJ, nM, x,y,z,r, L, J1,J2, Ax, J,Iy,Iz, p,
-					d, BMs, JMs, JMx, JMy, JMz, lump )
-int     DoF, nM;
-float   **M, *x,*y,*z,*r, *L, *Ax, *J, *Iy,*Iz, *p, *d, *BMs, *JMs, *JMx,*JMy,*JMz;
-int     *J1, *J2, lump;
-{
+void assemble_M(
+		float **M, int DoF, int nJ, int nM,
+		float *x, float *y, float *z, float *r, float *L
+		, int *J1, int *J2
+		, float *Ax, float *J, float *Iy, float *Iz, float *p
+		, float *d, float *BMs, float *JMs, float *JMx, float *JMy, float *JMz
+		, int lump
+){
 	float   **mass,	    /* element mass matrix in global coord */
 		**matrix();
 	int     **ind,	  /* member-structure DoF index table     */
@@ -652,7 +676,6 @@ int     *J1, *J2, lump;
 	}
 	free_matrix ( mass,1,12,1,12);
 	free_imatrix( ind,1,12,1,nM);
-	return;
 }
 
 
@@ -660,9 +683,9 @@ int     *J1, *J2, lump;
 LUMPED_M  -  space frame element lumped mass matrix in global coordnates 7apr94
 ------------------------------------------------------------------------------*/
 void lumped_M(
-	float **m, float *x, float *y, float *z
-	, float L, int j1, int j2, float Ax, float J, float Iy, float Iz
-	, float d, float p, float BMs
+		float **m, float *x, float *y, float *z
+		, float L, int j1, int j2, float Ax, float J, float Iy, float Iz
+		, float d, float p, float BMs
 ){
 	float   t1, t2, t3, t4, t5, t6, t7, t8, t9,     /* coord Xformn */
 		t, ry,rz, po;	/* translational, rotational & polar inertia */
@@ -689,8 +712,6 @@ void lumped_M(
 	m[4][5] = m[5][4] = m[10][11] = m[11][10] =po*t1*t2 +ry*t4*t5 +rz*t7*t8;
 	m[4][6] = m[6][4] = m[10][12] = m[12][10] =po*t1*t3 +ry*t4*t6 +rz*t7*t9;
 	m[5][6] = m[6][5] = m[11][12] = m[12][11] =po*t2*t3 +ry*t5*t6 +rz*t8*t9;
-
-	return;
 }
 
 
@@ -699,9 +720,9 @@ CONSISTENT_M  -  space frame consistent mass matrix in global coordnates 2oct97
 		 does not include shear deformations
 ------------------------------------------------------------------------------*/
 void consistent_M(
-	float **m, float *x, float *y, float *z, float *r, float L
-	, int j1, int j2, float Ax, float J, float Iy, float Iz, float d
-	, float BMs, float p
+		float **m, float *x, float *y, float *z, float *r, float L
+		, int j1, int j2, float Ax, float J, float Iy, float Iz, float d
+		, float BMs, float p
 ){
 	float   t1, t2, t3, t4, t5, t6, t7, t8, t9,     /* coord Xformn */
 		t, ry, rz, po;	/* translational, rotational & polar inertia */
@@ -742,9 +763,11 @@ void consistent_M(
 	m[11][5] = m[5][11]  = -L*L*t/140. - ry*L/30.;
 	m[12][6] = m[6][12]  = -L*L*t/140. - rz*L/30.;
 
-/*	save_matrix ( 12, 12, m, "mo" );	/* element mass matrix */
+#ifdef MATRIX_DEBUG
+	save_matrix ( 12, 12, m, "mo" );	/* element mass matrix */
+#endif
 
-	atma ( t1,t2,t3,t4,t5,t6,t7,t8,t9, m, r[j1],r[j2] );	/* globalize */
+	atma(t1,t2,t3,t4,t5,t6,t7,t8,t9, m, r[j1],r[j2]);	/* globalize */
 
 	/* check and enforce symmetry */ 
 
@@ -761,18 +784,21 @@ void consistent_M(
 	for (i=1; i<=3; i++)	m[i][i] += BMs/2.;
 	for (i=7; i<=9; i++)	m[i][i] += BMs/2.;
 
-/*	save_matrix ( 12, 12, m, "mt" );	/* transformed matrix */
-
-	return;
+#ifdef MATRIX_DEBUG
+	save_matrix ( 12, 12, m, "mt" );	/* transformed matrix */
+#endif
 }
 
 /*------------------------------------------------------------------------------
 ATMA  -  perform the coordinate transformation from local to global 	6jan96
          include effects of a finite joint radii, r1 and r2.            9dec04
 ------------------------------------------------------------------------------*/
-void atma ( t1, t2, t3, t4, t5, t6, t7, t8, t9, m, r1, r2 )
-float	t1, t2, t3, t4, t5, t6, t7, t8, t9, **m, r1, r2;
-{
+void atma(
+		float t1, float t2, float t3
+		, float t4, float t5, float t6
+		, float t7, float t8, float t9
+		, float **m, float r1, float r2
+){
 	float	**a, **ma, **matrix();
 	int	i,j,k;
 
@@ -812,13 +838,17 @@ float	t1, t2, t3, t4, t5, t6, t7, t8, t9, **m, r1, r2;
 */
 
 
-/*	save_matrix( 12, 12, a, "aa");		/* save cord xfmtn */
+#ifdef MATRIX_DEBUG
+	save_matrix( 12, 12, a, "aa");		/* save cord xfmtn */
+#endif
 
 	for (j=1; j <= 12; j++)				/* MT = M T	*/
 	    for (i=1; i <= 12; i++)
 		for (k=1; k <= 12; k++)    ma[i][j] += m[i][k] * a[k][j];
 
-/*	save_matrix( 12, 12, ma, "ma");	/* partial transformation */
+#ifdef MATRIX_DEBUG
+	save_matrix( 12, 12, ma, "ma");	/* partial transformation */
+#endif
 
 	for (i=1; i<=12; i++)   for (j=i; j<=12; j++)   m[j][i] = m[i][j] = 0.0;
 
@@ -826,21 +856,21 @@ float	t1, t2, t3, t4, t5, t6, t7, t8, t9, **m, r1, r2;
 	    for (i=1; i <= 12; i++)
 		for (k=1; k <= 12; k++)    m[i][j] += a[k][i] * ma[k][j];
 
-/*	save_matrix( 12, 12, m, "atma");		/* debug atma */
+#ifdef MATRIX_DEBUG
+	save_matrix( 12, 12, m, "atma");		/* debug atma */
+#endif
 
 	free_matrix(a, 1,12,1,12);
 	free_matrix(ma,1,12,1,12);
-	return;
 } 
 
 
 /*------------------------------------------------------------------------------
 CONDENSE - static condensation of stiffness matrix from NxN to nxn    30aug01
 ------------------------------------------------------------------------------*/
-void condense ( A, N, q, n, Ac)
-float	**A, **Ac;
-int	N, n, *q;
-{
+void condense(
+		float **A, int N, int *q, int n, float **Ac
+){
 	float	**Arr, **Arq;
 	int	i,j,k, ri,rj,qi,qj, ok, 
 		*r;
@@ -891,8 +921,6 @@ int	N, n, *q;
 	free_ivector ( r,   1,N-n );
 	free_matrix  ( Arr, 1,N-n,1,N-n );
 	free_matrix  ( Arq, 1,N-n,1,n );
-
-	return;
 }
 
 
@@ -902,13 +930,16 @@ GUYAN  -   generalized Guyan reduction of mass and stiffness matrices    6jun07
            Guyan, Robert J., ``Reduction of Stiffness and Mass Matrices,''
            AIAA Journal, Vol. 3, No. 2 (1965) p 380.
 -----------------------------------------------------------------------------*/
-void guyan ( M, K, N, q, n, Mc, Kc, w2 )
-float	**M, **K, **Mc, **Kc, w2;
-int	N, n, *q;
-{
+void guyan(
+		float **M, float **K, int N
+		, int *q, int n
+		, float **Mc, float **Kc, float w2 
+){
 	float	**Drr, **Drq, **invDrrDrq, **T;
 	int	i,j,k, ri,rj,qj, ok, 
 		*r;
+	
+	assert(M!=NULL);
 
 	r   = ivector(1,N-n);
 	Drr =  matrix(1,N-n,1,N-n);
@@ -969,8 +1000,6 @@ int	N, n, *q;
 	free_matrix  ( Drq, 1,N-n,1,n );
 	free_matrix  ( invDrrDrq, 1,N-n,1,N-n );
 	free_matrix  ( T, 1,N-n,1,n );
-
-	return;
 }
 
 
@@ -979,14 +1008,14 @@ DYN_CONDEN - dynamic condensation of mass and stiffness matrices    8oct01
 	     matches the response at a set of frequencies
 WARNING: Kc and Mc may be ill-conditioned, and possibly non-positive def.
 -----------------------------------------------------------------------------*/
-void dyn_conden ( M, K, N, R, p, n, Mc, Kc, V, f, m )
-float	**M, **K, **Mc, **Kc, **V, *f;
-int	*R, N, n, *p, *m;
-{
+void dyn_conden(
+		float **M, float **K, int N, int *R, int *p, int n
+		, float **Mc, float **Kc, float **V, float *f, int *m
+){
 	float	**P, **invP,
 		traceM = 0, traceMc = 0, 
 		Aij;		/* temporary storage for matrix mult. */
-	int	i,j,k, pi, ok; 
+	int	i,j,k; 
 
 	P    =  matrix(1,n,1,n);
 	invP =  matrix(1,n,1,n);
@@ -1029,8 +1058,6 @@ int	*R, N, n, *p, *m;
 
 	free_matrix  ( P,    1,n,1,n);
 	free_matrix  ( invP, 1,n,1,n);
-
-	return;
 }
 
 
@@ -1078,7 +1105,6 @@ void invAB(
 	free_vector(diag,1,n);
 	free_vector(x,1,n);
 	free_vector(b,1,n);
-	return;
 }
 
 
@@ -1124,7 +1150,6 @@ void xtaiy(
 	free_vector(diag,1,n);
 	free_vector(x,1,n);
 	free_vector(y,1,n);
-	return;
 }
 
 
@@ -1198,8 +1223,6 @@ int	n;
 	free_vector ( b, 1,n );
 	free_matrix ( Ai, 1,n,1,n );
 	free_matrix ( XAi, 1,n,1,n );
-
-	return;
 }
 
 /*------------------------------------------------------------------------------
@@ -1255,8 +1278,6 @@ float	*x,*y,*z, *r, *L, *Le, *Ax, *Asy,*Asz, *J,*Iy,*Iz, *E, *G,  **K,
 		free_vector(f,1,modes);
 		free_matrix(V,1,DoF,1,DoF);
 	}
-
-	return;
 }
 
 /* itoa moved to frm_io.c */

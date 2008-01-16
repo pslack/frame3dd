@@ -44,6 +44,8 @@
 #include "common.h"
 #include "coordtrans.h"
 #include "ldl_dcmp.h"
+#include "eig.h"
+#include "frm_io.h"
 
 int main ( argc, argv )
 int	argc;
@@ -61,7 +63,7 @@ char	*argv[];
 		*r,		/* joint size radius, for finite sizes	*/
 		**K, **Ks,	/* global stiffness matrix		*/
 		traceK = 0.0,	/* trace of the global stiffness matrix	*/
-		**M,		/* global mass matrix			*/
+		**M = NULL,	/* global mass matrix			*/
 		traceM = 0.0,	/* trace of the global mass matrix	*/
 		*Fo_mech,	/* mechanical load vector		*/
 		*Fo_temp,	/* thermal load vector		*/
@@ -70,7 +72,7 @@ char	*argv[];
 		**feF_temp,	/* fixed end forces from temp loads	*/
 		**feF,		/* a general set of fixed end forces	*/
 		*D, *dD,	/* displacement and displ increment	*/
-		dDdD = 0.0,	/* dD' * dD				*/
+		/*dDdD = 0.0,*/	/* dD' * dD				*/
 		*Fe,		/* equilibrium error in nonlinear anlys	*/
 		*Dp,		/* prescribed joint displacements	*/
 		**W,		/* uniform distributed member loads	*/
@@ -88,8 +90,9 @@ char	*argv[];
 		total_mass,	/* total structural mass and extra mass */
 		*JMx,*JMy,*JMz,	/* inertia of a joint in global coord	*/
 		tol = 1e-5,	/* tolerance for modal convergence	*/
-		shift,		/* shift-factor for rigid-body-modes	*/
-		*f, **V,	/* natural frequencies and mode-shapes	*/
+		shift		/* shift-factor for rigid-body-modes	*/
+		,*f = NULL  /* resonant frequencies */
+		,**V = NULL,/* resonant mode-shapes	*/
 		error = 1.0,	/* rms equilibrium error and reactions	*/
 		Cfreq = 0.0,	/* frequency used for Guyan condensation*/
 		**Kc, **Mc,	/* condensed stiffness and mass matrices*/
@@ -149,7 +152,7 @@ char	*argv[];
 		exit(1);
 	}
 
-	getline(fp, title, 256);
+	frm_getline(fp, title, 256);
 	fprintf(stderr," ** %s ** \n\n", title );
 
 	fscanf(fp, "%d %d", &nJ, &nM );
@@ -257,7 +260,9 @@ char	*argv[];
 	    assemble_K ( K, DoF, nM, x,y,z,r, L, Le, J1, J2,
 			Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
-/*	    save_matrix ( DoF, DoF, K, "Kf" );	     /* free stiffness matrix */
+#ifdef MATRIX_DEBUG
+		save_matrix ( DoF, DoF, K, "Kf" );	     /* free stiffness matrix */
+#endif
 
 	    if (temp_mech == 1 && nT > 0) { /* temperature loads first	*/
 		fprintf(stderr,"\n Linear Elastic Analysis ... Temperature Loads\n");
@@ -274,7 +279,9 @@ char	*argv[];
 		end_forces ( Q, nM, x,y,z, L, Le, J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear,geom );
 	    } 
 
-/*	    save_matrix ( DoF, DoF, K, "Ks" );	   /* static stiffness matrix */
+#ifdef MATRIX_DEBUG
+		save_matrix ( DoF, DoF, K, "Ks" );	   /* static stiffness matrix */
+#endif
 
 	  } 
 
@@ -328,8 +335,11 @@ char	*argv[];
 			J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 
 						/* convergence criteria: */
-		/* error = rel_norm (dD, D, DoF ); /* displacement increment */
+#if 0
+		error = rel_norm (dD, D, DoF ); /* displacement increment */
+#else
 		error = rel_norm ( Fe, F, DoF );	/* force balance */
+#endif
 
 		fprintf(stderr,"   NR iteration %3d ---", iter);
 	        fprintf(stderr," RMS equilibrium precision: %8.2e \n", error);
@@ -364,7 +374,9 @@ char	*argv[];
 		assemble_M ( M, DoF, nJ, nM, x,y,z,r, L, J1, J2, Ax, J, Iy, Iz, p,
 					d, BMs, JMs, JMx, JMy, JMz, lump );
 
-/*		save_matrix ( DoF, DoF, M, "Mf" );	/* free mass matrix */
+#ifdef MATRIX_DEBUG
+		save_matrix ( DoF, DoF, M, "Mf" );	/* free mass matrix */
+#endif
 
 		for (j=1; j<=DoF; j++) {
 			if ( !R[j] ) {

@@ -30,7 +30,7 @@ opts.Add("INSTALL_ROOT","Install root (for building RPMs etc)","")
 
 opts.Update(env)
 
-env['CCFLAGS']=['-O']
+env['CCFLAGS']=['-O', '-Wall']
 
 if env.get('DEBUG'):
 	print "DEBUGGING TURNED ON"
