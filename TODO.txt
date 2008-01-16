@@ -1,0 +1,23 @@
+TODO LIST for FRAME
+-------------------
+
+Convert 'save_matrix' to output files in Matrix Market format for easier
+import into other programs.
+http://math.nist.gov/MatrixMarket/
+
+Create structs to contain frame attributes, coordinates, etc, in order to 
+migrate to a more object-oriented coding style, and simplify the passing
+of parameters to functions.
+
+Implement import of frames from other file formats. First one to try is the
+Microstran '.arc' format. Imported will need to flag when the file contains
+design features that can not be modelled in frame, for example tension-only
+members, and probably others.
+
+Consider making use of third-party matrix routines, rather to providing them
+ourselves. Good options would be UMFPACK (for sparse matrices) or LAPACK (dense).
+
+Implement an OpenGL browser for examining frames. GnuPlot has no opportunity
+for GUI feedback eg click on a member to see its details, etc. Probably use can
+be made of some higher-level toolkit for this eg VTK, OGRE, etc.
+
