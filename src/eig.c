@@ -389,7 +389,7 @@ int	n, m, *iter, *ok;	/* DoF and number of required modes	*/
 		RQ, RQold=0.0,	/* Raliegh quotient			*/
 		error = 1.0;
 
-	int	i_ex,		/* location of minimum value of D[i][i]	*/
+	int	i_ex = 9999, /* location of minimum value of D[i][i]	*/
 		modes,		/* number of desired modes		*/
 		disp = 0,	/* 1: display convergence error; 0: dont*/
 		i,j,k;

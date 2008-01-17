@@ -290,7 +290,6 @@ void show_vector ( n, A )
 int     n;
 float   *A;
 {
-	FILE    *fp_m;
 	int     j;
 
 	for (j=1; j <= n; j++) {
@@ -309,7 +308,6 @@ void show_dvector ( n, A )
 int     n;
 double *A;
 {
-	FILE    *fp_m;
 	int     j;
 
 	for (j=1; j <= n; j++) {
@@ -328,7 +326,6 @@ void show_matrix ( m,n, A )
 int     n,m;
 float   **A;
 {
-	FILE    *fp_m;
 	int     i,j;
 
 	for (i=1; i <= m; i++) {
@@ -350,7 +347,6 @@ void show_dmatrix ( m,n, A )
 int     n,m;
 double  **A;
 {
-	FILE    *fp_m;
 	int     i,j;
 
 	for (i=1; i <= m; i++) {
