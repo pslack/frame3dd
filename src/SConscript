@@ -22,7 +22,18 @@ srcs = [
 	, 'coordtrans.c'
 ]
 
-frame = env.Program('frame',srcs + ['main.c'], LIBS=['m'])
+prog_env = env.Copy()
+
+objs = []
+for s in srcs:	
+	objs.append( env.Object(s) )
+	
+if env.get('VERSION'):
+	prog_env.Append(
+		CPPDEFINES={'VERSION':env['VERSION']}
+	)
+
+frame = prog_env.Program('frame',objs + ['main.c'], LIBS=['m'])
 
 bindir=Dir(env.subst("$INSTALL_ROOT$INSTALL_BIN"))
 env.Install(bindir,frame);

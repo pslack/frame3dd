@@ -13,9 +13,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-#define VERSION "20 Dec 2007"
-/**
+*//** @file
 	FRAME: a program for static and dynamic structural analysis of 2D and 3D
 	frames and trusses with elastic and geometric stiffness.
 
@@ -46,6 +44,10 @@
 #include "ldl_dcmp.h"
 #include "eig.h"
 #include "frm_io.h"
+
+#ifndef VERSION
+# define VERSION "unknown"
+#endif
 
 int main ( argc, argv )
 int	argc;
@@ -126,7 +128,7 @@ char	*argv[];
 		*m,		/* vector of modes to condense		*/
 		temp_mech;	/* counter for temp and mech load cases	*/
 
-    fprintf(stderr," FRAME version: " VERSION);
+    fprintf(stderr," FRAME version: %s\n", VERSION);
     fprintf(stderr," GPL Copyright (C) 1992-2007, Henri P. Gavin\n");
     fprintf(stderr," http://www.duke.edu/~hpgavin/frame/\n");
 	fprintf(stderr," This is free software with absolutely no warranty.\n");
