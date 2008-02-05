@@ -1,0 +1,390 @@
+<HTML>
+
+<!-- ----------------------------------------------------------------------
+  -- header
+  -->
+
+<HEAD>
+  <TITLE>
+    Parser Combinators in C
+  </TITLE>
+</HEAD>
+
+<!-- ----------------------------------------------------------------------
+  -- body
+  -->
+
+<BODY BGCOLOR="#FFFFFF">
+<CENTER><TABLE WIDTH=80%>
+
+<TR><TD ALIGN=left VALIGN=bottom><FONT SIZE=+3>Parser Combinators in C</FONT></TD>
+<TD ALIGN=right VALIGN=bottom></TD></TR>
+<TR><TD COLSPAN=2><HR><FONT SIZE=+2>DRAFT PAPER</FONT><BR> <BR>
+</TD></TR>
+
+<TR><TD COLSPAN=2>
+
+<!-- ----------------------------------------------------------------------
+  -- contents
+  -->
+
+<P>
+<B>Introduction</B>
+
+<P>
+This paper describes a solution to the following exercise: "Define a library
+that makes it easy to write parsers directly in the language C". Note that it
+says: "directly in the language", so no parser generator tools (like yacc) are
+allowed. Note that it says "in the language C", which means not C++ or Java, so
+no use of built-in objects or operators. (Later we will use some of the GCC
+extensions, which are not part of ANSI C though.)
+
+<P>
+We are inspired by parser combinators in functional languages like Haskell, such
+as Meijer's and Hutton's
+<A HREF="http://www.cs.nott.ac.uk/~gmh/bib.html#monparsing">Monadic Parser
+Combinators</A>, and Leijen's highly optimized
+<A HREF="http://www.cs.uu.nl/~daan/parsec.html">Parsec</A>.
+
+<P>
+How can we express parsers like these in C? First of all, we need to find
+alternatives in C for the two basic monadic parser operators: sequencing
+and choice. Sequencing is done in Haskell by the monadic "bind":
+
+<PRE>
+<B>  (>>=) :: Parser a -> (a -> Parser b) -> Parser b
+</B></PRE>
+
+In C, using first class functions, such as the second argument to (<B>>>=</B>),
+are really no possibility, so we will have to use a weaker variant of bind,
+also called "then". Also, polymorphism is no real option in C, so we use a
+specialized type for "then":
+
+<PRE>
+<B>  (>>) :: Parser () -> Parser () -> Parser ()
+</B></PRE>
+
+To pass information between parsers (which is done in Haskell using result
+types), we will have to use side effects. This is however not as bad as
+it sounds.
+
+<P>
+How do we implement this operator in C? For once, this operator should be lazy,
+since the second argument to (<B>>></B>) should not be evaluated if the first
+argument fails to parse the input. The only two operators which are lazy in C
+are (<B>||</B>) and (<B>&&</B>). (The fact that they are lazy is a very common
+source of errors among C programmers, so let us use this fact for once!)
+
+<P>
+So, if we represent parsers by C functions which always return the fact if
+they succeeded or not, we can use (<B>&&</B>) for sequencing!
+
+<P>
+So how about choice? In Haskell, choice is represented by the (<B>+++</B>)
+operator on parsers. Its specialized type is:
+
+<PRE>
+<B>  (+++) :: Parser () -> Parser () -> Parser ()
+</B></PRE>
+
+The obvious choice is to use the C operator (<B>||</B>) for this. In the
+following, we describe how we want to write parsers in C using these operators.
+
+<P>
+<HR>
+
+<P>
+<B>Basic Parsing Operators</B>
+
+<P>
+In the following, we assume a basic C type <B>parse</B>. We also assume the
+following operations on this type.
+
+<PRE>
+<B>  bool parseGetChar( parse *p, char *c );    <FONT COLOR="red">/* advancing */</FONT>
+  bool parseUnGetChar( parse *p, char c );   <FONT COLOR="red">/* backing up */</FONT>
+</B></PRE>
+
+Keeping the type <B>parse</B> abstract means that we can implement
+it in many different ways: reading input from a file, or advancing a pointer in
+a string. What the best way is to implement this, depends on the application.
+
+<P>
+There are still two operations missing in order to provide a basic parsing library.
+In Haskell, these functions are called <B>return</B> and <B>fail</B>. In order
+to implement <B>return</B>, we need to be able to produce a result. But alas,
+our parsers can only return a boolean result. Therefore, the real result of a
+parser will be produces by assigning something to a variable. So, we
+define the following macro in C:
+
+<PRE>
+<B>  <FONT COLOR="purple">#define</FONT> result(assignment)  (assignment,1)
+</B></PRE>
+
+(Unfortunately, the operator name <B>return</B> was already taken in C :-)
+For example, <B>result( x = 3 )</B> is an expression which updates the result
+<B>x</B> and as a parser, it always succeeds.
+
+<P>
+Similarly, to express <B>fail</B>, we define a macro that, as a parser, always
+fails:
+
+<PRE>
+<B>  <FONT COLOR="purple">#define</FONT> fail  (0)
+</B></PRE>
+
+Finally, it is useful to have a conditional success or failure operation, which
+is just the identity macro.
+
+<PRE>
+<B>  <FONT COLOR="purple">#define</FONT> condition(cond)  (cond)
+</B></PRE>
+
+<P>
+<HR>
+
+<P>
+<B>Some Parser Examples</B>
+
+<P>
+Here are some examples of how to define more complicated parsers. First, we
+define a parser which just parses any character and produces that as a result.
+
+<PRE>
+<B>  bool parseAChar( parse *p, char &c )
+  { 
+    <FONT COLOR="blue">return</FONT> ( parseGetChar( p, &c )
+           );
+  }
+</B></PRE>
+
+Simple enough, just a call to <B>parseGetChar</B>. (Note that every parser will
+get the parser <B>p</B> as an argument. We could have solved this using a
+global variable, but that would be bad programming even in C.)
+
+<P>
+Then, we define a parser which only parses a given character.
+
+<PRE>
+<B>  bool parseThisChar( parse *p, char c )
+  { 
+    char d;
+    <FONT COLOR="blue">return</FONT> ( parseAChar( p, &d )
+          && ( condition( c == d )
+            || parseUnGetChar( p, d )
+            && fail
+             )
+           );
+  }
+</B></PRE>
+
+Note that in C, we have to be explicit about variable allocation. This parser
+works as follows: It parsers an arbitrary character. If this succeeds, it checks
+if it is the right character. If it is the wrong character, it puts the
+character back and fails.
+
+<P>
+The idea is that all parsers we will construct will behave like this: If they
+fail to parse, they will restore the state of the <B>parse</B> struct.
+Unfortunately, this turns out to be a bit too restrictive. But it will be true
+for all basic parsers we will construct.
+
+<P>
+Note that we use the C operator (<B>||</B>) to take care of failure of the
+parser. Later we will see an example of using it for real choice. Another use of
+it is for error messages.
+
+<P>
+Similarly, we can define a parser which only parses a digit, and produces that
+as a result.
+
+<PRE>
+<B>  bool parseDigit( parse *p, char *c )
+  { 
+    <FONT COLOR="blue">return</FONT> ( parseAChar( p, c )
+          && ( condition( '0' <= *c && *c <= '9' )
+            || parseUnGetChar( p, *c )
+            && fail
+             )
+           );
+  }
+</B></PRE>
+
+We can see the subtle use of pointers to produce the result. Now, using
+the parser for digits, we can define a parser which parses a number.
+
+<PRE>
+<B>  bool parseNumber( parse *p, int *n )
+  { 
+    char s[300];
+    int i = 0;
+    
+    <FONT COLOR="blue">while</FONT> ( parseDigit( p, &(s[i]) )
+         && result ( i++ )
+          );
+  
+    <FONT COLOR="blue">return</FONT> ( condition ( i > 0 )
+          && result ( s[i] = '\0' )
+          && result ( *n = atoi( s ) )
+           );
+  }
+</B></PRE>
+
+Though relatively nice, it is a shame we had to split this up into two parts,
+one in the while loop and the other one in the return statement. This is
+because C makes a very silly distinction between statements and expressions,
+which means that a while loop can not be part of the argument to return. In GCC
+however, this restriction is lifted.
+
+<P>
+Thus, in GCC, we can define the familiar <B>many</B> combinator as follows:
+
+<PRE>
+<B>  <FONT COLOR="purple">#define</FONT> many(p)  ({while(p);1})
+</B></PRE>
+
+This means we can rewrite the number parser as follows:
+
+<PRE>
+<B>  bool parseNumber( parse *p, int *n )
+  { 
+    char s[300];
+    int i = 0;
+    
+    <FONT COLOR="blue">return</FONT> ( many ( parseDigit( p, &(s[i]) )
+                 && result ( i++ )
+                  )
+          && condition ( i > 0 )
+          && result ( s[i] = '\0' )
+          && result ( *n = atoi( s ) )
+           );
+  }
+</B></PRE>
+
+
+If we want to parse signed numbers (numbers with a <B>+</B> or a <B>-</B> in
+front of it), we can do this as follows:
+
+<PRE>
+<B>  bool parseSignedNumber( parse *p, int *n )
+  { 
+    <FONT COLOR="blue">return</FONT> ( parseThisChar( p, '-' )
+          && parseNumber( p, n )
+          && result ( *n = -(*n) )
+
+          || parseThisChar( p, '+' )
+          && parseNumber( p, n )
+
+          || parseNumber( p, n )
+           );
+  }
+</B></PRE>
+
+We can see that we use the (<B>||</B>) as a choice operator here. Now note that
+this parser violates the condition we have stated above! If the input string
+starts with a <B>+</B>, which is not followed by a number, the parser will fail
+and not restore the input.
+
+<P>
+It turns out that the (<B>&&</B>) has the not-so-nice property of not keeping
+the safety condition invariant. So we have to be careful using it. The safety
+condition is necessary to guarantee proper backtracking when the wrong choice is
+made. Usually, however, we define grammars which can be parsed in a
+so-called predictive way: once we have taken a branch of a choice and have
+initially parsed it successfully, we will stick to it and not backtrack.
+This makes the use of (<B>&&</B>) a bit less painful.
+
+<BLOCKQUOTE>
+<B>Exercise:</B> Change the definition of <B>parseSignedNumber</B> so that it
+does not violate the mentioned safety condition.
+</BLOCKQUOTE>
+
+Here is another example of a parser. It removes spaces and C and C++ comments.
+
+<PRE>
+<B>  bool parseSpaceAndComments( parse *p )
+  {
+    <FONT COLOR="blue">return</FONT> ( many ( parseThisChar( p, ' ' )             
+                 || parseThisChar( p, '\t' )
+                 || parseThisChar( p, '\n' )
+
+                 || parseThisString( p, "/*" )
+                 && ( many ( !parseThisString( p, "*/" )
+                          && parseAnyChar( p )
+                           )
+                    )
+
+                 || parseThisString( p, "//" )
+                 && ( many ( !parseThisChar( p, '\n' )
+                          && parseAnyChar( p )
+                           )
+                    )
+                  )
+           );
+  }
+</B></PRE>
+
+We use the parser <B>parseThisString</B>, which tries to parse a particular
+string. It is defined as follows:
+
+<PRE>
+<B>  bool parseThisString( parse *p, char *s )
+  { 
+    int i = 0;
+  
+    <FONT COLOR="blue">return</FONT> ( many ( condition ( s[i] != '\0' )
+                 && parseThisChar( p, s[i] )
+                 && result ( i++ )
+                  )
+          && condition ( s[i] == '\0' )
+
+          || many ( condition ( i-- >= 0 )
+                 && parseUnGetChar( p, s[i] )
+                  )
+          && fail
+           );
+  }
+</B></PRE>
+
+Note that there is some work involved when cleaning up after failure.
+
+<P>
+<HR>
+
+<P>
+<B>To Do</B>
+
+<P>
+Give an example of a larger grammar. Talk about categories, which are used to
+implement Haskell functions like <B>isAlpha</B>. Make a comprehensible <A
+HREF=".">download</A> page.
+
+<P>
+<HR>
+
+<P>
+<B>Comments?</B>
+
+<P>
+Please feel free to send any comments to my by e-mail.
+
+
+<!-- ----------------------------------------------------------------------
+  -- closing up
+  -->
+
+</TD></TR>
+
+<TR><TD COLSPAN=2><BR> <BR><HR></TD></TR>
+<TR><TD ALIGN=left>
+</TD>
+<TD ALIGN=right>
+<!-- extra -->
+<A href="http://www.cs.chalmers.se/~koen/">Koen Claessen</A>, Nov 22, 2000
+</EM>
+</TD></TR>
+
+</TABLE></CENTER>
+
+</BODY>
+</HTML>

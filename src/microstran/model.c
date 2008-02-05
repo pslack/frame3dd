@@ -21,6 +21,10 @@ node_stmt node_create(unsigned id,double x,double y,double z,unsigned flags){
 	return n;
 }
 
+int node_print(FILE *f, const node_stmt *n){
+	return fprintf(f,"NODE %5d %10f %10f %10f %06d\n",n->id, n->x, n->y, n->z, n->flags);
+}
+
 node_stmt *node_translate(node_stmt *n, double dx, double dy, double dz){
 	n->x += dx;
 	n->y += dy;
@@ -76,7 +80,7 @@ void model_destroy(model *a){
 	free(a);
 }
 
-cbool model_find_node(model *a, unsigned id, unsigned *index){
+cbool model_find_node(const model *a, unsigned id, unsigned *index){
 	int i;
 	for(i=0; i <a->num_nodes; ++i){
 		if(a->node[i].id == id){
@@ -116,6 +120,49 @@ cbool model_add_memb(model *a, unsigned id,unsigned fromnode
 	//fprintf(stderr,"MEMB %d %d %d %c%c %d %d %d %d\n",m.id,fromnode,tonode,axisdir,axis,prop,matl,flags1,flags2);
 	a->memb[a->num_membs++] = m;
 	return 1;
+}
+
+cbool model_find_memb(const model *a, const unsigned membid, unsigned *membindex){
+	unsigned i;
+	if(a->num_membs==0){
+		fprintf(stderr,"No MEMBs in model!\n");
+		return 0;
+	}
+	for(i=0; i<a->num_membs; ++i){
+		if(a->memb[i].id == membid){
+			*membindex = i;
+			return 1;
+		}
+	}
+	fprintf(stderr,"No member with ID %d was found.\n", membid);
+	return 0;
+}
+
+
+cbool model_find_memb_from_to(const model *a, const unsigned fromnodeid, const unsigned tonodeid, unsigned *membindex){
+	unsigned fromnodeindex, tonodeindex,i;
+	if(a->num_membs==0){
+		fprintf(stderr,"No MEMBs in model!\n");
+		return 0;
+	}
+	if(!model_find_node(a,fromnodeid,&fromnodeindex)){
+		fprintf(stderr,"Invalid 'fromnodeid' in model_find_memb_from_to\n");
+		return 0;
+	}
+	if(!model_find_node(a,tonodeid,&tonodeindex)){
+		fprintf(stderr,"Invalid 'tonodeid' in model_find_memb_from_to\n");
+		return 0;
+	}
+	for(i=0; i<a->num_membs; ++i){
+		if((a->memb[i].fromnode == fromnodeindex && a->memb[i].tonode == tonodeindex)
+			|| (a->memb[i].tonode == fromnodeindex && a->memb[i].fromnode == tonodeindex)
+		){
+			*membindex = i;
+			return 1;
+		}
+	}
+	fprintf(stderr,"No MEMB between these two nodes\n");
+	return 0;
 }
 
 cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[]

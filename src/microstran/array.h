@@ -27,7 +27,7 @@ array array_create(size_t eachsize, unsigned cap);
 
 #define ARRAY_CREATE(TYPE,CAP) array_create(sizeof(TYPE),(CAP))
 
-#define ARRAY_NUM(ARRAY) (ARRAY.num)
+#define ARRAY_NUM(ARRAY) ((ARRAY).num)
 
 /** set a value in the array. pass value by pointer; it is *copied* into place. @return pointer to the updated data element */
 void *array_set(array *a, unsigned index, void *val);

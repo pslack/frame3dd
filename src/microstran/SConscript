@@ -1,0 +1,28 @@
+#!/usr/bin/python
+
+Import('env')
+
+srcs = Split("""
+	new.c  
+	parse.c 
+	print.c
+	CharactersInDouble.c
+	error.c 
+	array.c 
+	case.c 
+	model.c 
+	modelparser.c 
+	displacements.c
+	displacementparser.c
+	sections.c
+	sectionsparser.c
+""")
+# bdd.c row.c  table.c  print.c   iter.c  list.c  
+
+lib = env.SharedLibrary("../microstranparser",srcs)
+
+env.Program('microst',['main.c'],LIBS=["microstranparser"],LIBPATH=["#"])
+
+env.Program('dumpsections',['dumpsections.c'],LIBS=["microstranparser"],LIBPATH=["#"])
+
+

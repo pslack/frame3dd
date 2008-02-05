@@ -6,6 +6,8 @@
 #include "case.h"
 #include "array.h"
 
+#include <stdio.h>
+
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -20,7 +22,8 @@ typedef struct node_stmt_{
 	unsigned flags;
 } node_stmt;
 
-node_stmt node_create(unsigned nodeid,double x,double y,double z,unsigned flags);
+MSTRANP_API node_stmt node_create(unsigned nodeid,double x,double y,double z,unsigned flags);
+MSTRANP_API int node_print(FILE *f, const node_stmt *n);
 
 /* changes the node 'n' and also returns the pointer back again */
 node_stmt *node_translate(node_stmt *n, double dx, double dy, double dz);
@@ -33,7 +36,7 @@ typedef struct memb_stmt_{
 	unsigned tonode; /**< NOTE: we store index to the 'node' array, rather than the node ID here */
 	char axisdir, axis;
 	unsigned prop; /**< NOTE: this is a property ID (direct from microstran) */
-	unsigned matl; /**< NOTE: this is a property ID (direct from microstran) */
+	unsigned matl; /**< NOTE: this is a material ID (direct from microstran) */
 	unsigned flags1;
 	unsigned flags2;
 } memb_stmt;
@@ -51,7 +54,7 @@ typedef struct unit_stmt_{
 #define MAXPROPDESC 200
 
 enum prop_vals{
-	PROP_1, PROP_2, PROP_3, PROP_4, PROP_5, PROP_6,MAXPROPVALS
+	PROP_A, PROP_2, PROP_3, PROP_J, PROP_IYY, PROP_IXX,MAXPROPVALS
 };
 
 /* PROP statement (section properties) */
@@ -107,7 +110,10 @@ MSTRANP_API void model_destroy(model *a);
 
 cbool model_add_node(model *a, node_stmt node);
 
-MSTRANP_API cbool model_find_node(model *a, unsigned id, unsigned *index);
+MSTRANP_API cbool model_find_node(const model *a, unsigned id, unsigned *index);
+
+MSTRANP_API cbool model_find_memb(const model *a, const unsigned membid, unsigned *membindex);
+MSTRANP_API cbool model_find_memb_from_to(const model *a, const unsigned nodeid1, const unsigned nodeid2, unsigned *membindex);
 
 cbool model_add_memb(model *a, unsigned id,unsigned fromnode
 		,unsigned tonode, char axisdir, char axis, unsigned prop, unsigned matl
@@ -117,7 +123,7 @@ cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[
 		, cbool isdefault, double vals[MAXPROPVALS]
 );
 
-prop_stmt *model_find_prop(model *a, unsigned propid);
+MSTRANP_API prop_stmt *model_find_prop(model *a, unsigned propid);
 
 cbool model_add_matl(model *a, unsigned id, double E, double sigma_y
 		, double rho, double beta

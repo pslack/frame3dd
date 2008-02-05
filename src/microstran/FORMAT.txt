@@ -1,0 +1,38 @@
+
+== PROP statement ==
+
+Microstran has a section library, and sections are referred to by name, eg
+'114.3X3.6CHS'. The .arc file format embeds some information about the section
+to allow calculations without going back to the section library, namely
+the cross sectional area, torsional modulus and second moments of area about
+the two principle axes. There are two extra fields which have both been 0.000 
+in the models I have seen so far.
+
+Code:
+ PROP     7 LIBR asw       114.3X3.6CHS    Y
+      1.2500E-03  0.000      0.000     3.8400E-06 1.9200E-06 1.9200E-06
+
+Interpretation:
+ PROP propid source asw?   NAME            ???
+       A_g         ?????      ?????     J          I_yy          I_xx
+
+There is some support for custom sections also in place. Here is an example
+of what that looks like:
+
+ PROP     1 PRIS LH80603010x1.5  Lipped Hat G350
+        2.9180E-04   0.000       0.000       0.000      2.8270E-07  4.0540E-07
+
+In this case the 'Y' from the above (perhaps that is the member orientation?)
+is replaced by a name for the section. The same properties appear to be
+given on the following line.
+
+We can see which of the 'I' is which using this output:
+
+ PROP    43 LIBR asw       250UB37.3       Y default
+       4.7500E-03  0.000      0.000     1.5800E-07 5.6600E-06 5.5700E-05
+
+The values of 5.66 and 5.57, corresponding to I_yy and I_xx respectively, can 
+be checked against the onesteel datasheet at:
+http://onesteel.com/images/db_images/productspecs/sectpropub1203.pdf
+
+
