@@ -265,6 +265,61 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	unsigned n = ARRAY_NUM(o.trace);
 	unsigned nv = ARRAY_NUM(o.point);
 
+	// direction vector
+	SbVec3f d(B - A);
+	d.normalize();
+
+	// midpoint of the member
+	SbVec3f m(float(0.5) * (A + B));
+
+	// as-placed orientation of cylinder
+	SbVec3f y(0,0,1);
+
+	// axis and angle of rotation to get the right position
+	SbVec3f a = y.cross(d);
+	double theta_cyl = angle(y,d);
+	// fix case where cross product is 0
+	if(a.length() < 1e-6){
+		a = SbVec3f(1,0,0);
+		theta_cyl = 0;
+	}
+
+#if 0
+	// FIXME still need to fix the twist-angle stuff to get the member oriented correctly
+	SbVec3f
+	SbVec3f Ad_unrot(A.d);
+	Ad_unrot.rotate(a,-theta_cyl);
+	if(fabs(dot(Ad_unrot,Vector(0,1,0)))>1e-8){
+		throw runtime_error("Plane at 'A' is wrong for squashedpipe");
+	}
+
+	Vector zeroA(0,0,1);
+
+	Vector axisA;
+	double theta_A = angle(zeroA,Ad_unrot, axisA);
+#endif
+	double theta_A = 0;
+
+	SoBaseColor *col = new SoBaseColor;
+	col->rgb = c;
+	s->addChild(col);
+
+	// rotation to orient the prepared member correctly in space
+	SoTransform *tr = new SoTransform;
+	tr->translation.setValue(m);
+	tr->rotation = SbRotation(a,theta_cyl);
+	s->addChild(tr);
+
+#if 0
+	//SoLevelOfDetail here...
+	SoLOD *lod = new SoLOD;
+	float rvals[] = {30};
+	lod->range.setValues(0,1,rvals);
+
+	// DETAILED level of detail
+	SoSeparator *detailed = new SoSeparator;
+#endif
+
 	SbVec3f *v3;
 	v3 = new SbVec3f[2*nv];
 	for(unsigned i=0; i<nv; ++i){
@@ -275,13 +330,11 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 		v3[nv + i] = SbVec3f(v2->x,v2->y, -r);
 	}
 
-	SoBaseColor *col = new SoBaseColor;
-	col->rgb = c;	
-	s->addChild(col);
-
+#if 0
 	SoMaterialBinding *mbi = new SoMaterialBinding;
 	mbi->value = SoMaterialBinding::PER_FACE;
 	s->addChild(mbi);
+#endif
 
 	SoCoordinate3 *coo = new SoCoordinate3;
 	coo->point.setValues(0, 2 * nv, v3);
@@ -290,26 +343,41 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	unsigned sides = 0;
 	for(unsigned i=0; i<n-1; ++i){
 		const int &v1 = *((int *)array_get((array *)&(o.trace), i));
-		if(v1==-1)continue; /* skip this one, if last one if it's 'pen up' */
+		if(v1==-1)continue; /* skip this one, if last one was a 'pen up' */
 		const int &v2 = *((int *)array_get((array *)&(o.trace), i+1));
 		if(v2==-1)continue; /* skip this one if we're about to pen-up*/
 		sides++;
 	}
 
 	int *i3; /* indices for the 3D face set */
-	i3 = new int[5*sides];
+	i3 = new int[5*sides /*+ (sides + 1)*/];
 
+	// add the sides of the prism
 	unsigned ni=0;
 	for(unsigned i=0; i<n-1; ++i){
 		int v1 = *(const int *)array_get((array *)&(o.trace), i);
 		int v2 = *(const int *)array_get((array *)&(o.trace), i+1);
 		if(v2==-1 || v1==-1)continue;
-		i3[ni++] = v2;
 		i3[ni++] = v1;
-		i3[ni++] = nv + v1;
+		i3[ni++] = v2;
 		i3[ni++] = nv + v2;
+		i3[ni++] = nv + v1;
 		i3[ni++] = SO_END_FACE_INDEX;
 	}
+
+	// add the ends of the prism
+#if 0
+	for(unsigned i=0; i<n-1; ++i){
+		const int &v1 = *((int *)array_get((array *)&(o.trace), i));
+		if(v1==-1)continue; /* skip this one, if last one was a 'pen up' */
+		const int &v2 = *((int *)array_get((array *)&(o.trace), i+1));
+		if(v2==-1)continue; /* skip this one if we're about to pen-up*/
+		i3[ni++] = v1;
+		cerr << v1 << "=" << coo->point[v1][0] << "," << coo->point[v1][1] << endl;
+	}
+	cerr << endl;
+	i3[ni++] = SO_END_FACE_INDEX;
+#endif
 
 	SoIndexedFaceSet *fsi = new SoIndexedFaceSet;
 	fsi->coordIndex.setValues(0, ni, i3);
@@ -319,8 +387,6 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	delete[] v3;
 	return s;	
 }
-
-
 
 
 #ifdef RENDER_DEBUG

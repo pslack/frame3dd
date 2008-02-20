@@ -143,7 +143,7 @@ int main(int argc, char **argv){
 				}else if(section_is_isec(s)){
 					c = GREEN;
 					double d = section_isec_depth(s);
-					root->addChild(cylinder(vA,vB,d/2.,c));				
+					//root->addChild(cylinder(vA,vB,d/2.,c));				
 					section_outline *o = section_isec_outline(s);
 					root->addChild(prism(vA, vB, *o, c, SbVec3f(0,0,0)));
 				}					

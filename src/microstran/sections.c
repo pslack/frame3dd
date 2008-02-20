@@ -92,18 +92,20 @@ section_outline *section_isec_outline(const section *s){
 	o->trace = ARRAY_CREATE(int,12);
 	int i=0;
 #define PT(X,Y) array_set(&(o->point),i++,vec2_set(&v,(X),(Y)))
-	PT(-bf/2, d/2);
-	PT(-bf/2, d/2 - tf);
-	PT(-tw/2, d/2 - tf);
-	PT(-tw/2, -(d/2-tf));
-	PT(-bf/2, -(d/2-tf));
-	PT(-bf/2, -d/2);
-	PT(bf/2, -d/2);
-	PT(bf/2, -(d/2-tf));
-	PT(tw/2, -(d/2-tf));
-	PT(tw/2, d/2 - tf);
-	PT(bf/2, d/2 - tf);
-	PT(bf/2, d/2);
+	/* trace around the contour in a clockwise direction, following the
+	convention that the surface 'exterior' is on the left side of the contour */
+	PT(bf/2, d/2); /* 0 */
+	PT(bf/2, d/2 - tf); /* 1 */
+	PT(tw/2, d/2 - tf); /* 2 */
+	PT(tw/2, -(d/2-tf)); /* 3 */
+	PT(bf/2, -(d/2-tf)); /* 4 */
+	PT(bf/2, -d/2); /* 5 */
+	PT(-bf/2, -d/2); /* 6 */
+	PT(-bf/2, -(d/2-tf)); /* 7 */
+	PT(-tw/2, -(d/2-tf)); /* 8 */
+	PT(-tw/2, d/2 - tf); /* 9 */
+	PT(-bf/2, d/2 - tf); /* 10 */
+	PT(-bf/2, d/2); /* 11 */
 #undef PT
 
 	for(i=0;i<12;++i)array_set(&(o->trace),i,&i);
@@ -112,6 +114,7 @@ section_outline *section_isec_outline(const section *s){
 
 	return o;
 }
+
 
 void section_outline_destroy(section_outline *o){
 	array_destroy(&(o->point));
