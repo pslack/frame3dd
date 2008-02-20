@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-version = '20080205'
+version = '20080221'
 
 env = Environment(
 	tools=['default','disttar','substinfile','soqt']

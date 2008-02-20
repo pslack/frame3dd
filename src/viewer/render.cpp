@@ -37,6 +37,7 @@
 #include <Inventor/nodes/SoNormalBinding.h>
 #include <Inventor/nodes/SoCoordinate3.h>
 #include <Inventor/nodes/SoIndexedFaceSet.h>
+#include <Inventor/nodes/SoShapeHints.h>
 
 #include <microstran/array.h>
 
@@ -163,6 +164,10 @@ SoSeparator *cone(const SbVec3f &A, const SbVec3f &B, const double &r, const SbC
 	SoBaseColor *col = new SoBaseColor;
 	col->rgb = c;	
 	s->addChild(col);
+
+	SoShapeHints *sha = new SoShapeHints;
+	sha->vertexOrdering = SoShapeHints::CLOCKWISE;
+	s->addChild(sha);
 
 	//cerr << "translation = " << m << endl;
 	SoTranslation *tr = new SoTranslation;
