@@ -15,10 +15,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-version = '20080116'
+version = '20080205'
 
 env = Environment(
-	tools=['default','disttar','substinfile']
+	tools=['default','disttar','substinfile','soqt']
 	,toolpath=['scons']
 )
 

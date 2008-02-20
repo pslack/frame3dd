@@ -35,6 +35,12 @@ if env.get('VERSION'):
 
 frame = prog_env.Program('frame',objs + ['main.c'], LIBS=['m'])
 
+# proceed into subdirectory to create libmicrostranparser
+env.SConscript('microstran/SConscript','env')
+
+# proceed into directory to create frame viewer program
+env.SConscript('viewer/SConscript','env')
+
 bindir=Dir(env.subst("$INSTALL_ROOT$INSTALL_BIN"))
 env.Install(bindir,frame);
 

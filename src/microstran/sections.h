@@ -18,6 +18,7 @@ extern "C"{
 
 typedef enum{
 	SECTION_CHS=0
+	,SECTION_ISEC
 } section_type;
 
 struct section_chs_struct{
@@ -36,6 +37,21 @@ struct section_chs_struct{
 	double Ze;
 };
 
+/**
+	I-sections (universal beams, universal columns, maybe other?)
+*/
+struct section_isec_struct{
+	double m_linear; /* mass per linear metre */
+	double d; /* section depth */
+	double bf, tf; /* flange width and thickness */
+	double tw; /* web thickness */
+	double r1; /* root radius */
+	double Ag; /* cross-section area */
+	double lx, Zx, Sx, rx;
+	double ly, Zy, Sy, ry;
+	double J, lw; /* torsion constant and warping constant */
+};
+
 #define SECTION_NAME_MAX 40
 
 struct section_struct{
@@ -43,23 +59,46 @@ struct section_struct{
 	section_type type;
 	union{
 		struct section_chs_struct chs;
+		struct section_isec_struct isec;
 	};
 };
-
 typedef struct section_struct section;
+
+/*
+	Structure to return section outline to other codes
+*/
+typedef struct vec2_struct{
+	double x,y;
+} vec2;
+
+typedef struct section_outline_struct {
+	array point; /**< (of vec2) vertices in the cross-section */
+	array trace; /**< (of int) array of point IDs, or -1 to pick up 'pen' */
+} section_outline;
 
 typedef struct section_library_struct{
 	array a;
 } section_library;
+
+MSTRANP_API void section_outline_destroy(section_outline *o);
 
 MSTRANP_API section_library *section_library_create();
 MSTRANP_API void section_library_destroy(section_library *l);
 
 MSTRANP_API const section *section_find(const section_library *l, const char *name);
 
+/* chs routines */
 MSTRANP_API int section_is_chs(const section *s);
 MSTRANP_API double section_chs_outside_diameter(const section *s);
 MSTRANP_API double section_chs_thickness(const section *s);
+
+/* i-section routines */
+MSTRANP_API int section_is_isec(const section *s);
+MSTRANP_API double section_isec_depth(const section *s);
+MSTRANP_API double section_isec_flange_width(const section *s);
+MSTRANP_API double section_isec_flange_thickness(const section *s);
+MSTRANP_API double section_isec_web_thickness(const section *s);
+MSTRANP_API section_outline *section_isec_outline(const section *s);
 
 MSTRANP_API int section_print(FILE *f, const section *s);
 

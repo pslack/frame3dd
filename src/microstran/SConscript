@@ -19,7 +19,7 @@ srcs = Split("""
 """)
 # bdd.c row.c  table.c  print.c   iter.c  list.c  
 
-lib = env.SharedLibrary("../microstranparser",srcs)
+lib = env.SharedLibrary("#/microstranparser",srcs)
 
 env.Program('microst',['main.c'],LIBS=["microstranparser"],LIBPATH=["#"])
 

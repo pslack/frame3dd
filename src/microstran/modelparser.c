@@ -195,6 +195,23 @@ cbool parseMSPR(parse *p, model *a){
 	);
 }
 
+/* MTYP statements: member types (eg tension-only members) */
+cbool parseMTYP(parse *p, model *a){
+	// MTYP  6046  TONLY
+	static int warnMTYP = 0;
+	unsigned memberid;
+	return (
+		parseComments(p)
+		&& parseThisString(p,"MTYP")
+		&& parseWS(p)
+		&& parseNumber(p,&memberid)
+		&& parseWS(p)
+		&& parseThisString(p,"TONLY")
+		&& parseEOLplus(p)
+		&& assign(warnMTYP ? 0 : (fprintf(stderr,"WARNING: 'MTYP' statements ignored.\n"),warnMTYP=1))
+	);
+}	
+
 /* PROP statement */
 
 cbool parsePROP(parse *p, model *a){
@@ -252,22 +269,24 @@ cbool parseMATL(parse *p, model *a){
 	double sigma_y; /* force unit / length_unit^2 */
 	double rho; /* mass_unit / length_unit^3 */
 	double beta; /* temp_unit^-1 ...guessing about this one */
+#define ASSIGN(Z) 1
 	return (
 		parseComments(p)
-		&& parseThisString(p,"MATL") //&& assign(fprintf(stderr,"MATL"))
+		&& parseThisString(p,"MATL") && ASSIGN(fprintf(stderr,"MATL"))
 		&& parseWS(p)
-		&& parseNumber(p,&id) //&& assign(fprintf(stderr,"%d",id))
-		&& parseWS(p) //&& assign(fprintf(stderr," "))
-		&& parseDouble(p,&E) //&& assign(fprintf(stderr,"%e",vals[0]))
-		&& parseWS(p) //&& assign(fprintf(stderr," "))
-		&& parseDouble(p,&sigma_y) //&& assign(fprintf(stderr,"%e",vals[1]))
-		&& parseWS(p) //&& assign(fprintf(stderr," "))
-		&& parseDouble(p,&rho) //&& assign(fprintf(stderr,"%e",vals[2]))
-		&& parseWS(p) //&& assign(fprintf(stderr," "))
-		&& parseDouble(p,&beta) //&& assign(fprintf(stderr,"%e",vals[3]))
-		&& parseEOLplus(p) //&& assign(fprintf(stderr,"\n"))
+		&& parseNumber(p,&id) && ASSIGN(fprintf(stderr,"%d",id))
+		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
+		&& parseDouble(p,&E) && ASSIGN(fprintf(stderr,"%e",E))
+		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
+		&& parseDouble(p,&sigma_y) && ASSIGN(fprintf(stderr,"%e",sigma_y))
+		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
+		&& parseDouble(p,&rho) && ASSIGN(fprintf(stderr,"%e",rho))
+		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
+		&& parseDouble(p,&beta) && ASSIGN(fprintf(stderr,"%e",beta))
+		&& parseEOLplus(p) && ASSIGN(fprintf(stderr,"\n"))
 		&& model_add_matl(a,id,E,sigma_y,rho,beta)
-	);		
+	);	
+#undef ASSIGN	
 }
 
 /* CASE statement (load-case) */
@@ -336,14 +355,15 @@ cbool parseCASE(parse *p, model *a){
 	case_stmt c;
 	c.type = CASE_UNDEFINED;
 	//ndld_stmt ndld[MAXNDLDS];
+#define ASSIGN(Z) 1
 	return (
 		parseComments(p)
-		&& parseThisString(p,"CASE") //&& assign(fprintf(stderr,"CASE"))
-		&& parseWS(p) //&& assign(fprintf(stderr," "))
-		&& parseNumber(p,&(c.id)) //&& assign(fprintf(stderr,"%d",c.id))
-		&& parseWS(p) //&& assign(fprintf(stderr," "))
-		&& parseStrExcept(p,"\n\r",c.name,MAXCASENAME) //&& assign(fprintf(stderr,"\"%s\"",c.name))
-		&& parseEOLplus(p) //&& assign(fprintf(stderr,"\n"))
+		&& parseThisString(p,"CASE") && ASSIGN(fprintf(stderr,"CASE"))
+		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
+		&& parseNumber(p,&(c.id)) && ASSIGN(fprintf(stderr,"%d",c.id))
+		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
+		&& parseStrExcept(p,"\n\r",c.name,MAXCASENAME) && ASSIGN(fprintf(stderr,"\"%s\"",c.name))
+		&& parseEOLplus(p) && ASSIGN(fprintf(stderr,"\n"))
 		&& ((maybe(parseGRAV(p,&c))
 			&& parseNDLD(p,&c) && many(parseNDLD(p,&c))
 		) || (
@@ -351,6 +371,7 @@ cbool parseCASE(parse *p, model *a){
 		))
 		&& model_add_case(a,&c)
 	);
+#undef ASSIGN
 }
 
 /* MICROSTRAN ARCHIVE FILE*/
@@ -359,6 +380,7 @@ cbool parseModelMicrostran(parse *p, model **a){
 	unsigned version, type, vert;
 	unit_stmt unit;
 	model *a1 = NULL;
+#define ASSIGN(Z) 1
 	return (
 		parseNumericLine(p,"VERS",&version) //&& assign(fprintf(stderr,"VERS %d\n",version))
 		&& parseNumericLine(p,"TYPE",&type) //&& assign(fprintf(stderr,"TYPE %d\n",type))
@@ -366,16 +388,18 @@ cbool parseModelMicrostran(parse *p, model **a){
 		&& parseUNIT(p,&unit) //&& assign(fprintf(stderr,"UNIT parsed\n"))
 		&& assign(a1 = model_create(version, type, vert, unit))
 		//&& assign(fprintf(stderr,"model created...\n"))
-		&& many(parseNODE(p,a1)) //&& assign(fprintf(stderr,"NODEs parsed\n"))
-		&& many(parseMEMB(p,a1)) //&& assign(fprintf(stderr,"MEMBs parsed\n"))
-		&& many(parseMOFF(p,a1)) //&& assign(fprintf(stderr,"MOFFs parsed\n"))
-		&& many(parseMSPR(p,a1)) //&& assign(fprintf(stderr,"MSPRs parsed\n"))
-		&& many(parsePROP(p,a1)) //&& assign(fprintf(stderr,"PROPs parsed\n"))
-		&& many(parseMATL(p,a1)) //&& assign(fprintf(stderr,"MATLs parsed\n"))
-		&& many(parseCASE(p,a1)) //&& assign(fprintf(stderr,"CASEs parsed\n"))
-		&& parseThisString(p,"END") && parseEOLplus(p) //&& assign(fprintf(stderr,"\nEND parsed\n"))
+		&& many(parseNODE(p,a1)) && ASSIGN(fprintf(stderr,"NODEs parsed\n"))
+		&& many(parseMEMB(p,a1)) && ASSIGN(fprintf(stderr,"MEMBs parsed\n"))
+		&& many(parseMOFF(p,a1)) && ASSIGN(fprintf(stderr,"MOFFs parsed\n"))
+		&& many(parseMSPR(p,a1)) && ASSIGN(fprintf(stderr,"MSPRs parsed\n"))
+		&& many(parseMTYP(p,a1)) && ASSIGN(fprintf(stderr,"MTYPs parser\n"))
+		&& many(parsePROP(p,a1)) && ASSIGN(fprintf(stderr,"PROPs parsed\n"))
+		&& many(parseMATL(p,a1)) && ASSIGN(fprintf(stderr,"MATLs parsed\n"))
+		&& many(parseCASE(p,a1)) && ASSIGN(fprintf(stderr,"CASEs parsed\n"))
+		&& parseThisString(p,"END") && parseEOLplus(p) && ASSIGN(fprintf(stderr,"\nEND parsed\n"))
 		&& assign(*a = a1)
 	) || ((a1?model_destroy(a1):0), fail);
+#undef ASSIGN
 }
 
 

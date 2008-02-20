@@ -1,0 +1,18 @@
+Import('env')
+
+v_env = env.Clone()
+
+v_env.AppendUnique(
+	LIBS = ['microstranparser'] + env.get('SOQT_LIBS')
+	,LIBPATH = ['#'] + env.get('SOQT_LIBPATH')
+	,CPPPATH = ['..'] + env.get('SOQT_CPPPATH')
+)
+
+srcs = Split("""
+	render.cpp
+	arc2iv.cpp
+""")
+
+v_env.Program("#/arc2iv",srcs)
+
+
