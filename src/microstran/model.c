@@ -92,7 +92,7 @@ cbool model_find_node(const model *a, unsigned id, unsigned *index){
 }			
 
 cbool model_add_memb(model *a, unsigned id,unsigned fromnode
-		,unsigned tonode, char axisdir, char axis, unsigned prop, unsigned matl
+		,unsigned tonode, member_orientation orient, unsigned prop, unsigned matl
 		,unsigned flags1,unsigned flags2
 ){
 	unsigned index;
@@ -111,8 +111,7 @@ cbool model_add_memb(model *a, unsigned id,unsigned fromnode
 		return 0;
 	}
 	m.id = id; /* TODO check unique */
-	m.axisdir = axisdir;
-	m.axis = axis;
+	m.orient = orient;
 	m.prop = prop;
 	m.matl = matl;
 	m.flags1 = flags1;
@@ -251,7 +250,7 @@ cbool model_apply_displacements(model *m, casedisplacements *cd){
 	unsigned displaced = 0;
 
 	double maxdisp = 0, disp;
-	unsigned nodemaxdisp;
+	unsigned nodemaxdisp = 999999999;
 
 	fprintf(stderr,"Displacing model with %d nodes...\n",m->num_nodes);
 	//fprintf(stderr,"Displacement set has %d nodes...\n",ARRAY_NUM(cd->nodes));

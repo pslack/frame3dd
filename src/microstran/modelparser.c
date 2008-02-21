@@ -86,17 +86,19 @@ cbool parseNODE(parse *p, model *a){
 
 /* MEMB statement */
 
-cbool parseMemberOrientation(parse *p, model *a, char *axis, char *axisdir, unsigned *aligntomemb){
-	*axisdir = '+';
+cbool parseMemberOrientation(parse *p, model *a, member_orientation *orient){
+	orient->axis = '\0';
+	orient->dir = '+';
 	return(
 		(
-			maybe(parseCharIn(p,"-+",axisdir) /*assign(fprintf(stderr,"%c",*axisdir))*/)
+			maybe(parseCharIn(p,"-+",&(orient->dir)) /*assign(fprintf(stderr,"%c",*axisdir))*/)
 			&& (
-				(parseCharIn(p,"XYZ",axis) /*&& assign(fprintf(stderr,"%c",*axis))*/)
+				(parseCharIn(p,"XYZ",&(orient->axis)) /*&& assign(fprintf(stderr,"%c",*axis))*/)
 			)
 		) || (
 			//assign(fprintf(stderr,"aligntomemb="))
-			parseNumber(p,aligntomemb) //&& assign(fprintf(stderr,"%d",*aligntomemb))
+			parseNumber(p,&(orient->node)) //&& assign(fprintf(stderr,"%d",*aligntomemb))
+			&& assign(orient->axis = '\0')
 		)
 	);
 }
@@ -104,8 +106,7 @@ cbool parseMemberOrientation(parse *p, model *a, char *axis, char *axisdir, unsi
 cbool parseMEMB(parse *p, model *a){
 	unsigned id = 0;
 	unsigned fromnode,tonode, prop, matl;
-	unsigned aligntomemb; /* the name of this one is a guess... not really sure what it is */
-	char axis, axisdir = '+';
+	member_orientation orient;
 	unsigned flags1, flags2;
 	return (
 		parseComments(p)
@@ -117,7 +118,7 @@ cbool parseMEMB(parse *p, model *a){
 		&& parseWS(p) //&& assign(fprintf(stderr," "))
 		&& parseNumber(p,&tonode) //&& assign(fprintf(stderr,"tonode=%d",tonode))
 		&& parseWS(p) //&& assign(fprintf(stderr," "))
-		&& parseMemberOrientation(p, a, &axis, &axisdir, &aligntomemb)
+		&& parseMemberOrientation(p, a, &orient)
 		&& parseWS(p) //&& assign(fprintf(stderr," "))
 		&& parseNumber(p,&prop) //&& assign(fprintf(stderr,"prop=%d",prop))
 		&& parseWS(p) //&& assign(fprintf(stderr," "))
@@ -127,7 +128,7 @@ cbool parseMEMB(parse *p, model *a){
 		&& parseWS(p) //&& assign(fprintf(stderr," "))
 		&& parseNumber(p,&flags2) //&& assign(fprintf(stderr,"%d",flags2))
 		&& parseEOLplus(p) //&& assign(fprintf(stderr,"\n"))
-		&& model_add_memb(a,id,fromnode,tonode,axisdir,axis,prop,matl,flags1,flags2)
+		&& model_add_memb(a,id,fromnode,tonode,orient,prop,matl,flags1,flags2)
 		//&& assign(fprintf(stderr,"MEMB %d OK\n",id))
 	);
 }
@@ -235,7 +236,7 @@ cbool parsePROP(parse *p, model *a){
 			&& parseStrExcept(p," \n\r\t",name,MAXPROPNAME) //&& assign(fprintf(stderr,"%s",name))
 			&& parseWS(p) //&& assign(fprintf(stderr," "))
 			&& parseThisChar(p,'Y') //&& assign(fprintf(stderr,"Y"))
-			&& maybe(parseWS(p) && parseThisString(p,"default") /*&& assign(fprintf(stderr," default"))*/) 
+			&& maybe(parseWS(p) && parseThisString(p,"default") && assign(isdefault=1)/*&& assign(fprintf(stderr," default"))*/) 
 			&& parseEOLplus(p) //&& assign(fprintf(stderr,"\n\t"))
 		) || (
 			parseThisString(p,"PRIS") //&& assign(fprintf(stderr,"PRIS"))

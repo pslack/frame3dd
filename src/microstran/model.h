@@ -30,11 +30,26 @@ node_stmt *node_translate(node_stmt *n, double dx, double dy, double dz);
 
 /* MEMB structure */
 
+/**
+	Structure to hold data on member orientation. In Microstran, you can specify
+	alignment to one of the global coordinate system axes, or else alignment
+	to a node.
+*/
+typedef struct member_orientation_struct{
+	char axis; /** Axis 'X', 'Y', or 'Z', or '\0' to indicate orientation to a node */
+	union{
+		unsigned node; /**< if axis=='\0', this will hode an index into the 'node' array (NOT a node ID) */
+		char dir; /**< if orientation to an axis, this will hold '+' or '-' for the direction of orientation */
+	};
+} member_orientation;
+
+	
+
 typedef struct memb_stmt_{
 	unsigned id;
 	unsigned fromnode; /**< NOTE: we store index to the 'node' array, rather than the node ID here */
 	unsigned tonode; /**< NOTE: we store index to the 'node' array, rather than the node ID here */
-	char axisdir, axis;
+	member_orientation orient;
 	unsigned prop; /**< NOTE: this is a property ID (direct from microstran) */
 	unsigned matl; /**< NOTE: this is a material ID (direct from microstran) */
 	unsigned flags1;
@@ -116,7 +131,7 @@ MSTRANP_API cbool model_find_memb(const model *a, const unsigned membid, unsigne
 MSTRANP_API cbool model_find_memb_from_to(const model *a, const unsigned nodeid1, const unsigned nodeid2, unsigned *membindex);
 
 cbool model_add_memb(model *a, unsigned id,unsigned fromnode
-		,unsigned tonode, char axisdir, char axis, unsigned prop, unsigned matl
+		,unsigned tonode, member_orientation orient, unsigned prop, unsigned matl
 		,unsigned flags1,unsigned flags2
 );
 cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[]
