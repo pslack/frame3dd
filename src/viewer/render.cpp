@@ -176,10 +176,6 @@ SoSeparator *cone(const SbVec3f &A, const SbVec3f &B, const double &r, const SbC
 	col->rgb = c;	
 	s->addChild(col);
 
-	SoShapeHints *sha = new SoShapeHints;
-	sha->vertexOrdering = SoShapeHints::CLOCKWISE;
-	s->addChild(sha);
-
 	//cerr << "translation = " << m << endl;
 	SoTranslation *tr = new SoTranslation;
 	tr->translation = m;
@@ -327,6 +323,10 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	SoBaseColor *col = new SoBaseColor;
 	col->rgb = c;
 	s->addChild(col);
+
+	SoShapeHints *sha = new SoShapeHints;
+	sha->vertexOrdering = SoShapeHints::CLOCKWISE;
+	s->addChild(sha);
 
 	// rotation to orient the prepared member correctly in space
 	SoTransform *tr = new SoTransform;

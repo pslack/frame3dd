@@ -105,6 +105,8 @@ int main(int argc, char **argv){
 
 
 	SoSeparator *root = new SoSeparator;
+
+	root->addChild(axes());
 	
 	// render all the nodes in the model
 	SbVec3f labeloffset(0.1,0.1,0.1);
