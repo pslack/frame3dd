@@ -133,6 +133,38 @@ section_outline *section_isec_outline(const section *s){
 }
 
 
+/**
+	Output a data structure containing the perimeter of the steel section.
+	We can use this to generate 3D 'prism' geometry elsewhere.
+*/
+section_outline *section_shs_outline(const section *s){
+	section_outline *o;
+	vec2 v;
+	assert(section_is_shs(s));
+	double t = s->shs.t;
+	double d = s->shs.d;
+	
+	o = NEW(section_outline);	
+	o->point = ARRAY_CREATE(vec2,4);
+	o->trace = ARRAY_CREATE(int,4);
+	int i=0;
+#define PT(X,Y) array_set(&(o->point),i++,vec2_set(&v,(X),(Y)))
+	/* trace around the contour in a clockwise direction, following the
+	convention that the surface 'exterior' is on the left side of the contour */
+	PT(d/2, d/2); /* 0 */
+	PT(d/2, -d/2); /* 1 */
+	PT(-d/2, -d/2); /* 2 */
+	PT(-d/2, d/2); /* 3 */
+#undef PT
+
+	for(i=0;i<4;++i)array_set(&(o->trace),i,&i);
+	i = 0; // join back to the start again
+	array_set(&(o->trace),4,&i);
+	return o;
+}
+
+
+
 void section_outline_destroy(section_outline *o){
 	array_destroy(&(o->point));
 	array_destroy(&(o->trace));

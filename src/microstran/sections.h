@@ -121,6 +121,7 @@ MSTRANP_API section_outline *section_isec_outline(const section *s);
 MSTRANP_API int section_is_shs(const section *s);
 MSTRANP_API double section_shs_depth(const section *s);
 MSTRANP_API double section_shs_thickness(const section *s);
+MSTRANP_API section_outline *section_shs_outline(const section *s);
 
 
 MSTRANP_API int section_print(FILE *f, const section *s);

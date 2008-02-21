@@ -142,11 +142,13 @@ int main(int argc, char **argv){
 					root->addChild(cylinder(vA,vB,d/2.,c));
 				}else if(section_is_isec(s)){
 					c = GREEN;
-					double d = section_isec_depth(s);
-					//root->addChild(cylinder(vA,vB,d/2.,c));				
 					section_outline *o = section_isec_outline(s);
 					root->addChild(prism(vA, vB, *o, c, SbVec3f(0,0,0)));
-				}					
+				}else if(section_is_shs(s)){
+					c = CYAN;
+					section_outline *o = section_shs_outline(s);
+					root->addChild(prism(vA, vB, *o, c, SbVec3f(0,0,0)));
+				}
 			}else{
 				if(unknownsections.find(p->name)==unknownsections.end()){
 					fprintf(stderr,"Warning: unknown section name '%s'\n",p->name);
