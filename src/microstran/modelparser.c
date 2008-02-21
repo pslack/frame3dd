@@ -242,7 +242,7 @@ cbool parsePROP(parse *p, model *a){
 			&& parseWS(p) //&& assign(fprintf(stderr," "))
 			&& parseStrExcept(p," \n\r\t",name,MAXPROPNAME) //&& assign(fprintf(stderr,"%s",name))
 			&& parseWS(p) //&& assign(fprintf(stderr," "))
-			&& parseStrExcept(p,"\n\r\t",name,MAXPROPDESC) //&& assign(fprintf(stderr,"%s",desc))
+			&& parseStrExcept(p,"\n\r\t",desc,MAXPROPDESC) //&& assign(fprintf(stderr,"%s",desc))
 			&& parseEOLplus(p)
 		)) //&& assign(fprintf(stderr,"\n\t"))
 		&& parseDouble(p,vals+0) //&& assign(fprintf(stderr,"%e",vals[0]))

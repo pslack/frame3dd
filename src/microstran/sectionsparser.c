@@ -185,12 +185,14 @@ cbool parseSHS(parse *p, section *s1){
 		&& assign(s.Ag *= 1e-6)
 		&& assign(s1->type = SECTION_SHS)
 		&& assign(s1->shs = s)
+#undef ASSIGN
 	);
 }
 
 
 cbool parseSection(parse *p, section_library *l){
 	section s;
+#define ASSIGN(Z) 1
 	return (
 		parseStrExcept(p," \n\r\t",s.name,SECTION_NAME_MAX) && strlen(s.name)// && assign(fprintf(stderr,"Section \"%s\"",s.name))
 		&& (
@@ -200,8 +202,9 @@ cbool parseSection(parse *p, section_library *l){
 			/* || parseUB(...) */
 			/* etc */
 		) && assign(array_append(&(l->a),&s)) 
-		&& assign(section_print(stderr,&s))
+		&& ASSIGN(section_print(stderr,&s))
 	);
+#undef ASSIGN
 }
 
 /* SECTIONS LIBRARY FILE*/

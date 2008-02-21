@@ -145,7 +145,7 @@ int main(int argc, char **argv){
 					section_outline *o = section_isec_outline(s);
 					root->addChild(prism(vA, vB, *o, c, SbVec3f(0,0,0)));
 				}else if(section_is_shs(s)){
-					c = CYAN;
+					c = YELLOW;
 					section_outline *o = section_shs_outline(s);
 					root->addChild(prism(vA, vB, *o, c, SbVec3f(0,0,0)));
 				}
