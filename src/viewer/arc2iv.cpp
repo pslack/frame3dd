@@ -40,6 +40,10 @@ void usage(const char *progname){
 	fprintf(stderr,"  OUTFILE Open Inventor file to output (defaults to '%s')\n\n",defaultsceneoutfile);	
 }
 
+static SbVec3f vec3_to_coin(vec3 A){
+	return SbVec3f(A.x,A.y,A.z);
+}
+
 int main(int argc, char **argv){
 
 	const char *sceneoutfile = NULL;
@@ -110,7 +114,7 @@ int main(int argc, char **argv){
 			n = &(M->node[i]);
 			stringstream ss;
 			ss << n->id;
-			SbVec3f p = labeloffset + SbVec3f(n->x,n->y,n->z);
+			SbVec3f p = labeloffset + vec3_to_coin(n->pos);
 			//fprintf(stderr,"Label = %s\n",ss.str().c_str());
 			//cerr << "pos = " << p << endl;
 			root->addChild(text(p,ss.str().c_str(),RED));
@@ -127,8 +131,9 @@ int main(int argc, char **argv){
 		node_stmt *B = &(M->node[m->tonode]);
 		prop_stmt *p = model_find_prop(M, m->prop);
 
-		SbVec3f vA(A->x, A->y, A->z);
-		SbVec3f vB(B->x, B->y, B->z);
+		SbVec3f vA = vec3_to_coin(A->pos);
+		SbVec3f vB = vec3_to_coin(B->pos);
+		SbVec3f vX = vec3_to_coin(memb_get_orientation(M,m));
 
 		stringstream ss;
 		SbColor c;
@@ -144,12 +149,13 @@ int main(int argc, char **argv){
 					c = GREEN;
 					/* FIXME need to get the member orientation correct! */
 					section_outline *o = section_isec_outline(s);
-					root->addChild(prism(vA, vB, *o, c, SbVec3f(0,0,0)));
+					cerr << "Member " << m->id << " oriented to " << vX[0] << "," << vX[1] << "," << vX[2] << endl;
+					root->addChild(prism(vA, vB, *o, c, vX));
 				}else if(section_is_shs(s)){
 					c = YELLOW;
 					/* FIXME need to get the member orientation correct! */
 					section_outline *o = section_shs_outline(s);
-					root->addChild(prism(vA, vB, *o, c, SbVec3f(0,0,0)));
+					root->addChild(prism(vA, vB, *o, c, vX));
 				}
 			}else{
 				if(unknownsections.find(p->name)==unknownsections.end()){

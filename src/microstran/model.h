@@ -5,6 +5,7 @@
 #include "types.h"
 #include "case.h"
 #include "array.h"
+#include "vec3.h"
 
 #include <stdio.h>
 
@@ -18,11 +19,11 @@ extern "C"{
 
 typedef struct node_stmt_{
 	unsigned id;
-	double x,y,z;
+	vec3 pos;
 	unsigned flags;
 } node_stmt;
 
-MSTRANP_API node_stmt node_create(unsigned nodeid,double x,double y,double z,unsigned flags);
+MSTRANP_API node_stmt node_create(unsigned nodeid,vec3 pos,unsigned flags);
 MSTRANP_API int node_print(FILE *f, const node_stmt *n);
 
 /* changes the node 'n' and also returns the pointer back again */
@@ -137,6 +138,8 @@ cbool model_add_memb(model *a, unsigned id,unsigned fromnode
 cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[]
 		, cbool isdefault, double vals[MAXPROPVALS]
 );
+
+MSTRANP_API vec3 memb_get_orientation(const model *a, const memb_stmt *m);
 
 MSTRANP_API prop_stmt *model_find_prop(model *a, unsigned propid);
 

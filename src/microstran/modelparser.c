@@ -64,22 +64,22 @@ cbool parseUNIT(parse *p, unit_stmt *u){
 
 cbool parseNODE(parse *p, model *a){
 	unsigned nodeid, flags;
-	double x,y,z;
+	vec3 pos;
 	return (
 		parseComments(p)
 		&& parseThisString(p,"NODE")
 		&& parseWS(p)
 		&& parseNumber(p,&nodeid)
 		&& parseWS(p)
-		&& parseDouble(p, &x)
+		&& parseDouble(p, &(pos.x))
 		&& parseWS(p)
-		&& parseDouble(p, &y)
+		&& parseDouble(p, &(pos.y))
 		&& parseWS(p)
-		&& parseDouble(p, &z)
+		&& parseDouble(p, &(pos.z))
 		&& parseWS(p)
 		&& parseNumber(p,&flags)
 		&& parseEOLplus(p)
-		&& model_add_node(a,node_create(nodeid,x,y,z,flags))
+		&& model_add_node(a,node_create(nodeid,pos,flags))
 		//&& assign(fprintf(stderr,"NODE %d\n",nodeid))
 	);
 }

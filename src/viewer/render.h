@@ -26,7 +26,7 @@ SoSeparator *axes(const double &size=1.0, double thickness=0.0, bool labelled=tr
 SoSeparator *arrow(const SbVec3f &A, const SbVec3f &B, const SbColor &c=YELLOW, const char *label=NULL, double thickness=0.05);
 SoSeparator *face(const SbVec3f &n, const std::vector<SbVec3f> &vertices, const SbColor &c=YELLOW);
 
-SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline &outline, const SbColor &c, const SbVec3f &C);
+SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline &outline, const SbColor &c, const SbVec3f &O);
 
 #endif
 

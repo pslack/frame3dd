@@ -39,11 +39,15 @@
 #include <Inventor/nodes/SoIndexedFaceSet.h>
 #include <Inventor/nodes/SoShapeHints.h>
 
+extern "C"{
 #include <microstran/array.h>
+#include <microstran/vec3.h>
+};
 
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
+#include <stdexcept>
 using namespace std;
 
 const SbColor WHITE(1,1,1);
@@ -60,6 +64,13 @@ static float angle(const SbVec3f &a, const SbVec3f &b){
 	return atan2(c.length(),a.dot(b));
 }
 
+SbVec3f vec3_to_coin(vec3 A){
+	return SbVec3f(A.x,A.y,A.z);
+}
+
+static vec3 vec3_from_coin(SbVec3f A){
+	return vec3_create(A[0],A[1],A[2]);
+}
 
 SoSeparator *text(const SbVec3f &left, const char *str, const SbColor &c){
 	SoSeparator *s = new SoSeparator;
@@ -260,9 +271,9 @@ SoSeparator *face(const SbVec3f &n, const vector<SbVec3f> &vertices, const SbCol
 	@param A first endpoint
 	@param B second endpoint
 	@param o section outline, tells how to draw the section.
-	@param C a third point giving the orientation of the Y-plane (with X being transverse and Z be along the beam)
+	@param O orientation vector for the +X axis of the local coordinate system (see memb_get_orientation for the way that this is calculated)
 */
-SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_struct &o, const SbColor &c, const SbVec3f &C){
+SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_struct &o, const SbColor &c, const SbVec3f &O){
 	SoSeparator *s = new SoSeparator;
 
 	// member half-length
@@ -289,21 +300,29 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 		theta_cyl = 0;
 	}
 
-#if 0
+	vec3 oo = vec3_norm(vec3_from_coin(O));
+	vec3 vz = vec3_create(0,0,1);
+	vec3 vy = vec3_create(0,1,0);
+	vec3 vx = vec3_create(1,0,0);
+	assert(vec3_mod(vec3_diff(vec3_rotate(vy,vx,M_PI/2.),vz))< 1e-8);
+	assert(vec3_mod(vec3_diff(vec3_rotate(vy,vx,-M_PI/2.),vec3_scale(vz,-1)))< 1e-8);
+#if 1
 	// FIXME still need to fix the twist-angle stuff to get the member oriented correctly
-	SbVec3f
-	SbVec3f Ad_unrot(A.d);
-	Ad_unrot.rotate(a,-theta_cyl);
-	if(fabs(dot(Ad_unrot,Vector(0,1,0)))>1e-8){
-		throw runtime_error("Plane at 'A' is wrong for squashedpipe");
+	SbVec3f Ad_unrot = vec3_to_coin(vec3_rotate(oo,vec3_from_coin(a),-theta_cyl));
+
+# if 0
+	if(fabs(Ad_unrot.dot(SbVec3f(1,0,0)))>1e-8){
+		cerr << "dot = "<< Ad_unrot.dot(SbVec3f(1,0,0)) << endl;
+		cerr << "Unrotated = " << Ad_unrot[0] << ", " << Ad_unrot[1] << ", " << Ad_unrot[2] << endl;
+		throw runtime_error("Orientation O is wrong for prism");
 	}
+# endif
 
-	Vector zeroA(0,0,1);
-
-	Vector axisA;
-	double theta_A = angle(zeroA,Ad_unrot, axisA);
+	SbVec3f zeroA(1,0,0);
+	double theta_A = angle(zeroA, Ad_unrot);
+#else
+	double theta_A = M_PI*45./180;
 #endif
-	double theta_A = 0;
 
 	SoBaseColor *col = new SoBaseColor;
 	col->rgb = c;
@@ -314,6 +333,12 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	tr->translation.setValue(m);
 	tr->rotation = SbRotation(a,theta_cyl);
 	s->addChild(tr);
+
+
+	// rotation to orient the prepared member correctly around its axis
+	SoTransform *axi = new SoTransform;
+	axi->rotation = SbRotation(SbVec3f(0,0,1),theta_A);
+	s->addChild(axi);
 
 #if 0
 	//SoLevelOfDetail here...

@@ -16,10 +16,14 @@ srcs = Split("""
 	displacementparser.c
 	sections.c
 	sectionsparser.c
+	vec3.c
 """)
 # bdd.c row.c  table.c  print.c   iter.c  list.c  
 
-lib = env.SharedLibrary("#/microstranparser",srcs)
+libenv = env.Clone()
+libenv.AppendUnique(LIBS = ['m'])
+
+lib = libenv.SharedLibrary("#/microstranparser",srcs)
 
 env.Program('microst',['main.c'],LIBS=["microstranparser"],LIBPATH=["#"])
 

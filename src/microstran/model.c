@@ -1,5 +1,6 @@
 #define MSTRANP_BUILD
 
+#include "vec3.h"
 #include "model.h"
 #include "displacements.h"
 #include "new.h"
@@ -11,24 +12,22 @@
 
 //#define NODISPLACEMENT_WARN
 
-node_stmt node_create(unsigned id,double x,double y,double z,unsigned flags){
+node_stmt node_create(unsigned id,vec3 pos,unsigned flags){
 	node_stmt n;
 	n.id = id;
-	n.x = x;
-	n.y = y;
-	n.z = z;
+	n.pos = pos;
 	n.flags = flags;
 	return n;
 }
 
 int node_print(FILE *f, const node_stmt *n){
-	return fprintf(f,"NODE %5d %10f %10f %10f %06d\n",n->id, n->x, n->y, n->z, n->flags);
+	return fprintf(f,"NODE %5d %10f %10f %10f %06d\n",n->id, n->pos.x, n->pos.y, n->pos.z, n->flags);
 }
 
 node_stmt *node_translate(node_stmt *n, double dx, double dy, double dz){
-	n->x += dx;
-	n->y += dy;
-	n->z += dz;
+	n->pos.x += dx;
+	n->pos.y += dy;
+	n->pos.z += dz;
 	return n;
 }
 
@@ -110,6 +109,15 @@ cbool model_add_memb(model *a, unsigned id,unsigned fromnode
 		fprintf(stderr,"Invalid MEMB 'to' number\n");
 		return 0;
 	}
+	if(orient.axis=='\0'){
+		if(model_find_node(a,orient.node, &index)){
+			orient.node = index;
+			/* fprintf(stderr,"Member %d is oriented to node %d\n",id,a->node[orient.node].id); */
+		}else{	
+			fprintf(stderr,"Invalid MEMB orientation node '%d'\n",orient.node);
+			return 0;
+		}
+	}
 	m.id = id; /* TODO check unique */
 	m.orient = orient;
 	m.prop = prop;
@@ -162,6 +170,44 @@ cbool model_find_memb_from_to(const model *a, const unsigned fromnodeid, const u
 	}
 	fprintf(stderr,"No MEMB between these two nodes\n");
 	return 0;
+}
+
+vec3 memb_get_orientation(const model *a, const memb_stmt *m){
+	vec3 AC = vec3_create(0,0,0);
+	vec3 AB = vec3_diff(a->node[m->tonode].pos, a->node[m->fromnode].pos);
+	switch(m->orient.axis){
+		case 'X': AC.x = 1; break;
+		case 'Y': AC.y = 1; break;
+		case 'Z': AC.z = 1; break;
+		case '\0':
+			AC = vec3_diff(a->node[m->orient.node].pos, a->node[m->fromnode].pos);
+			break;
+		default:
+			fprintf(stderr,"Invalid orient.axis value\n");
+			exit(1);
+	}
+
+#if 0
+	fprintf(stderr,"axis = %c\n",m->orient.axis);
+	fprintf(stderr,"\nAB = ");
+	vec3_print(stderr,AB);
+	fprintf(stderr,"\nAC = ");
+	vec3_print(stderr,AC);
+	fprintf(stderr,"\n");
+#endif
+
+#ifdef MSTRANP_NORMALISE_ORIENTATION
+	return vec3_norm(vec3_cross(AB,AC));
+#else
+	return vec3_cross(AB,AC);
+#endif
+
+#if 0
+	fprintf(stderr,"O = ");
+	vec3_print(stderr,O);
+	fprintf(stderr,"\n");
+#endif
+
 }
 
 cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[]
@@ -307,8 +353,7 @@ void model_write_inventory(model *m){
 		from = m->node + memb->fromnode;
 		to = m->node + memb->tonode;
 
-#define sq(X) ((X)*(X))
-		l = sqrt(sq(to->x - from->x) + sq(to->y - from->y) + sq(to->z - from->z));
+		l = vec3_mod(vec3_diff(to->pos,from->pos));
 		
 		printf("%d\t%d\t%d\t%d\t%s\t%f\n", memb->id, from->id, to->id, prop->id, prop->name, l);
 	}
