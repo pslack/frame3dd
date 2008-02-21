@@ -67,6 +67,23 @@ double section_isec_web_thickness(const section *s){
 	return s->isec.tw;
 }
 
+/* SHS routines */
+
+int section_is_shs(const section *s){
+	if(s->type==SECTION_SHS)return 1;
+	return 0;
+}
+
+double section_shs_depth(const section *s){
+	assert(section_is_shs(s));
+	return s->shs.d;
+}
+
+double section_shs_thickness(const section *s){
+	assert(section_is_shs(s));
+	return s->shs.t;
+}
+
 /* utility routine for use with array_set */
 static vec2 *vec2_set(vec2 *v, double x, double y){
 	v->x = x;
@@ -129,6 +146,9 @@ int section_print(FILE *f, const section *s){
 	if(section_is_chs(s)){
 		n += fprintf(f,"%s\n",s->name);
 		n += fprintf(f,"\tCHS, outside diameter = %f, thickness = %f\n", s->chs.d_o, s->chs.t);
+	}else if(section_is_shs(s)){
+		n += fprintf(f,"%s\n",s->name);
+		n += fprintf(f,"\tSHS, width and depth = %f, thickness = %f\n", s->shs.d, s->shs.t);
 	}
 	return n;
 }

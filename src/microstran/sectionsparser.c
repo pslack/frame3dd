@@ -75,7 +75,6 @@ cbool parseCHS(parse *p, section *s1){
 */
 cbool parseIsec(parse *p, section *s1){
 	struct section_isec_struct s;
-	double ignore;
 	return (
 		maybe(parseWS(p))
 		&& ((parseThisString(p,"UB") /* && assign(fprintf(stderr,"UB"))*/)
@@ -128,6 +127,68 @@ cbool parseIsec(parse *p, section *s1){
 	);
 }
 
+/*
+#Dimesions		-------------------------------------------------------------------------------PROPERTIES-------------------------------------------------------------------------------------------------------------------											-------- PROPERTIES FOR DESIGN TO AS 4100 -------					
+#Designation		Mass	External		Gross		About x-, y- and n-axis				Torsion	Torsion	Form	About x- and y-axis 				
+#		per m	Surface Area		section area		----------------------------------------------------------------------				Constant	Modulus	Factor	----------------------------------------------------				
+#d x b x t		m_linear	per_m	per_t	Ag	Ix	Zx	Zn	Sx	rx	J	C	kf	lambda_e	Compactness	Ze		
+#mm x mm x mm		kg/m	m²/m	m²/t	mm²	10^6mm^4	10³mm³	10³mm³	10³mm³	mm	10^6mm^4	10³mm³			(C,N,S)	10³mm³		
+250x250x9.0SHS	SHS	65.9	0.96	14.6	8400	79.8	639	477	750	97.5	129	972	1	30.5	N	744		
+250x250x6.0SHS	SHS	45	0.97	21.7	5730	56.2	450	330	521	99	88.7	681	0.85	46.9	S	409		
+*/
+cbool parseSHS(parse *p, section *s1){
+	struct section_shs_struct s;
+	double ignore;
+	return (
+#define ASSIGN(Z) 1
+		maybe(parseWS(p))
+		&& parseThisString(p,"SHS") && ASSIGN(fprintf(stderr,"SHS"))
+		&& parseWS(p)
+		&& parseDouble(p,&s.d) && ASSIGN(fprintf(stderr,"\td = %f\n",s.d))
+		&& parseWS(p)
+		&& parseDouble(p, &s.t) && ASSIGN(fprintf(stderr,"\tt = %f\n",s.t))
+		&& parseWS(p)
+		&& parseDouble(p, &s.m_linear) && ASSIGN(fprintf(stderr,"\tm_linear = %lf\n",s.m_linear))
+		&& parseWS(p)
+		&& parseDouble(p, &ignore)// && assign(fprintf(stderr,"\tignore %lf\n",ignore))
+		&& parseWS(p)
+		&& parseDouble(p, &ignore)// && assign(fprintf(stderr,"\tignore %lf\n",ignore))
+		&& parseWS(p)
+		&& parseDouble(p, &s.Ag) && ASSIGN(fprintf(stderr,"\tAg = %lf\n",s.Ag))
+		&& parseWS(p)
+		&& parseDouble(p,&s.Ix) && ASSIGN(fprintf(stderr,"\tIx = %lf\n",s.Ix))
+		&& parseWS(p)
+		&& parseDouble(p,&s.Zx) && ASSIGN(fprintf(stderr,"\tZx = %lf\n",s.Zx))
+		&& parseWS(p)
+		&& parseDouble(p,&s.Zn) && ASSIGN(fprintf(stderr,"\tZn = %lf\n",s.Zn))
+		&& parseWS(p)
+		&& parseDouble(p,&s.Sx) && ASSIGN(fprintf(stderr,"\tSx = %lf\n",s.Sx))
+		&& parseWS(p)
+		&& parseDouble(p,&s.rx) && ASSIGN(fprintf(stderr,"\trx = %lf\n",s.rx))
+		&& parseWS(p)
+		&& parseDouble(p,&s.J) && ASSIGN(fprintf(stderr,"\tJ = %lf\n",s.J))
+		&& parseWS(p)
+		&& parseDouble(p,&s.C) && ASSIGN(fprintf(stderr,"\tc = %lf\n",s.C))
+		&& parseWS(p)
+		&& parseDouble(p,&s.k_f) && ASSIGN(fprintf(stderr,"\tk_f = %lf\n",s.k_f))
+		&& parseWS(p)
+		&& parseDouble(p,&s.lambda_e)// && assign(fprintf(stderr,"\tlambda_s = %lf\n",s.lambda_s))
+		&& parseWS(p)
+		&& parseAChar(p,&s.compactness)// && assign(fprintf(stderr,"\tcompactness = %c\n",s.compactness))
+		&& parseWS(p)
+		&& parseDouble(p,&s.Ze)/* && assign(fprintf(stderr,"\tZe = %lf\n",s.Ze))*/
+		&& maybe(parseWS(p))
+		&& parseEOLplus(p)
+		&& assign(s.d *= 1e-3)
+		&& assign(s.t *= 1e-3)
+		&& assign(s.rx *= 1e-3)
+		&& assign(s.Ag *= 1e-6)
+		&& assign(s1->type = SECTION_SHS)
+		&& assign(s1->shs = s)
+	);
+}
+
+
 cbool parseSection(parse *p, section_library *l){
 	section s;
 	return (
@@ -135,11 +196,11 @@ cbool parseSection(parse *p, section_library *l){
 		&& (
 			parseCHS(p, &s)
 			|| parseIsec(p, &s)
+			|| parseSHS(p, &s)
 			/* || parseUB(...) */
-			/* || parseRHS(...) */
 			/* etc */
 		) && assign(array_append(&(l->a),&s)) 
-		//&& assign(section_print(stderr,&s))
+		&& assign(section_print(stderr,&s))
 	);
 }
 

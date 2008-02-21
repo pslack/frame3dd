@@ -23,6 +23,6 @@ lib = env.SharedLibrary("#/microstranparser",srcs)
 
 env.Program('microst',['main.c'],LIBS=["microstranparser"],LIBPATH=["#"])
 
-env.Program('dumpsections',['dumpsections.c'],LIBS=["microstranparser"],LIBPATH=["#"])
+env.Program('#/dumpsections',['dumpsections.c'],LIBS=["microstranparser"],LIBPATH=["#"])
 
 

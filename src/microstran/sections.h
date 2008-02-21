@@ -19,6 +19,7 @@ extern "C"{
 typedef enum{
 	SECTION_CHS=0
 	,SECTION_ISEC
+	,SECTION_SHS
 } section_type;
 
 struct section_chs_struct{
@@ -52,6 +53,21 @@ struct section_isec_struct{
 	double J, lw; /* torsion constant and warping constant */
 };
 
+/**
+	SHS square hollow sections
+*/
+struct section_shs_struct{
+	double d; /* section width and depth (equal in all cases) */
+	double t; /* section thickness */
+	double m_linear;
+	double Ag;
+	double Ix, Zx, Zn, Sx, rx;
+	double J, C;
+	double k_f, lambda_e;
+	char compactness;
+	double Ze;
+};
+
 #define SECTION_NAME_MAX 40
 
 struct section_struct{
@@ -60,6 +76,7 @@ struct section_struct{
 	union{
 		struct section_chs_struct chs;
 		struct section_isec_struct isec;
+		struct section_shs_struct shs;
 	};
 };
 typedef struct section_struct section;
@@ -99,6 +116,12 @@ MSTRANP_API double section_isec_flange_width(const section *s);
 MSTRANP_API double section_isec_flange_thickness(const section *s);
 MSTRANP_API double section_isec_web_thickness(const section *s);
 MSTRANP_API section_outline *section_isec_outline(const section *s);
+
+/* shs routines */
+MSTRANP_API int section_is_shs(const section *s);
+MSTRANP_API double section_shs_depth(const section *s);
+MSTRANP_API double section_shs_thickness(const section *s);
+
 
 MSTRANP_API int section_print(FILE *f, const section *s);
 

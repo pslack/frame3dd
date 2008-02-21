@@ -5,11 +5,21 @@
 #include "sections.h"
 #include "sectionsparser.h"
 
+#include <stdlib.h>
+
 int main(int argc, char **argv){
-	const char *filename = "properties.txt";
+	const char *filename = "src/microstran/properties.txt";
 	if(argc==2){
 		filename = argv[1];
 	}
+
+	FILE *f;
+	f = fopen(filename,"r");
+	if(f==NULL){
+		fprintf(stderr,"Unable to open section library '%s'",filename);
+		exit(1);
+	}
+
 	parse *p;
 	p = parseCreateFileName(filename);
 
@@ -17,7 +27,7 @@ int main(int argc, char **argv){
 	l = section_library_create();
 	parseSections(p,l);
 
-	const char *sn = "168.3X6.4CHS";
+	const char *sn = "100X100X9.0SHS";
 	fprintf(stderr,"\n\nLooking up section '%s'...\n",sn);
 	const section *s;
 	s = section_find(l,sn);
