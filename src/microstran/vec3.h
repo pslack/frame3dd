@@ -4,6 +4,10 @@
 #include "config.h"
 #include <stdio.h>
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 /**
 	3D vector type used by the microstran parser
 */
@@ -23,6 +27,10 @@ vec3 vec3_diff(const vec3 A, const vec3 B);
 int vec3_print(FILE *f, const vec3 A);
 
 MSTRANP_API vec3 vec3_rotate(vec3 A, vec3 axis, double theta);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif
 
