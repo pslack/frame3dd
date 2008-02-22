@@ -1,7 +1,7 @@
 #define MSTRANP_BUILD
 
-#include "vec3.h"
 #include "model.h"
+#include "vec3.h"
 #include "displacements.h"
 #include "new.h"
 #include "case.h"
