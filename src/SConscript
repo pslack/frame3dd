@@ -24,9 +24,13 @@ srcs = [
 
 prog_env = env.Copy()
 
+obj_env = env.Clone()
+if env.get('HAVE_ITOA'):
+	obj_env.Append(CPPDEFINES=['HAVE_ITOA'])
+
 objs = []
 for s in srcs:	
-	objs.append( env.Object(s) )
+	objs.append( obj_env.Object(s) )
 	
 if env.get('VERSION'):
 	prog_env.Append(

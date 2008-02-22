@@ -7,13 +7,18 @@
 	then destroy the old one.
 
 	note that when the array is resized, data is copied to a new location, so
-	pointers into the array are a bad idea. you should used array indices 
+	pointers into the array are a bad idea. you should used array indices
 	instead.
 */
-#ifndef ARRAY_H
-#define ARRAY_H
+#ifndef MSTRANP_ARRAY_H
+#define MSTRANP_ARRAY_H
 
+#include "config.h"
 #include <malloc.h>
+
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 typedef struct array_{
 	size_t eachsize;
@@ -33,7 +38,7 @@ array array_create(size_t eachsize, unsigned cap);
 void *array_set(array *a, unsigned index, void *val);
 
 /** look up a value in the array. @return pointer to the location where the data is stored. */
-void *array_get(array *a, unsigned index);
+MSTRANP_API void *array_get(array *a, unsigned index);
 
 /** place a value at the end of the array. value is copied into place. @return a pointer to the new member */
 void *array_append(array *a, void *val);
@@ -44,5 +49,9 @@ void array_destroy(array *a);
 /** copy an array. capacity of new array will include no spare space */
 array array_copy(const array a);
 
+#ifdef __cplusplus
+};
 #endif
+
+#endif /* MSTRANP_ARRAY_H */
 

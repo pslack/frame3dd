@@ -1,6 +1,7 @@
 #ifndef CASE_H
 #define CASE_H
 
+#include "config.h"
 #include "types.h"
 #include "array.h"
 

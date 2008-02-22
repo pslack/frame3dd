@@ -1,3 +1,4 @@
+#define MSTRANP_BUILD
 #include "case.h"
 #include "model.h"
 
@@ -79,7 +80,7 @@ cbool case_add_gravity(case_stmt *c,double gx, double gy, double gz){
 
 	return 1;
 }
-	
+
 
 cbool case_add_node_load(case_stmt *c,unsigned nodeid
 	, double Fx, double Fy, double Fz, double Mx, double My, double Mz){
@@ -98,7 +99,7 @@ cbool case_add_node_load(case_stmt *c,unsigned nodeid
 		fprintf(stderr,"node %d already present in case %d\n",nodeid,c->id);
 		return 0;
 	}
-	
+
 	n.Fx = Fx;
 	n.Fy = Fy;
 	n.Fz = Fz;
@@ -108,9 +109,9 @@ cbool case_add_node_load(case_stmt *c,unsigned nodeid
 	n.node = nodeid;
 
 	//fprintf(stderr,"Node %d being appended...\n",n.node);
-	
+
 	if(!array_append(&(c->data), &n)){
-		fprintf(stderr,"Failed to append node %d...\n",n.node);		
+		fprintf(stderr,"Failed to append node %d...\n",n.node);
 		return 0;
 	}
 	return 1;

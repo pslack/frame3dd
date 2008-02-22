@@ -36,6 +36,12 @@ opts.Add(BoolOption(
 	,1
 ))
 
+opts.Add(BoolOption(
+	"HAVE_ITOA"
+	,"Do you standard C libraries include the function 'itoa'?"
+	,True
+))
+
 opts.Add("INSTALL_PREFIX","Install location prefix (usually /usr or /usr/local)","/usr/local")
 opts.Add("INSTALL_BIN","Install location for binaries","$INSTALL_PREFIX/bin")
 opts.Add("INSTALL_DATA","Install location for general data files","$INSTALL_PREFIX/share");

@@ -1,3 +1,4 @@
+#define MSTRANP_BUILD
 #include "array.h"
 #include <stdlib.h>
 #include <malloc.h>
@@ -21,7 +22,7 @@ void array_destroy(array *a){
 	a->data = NULL;
 	a->num = 0;
 	a->cap = 0;
-}	
+}
 
 void *array_set(array *a, unsigned index, void *val){
 	void *pos;
@@ -71,7 +72,7 @@ void *array_grow(array *a,unsigned index){
 	}else{
 		newcap = index + 1;
 	}
-	
+
 	newdata = malloc(a->eachsize * newcap);
 	if(!newdata){
 		return NULL;
