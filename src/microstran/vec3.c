@@ -55,7 +55,7 @@ vec3 vec3_rotate(vec3 A, vec3 axis, double theta){
 	R.y = v*Aa + ( A.y*(SQ(u)+SQ(w)) - v*(u*A.x+w*A.z) )*ct + ma * (w*A.x-u*A.z) * st;
 	R.z = w*Aa + ( A.z*(SQ(u)+SQ(v)) - w*(u*A.x+v*A.y) )*ct + ma * (-v*A.x+u*A.y) * st;
 
-	fprintf(stderr,"x = %f, y = %f, z = %f\n",R.x, R.y, R.z);
+	/* fprintf(stderr,"x = %f, y = %f, z = %f\n",R.x, R.y, R.z); */
 	return vec3_scale(R, 1./SQ(ma));
 #undef SQ
 }

@@ -37,7 +37,7 @@ void usage(const char *progname){
 	fprintf(stderr,"  INFILE  Microstran .arc file to render (eg 'model.arc')\n");
 	fprintf(stderr,"  -l      Load a section library from LIBFILE.\n");
 	fprintf(stderr,"  -t      Include text for node/member IDs and member sizes.\n");
-	fprintf(stderr,"  OUTFILE Open Inventor file to output (defaults to '%s')\n\n",defaultsceneoutfile);	
+	fprintf(stderr,"  OUTFILE Open Inventor file to output (defaults to '%s')\n\n",defaultsceneoutfile);
 }
 
 static SbVec3f vec3_to_coin(vec3 A){
@@ -50,9 +50,9 @@ int main(int argc, char **argv){
 	const char *libfile = defaultlibfile;
 	bool highquality = false;
 	bool infotext = false;
-	
+
 	// no options yet
-	char c;	
+	char c;
 	while((c=getopt(argc,argv,"ho::l:t"))!=-1){
 		switch(c){
 			case 'h':
@@ -81,10 +81,12 @@ int main(int argc, char **argv){
 	const char *filename = argv[optind];
 
 	parse *p1;
+	fprintf(stderr,"Reading section library '%s'...",libfile);
 	p1 = parseCreateFileName(libfile);
 	section_library *l = NULL;
 	l = section_library_create();
 	parseSections(p1,l);
+	fprintf(stderr,"done!\n");
 
 	model *M;
 	parse *p;
@@ -107,7 +109,7 @@ int main(int argc, char **argv){
 	SoSeparator *root = new SoSeparator;
 
 	root->addChild(axes());
-	
+
 	// render all the nodes in the model
 	SbVec3f labeloffset(0.1,0.1,0.1);
 	if(infotext){
@@ -193,7 +195,7 @@ int main(int argc, char **argv){
 		eviewer->getGLRenderAction()->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
 		eviewer->setSceneGraph(root);
 		eviewer->show();
-	  
+
 		// Pop up the main window.
 		SoQt::show(mainwin);
 		// Loop until exit.
@@ -203,7 +205,7 @@ int main(int argc, char **argv){
 		delete eviewer;
 	}
 	root->unref();
-	
+
 
 
 }

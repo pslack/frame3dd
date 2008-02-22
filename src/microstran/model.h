@@ -1,5 +1,5 @@
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef MSTRANP_MODEL_H
+#define MSTRANP_MODEL_H
 
 #include "config.h"
 #include "types.h"
@@ -44,7 +44,7 @@ typedef struct member_orientation_struct{
 	};
 } member_orientation;
 
-	
+
 
 typedef struct memb_stmt_{
 	unsigned id;
@@ -164,5 +164,5 @@ MSTRANP_API cbool model_apply_displacements(model *a, struct casedisplacements_ 
 }
 #endif
 
-#endif
+#endif /* MSTRANP_MODEL_H */
 
