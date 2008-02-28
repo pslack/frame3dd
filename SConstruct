@@ -17,8 +17,12 @@
 
 version = '20080221'
 
+import platform
+deftools = ['default']
+if platform.system()=="Windows":
+	deftools = ['mingw']
 env = Environment(
-	tools=['default','disttar','substinfile','soqt']
+	tools=deftools + ['disttar','substinfile','soqt']
 	,toolpath=['scons']
 )
 
