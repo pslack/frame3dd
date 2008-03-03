@@ -107,6 +107,8 @@ int main(int argc, char **argv){
 		exit(3);
 	}
 
+	fprintf(stderr,"Rendering frame with %d members...\n",M->num_membs);
+
 	QWidget *mainwin = NULL;
 	if(sceneoutfile){
 		SoDB::init();

@@ -324,9 +324,11 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	col->rgb = c;
 	s->addChild(col);
 
+#if 1
 	SoShapeHints *sha = new SoShapeHints;
 	sha->vertexOrdering = SoShapeHints::CLOCKWISE;
 	s->addChild(sha);
+#endif
 
 	// rotation to orient the prepared member correctly in space
 	SoTransform *tr = new SoTransform;
@@ -380,7 +382,7 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	}
 
 	int *i3; /* indices for the 3D face set */
-	i3 = new int[5*sides /*+ (sides + 1)*/];
+	i3 = new int[5*sides + (sides + 1)];
 
 	// add the sides of the prism
 	unsigned ni=0;
@@ -388,6 +390,7 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 		int v1 = *(const int *)array_get((array *)&(o.trace), i);
 		int v2 = *(const int *)array_get((array *)&(o.trace), i+1);
 		if(v2==-1 || v1==-1)continue;
+		//cerr << "Side from v" << v1 << " to v" << v2 << endl;
 		i3[ni++] = v1;
 		i3[ni++] = v2;
 		i3[ni++] = nv + v2;
@@ -403,7 +406,8 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 		const int &v2 = *((int *)array_get((array *)&(o.trace), i+1));
 		if(v2==-1)continue; /* skip this one if we're about to pen-up*/
 		i3[ni++] = v1;
-		cerr << v1 << "=" << coo->point[v1][0] << "," << coo->point[v1][1] << endl;
+		cerr << "v" << v1 << "=" << coo->point[v1][0] << "," << coo->point[v1][1] << endl;
+		cerr << " to v" << v2 << "=" << coo->point[v2][0] << "," << coo->point[v2][1] << endl;
 	}
 	cerr << endl;
 	i3[ni++] = SO_END_FACE_INDEX;

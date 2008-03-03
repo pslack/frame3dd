@@ -252,9 +252,9 @@ section_outline *section_tophat_outline(const section *s){
 	PT(-(a/2), b); /* 0 */
 #undef PT
 
-	for(i=0;i<15;++i)array_set(&(o->trace),i,&i);
+	for(i=0;i<16;++i)array_set(&(o->trace),i,&i);
 	i = 0; // join back to the start again
-	array_set(&(o->trace),15,&i);
+	array_set(&(o->trace),16,&i);
 	return o;
 }
 
