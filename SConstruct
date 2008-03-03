@@ -26,7 +26,7 @@ env = Environment(
 	,toolpath=['scons']
 )
 
-opts = Options()
+opts = Options(['options.cache'])
 
 opts.Add(
 	"CC"
@@ -53,6 +53,8 @@ opts.Add("INSTALL_FRAMEDATA","Install location FRAME's data files","$INSTALL_DAT
 opts.Add("INSTALL_ROOT","Install root (for building RPMs etc)","")
 
 opts.Update(env)
+opts.Save('options.cache',env)
+Help(opts.GenerateHelpText(env))
 
 env['CCFLAGS']=['-O', '-Wall']
 env['VERSION'] = '\\"%s\\"' % version

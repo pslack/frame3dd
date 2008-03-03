@@ -28,7 +28,7 @@ using namespace std;
 #include <microstran/sectionsparser.h>
 
 const char *defaultsceneoutfile = "microstranmodel.iv";
-const char *defaultlibfile = "microstran/properties.txt";
+const char *defaultlibfile = "src/microstran/properties.txt";
 
 void usage(const char *progname){
 	fprintf(stderr,"Usage: %s [-o [OUTFILE]] [-h] [-l LIBFILE] [-t] INFILE\n",progname);
@@ -82,6 +82,15 @@ int main(int argc, char **argv){
 
 	parse *p1;
 	fprintf(stderr,"Reading section library '%s'...",libfile);
+
+	FILE *f;
+	f = fopen(libfile,"r");
+	if(f == NULL){
+		fprintf(stderr,"\nUnable to open section library file '%s'!\n",libfile);
+		exit(2);
+	}
+	fclose(f);
+
 	p1 = parseCreateFileName(libfile);
 	section_library *l = NULL;
 	l = section_library_create();
@@ -159,6 +168,11 @@ int main(int argc, char **argv){
 					c = YELLOW;
 					/* FIXME need to get the member orientation correct! */
 					section_outline *o = section_shs_outline(s);
+					root->addChild(prism(vA, vB, *o, c, vX));
+				}else if(section_is_tophat(s)){
+					c = ORANGE;
+					/* FIXME need to get the member orientation correct! */
+					section_outline *o = section_tophat_outline(s);
 					root->addChild(prism(vA, vB, *o, c, vX));
 				}
 			}else{

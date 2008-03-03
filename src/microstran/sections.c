@@ -1,9 +1,13 @@
 #include <string.h>
 #include <assert.h>
+#include <math.h>
 
 #define MSTRANP_BUILD
 #include "sections.h"
 #include "new.h"
+
+#define PI	3.141592653589793
+
 /**
 	Look up a section from the properties library by name
 	@param library an array of available sections to search throu
@@ -84,6 +88,44 @@ double section_shs_thickness(const section *s){
 	return s->shs.t;
 }
 
+/* Tophat routines */
+
+int section_is_tophat(const section *s){
+	if(s->type==SECTION_TOPHAT)return 1;
+	return 0;
+}
+	
+double section_tophat_top_width(const section *s){
+	assert(section_is_tophat(s));
+	return s->tophat.a;
+}
+
+double section_tophat_depth(const section *s){
+	assert(section_is_tophat(s));
+	return s->tophat.b;
+}
+
+double section_tophat_flange_width(const section *s){
+	assert(section_is_tophat(s));
+	return s->tophat.c;
+}
+
+double section_tophat_lip_width(const section *s){
+	assert(section_is_tophat(s));
+	return s->tophat.d;
+}
+
+double section_tophat_theta(const section *s){
+	assert(section_is_tophat(s));
+	return s->tophat.theta;
+}
+
+double section_tophat_phi(const section *s){
+	assert(section_is_tophat(s));
+	return s->tophat.phi;
+}
+
+
 /* utility routine for use with array_set */
 static vec2 *vec2_set(vec2 *v, double x, double y){
 	v->x = x;
@@ -141,7 +183,6 @@ section_outline *section_shs_outline(const section *s){
 	section_outline *o;
 	vec2 v;
 	assert(section_is_shs(s));
-	double t = s->shs.t;
 	double d = s->shs.d;
 	
 	o = NEW(section_outline);	
@@ -160,6 +201,60 @@ section_outline *section_shs_outline(const section *s){
 	for(i=0;i<4;++i)array_set(&(o->trace),i,&i);
 	i = 0; // join back to the start again
 	array_set(&(o->trace),4,&i);
+	return o;
+}
+
+/**
+	Output a data structure containing the perimeter of the TOP HAT section.
+	We can use this to generate 3D 'prism' geometry elsewhere.
+*/
+section_outline *section_tophat_outline(const section *s){
+	section_outline *o;
+	vec2 v;
+	assert(section_is_tophat(s));
+	double a = s->tophat.a;
+	double b = s->tophat.b;
+	double c = s->tophat.c;
+	double d = s->tophat.d;
+	double t = s->tophat.t;
+	double theta = s->tophat.theta;
+	double phi = s->tophat.phi;
+
+	double bx = (b - t)*tan(theta);
+	double c1 = c - t/tan(0.5*theta + 0.25*PI) - t/tan(0.5*phi + 0.25*PI);
+
+	double dx = d*cos(phi);
+	double dx1 = dx - t / tan(0.5*phi + 0.25*PI);
+	
+	o = NEW(section_outline);	
+	o->point = ARRAY_CREATE(vec2,16);
+	o->trace = ARRAY_CREATE(int,17);
+	int i=0;
+#define PT(X,Y) array_set(&(o->point),i++,vec2_set(&v,(X),(Y)))
+	/* trace around the contour in a clockwise direction, following the
+	convention that the surface 'exterior' is on the left side of the contour */
+	PT(a/2, b); /* 0 */
+	PT(a/2 + bx, t); /* 1 */
+	PT(a/2 + bx + c1, t); /* 2 */
+	PT(a/2 + bx + c1 + dx1*sin(phi), t + dx1*cos(phi)); /* 3 */
+	PT(a/2 + bx + c1 + dx1*sin(phi) + t * cos(phi), t + dx1*cos(phi) - t*sin(phi)); /* 4 */
+	PT(a/2 + bx - t/tan(0.5*theta + 0.25*PI) + c, 0); /* 5 */
+	PT(a/2 + bx - t/tan(0.5*theta + 0.25*PI), 0); /* 6 */
+	PT(a/2 - t/tan(0.5*theta + 0.25*PI), b - t); /* 7 */
+
+	PT(-(a/2 - t/tan(0.5*theta + 0.25*PI)), b - t); /* 7 */
+	PT(-(a/2 + bx - t/tan(0.5*theta + 0.25*PI)), 0); /* 6 */
+	PT(-(a/2 + bx - t/tan(0.5*theta + 0.25*PI) + c), 0); /* 5 */
+	PT(-(a/2 + bx + c1 + dx1*sin(phi) + t * cos(phi)), t + dx1*cos(phi) - t*sin(phi)); /* 4 */
+	PT(-(a/2 + bx + c1 + dx1*sin(phi)), t + dx1*cos(phi)); /* 3 */
+	PT(-(a/2 + bx + c1), t); /* 2 */
+	PT(-(a/2 + bx), t); /* 1 */
+	PT(-(a/2), b); /* 0 */
+#undef PT
+
+	for(i=0;i<15;++i)array_set(&(o->trace),i,&i);
+	i = 0; // join back to the start again
+	array_set(&(o->trace),15,&i);
 	return o;
 }
 

@@ -20,6 +20,7 @@ typedef enum{
 	SECTION_CHS=0
 	,SECTION_ISEC
 	,SECTION_SHS
+	,SECTION_TOPHAT
 } section_type;
 
 struct section_chs_struct{
@@ -68,6 +69,20 @@ struct section_shs_struct{
 	double Ze;
 };
 
+/**
+	Top-hat sections
+*/
+struct section_tophat_struct{
+	double a; /**< width at top of top hat (in m) */
+	double b; /**< overall height of top hat (in m) */
+	double c; /**< width of (a single) flange (in m) */
+	double d; /**< length of lip (in m) */
+	double theta; /**< angle of sidewalls to vertical (in radians) */
+	double phi; /**< angle of lip to vertical (in radians) */
+	double t; /**< sheetmetal thickness (in m) */
+	/* don't know what structural properties to define here yet */
+};
+
 #define SECTION_NAME_MAX 40
 
 struct section_struct{
@@ -77,6 +92,7 @@ struct section_struct{
 		struct section_chs_struct chs;
 		struct section_isec_struct isec;
 		struct section_shs_struct shs;
+		struct section_tophat_struct tophat;
 	};
 };
 typedef struct section_struct section;
@@ -123,6 +139,16 @@ MSTRANP_API double section_shs_depth(const section *s);
 MSTRANP_API double section_shs_thickness(const section *s);
 MSTRANP_API section_outline *section_shs_outline(const section *s);
 
+/* tophat routines */
+MSTRANP_API int section_is_tophat(const section *s);
+MSTRANP_API double section_tophat_top_width(const section *s);
+MSTRANP_API double section_tophat_depth(const section *s);
+MSTRANP_API double section_tophat_flange_width(const section *s);
+MSTRANP_API double section_tophat_lip_width(const section *s);
+MSTRANP_API double section_tophat_theta(const section *s);
+MSTRANP_API double section_tophat_phi(const section *s);
+MSTRANP_API double section_tophat_thickness(const section *s);
+MSTRANP_API section_outline *section_tophat_outline(const section *s);
 
 MSTRANP_API int section_print(FILE *f, const section *s);
 

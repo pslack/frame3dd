@@ -11,6 +11,8 @@
 #include "case.h"
 #include "sectionsparser.h"
 
+#define PI	3.141592653589793
+
 cbool parseSectionsFileComment(parse *p){
 	char c;
 	return (
@@ -190,6 +192,43 @@ cbool parseSHS(parse *p, section *s1){
 }
 
 
+/**
+	Parse the fields for a Top Hat section (we've already read the name)
+*/
+cbool parseTopHat(parse *p, section *s1){
+	struct section_tophat_struct s;
+	return (
+		maybe(parseWS(p))
+		&& (parseThisString(p,"TOPHAT"))
+		&& parseWS(p)
+		&& parseDouble(p,&s.a)
+		&& parseWS(p)
+		&& parseDouble(p, &s.b)
+		&& parseWS(p)
+		&& parseDouble(p, &s.c)
+		&& parseWS(p)
+		&& parseDouble(p, &s.d)
+		&& parseWS(p)
+		&& parseDouble(p, &s.theta)
+		&& parseWS(p)
+		&& parseDouble(p, &s.phi)
+		&& parseWS(p)
+		&& parseDouble(p,&s.t)
+		&& maybe(parseWS(p))
+		&& parseEOLplus(p)
+		&& assign(s.a *= 1e-3)
+		&& assign(s.b *= 1e-3)
+		&& assign(s.c *= 1e-3)
+		&& assign(s.d *= 1e-3)
+		&& assign(s.theta *= PI/180.)
+		&& assign(s.phi *= PI/180.)
+		&& assign(s.t *= 1e-3)
+		&& assign(s1->type = SECTION_TOPHAT)
+		&& assign(s1->tophat = s)
+	);
+}
+
+
 cbool parseSection(parse *p, section_library *l){
 	section s;
 #define ASSIGN(Z) 1
@@ -199,6 +238,7 @@ cbool parseSection(parse *p, section_library *l){
 			parseCHS(p, &s)
 			|| parseIsec(p, &s)
 			|| parseSHS(p, &s)
+			|| parseTopHat(p, &s)
 			/* || parseUB(...) */
 			/* etc */
 		) && assign(array_append(&(l->a),&s)) 
