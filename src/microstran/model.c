@@ -187,7 +187,7 @@ vec3 memb_get_orientation(const model *a, const memb_stmt *m){
 			exit(1);
 	}
 
-#if 0
+#if 1
 	fprintf(stderr,"axis = %c\n",m->orient.axis);
 	fprintf(stderr,"\nAB = ");
 	vec3_print(stderr,AB);

@@ -150,6 +150,8 @@ int main(int argc, char **argv){
 		SbVec3f vB = vec3_to_coin(B->pos);
 		SbVec3f vX = vec3_to_coin(memb_get_orientation(M,m));
 
+		cerr << "Member " << m->id << " oriented to " << vX[0] << "," << vX[1] << "," << vX[2] << endl;
+
 		stringstream ss;
 		SbColor c;
 		ss << m->id;
@@ -164,7 +166,6 @@ int main(int argc, char **argv){
 					c = GREEN;
 					/* FIXME need to get the member orientation correct! */
 					section_outline *o = section_isec_outline(s);
-					cerr << "Member " << m->id << " oriented to " << vX[0] << "," << vX[1] << "," << vX[2] << endl;
 					root->addChild(prism(vA, vB, *o, c, vX));
 				}else if(section_is_shs(s)){
 					c = YELLOW;
@@ -174,6 +175,7 @@ int main(int argc, char **argv){
 				}else if(section_is_tophat(s)){
 					c = ORANGE;
 					/* FIXME need to get the member orientation correct! */
+					cerr << "Rendering prism member" << endl;
 					section_outline *o = section_tophat_outline(s);
 					root->addChild(prism(vA, vB, *o, c, vX));
 				}

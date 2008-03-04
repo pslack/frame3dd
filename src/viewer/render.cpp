@@ -324,7 +324,9 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	col->rgb = c;
 	s->addChild(col);
 
-#if 1
+	s->addChild(arrow(A,A+O,YELLOW,"orientation"));
+
+#if 0
 	SoShapeHints *sha = new SoShapeHints;
 	sha->vertexOrdering = SoShapeHints::CLOCKWISE;
 	s->addChild(sha);
