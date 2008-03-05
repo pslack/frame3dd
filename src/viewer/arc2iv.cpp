@@ -150,7 +150,16 @@ int main(int argc, char **argv){
 		SbVec3f vB = vec3_to_coin(B->pos);
 		SbVec3f vX = vec3_to_coin(memb_get_orientation(M,m));
 
-		cerr << "Member " << m->id << " oriented to " << vX[0] << "," << vX[1] << "," << vX[2] << endl;
+		moff_stmt *moff = model_find_member_offset(M, m->id);
+		if(moff){
+			SbVec3f offA = vec3_to_coin(moff->deltafrom);
+			SbVec3f offB = vec3_to_coin(moff->deltato);
+			cerr << "Member " << m->id << " offset by " << offA[0] << "," << offA[1] << "," << offA[2] << endl;
+			vA += offA;
+			vB += offB;
+		}
+
+		//cerr << "Member " << m->id << " oriented to " << vX[0] << "," << vX[1] << "," << vX[2] << endl;
 
 		stringstream ss;
 		SbColor c;
@@ -175,7 +184,7 @@ int main(int argc, char **argv){
 				}else if(section_is_tophat(s)){
 					c = ORANGE;
 					/* FIXME need to get the member orientation correct! */
-					cerr << "Rendering prism member" << endl;
+					//cerr << "Rendering prism member" << endl;
 					section_outline *o = section_tophat_outline(s);
 					root->addChild(prism(vA, vB, *o, c, vX));
 				}

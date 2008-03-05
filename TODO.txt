@@ -9,15 +9,15 @@ Create structs to contain frame attributes, coordinates, etc, in order to
 migrate to a more object-oriented coding style, and simplify the passing
 of parameters to functions.
 
-Implement import of frames from other file formats. First one to try is the
-Microstran '.arc' format. Imported will need to flag when the file contains
-design features that can not be modelled in frame, for example tension-only
-members, and probably others.
+Implement import of Microstran .arc format. We can already parse these files
+(including many constructs that aren't supported by FRAME) but we can not yet
+actually calculate using the parsed data.
 
 Consider making use of third-party matrix routines, rather to providing them
 ourselves. Good options would be UMFPACK (for sparse matrices) or LAPACK (dense).
+There would be assumed to be some efficiency improvements as a result of this
+also, particularly if sparse matrix methods can be used.
 
-Implement an OpenGL browser for examining frames. GnuPlot has no opportunity
-for GUI feedback eg click on a member to see its details, etc. Probably use can
-be made of some higher-level toolkit for this eg VTK, OGRE, etc.
+Fix rendering of members with offsets specified in local coordinates (ie MOFF LO
+statements).
 

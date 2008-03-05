@@ -8,6 +8,10 @@
 # tab delimited so that this file can be comfortably edited with a spreadsheet.																		
 # Section names should conform to those used by Microstran so that we can																		
 # Use a string-based lookup to access section data from this file.																		
+#
+# WARNING!!!!
+# If you are using a spreadsheet to edit this file, set the format for all cells
+# to 'text', or else you will lose precision in the data!
 #																		
 #-------------------------------------------------------------------------------																		
 # DIMENSIONS AND PROPERTIES																		
@@ -188,5 +192,7 @@
 13X13X1.8SHS	SHS	13	1.8	0.57	0.05	80.7	72.3	0	0.22	0.18	0.29	4.42	0	0.34	1	6.18	C	0.29
 #
 # TOP HAT SECTIONS
-LH80603010x1.2  TOPHAT 80 60 30 10 4 4 1.2
-LH80603010x0.75 TOPHAT 80 60 30 10 4 4 0.75
+LH80603010x1.5  TOPHAT 60 80 30 10 4 10 1.5
+LH80603010x1.2  TOPHAT 60 80 30 10 4 10 1.2
+LH80603010x0.75 TOPHAT 60 80 30 10 4 10 0.75
+

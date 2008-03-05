@@ -39,6 +39,8 @@ if env.get('VERSION'):
 
 frame = prog_env.Program('frame',objs + ['main.c'], LIBS=['m'])
 
+env['PROGS'].append(frame)
+
 # proceed into subdirectory to create libmicrostranparser
 env.SConscript('microstran/SConscript','env')
 

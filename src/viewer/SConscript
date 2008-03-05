@@ -4,7 +4,7 @@ v_env = env.Clone()
 
 v_env.AppendUnique(
 	LIBS = ['microstranparser'] + env.get('SOQT_LIBS')
-	,LIBPATH = ['#'] + env.get('SOQT_LIBPATH')
+	,LIBPATH = ['..'] + env.get('SOQT_LIBPATH')
 	,CPPPATH = ['..'] + env.get('SOQT_CPPPATH')
 	,CPPDEFINES = env.get('SOQT_CPPDEFINES')
 )
@@ -14,6 +14,8 @@ srcs = Split("""
 	arc2iv.cpp
 """)
 
-v_env.Program("#/arc2iv",srcs)
+arc2iv = v_env.Program("../arc2iv",srcs)
+
+env['PROGS'].append(arc2iv)
 
 

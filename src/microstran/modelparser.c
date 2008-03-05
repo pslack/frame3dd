@@ -138,7 +138,9 @@ cbool parseMEMB(parse *p, model *a){
 cbool parseMOFF(parse *p, model *a){
 	/* FIXME currently these are not being recorded into the 'model' data structure */
 	unsigned memberid;
-	double x1,y1,z1, x2,y2,z2;
+	vec3 deltaA, deltaB;
+	const char *code;
+	const char *LO = "LO";
 	static int warnMOFF = 0;
 	return (
 		parseComments(p)
@@ -146,22 +148,22 @@ cbool parseMOFF(parse *p, model *a){
 		&& parseWS(p)
 		&& parseNumber(p,&memberid)
 		&& parseWS(p)
-		&& parseThisString(p,"LO")
+		&& parseThisString(p,"LO") && assign(code=LO)
 		&& parseWS(p)
-		&& parseDouble(p,&x1)
+		&& parseDouble(p,&deltaA.x)
 		&& parseWS(p)
-		&& parseDouble(p,&y1)
+		&& parseDouble(p,&deltaA.y)
 		&& parseWS(p)
-		&& parseDouble(p,&z1)
+		&& parseDouble(p,&deltaA.z)
 		&& parseWS(p)
-		&& parseDouble(p,&x2)
+		&& parseDouble(p,&deltaB.x)
 		&& parseWS(p)
-		&& parseDouble(p,&y2)
+		&& parseDouble(p,&deltaB.y)
 		&& parseWS(p)
-		&& parseDouble(p,&z2)
+		&& parseDouble(p,&deltaB.z)
 		&& parseEOLplus(p)
-		//&& assign(fprintf(stderr,"MOFF %d\n",memberid))
-		&& assign(warnMOFF ? 0 : (fprintf(stderr,"WARNING: 'MOFF' statements ignored.\n"), warnMOFF=1) )
+		&& model_add_member_offset(a, memberid, code, deltaA, deltaB)
+		&& assign(warnMOFF ? 0 : (fprintf(stderr,"WARNING: 'MOFF' implementation is still experimental.\n"), warnMOFF=1) )
 	);
 }
 

@@ -21,6 +21,10 @@ import platform
 deftools = ['default']
 if platform.system()=="Windows":
 	deftools = ['mingw']
+	default_itoa=1
+else:
+	default_itoa=0
+
 env = Environment(
 	tools=deftools + ['disttar','substinfile','soqt']
 	,toolpath=['scons']
@@ -43,7 +47,7 @@ opts.Add(BoolOption(
 opts.Add(BoolOption(
 	"HAVE_ITOA"
 	,"Do you standard C libraries include the function 'itoa'?"
-	,True
+	,default_itoa
 ))
 
 opts.Add("INSTALL_PREFIX","Install location prefix (usually /usr or /usr/local)","/usr/local")
@@ -67,6 +71,7 @@ if env.get('DEBUG'):
 # build the program
 
 env['installdirs'] = []
+env['PROGS'] = []
 
 env.BuildDir('build','src')
 env.SConscript('build/SConscript',['env'])
@@ -111,6 +116,8 @@ tar = env.DistTar("dist/frame-"+version
 )
 
 env.Depends(tar,"frame.spec")
+
+env.Default(env['PROGS'])
 
 
 # vim: set syntax=python:

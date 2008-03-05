@@ -23,10 +23,11 @@ srcs = Split("""
 libenv = env.Clone()
 libenv.AppendUnique(LIBS = ['m'])
 
-lib = libenv.SharedLibrary("#/microstranparser",srcs)
+lib = libenv.SharedLibrary("../microstranparser",srcs)
 
-env.Program('microst',['main.c'],LIBS=["microstranparser"],LIBPATH=["#"])
+microst = env.Program('microst',['main.c'],LIBS=["microstranparser"],LIBPATH=[".."])
 
-env.Program('#/dumpsections',['dumpsections.c'],LIBS=["microstranparser"],LIBPATH=["#"])
+dumpsections = env.Program('dumpsections',['dumpsections.c'],LIBS=["microstranparser"],LIBPATH=[".."])
 
+env['PROGS'] += [microst, dumpsections, lib]
 

@@ -53,6 +53,7 @@ model *model_create(unsigned version, unsigned type, unsigned vert, unit_stmt un
 	a->num_props = 0;
 	a->num_matls = 0;
 	a->cases = ARRAY_CREATE(case_stmt, 10);
+	a->moffs = ARRAY_CREATE(moff_stmt, 10);
 	return a;
 }
 
@@ -71,11 +72,21 @@ model *model_copy(const model *om){
 		array_set(&(m->cases), i, c);
 		free(c); /* data at 'c' will have been copied now */
 	}
+
+	// moff_stmts need special treatment due to dynamic memory allocation
+	moff_stmt moff;
+	m->moffs = ARRAY_CREATE(moff_stmt,ARRAY_NUM(om->moffs));
+	for(i=0; i < ARRAY_NUM(om->moffs); ++i){
+		moff = *((moff_stmt *)array_get((array *)&(om->moffs),i));
+		array_set(&(m->moffs), i, &moff);
+	}
+
 	return m;
 }
 
 void model_destroy(model *a){
-	
+	array_destroy(&(a->cases));
+	array_destroy(&(a->moffs));
 	free(a);
 }
 
@@ -187,7 +198,13 @@ vec3 memb_get_orientation(const model *a, const memb_stmt *m){
 			exit(1);
 	}
 
-#if 1
+	if(m->orient.axis!='\0'){
+		if(m->orient.dir=='-'){
+			AC = vec3_scale(AC,-1);
+		}
+	}
+
+#if 0
 	fprintf(stderr,"axis = %c\n",m->orient.axis);
 	fprintf(stderr,"\nAB = ");
 	vec3_print(stderr,AB);
@@ -197,9 +214,9 @@ vec3 memb_get_orientation(const model *a, const memb_stmt *m){
 #endif
 
 #ifdef MSTRANP_NORMALISE_ORIENTATION
-	return vec3_norm(vec3_cross(AB,AC));
+	return vec3_norm(vec3_cross(AC,AB));
 #else
-	return vec3_cross(AB,AC);
+	return vec3_cross(AC,AB);
 #endif
 
 #if 0
@@ -208,6 +225,35 @@ vec3 memb_get_orientation(const model *a, const memb_stmt *m){
 	fprintf(stderr,"\n");
 #endif
 
+}
+
+cbool model_add_member_offset(model *a, unsigned memberid
+		, const char *code, vec3 deltafrom, vec3 deltato
+){
+	/* MOFF statements are see later in the .arc file, and we're storing them
+	in a different bit of memory for compatibility with the apparent philosophy
+	of the Microstran approach. All the same, this is still a rather naive
+	implementation and will hopefully be improved once we understand its
+	workings a bit better. */
+	moff_stmt m;
+	m.id = memberid;
+	m.code = code;
+	m.deltafrom = deltafrom;
+	m.deltato = deltato;
+	array_append(&(a->moffs), &m);
+	return 1; /* success */
+}
+
+moff_stmt *model_find_member_offset(const model *a, const unsigned memberid){
+	unsigned i, n;
+	n = ARRAY_NUM(a->moffs);
+	for(i=0; i<n; ++i){
+		moff_stmt *moff = (moff_stmt *)array_get((array *)&(a->moffs), i);
+		if(moff->id == memberid){
+			return moff;
+		}
+	}
+	return NULL;
 }
 
 cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[]

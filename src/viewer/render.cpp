@@ -272,6 +272,17 @@ SoSeparator *face(const SbVec3f &n, const vector<SbVec3f> &vertices, const SbCol
 SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_struct &o, const SbColor &c, const SbVec3f &O){
 	SoSeparator *s = new SoSeparator;
 
+	SoBaseColor *col = new SoBaseColor;
+	col->rgb = c;
+	s->addChild(col);
+
+	SbVec3f minax = O;
+	minax.normalize();
+	SbVec3f majax = (B-A).cross(O); 
+	majax.normalize();
+	//s->addChild(arrow(A,A+majax,GREEN,"MAJOR"));
+	//s->addChild(arrow(A,A+minax,RED,"MINOR"));
+
 	// member half-length
 	double r = 0.5*(B-A).length();
 	unsigned n = ARRAY_NUM(o.trace);
@@ -296,35 +307,41 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 		theta_cyl = 0;
 	}
 
-	vec3 oo = vec3_norm(vec3_from_coin(O));
+	//s->addChild(arrow(SbVec3f(0,0,0),a,CYAN,"rotation"));
+
+	vec3 oo = vec3_norm(vec3_from_coin(majax));
+#if 0
 	vec3 vz = vec3_create(0,0,1);
 	vec3 vy = vec3_create(0,1,0);
 	vec3 vx = vec3_create(1,0,0);
 	assert(vec3_mod(vec3_diff(vec3_rotate(vy,vx,M_PI/2.),vz))< 1e-8);
 	assert(vec3_mod(vec3_diff(vec3_rotate(vy,vx,-M_PI/2.),vec3_scale(vz,-1)))< 1e-8);
-#if 1
+#endif
+
 	// FIXME still need to fix the twist-angle stuff to get the member oriented correctly
 	SbVec3f Ad_unrot = vec3_to_coin(vec3_rotate(oo,vec3_from_coin(a),-theta_cyl));
 
+	//s->addChild(arrow(A,A+Ad_unrot,YELLOW,"unrotated major axis"));
+
+	vec3 om = vec3_norm(vec3_from_coin(minax));
+	SbVec3f om_unrot = vec3_to_coin(vec3_rotate(om,vec3_from_coin(a),-theta_cyl));
+	//s->addChild(arrow(A,A+om_unrot,YELLOW,"unrotated minor axis"));
+
 # if 0
+	cerr << "dot = "<< Ad_unrot.dot(SbVec3f(1,0,0)) << endl;
 	if(fabs(Ad_unrot.dot(SbVec3f(1,0,0)))>1e-8){
-		cerr << "dot = "<< Ad_unrot.dot(SbVec3f(1,0,0)) << endl;
 		cerr << "Unrotated = " << Ad_unrot[0] << ", " << Ad_unrot[1] << ", " << Ad_unrot[2] << endl;
 		throw runtime_error("Orientation O is wrong for prism");
 	}
 # endif
 
-	SbVec3f zeroA(1,0,0);
+	SbVec3f zeroA(0,1,0);
 	double theta_A = angle(zeroA, Ad_unrot);
-#else
-	double theta_A = M_PI*45./180;
-#endif
+	SbVec3f dir_A = zeroA.cross(Ad_unrot);
 
-	SoBaseColor *col = new SoBaseColor;
-	col->rgb = c;
-	s->addChild(col);
+	//s->addChild(arrow(A,A+zeroA,PURPLE,"zeroA"));
 
-	s->addChild(arrow(A,A+O,YELLOW,"orientation"));
+	//cerr << "theta_A = " << theta_A * 180/M_PI << endl;
 
 #if 0
 	SoShapeHints *sha = new SoShapeHints;
@@ -341,7 +358,7 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 
 	// rotation to orient the prepared member correctly around its axis
 	SoTransform *axi = new SoTransform;
-	axi->rotation = SbRotation(SbVec3f(0,0,1),theta_A);
+	axi->rotation = SbRotation(dir_A,theta_A);
 	s->addChild(axi);
 
 #if 0

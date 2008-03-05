@@ -57,6 +57,15 @@ typedef struct memb_stmt_{
 	unsigned flags2;
 } memb_stmt;
 
+/* MOFF statement (member offsets) */
+
+typedef struct moff_stmt_{
+	unsigned id;
+	const char *code; /**< not sure what this one means at this stage, only value seen has been 'LO' */
+	vec3 deltafrom; /**< offset at the 'from' node end */
+	vec3 deltato; /**< offset at the 'to' node end */
+} moff_stmt;
+
 typedef struct unit_stmt_{
 	unsigned num;
 	char lengthunit[MAXUNIT];
@@ -114,6 +123,7 @@ typedef struct model_{
 	unsigned num_nodes;
 	memb_stmt memb[MAXMEMBS];
 	unsigned num_membs;
+	array moffs;
 	prop_stmt prop[MAXPROPS];
 	unsigned num_props;
 	matl_stmt matl[MAXMATLS];
@@ -135,10 +145,32 @@ cbool model_add_memb(model *a, unsigned id,unsigned fromnode
 		,unsigned tonode, member_orientation orient, unsigned prop, unsigned matl
 		,unsigned flags1,unsigned flags2
 );
+
+/**
+	Add member offsets in the form of variations in the positions of the
+	member ends relative to the nodes at which the member ends are anchored.
+	We're not sure yet how Microstran calculates with these offsets, but 
+	we want to be able to parse them so that we can correctly _render_ frames that
+	include such offsets.
+*/
+cbool model_add_member_offset(model *a, unsigned memberid, const char *code, vec3 deltafrom, vec3 deltato);
+
+/**
+	Find whether a member has an offset applied to its end locations.
+	@return pointer to the offset struct, or NULL if no offset exists.
+*/
+MSTRANP_API moff_stmt *model_find_member_offset(const model *a, const unsigned membid);
+
 cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[]
 		, cbool isdefault, double vals[MAXPROPVALS]
 );
 
+/**
+	Return the direction of the 'X' (minor?) axis of the member as specified
+	by its orientation data. The returned direction vector will be normal
+	to the axis of the member. Note that section outline is described in these
+	'X' and 'Y' coordinates (see sections.h)
+*/
 MSTRANP_API vec3 memb_get_orientation(const model *a, const memb_stmt *m);
 
 MSTRANP_API prop_stmt *model_find_prop(model *a, unsigned propid);

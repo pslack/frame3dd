@@ -6,8 +6,8 @@ geometry and mechanical properties of structural space frames. These files can
 be exported from Microstran, Multiframe and SpaceGASS structural analysis 
 programs, which are popular in Australia and perhaps other places too.
 
-As some sort of common interchange format, it made sense to write a parse for
-these files so that they could one day be read and analysed by the free open
+As some sort of common interchange format, it made sense to write a parser for
+these files so that they could (one day) be read and analysed by the free open
 source program 'FRAME', of which the code in this directory is a part.
 
 It is a working document. You may be able to glean further information by 
@@ -98,7 +98,7 @@ http://onesteel.com/images/db_images/productspecs/sectpropub1203.pdf
 
 This statement gives the material properties for the sections. For example,
 
-MATL     1 2.000E+08 2.500E-01 7.850E+00 1.170E-05
+ MATL    1 2.000E+08 2.500E-01 7.850E+00 1.170E-05
          ^   ^       ^         ^         ^
          |   |       |         |         + beta? (not sure about this one)
          |   |       |         + rho, material density
