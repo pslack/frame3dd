@@ -28,6 +28,17 @@ int vec3_print(FILE *f, const vec3 A);
 
 MSTRANP_API vec3 vec3_rotate(vec3 A, vec3 axis, double theta);
 
+/**
+	Calculate the angle between two vectors, in radians.
+*/
+MSTRANP_API double vec3_angle(vec3 A, vec3 B);
+
+/**
+	Calculate the angle between two vectors, in radians. Also return
+	the cross-product of the two vectors, useful with vec3_rotate.
+*/
+MSTRANP_API double vec3_angle_cross(vec3 A, vec3 B, vec3 *C);
+
 #ifdef __cplusplus
 };
 #endif

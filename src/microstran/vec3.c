@@ -60,3 +60,13 @@ vec3 vec3_rotate(vec3 A, vec3 axis, double theta){
 #undef SQ
 }
 
+double vec3_angle(vec3 A, vec3 B){
+	vec3 C = vec3_cross(A,B);
+	return atan2(vec3_mod(C),vec3_dot(A,B));
+}
+
+MSTRANP_API double vec3_angle_cross(vec3 A, vec3 B, vec3 *C){
+	*C = vec3_cross(A,B);
+	return atan2(vec3_mod(*C),vec3_dot(A,B));
+}
+

@@ -59,12 +59,19 @@ typedef struct memb_stmt_{
 
 /* MOFF statement (member offsets) */
 
+typedef enum{
+	MSTRANP_COORDS_LOCAL=0
+	,MSTRANP_COORDS_GLOBAL
+} coord_sys_t;
+
 typedef struct moff_stmt_{
 	unsigned id;
-	const char *code; /**< not sure what this one means at this stage, only value seen has been 'LO' */
+	coord_sys_t coordsys; /**< coordinate system for these offsets, either local or global */
 	vec3 deltafrom; /**< offset at the 'from' node end */
 	vec3 deltato; /**< offset at the 'to' node end */
 } moff_stmt;
+
+MSTRANP_API int moff_print(FILE *f, const moff_stmt *o);
 
 typedef struct unit_stmt_{
 	unsigned num;
@@ -153,13 +160,20 @@ cbool model_add_memb(model *a, unsigned id,unsigned fromnode
 	we want to be able to parse them so that we can correctly _render_ frames that
 	include such offsets.
 */
-cbool model_add_member_offset(model *a, unsigned memberid, const char *code, vec3 deltafrom, vec3 deltato);
+cbool model_add_member_offset(model *a, unsigned memberid, coord_sys_t code, vec3 deltafrom, vec3 deltato);
 
 /**
 	Find whether a member has an offset applied to its end locations.
 	@return pointer to the offset struct, or NULL if no offset exists.
 */
 MSTRANP_API moff_stmt *model_find_member_offset(const model *a, const unsigned membid);
+
+/**
+	Calculate member offsets in global coordinates (returned in *moff). Useful
+	in rendering code.
+	@return 1 on success.
+*/
+MSTRANP_API cbool model_get_member_offset_global(const model *a, const unsigned memberid, moff_stmt *moff);
 
 cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[]
 		, cbool isdefault, double vals[MAXPROPVALS]

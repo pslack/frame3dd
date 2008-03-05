@@ -145,21 +145,21 @@ int main(int argc, char **argv){
 		node_stmt *A = &(M->node[m->fromnode]);
 		node_stmt *B = &(M->node[m->tonode]);
 		prop_stmt *p = model_find_prop(M, m->prop);
+	
+		vec3 X = memb_get_orientation(M,m);
 
 		SbVec3f vA = vec3_to_coin(A->pos);
 		SbVec3f vB = vec3_to_coin(B->pos);
-		SbVec3f vX = vec3_to_coin(memb_get_orientation(M,m));
+		SbVec3f vX = vec3_to_coin(X);
 
-		moff_stmt *moff = model_find_member_offset(M, m->id);
-		if(moff){
-			SbVec3f offA = vec3_to_coin(moff->deltafrom);
-			SbVec3f offB = vec3_to_coin(moff->deltato);
-			cerr << "Member " << m->id << " offset by " << offA[0] << "," << offA[1] << "," << offA[2] << endl;
-			vA += offA;
-			vB += offB;
+		moff_stmt moff;
+		if(model_get_member_offset_global(M, m->id, &moff)){
+			vA += vec3_to_coin(moff.deltafrom);
+			vB += vec3_to_coin(moff.deltato);
+			cerr << "Member " << m->id << ": A offset = " << moff.deltafrom.x << "," << moff.deltafrom.y << "," << moff.deltafrom.z << endl;
 		}
 
-		//cerr << "Member " << m->id << " oriented to " << vX[0] << "," << vX[1] << "," << vX[2] << endl;
+		cerr << "Member " << m->id << " oriented to " << vX[0] << "," << vX[1] << "," << vX[2] << endl;
 
 		stringstream ss;
 		SbColor c;

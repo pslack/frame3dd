@@ -9,8 +9,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <assert.h>
 
 //#define NODISPLACEMENT_WARN
+#define MSTRANP_NORMALISE_ORIENTATION
+
+#define PI 3.14159265358
 
 node_stmt node_create(unsigned id,vec3 pos,unsigned flags){
 	node_stmt n;
@@ -228,7 +232,7 @@ vec3 memb_get_orientation(const model *a, const memb_stmt *m){
 }
 
 cbool model_add_member_offset(model *a, unsigned memberid
-		, const char *code, vec3 deltafrom, vec3 deltato
+		, coord_sys_t coordsys, vec3 deltafrom, vec3 deltato
 ){
 	/* MOFF statements are see later in the .arc file, and we're storing them
 	in a different bit of memory for compatibility with the apparent philosophy
@@ -237,7 +241,7 @@ cbool model_add_member_offset(model *a, unsigned memberid
 	workings a bit better. */
 	moff_stmt m;
 	m.id = memberid;
-	m.code = code;
+	m.coordsys = coordsys;
 	m.deltafrom = deltafrom;
 	m.deltato = deltato;
 	array_append(&(a->moffs), &m);
@@ -255,6 +259,116 @@ moff_stmt *model_find_member_offset(const model *a, const unsigned memberid){
 	}
 	return NULL;
 }
+
+cbool model_get_member_offset_global(const model *a, const unsigned memberid, moff_stmt *moff){
+	cbool found=0;
+	moff_stmt o;
+	const memb_stmt *m;
+	vec3 X;
+	unsigned i, n;
+	const node_stmt *A, *B;
+
+	assert(moff!=NULL);
+
+	n = ARRAY_NUM(a->moffs);
+	for(i=0; i<n; ++i){
+		// copy the member offset to the 
+		o = *(moff_stmt *)array_get((array *)&(a->moffs), i);
+		if(o.id == memberid){
+			found=1; 
+			break;
+		}
+	}
+	if(!found)return 0;
+
+	moff_print(stderr, &o);
+
+	if(o.coordsys==MSTRANP_COORDS_GLOBAL){
+		*moff = o;
+	}else if(o.coordsys==MSTRANP_COORDS_LOCAL){
+		unsigned memberindex;
+		if(!model_find_memb(a, o.id, &memberindex))return 0;
+		m = &(a->memb[memberindex]);
+
+		moff->id = o.id;
+		moff->coordsys = MSTRANP_COORDS_GLOBAL;
+
+		X = memb_get_orientation(a, m);
+		fprintf(stderr,"mod(X) = %f\n", vec3_mod(X));
+
+		A = &(a->node[m->fromnode]);
+		B = &(a->node[m->tonode]);
+
+		vec3 AB = vec3_norm(vec3_diff(B->pos, A->pos));
+		vec3 zzdir;
+		double theta_zz = vec3_angle_cross(vec3_create(0,0,1), AB, &zzdir);
+		if(vec3_mod(zzdir)<1e-6){
+			zzdir = vec3_create(0,0,1);
+			theta_zz = 0;
+		}
+
+		assert(!isnan(theta_zz));
+		assert(!isnan(zzdir.x));
+
+		vec3 Xdd = vec3_rotate(X,zzdir, -theta_zz);
+		assert(fabs(vec3_mod(Xdd)-1.0)<1e-6);
+
+		vec3 xxxdir;
+		double theta_xxx = vec3_angle_cross(vec3_create(1,0,0), Xdd, &xxxdir);
+
+		if(theta_xxx<1e-6){
+			fprintf(stderr,"theta_xxx = 0\n");
+			xxxdir = vec3_create(0,0,1);
+		}
+
+		if(vec3_mod(xxxdir)<1e-5){
+			fprintf(stderr,"xxxdir = 0\n");
+			xxxdir = vec3_create(0,0,1);
+			theta_xxx = 0;
+		}
+
+		assert(!isnan(theta_xxx));
+		assert(!isnan(xxxdir.x));
+
+		fprintf(stderr,"LO deltafrom = %f %f %f\n",o.deltafrom.x, o.deltafrom.y, o.deltafrom.z);
+		fprintf(stderr,"rotate by %f deg about %f %f %f\n", -theta_xxx*180./PI, xxxdir.x, xxxdir.y, xxxdir.z);
+
+		vec3 Add = vec3_rotate(o.deltafrom,xxxdir,-theta_xxx);
+		assert(!isnan(Add.x));
+		assert(!isnan(Add.y));
+		assert(!isnan(Add.z));
+
+		/* we can now perform the coordinate transform via rotation xxx then zz */
+		moff->deltafrom = vec3_rotate(Add,zzdir,-theta_zz);
+	
+		vec3 Bdd = vec3_rotate(o.deltato,xxxdir,-theta_xxx);
+		moff->deltato = vec3_rotate(Bdd,zzdir,-theta_zz);
+
+		moff_print(stderr, moff);
+
+		assert(!isnan(moff->deltafrom.x));
+		assert(!isnan(moff->deltafrom.y));
+		assert(!isnan(moff->deltafrom.z));
+		assert(!isnan(moff->deltato.x));
+		assert(!isnan(moff->deltato.y));
+		assert(!isnan(moff->deltato.z));
+
+	}
+	return 1;
+}	
+
+int moff_print(FILE *f, const moff_stmt *o){
+	const char *code;
+	switch(o->coordsys){
+		case MSTRANP_COORDS_GLOBAL: code="GL"; break;
+		case MSTRANP_COORDS_LOCAL:  code="LO"; break;
+	}
+	return fprintf(f,"MOFF %5d %s %10f %10f %10f %10f %10f %10f\n",o->id, code
+		, o->deltafrom.x, o->deltafrom.y, o->deltafrom.z
+		, o->deltato.x, o->deltato.y, o->deltato.z
+	);
+}
+	
 
 cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[]
 		, cbool isdefault, double vals[MAXPROPVALS]

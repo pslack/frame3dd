@@ -136,11 +136,9 @@ cbool parseMEMB(parse *p, model *a){
 /* MOFF statements: member offsets? */
 
 cbool parseMOFF(parse *p, model *a){
-	/* FIXME currently these are not being recorded into the 'model' data structure */
 	unsigned memberid;
 	vec3 deltaA, deltaB;
-	const char *code;
-	const char *LO = "LO";
+	coord_sys_t coordsys;
 	static int warnMOFF = 0;
 	return (
 		parseComments(p)
@@ -148,7 +146,10 @@ cbool parseMOFF(parse *p, model *a){
 		&& parseWS(p)
 		&& parseNumber(p,&memberid)
 		&& parseWS(p)
-		&& parseThisString(p,"LO") && assign(code=LO)
+		&& (	
+			(parseThisString(p,"LO") && assign(coordsys=MSTRANP_COORDS_LOCAL))
+			|| (parseThisString(p,"GL") && assign(coordsys=MSTRANP_COORDS_GLOBAL))
+		)
 		&& parseWS(p)
 		&& parseDouble(p,&deltaA.x)
 		&& parseWS(p)
@@ -162,7 +163,7 @@ cbool parseMOFF(parse *p, model *a){
 		&& parseWS(p)
 		&& parseDouble(p,&deltaB.z)
 		&& parseEOLplus(p)
-		&& model_add_member_offset(a, memberid, code, deltaA, deltaB)
+		&& model_add_member_offset(a, memberid, coordsys, deltaA, deltaB)
 		&& assign(warnMOFF ? 0 : (fprintf(stderr,"WARNING: 'MOFF' implementation is still experimental.\n"), warnMOFF=1) )
 	);
 }
