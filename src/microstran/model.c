@@ -316,12 +316,7 @@ cbool model_get_member_offset_global(const model *a, const unsigned memberid, mo
 		vec3 xxxdir;
 		double theta_xxx = vec3_angle_cross(vec3_create(1,0,0), Xdd, &xxxdir);
 
-		if(theta_xxx<1e-6){
-			fprintf(stderr,"theta_xxx = 0\n");
-			xxxdir = vec3_create(0,0,1);
-		}
-
-		if(vec3_mod(xxxdir)<1e-5){
+		if(vec3_mod(xxxdir)<1e-6){
 			fprintf(stderr,"xxxdir = 0\n");
 			xxxdir = vec3_create(0,0,1);
 			theta_xxx = 0;

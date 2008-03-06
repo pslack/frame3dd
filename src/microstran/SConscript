@@ -17,6 +17,7 @@ srcs = Split("""
 	sections.c
 	sectionsparser.c
 	vec3.c
+	ctrans.c
 """)
 # bdd.c row.c  table.c  print.c   iter.c  list.c  
 

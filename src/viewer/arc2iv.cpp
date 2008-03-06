@@ -26,6 +26,7 @@ using namespace std;
 
 #include <microstran/modelparser.h>
 #include <microstran/sectionsparser.h>
+#include <microstran/ctrans.h>
 
 const char *defaultsceneoutfile = "microstranmodel.iv";
 const char *defaultlibfile = "src/microstran/properties.txt";
@@ -37,6 +38,7 @@ void usage(const char *progname){
 	fprintf(stderr,"  INFILE  Microstran .arc file to render (eg 'model.arc')\n");
 	fprintf(stderr,"  -l      Load a section library from LIBFILE.\n");
 	fprintf(stderr,"  -t      Include text for node/member IDs and member sizes.\n");
+	fprintf(stderr,"  -m      Ignore member offsets (don't apply the offers)\n");
 	fprintf(stderr,"  OUTFILE Open Inventor file to output (defaults to '%s')\n\n",defaultsceneoutfile);
 }
 
@@ -50,13 +52,17 @@ int main(int argc, char **argv){
 	const char *libfile = defaultlibfile;
 	bool highquality = false;
 	bool infotext = false;
+	bool memberoffsets = true;
 
 	// no options yet
 	char c;
-	while((c=getopt(argc,argv,"ho::l:t"))!=-1){
+	while((c=getopt(argc,argv,"mho::l:t"))!=-1){
 		switch(c){
 			case 'h':
 				highquality = 1;
+				break;
+			case 'm':
+				memberoffsets = 0;
 				break;
 			case 'o':
 				sceneoutfile = (optarg ? optarg : defaultsceneoutfile);
@@ -152,12 +158,29 @@ int main(int argc, char **argv){
 		SbVec3f vB = vec3_to_coin(B->pos);
 		SbVec3f vX = vec3_to_coin(X);
 
-		moff_stmt moff;
+		if(memberoffsets){
+			moff_stmt moff;
+			moff_stmt *moff1 = model_find_member_offset(M, m->id);
+			if(moff1){
+				moff = *moff1;
+				if(moff.coordsys == MSTRANP_COORDS_LOCAL){
+					ctrans_matrix c = ctrans_rotation_axes(vec3_diff(B->pos,A->pos),X);
+					fprintf(stderr,"Coordinate transform:\n");
+					ctrans_print(stderr,&c);
+					moff.deltafrom = ctrans_apply(c, moff.deltafrom);
+					moff.deltato = ctrans_apply(c, moff.deltato);
+				}
+				vA += vec3_to_coin(moff.deltafrom);
+				vB += vec3_to_coin(moff.deltato);
+			}
+		}
+#if 0			
 		if(model_get_member_offset_global(M, m->id, &moff)){
 			vA += vec3_to_coin(moff.deltafrom);
 			vB += vec3_to_coin(moff.deltato);
 			cerr << "Member " << m->id << ": A offset = " << moff.deltafrom.x << "," << moff.deltafrom.y << "," << moff.deltafrom.z << endl;
 		}
+#endif
 
 		cerr << "Member " << m->id << " oriented to " << vX[0] << "," << vX[1] << "," << vX[2] << endl;
 
