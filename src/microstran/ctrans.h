@@ -26,6 +26,8 @@ typedef struct ctrans_matrix_struct{
 
 ctrans_matrix ctrans_identity(void);
 
+ctrans_matrix ctrans_scane(ctrans_matrix c, double s);
+
 ctrans_matrix ctrans_rotation_z(double theta);
 
 /**
@@ -49,6 +51,16 @@ ctrans_matrix ctrans_rotation(vec3 axis, double theta);
 	global coordinates.
 */
 MSTRANP_API ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X);
+
+/**
+	Calculate the transform inverse (this is just a 4×4 matrix inverse)
+*/
+ctrans_matrix ctrans_inverse(ctrans_matrix c);
+
+/**
+	Calculate the determinant of the transform matrix.
+*/
+double ctrans_det(ctrans_matrix c);
 
 /**
 	Apply the coordinate transform in a 4x4 transformation matrix

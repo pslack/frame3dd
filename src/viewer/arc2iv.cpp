@@ -32,14 +32,14 @@ const char *defaultsceneoutfile = "microstranmodel.iv";
 const char *defaultlibfile = "src/microstran/properties.txt";
 
 void usage(const char *progname){
-	fprintf(stderr,"Usage: %s [-o [OUTFILE]] [-h] [-l LIBFILE] [-t] INFILE\n",progname);
-	fprintf(stderr,"Load and parse a microstran file and render using Coin3D/OpenGL\n");
-	fprintf(stderr,"  -h      Render using higher quality graphics (slower).\n");
-	fprintf(stderr,"  INFILE  Microstran .arc file to render (eg 'model.arc')\n");
-	fprintf(stderr,"  -l      Load a section library from LIBFILE.\n");
-	fprintf(stderr,"  -t      Include text for node/member IDs and member sizes.\n");
-	fprintf(stderr,"  -m      Ignore member offsets (don't apply the offers)\n");
-	fprintf(stderr,"  OUTFILE Open Inventor file to output (defaults to '%s')\n\n",defaultsceneoutfile);
+	fprintf(stderr,"Usage: %s [-o [OUTFILE]] [-m] [-h] [-l LIBFILE] [-t] INFILE\n",progname);
+	fprintf(stderr,"Load and parse a Microstran .arc file and render using Coin3D/OpenGL\n");
+	fprintf(stderr,"  -o [OUTFILE] Open Inventor file to output (defaults to '%s')\n",defaultsceneoutfile);
+	fprintf(stderr,"  -m           Ignore member offsets (don't apply the offers)\n");
+	fprintf(stderr,"  -h           Render using higher quality graphics (slower).\n");
+	fprintf(stderr,"  -l LIBFILE   Load a section library from LIBFILE.\n");
+	fprintf(stderr,"  -t           Include text for node/member IDs and member sizes.\n");
+	fprintf(stderr,"  INFILE       Microstran .arc file to render (eg 'model.arc')\n\n");
 }
 
 static SbVec3f vec3_to_coin(vec3 A){
@@ -165,8 +165,11 @@ int main(int argc, char **argv){
 				moff = *moff1;
 				if(moff.coordsys == MSTRANP_COORDS_LOCAL){
 					ctrans_matrix c = ctrans_rotation_axes(vec3_diff(B->pos,A->pos),X);
-					fprintf(stderr,"Coordinate transform:\n");
-					ctrans_print(stderr,&c);
+
+					if(A->id==5 && B->id==6){
+						fprintf(stderr,"Coordinate transform:\n");
+						ctrans_print(stderr,&c);
+					}
 					moff.deltafrom = ctrans_apply(c, moff.deltafrom);
 					moff.deltato = ctrans_apply(c, moff.deltato);
 				}
@@ -182,7 +185,7 @@ int main(int argc, char **argv){
 		}
 #endif
 
-		cerr << "Member " << m->id << " oriented to " << vX[0] << "," << vX[1] << "," << vX[2] << endl;
+		//cerr << "Member " << m->id << " oriented to " << vX[0] << "," << vX[1] << "," << vX[2] << endl;
 
 		stringstream ss;
 		SbColor c;
