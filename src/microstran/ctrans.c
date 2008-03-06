@@ -121,7 +121,7 @@ ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X){
 	gX = ctrans_apply(ci,gX);
 	vec3_print(stderr,gX);
 	fprintf(stderr,"\n");
-	assert(vec3_mod(vec3_diff(gX,vec3_create(1,0,0))<1e-8);
+	assert(vec3_mod(vec3_diff(gX,vec3_create(1,0,0)))<1e-8);
 	
 #endif
 	
