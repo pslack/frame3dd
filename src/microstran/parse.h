@@ -116,6 +116,7 @@ cbool parseCharCategory( parse *p, category cat, char *c );
 
 cbool parseSpaceAndComments( parse *p );
 
+
 cbool parseLexThisCategory( parse *p, category cat, char *s );
 cbool parseLexCategory( parse *p, category cat, char *s );
 cbool parseLexNumber( parse *p, unsigned *n );
@@ -124,15 +125,17 @@ cbool parseLexThisString( parse *p, char *s );
 cbool parseLexThisChar( parse *p, char c );
 cbool parseLexEnd( parse *p );
 
+#if 0
+/* not currently using any of this stuff */
 cbool parseLexIfKeyword( parse *p, char *s, cbool *b );
 cbool parseLexIfNumber( parse *p, unsigned *n );
 cbool parseLexIfSignedNumber( parse *p, int *n );
 cbool parseLexKeywordNumber( parse *p, char *s, unsigned *n );
 cbool parseLexKeywordSignedNumber( parse *p, char *s, int *n );
+#endif
 
 cbool parseQuoted( parse *p, char *s );
 cbool parseLexQuoted( parse *p, char *s );
-
 
 /* john's useful stuff */
 cbool parseEOL(parse *p);

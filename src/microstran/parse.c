@@ -423,6 +423,7 @@ cbool parseLexEnd( parse *p )
          );
 }
 
+#if 0
 cbool parseLexIfKeyword( parse *p, char *s, cbool *b )
 {
   return ( parseLexThisKeyword( p, s )
@@ -463,6 +464,7 @@ cbool parseLexKeywordSignedNumber( parse *p, char *s, int *n )
            )
          );
 }
+#endif
 
 cbool parseQuoted( parse *p, char *name )
 {

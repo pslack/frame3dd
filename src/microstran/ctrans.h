@@ -79,6 +79,10 @@ MSTRANP_API vec3 ctrans_apply(ctrans_matrix c, const vec3 p);
 
 MSTRANP_API int ctrans_print(FILE *f, const ctrans_matrix *c);
 
+char ctrans_isnan(const ctrans_matrix *c);
+
+#define CTRANS_CHECK_NAN(C) (ctrans_isnan(C) ? (ctrans_print(stderr,C), assert(!ctrans_isnan(C))) : 0)
+
 #ifdef __cplusplus
 };
 #endif
