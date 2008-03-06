@@ -70,3 +70,8 @@ MSTRANP_API double vec3_angle_cross(vec3 A, vec3 B, vec3 *C){
 	return atan2(vec3_mod(*C),vec3_dot(A,B));
 }
 
+char vec3_equal_tol(vec3 A, vec3 B, double tol){
+	return vec3_mod(vec3_diff(B,A))<tol;
+}
+
+

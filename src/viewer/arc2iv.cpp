@@ -102,6 +102,7 @@ int main(int argc, char **argv){
 	l = section_library_create();
 	parseSections(p1,l);
 	fprintf(stderr,"done!\n");
+	parseDispose(p1);
 
 	model *M;
 	parse *p;
@@ -112,6 +113,8 @@ int main(int argc, char **argv){
 		fprintf(stderr,"Failed to parse microstran model!\n");
 		exit(3);
 	}
+
+	parseDispose(p);
 
 	fprintf(stderr,"Rendering frame with %d members...\n",M->num_membs);
 
@@ -202,17 +205,20 @@ int main(int argc, char **argv){
 					/* FIXME need to get the member orientation correct! */
 					section_outline *o = section_isec_outline(s);
 					root->addChild(prism(vA, vB, *o, c, vX));
+					section_outline_destroy(o);
 				}else if(section_is_shs(s)){
 					c = YELLOW;
 					/* FIXME need to get the member orientation correct! */
 					section_outline *o = section_shs_outline(s);
 					root->addChild(prism(vA, vB, *o, c, vX));
+					section_outline_destroy(o);
 				}else if(section_is_tophat(s)){
 					c = ORANGE;
 					/* FIXME need to get the member orientation correct! */
 					//cerr << "Rendering prism member" << endl;
 					section_outline *o = section_tophat_outline(s);
 					root->addChild(prism(vA, vB, *o, c, vX));
+					section_outline_destroy(o);
 				}
 			}else{
 				if(unknownsections.find(p->name)==unknownsections.end()){

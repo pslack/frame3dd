@@ -39,6 +39,8 @@ MSTRANP_API double vec3_angle(vec3 A, vec3 B);
 */
 MSTRANP_API double vec3_angle_cross(vec3 A, vec3 B, vec3 *C);
 
+MSTRANP_API char vec3_equal_tol(vec3 A, vec3 B, double tol);
+
 #ifdef __cplusplus
 };
 #endif

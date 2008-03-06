@@ -68,10 +68,15 @@ ctrans_matrix ctrans_mult(ctrans_matrix A, ctrans_matrix B){
 ctrans_matrix ctrans_rotation(vec3 axis, double theta){
 	double C = cos(theta);
 	double S = sin(theta);
+	fprintf(stderr,"C = %f, S = %f\naxis = ",C,S);
+	vec3_print(stderr,axis);
+	fprintf(stderr,"\n");
 #define SQ(X) ((X)*(X))
 	ctrans_matrix c;
 	c = ctrans_identity();
 	axis = vec3_norm(axis);
+	fprintf(stderr,"c[0][1] = %f + %f = %f",-axis.z*S, (1-C)*axis.x*axis.y, -axis.z*S+(1-C)*axis.x*axis.y);
+
 	// SOURCE: http://www.euclideanspace.com/maths/algebra/matrix/orthogonal/rotation/index.htm
 	c.m[0][0] += (1-C)*(SQ(axis.x)-1);
 	c.m[0][1] = -axis.z*S+(1-C)*axis.x*axis.y;
@@ -82,22 +87,68 @@ ctrans_matrix ctrans_rotation(vec3 axis, double theta){
 	c.m[2][0] = -axis.y*S+(1-C)*axis.x*axis.z;
 	c.m[2][1] = axis.x*S+(1-C)*axis.y*axis.z;
 	c.m[2][2] += (1-C)*(SQ(axis.z)-1);
-#if 0
-	fprintf(stderr,"ROT =");
-	ctrans_print(stderr,&c);
-#endif
 #undef SQ
+
+#if 1
+	fprintf(stderr,"c[0][1] = %f = %f\n",-axis.z*S+(1-C)*axis.x*axis.y, c.m[0][1]);
+	fprintf(stderr,"c[0][2] = %f = %f\n",-axis.z*S+(1-C)*axis.x*axis.y, c.m[0][1]);
+	fprintf(stderr,"axis = ");
+	vec3_print(stderr,axis);
+	fprintf(stderr,"\ntheta = %f deg\nROT =",theta *180./PI);
+	ctrans_print(stderr,&c);
+
+	vec3 X = vec3_create(1,0,0);
+
+	fprintf(stderr,"ctrans_apply(c,X) = ");
+	vec3_print(stderr,ctrans_apply(c,X));
+	fprintf(stderr,"\nvec3_rotate(X,axis,theta) = ");
+	vec3_print(stderr,vec3_rotate(X,axis,theta));
+	fprintf(stderr,"\n");
+
+	assert(vec3_equal_tol(ctrans_apply(c,X), vec3_rotate(X,axis,theta),1e-5));
+	vec3 Y = vec3_create(0,1,0);
+	assert(vec3_equal_tol(ctrans_apply(c,Y), vec3_rotate(Y,axis,theta),1e-5));
+	vec3 Z = vec3_create(0,0,1);
+	assert(vec3_equal_tol(ctrans_apply(c,Z), vec3_rotate(Z,axis,theta),1e-5));
+	vec3 M = vec3_create(-1,-2,-3);
+	assert(vec3_equal_tol(ctrans_apply(c,M), vec3_rotate(M,axis,theta),1e-5));
+#endif
+
 	return c;
 }
 
 ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X){
+	X = vec3_norm(X);
+	Z = vec3_norm(Z);
+
+	fprintf(stderr,"X = ");
+	vec3_print(stderr,X);
+	fprintf(stderr,", Z = ");
+	vec3_print(stderr,Z);
+	fprintf(stderr,"\n");
+
+
 	ctrans_matrix cz, cx;
 	vec3 z = vec3_create(0,0,1);
 	vec3 dirz;
 	double thetaz = vec3_angle_cross(z,Z,&dirz);
 	fprintf(stderr,"Z-Rotation by %f around %f,%f,%f\n",thetaz*180./PI,dirz.x,dirz.y,dirz.z);
-	cz = ctrans_rotation(dirz,thetaz);
-	vec3 xd = vec3_rotate(X,dirz,thetaz);
+
+	/* we should recover z by rotating Z by -thetaz around the axis dirz... */
+	assert(vec3_mod(vec3_diff(vec3_rotate(Z,dirz,-thetaz),z))<1e-8);
+
+	/* and dirz must be normal to Z */
+	assert(vec3_dot(dirz,Z)<1e-8);
+
+	cz = ctrans_rotation(dirz,-thetaz);
+
+	/* as before, check that we recover z */
+	assert(vec3_mod(vec3_diff(ctrans_apply(cz,Z),z))<1e-8);
+	
+	vec3 xd = vec3_rotate(X,dirz,-thetaz);
+	fprintf(stderr,"rotation of X around dirz by -theta --> ");
+	vec3_print(stderr,xd);
+	fprintf(stderr,"\n");
 	vec3 dirx;
 	double thetax = vec3_angle_cross(xd,X,&dirx);
 	if(thetax<1e-5){
