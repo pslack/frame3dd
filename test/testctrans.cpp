@@ -69,8 +69,23 @@ public:
 		vec3 Z = vec3_create(0,0,1);
 		vec3 X = vec3_create(1,0,0);
 		ctrans_matrix R = ctrans_rotation_axes(Z,X);
+		CTRANS_PR(R);
 		ctrans_matrix I = ctrans_identity();
 		CPPUNIT_ASSERT(ctrans_equal_tol(&R,&I,1e-15));
+	}
+
+	void testrotaxes2(){
+		vec3 Z = vec3_create(0,0,1);
+		vec3 X = vec3_create(-1,0,0);
+		ctrans_matrix R = ctrans_rotation_axes(Z,X);
+		CTRANS_PR(R);
+		
+		/* equivalent rotation is a X and Y flip, Z unchanged */
+		ctrans_matrix Re = ctrans_identity();
+		Re.m[0][0] = -1;
+		Re.m[1][1] = -1;
+
+		CPPUNIT_ASSERT(ctrans_equal_tol(&R,&Re,1e-15));
 	}
 
 	CPPUNIT_TEST_SUITE(TestCtrans);
@@ -81,6 +96,7 @@ public:
 	CPPUNIT_TEST(testrot2);
 	CPPUNIT_TEST(testrotz);
 	CPPUNIT_TEST(testrotaxes);
+	CPPUNIT_TEST(testrotaxes2);
 	CPPUNIT_TEST_SUITE_END();
 
 };

@@ -159,50 +159,63 @@ ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X){
 	X = vec3_norm(X);
 	Z = vec3_norm(Z);
 
-	fprintf(stderr,"X = ");
-	vec3_print(stderr,X);
-	fprintf(stderr,", Z = ");
-	vec3_print(stderr,Z);
-	fprintf(stderr,"\n");
+	VEC3_PR(X);
+	VEC3_PR(Z);
 
+#define CTRANS_ROT_VEC_TOL 1e-8
 
-	ctrans_matrix cz, cx;
+	ctrans_matrix cz = ctrans_identity();
+	ctrans_matrix cx = ctrans_identity();
+
+	fprintf(stderr,"\nRotation to orient Z...\n\n");
+
 	vec3 z = vec3_create(0,0,1);
-	vec3 dirz;
-	double thetaz = vec3_angle_cross(z,Z,&dirz);
-	fprintf(stderr,"Z-Rotation by %f around %f,%f,%f\n",thetaz*180./PI,dirz.x,dirz.y,dirz.z);
+	vec3 xd = X;
 
-	/* we should recover z by rotating Z by -thetaz around the axis dirz... */
-	//assert(vec3_mod(vec3_diff(vec3_rotate(Z,dirz,-thetaz),z))<1e-8);
+	if(!vec3_equal_tol(Z,z,CTRANS_ROT_VEC_TOL)){
+		fprintf(stderr,"No Z-rotation required\n");
+	}else{
+		vec3 dirz;
+		double thetaz = vec3_angle_cross(z,Z,&dirz);
+		fprintf(stderr,"Z-Rotation by %f around %f,%f,%f\n",thetaz*180./PI,dirz.x,dirz.y,dirz.z);
 
-	/* and dirz must be normal to Z */
-	assert(vec3_dot(dirz,Z)<1e-8);
+		/* and dirz must be normal to Z */
+		assert(vec3_dot(dirz,Z)<1e-8);
 
-	cz = ctrans_rotation(dirz,-thetaz);
+		cz = ctrans_rotation(dirz,-thetaz);
+		CTRANS_PR(cz);
 
-	/* as before, check that we recover z */
+		/* apply the cz to X, this should bring X into the global x-y plane */
+		vec3 xd = ctrans_apply(cz, X);
+	}
+
+	/* check that we recover z when applying cz to Z */
 	assert(vec3_mod(vec3_diff(ctrans_apply(cz,Z),z))<1e-8);
 
-	/* vec3 xd = vec3_rotate(X,dirz,-thetaz);*/
-	vec3 xd = ctrans_apply(cz, X);
+	fprintf(stderr,"\nRotation to orient X...\n\n");
+
+	assert(fabs(vec3_dot(xd,vec3_create(0,0,1)))<1e-8);
 
 	VEC3_CHECK_NAN(xd);
 
-	fprintf(stderr,"rotation of X around dirz by -theta --> ");
-	vec3_print(stderr,xd);
-	fprintf(stderr,"\n");
+	VEC3_PR(xd);
 	vec3 dirx;
 	VEC3_CHECK_NAN(dirx);
-	double thetax = 0;
-	if(!vec3_equal_tol(xd,X,1e-8)){
-		thetax = vec3_angle_cross(xd,X,&dirx);
+
+	vec3 x = vec3_create(1,0,0);
+	if(vec3_equal_tol(xd,x,1e-8)){
+		fprintf(stderr,"No X rotation required\n");
+	}else{
+		double thetax = 0;
+		thetax = vec3_angle_cross(xd,x,&dirx);
+		fprintf(stderr,"thetax = %f\n",thetax);
 		VEC3_CHECK_NAN(dirx);
 		if(thetax<1e-5){
 			fprintf(stderr,"No X rotation required\n");
 			return cz;
 		}
 		fprintf(stderr,"X-Rotation by %f around %f,%f,%f\n",thetax*180./PI,dirx.x,dirx.y,dirx.z);
-		cx = ctrans_rotation(dirz,-thetax);
+		cx = ctrans_rotation(dirx,-thetax);
 	}
 #if 1
 
@@ -232,6 +245,26 @@ vec3 ctrans_apply(ctrans_matrix c, const vec3 p){
 	q.z = c.m[2][0] * p.x + c.m[2][1] * p.y + c.m[2][2] * p.z + c.m[2][3];
 	return q;
 }
+
+int ctrans_print(FILE *f, const ctrans_matrix *c){
+	int n = 0;
+	unsigned i;
+	for(i=0; i<4;++i){
+		n += fprintf(f,"\t[ %8f %8f %8f %8f ]\n",c->m[i][0],c->m[i][1],c->m[i][2],c->m[i][3]);
+	}
+	return n;
+}
+
+MSTRANP_API char ctrans_equal_tol(const ctrans_matrix *c, const ctrans_matrix *d, double tol){
+	unsigned i,j;
+	for(i=0;i<4;++i){
+		for(j=0;j<4;++j){
+			if(fabs(c->m[i][j] - d->m[i][j]) > tol)return 0;
+		}
+	}
+	return 1;
+}
+
 
 ctrans_matrix ctrans_inverse(ctrans_matrix c){
 #define m00 c.m[0][0]
@@ -279,26 +312,4 @@ double ctrans_det(ctrans_matrix c){
      + m01 * m10 * m23 * m32-m00 * m11 * m23 * m32-m02 * m11 * m20 * m33+m01 * m12 * m20 * m33
      + m02 * m10 * m21 * m33-m00 * m12 * m21 * m33-m01 * m10 * m22 * m33+m00 * m11 * m22 * m33;
 } 
-
-	
-
-int ctrans_print(FILE *f, const ctrans_matrix *c){
-	int n = 0;
-	unsigned i;
-	for(i=0; i<4;++i){
-		n += fprintf(f,"\t[ %8f %8f %8f %8f ]\n",c->m[i][0],c->m[i][1],c->m[i][2],c->m[i][3]);
-	}
-	return n;
-}
-
-MSTRANP_API char ctrans_equal_tol(const ctrans_matrix *c, const ctrans_matrix *d, double tol){
-	unsigned i,j;
-	for(i=0;i<4;++i){
-		for(j=0;j<4;++j){
-			if(fabs(c->m[i][j] - d->m[i][j]) > tol)return 0;
-		}
-	}
-	return 1;
-}
-
 

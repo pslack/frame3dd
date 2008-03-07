@@ -46,11 +46,13 @@ MSTRANP_API char vec3_equal_tol(vec3 A, vec3 B, double tol);
 
 char vec3_isnan(const vec3 *A);
 
-#define VEC3_CHECK_NAN(V) (vec3_isnan(&(V)) ? (fprintf(stderr,"%s = ",#V), vec3_print(stderr,V), fprintf(stderr,"\n"), assert(!vec3_isnan(&(V)))) : 0)
-
 #define VEC3_PR(V) (fprintf(stderr,"%s = ",#V), vec3_print(stderr,V), fprintf(stderr,"\n"))
 
+#define VEC3_CHECK_NAN(V) (vec3_isnan(&(V)) ? (VEC3_PR(V), assert(!vec3_isnan(&(V)))) : 0)
+
 #define VEC3_ASSERT_EQUAL_TOL(X,Y,TOL) (vec3_equal_tol(X,Y,TOL) ? (VEC3_PR(X), VEC3_PR(Y), assert(vec3_equal_tol(X,Y,TOL))) : 0)
+
+#define VEC3_NOT_EQUAL(X,Y) ((X).x!=(Y).x || (X).y!=(Y).y || (X).z!=(Y).z)
 
 #ifdef __cplusplus
 };

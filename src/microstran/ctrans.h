@@ -85,6 +85,8 @@ char ctrans_isnan(const ctrans_matrix *c);
 
 #define CTRANS_CHECK_NAN(C) (ctrans_isnan(C) ? (ctrans_print(stderr,C), assert(!ctrans_isnan(C))) : 0)
 
+#define CTRANS_PR(C) (fprintf(stderr,"%s =",#C), ctrans_print(stderr,&C))
+
 #ifdef __cplusplus
 };
 #endif
