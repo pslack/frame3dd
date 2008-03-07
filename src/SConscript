@@ -34,7 +34,7 @@ for s in srcs:
 	
 if env.get('VERSION'):
 	prog_env.Append(
-		CPPDEFINES={'VERSION':env['VERSION']}
+		CPPDEFINES=['VERSION=%s' % env['VERSION']]
 	)
 
 frame = prog_env.Program('frame',objs + ['main.c'], LIBS=['m'])

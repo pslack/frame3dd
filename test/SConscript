@@ -1,0 +1,18 @@
+Import('env')
+
+if env.get('HAVE_CPPUNIT'):
+
+	test_env = env.Copy()
+
+	test_env.Append(
+		LIBS = ['microstranparser']
+		,LIBPATH = ['..']
+		,CPPPATH = ['..']
+	)
+
+	tests = Split("""
+		testvec3.cpp
+		testctrans.cpp
+	""")
+	
+	test_env.Program("testoptx",["main.cpp"] + tests)

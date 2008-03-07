@@ -1,5 +1,7 @@
-
+#define MSTRANP_BUILD
 #include "ctrans.h"
+#include "vec3.h"
+
 #include <math.h>
 #include <assert.h>
 
@@ -288,4 +290,15 @@ int ctrans_print(FILE *f, const ctrans_matrix *c){
 	}
 	return n;
 }
+
+MSTRANP_API char ctrans_equal_tol(const ctrans_matrix *c, const ctrans_matrix *d, double tol){
+	unsigned i,j;
+	for(i=0;i<4;++i){
+		for(j=0;j<4;++j){
+			if(fabs(c->m[i][j] - d->m[i][j]) > tol)return 0;
+		}
+	}
+	return 1;
+}
+
 

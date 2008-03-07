@@ -10,7 +10,17 @@ vec3 vec3_create(double x, double y, double z){
 	return A;
 }
 
-vec3 vec3_cross(const vec3 a, const vec3 b){
+vec3 vec3_add(vec3 A, vec3 B){
+	return vec3_create(
+		A.x+B.x, A.y + B.y, A.z + B.z
+	);
+}
+
+double vec3_dot(vec3 a, vec3 b){
+	return a.x*b.x + a.y*b.y + a.z*b.z;
+}
+
+vec3 vec3_cross(vec3 a, vec3 b){
 	return vec3_create(
 		a.y*b.z-a.z*b.y
 		,a.z*b.x-a.x*b.z
@@ -36,10 +46,6 @@ vec3 vec3_diff(const vec3 A, const vec3 B){
 
 int vec3_print(FILE *f, const vec3 A){
 	return fprintf(f,"%.30e %.30e %.30e",A.x,A.y,A.z);
-}
-
-double vec3_dot(vec3 A, vec3 B){
-	return A.x*B.x + A.y*B.y + A.z*B.z;
 }
 
 vec3 vec3_rotate(vec3 A, vec3 axis, double theta){
@@ -101,6 +107,10 @@ MSTRANP_API double vec3_angle_cross(vec3 A, vec3 B, vec3 *C){
 
 char vec3_equal_tol(vec3 A, vec3 B, double tol){
 	return vec3_mod(vec3_diff(B,A))<tol;
+}
+
+char vec3_equal(vec3 A, vec3 B){
+	return A.x==B.x && A.y==B.y && A.z==B.z;
 }
 
 char vec3_isnan(const vec3 *A){

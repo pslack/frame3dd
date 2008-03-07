@@ -50,6 +50,12 @@ opts.Add(BoolOption(
 	,default_itoa
 ))
 
+opts.Add(BoolOption(
+	"WITH_GCCVISIBILITY"
+	,"Set true if you want to use the GCC 'visibility' feature."
+	,True
+))
+
 opts.Add("INSTALL_PREFIX","Install location prefix (usually /usr or /usr/local)","/usr/local")
 opts.Add("INSTALL_BIN","Install location for binaries","$INSTALL_PREFIX/bin")
 opts.Add("INSTALL_DATA","Install location for general data files","$INSTALL_PREFIX/share");
@@ -61,11 +67,103 @@ opts.Save('options.cache',env)
 Help(opts.GenerateHelpText(env))
 
 env['CCFLAGS']=['-O', '-Wall']
-env['VERSION'] = '\\"%s\\"' % version
+env['VERSION'] = version
 
 if env.get('DEBUG'):
 	print "DEBUGGING TURNED ON"
 	env.Append(CCFLAGS=['-g'])
+
+#====================
+# CONFIGURATION TESTS
+
+#----------------
+# GCC
+
+gcc_test_text = """
+#ifndef __GNUC__
+# error "Not using GCC"
+#endif
+
+int main(void){
+	return __GNUC__;
+}
+"""
+
+def CheckGcc(context):
+	context.Message("Checking for GCC... ")
+	is_ok = context.TryCompile(gcc_test_text,".c")
+	context.Result(is_ok)
+	return is_ok
+
+#----------------
+# GCC VISIBILITY feature
+
+gccvisibility_test_text = """
+#if __GNUC__ < 4
+# error "Require GCC version 4 or newer"
+#endif
+
+__attribute__ ((visibility("default"))) int x;
+
+int main(void){
+	extern int x;
+	x = 4;
+}
+"""
+
+def CheckGccVisibility(context):
+	context.Message("Checking for GCC 'visibility' capability... ")
+	if not context.env.has_key('WITH_GCCVISIBILITY') or not env['WITH_GCCVISIBILITY']:
+		context.Result("disabled")
+		return 0
+	is_ok = context.TryCompile(gccvisibility_test_text,".c")
+	context.Result(is_ok)
+	return is_ok
+
+#--------
+# CPPUNIT
+
+if platform.system()=="Windows":
+	cppunit_config_command = ["cppunit-config"]
+else:	
+	cppunit_config_command = ["cppunit-config"]
+
+def CheckCppUnitConfig(context):
+	res = 0
+	context.Message("Checking for cppunit-config... ")
+	if context.env.WhereIs(cppunit_config_command[0]):
+		res = 1	
+		context.env.ParseConfig(cppunit_config_command + ["--libs","--cflags"])
+
+	context.Result(res)
+	return res
+
+def CheckCppUnit(context):
+	envtemp = conf.env.Copy()
+	conf.env.Parseconfig
+	
+		
+	context.Result(1)
+	return 1
+
+conf = Configure(env
+	, custom_tests = { 
+		'CheckGcc' : CheckGcc
+		, 'CheckGccVisibility' : CheckGccVisibility
+		, 'CheckCppUnitConfig' : CheckCppUnitConfig
+	} 
+)
+
+if conf.CheckGcc():
+	conf.env['HAVE_GCC']=True;
+	if env['WITH_GCCVISIBILITY'] and conf.CheckGccVisibility():
+		conf.env['HAVE_GCCVISIBILITY']=True;
+		conf.env.Append(CCFLAGS=['-fvisibility=hidden'])
+		conf.env.Append(CPPDEFINES=['HAVE_GCCVISIBILITY'])
+	conf.env.Append(CCFLAGS=['-Wall'])
+
+if conf.CheckCppUnitConfig():
+	conf.env['HAVE_CPPUNIT']=True;
 
 #-------------
 # build the program
@@ -75,6 +173,12 @@ env['PROGS'] = []
 
 env.BuildDir('build','src')
 env.SConscript('build/SConscript',['env'])
+
+#------------
+# test suite
+
+env.BuildDir('build/test','test')
+env.SConscript('build/test/SConscript',['env'])
 
 #------------
 # install example files
@@ -92,7 +196,31 @@ env.Alias("install",env['installdirs'])
 
 #------------
 # create the RPM .spec file
+#---------------------------------------------------
+# CPPUNIT
 
+if platform.system()=="Windows":
+	cppunit_config_command = ["cppunit-config"]
+else:	
+	cppunit_config_command = ["cppunit-config"]
+
+def CheckCppUnitConfig(context):
+	res = 0
+	context.Message("Checking for cppunit-config... ")
+	if context.env.WhereIs(cppunit_config_command[0]):
+		res = 1	
+		context.env.ParseConfig(cppunit_config_command + ["--libs","--cflags"])
+
+	context.Result(res)
+	return res
+
+def CheckCppUnit(context):
+	envtemp = conf.env.Copy()
+	conf.env.Parseconfig
+	
+		
+	context.Result(1)
+	return 1
 env.Append(SUBST_DICT= {
 	'@VERSION@':version
 })

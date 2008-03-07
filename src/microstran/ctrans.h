@@ -24,23 +24,23 @@ typedef struct ctrans_matrix_struct{
 	double m[4][4];
 } ctrans_matrix;
 
-ctrans_matrix ctrans_identity(void);
+MSTRANP_API ctrans_matrix ctrans_identity(void);
 
 ctrans_matrix ctrans_scane(ctrans_matrix c, double s);
 
-ctrans_matrix ctrans_rotation_z(double theta);
+MSTRANP_API ctrans_matrix ctrans_rotation_z(double theta);
 
 /**
 	Apply one transformation after another, creating a new composite.
 */
-ctrans_matrix ctrans_mult(ctrans_matrix A, ctrans_matrix B);
+MSTRANP_API ctrans_matrix ctrans_mult(ctrans_matrix A, ctrans_matrix B);
 
 ctrans_matrix ctrans_translation(vec3 A);
 
 /**
 	Create transformation matrix for general axis/angle rotation.
 */
-ctrans_matrix ctrans_rotation(vec3 axis, double theta);
+MSTRANP_API ctrans_matrix ctrans_rotation(vec3 axis, double theta);
 
 /**
 	Create rotation transform given the direction of the transformed Z
@@ -55,7 +55,7 @@ MSTRANP_API ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X);
 /**
 	Calculate the transform inverse (this is just a 4×4 matrix inverse)
 */
-ctrans_matrix ctrans_inverse(ctrans_matrix c);
+MSTRANP_API ctrans_matrix ctrans_inverse(ctrans_matrix c);
 
 /**
 	Calculate the determinant of the transform matrix.
@@ -78,6 +78,8 @@ double ctrans_det(ctrans_matrix c);
 MSTRANP_API vec3 ctrans_apply(ctrans_matrix c, const vec3 p);
 
 MSTRANP_API int ctrans_print(FILE *f, const ctrans_matrix *c);
+
+MSTRANP_API char ctrans_equal_tol(const ctrans_matrix *c, const ctrans_matrix *d, double tol);
 
 char ctrans_isnan(const ctrans_matrix *c);
 
