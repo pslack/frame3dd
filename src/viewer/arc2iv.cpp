@@ -54,7 +54,6 @@ int main(int argc, char **argv){
 	bool infotext = false;
 	bool memberoffsets = true;
 
-	// no options yet
 	char c;
 	while((c=getopt(argc,argv,"mho::l:t"))!=-1){
 		switch(c){

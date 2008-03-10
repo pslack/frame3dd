@@ -15,4 +15,4 @@ if env.get('HAVE_CPPUNIT'):
 		testctrans.cpp
 	""")
 	
-	test_env.Program("testoptx",["main.cpp"] + tests)
+	test_env.Program("runtest",["main.cpp"] + tests)

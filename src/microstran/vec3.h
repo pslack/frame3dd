@@ -50,9 +50,11 @@ char vec3_isnan(const vec3 *A);
 
 #define VEC3_CHECK_NAN(V) (vec3_isnan(&(V)) ? (VEC3_PR(V), assert(!vec3_isnan(&(V)))) : 0)
 
-#define VEC3_ASSERT_EQUAL_TOL(X,Y,TOL) (vec3_equal_tol(X,Y,TOL) ? (VEC3_PR(X), VEC3_PR(Y), assert(vec3_equal_tol(X,Y,TOL))) : 0)
+#define VEC3_ASSERT_EQUAL_TOL(X,Y,TOL) (vec3_equal_tol((X),(Y),TOL) ? 0 : (VEC3_PR(X), VEC3_PR(Y), assert(vec3_equal_tol((X),(Y),TOL))))
 
 #define VEC3_NOT_EQUAL(X,Y) ((X).x!=(Y).x || (X).y!=(Y).y || (X).z!=(Y).z)
+
+#define VEC3_NOT_ZERO(X) ((X).x!=0 || (X).y!=0 || (X).z!=0)
 
 #ifdef __cplusplus
 };

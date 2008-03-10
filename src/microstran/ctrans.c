@@ -84,15 +84,53 @@ char ctrans_isnan(const ctrans_matrix *c){
 }
 
 ctrans_matrix ctrans_rotation(vec3 axis, double theta){
-	double C = cos(theta);
-	double S = sin(theta);
-	fprintf(stderr,"C = %f, S = %f\naxis = ",C,S);
-	vec3_print(stderr,axis);
-	fprintf(stderr,"\n");
+#if 0
+	/* this is probably more efficient code, but it seems to contain a bug */
+	ctrans_matrix c;
+
+    double C = cos(theta);
+    double S = sin(theta);
+    double t = 1.0 - C;
+
+	double magnitude = sqrt(axis.x*axis.x + axis.y*axis.y + axis.z*axis.z);
+	assert(magnitude!=0);
+	if(fabs(magnitude)-1 >1e-20){
+		axis.x /= magnitude;
+		axis.y /= magnitude;
+		axis.z /= magnitude;
+	}
+
+	C = ctrans_identity();
+    C.m[0][0] = C + axis.x*axis.x*t;
+    C.m[1][1] = C + axis.y*axis.y*t;
+    C.m[2][2] = C + axis.z*axis.z*t;
+
+    double tmp1 = axis.x*axis.y*t;
+    double tmp2 = axis.z*S;
+    C.m[1][0] = tmp1 + tmp2;
+    C.m[0][1] = tmp1 - tmp2;
+    tmp1 = axis.x*axis.z*t;
+    tmp2 = axis.y*S;
+    C.m[2][0] = tmp1 - tmp2;
+    C.m[0][2] = tmp1 + tmp2;
+    tmp1 = axis.y*axis.z*t;
+    tmp2 = axis.x*S;
+    C.m[2][1] = tmp1 + tmp2;
+    C.m[1][2] = tmp1 - tmp2;
+	return C;
+#else
+	assert(vec3_mod(axis) > 1e-3);
+
+	//fprintf(stderr,"C = %f, S = %f\naxis = ",C,S);
+	//vec3_print(stderr,axis);
+	//fprintf(stderr,"\n");
 #define SQ(X) ((X)*(X))
 	ctrans_matrix c;
 	c = ctrans_identity();
 	axis = vec3_norm(axis);
+
+    double C = cos(theta);
+    double S = sin(theta);
 
 	assert(!isnan(C));
 	assert(!isnan(S));
@@ -150,6 +188,7 @@ ctrans_matrix ctrans_rotation(vec3 axis, double theta){
 
 	return c;
 }
+#endif
 
 ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X){
 
@@ -159,31 +198,34 @@ ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X){
 	X = vec3_norm(X);
 	Z = vec3_norm(Z);
 
-	VEC3_PR(X);
-	VEC3_PR(Z);
+	//VEC3_PR(X);
+	//VEC3_PR(Z);
 
 #define CTRANS_ROT_VEC_TOL 1e-8
 
 	ctrans_matrix cz = ctrans_identity();
 	ctrans_matrix cx = ctrans_identity();
 
-	fprintf(stderr,"\nRotation to orient Z...\n\n");
+	//fprintf(stderr,"\nRotation to orient Z...\n\n");
 
 	vec3 z = vec3_create(0,0,1);
 	vec3 xd = X;
 
-	if(!vec3_equal_tol(Z,z,CTRANS_ROT_VEC_TOL)){
-		fprintf(stderr,"No Z-rotation required\n");
+	if(vec3_equal_tol(Z,z,CTRANS_ROT_VEC_TOL)){
+		//fprintf(stderr,"No Z-rotation required\n");
 	}else{
 		vec3 dirz;
-		double thetaz = vec3_angle_cross(z,Z,&dirz);
-		fprintf(stderr,"Z-Rotation by %f around %f,%f,%f\n",thetaz*180./PI,dirz.x,dirz.y,dirz.z);
+
+		assert(VEC3_NOT_EQUAL(z,Z));
+		double thetaz = vec3_angle_cross(Z,z,&dirz);
+		//fprintf(stderr,"Z-Rotation by %f around %f,%f,%f\n",thetaz*180./PI,dirz.x,dirz.y,dirz.z);
 
 		/* and dirz must be normal to Z */
 		assert(vec3_dot(dirz,Z)<1e-8);
 
-		cz = ctrans_rotation(dirz,-thetaz);
-		CTRANS_PR(cz);
+		assert(vec3_mod(dirz) > 1e-3);
+		cz = ctrans_rotation(dirz,thetaz);
+		//CTRANS_PR(cz);
 
 		/* apply the cz to X, this should bring X into the global x-y plane */
 		vec3 xd = ctrans_apply(cz, X);
@@ -192,45 +234,54 @@ ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X){
 	/* check that we recover z when applying cz to Z */
 	assert(vec3_mod(vec3_diff(ctrans_apply(cz,Z),z))<1e-8);
 
-	fprintf(stderr,"\nRotation to orient X...\n\n");
+	//fprintf(stderr,"\nRotation to orient X...\n\n");
 
 	assert(fabs(vec3_dot(xd,vec3_create(0,0,1)))<1e-8);
 
 	VEC3_CHECK_NAN(xd);
 
-	VEC3_PR(xd);
+	//VEC3_PR(xd);
 	vec3 dirx;
 	VEC3_CHECK_NAN(dirx);
 
 	vec3 x = vec3_create(1,0,0);
-	if(vec3_equal_tol(xd,x,1e-8)){
-		fprintf(stderr,"No X rotation required\n");
+	if(vec3_equal_tol(xd,x,CTRANS_ROT_VEC_TOL)){
+		//fprintf(stderr,"No X rotation required\n");
 	}else{
 		double thetax = 0;
+		//VEC3_PR(xd);
+		//VEC3_PR(x);
 		thetax = vec3_angle_cross(xd,x,&dirx);
-		fprintf(stderr,"thetax = %f\n",thetax);
+		//fprintf(stderr,"thetax = %f\n",thetax*180./PI);
 		VEC3_CHECK_NAN(dirx);
-		if(thetax<1e-5){
-			fprintf(stderr,"No X rotation required\n");
-			return cz;
+		if(vec3_mod(dirx)<1e-8){
+			//fprintf(stderr,"dirx is very small!\n");
+			/* this means that xd × x is close to zero, hence theta is close 
+			to 0 or ±180. so we'll use 0,0,1 as the axis in that case, becase
+			the orientation 0,0,±1 won't matter */
+			dirx = vec3_create(0,0,1);
+			
 		}
-		fprintf(stderr,"X-Rotation by %f around %f,%f,%f\n",thetax*180./PI,dirx.x,dirx.y,dirx.z);
-		cx = ctrans_rotation(dirx,-thetax);
+		//fprintf(stderr,"X-Rotation by %f around %f,%f,%f\n",thetax*180./PI,dirx.x,dirx.y,dirx.z);
+		assert(vec3_mod(dirx)>1e-3);	
+		cx = ctrans_rotation(dirx,thetax);
 	}
 #if 1
 
 	VEC3_ASSERT_EQUAL_TOL(vec3_create(0,0,1),vec3_create(0,0,1),1e-8);
-	VEC3_ASSERT_EQUAL_TOL(vec3_create(0,0,1),vec3_create(0,0,1.001),1e-8);
+	//VEC3_ASSERT_EQUAL_TOL(vec3_create(0,0,1),vec3_create(0,0,1.001),1e-8);
 
-	// test the transform
 	ctrans_matrix c = ctrans_mult(cx,cz);
-	ctrans_matrix ci = ctrans_inverse(c);
-	vec3 gX = ctrans_apply(c,vec3_create(1,0,0));
-	VEC3_ASSERT_EQUAL_TOL(gX,X,1e-8);
+	//CTRANS_PR(c);
 
-	gX = ctrans_apply(ci,gX);
-	vec3 xxx = vec3_create(1,0,0);
-	VEC3_ASSERT_EQUAL_TOL(gX,xxx,1e-8);
+	// test the transform: 'X' must transfor to 'x'...
+	vec3 gX = ctrans_apply(c,X);
+	VEC3_ASSERT_EQUAL_TOL(gX,vec3_create(1,0,0),1e-8);
+
+	// and 'x' must transform to 'X'...
+	ctrans_matrix ci = ctrans_inverse(c);
+	gX = ctrans_apply(ci,x);
+	VEC3_ASSERT_EQUAL_TOL(gX,X,1e-8);
 	
 #endif
 	

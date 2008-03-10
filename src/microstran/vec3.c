@@ -89,7 +89,7 @@ double vec3_angle(vec3 A, vec3 B){
 }
 
 MSTRANP_API double vec3_angle_cross(vec3 A, vec3 B, vec3 *C){
-	assert(A.x!=B.x || A.y!=B.y || A.z!=B.z);
+	assert(VEC3_NOT_EQUAL(A,B));
 	VEC3_CHECK_NAN(A);
 	VEC3_CHECK_NAN(B);
 	assert(C!=NULL);
@@ -99,7 +99,7 @@ MSTRANP_API double vec3_angle_cross(vec3 A, vec3 B, vec3 *C){
 	if(vec3_isnan(C)){
 		VEC3_PR(A);
 		VEC3_PR(B);
-		fprintf(stderr,"dot(A,B) = %f\n",vec3_dot(A,B));
+		//fprintf(stderr,"dot(A,B) = %f\n",vec3_dot(A,B));
 		VEC3_CHECK_NAN(*C);
 	}
 	return atan2(vec3_mod(*C),vec3_dot(A,B));
