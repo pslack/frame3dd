@@ -126,6 +126,15 @@ public:
 		CPPUNIT_ASSERT(ctrans_equal_tol(&R,&R1,1e-8));
 	}
 
+	void testrotaxes7(){
+		vec3 X = vec3_create(-0.000000000000000000000000000000e+00, 9.908472411173366856118605028314e-01, 1.349879430547868131018418580425e-01);
+		vec3 Z = vec3_create(1.000000000000000000000000000000e+00, 0.000000000000000000000000000000e+00, 0.000000000000000000000000000000e+00);
+		ctrans_matrix R = ctrans_rotation_axes(Z,X);
+		CPPUNIT_ASSERT(vec3_equal_tol(ctrans_apply(R,vec3_create(1,0,0)),X,1e-8));
+		CPPUNIT_ASSERT(vec3_equal_tol(ctrans_apply(R,vec3_create(0,0,1)),Z,1e-8));
+	}		
+
+
 #if 0
 	// THIS TEST IS INVALID
 	void testrotaxes7(){
