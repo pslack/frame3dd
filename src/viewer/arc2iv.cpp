@@ -159,24 +159,27 @@ int main(int argc, char **argv){
 		SbVec3f vA = vec3_to_coin(A->pos);
 		SbVec3f vB = vec3_to_coin(B->pos);
 		SbVec3f vX = vec3_to_coin(X);
+		vec3 dA, dB;
 
+		moff_stmt *moff = NULL;
 		if(memberoffsets){
-			moff_stmt moff;
-			moff_stmt *moff1 = model_find_member_offset(M, m->id);
-			if(moff1){
-				moff = *moff1;
-				if(moff.coordsys == MSTRANP_COORDS_LOCAL){
+			moff = model_find_member_offset(M, m->id);
+			if(moff){
+				if(moff->coordsys == MSTRANP_COORDS_LOCAL){
 					ctrans_matrix c = ctrans_rotation_axes(vec3_diff(B->pos,A->pos),X);
 
 					if(A->id==5 && B->id==6){
 						fprintf(stderr,"Coordinate transform:\n");
 						ctrans_print(stderr,&c);
 					}
-					moff.deltafrom = ctrans_apply(c, moff.deltafrom);
-					moff.deltato = ctrans_apply(c, moff.deltato);
+					dA = ctrans_apply(c, moff->deltafrom);
+					dB = ctrans_apply(c, moff->deltato);
+				}else{
+					dA = moff->deltafrom;
+					dB = moff->deltato;
 				}
-				vA += vec3_to_coin(moff.deltafrom);
-				vB += vec3_to_coin(moff.deltato);
+				vA += vec3_to_coin(dA);
+				vB += vec3_to_coin(dB);
 			}
 		}
 #if 0			
@@ -201,19 +204,20 @@ int main(int argc, char **argv){
 					root->addChild(cylinder(vA,vB,d/2.,c));
 				}else if(section_is_isec(s)){
 					c = GREEN;
-					/* FIXME need to get the member orientation correct! */
 					section_outline *o = section_isec_outline(s);
 					root->addChild(prism(vA, vB, *o, c, vX));
 					section_outline_destroy(o);
 				}else if(section_is_shs(s)){
 					c = YELLOW;
-					/* FIXME need to get the member orientation correct! */
 					section_outline *o = section_shs_outline(s);
 					root->addChild(prism(vA, vB, *o, c, vX));
 					section_outline_destroy(o);
 				}else if(section_is_tophat(s)){
 					c = ORANGE;
-					/* FIXME need to get the member orientation correct! */
+					if(moff && (A->id<=40)){
+						root->addChild(arrow(vA - vec3_to_coin(vec3_norm(dA)), vA, CYAN, "A"));
+						root->addChild(arrow(vB - vec3_to_coin(vec3_norm(dB)), vB, PURPLE, "B"));
+					}
 					//cerr << "Rendering prism member" << endl;
 					section_outline *o = section_tophat_outline(s);
 					root->addChild(prism(vA, vB, *o, c, vX));

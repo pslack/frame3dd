@@ -351,18 +351,24 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 
 	//SoLevelOfDetail here...
 	SoLOD *lod = new SoLOD;
-	float rvals[] = {100};
+	float rvals[] = {2};
+	lod->center = float(0.5)*(A+B);
 	lod->range.setValues(0,1,rvals);
 
 	// DETAILED level of detail
 	SoSeparator *detailed = new SoSeparator;
+
+#if ORIENTATION_DEBUG
+	detailed->addChild(arrow(A, A+minax, RED, "X"));
+	detailed->addChild(arrow(A, A+majax, GREEN, "Y"));
+	detailed->addChild(arrow(A, A+d, BLUE, "Z"));
+#endif
 
 	// rotation to orient the prepared member correctly in space
 	SoTransform *tr = new SoTransform;
 	tr->translation.setValue(m);
 	tr->rotation = SbRotation(a,theta_cyl);
 	detailed->addChild(tr);
-
 
 	// rotation to orient the prepared member correctly around its axis
 	SoTransform *axi = new SoTransform;
