@@ -114,7 +114,7 @@ public:
 		vec3 Z = vec3_create(0,0,1);
 		vec3 X = vec3_norm(vec3_create(1,1,0));
 		ctrans_matrix R = ctrans_rotation_axes(Z,X);
-		ctrans_matrix R1 = ctrans_rotation(Z,-PI/4);
+		ctrans_matrix R1 = ctrans_rotation(Z,PI/4);
 		CPPUNIT_ASSERT(ctrans_equal_tol(&R,&R1,1e-8));
 	}
 
@@ -123,7 +123,7 @@ public:
 		vec3 Z = vec3_create(0,0,1);
 		vec3 X = vec3_norm(vec3_create(-1,1,0));
 		ctrans_matrix R = ctrans_rotation_axes(Z,X);
-		ctrans_matrix R1 = ctrans_rotation(Z,-3*PI/4);
+		ctrans_matrix R1 = ctrans_rotation(Z,3*PI/4);
 		CPPUNIT_ASSERT(ctrans_equal_tol(&R,&R1,1e-8));
 	}
 
@@ -132,7 +132,7 @@ public:
 		vec3 Z = vec3_norm(vec3_create(0,1,1));
 		vec3 X = vec3_create(1,0,0);
 		ctrans_matrix R = ctrans_rotation_axes(Z,X);
-		ctrans_matrix R1 = ctrans_rotation(X,PI/4);
+		ctrans_matrix R1 = ctrans_rotation(X,-PI/4);
 		CPPUNIT_ASSERT(ctrans_equal_tol(&R,&R1,1e-8));
 	}
 
@@ -141,7 +141,7 @@ public:
 		vec3 Z = vec3_norm(vec3_create(0,1,-1));
 		vec3 X = vec3_create(1,0,0);
 		ctrans_matrix R = ctrans_rotation_axes(Z,X);
-		ctrans_matrix R1 = ctrans_rotation(X,3.*PI/4);
+		ctrans_matrix R1 = ctrans_rotation(X,-3.*PI/4);
 		CPPUNIT_ASSERT(ctrans_equal_tol(&R,&R1,1e-8));
 	}
 

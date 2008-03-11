@@ -39,6 +39,13 @@ ctrans_matrix ctrans_translation(vec3 A);
 
 /**
 	Create transformation matrix for general axis/angle rotation.
+	This transformation will cause points to which this transform is applied
+	to be rotatied around the origin by the specified amount. 
+
+	Note that this different in interpretation from ctrans_rotation_axes,
+	which gives the transform required to convert local coordinates back to
+	global coordinates, which is in some way a sort of inverse of this 
+	function.
 */
 MSTRANP_API ctrans_matrix ctrans_rotation(vec3 axis, double theta);
 
@@ -48,7 +55,7 @@ MSTRANP_API ctrans_matrix ctrans_rotation(vec3 axis, double theta);
 
 	@return transformation that if applied to a vector in local coordinates
 	relative to vectors X, Y, Z (Y = Z × X) will yeild the vector's value in
-	global coordinates.
+	global coordinates (x,y,z).
 */
 MSTRANP_API ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X);
 

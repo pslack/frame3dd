@@ -191,7 +191,26 @@ ctrans_matrix ctrans_rotation(vec3 axis, double theta){
 #endif
 
 ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X){
+	/* I was thinking about this all the wrong way! :-) */
+	ctrans_matrix c = ctrans_identity();
+	Z = vec3_norm(Z);
+	X = vec3_norm(X);
+	assert(vec3_dot(X,Z)<1e-8);
+	vec3 Y = vec3_cross(Z,X);
+	c.m[0][0] = X.x;
+	c.m[1][0] = X.y;
+	c.m[2][0] = X.z;
+	c.m[0][1] = Y.x;
+	c.m[1][1] = Y.y;
+	c.m[2][1] = Y.z;
+	c.m[0][2] = Z.x;
+	c.m[1][2] = Z.y;
+	c.m[2][2] = Z.z;
+	return c;
+}
 
+#if 0
+ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X){
 	//fprintf(stderr,"Starting ctrans_rotation_axes...\n");
 
 	VEC3_CHECK_NAN(X);
@@ -291,8 +310,8 @@ ctrans_matrix ctrans_rotation_axes(vec3 Z, vec3 X){
 #endif
 	
 	return ctrans_mult(cx, cz);
-
 }
+#endif
 
 vec3 ctrans_apply(ctrans_matrix c, const vec3 p){
 	vec3 q;

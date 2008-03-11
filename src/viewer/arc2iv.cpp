@@ -161,12 +161,14 @@ int main(int argc, char **argv){
 		SbVec3f vX = vec3_to_coin(X);
 		vec3 dA, dB;
 
+		vec3 ABn = vec3_norm(vec3_diff(B->pos,A->pos));
+
 		moff_stmt *moff = NULL;
 		if(memberoffsets){
 			moff = model_find_member_offset(M, m->id);
 			if(moff){
 				if(moff->coordsys == MSTRANP_COORDS_LOCAL){
-					ctrans_matrix c = ctrans_rotation_axes(vec3_diff(B->pos,A->pos),X);
+					ctrans_matrix c = ctrans_rotation_axes(ABn,X);
 
 					if(A->id==5 && B->id==6){
 						fprintf(stderr,"Coordinate transform:\n");
@@ -174,6 +176,28 @@ int main(int argc, char **argv){
 					}
 					dA = ctrans_apply(c, moff->deltafrom);
 					dB = ctrans_apply(c, moff->deltato);
+
+					vec3 Y = vec3_norm(vec3_cross(ABn,X));
+					// work out the global coordinates another way...
+					vec3 da1 = 
+					 	vec3_add(
+							vec3_scale(X, moff->deltafrom.x)
+							,vec3_add(
+								vec3_scale(Y, moff->deltafrom.y)
+								,vec3_scale(ABn, moff->deltafrom.z)
+							)
+						);
+
+					if(!vec3_equal_tol(da1,dA,1e-8)){
+						VEC3_PR(ABn);
+						VEC3_PR(X);
+						VEC3_PR(Y);
+						VEC3_PR(moff->deltafrom);
+						VEC3_PR(da1);
+						VEC3_PR(dA);
+						CTRANS_PR(c);
+						throw runtime_error("failed coordinate transformation");
+					}
 				}else{
 					dA = moff->deltafrom;
 					dB = moff->deltato;
@@ -215,8 +239,27 @@ int main(int argc, char **argv){
 				}else if(section_is_tophat(s)){
 					c = ORANGE;
 					if(moff && (A->id<=40)){
-						root->addChild(arrow(vA - vec3_to_coin(vec3_norm(dA)), vA, CYAN, "A"));
-						root->addChild(arrow(vB - vec3_to_coin(vec3_norm(dB)), vB, PURPLE, "B"));
+						stringstream ss;
+						ss << "dA global: (" << dA.x << "," << dA.y << "," << dA.z << ")" << endl;
+						ss << "   local:  (" << moff->deltafrom.x << "," << moff->deltafrom.y << "," << moff->deltafrom.z << ")";
+
+						root->addChild(arrow(vA - vec3_to_coin(vec3_norm(dA)), vA, CYAN, ss.str().c_str()));
+						//root->addChild(arrow(vB - vec3_to_coin(vec3_norm(dB)), vB, PURPLE, "B"));
+						root->addChild(arrow(vA - vec3_to_coin(dA), vA - vec3_to_coin(dA) + vec3_to_coin(X), RED, "X"));
+						vec3 Y = vec3_norm(vec3_cross(ABn,X));
+						root->addChild(arrow(vA - vec3_to_coin(dA), vA - vec3_to_coin(dA) + vec3_to_coin(Y), GREEN, "Y"));
+						root->addChild(arrow(vA - vec3_to_coin(dA), vA - vec3_to_coin(dA) + vec3_to_coin(ABn), BLUE, "Z"));
+
+						vec3 da1 = 
+						 	vec3_add(
+								vec3_scale(X, moff->deltafrom.x)
+								,vec3_add(
+									vec3_scale(Y, moff->deltafrom.y)
+									,vec3_scale(ABn, moff->deltafrom.z)
+								)
+							);
+						root->addChild(arrow(vA - vec3_to_coin(dA), vA - vec3_to_coin(dA) + vec3_to_coin(vec3_norm(da1)), PURPLE, "dA2"));
+							
 					}
 					//cerr << "Rendering prism member" << endl;
 					section_outline *o = section_tophat_outline(s);

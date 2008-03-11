@@ -351,7 +351,7 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 
 	//SoLevelOfDetail here...
 	SoLOD *lod = new SoLOD;
-	float rvals[] = {2};
+	float rvals[] = {60};
 	lod->center = float(0.5)*(A+B);
 	lod->range.setValues(0,1,rvals);
 

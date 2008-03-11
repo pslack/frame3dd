@@ -45,7 +45,7 @@ vec3 vec3_diff(const vec3 A, const vec3 B){
 }
 
 int vec3_print(FILE *f, const vec3 A){
-	return fprintf(f,"%.30e %.30e %.30e",A.x,A.y,A.z);
+	return fprintf(f,"%.10f %.10f %.10f",A.x,A.y,A.z);
 }
 
 vec3 vec3_rotate(vec3 A, vec3 axis, double theta){
