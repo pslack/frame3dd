@@ -361,7 +361,6 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	axi->rotation = SbRotation(dir_A,theta_A);
 	s->addChild(axi);
 
-#if 0
 	//SoLevelOfDetail here...
 	SoLOD *lod = new SoLOD;
 	float rvals[] = {30};
@@ -369,7 +368,6 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 
 	// DETAILED level of detail
 	SoSeparator *detailed = new SoSeparator;
-#endif
 
 	SbVec3f *v3;
 	v3 = new SbVec3f[2*nv];
@@ -384,12 +382,12 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 #if 0
 	SoMaterialBinding *mbi = new SoMaterialBinding;
 	mbi->value = SoMaterialBinding::PER_FACE;
-	s->addChild(mbi);
+	detailed->addChild(mbi);
 #endif
 
 	SoCoordinate3 *coo = new SoCoordinate3;
 	coo->point.setValues(0, 2 * nv, v3);
-	s->addChild(coo);
+	default->addChild(coo);
 
 	unsigned sides = 0;
 	for(unsigned i=0; i<n-1; ++i){
@@ -434,10 +432,19 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 
 	SoIndexedFaceSet *fsi = new SoIndexedFaceSet;
 	fsi->coordIndex.setValues(0, ni, i3);
-	s->addChild(fsi);
+	detailed->addChild(fsi);
+	lod->addChild(detailed)
 			
 	delete[] i3;		
 	delete[] v3;
+
+	// rough model - just a cylinder?
+	SoSeparator *rough = new SoSeparator;
+	double d_rough = section_outline_approx_diameter(o);
+	rough->addChild(cylinder(A,B,d_rough/2.,c));
+	lod->addChild(rough);
+	s->addChild(lod);
+	
 	return s;	
 }
 

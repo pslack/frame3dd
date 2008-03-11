@@ -152,6 +152,9 @@ MSTRANP_API section_outline *section_tophat_outline(const section *s);
 
 MSTRANP_API int section_print(FILE *f, const section *s);
 
+/** approximate diameter of section for use in fast rendering routines */
+MSTRANP_API double section_outline_approx_diameter(const section_outline *o);
+
 #ifdef __cplusplus
 }
 #endif

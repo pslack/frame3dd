@@ -168,12 +168,14 @@ cbool model_add_member_offset(model *a, unsigned memberid, coord_sys_t code, vec
 */
 MSTRANP_API moff_stmt *model_find_member_offset(const model *a, const unsigned membid);
 
+#if 0
 /**
 	Calculate member offsets in global coordinates (returned in *moff). Useful
 	in rendering code.
 	@return 1 on success.
 */
 MSTRANP_API cbool model_get_member_offset_global(const model *a, const unsigned memberid, moff_stmt *moff);
+#endif
 
 cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[]
 		, cbool isdefault, double vals[MAXPROPVALS]

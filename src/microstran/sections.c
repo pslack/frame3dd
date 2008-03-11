@@ -280,6 +280,41 @@ int section_print(FILE *f, const section *s){
 	return n;
 }
 
+#if 0
+double section_approx_radius(const section *s){
+	switch(s->type){
+		case SECTION_CHS:
+			return s->chs.d_o;
+		case SECTION_ISEC:
+			return sqrt(SQ(s->isec.d)+SQ(s->isec.bf));
+		case SECTION_SHS:
+			return sqrt(2)*s->shs.d;
+		case SECTION_TOPHAT:
+			return sqrt(SQ(s->tophat.b)+SQ(s->tophat.a+s->tophat.c));
+	}
+}
+#endif
+
+double section_outline_approx_diameter(const section_outline *o){
+	unsigned i, n = ARRAY_NUM(o->point);
+	double maxx=0, double maxy=0;
+	for(i=0;i<n;++i){
+		vec2 *p = (vec2 *)array_get(o->point,i);
+		if(fabs(p->x) > maxx)maxx=fabs(p->x);
+		if(fabs(p->y) > maxy)maxy=fabs(p->y);
+	}
+	return 2.*sqrt(SQ(maxx)+SQ(maxy));
+}
+		
+
+typedef enum{
+	SECTION_CHS=0
+	,SECTION_ISEC
+	,SECTION_SHS
+	,SECTION_TOPHAT
+} section_type;
+
+
 section_library *section_library_create(){
 	section_library *l;
 	l = NEW(section_library);

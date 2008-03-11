@@ -64,6 +64,25 @@ public:
 		ctrans_matrix I = ctrans_identity();
 		CPPUNIT_ASSERT(ctrans_equal_tol(&RiRz,&I,1e-15));
 	}
+
+	/// check consistency of vec3_rotate and ctrans_rotation for many random vectors
+	void testrotrandom(){
+		unsigned i,j;
+		double maxlen = 30;
+		for(i=0;i<100;++i){
+			//fprintf(stderr,"i=%u...\n",i);
+			vec3 axis = vec3_norm(vec3_create(float(rand())/RAND_MAX,float(rand())/RAND_MAX,float(rand())/RAND_MAX));
+			double theta = 2.*PI*rand()/RAND_MAX - PI;
+			for(j=0;j<100;++j){
+				// random vector to be rotated
+				vec3 v = vec3_scale(
+					vec3_norm(vec3_create(float(rand())/RAND_MAX,float(rand())/RAND_MAX,float(rand())/RAND_MAX))
+					,maxlen*float(rand())/RAND_MAX
+				);
+				CPPUNIT_ASSERT(vec3_equal_tol(ctrans_apply(ctrans_rotation(axis,theta),v),vec3_rotate(v,axis,theta),1e-13));
+			}
+		}
+	}		
 	
 	/// test null transformation using ctrans_rotation_axes
 	void testrotaxes(){
@@ -169,6 +188,7 @@ public:
 	CPPUNIT_TEST(testrotation);
 	CPPUNIT_TEST(testrot2);
 	CPPUNIT_TEST(testrotz);
+	CPPUNIT_TEST(testrotrandom);
 	CPPUNIT_TEST(testrotaxes);
 	CPPUNIT_TEST(testrotaxes2);
 	CPPUNIT_TEST(testrotaxes3);

@@ -260,6 +260,8 @@ moff_stmt *model_find_member_offset(const model *a, const unsigned memberid){
 	return NULL;
 }
 
+#if 0
+/* this code replaced by use of ctrans_apply in arc2iv.cpp */
 cbool model_get_member_offset_global(const model *a, const unsigned memberid, moff_stmt *moff){
 	cbool found=0;
 	moff_stmt o;
@@ -351,6 +353,7 @@ cbool model_get_member_offset_global(const model *a, const unsigned memberid, mo
 	}
 	return 1;
 }	
+#endif
 
 int moff_print(FILE *f, const moff_stmt *o){
 	const char *code;
