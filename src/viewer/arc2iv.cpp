@@ -178,6 +178,7 @@ int main(int argc, char **argv){
 					dB = ctrans_apply(c, moff->deltato);
 
 					vec3 Y = vec3_norm(vec3_cross(ABn,X));
+#if 0
 					// work out the global coordinates another way...
 					vec3 da1 = 
 					 	vec3_add(
@@ -198,6 +199,7 @@ int main(int argc, char **argv){
 						CTRANS_PR(c);
 						throw runtime_error("failed coordinate transformation");
 					}
+#endif
 				}else{
 					dA = moff->deltafrom;
 					dB = moff->deltato;
@@ -238,6 +240,7 @@ int main(int argc, char **argv){
 					section_outline_destroy(o);
 				}else if(section_is_tophat(s)){
 					c = ORANGE;
+#if 0
 					if(moff && (A->id<=40)){
 						stringstream ss;
 						ss << "dA global: (" << dA.x << "," << dA.y << "," << dA.z << ")" << endl;
@@ -261,6 +264,7 @@ int main(int argc, char **argv){
 						root->addChild(arrow(vA - vec3_to_coin(dA), vA - vec3_to_coin(dA) + vec3_to_coin(vec3_norm(da1)), PURPLE, "dA2"));
 							
 					}
+#endif
 					//cerr << "Rendering prism member" << endl;
 					section_outline *o = section_tophat_outline(s);
 					root->addChild(prism(vA, vB, *o, c, vX));
