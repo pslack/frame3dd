@@ -5,6 +5,7 @@
 #define MSTRANP_BUILD
 #include "sections.h"
 #include "new.h"
+#include "array.h"
 
 #define PI	3.141592653589793
 
@@ -233,6 +234,8 @@ section_outline *section_tophat_outline(const section *s){
 #define PT(X,Y) array_set(&(o->point),i++,vec2_set(&v,(X),(Y)))
 	/* trace around the contour in a clockwise direction, following the
 	convention that the surface 'exterior' is on the left side of the contour */
+	/* these points are plotted relative to an origin at the middle of the plane
+	containing the flanges */
 	PT(a/2, b); /* 0 */
 	PT(a/2 + bx, t); /* 1 */
 	PT(a/2 + bx + c1, t); /* 2 */
@@ -255,6 +258,18 @@ section_outline *section_tophat_outline(const section *s){
 	for(i=0;i<16;++i)array_set(&(o->trace),i,&i);
 	i = 0; // join back to the start again
 	array_set(&(o->trace),16,&i);
+
+	double cx, cy;
+	cx = 0;
+	cy = 0.5 * b;
+	// adjust for location of the centroid
+	unsigned n = ARRAY_NUM(o->point);
+	for(i=0;i<n;++i){
+		vec2 *p = (vec2 *)array_get(&(o->point),i);
+		p->x -= cx;
+		p->y -= cy;
+	}
+
 	return o;
 }
 
@@ -280,6 +295,8 @@ int section_print(FILE *f, const section *s){
 	return n;
 }
 
+#define SQ(X) ((X)*(X))
+
 #if 0
 double section_approx_radius(const section *s){
 	switch(s->type){
@@ -297,23 +314,14 @@ double section_approx_radius(const section *s){
 
 double section_outline_approx_diameter(const section_outline *o){
 	unsigned i, n = ARRAY_NUM(o->point);
-	double maxx=0, double maxy=0;
+	double maxx=0, maxy=0;
 	for(i=0;i<n;++i){
-		vec2 *p = (vec2 *)array_get(o->point,i);
+		vec2 *p = (vec2 *)array_get((array *)&(o->point),i);
 		if(fabs(p->x) > maxx)maxx=fabs(p->x);
 		if(fabs(p->y) > maxy)maxy=fabs(p->y);
 	}
 	return 2.*sqrt(SQ(maxx)+SQ(maxy));
 }
-		
-
-typedef enum{
-	SECTION_CHS=0
-	,SECTION_ISEC
-	,SECTION_SHS
-	,SECTION_TOPHAT
-} section_type;
-
 
 section_library *section_library_create(){
 	section_library *l;
