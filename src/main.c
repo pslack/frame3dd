@@ -53,7 +53,7 @@ int main ( argc, argv )
 int	argc;
 char	*argv[];
 {
-	char	In_file[96],	/* the input/output filename		*/
+	char	IO_file[96],	/* the input/output filename		*/
 		title[256],	/* the title of the analysis		*/
 		mesh_file[96],	/* frame mesh data filename		*/
 		plot_file[96],	/* frame mesh plot filename		*/

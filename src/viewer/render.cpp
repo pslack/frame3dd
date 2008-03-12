@@ -343,12 +343,6 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 
 	//cerr << "theta_A = " << theta_A * 180/M_PI << endl;
 
-#if 0
-	SoShapeHints *sha = new SoShapeHints;
-	sha->vertexOrdering = SoShapeHints::CLOCKWISE;
-	s->addChild(sha);
-#endif
-
 	//SoLevelOfDetail here...
 	SoLOD *lod = new SoLOD;
 	float rvals[] = {60};
@@ -362,6 +356,13 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	detailed->addChild(arrow(A, A+minax, RED, "X"));
 	detailed->addChild(arrow(A, A+majax, GREEN, "Y"));
 	detailed->addChild(arrow(A, A+d, BLUE, "Z"));
+#endif
+
+#if 1
+	SoShapeHints *sha = new SoShapeHints;
+	sha->vertexOrdering = SoShapeHints::CLOCKWISE;
+    sha->faceType = SoShapeHints::UNKNOWN_FACE_TYPE;
+	detailed->addChild(sha);
 #endif
 
 	// rotation to orient the prepared member correctly in space
@@ -405,7 +406,7 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	}
 
 	int *i3; /* indices for the 3D face set */
-	i3 = new int[5*sides + (sides + 1)];
+	i3 = new int[5*sides + 2 * (sides + 1)];
 
 	// add the sides of the prism
 	unsigned ni=0;
@@ -422,18 +423,29 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	}
 
 	// add the ends of the prism
-#if 0
+#if 1
 	for(unsigned i=0; i<n-1; ++i){
 		const int &v1 = *((int *)array_get((array *)&(o.trace), i));
 		if(v1==-1)continue; /* skip this one, if last one was a 'pen up' */
 		const int &v2 = *((int *)array_get((array *)&(o.trace), i+1));
 		if(v2==-1)continue; /* skip this one if we're about to pen-up*/
 		i3[ni++] = v1;
-		cerr << "v" << v1 << "=" << coo->point[v1][0] << "," << coo->point[v1][1] << endl;
-		cerr << " to v" << v2 << "=" << coo->point[v2][0] << "," << coo->point[v2][1] << endl;
+		//cerr << "v" << v1 << "=" << coo->point[v1][0] << "," << coo->point[v1][1] << endl;
+		//cerr << " to v" << v2 << "=" << coo->point[v2][0] << "," << coo->point[v2][1] << endl;
 	}
-	cerr << endl;
+	//cerr << endl;
+
+	for(unsigned i=0; i<n-1; ++i){
+		const int &v1 = *((int *)array_get((array *)&(o.trace), i));
+		if(v1==-1)continue; /* skip this one, if last one was a 'pen up' */
+		const int &v2 = *((int *)array_get((array *)&(o.trace), i+1));
+		if(v2==-1)continue; /* skip this one if we're about to pen-up*/
+		i3[ni++] = nv + v1;
+		//cerr << "v" << v1 << "=" << coo->point[v1][0] << "," << coo->point[v1][1] << endl;
+		//cerr << " to v" << v2 << "=" << coo->point[v2][0] << "," << coo->point[v2][1] << endl;
+	}
 	i3[ni++] = SO_END_FACE_INDEX;
+
 #endif
 
 	SoIndexedFaceSet *fsi = new SoIndexedFaceSet;
