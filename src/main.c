@@ -53,7 +53,7 @@ int main ( argc, argv )
 int	argc;
 char	*argv[];
 {
-	char	IO_file[96],	/* the input/output filename		*/
+	char	In_file[96],	/* the input/output filename		*/
 		title[256],	/* the title of the analysis		*/
 		mesh_file[96],	/* frame mesh data filename		*/
 		plot_file[96],	/* frame mesh plot filename		*/
@@ -247,6 +247,10 @@ char	*argv[];
 
 	fclose(fp);
 	fp = fopen(IO_file, "a");     /* output appends input */
+	if(fp==NULL){
+		fprintf(stderr,"Unable to append to input file '%s'!\n",IO_file);
+		exit(1);
+	}
 
 	control_data(
 			fp, title, nJ,nM, nF,nD,nR,nW,nP,nT, x,y,z,r, J1,J2
