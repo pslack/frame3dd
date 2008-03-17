@@ -1,4 +1,4 @@
-Name:		frame
+Name:		frame3dd
 Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
@@ -56,6 +56,9 @@ rm -rf %{buildroot}
 %{_datadir}
 
 %changelog
+* Mon Mar 17 2008 John Pye <john@curioussymbols.com>
+- Renamed to 'frame3dd' inline with new SF.net project name.
+
 * Mon Jan 15 2008 John Pye <john@curioussymbols.com> 20071220
 - Updated to new version received from H Gavin by email.
 

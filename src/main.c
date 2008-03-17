@@ -38,7 +38,7 @@
 #include "nrutil.h"
 
 /* must come after the above, because of the sneaky #defines in common.h */
-#include "frame.h"
+#include "frame3dd.h"
 #include "common.h"
 #include "coordtrans.h"
 #include "ldl_dcmp.h"
@@ -128,8 +128,8 @@ char	*argv[];
 		*m,		/* vector of modes to condense		*/
 		temp_mech;	/* counter for temp and mech load cases	*/
 
-    fprintf(stderr," FRAME version: %s\n", VERSION);
-    fprintf(stderr," GPL Copyright (C) 1992-2007, Henri P. Gavin\n");
+    fprintf(stderr," FRAME3DD version: %s\n", VERSION);
+    fprintf(stderr," GPL Copyright (C) 1992-2008, Henri P. Gavin\n");
     fprintf(stderr," http://www.duke.edu/~hpgavin/frame/\n");
 	fprintf(stderr," This is free software with absolutely no warranty.\n");
 	fprintf(stderr," For details, see http://www.fsf.org/copyleft/gpl.html\n\n");

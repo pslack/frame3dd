@@ -17,7 +17,7 @@
 Import('env')
 
 srcs = [
-	'frame.c','lu_dcmp.c','ldl_dcmp.c','nrutil.c','eig.c'
+	'frame3dd.c','lu_dcmp.c','ldl_dcmp.c','nrutil.c','eig.c'
 	, 'frm_io.c'
 	, 'coordtrans.c'
 ]

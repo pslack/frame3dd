@@ -225,7 +225,7 @@ env.Append(SUBST_DICT= {
 	'@VERSION@':version
 })
 
-env.SubstInFile('frame.spec.in')
+env.SubstInFile('frame3dd.spec.in')
 
 #------------
 # create distribution zip-file
