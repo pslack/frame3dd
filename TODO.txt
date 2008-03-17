@@ -1,9 +1,14 @@
 TODO LIST for FRAME
 -------------------
 
+Add comments to describe variables in src/*.h files
+
 Convert 'save_matrix' to output files in Matrix Market format for easier
 import into other programs.
 http://math.nist.gov/MatrixMarket/
+
+Implment end_release function in frame3dd.c into the code to 
+carry out member end release.
 
 Create structs to contain frame attributes, coordinates, etc, in order to 
 migrate to a more object-oriented coding style, and simplify the passing
