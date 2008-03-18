@@ -239,11 +239,11 @@ env.Append(
 		,'development','buildings','gui','images','tests']
 )
 
-tar = env.DistTar("dist/frame-"+version
+tar = env.DistTar("dist/frame3dd-"+version
         , [env.Dir('#')]
 )
 
-env.Depends(tar,"frame.spec")
+env.Depends(tar,"frame3dd.spec")
 
 env.Default(env['PROGS'])
 
