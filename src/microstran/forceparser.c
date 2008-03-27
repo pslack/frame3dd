@@ -14,16 +14,16 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *//** @FILE
-	parser for microstran .p1 displacement data files
+	parser for microstran .p1 member forces data files
 */
 
 #define MSTRANP_BUILD
 
-#include "displacementparser.h"
+#include "forceparser.h"
 
 #include <string.h>
 
-cbool parseNonHeading(parse *p){
+static cbool parseNonHeading(parse *p){
 	char c;
 	char s[500];
 
@@ -57,7 +57,7 @@ cbool parseNonHeading(parse *p){
 	);
 }
 		
-cbool parseHeading(parse *p, char *heading, unsigned maxlen){
+static cbool parseHeading(parse *p, char *heading, unsigned maxlen){
 	
 	char c1, c2;
 	char s[500];
@@ -107,7 +107,7 @@ cbool parseHeading(parse *p, char *heading, unsigned maxlen){
 	return 1;
 }
 
-cbool parseToHeading(parse *p,const char *heading){
+static cbool parseToHeading(parse *p,const char *heading){
 #define MAXHEADINGNAME 500
 	char foundheading[MAXHEADINGNAME];
 	cbool foundcorrect = 0;
@@ -121,35 +121,48 @@ cbool parseToHeading(parse *p,const char *heading){
 	return foundcorrect;
 }
 
-cbool parseDisplacementNode(parse *p, casedisplacements *cd, const unsigned caseid){
+cbool parseMemberNodeForce(parse *p, membernodeforce *mnf, const unsigned caseid){
 	unsigned nodeid;
-	double dx,dy,dz;
-	double rx,ry,rz;
+	vec3 F, M;
 	return (
 		parseNumber(p,&nodeid)
 		//&& assign(fprintf(stderr,"NODE %d for case %d\n",nodeid,cd->id))
 		&& parseWS(p)
-		&& parseDouble(p,&dx)
+		&& parseDouble(p,&F.x)
 		&& parseWS(p)
-		&& parseDouble(p,&dy)
+		&& parseDouble(p,&F.y)
 		&& parseWS(p)
-		&& parseDouble(p,&dz)
+		&& parseDouble(p,&F.z)
 		&& parseWS(p)
-		&& parseDouble(p,&rx)
+		&& parseDouble(p,&M.x)
 		&& parseWS(p)
-		&& parseDouble(p,&ry)
+		&& parseDouble(p,&M.y)
 		&& parseWS(p)
-		&& parseDouble(p,&rz)
+		&& parseDouble(p,&M.z)
 		&& parseEOLplus(p)
-		&& casedisplacements_add_node(cd,nodeid,dx,dy,dz,rx,ry,rz)
+		&& assign(*mnf = membernodeforce_create(nodeid,F,M))
 	);
 }
 
-cbool parseDisplacementCASE(parse *p, modeldisplacements *md){
+cbool parseMemberForce(parse *p, caseforces *cf, const unsigned caseid){
+	unsigned memberid;
+	membernodeforce fromnode;
+	membernodeforce tonode;
+	return (
+		parseNumber(p,&memberid)
+		&& parseWS(p)
+		&& parseMemberNodeForce(p, &fromnode, caseid)
+		&& parseWS(p)
+		&& parseMemberNodeForce(p, &tonode, caseid)
+		&& caseforces_add_member(cf, memberid, fromnode, tonode)
+	);
+}
+
+cbool parseForceCASE(parse *p, modelforces *mf){
 	unsigned caseid;
 	char c;
 	char casename[MAXCASENAME];
-	casedisplacements *cd = NULL;
+	caseforces *cf = NULL;
 	return (
 		parseThisString(p,"CASE")
 		&& parseWS(p)
@@ -158,48 +171,48 @@ cbool parseDisplacementCASE(parse *p, modeldisplacements *md){
 		&& parseWS(p)
 		&& parseStrExcept(p,"\n\r",casename,MAXCASENAME) //&& assign(fprintf(stderr," '%s'\n",casename))
 		&& parseEOLplus(p)
-		&& parseThisString(p,"Node")
+		&& parseThisString(p,"Member")
 		&& many(parseCharExcept(p,"\n\r",&c))
 		&& parseEOLplus(p)
-		&& parseThisString(p,"m")
+		&& parseThisString(p,"kN")
 		&& parseWS(p)
-		&& parseThisString(p,"m")
+		&& parseThisString(p,"kN")
 		&& parseWS(p)
-		&& parseThisString(p,"m")
+		&& parseThisString(p,"kN")
 		&& parseWS(p)
-		&& parseThisString(p,"rad")
+		&& parseThisString(p,"kNm")
 		&& parseWS(p)
-		&& parseThisString(p,"rad")
+		&& parseThisString(p,"kNm")
 		&& parseWS(p)
-		&& parseThisString(p,"rad")
+		&& parseThisString(p,"kNm")
 		&& parseEOLplus(p)
-		&& assign(cd = casedisplacements_create(caseid,casename))
-		&& many(parseDisplacementNode(p, cd, caseid))
-		//&& assign(fprintf(stderr,"Case %d contains %d nodes\n",caseid,ARRAY_NUM(cd->nodes)))
-		&& modeldisplacements_add_case(md, cd)
+		&& assign(cf = caseforces_create(caseid,casename))
+		&& many(parseMemberForce(p, cf, caseid))
+		//&& assign(fprintf(stderr,"Case %d contains %d nodes\n",caseid,ARRAY_NUM(cf->nodes)))
+		&& modelforces_add_case(mf, cf)
 	) || (
-		(cd && assign(casedisplacements_destroy(cd)))
+		(cf && assign(caseforces_destroy(cf)))
 		&& fail
 	);
 }
 		
-cbool parseMicrostranDisplacements(parse *p, modeldisplacements **md){
-	modeldisplacements *md1 = NULL;
-	*md = NULL;
+cbool parseMicrostranForces(parse *p, modelforces **mf){
+	modelforces *mf1 = NULL;
+	*mf = NULL;
 	return (
-		assign(md1 = modeldisplacements_create())
+		assign(mf1 = modelforces_create())
 		&& parseToHeading(p,"LOAD CASES")
 		&& many(
-			parseToHeading(p,"NODE DISPLACEMENTS")
-			&& parseDisplacementCASE(p,md1)
+			parseToHeading(p,"MEMBER FORCES")
+			&& parseForceCASE(p,mf1)
 		)
-		&& assign(fprintf(stderr,"Displacement file contains %d cases\n",ARRAY_NUM(md1->cases)))
-		&& assign(*md = md1)
-		&& assign(fprintf(stderr,"Displacement file contains %d cases\n",ARRAY_NUM((*md)->cases)))
+		&& assign(fprintf(stderr,"Data file contains %d load-cases\n",ARRAY_NUM(mf1->cases)))
+		&& assign(*mf = mf1)
+		&& assign(fprintf(stderr,"Data file contains %d load-cases\n",ARRAY_NUM((*mf)->cases)))
 	) || (
 		(
-			md1 
-			&& (modeldisplacements_destroy(md1),1)
+			mf1 
+			&& (modelforces_destroy(mf1),1)
 		)
 		&& fail
 	);

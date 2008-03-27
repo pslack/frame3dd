@@ -18,6 +18,8 @@ srcs = Split("""
 	sectionsparser.c
 	vec3.c
 	ctrans.c
+	forces.c
+	forceparser.c
 """)
 # bdd.c row.c  table.c  print.c   iter.c  list.c  
 
@@ -30,5 +32,7 @@ microst = env.Program('microst',['main.c'],LIBS=["microstranparser"],LIBPATH=[".
 
 dumpsections = env.Program('dumpsections',['dumpsections.c'],LIBS=["microstranparser"],LIBPATH=[".."])
 
-env['PROGS'] += [microst, dumpsections, lib]
+dumpforces = env.Program('dumpforces',['dumpforces.c'],LIBS=["microstranparser"],LIBPATH=[".."])
+
+env['PROGS'] += [microst, dumpsections, dumpforces, lib]
 
