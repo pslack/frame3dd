@@ -121,41 +121,56 @@ static cbool parseToHeading(parse *p,const char *heading){
 	return foundcorrect;
 }
 
-cbool parseMemberNodeForce(parse *p, membernodeforce *mnf, const unsigned caseid){
+cbool parseMemberNodeForce(parse *p, membernodeforce *mnf){
 	unsigned nodeid;
 	vec3 F, M;
 	return (
+		//assign(fprintf(stderr,"Looking for member node force...\n")) &&
 		parseNumber(p,&nodeid)
-		//&& assign(fprintf(stderr,"NODE %d for case %d\n",nodeid,cd->id))
+		//&& assign(fprintf(stderr,"NODE %d\n",nodeid))
 		&& parseWS(p)
 		&& parseDouble(p,&F.x)
 		&& parseWS(p)
 		&& parseDouble(p,&F.y)
 		&& parseWS(p)
 		&& parseDouble(p,&F.z)
+		//&& assign(VEC3_PR(F))
 		&& parseWS(p)
 		&& parseDouble(p,&M.x)
 		&& parseWS(p)
 		&& parseDouble(p,&M.y)
 		&& parseWS(p)
 		&& parseDouble(p,&M.z)
+		//&& assign(VEC3_PR(M))
 		&& parseEOLplus(p)
 		&& assign(*mnf = membernodeforce_create(nodeid,F,M))
+		//&& assign(fprintf(stderr,"Member node force on node %d OK\n",nodeid))
+	) || (
+		assign(fprintf(stderr,"Failed to parse member node force\n"))
+		&& fail
 	);
 }
 
 cbool parseMemberForce(parse *p, caseforces *cf, const unsigned caseid){
-	unsigned memberid;
+	unsigned memberid = 0;
 	membernodeforce fromnode;
 	membernodeforce tonode;
 	return (
 		parseNumber(p,&memberid)
+		//&& assign(fprintf(stderr,"Member %d...\n",memberid))
 		&& parseWS(p)
-		&& parseMemberNodeForce(p, &fromnode, caseid)
-		&& parseWS(p)
-		&& parseMemberNodeForce(p, &tonode, caseid)
+		&& parseMemberNodeForce(p, &fromnode)
+		//&& assign(fprintf(stderr,"Got 'from' node for member %d...\n",memberid))
+		//&& assign(fprintf(stderr,"Looking for WS...\n"))
+		&& parseMemberNodeForce(p, &tonode)
+		//&& assign(fprintf(stderr,"Got 'to' node for member %d...\n",memberid))
 		&& caseforces_add_member(cf, memberid, fromnode, tonode)
-	);
+		//&& assign(fprintf(stderr,"Added member %d to case %d OK...\n",memberid,caseid))
+		//&& assign(fprintf(stderr,"Member %d force OK\n",memberid))
+	)/* || (
+		assign(fprintf(stderr,"Failed to parse forces for member %d\n",memberid))
+		&& fail
+	)*/;
 }
 
 cbool parseForceCASE(parse *p, modelforces *mf){
@@ -187,7 +202,7 @@ cbool parseForceCASE(parse *p, modelforces *mf){
 		&& parseThisString(p,"kNm")
 		&& parseEOLplus(p)
 		&& assign(cf = caseforces_create(caseid,casename))
-		&& many(parseMemberForce(p, cf, caseid))
+		&& one_or_more(parseMemberForce(p, cf, caseid))
 		//&& assign(fprintf(stderr,"Case %d contains %d nodes\n",caseid,ARRAY_NUM(cf->nodes)))
 		&& modelforces_add_case(mf, cf)
 	) || (
@@ -202,13 +217,12 @@ cbool parseMicrostranForces(parse *p, modelforces **mf){
 	return (
 		assign(mf1 = modelforces_create())
 		&& parseToHeading(p,"LOAD CASES")
-		&& many(
+		&& one_or_more(
 			parseToHeading(p,"MEMBER FORCES")
 			&& parseForceCASE(p,mf1)
 		)
-		&& assign(fprintf(stderr,"Data file contains %d load-cases\n",ARRAY_NUM(mf1->cases)))
 		&& assign(*mf = mf1)
-		&& assign(fprintf(stderr,"Data file contains %d load-cases\n",ARRAY_NUM((*mf)->cases)))
+		&& assign(fprintf(stderr,"Member forces data file parsed; contains %d load-cases.\n",ARRAY_NUM((*mf)->cases)))
 	) || (
 		(
 			mf1 

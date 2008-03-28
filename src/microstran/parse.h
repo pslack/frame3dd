@@ -32,6 +32,7 @@ extern "C"{
 
 #define many(p)                   ({while(p);1;})
 #define maybe(p)                  (p,1)
+#define one_or_more(p)            (p && many(p))
 
 #endif
 

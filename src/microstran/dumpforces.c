@@ -37,19 +37,42 @@ int main(int argc, char **argv){
 	parse *p;
 	p = parseCreateFileName(filename);
 
-	modelforces *mf = NULL;
-	parseMicrostranForces(p,&mf);
+	modelforces *MF = NULL;
+	parseMicrostranForces(p,&MF);
+	if(MF==NULL){
+		fprintf(stderr,"ERROR: Failed to parse forces!\n");
+		exit(1);
+	}
 
 	unsigned caseid = 1;
 	fprintf(stderr,"Looking up case %d...\n",caseid);
 	const caseforces *cf;
-	cf = modelforces_find_case(mf,caseid);
+	cf = modelforces_find_case(MF,caseid);
 	if(cf==NULL){
 		fprintf(stderr,"LOAD CASE %d NOT FOUND\n",caseid);
 		return 1;
 	}else{
-		fprintf(stderr,"CASEID %d FOUND\n",caseid);
+		fprintf(stderr,"CASE ID %d FOUND\n",caseid);
 	}
+
+	unsigned memberid = 800;
+	const memberforce *mf;
+	mf = caseforces_find_member(cf, memberid);
+
+	if(mf==NULL){
+		fprintf(stderr,"MEMBER FORCE FOR MEMBER %d NOT FOUND\n",memberid);
+		return 1;
+	}
+	fprintf(stderr,"FOUND FORCE ON MEMBER %d\n",memberid);
+	
+	fprintf(stderr,"Force at 'from' end (node %d):\n",mf->fromnode.node);
+	VEC3_PR(mf->fromnode.F);
+	VEC3_PR(mf->fromnode.M);
+
+	fprintf(stderr,"Force at 'to' end (node %d):\n",mf->tonode.node);
+	VEC3_PR(mf->tonode.F);
+	VEC3_PR(mf->tonode.M);
+	
 	return 0;
 }
 

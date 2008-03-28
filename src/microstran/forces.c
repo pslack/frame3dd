@@ -68,7 +68,7 @@ membernodeforce membernodeforce_create(unsigned nodeid, vec3 F, vec3 M){
 
 cbool caseforces_add_member(caseforces *cf, unsigned memberid, membernodeforce fromnode, membernodeforce tonode){
 	memberforce mf;
-	fprintf(stderr,"ADDING MEMBER %d to case %d",memberid,cf->id);
+	//fprintf(stderr,"ADDING MEMBER %d to case %d\n",memberid,cf->id);
 	mf.member = memberid;
 	mf.fromnode = fromnode;
 	mf.tonode = tonode;
@@ -77,7 +77,7 @@ cbool caseforces_add_member(caseforces *cf, unsigned memberid, membernodeforce f
 }
 
 cbool modelforces_add_case(modelforces *mf, caseforces *cf){
-	fprintf(stderr,"Model forces: contains %d cases\n",ARRAY_NUM(mf->cases));
+	//fprintf(stderr,"Model forces: contains %d cases\n",ARRAY_NUM(mf->cases));
 	array_append(&(mf->cases),cf);
 	return 1;
 }

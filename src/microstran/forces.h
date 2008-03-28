@@ -86,7 +86,7 @@ cbool modelforces_add_case(modelforces *mf, caseforces *cf);
 
 MSTRANP_API caseforces *modelforces_find_case(modelforces *mf, unsigned caseid);
 
-memberforce *caseforces_find_member(caseforces *cf, const unsigned memberid);
+MSTRANP_API memberforce *caseforces_find_member(caseforces *cf, const unsigned memberid);
 
 MSTRANP_API caseforces *modelforces_get_case(modelforces *mf, unsigned index);
 
