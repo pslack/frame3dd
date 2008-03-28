@@ -162,6 +162,16 @@ cbool model_add_node(model *a, node_stmt node);
 MSTRANP_API cbool model_find_node(const model *a, unsigned id, unsigned *index);
 
 MSTRANP_API cbool model_find_memb(const model *a, const unsigned membid, unsigned *membindex);
+
+/**
+	Find a member that bridges between nodeid1 and nodeid2. Flips the 'from' and 'to' if necessary, in order to find a match. 
+	The behaviour for the case where a model contains multiple members between a given node is undefined.
+
+	@param nodeid1 'from' node ID
+	@param nodeid2 'to' node ID
+	@param membindex (returned) index into the model->memb array (NOTE: NOT equal to the member ID)
+	@return 1 if such a member is found (in which case, *membindex will have been set), 0 otherwise.
+*/
 MSTRANP_API cbool model_find_memb_from_to(const model *a, const unsigned nodeid1, const unsigned nodeid2, unsigned *membindex);
 
 cbool model_add_memb(model *a, unsigned id,unsigned fromnode
