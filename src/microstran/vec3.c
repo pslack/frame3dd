@@ -44,23 +44,31 @@ vec3 vec3_cross(vec3 a, vec3 b){
 	);
 }
 
-vec3 vec3_scale(const vec3 A, double s){
+vec3 vec3_scale(vec3 A, double s){
 	return vec3_create(A.x * s, A.y * s, A.z * s);
 }
 
-double vec3_mod(const vec3 A){
+double vec3_mod(vec3 A){
 	return sqrt(A.x*A.x + A.y*A.y + A.z*A.z);
 }
 
-vec3 vec3_norm(const vec3 A){
+vec3 vec3_norm(vec3 A){
 	return vec3_scale(A, 1./vec3_mod(A));
 }
 
-vec3 vec3_diff(const vec3 A, const vec3 B){
+vec3 vec3_diff(vec3 A, vec3 B){
 	return vec3_create(A.x - B.x, A.y - B.y, A.z - B.z);
 }
 
-int vec3_print(FILE *f, const vec3 A){
+vec3 vec3_negate(vec3 A){
+	vec3 B;
+	B.x = -A.x;
+	B.y = -A.y;
+	B.z = -A.z;
+	return B;
+}
+
+int vec3_print(FILE *f, vec3 A){
 	return fprintf(f,"%.10f %.10f %.10f",A.x,A.y,A.z);
 }
 

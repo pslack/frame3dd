@@ -55,7 +55,7 @@ int main(int argc, char **argv){
 		fprintf(stderr,"CASE ID %d FOUND\n",caseid);
 	}
 
-	unsigned memberid = 800;
+	unsigned memberid = 4;
 	const memberforce *mf;
 	mf = caseforces_find_member(cf, memberid);
 

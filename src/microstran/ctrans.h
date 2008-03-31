@@ -42,7 +42,7 @@ typedef struct ctrans_matrix_struct{
 
 MSTRANP_API ctrans_matrix ctrans_identity(void);
 
-ctrans_matrix ctrans_scane(ctrans_matrix c, double s);
+ctrans_matrix ctrans_scale(ctrans_matrix c, double s);
 
 MSTRANP_API ctrans_matrix ctrans_rotation_z(double theta);
 

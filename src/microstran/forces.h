@@ -32,9 +32,23 @@ extern "C"{
 /**
 	Forces and moments on a certain member due to the specified node.
 	Each member will have two such force struct, one for each end.
+
+	Note carefully that when a membernodeforce corresponds to a 'from' node,
+	the true direction of the force and moment is actually the negative
+	of that stored here, because of the sign convention used by Microstran
+	for member forces.
+
+	This comes about because positive axial forces are those which cause a
+	member to be in tension, regardless of whether one is at the +Z or -Z 
+	end of the member.
+
+	NOTE ALSO that in this code's sign convention, local coordinates are
+	'Z' aligned with the member axis in the direction from-->to, and
+	'Y' is the major axis of the cross-section. 'Z' and 'X' are reversed
+	compared with the Microstran sign convention.
 */
 typedef struct membernodeforce_{
-	int node;
+	unsigned node;
 	vec3 F; /**< force applied on member due to this node */
 	vec3 M; /**< moment applied on member due to this node */
 } membernodeforce;
@@ -44,7 +58,7 @@ typedef struct membernodeforce_{
 	There are forces and moments at each end of the member.
 */
 typedef struct memberforce_{
-	int member; /* member ID, as read from the .p1 file */
+	unsigned member; /* member ID, as read from the .p1 file */
 	membernodeforce fromnode; /* forces for the first-listed node (FIXME check that this node corresponds to the 'from' node in the model struct) */
 	membernodeforce tonode; /* forces for the second-listed node (FIXME check that this node corresponds to the 'to' node in the model struct) */
 } memberforce;
@@ -55,7 +69,7 @@ typedef struct memberforce_{
 	forces will be present for all nodes/members in subsequent processing.
 */
 typedef struct caseforces_{
-	int id; /**< case ID, as read from the .p1 file. */
+	unsigned id; /**< case ID, as read from the .p1 file. */
 	char name[MAXCASENAME]; /**< load case name, as read from the .p1 file. */
 	array members; /**< array (list) of memberforce */
 } caseforces;
