@@ -28,6 +28,7 @@ case_stmt *case_create(unsigned caseid, const char *name){
 	case_stmt *c;
 	c = NEW(case_stmt);
 	c->id = caseid;
+	c->data = array_create(0,0);
 	c->type = CASE_UNDEFINED;
 	strncpy(c->name, name, MAXCASENAME);
 	if(strlen(name)>= MAXCASENAME){
@@ -66,19 +67,24 @@ cbool case_add_comb(
 		c->data = ARRAY_CREATE(comb_stmt,5);
 	}
 
-	co.c = model_find_case(a, subcaseid);
-	if(!co.c){
+	fprintf(stderr,"CASE %d contains %d COMBs\n",c->id, ARRAY_NUM(c->data));
+
+	case_stmt *case1 = model_find_case(a, subcaseid);
+	if(!case1){
 		fprintf(stderr,"Subcase %d not found in COMB case %d\n",subcaseid,c->id);
 		return 0;
 	}
 
-	if(!array_append(&(c->data), &co)){
+	co.caseindex = subcaseid;
+
+	if(!array_append(&c->data, &co)){
 		fprintf(stderr,"failed to append subcase to case %d\n",c->id);
 		return 0;
 	}
 
-	co.c = model_find_case(a, subcaseid);
-	fprintf(stderr,"Added subcase %d to case %d\n",co.c->id, c->id);
+	comb_stmt *co1 = array_get(&c->data, ARRAY_NUM(c->data)-1);
+	case1 = array_get(&a->cases, co1->caseindex);
+	fprintf(stderr,"Added subcase %d '%s' to case %d\n",case1->id, case1->name, c->id);
 
 	return 1;
 }
@@ -146,7 +152,7 @@ ndld_stmt *case_find_node(case_stmt *c, unsigned nodeid){
 	in this code, we will assume that each case may contain multiple
 	loads on the same node (although in our CASE parser we limited it to one)
 */
-cbool case_total_load_node(case_stmt *c, unsigned nodeid, ndld_stmt *nl){
+cbool case_total_load_node(model *a, case_stmt *c, unsigned nodeid, ndld_stmt *nl){
 	ndld_stmt n;
 	n.F = VEC3_ZERO;
 	n.M = VEC3_ZERO;
@@ -169,13 +175,14 @@ cbool case_total_load_node(case_stmt *c, unsigned nodeid, ndld_stmt *nl){
 		case CASE_COMB:
 			fprintf(stderr,"COMB case with %d subcases\n",ARRAY_NUM(c->data));
 			for(i=0; i<ARRAY_NUM(c->data); ++i){
-				comb_stmt *c1 = (comb_stmt *)array_get(&(c->data), i);
-				fprintf(stderr,"Descending into sub-case %d '%s' (factor = %f)...\n",c1->c->id,c1->c->name,c1->factor);
+				comb_stmt *comb1 = (comb_stmt *)array_get(&(c->data), i);
+				case_stmt *case2 = array_get(&a->cases, comb1->caseindex);
+				fprintf(stderr,"Descending into sub-case %d '%s' (factor = %f)...\n",case2->id,case2->name,comb1->factor);
 				ndld_stmt nl1;
-				if(case_total_load_node(c1->c, nodeid, &nl1)){
+				if(case_total_load_node(a, case2, nodeid, &nl1)){
 					found = 1;
-					n.F = vec3_add(n.F, vec3_scale(nl1.F, c1->factor));
-					n.M = vec3_add(n.M, vec3_scale(nl1.M, c1->factor));
+					n.F = vec3_add(n.F, vec3_scale(nl1.F, comb1->factor));
+					n.M = vec3_add(n.M, vec3_scale(nl1.M, comb1->factor));
 				}
 			}
 			break;

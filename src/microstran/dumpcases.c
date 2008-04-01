@@ -57,13 +57,14 @@ int main(int argc, char **argv){
 				fprintf(stderr,"Case %d: %d NDLDs '%s'\n", c->id, ARRAY_NUM(c->data), c->name);
 				break;
 			case CASE_COMB:
-				fprintf(stderr,"Case %d: %d COMBs '%s'\n", c->id, ARRAY_NUM(c->data), c->name);
+				fprintf(stderr,"\nCase %d: %d COMBs '%s'\n", c->id, ARRAY_NUM(c->data), c->name);
 				for(j = 0; j<ARRAY_NUM(c->data); ++j){
 					comb_stmt *c1 = array_get(&c->data, j);
-					fprintf(stderr,"c1->c = %p, M->cases.data = %p\n", c1->c, M->cases.data);
+					case_stmt *case1 = array_get(&M->cases, c1->caseindex);
+					//fprintf(stderr,"c1->c = %p, M->cases.data = %p\n", case1, M->cases.data);
 					//assert(c1->c >= (case_stmt *)M->cases.data);
 					//assert(c1->c < (((case_stmt *)M->cases.data + ARRAY_NUM(M->cases))));
-					fprintf(stderr," + %f × CASE %d '%s'\n", c1->factor, c1->c->id, c1->c->name);
+					fprintf(stderr," + %f × CASE %d '%s'\n", c1->factor, case1->id, case1->name);
 				}
 				break;
 			default:

@@ -38,7 +38,10 @@ typedef struct ndld_stmt_{
 struct case_stmt_;
 
 typedef struct comb_stmt_{
-	struct case_stmt_ *c;
+	unsigned caseindex; /**< this is the index for the referenced load case
+		in the model->cases array. We can't use a pointer directly because
+		the array grows dynamically and is relocated when this happens, thus
+		invalidating pointers. */
 	double factor;
 } comb_stmt;
 
@@ -66,19 +69,6 @@ typedef struct case_stmt_{
 
 ndld_stmt *case_find_node(case_stmt *c, unsigned nodeid);
 
-/**
-	Get the total load on a node for a particular node. If there is
-	no applied load on the node, return false. Otherwise, insert the total
-	applied node load (force, moment) into the ndld_stmt data structure
-	pointed to by 'nl'.
-	
-	@param nodeid node ID of the node we're looking at.
-	@param nl (returned) applied force and moment on the node, set to zero
-		if no applied load is found.
-	@return 1 if node is loaded, 0 otherwise.
-*/
-MSTRANP_API cbool case_total_load_node(case_stmt *c, unsigned nodeid, ndld_stmt *nl);
-
 case_stmt *case_create(unsigned caseid, const char *name);
 
 case_stmt *case_copy(const case_stmt *c);
@@ -90,6 +80,19 @@ cbool case_add_node_load(case_stmt *c, unsigned nodeid, vec3 F, vec3 M);
 struct model_;
 
 cbool case_add_comb(struct model_ *a, case_stmt *c, unsigned subcaseid, double factor);
+
+/**
+	Get the total load on a node for a particular node. If there is
+	no applied load on the node, return false. Otherwise, insert the total
+	applied node load (force, moment) into the ndld_stmt data structure
+	pointed to by 'nl'.
+	
+	@param nodeid node ID of the node we're looking at.
+	@param nl (returned) applied force and moment on the node, set to zero
+		if no applied load is found.
+	@return 1 if node is loaded, 0 otherwise.
+*/
+MSTRANP_API cbool case_total_load_node(struct model_ *a, case_stmt *c, unsigned nodeid, ndld_stmt *nl);
 
 #ifdef __cplusplus
 };
