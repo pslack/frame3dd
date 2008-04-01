@@ -174,6 +174,23 @@ MSTRANP_API cbool model_find_memb(const model *a, const unsigned membid, unsigne
 */
 MSTRANP_API cbool model_find_memb_from_to(const model *a, const unsigned nodeid1, const unsigned nodeid2, unsigned *membindex);
 
+/**
+	Find the next member that has either 'from' or 'to' node passing through
+	node 'nodeid1', starting at the member pointed to by 'start' (which must
+	be a pointer inside the array a->memb. If 'start' is NULL, assume that we
+	must start 'just before' a->memb[0].
+
+	This function can be used to (fairly) efficiently iterate through all of 
+	the members	connected to a node.
+
+	@return pointer into a->memb of next member AFTER start that is connected
+	to node 'nodeid', or NULL if no such node exists.
+	@param nodeid the node ID which we want the connected members for.
+	@param start pointer to the last found member, or NULL if we should start
+		at the start.
+*/
+MSTRANP_API memb_stmt *model_find_memb_from(model *a, const unsigned nodeid1, memb_stmt *start);
+
 cbool model_add_memb(model *a, unsigned id,unsigned fromnode
 		,unsigned tonode, member_orientation orient, unsigned prop, unsigned matl
 		,unsigned flags1,unsigned flags2
@@ -223,7 +240,7 @@ cbool model_add_matl(model *a, unsigned id, double E, double sigma_y
 
 MSTRANP_API void model_write_inventory(model *a);
 
-case_stmt *model_find_case(model *a,unsigned caseid);
+MSTRANP_API case_stmt *model_find_case(model *a,unsigned caseid);
 
 cbool model_add_case(model *a, case_stmt *c);
 

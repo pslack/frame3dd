@@ -203,6 +203,25 @@ cbool model_find_memb_from_to(const model *a, const unsigned fromnodeid, const u
 	return 0;
 }
 
+MSTRANP_API memb_stmt *model_find_memb_from(model *a, const unsigned nodeid1, memb_stmt *start){
+	memb_stmt *i = start;
+	if(start==NULL){
+		i = a->memb;
+		i--;
+		/* now start = a->memb[-1] */
+	}
+	memb_stmt *end = &a->memb[a->num_membs];
+	while(++i < end){
+		if(
+			a->node[i->fromnode].id == nodeid1
+			|| a->node[i->tonode].id == nodeid1
+		){
+			return i;
+		}
+	}
+	return NULL;
+}
+
 vec3 memb_get_orientation(const model *a, const memb_stmt *m){
 	vec3 AC = vec3_create(0,0,0);
 	vec3 AB = vec3_diff(a->node[m->tonode].pos, a->node[m->fromnode].pos);
@@ -444,7 +463,8 @@ cbool model_add_case(model *a,case_stmt *c){
 	}
 
 	array_append(&(a->cases), c);
-	//fprintf(stderr,"Added case %d '%s' (%d %s)\n",c->id, c->name, c->data.num, (c->type==CASE_LOADS ? "loads" : "subcases"));
+	c1 = model_find_case(a,c->id);
+	fprintf(stderr,"Added case %d '%s' (%d %s)\n",c1->id, c1->name, ARRAY_NUM(c1->data), (c1->type==CASE_LOADS ? "loads" : "subcases"));
 	return 1;
 }
 

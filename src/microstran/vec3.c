@@ -20,6 +20,8 @@
 #include <math.h>
 #include <assert.h>
 
+const vec3 VEC3_ZERO = {0,0,0};
+
 vec3 vec3_create(double x, double y, double z){
 	vec3 A;
 	A.x = x; A.y = y; A.z = z;

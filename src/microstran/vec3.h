@@ -32,6 +32,8 @@ typedef struct vec3_struct{
 	double x, y, z;
 } vec3;
 
+MSTRANP_API const vec3 VEC3_ZERO;
+
 MSTRANP_API vec3 vec3_create(double x, double y, double z);
 MSTRANP_API double vec3_dot(vec3 A, vec3 B);
 MSTRANP_API vec3 vec3_add(vec3 A, vec3 B);

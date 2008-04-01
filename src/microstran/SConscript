@@ -34,5 +34,7 @@ dumpsections = env.Program('dumpsections',['dumpsections.c'],LIBS=["microstranpa
 
 dumpforces = env.Program('dumpforces',['dumpforces.c'],LIBS=["microstranparser"],LIBPATH=[".."])
 
-env['PROGS'] += [microst, dumpsections, dumpforces, lib]
+dumpcases = env.Program('dumpcases',['dumpcases.c'],LIBS=["microstranparser"],LIBPATH=[".."])
+
+env['PROGS'] += [microst, dumpsections, dumpforces, dumpcases, lib]
 

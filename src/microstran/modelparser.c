@@ -314,25 +314,25 @@ cbool parseMATL(parse *p, model *a){
 /* CASE statement (load-case) */
 
 cbool parseGRAV(parse *p, case_stmt *c){
-	double gx,gy,gz;
+	vec3 g;
 	return (
 		parseComments(p)
 		&& parseThisString(p,"GRAV")/* && assign(fprintf(stderr,"GRAV")) */
 		&& parseWS(p) && assign(fprintf(stderr," "))
-		&& parseDouble(p,&gx) //&& assign(fprintf(stderr,"%d",id))
+		&& parseDouble(p,&g.x) //&& assign(fprintf(stderr,"%d",id))
 		&& parseWS(p) //&& assign(fprintf(stderr," "))
-		&& parseDouble(p,&gy) //&& assign(fprintf(stderr,"%d",id))
+		&& parseDouble(p,&g.y) //&& assign(fprintf(stderr,"%d",id))
 		&& parseWS(p) //&& assign(fprintf(stderr," "))
-		&& parseDouble(p,&gz) //&& assign(fprintf(stderr,"%d",id))
+		&& parseDouble(p,&g.z) //&& assign(fprintf(stderr,"%d",id))
 		&& parseEOLplus(p) //&& assign(fprintf(stderr," "))
-		&& case_add_gravity(c,gx, gy, gz)
+		&& case_add_gravity(c,g)
 		//&& assign(fprintf(stderr,"%e %e %e\n", gx,gy,gz))
 	);
 }
 
 cbool parseNDLD(parse *p, case_stmt *c){
 	unsigned nodeid;
-	double Fx,Fy,Fz, Mx,My,Mz;
+	vec3 F, M;
 	return (
 		parseComments(p)
 		&& parseThisString(p,"NDLD")// && assign(fprintf(stderr,"NDLD"))
@@ -341,19 +341,19 @@ cbool parseNDLD(parse *p, case_stmt *c){
 		//&& assign(fprintf(stderr," case=%d node=%d",c->id,nodeid))
 		&& parseWS(p)
 		//&& assign(fprintf(stderr," Fx=%e Fy=%e Fz=%e Mx=%e My=%e Mz=%e\n",c->id,nodeid,Fx,Fy,Fz,Mx,My,Mz))
-		&& parseDouble(p,&Fx)
+		&& parseDouble(p,&F.x)
 		&& parseWS(p)
-		&& parseDouble(p,&Fy)
+		&& parseDouble(p,&F.y)
 		&& parseWS(p)
-		&& parseDouble(p,&Fz)
+		&& parseDouble(p,&F.z)
 		&& parseWS(p)
-		&& parseDouble(p,&Mx)
+		&& parseDouble(p,&M.x)
 		&& parseWS(p)
-		&& parseDouble(p,&My)
+		&& parseDouble(p,&M.y)
 		&& parseWS(p)
-		&& parseDouble(p,&Mz)
+		&& parseDouble(p,&M.z)
 		&& parseEOLplus(p)
-		&& case_add_node_load(c,nodeid,Fx,Fy,Fz,Mx,My,Mz)
+		&& case_add_node_load(c,nodeid, F, M)
 		//&& assign(fprintf(stderr,"Added node %d to case %d, now has %d loads\n",nodeid,c->id, ARRAY_NUM(c->data)))
 	);
 }
@@ -361,28 +361,30 @@ cbool parseNDLD(parse *p, case_stmt *c){
 cbool parseCOMB(parse *p, model *a, case_stmt *c){
 	unsigned subcaseid;
 	double factor;
+#define ASSIGN(Z) assign(Z)
 	return (
-		parseComments(p) //&& assign(fprintf(stderr,"Adding to case %d\n",c->id))
-		&& parseThisString(p,"COMB") //&& assign(fprintf(stderr,"COMB"))
-		&& parseWS(p) //&& assign(fprintf(stderr," "))
-		&& parseNumber(p,&subcaseid)// && assign(fprintf(stderr,"%d",subcaseid))
-		&& parseWS(p) //&& assign(fprintf(stderr," "))
-		&& parseDouble(p,&factor) //&& assign(fprintf(stderr,"%f",factor))
-		&& parseEOLplus(p) //&& assign(fprintf(stderr,"\n"))
+		parseComments(p) /* && ASSIGN(fprintf(stderr,"Adding to case %d\n",c->id)) */
+		&& parseThisString(p,"COMB") && ASSIGN(fprintf(stderr,"COMB"))
+		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
+		&& parseNumber(p,&subcaseid) && ASSIGN(fprintf(stderr,"%d",subcaseid))
+		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
+		&& parseDouble(p,&factor) && ASSIGN(fprintf(stderr,"%f",factor))
+		&& parseEOLplus(p) && ASSIGN(fprintf(stderr,"\n"))
 		&& case_add_comb(a,c,subcaseid,factor)
 	);
+#undef ASSIGN
 }	
 
 cbool parseCASE(parse *p, model *a){
 	case_stmt c;
 	c.type = CASE_UNDEFINED;
 	//ndld_stmt ndld[MAXNDLDS];
-#define ASSIGN(Z) 1
+#define ASSIGN(Z) assign(Z)
 	return (
 		parseComments(p)
 		&& parseThisString(p,"CASE") && ASSIGN(fprintf(stderr,"CASE"))
 		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
-		&& parseNumber(p,&(c.id)) && ASSIGN(fprintf(stderr,"%d",c.id))
+		&& parseNumber(p,&c.id) && ASSIGN(fprintf(stderr,"%d",c.id))
 		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
 		&& parseStrExcept(p,"\n\r",c.name,MAXCASENAME) && ASSIGN(fprintf(stderr,"\"%s\"",c.name))
 		&& parseEOLplus(p) && ASSIGN(fprintf(stderr,"\n"))
