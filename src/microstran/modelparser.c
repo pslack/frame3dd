@@ -225,7 +225,10 @@ cbool parseMTYP(parse *p, model *a){
 		&& parseWS(p)
 		&& parseNumber(p,&memberid)
 		&& parseWS(p)
-		&& parseThisString(p,"TONLY")
+		&& (
+			parseThisString(p,"TONLY")
+			|| parseThisString(p,"CONLY")
+		)
 		&& parseEOLplus(p)
 		&& assign(warnMTYP ? 0 : (fprintf(stderr,"WARNING: 'MTYP' statements ignored.\n"),warnMTYP=1))
 	);
