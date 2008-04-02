@@ -51,6 +51,8 @@ void usage(const char *progname){
 	fprintf(stderr,"Load and parse a Microstran .arc file and render using Coin3D/OpenGL\n");
 	fprintf(stderr,"  -o[OUTFILE]  Open Inventor file to output (defaults to '%s'). No space after -o!\n",defaultsceneoutfile);
 	fprintf(stderr,"  -m           Ignore member offsets (don't apply the offers)\n");
+	fprintf(stderr,"  -a MEMBID    Ignore members with member IDs less than MEMBID.\n");
+	fprintf(stderr,"  -b MEMBID    Ignore members with member IDs greater than MEMBID.\n");
 	fprintf(stderr,"  -h           Render using higher quality graphics (slower).\n");
 	fprintf(stderr,"  -l LIBFILE   Load a section library from LIBFILE.\n");
 	fprintf(stderr,"  -t           Include text for node/member IDs and member sizes.\n");
@@ -71,9 +73,18 @@ int main(int argc, char **argv){
 	bool infotext = false;
 	bool memberoffsets = true;
 
+	unsigned minmemb = 0;
+	unsigned maxmemb = UINT_MAX;
+
 	char c;
-	while((c=getopt(argc,argv,"mho::l:t"))!=-1){
+	while((c=getopt(argc,argv,"a:b:mho::l:t"))!=-1){
 		switch(c){
+			case 'a':
+				minmemb = atoi(optarg);
+				break;
+			case 'b':
+				maxmemb = atoi(optarg);
+				break;
 			case 'h':
 				highquality = 1;
 				break;
@@ -167,6 +178,9 @@ int main(int argc, char **argv){
 	for(unsigned i=0; i<M->num_membs; ++i){
 		memb_stmt *m;
 		m = &(M->memb[i]);
+
+		if(m->id < minmemb || m->id > maxmemb)continue;
+
 		node_stmt *A = &(M->node[m->fromnode]);
 		node_stmt *B = &(M->node[m->tonode]);
 		prop_stmt *p = model_find_prop(M, m->prop);
