@@ -361,7 +361,7 @@ cbool parseNDLD(parse *p, case_stmt *c){
 cbool parseCOMB(parse *p, model *a, case_stmt *c){
 	unsigned subcaseid;
 	double factor;
-#define ASSIGN(Z) assign(Z)
+#define ASSIGN(Z) 1
 	return (
 		parseComments(p) /* && ASSIGN(fprintf(stderr,"Adding to case %d\n",c->id)) */
 		&& parseThisString(p,"COMB") && ASSIGN(fprintf(stderr,"COMB"))
@@ -379,7 +379,7 @@ cbool parseCASE(parse *p, model *a){
 	case_stmt c;
 	c.type = CASE_UNDEFINED;
 	//ndld_stmt ndld[MAXNDLDS];
-#define ASSIGN(Z) assign(Z)
+#define ASSIGN(Z) 1
 	return (
 		parseComments(p)
 		&& parseThisString(p,"CASE") && ASSIGN(fprintf(stderr,"CASE"))

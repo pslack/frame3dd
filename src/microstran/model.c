@@ -456,19 +456,30 @@ cbool model_add_matl(model *a, unsigned id, double E, double sigma_y
 
 cbool model_add_case(model *a,case_stmt *c){
 	case_stmt *c1;
-	c1 = model_find_case(a,c->id);
-	if(c1){
+	unsigned caseindex;
+	if(model_find_case(a,c->id, &caseindex)){
 		fprintf(stderr,"case ID %d already in use\n",c->id);
 		return 0;
 	}
 
 	array_append(&(a->cases), c);
-	c1 = model_find_case(a,c->id);
+	if(!model_find_case(a,c->id, &caseindex)){
+		fprintf(stderr,"Failed to add case %d\n",c->id);
+		return 0;
+	}
+	c1 = array_get(&a->cases, caseindex);
 	fprintf(stderr,"Added case %d '%s' (%d %s)\n",c1->id, c1->name, ARRAY_NUM(c1->data), (c1->type==CASE_LOADS ? "loads" : "subcases"));
+	if(c1->type ==CASE_COMB){
+		unsigned i;
+		for(i=0; i<ARRAY_NUM(c1->data); ++i){
+			case_stmt *c2 = array_get(&a->cases, ((comb_stmt *)array_get(&c1->data, i))->caseindex);
+			fprintf(stderr," %c CASE %d '%s'\n",(i==0 ? '=' : '+'), c2->id, c2->name);
+		}
+	}
 	return 1;
 }
 
-case_stmt *model_find_case(model *a,unsigned caseid){
+cbool model_find_case(model *a,unsigned caseid, unsigned *caseindex){
 	unsigned i,n;
 	case_stmt *c;
 	n = ARRAY_NUM(a->cases);
@@ -476,10 +487,11 @@ case_stmt *model_find_case(model *a,unsigned caseid){
 		c = array_get(&(a->cases), i);
 		//fprintf(stderr,"looking at case %d, id = %d\n",i,c->id);
 		if(c->id == caseid){
-			return c;
+			*caseindex = i;
+			return 1;
 		}
 	}
-	return NULL;
+	return 0;
 }
 
 cbool model_apply_displacements(model *m, casedisplacements *cd){

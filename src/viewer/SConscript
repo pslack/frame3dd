@@ -15,7 +15,9 @@ srcs = Split("""
 """)
 
 arc2iv = v_env.Program("../arc2iv",srcs)
+iv2vrml = v_env.Program("../iv2vrml",['iv2vrml.cpp'])
 
 env['PROGS'].append(arc2iv)
+env['PROGS'].append(iv2vrml)
 
 

@@ -67,15 +67,12 @@ cbool case_add_comb(
 		c->data = ARRAY_CREATE(comb_stmt,5);
 	}
 
-	fprintf(stderr,"CASE %d contains %d COMBs\n",c->id, ARRAY_NUM(c->data));
+	//fprintf(stderr,"CASE %d contains %d COMBs\n",c->id, ARRAY_NUM(c->data));
 
-	case_stmt *case1 = model_find_case(a, subcaseid);
-	if(!case1){
+	if(!model_find_case(a, subcaseid, &co.caseindex)){
 		fprintf(stderr,"Subcase %d not found in COMB case %d\n",subcaseid,c->id);
 		return 0;
 	}
-
-	co.caseindex = subcaseid;
 
 	if(!array_append(&c->data, &co)){
 		fprintf(stderr,"failed to append subcase to case %d\n",c->id);
@@ -83,8 +80,9 @@ cbool case_add_comb(
 	}
 
 	comb_stmt *co1 = array_get(&c->data, ARRAY_NUM(c->data)-1);
+	case_stmt *case1;
 	case1 = array_get(&a->cases, co1->caseindex);
-	fprintf(stderr,"Added subcase %d '%s' to case %d\n",case1->id, case1->name, c->id);
+	//fprintf(stderr,"Added subcase %d '%s' to case %d\n",case1->id, case1->name, c->id);
 
 	return 1;
 }
@@ -154,33 +152,34 @@ ndld_stmt *case_find_node(case_stmt *c, unsigned nodeid){
 */
 cbool case_total_load_node(model *a, case_stmt *c, unsigned nodeid, ndld_stmt *nl){
 	ndld_stmt n;
+	n.node = nodeid;
 	n.F = VEC3_ZERO;
 	n.M = VEC3_ZERO;
 	unsigned i;
 	cbool found = 0;
-	fprintf(stderr,"Looking for loads on node %d in case %d...\n",nodeid,c->id);
+	/* fprintf(stderr,"Looking for loads on node %d in case %d...\n",nodeid,c->id); */
 	switch(c->type){
 		case CASE_LOADS:
-			fprintf(stderr,"Case %d has %d node loads\n",c->id,ARRAY_NUM(c->data));
+			/* fprintf(stderr,"Case %d has %d node loads\n",c->id,ARRAY_NUM(c->data)); */
 			for(i=0; i<ARRAY_NUM(c->data); ++i){
 				ndld_stmt *nl1 = array_get(&c->data, i);
 				if(nl1->node == nodeid){
-					VEC3_PR(nl1->F);
-					found = 1;
+					//VEC3_PR(nl1->F);
+					++found;
 					n.F = vec3_add(n.F, nl1->F);
 					n.M = vec3_add(n.M, nl1->M);
 				}
 			}
 			break;
 		case CASE_COMB:
-			fprintf(stderr,"COMB case with %d subcases\n",ARRAY_NUM(c->data));
+			/* fprintf(stderr,"COMB case with %d subcases\n",ARRAY_NUM(c->data)); */
 			for(i=0; i<ARRAY_NUM(c->data); ++i){
 				comb_stmt *comb1 = (comb_stmt *)array_get(&(c->data), i);
 				case_stmt *case2 = array_get(&a->cases, comb1->caseindex);
-				fprintf(stderr,"Descending into sub-case %d '%s' (factor = %f)...\n",case2->id,case2->name,comb1->factor);
+				/* fprintf(stderr,"Descending into sub-case %d '%s' (factor = %f)...\n",case2->id,case2->name,comb1->factor); */
 				ndld_stmt nl1;
 				if(case_total_load_node(a, case2, nodeid, &nl1)){
-					found = 1;
+					++found;
 					n.F = vec3_add(n.F, vec3_scale(nl1.F, comb1->factor));
 					n.M = vec3_add(n.M, vec3_scale(nl1.M, comb1->factor));
 				}
@@ -190,7 +189,7 @@ cbool case_total_load_node(model *a, case_stmt *c, unsigned nodeid, ndld_stmt *n
 			break;
 	}
 	*nl = n;
-	if(found)fprintf(stderr,"NDLDs found for node %d\n",nodeid);
+	//if(found)fprintf(stderr,"%d NDLDs found for node %d\n",found,nodeid);
 	return found;
 }
 		

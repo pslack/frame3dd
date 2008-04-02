@@ -240,7 +240,7 @@ cbool model_add_matl(model *a, unsigned id, double E, double sigma_y
 
 MSTRANP_API void model_write_inventory(model *a);
 
-MSTRANP_API case_stmt *model_find_case(model *a,unsigned caseid);
+MSTRANP_API cbool model_find_case(model *a,unsigned caseid, unsigned *caseindex);
 
 cbool model_add_case(model *a, case_stmt *c);
 
