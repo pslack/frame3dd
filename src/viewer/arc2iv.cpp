@@ -47,12 +47,12 @@ const char *defaultsceneoutfile = "microstranmodel.iv";
 const char *defaultlibfile = "src/microstran/properties.txt";
 
 void usage(const char *progname){
-	fprintf(stderr,"Usage: %s [-o[OUTFILE]] [-m] [-h] [-l LIBFILE] [-t] INFILE\n",progname);
+	fprintf(stderr,"Usage: %s [-o[OUTFILE]] [-a MIN] [-b MAX] [-m] [-h] [-l LIBFILE] [-t] INFILE\n",progname);
 	fprintf(stderr,"Load and parse a Microstran .arc file and render using Coin3D/OpenGL\n");
 	fprintf(stderr,"  -o[OUTFILE]  Open Inventor file to output (defaults to '%s'). No space after -o!\n",defaultsceneoutfile);
-	fprintf(stderr,"  -m           Ignore member offsets (don't apply the offers)\n");
 	fprintf(stderr,"  -a MEMBID    Ignore members with member IDs less than MEMBID.\n");
 	fprintf(stderr,"  -b MEMBID    Ignore members with member IDs greater than MEMBID.\n");
+	fprintf(stderr,"  -m           Ignore member offsets (don't apply the offers)\n");
 	fprintf(stderr,"  -h           Render using higher quality graphics (slower).\n");
 	fprintf(stderr,"  -l LIBFILE   Load a section library from LIBFILE.\n");
 	fprintf(stderr,"  -t           Include text for node/member IDs and member sizes.\n");
