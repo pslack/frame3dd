@@ -56,10 +56,10 @@ double defaultscaleF = 5;
 
 void usage(char *progname){
 	cerr << progname << ": process front-surface join forces." << endl;
-	cerr << "Usage: " << progname << " [-n NODEID] [-m MODEL.arc] [-f FORCES.p1] [-d DISHMAP.bar]" << endl;
+	cerr << "Usage: " << progname << " [-n NODEID] [-m MODEL.arc] [-f FORCES.p1]" << endl;
 	cerr << "    -m FILE   Microstran model .arc file to read." << endl;
 	cerr << "    -f FILE   Member forces data file to read (.p1 report format from Microstran)" << endl;
-	cerr << "    -s SCALE  Scale forces for such that SCALE kN = 1 m" << endl;
+	cerr << "    -s SCALE  Scale forces in visual output, such that SCALE kN = 1 m" << endl;
 	cerr << "    -n NODEID Show only forces for node NODEID" << endl;
 	exit(1);
 }
