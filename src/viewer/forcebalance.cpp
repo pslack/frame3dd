@@ -1,9 +1,12 @@
 /** @FILE
-	This program calculates the front-surface joint forces at the plane lying
-	between the horizontal and vertical front-surface members.
-	The difference between end forces at each end of the horizontal member
-	is seen to be the force which acts on the vertical-member-together-with-
-	pyramid-legs.
+	This program displays the forces applied at each node in the structure
+	and creates a graphical output of the forces on each node from each
+	of the node's connected members. The total reaction force on the
+	node is shown, as well as the total applied load (for the selected load
+	case), and finally the force balance (which should be very close to zero).
+
+	You can set the program to display forces for all nodes in the structure,
+	or your can specify a single node, using a command-line argument.
 */
 
 #include <microstran/config.h>
