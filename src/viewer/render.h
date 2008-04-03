@@ -33,6 +33,7 @@ extern const SbColor BLUE;
 extern const SbColor ORANGE;
 extern const SbColor PURPLE;
 extern const SbColor CYAN;
+extern const SbColor LIME;
 
 SoSeparator *text(const SbVec3f &left, const char *str, const SbColor &c=WHITE);
 SoSeparator *sphere(const SbVec3f &C, const double &r=0.1, const SbColor &c=YELLOW);

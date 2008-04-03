@@ -59,6 +59,7 @@ const SbColor BLUE(0.5,0.5,1);
 const SbColor ORANGE(1,0.6,0);
 const SbColor PURPLE(1,0,1);
 const SbColor CYAN(0,1,1);
+const SbColor LIME(0.71,1,0);
 
 static float angle(const SbVec3f &a, const SbVec3f &b){
 	SbVec3f c(a.cross(b));
