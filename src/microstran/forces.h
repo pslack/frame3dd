@@ -31,21 +31,23 @@ extern "C"{
 
 /**
 	Forces and moments on a certain member due to the specified node.
-	Each member will have two such force struct, one for each end.
+	Each member will have two such force struct, one for each end. Forces
+	are in local member coordinate systems, as can be accessed using the
+	function 'memb_get_orientation'.
 
-	Note carefully that when a membernodeforce corresponds to a 'from' node,
+	@NOTE carefully that when a membernodeforce corresponds to a 'from' node,
 	the true direction of the force and moment is actually the negative
 	of that stored here, because of the sign convention used by Microstran
 	for member forces.
 
 	This comes about because positive axial forces are those which cause a
 	member to be in tension, regardless of whether one is at the +Z or -Z 
-	end of the member.
+	end of the member. @ENDNOTE
 
-	NOTE ALSO that in this code's sign convention, local coordinates are
-	'Z' aligned with the member axis in the direction from-->to, and
+	@NOTE ALSO that in libmicrostranparser's sign convention, local coordinates 
+	are 'Z' aligned with the member axis in the direction from-->to, and
 	'Y' is the major axis of the cross-section. 'Z' and 'X' are reversed
-	compared with the Microstran sign convention.
+	compared with the Microstran sign convention. @ENDNOTE
 */
 typedef struct membernodeforce_{
 	unsigned node;

@@ -290,12 +290,14 @@ int main(int argc, char **argv){
 		cerr << endl;
 
 		if(showall || nodeid == shownode){
+#ifdef SHOW_TOTAL_REACTION
 			if(vec3_mod(F_res) > 5e-4){
 				stringstream ss;
 				ss << "TR:";
 				ss << vec3_mod(F_res);
 				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(F_res,1./scaleF)),YELLOW,ss.str().c_str()));
 			}
+#endif
 			{
 				F_res = vec3_add(F_res, nl.F);
 				stringstream ss;
