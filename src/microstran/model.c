@@ -472,8 +472,9 @@ cbool model_add_case(model *a,case_stmt *c){
 	if(c1->type ==CASE_COMB){
 		unsigned i;
 		for(i=0; i<ARRAY_NUM(c1->data); ++i){
-			case_stmt *c2 = array_get(&a->cases, ((comb_stmt *)array_get(&c1->data, i))->caseindex);
-			fprintf(stderr," %c CASE %d '%s'\n",(i==0 ? '=' : '+'), c2->id, c2->name);
+			comb_stmt *co = array_get(&c1->data, i);
+			case_stmt *c2 = array_get(&a->cases, co->caseindex);
+			fprintf(stderr," %c %f × CASE %d '%s'\n",(i==0 ? '=' : '+'), co->factor, c2->id, c2->name);
 		}
 	}
 	return 1;

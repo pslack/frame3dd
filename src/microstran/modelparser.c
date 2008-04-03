@@ -362,16 +362,21 @@ cbool parseCOMB(parse *p, model *a, case_stmt *c){
 	unsigned subcaseid;
 	double factor;
 #define ASSIGN(Z) 1
-	return (
-		parseComments(p) /* && ASSIGN(fprintf(stderr,"Adding to case %d\n",c->id)) */
+	return ((
+		parseComments(p) && ASSIGN(fprintf(stderr,"Adding to case %d\n",c->id))
 		&& parseThisString(p,"COMB") && ASSIGN(fprintf(stderr,"COMB"))
-		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
-		&& parseNumber(p,&subcaseid) && ASSIGN(fprintf(stderr,"%d",subcaseid))
-		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
-		&& parseDouble(p,&factor) && ASSIGN(fprintf(stderr,"%f",factor))
-		&& parseEOLplus(p) && ASSIGN(fprintf(stderr,"\n"))
-		&& case_add_comb(a,c,subcaseid,factor)
-	);
+	) && (
+		(
+			parseWS(p) && ASSIGN(fprintf(stderr," "))
+			&& parseNumber(p,&subcaseid) && ASSIGN(fprintf(stderr,"%d",subcaseid))
+			&& parseWS(p) && ASSIGN(fprintf(stderr," "))
+			&& parseDouble(p,&factor) && ASSIGN(fprintf(stderr,"%f",factor))
+			&& parseEOLplus(p) && ASSIGN(fprintf(stderr,"\n"))
+			&& case_add_comb(a,c,subcaseid,factor)
+		) || (
+			assign(fprintf(stderr,"Failed to parse COMB\n"))
+		)
+	));
 #undef ASSIGN
 }	
 
@@ -388,12 +393,20 @@ cbool parseCASE(parse *p, model *a){
 		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
 		&& parseStrExcept(p,"\n\r",c.name,MAXCASENAME) && ASSIGN(fprintf(stderr,"\"%s\"",c.name))
 		&& parseEOLplus(p) && ASSIGN(fprintf(stderr,"\n"))
-		&& ((maybe(parseGRAV(p,&c))
-			&& parseNDLD(p,&c) && many(parseNDLD(p,&c))
-		) || (
-			parseCOMB(p,a,&c) && many(parseCOMB(p,a,&c))
-		))
-		&& model_add_case(a,&c)
+		&& (
+			(
+				parseGRAV(p,&c)
+				&& many(parseNDLD(p,&c))
+			) || (
+				one_or_more(parseNDLD(p,&c))
+			) || (
+				one_or_more(parseCOMB(p,a,&c))
+			)
+		)
+		&& (
+			model_add_case(a,&c)
+			|| assign(fprintf(stderr,"Unable to add case to model\n"))
+		)
 	);
 #undef ASSIGN
 }
@@ -420,7 +433,8 @@ cbool parseModelMicrostran(parse *p, model **a){
 		&& many(parsePROP(p,a1)) && ASSIGN(fprintf(stderr,"PROPs parsed\n"))
 		&& many(parseMATL(p,a1)) && ASSIGN(fprintf(stderr,"MATLs parsed\n"))
 		&& many(parseCASE(p,a1)) && ASSIGN(fprintf(stderr,"CASEs parsed\n"))
-		&& parseThisString(p,"END") && parseEOLplus(p) && ASSIGN(fprintf(stderr,"\nEND parsed\n"))
+		&& parseThisString(p,"END") && ASSIGN(fprintf(stderr,"END parsed\n"))
+		&& parseEOLplus(p) && ASSIGN(fprintf(stderr,"\nEND parsed\n"))
 		&& assign(*a = a1)
 	) || ((a1?model_destroy(a1):0), fail);
 #undef ASSIGN
