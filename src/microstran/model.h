@@ -112,7 +112,6 @@ typedef struct prop_stmt_{
 	char libr[MAXPROPLIBNAME];
 	char name[MAXPROPNAME];
 	char desc[MAXPROPDESC];
-	cbool isdefault;
 	double vals[MAXPROPVALS];
 } prop_stmt;
 
@@ -164,7 +163,7 @@ MSTRANP_API cbool model_find_node(const model *a, unsigned id, unsigned *index);
 MSTRANP_API cbool model_find_memb(const model *a, const unsigned membid, unsigned *membindex);
 
 /**
-	Find a member that bridges between nodeid1 and nodeid2. Flips the 'from' and 'to' if necessary, in order to find a match. 
+	Find a member that bridges between nodeid1 and nodeid2. Flips the 'from' and 'to' if necessary, in order to find a match.
 	The behaviour for the case where a model contains multiple members between a given node is undefined.
 
 	@param nodeid1 'from' node ID
@@ -180,7 +179,7 @@ MSTRANP_API cbool model_find_memb_from_to(const model *a, const unsigned nodeid1
 	be a pointer inside the array a->memb. If 'start' is NULL, assume that we
 	must start 'just before' a->memb[0].
 
-	This function can be used to (fairly) efficiently iterate through all of 
+	This function can be used to (fairly) efficiently iterate through all of
 	the members	connected to a node.
 
 	@return pointer into a->memb of next member AFTER start that is connected
@@ -199,7 +198,7 @@ cbool model_add_memb(model *a, unsigned id,unsigned fromnode
 /**
 	Add member offsets in the form of variations in the positions of the
 	member ends relative to the nodes at which the member ends are anchored.
-	We're not sure yet how Microstran calculates with these offsets, but 
+	We're not sure yet how Microstran calculates with these offsets, but
 	we want to be able to parse them so that we can correctly _render_ frames that
 	include such offsets.
 */
@@ -221,7 +220,7 @@ MSTRANP_API cbool model_get_member_offset_global(const model *a, const unsigned 
 #endif
 
 cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[]
-		, cbool isdefault, double vals[MAXPROPVALS]
+		, double vals[MAXPROPVALS]
 );
 
 /**

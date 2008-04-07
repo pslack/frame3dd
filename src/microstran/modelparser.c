@@ -241,7 +241,6 @@ cbool parsePROP(parse *p, model *a){
 	char libr[MAXPROPLIBNAME] = "";
 	char name[MAXPROPNAME] = "";
 	char desc[MAXPROPDESC] = "";
-	cbool isdefault;
 	double vals[6];
 #define ASSIGN(Z) 1
 	return (
@@ -258,16 +257,12 @@ cbool parsePROP(parse *p, model *a){
 			&& parseStrExcept(p," \n\r\t",name,MAXPROPNAME) && ASSIGN(fprintf(stderr,"%s",name))
 			&& parseWS(p) && ASSIGN(fprintf(stderr," "))
 			&& parseThisChar(p,'Y') && ASSIGN(fprintf(stderr,"Y"))
-			&& parseWS(p)
-			&& (
-				(
-					parseThisString(p,"default")
-					&& assign(isdefault=1) && ASSIGN(fprintf(stderr," default"))
-				) || (
-					parseStrExcept(p,"\n\r\t",desc,MAXPROPDESC)
-					&& ASSIGN(fprintf(stderr,"%s",desc))
-				)
-			) && parseEOLplus(p) && ASSIGN(fprintf(stderr,"\n\t"))
+			&& maybe(
+				parseWS(p)
+				&& parseStrExcept(p,"\n\r\t",desc,MAXPROPDESC)
+				&& ASSIGN(fprintf(stderr," %s",desc))
+			)
+			&& parseEOLplus(p)
 		) || (
 			parseThisString(p,"PRIS") && ASSIGN(fprintf(stderr,"PRIS"))
 			&& parseWS(p) && ASSIGN(fprintf(stderr," "))
@@ -275,7 +270,8 @@ cbool parsePROP(parse *p, model *a){
 			&& parseWS(p) && ASSIGN(fprintf(stderr," "))
 			&& parseStrExcept(p,"\n\r\t",desc,MAXPROPDESC) && ASSIGN(fprintf(stderr,"%s",desc))
 			&& parseEOLplus(p)
-		)) && ASSIGN(fprintf(stderr,"\n\t"))
+		))
+		&& ASSIGN(fprintf(stderr,"\n\t"))
 		&& parseDouble(p,vals+0) && ASSIGN(fprintf(stderr,"%e",vals[0]))
 		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
 		&& parseDouble(p,vals+1) && ASSIGN(fprintf(stderr,"%e",vals[1]))
@@ -288,7 +284,7 @@ cbool parsePROP(parse *p, model *a){
 		&& parseWS(p) && ASSIGN(fprintf(stderr," "))
 		&& parseDouble(p,vals+5) && ASSIGN(fprintf(stderr,"%e",vals[5]))
 		&& parseEOLplus(p) && ASSIGN(fprintf(stderr,"\n"))
-		&& model_add_prop(a, id, libr, name, desc, isdefault, vals)
+		&& model_add_prop(a, id, libr, name, desc, vals)
 	);
 #undef ASSIGN
 }
@@ -394,7 +390,7 @@ cbool parseCASE(parse *p, model *a){
 	case_stmt c;
 	c.type = CASE_UNDEFINED;
 	//ndld_stmt ndld[MAXNDLDS];
-#define ASSIGN(Z) 1
+#define ASSIGN(Z) assign(Z)
 	return (
 		parseComments(p)
 		&& parseThisString(p,"CASE") && ASSIGN(fprintf(stderr,"CASE"))

@@ -119,7 +119,7 @@ cbool model_find_node(const model *a, unsigned id, unsigned *index){
 		}
 	}
 	return 0;
-}			
+}
 
 cbool model_add_memb(model *a, unsigned id,unsigned fromnode
 		,unsigned tonode, member_orientation orient, unsigned prop, unsigned matl
@@ -144,7 +144,7 @@ cbool model_add_memb(model *a, unsigned id,unsigned fromnode
 		if(model_find_node(a,orient.node, &index)){
 			orient.node = index;
 			/* fprintf(stderr,"Member %d is oriented to node %d\n",id,a->node[orient.node].id); */
-		}else{	
+		}else{
 			fprintf(stderr,"Invalid MEMB orientation node '%d'\n",orient.node);
 			return 0;
 		}
@@ -309,10 +309,10 @@ cbool model_get_member_offset_global(const model *a, const unsigned memberid, mo
 
 	n = ARRAY_NUM(a->moffs);
 	for(i=0; i<n; ++i){
-		// copy the member offset to the 
+		// copy the member offset to the
 		o = *(moff_stmt *)array_get((array *)&(a->moffs), i);
 		if(o.id == memberid){
-			found=1; 
+			found=1;
 			break;
 		}
 	}
@@ -372,7 +372,7 @@ cbool model_get_member_offset_global(const model *a, const unsigned memberid, mo
 
 		/* we can now perform the coordinate transform via rotation xxx then zz */
 		moff->deltafrom = vec3_rotate(Add,zzdir,-theta_zz);
-	
+
 		vec3 Bdd = vec3_rotate(o.deltato,xxxdir,-theta_xxx);
 		moff->deltato = vec3_rotate(Bdd,zzdir,-theta_zz);
 
@@ -387,7 +387,7 @@ cbool model_get_member_offset_global(const model *a, const unsigned memberid, mo
 
 	}
 	return 1;
-}	
+}
 #endif
 
 int moff_print(FILE *f, const moff_stmt *o){
@@ -401,10 +401,10 @@ int moff_print(FILE *f, const moff_stmt *o){
 		, o->deltato.x, o->deltato.y, o->deltato.z
 	);
 }
-	
+
 
 cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[]
-		, cbool isdefault, double vals[MAXPROPVALS]
+		, double vals[MAXPROPVALS]
 ){
 	prop_stmt p;
 	//int i = 0;
@@ -415,7 +415,6 @@ cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[
 	strncpy(p.libr,libr,MAXPROPLIBNAME);
 	strncpy(p.name,name,MAXPROPNAME);
 	strncpy(p.desc,desc,MAXPROPDESC);
-	p.isdefault = isdefault;
 
 #ifdef MODEL_DEBUG
 	for(i=0; i < MAXPROPVALS; ++i){
@@ -426,9 +425,6 @@ cbool model_add_prop(model *a, unsigned id, char libr[], char name[], char desc[
 		fprintf(stderr,"LIBR %s ",libr);
 	}
 	fprintf(stderr,"%s Y",name);
-	if(isdefault){
-		fprintf(stderr,"%s",(isdefault?"default":""));
-	}
 	fprintf(stderr,"\n\t");
 	for(i=0; i<MAXPROPVALS; ++i){
 		fprintf(stderr,"%e ",vals[i]);
@@ -497,7 +493,7 @@ cbool model_find_case(model *a,unsigned caseid, unsigned *caseindex){
 
 cbool model_apply_displacements(model *m, casedisplacements *cd){
 	/* important note: nodes are not densely numbered, so we must use 'find' functions etc */
-	/* note that we required all nodes to be given a displacement */	
+	/* note that we required all nodes to be given a displacement */
 	unsigned im, nodeid;
 	nodedisplacement *nd;
 	unsigned displaced = 0;
@@ -540,7 +536,7 @@ prop_stmt *model_find_prop(model *m, unsigned propid){
 		}
 	}
 	return NULL;
-}	
+}
 
 void model_write_inventory(model *m){
 	unsigned i;
@@ -561,7 +557,7 @@ void model_write_inventory(model *m){
 		to = m->node + memb->tonode;
 
 		l = vec3_mod(vec3_diff(to->pos,from->pos));
-		
+
 		printf("%d\t%d\t%d\t%d\t%s\t%f\n", memb->id, from->id, to->id, prop->id, prop->name, l);
 	}
 }
