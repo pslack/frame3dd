@@ -1,0 +1,139 @@
+ 
+== I N P U T / A N A L Y S I S   R E P O R T ==
+ 
+ 
+Job:    lateral-column
+ 
+Title:  Lateral column
+        Simple test case for demonstrating Microstran parser in Frame3d
+Type:   Space frame
+Date:    7 Apr 2008
+Time:    3:46 PM
+ 
+Nodes .............................      2
+Members ...........................      1
+Spring supports ...................      0
+Sections ..........................      1
+Materials .........................      1
+Primary load cases ................      1
+Combination load cases ............      0
+ 
+Analysis:  Non-linear elastic
+Update node coordinates ...........      Y
+Small displacement theory .........      Y
+Include axial force effects .......      Y
+Include flexural shortening .......      Y
+Convergence criterion:  Residual
+Convergence tolerance .........  5.000E-04
+ 
+ 
+== L O A D   C A S E S ==
+ 
+  Case Type Analysis Title
+     1   P      N    Horizontal load 1kN
+ 
+Analysis Types:
+  S - Skipped (not analysed)
+  L - Linear
+  N - Non-linear
+ 
+ 
+== N O D E   C O O R D I N A T E S ==
+ 
+  Node         X         Y         Z   Restraint
+               m         m         m
+     1     0.000     0.000     0.000      111111
+     2     0.000     0.000     1.000      000000
+ 
+ 
+== M E M B E R   D E F I N I T I O N ==
+ 
+Member     A     B     C  Prop  Matl  Rel-A  Rel-B    Length
+                                                           m
+     1     1     2     X     1     1 000000 000000     1.000
+ 
+ 
+== L I B R A R Y   S E C T I O N S ==
+ 
+Section  Library       Name            Axis  Comment
+     1   asw           50X20X1.6RHS       Y  comment
+ 
+ 
+== S E C T I O N   P R O P E R T I E S ==
+ 
+Section        Ax         Ay         Az          J         Iy         Iz  fact
+               m2         m2         m2         m4         m4         m4
+     1  2.070E-04  0.000E+00  0.000E+00  3.890E-08  1.420E-08  6.080E-08
+ 
+ 
+== M A T E R I A L   P R O P E R T I E S ==
+ 
+Material             E         u    Density        Alpha
+                 kN/m2                 t/m3       /deg C
+     1       2.000E+08    0.2500  7.850E+00    1.170E-05
+ 
+ 
+== T A B L E   O F   Q U A N T I T I E S ==
+ 
+MATERIAL      1
+ 
+Section  Name                 Length        Mass  Comment
+                                   m       tonne
+     1   50X20X1.6RHS          1.000       0.002  comment
+                          ----------  ----------
+                               1.000       0.002
+ 
+ 
+== A P P L I E D   L O A D I N G ==
+ 
+CASE     1: Horizontal load 1kN
+ 
+-- Node Loads --
+ 
+  Node    X Force   Y Force   Z Force  X Moment  Y Moment  Z Moment
+               kN        kN        kN       kNm       kNm       kNm
+     2      1.000     0.500     0.000     0.000     0.000     0.000
+ 
+-- Sum of Applied Loads (Global Axes): --
+  FX:       1.000    FY:       0.500    FZ:       0.000
+ Moments about the global origin:
+  MX:      -0.500    MY:       1.000    MZ:       0.000
+ 
+ 
+== N O D E   D I S P L A C E M E N T S ==
+ 
+CASE     1: Horizontal load 1kN
+ 
+  Node     X-Disp     Y-Disp     Z-Disp     X-Rotn     Y-Rotn     Z-Rotn
+               m         m         m       rad       rad       rad
+     1     0.0000     0.0000     0.0000    0.00000    0.00000    0.00000
+     2     0.0274     0.0584    -0.0025   -0.08763    0.04109    0.00000
+ 
+ 
+== M E M B E R   F O R C E S ==
+ 
+CASE     1: Horizontal load 1kN
+ 
+Member   Node      Axial    Shear-y    Shear-z     Torque   Moment-y   Moment-z
+                     kN         kN         kN        kNm        kNm        kNm
+     1      1       0.06       1.00       0.50       0.00       0.50       1.00
+            2       0.06       1.00       0.50       0.00       0.00       0.00
+ 
+Positive Forces (Member Axes):
+  Axial  - Tension              Shear  - End A sagging
+  Torque - Right-hand twist     Moment - Sagging
+ 
+ 
+== S U P P O R T   R E A C T I O N S ==
+ 
+CASE     1: Horizontal load 1kN
+ 
+  Node    Force-X    Force-Y    Force-Z   Moment-X   Moment-Y   Moment-Z
+              kN        kN        kN       kNm       kNm       kNm
+     1      -1.00      -0.50       0.00       0.50      -1.00       0.04
+ 
+ SUM:       -1.00      -0.50       0.00 (all nodes)
+ 
+ Max. residual: -3.524E-07 at DOFN: 3
+ 
+(Reactions act on structure in positive global axis directions.)

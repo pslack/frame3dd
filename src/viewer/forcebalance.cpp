@@ -11,10 +11,6 @@
 
 #include <microstran/config.h>
 
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/shared_ptr.hpp>
-
 #include <iostream>
 #include <stdlib.h>
 #include <stdexcept>
@@ -22,6 +18,9 @@
 #include <fstream>
 #include <assert.h>
 #include <sstream>
+
+#include <unistd.h>
+#include <stdlib.h>
 
 #include <microstran/parse.h>
 #include <microstran/model.h>
@@ -156,7 +155,7 @@ int main(int argc, char **argv){
 
 	double maxF = 0, maxM = 0;
 	bool foundloads = false;
-	
+
 	// loop through all the nodes
 	for(unsigned i = 0; i < M->num_nodes; ++i){
 		unsigned nodeid = M->node[i].id;
@@ -172,7 +171,7 @@ int main(int argc, char **argv){
 		if(!model_find_node(M, nodeid, &nodeindex)){
 			throw runtime_error("Unknown node ID");
 		}
-		vec3 pos = M->node[nodeindex].pos;		
+		vec3 pos = M->node[nodeindex].pos;
 
 		if(1 || showall || nodeid==shownode){
 			stringstream ss;
@@ -198,7 +197,7 @@ int main(int argc, char **argv){
 
 			memberforce *mf = caseforces_find_member(cf, m->id);
 
-			assert(mf->member == m->id);		
+			assert(mf->member == m->id);
 
 			// check for member offset
 			moff_stmt *moff = model_find_member_offset(M, m->id);
@@ -220,7 +219,7 @@ int main(int argc, char **argv){
 				/*
 					on the 'from' node, the force is negated twice: once
 					for the fact of the sign convention, another for the
-					fact that we are concerned with the force of the 
+					fact that we are concerned with the force of the
 					member on the node, not vice versa
 				*/
 				F_local = mnf->F;
@@ -230,7 +229,7 @@ int main(int argc, char **argv){
 				othernode = &M->node[m->fromnode];
 				mnf = &mf->tonode;
 				if(moff)delta = &moff->deltato;
-				/* 
+				/*
 					on the 'to' node, the force is only negated once, for
 					the fact of calculating force of member on node.
 				*/
@@ -330,7 +329,7 @@ int main(int argc, char **argv){
 	wr.getOutput()->setFilePointer(f);
 	cerr << "Writing scene file to '" << sceneoutfile << "'...";
 	wr.apply(root);
-	cerr << "done!" << endl;	
+	cerr << "done!" << endl;
 
 	exit(0);
 }

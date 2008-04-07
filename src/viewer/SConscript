@@ -18,9 +18,9 @@ env['PROGS'].append(
 	v_env.Program("../arc2iv",srcs)
 )
 
-env['PROGS'].append( 
-	v_env.Program("../iv2vrml",['iv2vrml.cpp'])
-)
+#env['PROGS'].append( 
+#	v_env.Program("../iv2vrml",['iv2vrml.cpp'])
+#)
 
 env['PROGS'].append( 
 	v_env.Program("../forcebalance",['forcebalance.cpp','render.cpp'])
