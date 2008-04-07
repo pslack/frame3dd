@@ -62,7 +62,7 @@ void usage(char *progname){
 	cerr << "    -f FORCES  Filename of .p1 member forces report to read. Defaults to MODEL.p1 (by changing file extension)." << endl;
 	cerr << "    -s SCALE   Scale forces in visual output, such that SCALE kN = 1 m" << endl;
 	cerr << "    -n NODEID  Show only forces for node NODEID" << endl;
-	cerr << "    -o[OUTFILE] Filename to write to, in Open Inventor .iv format (instead of rendering to screen). If name omitted, defaults to '" << defaultsceneoutfile << "'." << endl; 
+	cerr << "    -o[OUTFILE] Filename to write to, in Open Inventor .iv format (instead of rendering to screen). If name omitted, defaults to '" << defaultsceneoutfile << "'." << endl;
 	exit(1);
 }
 
@@ -93,7 +93,7 @@ int main(int argc, char **argv){
 			case 'f': forcefile = optarg; break;
 			case 'c': caseid = atoi(optarg); break;
 			case 's': scaleF = atof(optarg); break;
-			case 'o': 
+			case 'o':
 				if(optarg)sceneoutfile = optarg;
 				else sceneoutfile = defaultsceneoutfile;
 				break;
@@ -135,7 +135,7 @@ int main(int argc, char **argv){
 		sprintf(c,".p1");
 		forcefile = forcefileauto;
 	}
-	
+
 
 	cerr << "Loading member forces file '" << forcefile << "'..." << endl;
 	modelforces *MF = NULL;
@@ -185,8 +185,10 @@ int main(int argc, char **argv){
 		ndld_stmt nl;
 		if(case_total_load_node(M, cl, nodeid, &nl)){
 			foundloads = true;
-			fprintf(stderr, "Node %d: ",nodeid);
-			VEC3_PR(nl.F);
+			if(showall || nodeid==shownode){
+				fprintf(stderr, "Node %d: ",nodeid);
+				VEC3_PR(nl.F);
+			}
 		}
 
 		unsigned nodeindex;
@@ -308,11 +310,11 @@ int main(int argc, char **argv){
 			}
 		}
 
-		cerr << "Resultant force at node " << nodeid << " = ";
-		vec3_print(stderr,F_res);
-		cerr << endl;
-
 		if(showall || nodeid == shownode){
+			cerr << "Resultant force at node " << nodeid << " = ";
+			vec3_print(stderr,F_res);
+			cerr << endl;
+
 #ifdef SHOW_TOTAL_REACTION
 			if(vec3_mod(F_res) > 5e-4){
 				stringstream ss;
@@ -369,7 +371,7 @@ int main(int argc, char **argv){
 		// Clean up resources.
 		delete eviewer;
 	}
-	root->unref();		
+	root->unref();
 
 	exit(0);
 }

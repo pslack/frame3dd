@@ -1,0 +1,284 @@
+ 
+== I N P U T / A N A L Y S I S   R E P O R T ==
+ 
+ 
+Job:    testcase3
+ 
+Title:  Set up frame
+        test node forces for balance
+Type:   Space frame
+Date:    7 Apr 2008
+Time:    6:43 PM
+ 
+Nodes .............................      4
+Members ...........................      5
+Spring supports ...................      0
+Sections ..........................      1
+Materials .........................      1
+Primary load cases ................      2
+Combination load cases ............      1
+ 
+Analysis:  Linear elastic
+ 
+ 
+== L O A D   C A S E S ==
+ 
+  Case Type Analysis Title
+     1   P      L    Gravity
+     2   P      L    Nodal load
+     3   C      L    Case 1 + Case2
+ 
+Analysis Types:
+  S - Skipped (not analysed)
+  L - Linear
+  N - Non-linear
+ 
+ 
+== N O D E   C O O R D I N A T E S ==
+ 
+  Node         X         Y         Z   Restraint
+               m         m         m
+     1     1.000     0.577     1.633      000000
+     2     1.000     1.733     0.000      111000
+     3     0.000     0.000     0.000      111111
+     4     2.000     0.000     0.000      111111
+ 
+ 
+== M E M B E R   D E F I N I T I O N ==
+ 
+Member     A     B     C  Prop  Matl  Rel-A  Rel-B    Length
+                                                           m
+     2     2     3     Z     1     1 000000 000000     2.001
+     3     3     4     Z     1     1 000000 000000     2.000
+     4     4     2     Z     1     1 000000 000000     2.001
+     5     1     3     Z     1     1 000000 000000     2.000
+     6     1     4     Z     1     1 000000 000000     2.000
+ 
+ 
+== L I B R A R Y   S E C T I O N S ==
+ 
+Section  Library       Name            Axis  Comment
+     1   asw           60.3X2.3CHS        Y  default
+ 
+ 
+== S E C T I O N   P R O P E R T I E S ==
+ 
+Section        Ax         Ay         Az          J         Iy         Iz  fact
+               m2         m2         m2         m4         m4         m4
+     1  4.190E-04  0.000E+00  0.000E+00  3.530E-07  1.770E-07  1.770E-07
+ 
+ 
+== M A T E R I A L   P R O P E R T I E S ==
+ 
+Material             E         u    Density        Alpha
+                 kN/m2                 t/m3       /deg C
+     1       2.000E+08    0.2500  7.850E+00    1.170E-05
+ 
+ 
+== T A B L E   O F   Q U A N T I T I E S ==
+ 
+MATERIAL      1
+ 
+Section  Name                 Length        Mass  Comment
+                                   m       tonne
+     1   60.3X2.3CHS          10.003       0.033  default
+                          ----------  ----------
+                              10.003       0.033
+ 
+ 
+== C O N D I T I O N   N U M B E R ==
+ 
+Maximum condition number: 5.929E+01 at node: 1 DOFN: 3
+ 
+ 
+== A P P L I E D   L O A D I N G ==
+ 
+CASE     1: Gravity
+ 
+-- Gravitational Acceleration --
+ 
+     X Comp     Y Comp     Z Comp
+     m/sec2     m/sec2     m/sec2
+      0.000      0.000     -9.810
+ 
+-- Sum of Applied Loads (Global Axes): --
+  FX:       0.000    FY:       0.000    FZ:      -0.323
+ Moments about the global origin:
+  MX:      -0.149    MY:       0.323    MZ:       0.000
+ 
+ 
+== N O D E   D I S P L A C E M E N T S ==
+ 
+CASE     1: Gravity
+ 
+  Node     X-Disp     Y-Disp     Z-Disp     X-Rotn     Y-Rotn     Z-Rotn
+               m         m         m       rad       rad       rad
+     1     0.0000     0.0005    -0.0002   -0.00037    0.00000    0.00000
+     2     0.0000     0.0000     0.0000    0.00016    0.00000    0.00000
+     3     0.0000     0.0000     0.0000    0.00000    0.00000    0.00000
+     4     0.0000     0.0000     0.0000    0.00000    0.00000    0.00000
+ 
+ 
+== M E M B E R   F O R C E S ==
+ 
+CASE     1: Gravity
+ 
+Member   Node      Axial    Shear-y    Shear-z     Torque   Moment-y   Moment-z
+                     kN         kN         kN        kNm        kNm        kNm
+     2      2       0.00      -0.02       0.00       0.00       0.00       0.00
+            3       0.00       0.04       0.00       0.00       0.00      -0.02
+     3      3       0.00      -0.03       0.00       0.00       0.00      -0.01
+            4       0.00       0.03       0.00       0.00       0.00      -0.01
+     4      4       0.00      -0.04       0.00       0.00       0.00      -0.02
+            2       0.00       0.02       0.00       0.00       0.00       0.00
+     5      1      -0.01      -0.01      -0.01       0.00       0.00       0.00
+            3      -0.06       0.02      -0.01       0.00       0.01      -0.02
+     6      1      -0.01      -0.01       0.01       0.00       0.00       0.00
+            4      -0.06       0.02       0.01       0.00      -0.01      -0.02
+ 
+Positive Forces (Member Axes):
+  Axial  - Tension              Shear  - End A sagging
+  Torque - Right-hand twist     Moment - Sagging
+ 
+ 
+== S U P P O R T   R E A C T I O N S ==
+ 
+CASE     1: Gravity
+ 
+  Node    Force-X    Force-Y    Force-Z   Moment-X   Moment-Y   Moment-Z
+              kN        kN        kN       kNm       kNm       kNm
+     2       0.00       0.00       0.05       0.00       0.00       0.00
+     3       0.02       0.00       0.14       0.03      -0.03      -0.01
+     4      -0.02       0.00       0.14       0.03       0.03       0.01
+ 
+ SUM:        0.00       0.00       0.32 (all nodes)
+ 
+ Max. residual: 8.882E-16 at DOFN: 1
+ 
+(Reactions act on structure in positive global axis directions.)
+ 
+CASE     2: Nodal load
+ 
+-- Node Loads --
+ 
+  Node    X Force   Y Force   Z Force  X Moment  Y Moment  Z Moment
+               kN        kN        kN       kNm       kNm       kNm
+     1     10.000    40.000    20.000     0.000     0.000     0.000
+ 
+-- Sum of Applied Loads (Global Axes): --
+  FX:      10.000    FY:      40.000    FZ:      20.000
+ Moments about the global origin:
+  MX:     -53.788    MY:      -3.666    MZ:      34.226
+ 
+ 
+== N O D E   D I S P L A C E M E N T S ==
+ 
+CASE     2: Nodal load
+ 
+  Node     X-Disp     Y-Disp     Z-Disp     X-Rotn     Y-Rotn     Z-Rotn
+               m         m         m       rad       rad       rad
+     1     0.0005     0.9296    -0.3281   -0.80030    0.00029   -0.00010
+     2     0.0000     0.0000     0.0000    0.00000    0.00000    0.00000
+     3     0.0000     0.0000     0.0000    0.00000    0.00000    0.00000
+     4     0.0000     0.0000     0.0000    0.00000    0.00000    0.00000
+ 
+ 
+== M E M B E R   F O R C E S ==
+ 
+CASE     2: Nodal load
+ 
+Member   Node      Axial    Shear-y    Shear-z     Torque   Moment-y   Moment-z
+                     kN         kN         kN        kNm        kNm        kNm
+     2      2       0.00       0.00       0.00       0.00       0.00       0.00
+            3       0.00       0.00       0.00       0.00       0.00       0.00
+     3      3       0.00       0.00       0.00       0.00       0.00       0.00
+            4       0.00       0.00       0.00       0.00       0.00       0.00
+     4      4       0.00       0.00       0.00       0.00       0.00       0.00
+            2       0.00       0.00       0.00       0.00       0.00       0.00
+     5      1      28.57       8.96     -12.68      -5.65      -2.67       1.87
+            3      28.57       8.96     -12.68      -5.65      22.69     -16.04
+     6      1       8.58       8.95      12.69       5.65       2.67       1.87
+            4       8.58       8.95      12.69       5.65     -22.71     -16.03
+ 
+Positive Forces (Member Axes):
+  Axial  - Tension              Shear  - End A sagging
+  Torque - Right-hand twist     Moment - Sagging
+ 
+ 
+== S U P P O R T   R E A C T I O N S ==
+ 
+CASE     2: Nodal load
+ 
+  Node    Force-X    Force-Y    Force-Z   Moment-X   Moment-Y   Moment-Z
+              kN        kN        kN       kNm       kNm       kNm
+     2       0.00       0.00       0.00       0.00       0.00       0.00
+     3     -14.27     -22.88     -18.16      26.89      -3.00      -8.49
+     4       4.27     -17.12      -1.84      26.89       2.98       8.50
+ 
+ SUM:      -10.00     -40.00     -20.00 (all nodes)
+ 
+ Max. residual: 2.970E-12 at DOFN: 3
+ 
+(Reactions act on structure in positive global axis directions.)
+ 
+CASE     3: Case 1 + Case2
+ 
+-- Load Combinations --
+ 
+  Case  Factor
+     1   1.000  Gravity
+     2   1.000  Nodal load
+ 
+-- Sum of Applied Loads (Global Axes): --
+  FX:      10.000    FY:      40.000    FZ:      19.677
+ Moments about the global origin:
+  MX:     -53.937    MY:      -3.343    MZ:      34.226
+ 
+ 
+== N O D E   D I S P L A C E M E N T S ==
+ 
+CASE     3: Case 1 + Case2
+ 
+  Node     X-Disp     Y-Disp     Z-Disp     X-Rotn     Y-Rotn     Z-Rotn
+               m         m         m       rad       rad       rad
+     1     0.0005     0.9300    -0.3282   -0.80067    0.00029   -0.00010
+     2     0.0000     0.0000     0.0000    0.00016    0.00000    0.00000
+     3     0.0000     0.0000     0.0000    0.00000    0.00000    0.00000
+     4     0.0000     0.0000     0.0000    0.00000    0.00000    0.00000
+ 
+ 
+== M E M B E R   F O R C E S ==
+ 
+CASE     3: Case 1 + Case2
+ 
+Member   Node      Axial    Shear-y    Shear-z     Torque   Moment-y   Moment-z
+                     kN         kN         kN        kNm        kNm        kNm
+     2      2       0.00      -0.02       0.00       0.00       0.00       0.00
+            3       0.00       0.04       0.00       0.00       0.00      -0.02
+     3      3       0.00      -0.03       0.00       0.00       0.00      -0.01
+            4       0.00       0.03       0.00       0.00       0.00      -0.01
+     4      4       0.00      -0.04       0.00       0.00       0.00      -0.02
+            2       0.00       0.02       0.00       0.00       0.00       0.00
+     5      1      28.56       8.94     -12.69      -5.65      -2.67       1.87
+            3      28.51       8.98     -12.69      -5.65      22.71     -16.06
+     6      1       8.57       8.93      12.69       5.65       2.67       1.87
+            4       8.52       8.97      12.69       5.65     -22.72     -16.04
+ 
+Positive Forces (Member Axes):
+  Axial  - Tension              Shear  - End A sagging
+  Torque - Right-hand twist     Moment - Sagging
+ 
+ 
+== S U P P O R T   R E A C T I O N S ==
+ 
+CASE     3: Case 1 + Case2
+ 
+  Node    Force-X    Force-Y    Force-Z   Moment-X   Moment-Y   Moment-Z
+              kN        kN        kN       kNm       kNm       kNm
+     2       0.00       0.00       0.05       0.00       0.00       0.00
+     3     -14.26     -22.88     -18.02      26.93      -3.02      -8.49
+     4       4.26     -17.12      -1.71      26.93       3.00       8.50
+ 
+ SUM:      -10.00     -40.00     -19.68 (all nodes)
+ 
+(Reactions act on structure in positive global axis directions.)

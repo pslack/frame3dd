@@ -1,5 +1,6 @@
 * Set up frame
 * test node forces for balance
+ 
 VERS     5
 TYPE     5
 VERT     3
@@ -25,7 +26,7 @@ CASE     1 Gravity
 GRAV           0.000      0.000     -9.810
  
 CASE     2 Nodal load
-NDLD     1     40.000     10.000     20.000      0.000      0.000      0.000
+NDLD     1     10.000     40.000     20.000      0.000      0.000      0.000
  
 CASE     3 Case 1 + Case2
 COMB     1      1.000
