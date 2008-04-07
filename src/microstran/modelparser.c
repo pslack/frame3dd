@@ -236,6 +236,10 @@ cbool parseMTYP(parse *p, model *a){
 
 /* PROP statement */
 
+/**
+	FIXME this should also parse LIBR lines with 'X' instead of 'Y' as the 
+	major-axis alignment
+*/
 cbool parsePROP(parse *p, model *a){
 	unsigned id;
 	char libr[MAXPROPLIBNAME] = "";

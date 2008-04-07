@@ -52,40 +52,51 @@ Vector::operator()(const vec3 &v){
 #endif
 
 double defaultscaleF = 5;
+const char *defaultmodelfname = "model.arc";
+const char *defaultsceneoutfile = "forcebalance.iv";
 
 void usage(char *progname){
-	cerr << progname << ": process front-surface join forces." << endl;
-	cerr << "Usage: " << progname << " [-n NODEID] [-m MODEL.arc] [-f FORCES.p1]" << endl;
-	cerr << "    -m FILE   Microstran model .arc file to read." << endl;
-	cerr << "    -f FILE   Member forces data file to read (.p1 report format from Microstran)" << endl;
-	cerr << "    -s SCALE  Scale forces in visual output, such that SCALE kN = 1 m" << endl;
-	cerr << "    -n NODEID Show only forces for node NODEID" << endl;
+	cerr << progname << ": Parse and display force balance on nodes using Microstran output." << endl;
+	cerr << "Usage: " << progname << " [-o[OUTFILE]] [-n NODEID] [-m MODEL.arc] [-f FORCES.p1]" << endl;
+	cerr << "    -m MODEL   Filename of Microstran model .arc file to read. Defaults to '" << defaultmodelfname << "'." << endl;
+	cerr << "    -f FORCES  Filename of .p1 member forces report to read. Defaults to MODEL.p1 (by changing file extension)." << endl;
+	cerr << "    -s SCALE   Scale forces in visual output, such that SCALE kN = 1 m" << endl;
+	cerr << "    -n NODEID  Show only forces for node NODEID" << endl;
+	cerr << "    -o[OUTFILE] Filename to write to, in Open Inventor .iv format (instead of rendering to screen). If name omitted, defaults to '" << defaultsceneoutfile << "'." << endl; 
 	exit(1);
 }
 
 int main(int argc, char **argv){
-
-	const char *defaultmodelfname = "model.arc";
 	const char *modelfname = defaultmodelfname;
 
-	const char *defaultforcefile = "forces.p1";
-	const char *forcefile = defaultforcefile;
+	const char *forcefile = NULL;
+#define FILENMAX 200
+	char forcefileauto[FILENMAX];
+
+	const char *sceneoutfile = NULL;
 
 	unsigned caseid = 1;
 
 	bool showall = 1;
 	unsigned shownode = 0;
 
-	double scaleF = defaultscaleF, scaleM = 5;
+	double scaleF = defaultscaleF;
+#ifdef SHOW_MOMENTS
+	double scaleM = 5;
+#endif
 
 	char c;
-    while((c = getopt (argc, argv, "n:m:f:c:s:")) != -1){
+    while((c = getopt (argc, argv, "n:m:f:c:s:o::")) != -1){
 		switch(c){
 			case 'n': showall = false; shownode = atoi(optarg); break;
 			case 'm': modelfname = optarg; break;
 			case 'f': forcefile = optarg; break;
 			case 'c': caseid = atoi(optarg); break;
 			case 's': scaleF = atof(optarg); break;
+			case 'o': 
+				if(optarg)sceneoutfile = optarg;
+				else sceneoutfile = defaultsceneoutfile;
+				break;
 			default:
 				usage(argv[0]);
 		}
@@ -114,6 +125,17 @@ int main(int argc, char **argv){
 
 	//--------------------
 	// read in member forces
+
+	if(forcefile == NULL){
+		strncpy(forcefileauto,(char *)modelfname,FILENMAX);
+		char *c = forcefileauto;
+		while(*c!='\0')++c;
+		while(*c!='.')--c;
+		if(c==modelfname)throw runtime_error("unable to generate forces filename, please specify using '-f' option");
+		sprintf(c,".p1");
+		forcefile = forcefileauto;
+	}
+	
 
 	cerr << "Loading member forces file '" << forcefile << "'..." << endl;
 	modelforces *MF = NULL;
@@ -151,7 +173,7 @@ int main(int argc, char **argv){
 
     SoSeparator *root = new SoSeparator;
     root->ref();
-	root->addChild(axes());
+	root->addChild(axes(0.2));
 
 	double maxF = 0, maxM = 0;
 	bool foundloads = false;
@@ -173,7 +195,7 @@ int main(int argc, char **argv){
 		}
 		vec3 pos = M->node[nodeindex].pos;
 
-		if(1 || showall || nodeid==shownode){
+		if(showall || nodeid==shownode){
 			stringstream ss;
 			ss << vec3_mod(nl.F);
 			root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(nl.F,1./scaleF)),GREEN,ss.str().c_str()));
@@ -321,15 +343,33 @@ int main(int argc, char **argv){
 	cerr << "Maximum force = " << maxF << endl;
 	cerr << "Maximum moment = " << maxM << endl;
 
-	SoWriteAction wr;
-	const char *sceneoutfile = "forcebalance.iv";
-	FILE *f;
-	f = fopen(sceneoutfile,"w");
-	if(!f) throw runtime_error("Unable to write to scene output file");
-	wr.getOutput()->setFilePointer(f);
-	cerr << "Writing scene file to '" << sceneoutfile << "'...";
-	wr.apply(root);
-	cerr << "done!" << endl;
+	if(sceneoutfile){
+		SoWriteAction wr;
+		FILE *f;
+		f = fopen(sceneoutfile,"w");
+		if(!f) throw runtime_error("Unable to write to scene output file");
+		wr.getOutput()->setFilePointer(f);
+		cerr << "Writing scene file to '" << sceneoutfile << "'...";
+		wr.apply(root);
+		cerr << "done!" << endl;
+	}else{
+		fprintf(stderr,"Rendering scene to OpenGL directly...\n");
+
+		// Use one of the convenient SoQt viewer classes.
+		SoQtExaminerViewer *eviewer = new SoQtExaminerViewer(mainwin);
+		eviewer->getGLRenderAction()->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
+		eviewer->setSceneGraph(root);
+		eviewer->show();
+
+		// Pop up the main window.
+		SoQt::show(mainwin);
+		// Loop until exit.
+		SoQt::mainLoop();
+
+		// Clean up resources.
+		delete eviewer;
+	}
+	root->unref();		
 
 	exit(0);
 }
