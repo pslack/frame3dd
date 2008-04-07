@@ -155,15 +155,17 @@ int main(int argc, char **argv){
 	root->addChild(axes());
 
 	double maxF = 0, maxM = 0;
-
+	bool foundloads = false;
+	
 	// loop through all the nodes
 	for(unsigned i = 0; i < M->num_nodes; ++i){
 		unsigned nodeid = M->node[i].id;
 
 		ndld_stmt nl;
 		if(case_total_load_node(M, cl, nodeid, &nl)){
-			//fprintf(stderr, "Node %d: ",nodeid);
-			//VEC3_PR(nl.F);
+			foundloads = true;
+			fprintf(stderr, "Node %d: ",nodeid);
+			VEC3_PR(nl.F);
 		}
 
 		unsigned nodeindex;
@@ -314,6 +316,9 @@ int main(int argc, char **argv){
 		}
 	}
 
+	if(!foundloads){
+		cerr << "WARNING: no applied node-loads found!" << endl;
+	}
 	cerr << "Maximum force = " << maxF << endl;
 	cerr << "Maximum moment = " << maxM << endl;
 
