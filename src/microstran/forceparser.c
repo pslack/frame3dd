@@ -56,9 +56,9 @@ static cbool parseNonHeading(parse *p){
 		//&& assign(fprintf(stderr,"...%s\n",s))
 	);
 }
-		
+
 static cbool parseHeading(parse *p, char *heading, unsigned maxlen){
-	
+
 	char c1, c2;
 	char s[500];
 	char *i, *j;
@@ -84,7 +84,7 @@ static cbool parseHeading(parse *p, char *heading, unsigned maxlen){
 	}
 
 	//fprintf(stderr,"HEADING\n");
-		
+
 	if(!(maybe(parseWS(p))
 		&& parseStrExcept(p,"\n\r",s,500)
 		&& parseEOLplus(p)
@@ -111,7 +111,7 @@ static cbool parseToHeading(parse *p,const char *heading){
 #define MAXHEADINGNAME 500
 	char foundheading[MAXHEADINGNAME];
 	cbool foundcorrect = 0;
-	
+
 	while(many(parseNonHeading(p)) && parseHeading(p,foundheading,MAXHEADINGNAME)){
 		if(strcmp(foundheading,heading)==0){
 			foundcorrect = 1;
@@ -143,6 +143,7 @@ cbool parseMemberNodeForce(parse *p, membernodeforce *mnf){
 		&& parseDouble(p,&M.x)
 		//&& assign(VEC3_PR(M))
 		&& parseEOLplus(p)
+		&& assign(F.x = -F.x)
 		&& assign(*mnf = membernodeforce_create(nodeid,F,M))
 		//&& assign(fprintf(stderr,"Member node force on node %d OK\n",nodeid))
 	) || (
@@ -210,7 +211,7 @@ cbool parseForceCASE(parse *p, modelforces *mf){
 		&& fail
 	);
 }
-		
+
 cbool parseMicrostranForces(parse *p, modelforces **mf){
 	modelforces *mf1 = NULL;
 	*mf = NULL;
@@ -225,12 +226,12 @@ cbool parseMicrostranForces(parse *p, modelforces **mf){
 		&& assign(fprintf(stderr,"Member forces data file parsed; contains %d load-cases.\n",ARRAY_NUM((*mf)->cases)))
 	) || (
 		(
-			mf1 
+			mf1
 			&& (modelforces_destroy(mf1),1)
 		)
 		&& fail
 	);
-	
+
 	// read file header
 	// skip down to 'N O D E   D I S P'...
 	// read in list of node IDs and displacements
