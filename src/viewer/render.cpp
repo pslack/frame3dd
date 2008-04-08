@@ -57,7 +57,8 @@ const SbColor GREEN(0,1,0);
 const SbColor YELLOW(1,1,0);
 const SbColor BLUE(0.5,0.5,1);
 const SbColor ORANGE(1,0.6,0);
-const SbColor PURPLE(1,0,1);
+const SbColor PURPLE(160./255,32./255,240./255);
+const SbColor MAGENTA(1,0,1);
 const SbColor CYAN(0,1,1);
 const SbColor LIME(0.71,1,0);
 
@@ -76,7 +77,7 @@ static vec3 vec3_from_coin(SbVec3f A){
 
 SoSeparator *text(const SbVec3f &left, const char *str, const SbColor &c){
 	SoSeparator *s = new SoSeparator;
-	
+
 	SoBaseColor *col = new SoBaseColor;
 	col->rgb = c;
 	s->addChild(col);
@@ -108,7 +109,7 @@ SoSeparator *sphere(const SbVec3f &C, const double &r, const SbColor &c){
 	s->addChild(sph);
 
 	return s;
-}	
+}
 
 SoSeparator *cylinder(const SbVec3f &A, const SbVec3f &B, const double &radius, const SbColor &c){
 
@@ -175,7 +176,7 @@ SoSeparator *cone(const SbVec3f &A, const SbVec3f &B, const double &r, const SbC
 	}
 
 	SoBaseColor *col = new SoBaseColor;
-	col->rgb = c;	
+	col->rgb = c;
 	s->addChild(col);
 
 	//cerr << "translation = " << m << endl;
@@ -241,7 +242,7 @@ SoSeparator *face(const SbVec3f &n, const vector<SbVec3f> &vertices, const SbCol
 
 	SoNormal *n1 = new SoNormal;
 	n1->vector.setValues(0,1, &n);
-	s->addChild(n1);	
+	s->addChild(n1);
 
 	SoNormalBinding *nb = new SoNormalBinding;
 	nb->value = SoNormalBinding::PER_FACE;
@@ -254,7 +255,7 @@ SoSeparator *face(const SbVec3f &n, const vector<SbVec3f> &vertices, const SbCol
 	SoCoordinate3 *cor = new SoCoordinate3;
 	cor->point.setValues(0,vertices.size(),&(vertices[0]));
 	s->addChild(cor);
-	
+
 	SoFaceSet *fs = new SoFaceSet;
 	const int32_t nv = vertices.size();
 	fs->numVertices.setValues(0,1,&nv);
@@ -265,7 +266,7 @@ SoSeparator *face(const SbVec3f &n, const vector<SbVec3f> &vertices, const SbCol
 
 /**
 	Render an arbitrary right-prism length
-	
+
 	@param A first endpoint
 	@param B second endpoint
 	@param o section outline, tells how to draw the section.
@@ -280,7 +281,7 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 
 	SbVec3f minax = O;
 	minax.normalize();
-	SbVec3f majax = (B-A).cross(O); 
+	SbVec3f majax = (B-A).cross(O);
 	majax.normalize();
 	//s->addChild(arrow(A,A+majax,GREEN,"MAJOR"));
 	//s->addChild(arrow(A,A+minax,RED,"MINOR"));
@@ -454,8 +455,8 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	fsi->coordIndex.setValues(0, ni, i3);
 	detailed->addChild(fsi);
 	lod->addChild(detailed);
-			
-	delete[] i3;		
+
+	delete[] i3;
 	delete[] v3;
 
 	// rough model - just a cylinder?
@@ -464,8 +465,8 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 	rough->addChild(cylinder(A,B,d_rough/2.,c));
 	lod->addChild(rough);
 	s->addChild(lod);
-	
-	return s;	
+
+	return s;
 }
 
 
@@ -476,7 +477,7 @@ main(int argc, char ** argv){
     // Initializes SoQt library (and implicitly also the Coin and Qt
     // libraries). Returns a top-level / shell Qt window to use.
     QWidget *mainwin = SoQt::init(argc, argv, argv[0]);
-  
+
     // Make a simple scene graph by using the Coin library
     SoSeparator *root = new SoSeparator;
     root->ref();
@@ -507,7 +508,7 @@ main(int argc, char ** argv){
 		Vector dB(0,1,0);
 		dB.rotate(Vector(1,0,0),rB);
 		Plane PB(B,normalise(dB));
-		
+
 		Vector ax(1,0,0);
 		A.rotate(ax,45);
 		B.rotate(ax,45);
@@ -537,7 +538,7 @@ main(int argc, char ** argv){
     SoQtExaminerViewer *eviewer = new SoQtExaminerViewer(mainwin);
     eviewer->setSceneGraph(root);
     eviewer->show();
-  
+
     // Pop up the main window.
     SoQt::show(mainwin);
     // Loop until exit.

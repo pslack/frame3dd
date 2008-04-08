@@ -52,17 +52,21 @@ Vector::operator()(const vec3 &v){
 #endif
 
 double defaultscaleF = 5;
+double defaultscaleM = 10;
 const char *defaultmodelfname = "model.arc";
 const char *defaultsceneoutfile = "forcebalance.iv";
 
 void usage(char *progname){
 	cerr << progname << ": Parse and display force balance on nodes using Microstran output." << endl;
-	cerr << "Usage: " << progname << " [-o[OUTFILE]] [-n NODEID] [-m MODEL.arc] [-f FORCES.p1]" << endl;
-	cerr << "    -m MODEL   Filename of Microstran model .arc file to read. Defaults to '" << defaultmodelfname << "'." << endl;
-	cerr << "    -f FORCES  Filename of .p1 member forces report to read. Defaults to MODEL.p1 (by changing file extension)." << endl;
-	cerr << "    -s SCALE   Scale forces in visual output, such that SCALE kN = 1 m" << endl;
-	cerr << "    -n NODEID  Show only forces for node NODEID" << endl;
+	cerr << "Usage: " << progname << " [-MF] [-o[OUTFILE]] [-n NODEID] [-m MODEL.arc] [-f FORCES.p1]" << endl;
+	cerr << "    -m MODEL    Filename of Microstran model .arc file to read. Defaults to '" << defaultmodelfname << "'." << endl;
+	cerr << "    -f FORCES   Filename of .p1 member forces report to read. Defaults to MODEL.p1 (by changing file extension)." << endl;
+	cerr << "    -s SCALEF   Scale forces in visual output, such that SCALEF kN = 1 m" << endl;
+	cerr << "    -t SCALEM   Scale moments in visual output, such that SCALEM kNm = 1 m" << endl;
+	cerr << "    -n NODEID   Show only forces for node NODEID" << endl;
 	cerr << "    -o[OUTFILE] Filename to write to, in Open Inventor .iv format (instead of rendering to screen). If name omitted, defaults to '" << defaultsceneoutfile << "'." << endl;
+	cerr << "    -M          Toggle display of moments (default off)" << endl;
+	cerr << "    -F          Toggle display of forces (default on)" << endl;
 	exit(1);
 }
 
@@ -81,18 +85,22 @@ int main(int argc, char **argv){
 	unsigned shownode = 0;
 
 	double scaleF = defaultscaleF;
-#ifdef SHOW_MOMENTS
-	double scaleM = 5;
-#endif
+	double scaleM = defaultscaleM;
+
+	bool showmoments = false;
+	bool showforces = true;
 
 	char c;
-    while((c = getopt (argc, argv, "n:m:f:c:s:o::")) != -1){
+    while((c = getopt (argc, argv, "MFn:m:f:c:s:t:o::")) != -1){
 		switch(c){
+			case 'F': showforces = !showforces; break;
+			case 'M': showmoments = !showmoments; break;
 			case 'n': showall = false; shownode = atoi(optarg); break;
 			case 'm': modelfname = optarg; break;
 			case 'f': forcefile = optarg; break;
 			case 'c': caseid = atoi(optarg); break;
 			case 's': scaleF = atof(optarg); break;
+			case 't': scaleM = atof(optarg); break;
 			case 'o':
 				if(optarg)sceneoutfile = optarg;
 				else sceneoutfile = defaultsceneoutfile;
@@ -178,6 +186,7 @@ int main(int argc, char **argv){
 	double maxF = 0, maxM = 0;
 	bool foundloads = false;
 	bool foundfix = false;
+	bool founddelta = false;
 	double F_bal_max = 0; //< maximum force residual (should be close to zero)
 	double M_bal_max = 0; //< maximum moment residual (should be close to zero)
 	unsigned node_F_bal_max = 0;
@@ -191,8 +200,14 @@ int main(int argc, char **argv){
 		if(case_total_load_node(M, cl, nodeid, &nl)){
 			foundloads = true;
 			if(showall || nodeid==shownode){
-				fprintf(stderr, "Node %d: ",nodeid);
-				VEC3_PR(nl.F);
+				if(showforces){
+					fprintf(stderr, "Node %d: ",nodeid);
+					VEC3_PR(nl.F);
+				}
+				if(showmoments){
+					fprintf(stderr, "Node %d: ",nodeid);
+					VEC3_PR(nl.M);
+				}
 			}
 		}
 
@@ -203,9 +218,16 @@ int main(int argc, char **argv){
 		vec3 pos = M->node[nodeindex].pos;
 
 		if(showall || nodeid==shownode){
-			stringstream ss;
-			ss << vec3_mod(nl.F);
-			root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(nl.F,1./scaleF)),GREEN,ss.str().c_str()));
+			if(showforces){
+				stringstream ss;
+				ss << "F=" << vec3_mod(nl.F);
+				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(nl.F,1./scaleF)),GREEN,ss.str().c_str()));
+			}
+			if(showmoments){
+				stringstream ss;
+				ss << "M=" << vec3_mod(nl.M);
+				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(nl.M,1./scaleM)),PURPLE,ss.str().c_str()));
+			}
 		}
 
 		vec3 F_res = VEC3_ZERO;
@@ -295,13 +317,26 @@ int main(int argc, char **argv){
 			if(vec3_mod(M_gl)>maxM)maxM = vec3_mod(M_gl);
 
 			if((showall || thisnode->id == shownode) && vec3_mod(F_gl) > 5e-4){
-				stringstream ss;
-				ss << othernode->id << ": ";
-				ss << vec3_mod(F_gl);
-				root->addChild(arrow(
-					from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(F_gl,1./scaleF))
-					,(m->id >= 7200 ? YELLOW : CYAN)
-					,ss.str().c_str()));
+				if(showforces){
+					stringstream ss;
+					ss << othernode->id << ":M ";
+					ss << vec3_mod(F_gl);
+					root->addChild(arrow(
+						from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(F_gl,1./scaleF))
+						,(m->id >= 7200 ? YELLOW : CYAN)
+						,ss.str().c_str()
+					));
+				}
+				if(showmoments){
+					stringstream ss;
+					ss << othernode->id << ": ";
+					ss << vec3_mod(M_gl);
+					root->addChild(arrow(
+						from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(M_gl,1./scaleM))
+						,(m->id >= 7200 ? MAGENTA : PURPLE)
+						,ss.str().c_str()
+					));
+				}
 			}
 
 			M_res = vec3_add(M_res, M_gl);
@@ -309,8 +344,18 @@ int main(int argc, char **argv){
 
 			// add offset forces to resultant moment
 			if(delta){
+				founddelta = true;
 				vec3 delta_gl = ctrans_apply(ct, *delta);
 				vec3 M_offset = vec3_cross(F_gl, delta_gl);
+				if(showall || nodeid == shownode){
+					cerr << "Offset for member " << m->id << " = ";
+					vec3_print(stderr,delta_gl);
+					cerr << " --> M_offset = " << vec3_mod(M_offset) << " = |";
+					vec3_print(stderr,M_offset);
+					cerr << "|" << endl;
+				}else if(nodeid == shownode){
+					cerr << "No offset for member " << m->id << endl;
+				}
 				M_res = vec3_add(M_res, M_offset);
 			}
 		}
@@ -331,28 +376,34 @@ int main(int argc, char **argv){
 				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(F_res,1./scaleF)),YELLOW,ss.str().c_str()));
 			}
 #endif
-			{
-				cerr << "Force error at node " << nodeid << " = ";
+
+			if(showforces){
+				cerr << "Force error at node " << nodeid << " = " << vec3_mod(F_bal) << " = |";
 				vec3_print(stderr,F_bal);
-				cerr << endl;
+				cerr << "|" << endl;
 
 				stringstream ss;
 				ss << "B:";
 				ss << vec3_mod(F_bal);
-				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(F_res,1./scaleF)),PURPLE,ss.str().c_str()));
+				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(F_bal,1./scaleF)),PURPLE,ss.str().c_str()));
 			}
 
-#ifdef SHOW_MOMENTS
-		if(vec3_mod(M_res) > 1e-3){
-			root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(M_res,1./scaleM)),PURPLE));
-		}
-#endif
+			if(showmoments){
+				cerr << "Moment error at node " << nodeid << " = " << vec3_mod(M_bal) << " = |";
+				vec3_print(stderr,M_bal);
+				cerr << "|" << endl;
+
+				stringstream ss;
+				ss << "M_bal:";
+				ss << vec3_mod(M_bal);
+				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(M_bal,1./scaleM)),ORANGE,ss.str().c_str()));
+			}
 		}
 
 		// to calculate the maximum force/moment errors, cancel out restrained components
 
 		bool cleared = false;
-		if(M->node[i].flags & MSTRANP_NODE_FIXX){	
+		if(M->node[i].flags & MSTRANP_NODE_FIXX){
 			cerr << "Node " << nodeid << " has 'X' restraint" << endl;
 			cleared = true; foundfix = true;
 			F_bal.x = 0;
@@ -385,7 +436,7 @@ int main(int argc, char **argv){
 		if(cleared){
 			node_print(stderr,&M->node[i]);
 		}
-		
+
 		if(vec3_mod(F_bal)>F_bal_max){
 			F_bal_max = vec3_mod(F_bal);
 			node_F_bal_max = nodeid;
@@ -401,6 +452,9 @@ int main(int argc, char **argv){
 	}
 	if(!foundfix){
 		cerr << "WARNING: no translational restraints found!" << endl;
+	}
+	if(!founddelta){
+		cerr << "NOTE: no member offsets found!" << endl;
 	}
 	cerr << "Largest member force = " << maxF << endl;
 	cerr << "Largest member moment = " << maxM << endl;

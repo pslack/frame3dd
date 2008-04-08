@@ -32,6 +32,7 @@ extern const SbColor YELLOW;
 extern const SbColor BLUE;
 extern const SbColor ORANGE;
 extern const SbColor PURPLE;
+extern const SbColor MAGENTA;
 extern const SbColor CYAN;
 extern const SbColor LIME;
 
