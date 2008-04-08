@@ -1,0 +1,138 @@
+ 
+== I N P U T / A N A L Y S I S   R E P O R T ==
+ 
+ 
+Job:    lateral-column-rev
+ 
+Title:  Lateral column
+        Simple test case for demonstrating Microstran parser in Frame3d
+Type:   Space frame
+Date:    8 Apr 2008
+Time:    3:59 PM
+ 
+Nodes .............................      2
+Members ...........................      1
+Spring supports ...................      0
+Sections ..........................      1
+Materials .........................      1
+Primary load cases ................      1
+Combination load cases ............      0
+ 
+Analysis:  Linear elastic
+ 
+ 
+== L O A D   C A S E S ==
+ 
+  Case Type Analysis Title
+     1   P      L    Horizontal load 1kN
+ 
+Analysis Types:
+  S - Skipped (not analysed)
+  L - Linear
+  N - Non-linear
+ 
+ 
+== N O D E   C O O R D I N A T E S ==
+ 
+  Node         X         Y         Z   Restraint
+               m         m         m
+     1     0.000     0.000     1.000      000000
+     2     0.000     0.000     0.000      111111
+ 
+ 
+== M E M B E R   D E F I N I T I O N ==
+ 
+Member     A     B     C  Prop  Matl  Rel-A  Rel-B    Length
+                                                           m
+     1     2     1     X     1     1 000000 000000     1.000
+ 
+ 
+== L I B R A R Y   S E C T I O N S ==
+ 
+Section  Library       Name            Axis  Comment
+     1   asw           65X35X2.0RHS       Y  comment
+ 
+ 
+== S E C T I O N   P R O P E R T I E S ==
+ 
+Section        Ax         Ay         Az          J         Iy         Iz  fact
+               m2         m2         m2         m4         m4         m4
+     1  3.740E-04  0.000E+00  0.000E+00  1.840E-07  7.780E-08  2.040E-07
+ 
+ 
+== M A T E R I A L   P R O P E R T I E S ==
+ 
+Material             E         u    Density        Alpha
+                 kN/m2                 t/m3       /deg C
+     1       2.000E+08    0.2500  7.850E+00    1.170E-05
+ 
+ 
+== T A B L E   O F   Q U A N T I T I E S ==
+ 
+MATERIAL      1
+ 
+Section  Name                 Length        Mass  Comment
+                                   m       tonne
+     1   65X35X2.0RHS          1.000       0.003  comment
+                          ----------  ----------
+                               1.000       0.003
+ 
+ 
+== C O N D I T I O N   N U M B E R ==
+ 
+Maximum condition number: 4.000E+00 at node: 1 DOFN: 4
+ 
+ 
+== A P P L I E D   L O A D I N G ==
+ 
+CASE     1: Horizontal load 1kN
+ 
+-- Node Loads --
+ 
+  Node    X Force   Y Force   Z Force  X Moment  Y Moment  Z Moment
+               kN        kN        kN       kNm       kNm       kNm
+     1      5.000     3.000     0.000     0.000     0.000     0.000
+ 
+-- Sum of Applied Loads (Global Axes): --
+  FX:       5.000    FY:       3.000    FZ:       0.000
+ Moments about the global origin:
+  MX:      -3.000    MY:       5.000    MZ:       0.000
+ 
+ 
+== N O D E   D I S P L A C E M E N T S ==
+ 
+CASE     1: Horizontal load 1kN
+ 
+  Node     X-Disp     Y-Disp     Z-Disp     X-Rotn     Y-Rotn     Z-Rotn
+               m         m         m       rad       rad       rad
+     1     0.0408     0.0643     0.0000   -0.09640    0.06127    0.00000
+     2     0.0000     0.0000     0.0000    0.00000    0.00000    0.00000
+ 
+ 
+== M E M B E R   F O R C E S ==
+ 
+CASE     1: Horizontal load 1kN
+ 
+Member   Node      Axial    Shear-y    Shear-z     Torque   Moment-y   Moment-z
+                     kN         kN         kN        kNm        kNm        kNm
+     1      2       0.00       5.00       3.00       0.00       3.00       5.00
+            1       0.00       5.00       3.00       0.00       0.00       0.00
+ 
+Positive Forces (Member Axes):
+  Axial  - Tension              Shear  - End A sagging
+  Torque - Right-hand twist     Moment - Sagging
+ 
+ 
+== S U P P O R T   R E A C T I O N S ==
+ 
+CASE     1: Horizontal load 1kN
+ 
+  Node    Force-X    Force-Y    Force-Z   Moment-X   Moment-Y   Moment-Z
+              kN        kN        kN       kNm       kNm       kNm
+     2      -5.00      -3.00       0.00       3.00      -5.00       0.00
+ 
+ SUM:       -5.00      -3.00       0.00 (all nodes)
+ 
+ Max. residual: 1.776E-15 at DOFN: 2
+ 
+(Reactions act on structure in positive global axis directions.)
