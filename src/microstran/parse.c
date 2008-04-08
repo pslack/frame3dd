@@ -604,4 +604,19 @@ cbool parseDouble(parse *p, double *d){
 	}
 }
 
+/**
+	Add a bit to a flag value. If the next char is '1', OR {value} into the
+	result value {result}. If the next char is '0', do nothing. Otherwise,
+	it's a parsing error.
+*/
+cbool parseBitChar(parse *p, unsigned value, unsigned *result){
+	return (
+		parseThisChar(p,'0')
+		|| (
+			parseThisChar(p,'1')
+			&& assign(*result |= value)
+		)
+	);
+}
+
 /* end parse.c */

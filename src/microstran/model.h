@@ -33,10 +33,17 @@ extern "C"{
 
 /* NODE structure */
 
+#define MSTRANP_NODE_FIXX  0x01
+#define MSTRANP_NODE_FIXY  0x02
+#define MSTRANP_NODE_FIXZ  0x04
+#define MSTRANP_NODE_FIXMX 0x08
+#define MSTRANP_NODE_FIXMY 0x10
+#define MSTRANP_NODE_FIXMZ 0x20
+
 typedef struct node_stmt_{
 	unsigned id;
 	vec3 pos;
-	unsigned flags;
+	unsigned flags; ///< composed of ORed values like MSTRANP_NODE_FIX*.
 } node_stmt;
 
 MSTRANP_API node_stmt node_create(unsigned nodeid,vec3 pos,unsigned flags);

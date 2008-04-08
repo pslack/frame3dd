@@ -78,7 +78,7 @@ cbool parseUNIT(parse *p, unit_stmt *u){
 /* NODE statement */
 
 cbool parseNODE(parse *p, model *a){
-	unsigned nodeid, flags;
+	unsigned nodeid, flags = 0;
 	vec3 pos;
 	return (
 		parseComments(p)
@@ -92,7 +92,12 @@ cbool parseNODE(parse *p, model *a){
 		&& parseWS(p)
 		&& parseDouble(p, &(pos.z))
 		&& parseWS(p)
-		&& parseNumber(p,&flags)
+		&& parseBitChar(p,MSTRANP_NODE_FIXX, &flags)
+		&& parseBitChar(p,MSTRANP_NODE_FIXY, &flags)
+		&& parseBitChar(p,MSTRANP_NODE_FIXZ, &flags)
+		&& parseBitChar(p,MSTRANP_NODE_FIXMX, &flags)
+		&& parseBitChar(p,MSTRANP_NODE_FIXMY, &flags)
+		&& parseBitChar(p,MSTRANP_NODE_FIXMZ, &flags)
 		&& parseEOLplus(p)
 		&& model_add_node(a,node_create(nodeid,pos,flags))
 		//&& assign(fprintf(stderr,"NODE %d\n",nodeid))

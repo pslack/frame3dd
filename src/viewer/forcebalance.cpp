@@ -177,6 +177,11 @@ int main(int argc, char **argv){
 
 	double maxF = 0, maxM = 0;
 	bool foundloads = false;
+	bool foundfix = false;
+	double F_bal_max = 0; //< maximum force residual (should be close to zero)
+	double M_bal_max = 0; //< maximum moment residual (should be close to zero)
+	unsigned node_F_bal_max = 0;
+	unsigned node_M_bal_max = 0;
 
 	// loop through all the nodes
 	for(unsigned i = 0; i < M->num_nodes; ++i){
@@ -310,6 +315,9 @@ int main(int argc, char **argv){
 			}
 		}
 
+		vec3 F_bal = vec3_add(F_res, nl.F);
+		vec3 M_bal = vec3_add(M_res, nl.M);
+
 		if(showall || nodeid == shownode){
 			cerr << "Resultant force at node " << nodeid << " = ";
 			vec3_print(stderr,F_res);
@@ -324,10 +332,13 @@ int main(int argc, char **argv){
 			}
 #endif
 			{
-				F_res = vec3_add(F_res, nl.F);
+				cerr << "Force error at node " << nodeid << " = ";
+				vec3_print(stderr,F_bal);
+				cerr << endl;
+
 				stringstream ss;
 				ss << "B:";
-				ss << vec3_mod(F_res);
+				ss << vec3_mod(F_bal);
 				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(F_res,1./scaleF)),PURPLE,ss.str().c_str()));
 			}
 
@@ -337,13 +348,64 @@ int main(int argc, char **argv){
 		}
 #endif
 		}
+
+		// to calculate the maximum force/moment errors, cancel out restrained components
+
+		bool cleared = false;
+		if(M->node[i].flags & MSTRANP_NODE_FIXX){	
+			cerr << "Node " << nodeid << " has 'X' restraint" << endl;
+			cleared = true; foundfix = true;
+			F_bal.x = 0;
+		}
+		if(M->node[i].flags & MSTRANP_NODE_FIXY){
+			cerr << "Node " << nodeid << " has 'Y' restraint" << endl;
+			cleared = true; foundfix = true;
+			F_bal.y = 0;
+		}
+		if(M->node[i].flags & MSTRANP_NODE_FIXZ){
+			cerr << "Node " << nodeid << " has 'Z' restraint" << endl;
+			cleared = true; foundfix = true;
+			F_bal.z = 0;
+		}
+		if(M->node[i].flags & MSTRANP_NODE_FIXMX){
+			cerr << "Node " << nodeid << " has 'MX' restraint" << endl;
+			cleared = true;
+			M_bal.x = 0;
+		}
+		if(M->node[i].flags & MSTRANP_NODE_FIXMY){
+			cerr << "Node " << nodeid << " has 'MY' restraint" << endl;
+			cleared = true;
+			M_bal.y = 0;
+		}
+		if(M->node[i].flags & MSTRANP_NODE_FIXMZ){
+			cerr << "Node " << nodeid << " has 'MZ' restraint" << endl;
+			cleared = true;
+			M_bal.z = 0;
+		}
+		if(cleared){
+			node_print(stderr,&M->node[i]);
+		}
+		
+		if(vec3_mod(F_bal)>F_bal_max){
+			F_bal_max = vec3_mod(F_bal);
+			node_F_bal_max = nodeid;
+		}
+		if(vec3_mod(M_bal)>M_bal_max){
+			M_bal_max = vec3_mod(M_bal);
+			node_M_bal_max = nodeid;
+		}
 	}
 
 	if(!foundloads){
 		cerr << "WARNING: no applied node-loads found!" << endl;
 	}
-	cerr << "Maximum force = " << maxF << endl;
-	cerr << "Maximum moment = " << maxM << endl;
+	if(!foundfix){
+		cerr << "WARNING: no translational restraints found!" << endl;
+	}
+	cerr << "Largest member force = " << maxF << endl;
+	cerr << "Largest member moment = " << maxM << endl;
+	cerr << "Maximum force error = " << F_bal_max << " (at node " << node_F_bal_max << ")" << endl;
+	cerr << "Maximum moment error = " << M_bal_max << " (at node " << node_M_bal_max << ")" << endl;
 
 	if(sceneoutfile){
 		SoWriteAction wr;

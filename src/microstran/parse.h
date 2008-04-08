@@ -149,6 +149,19 @@ cbool parseNonWS(parse *p, char *str, int maxl);
 cbool parseEOLplus(parse *p);
 cbool parseDouble(parse *p, double *d);
 
+/**
+	Accumulate the values from a stringified bit-field using this function.
+	For each successive 0 or 1, call this function using 'value' to specify
+	the binary value of that bit, and it will be set in 'result' if found to be
+	'1'.
+
+	@param value value of the current '1', if found.
+	@param result (returned) value into which current value is ORed if next char
+		equals '1'.
+	@return 1 if a '0' or '1' is read, 0 otherwise.
+*/
+cbool parseBitChar(parse *p, unsigned value, unsigned *result);
+
 #ifdef __cplusplus
 }
 #endif

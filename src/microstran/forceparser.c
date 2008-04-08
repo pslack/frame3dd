@@ -15,6 +15,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *//** @FILE
 	parser for microstran .p1 member forces data files
+
+	@NOTE there are important differences between the axes and sign conventions
+	used here and those specified by the Microstran .arc format. @ENDNOTE
 */
 
 #define MSTRANP_BUILD

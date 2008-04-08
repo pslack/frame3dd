@@ -41,7 +41,12 @@ node_stmt node_create(unsigned id,vec3 pos,unsigned flags){
 }
 
 int node_print(FILE *f, const node_stmt *n){
-	return fprintf(f,"NODE %5d %10f %10f %10f %06d\n",n->id, n->pos.x, n->pos.y, n->pos.z, n->flags);
+#define BIT(VAL) (n->flags & MSTRANP_NODE_FIX##VAL ? '1' : '0')
+	return fprintf(f,"NODE %5d %10f %10f %10f %c%c%c%c%c%c\n",n->id, n->pos.x, n->pos.y, n->pos.z
+		, BIT(X), BIT(Y), BIT(Z)
+		, BIT(MX), BIT(MY), BIT(MZ)
+	);
+#undef BIT
 }
 
 node_stmt *node_translate(node_stmt *n, double dx, double dy, double dz){
