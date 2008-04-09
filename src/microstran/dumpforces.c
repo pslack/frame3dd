@@ -46,7 +46,7 @@ int main(int argc, char **argv){
 
 	unsigned caseid = 1;
 	fprintf(stderr,"Looking up case %d...\n",caseid);
-	const caseforces *cf;
+	caseforces *cf;
 	cf = modelforces_find_case(MF,caseid);
 	if(cf==NULL){
 		fprintf(stderr,"LOAD CASE %d NOT FOUND\n",caseid);

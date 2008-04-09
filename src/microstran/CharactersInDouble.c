@@ -4,6 +4,7 @@
 
 #include "CharactersInDouble.h"
 #include <string.h>
+#include <ctype.h>
 
 // CharactersInDouble
 //

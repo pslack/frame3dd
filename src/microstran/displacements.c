@@ -46,6 +46,7 @@ void modeldisplacements_destroy(modeldisplacements *d){
 cbool modeldisplacements_add_case(modeldisplacements *md, casedisplacements *cd){
 	//fprintf(stderr,"Model displacements: contains %d cases\n",ARRAY_NUM(md->cases));
 	array_append(&(md->cases),cd);
+	return 1;
 }
 
 casedisplacements *modeldisplacements_get_case(modeldisplacements *md, unsigned index){

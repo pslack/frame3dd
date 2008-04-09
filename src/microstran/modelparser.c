@@ -270,8 +270,7 @@ cbool parsePROP(parse *p, model *a){
 				parseWS(p)
 				&& parseStrExcept(p,"\n\r\t",desc,MAXPROPDESC)
 				&& ASSIGN(fprintf(stderr," %s",desc))
-			)
-			&& parseEOLplus(p)
+			) && parseEOLplus(p)
 		) || (
 			parseThisString(p,"PRIS") && ASSIGN(fprintf(stderr,"PRIS"))
 			&& parseWS(p) && ASSIGN(fprintf(stderr," "))
@@ -432,7 +431,6 @@ cbool parseModelMicrostran(parse *p, model **a){
 	unsigned version, type, vert;
 	unit_stmt unit;
 	model *a1 = NULL;
-	const char *expecting;
 #define ASSIGN(Z) 1
 	return (
 		parseNumericLine(p,"VERS",&version) //&& assign(fprintf(stderr,"VERS %d\n",version))

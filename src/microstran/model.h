@@ -60,7 +60,8 @@ extern "C"{
 #define MSTRANP_NODE_FIXMZ 0x20
 
 /**
-	Node statement structure. Includes f
+	Node statement structure.
+*/
 typedef struct node_stmt_{
 	unsigned id; /**< node ID (from Microstran .arc) */
 	vec3 pos; /**< node position */

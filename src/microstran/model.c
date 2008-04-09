@@ -396,7 +396,7 @@ cbool model_get_member_offset_global(const model *a, const unsigned memberid, mo
 #endif
 
 int moff_print(FILE *f, const moff_stmt *o){
-	const char *code;
+	const char *code = "??";
 	switch(o->coordsys){
 		case MSTRANP_COORDS_GLOBAL: code="GL"; break;
 		case MSTRANP_COORDS_LOCAL:  code="LO"; break;

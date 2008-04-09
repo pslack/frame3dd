@@ -46,8 +46,8 @@ int main(int argc, char **argv){
 	unsigned caseid;
 	const unsigned defaultcaseid = 1;
 
-	char *modelfname;
-	char *displacementfname;
+	const char *modelfname;
+	const char *displacementfname;
 
 	if(argc>1){
 		modelfname = argv[1];
