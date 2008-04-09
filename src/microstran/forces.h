@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*//** @FILE
-	data structures to hold member-end force data
+*//** @file
+	Data structures to hold member-end force data
 */
 #ifndef DISPLACEMENTS_H
 #define DISPLACEMENTS_H

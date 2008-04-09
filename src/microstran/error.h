@@ -13,6 +13,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*//** @file
+	Error reporting functions for use with parser (little-used at the moment)
 */
 #ifndef ERROR_H
 #define ERROR_H

@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*//** @FILE
-	parser for microstran properties.txt files
+*//** @file
+	Parser for microstran properties.txt files
 */
 
 #ifndef SECTIONSPARSER_H

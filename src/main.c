@@ -14,19 +14,23 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *//** @file
-	FRAME: a program for static and dynamic structural analysis of 2D and 3D
+	Main FRAME3DD program driver
+*//** @mainpage
+	FRAME3DD: a program for static and dynamic structural analysis of 2D and 3D
 	frames and trusses with elastic and geometric stiffness.
 
-	For more information go to http://www.duke.edu/~hpgavin/frame/
+	Also included is a system for parsing Microstran .arc 'Archive' files and
+	for parsing calculated force and displacement output files (.p1 format) from
+	Microstran. It is intended that ultimately the .arc format be an alternative
+	method of inputting data to the FRAME3DD program, but currently these two
+	parts of the code are distinct.
+
+	For more information go to http://frame3dd.sourceforge.net/
 
 	The input file format for FRAME is defined in doc/user_manual.html
 
-	---------------------------------------------------------------------------
-	Henri P. Gavin                                             hpgavin@duke.edu   
-	Department of Civil and Environmental Engineering
-	Duke University, Box 90287
-	Durham, NC  27708--0287
-	---------------------------------------------------------------------------
+	Henri P. Gavin hpgavin@duke.edu (main FRAME3DD code) <br>
+	John Pye john.pye@anu.edu.au (Microstran parser and viewer)
 */
 
 #include <stdio.h>

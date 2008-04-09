@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*//** @FILE
-	parser for microstran .p1 displacement data files
+*//** @file
+	Parser for microstran .p1 displacement data files
 */
 #ifndef DISPLACEMENTPARSER_H
 #define DISPLACEMENTPARSER_H

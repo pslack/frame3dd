@@ -1,6 +1,11 @@
 #ifndef NEW_H
 #define NEW_H
 
+/** @file
+	Memory allocation functions used by parse.c. 
+	@todo May need to review this stuff.
+*/
+
 #include <stdlib.h>
 #include "types.h"
 

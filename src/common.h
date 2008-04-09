@@ -13,11 +13,12 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*//** @file
+	this file contains some #defines to set up 'float' to be 'double' instead.
 */
+
 #ifndef FRAME_COMMON_H
 #define FRAME_COMMON_H
-
-/* this file contains some #defines to set up 'float' to be 'double' instead. */
 
 #ifndef PI
 #define PI	3.141592653589793

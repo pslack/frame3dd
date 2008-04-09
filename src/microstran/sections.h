@@ -13,7 +13,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*//** @FILE
+*//** @file
 	routines to load a section library from a text file such as
 	'properties.txt' provided here.
 */
@@ -38,6 +38,9 @@ typedef enum{
 	,SECTION_TOPHAT
 } section_type;
 
+/**
+	CHS section properties
+*/
 struct section_chs_struct{
 	double d_o;
 	double t;
@@ -100,6 +103,9 @@ struct section_tophat_struct{
 
 #define SECTION_NAME_MAX 40
 
+/**
+	General section properties structure
+*/
 struct section_struct{
 	char name[SECTION_NAME_MAX];
 	section_type type;
@@ -112,18 +118,25 @@ struct section_struct{
 };
 typedef struct section_struct section;
 
-/*
+/**
 	Structure to return section outline to other codes
 */
 typedef struct vec2_struct{
 	double x,y;
 } vec2;
 
+/**
+	Section outline (trace of points for use in rendering steel sections)
+*/
 typedef struct section_outline_struct {
 	array point; /**< (of vec2) vertices in the cross-section */
 	array trace; /**< (of int) array of point IDs, or -1 to pick up 'pen' */
 } section_outline;
 
+/**
+	Array of known steel sections of different sizes and types, as loaded
+	using section_library_create and related parser functions.
+*/
 typedef struct section_library_struct{
 	array a;
 } section_library;

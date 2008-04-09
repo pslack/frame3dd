@@ -13,8 +13,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*//** @FILE
-	data structures to hold model case deflection data
+*//** @file
+	Data structures to hold model case deflection data
 */
 #ifndef DISPLACEMENTS_H
 #define DISPLACEMENTS_H
@@ -28,18 +28,29 @@ extern "C"{
 
 #define MAXDISPLACEMENTSNAME 80
 
+/**
+	Displacement (both translation and rotation)
+	of a node, together with the node's ID.
+*/
 typedef struct nodedisplacement_{
 	int node;
 	double dx,dy,dz; /* displacements */
 	double rx,ry,rz; /* rotations */
 } nodedisplacement;
 
+/**
+	Displacement data for a specific load case.
+*/
 typedef struct casedisplacements_{
 	int id;
 	char name[MAXCASENAME];
 	array nodes; /* array (list) of node_displacement */
 } casedisplacements;
 
+/**
+	Displacement data structure for containing results parsed from
+	.p1 data files.
+*/
 typedef struct modeldisplacements_{
 	char filename[MAXDISPLACEMENTSNAME];
 	array cases; /* array (list) of displacement_case */

@@ -13,6 +13,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*//** @file
+	Load cases data structures, and associated methods.
 */
 #ifndef MSTRANP_CASE_H
 #define MSTRANP_CASE_H
@@ -29,6 +31,10 @@ extern "C"{
 /* Load case statements */
 
 #define MAXNDLDS 10000
+
+/**
+	Node load (NDLD) statement.
+*/
 typedef struct ndld_stmt_{
 	unsigned node;
 	vec3 F;
@@ -37,6 +43,9 @@ typedef struct ndld_stmt_{
 
 struct case_stmt_;
 
+/**
+	Load sub-case specified (for use in COMB statements)
+*/
 typedef struct comb_stmt_{
 	unsigned caseindex; /**< this is the index for the referenced load case
 		in the model->cases array. We can't use a pointer directly because
@@ -67,18 +76,41 @@ typedef struct case_stmt_{
 	array data;/**< array of ndld_stmt or comb_stmt (depending on case type) */
 } case_stmt;
 
+/**
+	Find a node-load in a load case, by node ID
+*/
 ndld_stmt *case_find_node(case_stmt *c, unsigned nodeid);
 
+/**
+	Create a new load case, with the specified name
+*/
 case_stmt *case_create(unsigned caseid, const char *name);
 
+/**
+	Duplicate load case data
+*/
 case_stmt *case_copy(const case_stmt *c);
 
+/**
+	Specify the body force (normally gravity) on the structure's mass
+*/
 cbool case_add_gravity(case_stmt *c, vec3 g);
 
+/**
+	Add a node load to a load case
+	@param nodeid loaded node ID
+	@param F applied force on the node
+	@param M applied moment on the node
+*/
 cbool case_add_node_load(case_stmt *c, unsigned nodeid, vec3 F, vec3 M);
 
 struct model_;
 
+/**
+	Add a sub-case to a 'combined' load case. This is used to implement the 
+	'COMB' statement from the .arc file format. This allows superposition
+	of different load cases for more complex loading scenarios.
+*/
 cbool case_add_comb(struct model_ *a, case_stmt *c, unsigned subcaseid, double factor);
 
 /**

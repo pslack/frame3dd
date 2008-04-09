@@ -13,7 +13,26 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*//**
+	@file
+	specification of model data structures and methods.
+*//**
+	@page mstranp Microstran parser
+	Code in this directory provides the ability to load Microstran .arc model
+	files as well as .p1 files containing member forces and node displacements
+	as computed by Microstran. Ultimately we aim to use this code to
+	interface with the main FRAME3DD calculation engine, so that FRAME3DD can 
+	also be used to analyse models generated in the .arc file format. Commercial
+	software that supports the .arc format includes Microstran, Spacegass, 
+	and Multiframe.
+
+	Key data structures in this section are:
+	@li model
+    @li modelforces
+    @li modeldisplacements
+	@li parse
 */
+
 #ifndef MSTRANP_MODEL_H
 #define MSTRANP_MODEL_H
 
@@ -40,10 +59,12 @@ extern "C"{
 #define MSTRANP_NODE_FIXMY 0x10
 #define MSTRANP_NODE_FIXMZ 0x20
 
+/**
+	Node statement structure. Includes f
 typedef struct node_stmt_{
-	unsigned id;
-	vec3 pos;
-	unsigned flags; ///< composed of ORed values like MSTRANP_NODE_FIX*.
+	unsigned id; /**< node ID (from Microstran .arc) */
+	vec3 pos; /**< node position */
+	unsigned flags; /**< composed of ORed values like MSTRANP_NODE_FIX*. */
 } node_stmt;
 
 MSTRANP_API node_stmt node_create(unsigned nodeid,vec3 pos,unsigned flags);
@@ -68,25 +89,38 @@ typedef struct member_orientation_struct{
 } member_orientation;
 
 
-
+/**
+	Data structure for frame members imported from Microstran.
+*/
 typedef struct memb_stmt_{
-	unsigned id;
+	unsigned id; /**< Member ID */
 	unsigned fromnode; /**< NOTE: we store index to the 'node' array, rather than the node ID here */
 	unsigned tonode; /**< NOTE: we store index to the 'node' array, rather than the node ID here */
-	member_orientation orient;
+	member_orientation orient; /**< Member orientation */
 	unsigned prop; /**< NOTE: this is a property ID (direct from microstran) */
 	unsigned matl; /**< NOTE: this is a material ID (direct from microstran) */
-	unsigned flags1;
-	unsigned flags2;
+	unsigned flags1; /**< flags for the 'from' end? */
+	unsigned flags2; /**< flags for the 'to' end? */
 } memb_stmt;
 
-/* MOFF statement (member offsets) */
+/*----------------------
+	MOFF statement (member offsets) 
+*/
 
+/**
+	Enumeration of the possible coordinate systems used in member offsets
+*/
 typedef enum{
-	MSTRANP_COORDS_LOCAL=0
-	,MSTRANP_COORDS_GLOBAL
+	MSTRANP_COORDS_LOCAL=0 /**< local coordinate system */
+	,MSTRANP_COORDS_GLOBAL /**< global coordinate system */
 } coord_sys_t;
 
+/**
+	Member offset statement, for members whose ends do not finish exactly
+	at a node location. These structures are held separately from the member
+	data, because not all members have an offset, and because of the way that
+	data is read in from the Microstran .arc file.
+*/
 typedef struct moff_stmt_{
 	unsigned id;
 	coord_sys_t coordsys; /**< coordinate system for these offsets, either local or global */
@@ -96,6 +130,11 @@ typedef struct moff_stmt_{
 
 MSTRANP_API int moff_print(FILE *f, const moff_stmt *o);
 
+/**
+	UNIT statement, which specifies the units of measurement in the
+	Microstran .arc file. At present we don't make use of these data in
+	subsequent output.
+*/
 typedef struct unit_stmt_{
 	unsigned num;
 	char lengthunit[MAXUNIT];
@@ -108,12 +147,17 @@ typedef struct unit_stmt_{
 #define MAXPROPNAME 40
 #define MAXPROPDESC 200
 
+/*
+	Enumeration of the steel properties that are kept in the prop_stmt
+	'vals' array.
+*/
 enum prop_vals{
 	PROP_A, PROP_2, PROP_3, PROP_J, PROP_IYY, PROP_IXX,MAXPROPVALS
 };
 
-/* PROP statement (section properties) */
-
+/**
+	PROP statement (section properties)
+*/
 typedef struct prop_stmt_{
 	unsigned id;
 	char libr[MAXPROPLIBNAME];
@@ -122,8 +166,9 @@ typedef struct prop_stmt_{
 	double vals[MAXPROPVALS];
 } prop_stmt;
 
-/* MATL statement (material stiffness/yield etc) */
-
+/**
+	MATL statement (material stiffness/yield etc)
+*/
 typedef struct matl_stmt_{
 	unsigned id;
 	double E; /* force unit / length_unit^2 */
@@ -140,24 +185,26 @@ typedef struct matl_stmt_{
 #define MAXMATLS 50
 #define MAXCASES 200
 
-/*
-	FIXME these structures are fixed-size, which is a bit silly
+/**
+	Top-level data structure for Microstran model data.
+
+	@TODO FIXME these structures are fixed-size, which is a bit silly
 */
 typedef struct model_{
-	int version;
-	int type;
-	int vert;
-	unit_stmt unit;
+	int version; /**< file format, currently expected to be '5' */
+	int type; /**< type of model, currently expected to be '5' */
+	int vert; /**< number of spatial dimensions? Expected to be '3' */
+	unit_stmt unit; /**< units of measurement for this model */
 	node_stmt node[MAXNODES];
-	unsigned num_nodes;
+	unsigned num_nodes; /**< number of nodes in the model */
 	memb_stmt memb[MAXMEMBS];
-	unsigned num_membs;
-	array moffs;
-	prop_stmt prop[MAXPROPS];
-	unsigned num_props;
+	unsigned num_membs; /**< number of members in the model */
+	array moffs; /**< dynamically-sized array of member offsets (of type moff_stmt) */
+	prop_stmt prop[MAXPROPS]; /** section properties (steel cross section data) */
+	unsigned num_props; /**< number of cross-sections used in the model */
 	matl_stmt matl[MAXMATLS];
-	unsigned num_matls;
-	array cases;
+	unsigned num_matls; /**< number of materials (steel properties etc */
+	array cases; /**< dynamically-sized array of load case data (of type case_stmt) */
 } model;
 
 model *model_create(unsigned version, unsigned type, unsigned vert, unit_stmt unit);

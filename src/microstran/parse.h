@@ -1,6 +1,10 @@
 #ifndef PARSE_H
 #define PARSE_H
 
+/** @file
+	General-purpose parser functions.
+*/
+
 #include "config.h"
 #include "types.h"
 
@@ -68,8 +72,12 @@ typedef
   void
   (parseDisposeFunction)( struct _parse * );
 
-typedef struct _parse
-{
+/**
+	Parser data structure, keeps track of the data stream being parsed,
+	and permits characters to be returned to the stream in the case where
+	a particular pattern is not matched.
+*/
+typedef struct _parse{
   char      *buf;
   int       bufptr;
   judgement judge;

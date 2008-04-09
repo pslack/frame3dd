@@ -13,6 +13,9 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*//**
+	@file 
+	3D vector type and related functions/methods.
 */
 #ifndef MSTRAP_VEC3_H
 #define MSTRAP_VEC3_H

@@ -13,6 +13,9 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*//**
+	@file
+	Coordinate transformations for the FRAME3DD solver API.
 */
 #ifndef FRAME_COORDTRANS_H
 #define FRAME_COORDTRANS_H

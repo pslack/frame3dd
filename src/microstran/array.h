@@ -13,7 +13,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*//** @FILE
+*//** @file
 	data type for dynamically-size array in C. this array will
 	automatically resize when you use array_set outside its bounds. it is
 	dense, however: storage is allocated for members in the range 0..num.
@@ -25,6 +25,7 @@
 	pointers into the array are a bad idea. you should used array indices
 	instead.
 */
+
 #ifndef MSTRANP_ARRAY_H
 #define MSTRANP_ARRAY_H
 

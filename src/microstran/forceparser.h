@@ -13,12 +13,12 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*//** @FILE
-	parser for microstran .p1 member forces output files.
+*//** @file
+	Parser for microstran .p1 member forces output files.
 
-	@NOTE there are important differences between the axes and sign conventions
+	@note there are important differences between the axes and sign conventions
 	used here and those specified by the Microstran .arc format. See
-	forces.h for details. @ENDNOTE
+	forces.h for details. @endnote
 */
 #ifndef MSTRANP_FORCEPARSER_H
 #define MSTRANP_FORCEPARSER_H

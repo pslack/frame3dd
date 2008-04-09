@@ -13,7 +13,11 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*//**
+	@file
+	Main functions of the FRAME3DD solver API
 */
+
 #ifndef FRAME_FRAME_H
 #define FRAME_FRAME_H
 
