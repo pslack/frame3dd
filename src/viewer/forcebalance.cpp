@@ -139,7 +139,7 @@ int main(int argc, char **argv){
 		char *c = forcefileauto;
 		while(*c!='\0')++c;
 		while(*c!='.')--c;
-		if(c==modelfname)throw runtime_error("unable to generate forces filename, please specify using '-f' option");
+		if(c==modelfname)throw runtime_error("Unable to generate forces filename, please specify using '-f' option");
 		sprintf(c,".p1");
 		forcefile = forcefileauto;
 	}

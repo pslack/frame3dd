@@ -227,6 +227,13 @@ MSTRANP_API memb_stmt *model_find_memb_from(model *a, const unsigned nodeid1, me
 	return NULL;
 }
 
+/**
+	Member orientation is defined by a third node ID, or
+	else several axis orientations X, Y, Z or -X, -Y, -Z.
+
+	@TODO FIXME still need to sort out 'D' orientation
+	as specified for Microstran file format.
+*/
 vec3 memb_get_orientation(const model *a, const memb_stmt *m){
 	vec3 AC = vec3_create(0,0,0);
 	vec3 AB = vec3_diff(a->node[m->tonode].pos, a->node[m->fromnode].pos);

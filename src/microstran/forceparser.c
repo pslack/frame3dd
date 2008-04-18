@@ -147,6 +147,7 @@ cbool parseMemberNodeForce(parse *p, membernodeforce *mnf){
 		//&& assign(VEC3_PR(M))
 		&& parseEOLplus(p)
 		&& assign(F.x = -F.x)
+		&& assign(M.z = -M.z)
 		&& assign(*mnf = membernodeforce_create(nodeid,F,M))
 		//&& assign(fprintf(stderr,"Member node force on node %d OK\n",nodeid))
 	) || (
