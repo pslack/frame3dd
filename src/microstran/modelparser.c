@@ -242,7 +242,7 @@ cbool parseMTYP(parse *p, model *a){
 /* PROP statement */
 
 /**
-	FIXME this should also parse LIBR lines with 'X' instead of 'Y' as the 
+	FIXME this should also parse LIBR lines with 'X' instead of 'Y' as the
 	major-axis alignment
 */
 cbool parsePROP(parse *p, model *a){
@@ -398,7 +398,7 @@ cbool parseCASE(parse *p, model *a){
 	case_stmt c;
 	c.type = CASE_UNDEFINED;
 	//ndld_stmt ndld[MAXNDLDS];
-#define ASSIGN(Z) assign(Z)
+#define ASSIGN(Z) 1
 	return (
 		parseComments(p)
 		&& parseThisString(p,"CASE") && ASSIGN(fprintf(stderr,"CASE"))

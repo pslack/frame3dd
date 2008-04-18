@@ -27,8 +27,9 @@
 #include <math.h>
 #include <assert.h>
 
-//#define NODISPLACEMENT_WARN
+/* #define NODISPLACEMENT_WARN */
 #define MSTRANP_NORMALISE_ORIENTATION
+/* #define CASE_DEBUG */
 
 #define PI 3.14159265358
 
@@ -475,6 +476,8 @@ cbool model_add_case(model *a,case_stmt *c){
 		fprintf(stderr,"Failed to add case %d\n",c->id);
 		return 0;
 	}
+
+#ifdef CASE_DEBUG
 	c1 = array_get(&a->cases, caseindex);
 	fprintf(stderr,"Added case %d '%s' (%d %s)\n",c1->id, c1->name, ARRAY_NUM(c1->data), (c1->type==CASE_LOADS ? "loads" : "subcases"));
 	if(c1->type ==CASE_COMB){
@@ -485,6 +488,7 @@ cbool model_add_case(model *a,case_stmt *c){
 			fprintf(stderr," %c %f × CASE %d '%s'\n",(i==0 ? '=' : '+'), co->factor, c2->id, c2->name);
 		}
 	}
+#endif
 	return 1;
 }
 

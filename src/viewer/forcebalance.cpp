@@ -51,8 +51,14 @@ Vector::operator()(const vec3 &v){
 }
 #endif
 
+ostream & operator<< (ostream &os, const SbVec3f &v){
+	os << v[0] << " " << v[1] << " " << v[2] << " ";
+	return os;
+}
+
+
 double defaultscaleF = 5;
-double defaultscaleM = 10;
+double defaultscaleM = 1;
 const char *defaultmodelfname = "model.arc";
 const char *defaultsceneoutfile = "forcebalance.iv";
 
@@ -67,10 +73,12 @@ void usage(char *progname){
 	cerr << "    -o[OUTFILE] Filename to write to, in Open Inventor .iv format (instead of rendering to screen). If name omitted, defaults to '" << defaultsceneoutfile << "'." << endl;
 	cerr << "    -M          Toggle display of moments (default off)" << endl;
 	cerr << "    -F          Toggle display of forces (default on)" << endl;
+	cerr << "    -X          Toggle display of axes (default off)" << endl;
 	exit(1);
 }
 
 int main(int argc, char **argv){
+
 	const char *modelfname = defaultmodelfname;
 
 	const char *forcefile = NULL;
@@ -89,12 +97,16 @@ int main(int argc, char **argv){
 
 	bool showmoments = false;
 	bool showforces = true;
+	bool showaxes = false;
+	bool showoffsets = false;
+	bool applyoffsets = true;
 
 	char c;
     while((c = getopt (argc, argv, "MFn:m:f:c:s:t:o::")) != -1){
 		switch(c){
 			case 'F': showforces = !showforces; break;
 			case 'M': showmoments = !showmoments; break;
+			case 'X': showaxes = !showaxes; break;
 			case 'n': showall = false; shownode = atoi(optarg); break;
 			case 'm': modelfname = optarg; break;
 			case 'f': forcefile = optarg; break;
@@ -148,10 +160,18 @@ int main(int argc, char **argv){
 	cerr << "Loading member forces file '" << forcefile << "'..." << endl;
 	modelforces *MF = NULL;
 	f1 = fopen(forcefile,"r");
-	if(!f1)throw runtime_error("Unable to read member forces file");
+	if(!f1){
+		cerr << "ERROR: Unable to read member forces file" << endl;
+		exit(1);
+	}
+
 	fclose(f1);
 	p = parseCreateFileName(forcefile);
-	if(!parseMicrostranForces(p,&MF))throw runtime_error("Unable to parse member forces file");
+	if(!parseMicrostranForces(p,&MF)){
+		cerr << "ERROR: Unable to parse member forces file '" << forcefile << "'" << endl;
+		exit(1);
+	}
+
 	fprintf(stderr,"\nParse member forces OK, %d load cases found\n",ARRAY_NUM(MF->cases));
 
 	//---------------------
@@ -161,7 +181,8 @@ int main(int argc, char **argv){
 
 	unsigned caseindex;
 	if(!model_find_case(M,caseid,&caseindex)){
-		throw runtime_error("Unable to find load-case in model");
+		cerr << "Unable to find load-case in model";
+		exit(1);
 	}
 	case_stmt *cl = (case_stmt *)array_get(&M->cases, caseindex);
 
@@ -181,7 +202,9 @@ int main(int argc, char **argv){
 
     SoSeparator *root = new SoSeparator;
     root->ref();
-	root->addChild(axes(0.2));
+    if(showaxes){
+		root->addChild(axes(0.2));
+	}
 
 	double maxF = 0, maxM = 0;
 	bool foundloads = false;
@@ -191,6 +214,10 @@ int main(int argc, char **argv){
 	double M_bal_max = 0; //< maximum moment residual (should be close to zero)
 	unsigned node_F_bal_max = 0;
 	unsigned node_M_bal_max = 0;
+
+	if(!applyoffsets){
+		cerr << "NOTE: moments due to member offsets are NOT being applied" << endl;
+	}
 
 	// loop through all the nodes
 	for(unsigned i = 0; i < M->num_nodes; ++i){
@@ -296,7 +323,9 @@ int main(int argc, char **argv){
 
 			// get member orientation so that we can do the coordinate transformation
 			vec3 minax = memb_get_orientation(M, m);
-			if(showall || thisnode->id==shownode){
+			if(showaxes &&
+					(showall || thisnode->id==shownode)
+			){
 				stringstream ss;
 				ss << "X-ax " << m->id << ": " << fromnode->id << " -- " << tonode->id;
 				root->addChild(arrow(
@@ -312,6 +341,10 @@ int main(int argc, char **argv){
 
 			vec3 M_gl = vec3_negate(ctrans_apply(ct,M_local));
 			vec3 F_gl = ctrans_apply(ct,F_local);
+
+			if(showmoments && !showall && thisnode->id==shownode){
+				cerr << "Moment due to member " << m->id << " (from node " << othernode->id << "): " << from_vec3(M_gl) << endl;
+			}
 
 			if(vec3_mod(F_gl)>maxF)maxF = vec3_mod(F_gl);
 			if(vec3_mod(M_gl)>maxM)maxM = vec3_mod(M_gl);
@@ -348,17 +381,21 @@ int main(int argc, char **argv){
 			if(delta){
 				founddelta = true;
 				vec3 delta_gl = ctrans_apply(ct, *delta);
-				vec3 M_offset = vec3_cross(F_gl, delta_gl);
-				if(showall || nodeid == shownode){
-					cerr << "Offset for member " << m->id << " = ";
-					vec3_print(stderr,delta_gl);
-					cerr << " --> M_offset = " << vec3_mod(M_offset) << " = |";
-					vec3_print(stderr,M_offset);
-					cerr << "|" << endl;
-				}else if(nodeid == shownode){
-					cerr << "No offset for member " << m->id << endl;
+				vec3 M_offset = vec3_cross(delta_gl, F_gl);
+				if(showoffsets){
+					if(showall || nodeid == shownode){
+						cerr << "Offset for member " << m->id << " = ";
+						vec3_print(stderr,delta_gl);
+						cerr << " --> M_offset = " << vec3_mod(M_offset) << " = |";
+						vec3_print(stderr,M_offset);
+						cerr << "|" << endl;
+					}else if(nodeid == shownode){
+						cerr << "No offset for member " << m->id << endl;
+					}
 				}
-				M_res = vec3_add(M_res, M_offset);
+				if(applyoffsets){
+					M_res = vec3_add(M_res, M_offset);
+				}
 			}
 		}
 
@@ -406,36 +443,36 @@ int main(int argc, char **argv){
 
 		bool cleared = false;
 		if(M->node[i].flags & MSTRANP_NODE_FIXX){
-			cerr << "Node " << nodeid << " has 'X' restraint" << endl;
+			if(showforces && (showall || nodeid == shownode))cerr << "Node " << nodeid << " has 'X' restraint" << endl;
 			cleared = true; foundfix = true;
 			F_bal.x = 0;
 		}
 		if(M->node[i].flags & MSTRANP_NODE_FIXY){
-			cerr << "Node " << nodeid << " has 'Y' restraint" << endl;
+			if(showforces&& (showall || nodeid == shownode))cerr << "Node " << nodeid << " has 'Y' restraint" << endl;
 			cleared = true; foundfix = true;
 			F_bal.y = 0;
 		}
 		if(M->node[i].flags & MSTRANP_NODE_FIXZ){
-			cerr << "Node " << nodeid << " has 'Z' restraint" << endl;
+			if(showforces && (showall || nodeid == shownode))cerr << "Node " << nodeid << " has 'Z' restraint" << endl;
 			cleared = true; foundfix = true;
 			F_bal.z = 0;
 		}
 		if(M->node[i].flags & MSTRANP_NODE_FIXMX){
-			cerr << "Node " << nodeid << " has 'MX' restraint" << endl;
+			if(showmoments && (showall || nodeid == shownode))cerr << "Node " << nodeid << " has 'MX' restraint" << endl;
 			cleared = true;
 			M_bal.x = 0;
 		}
 		if(M->node[i].flags & MSTRANP_NODE_FIXMY){
-			cerr << "Node " << nodeid << " has 'MY' restraint" << endl;
+			if(showmoments && (showall || nodeid == shownode))cerr << "Node " << nodeid << " has 'MY' restraint" << endl;
 			cleared = true;
 			M_bal.y = 0;
 		}
 		if(M->node[i].flags & MSTRANP_NODE_FIXMZ){
-			cerr << "Node " << nodeid << " has 'MZ' restraint" << endl;
+			if(showmoments && (showall || nodeid == shownode))cerr << "Node " << nodeid << " has 'MZ' restraint" << endl;
 			cleared = true;
 			M_bal.z = 0;
 		}
-		if(cleared){
+		if(cleared && (showall || nodeid == shownode)){
 			node_print(stderr,&M->node[i]);
 		}
 

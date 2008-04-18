@@ -14,7 +14,7 @@ if len(sys.argv)>3:
 
 sys.stderr.write("READING FORCE BALANCE...\n")
 
-cmd = ['build/forcebalance','-m',modelfile,'-o','-FM']
+cmd = ['build/forcebalance','-m',modelfile,'-MFo']
 
 if forcefile:
 	cmd += ['-f',forcefile]
@@ -22,7 +22,13 @@ if forcefile:
 if node:
 	cmd += ['-n',node]
 
-subprocess.Popen(cmd).communicate()
+sys.stderr.write("CMD ="+str(cmd))
+sys.stderr.flush()
+
+p = subprocess.Popen(cmd)
+p.communicate()
+if p.returncode:
+	sys.exit(1)
 
 sys.stderr.write("CONVERTING MODEL TO GRAPHICAL FORMAT...\n")
 
