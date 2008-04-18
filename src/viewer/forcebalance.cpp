@@ -221,12 +221,12 @@ int main(int argc, char **argv){
 			if(showforces){
 				stringstream ss;
 				ss << "F=" << vec3_mod(nl.F);
-				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(nl.F,1./scaleF)),GREEN,ss.str().c_str()));
+				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(nl.F,1./scaleF)),GREEN,ss.str().c_str(),0.01));
 			}
 			if(showmoments){
 				stringstream ss;
 				ss << "M=" << vec3_mod(nl.M);
-				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(nl.M,1./scaleM)),PURPLE,ss.str().c_str()));
+				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(nl.M,1./scaleM)),PURPLE,ss.str().c_str(),0.01));
 			}
 		}
 
@@ -304,7 +304,7 @@ int main(int argc, char **argv){
 					,from_vec3(vec3_add(fromnode->pos, vec3_scale(vec3_norm(minax),0.3)))
 					,LIME
 					,ss.str().c_str()
-					,0.02
+					,0.005
 				));
 			}
 
@@ -319,12 +319,13 @@ int main(int argc, char **argv){
 			if((showall || thisnode->id == shownode) && vec3_mod(F_gl) > 5e-4){
 				if(showforces){
 					stringstream ss;
-					ss << othernode->id << ":M ";
+					ss << othernode->id << ":F ";
 					ss << vec3_mod(F_gl);
 					root->addChild(arrow(
 						from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(F_gl,1./scaleF))
 						,(m->id >= 7200 ? YELLOW : CYAN)
 						,ss.str().c_str()
+						,0.01
 					));
 				}
 				if(showmoments){
@@ -335,6 +336,7 @@ int main(int argc, char **argv){
 						from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(M_gl,1./scaleM))
 						,(m->id >= 7200 ? MAGENTA : PURPLE)
 						,ss.str().c_str()
+						,0.01
 					));
 				}
 			}
@@ -385,7 +387,7 @@ int main(int argc, char **argv){
 				stringstream ss;
 				ss << "B:";
 				ss << vec3_mod(F_bal);
-				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(F_bal,1./scaleF)),PURPLE,ss.str().c_str()));
+				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(F_bal,1./scaleF)),PURPLE,ss.str().c_str(),0.01));
 			}
 
 			if(showmoments){
@@ -396,7 +398,7 @@ int main(int argc, char **argv){
 				stringstream ss;
 				ss << "M_bal:";
 				ss << vec3_mod(M_bal);
-				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(M_bal,1./scaleM)),ORANGE,ss.str().c_str()));
+				root->addChild(arrow(from_vec3(pos), from_vec3(pos) + from_vec3(vec3_scale(M_bal,1./scaleM)),ORANGE,ss.str().c_str(),0.01));
 			}
 		}
 

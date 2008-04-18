@@ -496,6 +496,11 @@ cbool model_find_case(model *a,unsigned caseid, unsigned *caseindex){
 	return 0;
 }
 
+case_stmt *model_get_case(model *a, unsigned caseindex){
+	if(caseindex >= ARRAY_NUM(a->cases))return NULL;
+	return (case_stmt *)array_get(&a->cases,caseindex);
+}
+
 cbool model_apply_displacements(model *m, casedisplacements *cd){
 	/* important note: nodes are not densely numbered, so we must use 'find' functions etc */
 	/* note that we required all nodes to be given a displacement */

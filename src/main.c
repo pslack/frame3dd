@@ -21,7 +21,7 @@
 
 	Also included is a system for parsing Microstran .arc 'Archive' files and
 	for parsing calculated force and displacement output files (.p1 format) from
-	Microstran. It is intended that ultimately the .arc format be an alternative
+	Microstran. See @ref mstranp. It is intended that ultimately the .arc format be an alternative
 	method of inputting data to the FRAME3DD program, but currently these two
 	parts of the code are distinct.
 

@@ -296,6 +296,18 @@ MSTRANP_API void model_write_inventory(model *a);
 
 MSTRANP_API cbool model_find_case(model *a,unsigned caseid, unsigned *caseindex);
 
+/**
+	Get case at position 'caseindex'. Note that this is NOT the case ID, it
+	is the position in the case array instead, for ease of iterating through
+	the available cases.
+
+	@note that case pointers are not persistent; if more cases are added to the 
+	model, it is possible that the case_stmt* may be invalidated. @endnote
+
+	@return pointer to the case data structure, or NULL if the caseindex is invalid.
+*/
+MSTRANP_API case_stmt *model_get_case(model *a, unsigned caseindex);
+
 cbool model_add_case(model *a, case_stmt *c);
 
 struct casedisplacements_;
