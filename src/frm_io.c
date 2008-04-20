@@ -49,7 +49,7 @@ READ_INPUT  -  read material and geometry data, calc lengths		15dec97
 ------------------------------------------------------------------------------*/
 void read_input(
 		FILE *fp
-		, int nJ, int nM, float *x, float *y, float *z
+		, int nJ, int nM, vec3 *pos
 		, float *r, float *L, float *Le
 		, int *J1, int *J2, int *anlyz, int *geom, float **Q
 		, float *Ax, float *Asy, float *Asz
@@ -66,7 +66,7 @@ void read_input(
 		    fprintf(stderr,"  Joint: %d  \n", j);
 		    exit(1);
 		}
-		fscanf(fp, "%lf %lf %lf %lf", &x[j], &y[j], &z[j], &r[j]);
+		fscanf(fp, "%lf %lf %lf %lf", &pos[j].x, &pos[j].y, &pos[j].z, &r[j]);
 		r[j] = fabs(r[j]);
 	}
 	for (i=1;i<=nM;i++) {		/* read member properties	*/
@@ -123,9 +123,13 @@ void read_input(
 	for (i=1;i<=nM;i++) {		/* calculate member lengths	*/
 		j1 = J1[i];
 		j2 = J2[i];
-		L[i] =	(x[j2]-x[j1]) * (x[j2]-x[j1]) +
-			(y[j2]-y[j1]) * (y[j2]-y[j1]) +
-			(z[j2]-z[j1]) * (z[j2]-z[j1]);
+
+#define SQ(X) ((X)*(X))
+		L[i] =	SQ(pos[j2].x - pos[j1].x) +
+			SQ(pos[j2].y-pos[j1].y) +
+			SQ(pos[j2].z-pos[j1].z);
+#undef SQ
+
 		L[i] = sqrt( L[i] );
 		Le[i] = L[i] - r[j1] - r[j2];
 		if ( j1 == j2 || L[i] == 0.0 ) {
@@ -247,7 +251,7 @@ READ_LOADS  -  read load information data, form un-restrained load vector	6dec06
 ------------------------------------------------------------------------------*/
 void read_loads(
 		FILE *fp
-		, int nJ, float *x, float *y, float *z
+		, int nJ, vec3 *pos
 		, float *L, float *Le, float *Ax, float *Asy, float *Asz
 		, float *Iy, float *Iz, float *E, float *G
 		, float *p, int shear
@@ -321,7 +325,7 @@ void read_loads(
 
 		j1 = J1[n];	j2 = J2[n];
 
-		coord_trans ( x, y, z, L[n], j1, j2,
+		coord_trans ( pos, L[n], j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		/* debugging
@@ -406,7 +410,7 @@ void read_loads(
 
 		j1 = J1[n];	j2 = J2[n];
 
-		coord_trans ( x, y, z, L[n], j1, j2,
+		coord_trans ( pos, L[n], j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		/* {F} = [T]'{Q} */
@@ -462,7 +466,7 @@ void read_loads(
 
 		j1 = J1[n];	j2 = J2[n];
 
-		coord_trans ( x, y, z, L[n], j1, j2,
+		coord_trans ( pos, L[n], j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		/* {F} = [T]'{Q} */
@@ -792,7 +796,7 @@ CONTROL_DATA  -  save input data					7nov02
 void control_data(
 		FILE *fp
 		, char *title, int nJ, int nM, int nF, int nD, int nR, int nW, int nP,int nT
-		, float *x, float *y, float *z, float *r
+		, vec3 *pos, float *r
 		, int *J1, int *J2
 		, float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz
 		, float *E, float *G, float *p, float *F, float *Dp
@@ -838,7 +842,7 @@ void control_data(
 	for (i=1; i<=nJ; i++) {
 	 j = 6*(i-1);
 	 fprintf(fp,"%5d %14.6f %14.6f %14.6f %8.3f  %2d %2d %2d %2d %2d %2d\n",
-		i, x[i], y[i], z[i], r[i],
+		i, pos[i].x, pos[i].y, pos[i].z, r[i],
 			R[j+1], R[j+2], R[j+3], R[j+4], R[j+5], R[j+6] );
 	}
 	fprintf(fp,"M E M B E R   D A T A\t\t\t\t\t\t\t(local)\n");
@@ -1114,7 +1118,7 @@ MESH  -  create mesh data of deformed and undeformed mesh, use gnuplot	22feb99
 void mesh(
 		char IO_file[], char meshfile[], char plotfile[]
 		, char *title, int nJ, int nM, int DoF
-		, float *x, float *y, float *z, float *L
+		, vec3 *pos, float *L
 		, int *J1, int *J2, float *p, float *D
 		, float exg, int anlyz
 ){
@@ -1159,23 +1163,30 @@ void mesh(
 
 	for (m=1; m<=nM; m++) {
 
-		bent_beam ( fpmfx, J1[m], J2[m], x,y,z, L[m], p[m], D, exg );
+		bent_beam ( fpmfx, J1[m], J2[m], pos, L[m], p[m], D, exg );
 
 		j = J1[m];	i = 6*(j-1);
-		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, x[j],y[j],z[j]);
+		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, pos[j].x,pos[j].y,pos[j].z);
 		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-		x[j]+exg*D[i+1], y[j]+exg*D[i+2], z[j]+exg*D[i+3]);
+			pos[j].x + exg*D[i+1]
+			, pos[j].y + exg*D[i+2]
+			, pos[j].z + exg*D[i+3]
+		);
+
 		j = J2[m];	i = 6*(j-1);
-		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, x[j],y[j],z[j]);
+		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, pos[j].x,pos[j].y,pos[j].z);
 		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-		x[j]+exg*D[i+1], y[j]+exg*D[i+2], z[j]+exg*D[i+3]);
+			pos[j].x + exg*D[i+1]
+			, pos[j].y + exg*D[i+2]
+			, pos[j].z + exg*D[i+3]
+		);
 		fprintf(fpm,"\n\n");
 	}
 
 	for ( j=1; j<=nJ; j++ ) {
-		if (x[j] != 0.0) X=1;	/* check for three-dimensional frame */
-		if (y[j] != 0.0) Y=1;
-		if (z[j] != 0.0) Z=1;
+		if (pos[j].x != 0.0) X=1;	/* check for three-dimensional frame */
+		if (pos[j].y != 0.0) Y=1;
+		if (pos[j].z != 0.0) Z=1;
 	}
 	if ( X && Y && Z ) D3 = ' ';
 
@@ -1204,14 +1215,14 @@ void mesh(
 	fprintf(fpm,"# NODE NUMBER LABELS\n");
 	for (j=1; j<=nJ; j++)
 		fprintf(fpm,"set label ' %d' at %12.4e, %12.4e, %12.4e\n",
-							j, x[j], y[j], z[j] );
+							j, pos[j].x,pos[j].y,pos[j].z );
 
 	fprintf(fpm,"# MEMBER NUMBER LABELS\n");
 	for (m=1; m<=nM; m++) {
 		j1 = J1[m];	j2 = J2[m];
-		mx = 0.5 * ( x[j1] + x[j2] );
-		my = 0.5 * ( y[j1] + y[j2] );
-		mz = 0.5 * ( z[j1] + z[j2] );
+		mx = 0.5 * ( pos[j1].x + pos[j2].x );
+		my = 0.5 * ( pos[j1].y + pos[j2].y );
+		mz = 0.5 * ( pos[j1].z + pos[j2].z );
 		fprintf(fpm,"set label ' %d' at %12.4e, %12.4e, %12.4e\n",
 								m, mx, my, mz );
 	}
@@ -1245,7 +1256,7 @@ void modal_mesh(
 		char IO_file[], char meshfile[], char modefile[]
 		, char plotfile[], char *title
 		, int nJ, int nM, int DoF, int modes
-		, float *x, float *y, float *z, float *L
+		, vec3 *pos, float *L
 		, int *J1, int *J2, float *p
 		, float **M, float *f, float **V
 		, float exg, int anlyz
@@ -1301,12 +1312,12 @@ void modal_mesh(
 		fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
 
 		for(n=1; n<=nM; n++)
-			bent_beam ( fpm, J1[n], J2[n], x,y,z, L[n], p[n], v, exg );
+			bent_beam ( fpm, J1[n], J2[n], pos, L[n], p[n], v, exg );
 
 		for ( j=1; j<=nJ; j++ ) {
-			if (x[j] != 0.0) X=1;	/* check for three-dimensional frame */
-			if (y[j] != 0.0) Y=1;
-			if (z[j] != 0.0) Z=1;
+			if (pos[j].x != 0.0) X=1;	/* check for three-dimensional frame */
+			if (pos[j].y != 0.0) Y=1;
+			if (pos[j].z != 0.0) Z=1;
 		}
 
 		if ( X && Y && Z ) D3 = ' ';
@@ -1353,7 +1364,7 @@ void animate(
 	, char *title
 	, int anim[]
 	, int nJ, int nM, int DoF, int modes
-	, float *x, float *y, float *z, float *L, float *p
+	, vec3 *pos, float *L, float *p
 	, int *J1, int *J2, float *f, float **V
 	, float exg
 	, int pan
@@ -1382,15 +1393,15 @@ void animate(
 		s1[16], s2[16], modefl[64], framefl[64];
 
 	for (j=1; j<=nJ; j++) {		/* check for three-dimensional frame */
-		if (x[j] != 0.0) X=1;
-		if (y[j] != 0.0) Y=1;
-		if (z[j] != 0.0) Z=1;
-		if ( x[j] < x_min ) x_min = x[j];
-		if ( y[j] < y_min ) y_min = y[j];
-		if ( z[j] < z_min ) z_min = z[j];
-		if ( x_max < x[j] ) x_max = x[j];
-		if ( y_max < y[j] ) y_max = y[j];
-		if ( z_max < z[j] ) z_max = z[j];
+		if (pos[j].x != 0.0) X=1;
+		if (pos[j].y != 0.0) Y=1;
+		if (pos[j].z != 0.0) Z=1;
+		if (pos[j].x < x_min ) x_min = pos[j].x;
+		if (pos[j].y < y_min ) y_min = pos[j].y;
+		if (pos[j].z < z_min ) z_min = pos[j].z;
+		if ( x_max < pos[j].x ) x_max = pos[j].x;
+		if ( y_max < pos[j].y ) y_max = pos[j].y;
+		if ( z_max < pos[j].z ) z_max = pos[j].z;
 	}
 	if ( X && Y && Z ) D3 = ' ';
 
@@ -1544,7 +1555,7 @@ void animate(
 
 	    for (n=1; n<=nM; n++)
 
-		bent_beam ( fpm, J1[n], J2[n], x,y,z, L[n], p[n], v, ex );
+		bent_beam ( fpm, J1[n], J2[n], pos, L[n], p[n], v, ex );
 
 	    fclose(fpm);
           }
@@ -1562,7 +1573,7 @@ are exact for mode-shapes, and for frames loaded at their joints.	22feb99
 ------------------------------------------------------------------------------*/
 void bent_beam(
 		FILE *fp, int j1, int j2
-		, float *x, float *y, float *z
+		, vec3 *pos
 		, float L, float p, float *D
 		, float exg
 ){
@@ -1576,7 +1587,7 @@ void bent_beam(
 	a = vector(1,4);
 	b = vector(1,4);
 
-	coord_trans ( x, y, z, L, j1, j2,
+	coord_trans ( pos, L, j1, j2,
 				&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p );
 
 	i1 = 6*(j1-1);	i2 = 6*(j2-1);
@@ -1634,7 +1645,8 @@ void bent_beam(
 		dz = t3*s + t6*v + t9*w;
 
 		fprintf (fp," %12.4e %12.4e %12.4e\n",
-					x[j1]+dx, y[j1]+dy, z[j1]+dz );
+			pos[j1].x + dx, pos[j1].y + dy, pos[j1].z + dz
+		);
 	}
 	fprintf(fp,"\n\n");
 

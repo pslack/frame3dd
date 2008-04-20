@@ -19,6 +19,7 @@
 */
 
 #include "common.h"
+#include "microstran/vec3.h"
 
 #include <stdio.h>
 
@@ -35,7 +36,7 @@ void frm_getline(
 /* read input data file			*/
 void read_input(
 		FILE *fp
-		, int nJ, int nM, float *x, float *y, float *z
+		, int nJ, int nM, vec3 *pos
 		, float *r, float *L, float *Le
 		, int *J1, int *J2, int *anlyz, int *geom, float **Q
 		, float *Ax, float *Asy, float *Asz
@@ -51,7 +52,7 @@ void parse_input(FILE *fp);
 */
 void read_loads(
 		FILE *fp
-		, int nJ, float *x, float *y, float *z
+		, int nJ, vec3 *pos
 		, float *L, float *Le, float *Ax, float *Asy, float *Asz
 		, float *Iy, float *Iz, float *E, float *G
 		, float *p, int shear
@@ -100,7 +101,7 @@ void read_condense(
 void control_data(
 		FILE *fp
 		, char *title, int nJ, int nM, int nF, int nD, int nR, int nW, int nP,int nT
-		, float *x, float *y, float *z, float *r
+		, vec3 *pos, float *r
 		, int *J1, int *J2
 		, float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz
 		, float *E, float *G, float *p, float *F, float *Dp
@@ -139,7 +140,7 @@ void modal_results(
 void mesh(
 		char IO_file[], char meshfile[], char plotfile[]
 		, char *title, int nJ, int nM, int DoF
-		, float *x, float *y, float *z, float *L
+		, vec3 *pos, float *L
 		, int *J1, int *J, float *p, float *D
 		, float exg, int anlyz
 );
@@ -152,7 +153,7 @@ void modal_mesh(
 		char IO_file[], char meshfile[], char modefile[]
 		, char plotfile[], char *title
 		, int nJ, int nM, int DoF, int modes
-		, float *x, float *y, float *z, float *L
+		, vec3 *pos, float *L
 		, int *J1, int *J2, float *p
 		, float **M, float *f, float **V
 		, float exg, int anlyz
@@ -169,7 +170,7 @@ void animate(
 		, char *title
 		, int anim[]
 		, int nJ, int nM, int DoF, int modes
-		, float *x, float *y, float *z, float *L, float *p
+		, vec3 *pos, float *L, float *p
 		, int *J1, int *J2, float *f, float **V
 		, float exg
 		, int pan
@@ -182,7 +183,7 @@ void animate(
 */
 void bent_beam(
 		FILE *fp, int j1, int j2
-		, float *x, float *y, float *z
+		, vec3 *pos
 		, float L, float p, float *D
 		, float exg
 );

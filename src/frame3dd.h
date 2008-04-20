@@ -24,11 +24,13 @@
 /* note, common.h includes a sneaky #define that rewrites 'float' to 'double'. */
 #include "common.h"
 
+#include "microstran/vec3.h"
+
 /** form the global stiffness matrix */
 void assemble_K(
 	float **K
 	, int DoF, int nM
-	, float *x, float *y, float *z, float *r, float *L, float *Le
+	, vec3 *pos, float *r, float *L, float *Le
 	, int *J1, int *J2
 	, float *Ax, float *Asy, float *Asz
 	, float *J, float *Iy, float *Iz, float *E, float *G, float *p
@@ -48,7 +50,7 @@ void solve_system(
 
 /** evaluate the member end forces for every member */
 void end_forces(
-	float **Q, int nM, float *x, float *y, float *z
+	float **Q, int nM, vec3 *pos
 	, float *L, float *Le
 	, int *J1, int *J2, float *Ax, float *Asy, float *Asz
 	, float *J, float *Iy, float *Iz, float *E, float *G, float *p
@@ -57,7 +59,7 @@ void end_forces(
 
 /** perform an equilibrium check, F returned as reactions */
 void equilibrium(	
-	float *x, float *y, float *z
+	vec3 *pos
 	, float *L, int *J1, int *J2, float *F, int *R, float *p
 	, float **Q, float **feF, int nM, int DoF, float *err
 );
@@ -65,7 +67,7 @@ void equilibrium(
 /** assemble global mass matrix from element mass & inertia */
 void assemble_M(
 	float **M, int DoF, int nJ, int nM,
-	float *x, float *y, float *z, float *r, float *L
+	vec3 *pos, float *r, float *L
 	, int *J1, int *J2
 	, float *Ax, float *J, float *Iy, float *Iz, float *p
 	, float *d, float *BMs, float *JMs, float *JMx, float *JMy, float *JMz
@@ -105,7 +107,7 @@ void dyn_conden(
 	release allocated memory
 */
 void deallocate( 
-	float *x, float *y, float *z, float *r, float *L, float *Le
+	vec3 *pos, float *r, float *L, float *Le
 	, int *J1, int *J2
 	, float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz
 	, float *E, float *G, float **K, float **Q, float *F, float *D

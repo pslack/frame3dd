@@ -19,7 +19,7 @@
 #include <math.h>
 
 void coord_trans(
-		float *x, float *y, float *z
+		vec3 *pos
 		, float L
 		, int j1, int j2
 		, float *t1, float *t2, float *t3, float *t4, float *t5
@@ -29,9 +29,9 @@ void coord_trans(
 	float	Cx, Cy, Cz, den,		/* direction cosines	*/
 		Cp, Sp;			/* cosine and sine of roll angle */
 
-	Cx = (x[j2] - x[j1]) / L;
-	Cy = (y[j2] - y[j1]) / L;
-	Cz = (z[j2] - z[j1]) / L;
+	Cx = (pos[j2].x - pos[j1].x) / L;
+	Cy = (pos[j2].y - pos[j1].y) / L;
+	Cz = (pos[j2].z - pos[j1].z) / L;
 
 	*t1 = *t2 = *t3 = *t4 = *t5 = *t6 = *t7 = *t8 = *t9 = 0.0;
 

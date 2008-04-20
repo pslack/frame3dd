@@ -21,6 +21,7 @@
 #define FRAME_COORDTRANS_H
 
 #include "common.h"
+#include "microstran/vec3.h"
 
 /**
 	COORD_TRANS -  evaluate the 3D coordinate transformation coefficients 1dec04
@@ -38,7 +39,7 @@
 	Q=TF;   U=TD;   T'T=I;   Q=kU;   TF=kTD;   T'TF=T'kTD;   T'kT = K;   F=KD
 */
 void coord_trans(
-	float *x, float *y, float *z
+	vec3 *pos
 	, float L
 	, int j1, int j2
 	, float *t1, float *t2, float *t3, float *t4, float *t5

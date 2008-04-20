@@ -65,7 +65,9 @@ char	*argv[];
 
 	FILE	*fp;		/* input/output file pointer		*/
 
-	float	*x, *y, *z,	/* joint coordinates (global)		*/
+	vec3 *pos;/* joint coordinates (global)		*/
+
+	float
 		*r,		/* joint size radius, for finite sizes	*/
 		**K, **Ks,	/* global stiffness matrix		*/
 		traceK = 0.0,	/* trace of the global stiffness matrix	*/
@@ -174,11 +176,11 @@ char	*argv[];
         }
 
 	DoF = 6*nJ;		/* total number of degrees of freedom		*/
+	
+						   /* allocate memory */
 
-							   /* allocate memory */
-	x   =  vector(1,nJ);	/* x coordinate of each joint		*/
-	y   =  vector(1,nJ);	/* y coordinate of each joint		*/
-	z   =  vector(1,nJ);	/* z coordinate of each joint		*/
+	pos = (vec3 *)malloc(sizeof(vec3)*(1+nJ));
+
 	r   =  vector(1,nJ);	/* rigid radius around each joint	*/
 	L   =  vector(1,nM);	/* length of each element		*/
 	Le  =  vector(1,nM);	/* effective length of each element	*/
@@ -222,13 +224,13 @@ char	*argv[];
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
 
 	read_input(
-			fp, nJ, nM, x,y,z,r, L, Le, J1, J2, &anlyz, &geom, Q
+			fp, nJ, nM, pos,r, L, Le, J1, J2, &anlyz, &geom, Q
 			, Ax,Asy,Asz, J,Iy,Iz, E,G, p, &shear, mesh_file,plot_file,&exagg
 	);
 	printf("  input data complete\n");
 
 	read_loads(
-			fp, nJ, x, y, z, L, Le, Ax,Asy,Asz, Iy,Iz, E, G, p, shear
+			fp, nJ, pos, L, Le, Ax,Asy,Asz, Iy,Iz, E, G, p, shear
 			, J1, J2, DoF, nM, &nF, &nW, &nP, &nT
 			, Fo_mech, Fo_temp, W, P, T, feF_mech, feF_temp
 	);
@@ -257,7 +259,7 @@ char	*argv[];
 	}
 
 	control_data(
-			fp, title, nJ,nM, nF,nD,nR,nW,nP,nT, x,y,z,r, J1,J2
+			fp, title, nJ,nM, nF,nD,nR,nW,nP,nT, pos,r, J1,J2
 			, Ax,Asy,Asz, J,Iy,Iz, E,G, p, Fo,Dp,R,W,P,T, shear,anlyz,geom
 	);
 
@@ -267,7 +269,7 @@ char	*argv[];
 
 	  for (temp_mech=1; temp_mech <= 2; temp_mech++) { 
 
-	    assemble_K ( K, DoF, nM, x,y,z,r, L, Le, J1, J2,
+	    assemble_K ( K, DoF, nM, pos,r, L, Le, J1, J2,
 			Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
 #ifdef MATRIX_DEBUG
@@ -279,14 +281,14 @@ char	*argv[];
 		apply_reactions ( DoF, R, Dp, Fo_temp, F, K );
 		solve_system( K, dD, F, DoF, &ok );
 		for (i=1; i<=DoF; i++)	D[i] += dD[i];
-		end_forces ( Q, nM, x,y,z, L, Le, J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear,geom );
+		end_forces ( Q, nM, pos, L, Le, J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear,geom );
 	    }
 	    if (temp_mech == 2 && (nF > 0 || nW > 0 || nP > 0) ) { /* then add mechanical loads	*/
 		fprintf(stderr,"\n Linear Elastic Analysis ... Mechanical Loads\n");
 		apply_reactions ( DoF, R, Dp, Fo_mech, F, K );
 		solve_system( K, dD, F, DoF, &ok );
 		for (i=1; i<=DoF; i++)	D[i] += dD[i];
-		end_forces ( Q, nM, x,y,z, L, Le, J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear,geom );
+		end_forces ( Q, nM, pos, L, Le, J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear,geom );
 	    } 
 
 #ifdef MATRIX_DEBUG
@@ -310,7 +312,7 @@ char	*argv[];
 
 		++iter;
 
-		assemble_K ( K, DoF, nM, x,y,z,r, L, Le, J1, J2,
+		assemble_K ( K, DoF, nM, pos,r, L, Le, J1, J2,
 			Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
 		apply_reactions ( DoF, R, Dp, Fo, F, K );
@@ -341,7 +343,7 @@ char	*argv[];
 
 		for (i=1; i<=DoF; i++)	D[i] += dD[i];	/* increment D */
 
-		end_forces ( Q, nM, x,y,z, L, Le,
+		end_forces ( Q, nM, pos, L, Le,
 			J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 
 						/* convergence criteria: */
@@ -363,7 +365,7 @@ char	*argv[];
 	  for (i=1; i<=12; i++)
 		for (n=1; n<=nM; n++)
 			feF[n][i] = feF_temp[n][i] + feF_mech[n][i];
-	  equilibrium ( x,y,z, L, J1,J2, Fo, R, p, Q, feF, nM, DoF, &error );
+	  equilibrium ( pos, L, J1,J2, Fo, R, p, Q, feF, nM, DoF, &error );
 	  save_results ( fp, nJ, nM, DoF, J1, J2, Fo, D, R, Q, error, ok );
 
 	} else {
@@ -381,7 +383,7 @@ char	*argv[];
 		f   =  vector(1,calc_modes);
 		V   =  matrix(1,DoF,1,calc_modes);
 
-		assemble_M ( M, DoF, nJ, nM, x,y,z,r, L, J1, J2, Ax, J, Iy, Iz, p,
+		assemble_M ( M, DoF, nJ, nM, pos,r, L, J1, J2, Ax, J, Iy, Iz, p,
 					d, BMs, JMs, JMx, JMy, JMz, lump );
 
 #ifdef MATRIX_DEBUG
@@ -423,13 +425,13 @@ char	*argv[];
 	fclose (fp);
 
 	mesh ( IO_file, mesh_file, plot_file, title, nJ, nM, DoF, 
-					x,y,z,L, J1,J2, p, D, exagg, anlyz);
+					pos,L, J1,J2, p, D, exagg, anlyz);
 
 	if ( modes > 0 && anlyz ) {
 		modal_mesh ( IO_file, mesh_file, mode_file, plot_file, title, 
-		       nJ,nM, DoF, modes, x,y,z,L, J1,J2, p, M,f,V,exagg,anlyz);
+		       nJ,nM, DoF, modes, pos,L, J1,J2, p, M,f,V,exagg,anlyz);
 		animate ( IO_file, mesh_file, mode_file, plot_file, title,anim, 
-		       nJ,nM, DoF, modes, x,y,z,L, p, J1,J2, f,V, exagg, pan );
+		       nJ,nM, DoF, modes, pos,L, p, J1,J2, f,V, exagg, pan );
 	}
 
 	if ( nC > 0 ) {		/* matrix condensation of stiffness and mass */
@@ -472,7 +474,7 @@ char	*argv[];
 
 	printf("\n");
 
-	deallocate ( x,y,z,r, L,Le, J1, J2, Ax,Asy,Asz, J,Iy,Iz, E, G,
+	deallocate ( pos,r, L,Le, J1, J2, Ax,Asy,Asz, J,Iy,Iz, E, G,
        K,Q,F,D,R,W,P,T, feF,Fo, d,BMs,JMs,JMx,JMy,JMz,M,f,V, nJ,nM,DoF, modes );
 
 	return(0);
