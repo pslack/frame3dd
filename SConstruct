@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-version = '20080221'
+version = '0.20080221'
 
 import platform
 deftools = ['default']
@@ -26,7 +26,7 @@ else:
 	default_itoa=0
 
 env = Environment(
-	tools=deftools + ['disttar','substinfile','soqt']
+	tools=deftools + ['disttar','substinfile','soqt','nsis']
 	,toolpath=['scons']
 )
 
@@ -61,6 +61,14 @@ opts.Add("INSTALL_BIN","Install location for binaries","$INSTALL_PREFIX/bin")
 opts.Add("INSTALL_DATA","Install location for general data files","$INSTALL_PREFIX/share");
 opts.Add("INSTALL_FRAMEDATA","Install location FRAME's data files","$INSTALL_DATA/frame");
 opts.Add("INSTALL_ROOT","Install root (for building RPMs etc)","")
+
+# NSIS TARGET FILENAME
+
+opts.Add(
+	'WIN_INSTALLER_NAME'
+	,'Windows Installer name'
+	,'frame3dd-%s.exe' % version
+)
 
 opts.Update(env)
 opts.Save('options.cache',env)
@@ -244,6 +252,18 @@ tar = env.DistTar("dist/frame3dd-"+version
 )
 
 env.Depends(tar,"frame3dd.spec")
+
+if platform.system()=="Windows":
+	env.Append(NSISDEFINES={
+		'OUTFILE':"#dist/"+env['WIN_INSTALLER_NAME']
+	})
+	
+	installer = env.Installer('installer.nsi')
+	Depends(installer,env['PROGS'])
+	env.Alias('installer',installer)
+
+
+#-------
 
 env.Default(env['PROGS'])
 

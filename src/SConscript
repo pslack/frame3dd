@@ -37,9 +37,9 @@ if env.get('VERSION'):
 		CPPDEFINES=['VERSION=\\"%s\\"' % env['VERSION']]
 	)
 
-frame = prog_env.Program('frame',objs + ['main.c'], LIBS=['m'])
+frame3dd = prog_env.Program('frame3dd',objs + ['main.c'], LIBS=['m'])
 
-env['PROGS'].append(frame)
+env['PROGS'].append(frame3dd)
 
 # proceed into subdirectory to create libmicrostranparser
 env.SConscript('microstran/SConscript','env')
@@ -48,7 +48,7 @@ env.SConscript('microstran/SConscript','env')
 env.SConscript('viewer/SConscript','env')
 
 bindir=Dir(env.subst("$INSTALL_ROOT$INSTALL_BIN"))
-env.Install(bindir,frame);
+env.Install(bindir,frame3dd);
 
 #libdir=Dir(env.subst("$INSTALL_ROOT$INSTALL_LIB"))
 #env.Install(bindir,lib);

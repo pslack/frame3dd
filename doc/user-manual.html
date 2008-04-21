@@ -4,14 +4,14 @@
 
 
 <meta name="Description" content=" Free software for static and dynamic analysis of 3D moment-resisting frames with elastic and geometric stiffness. Written in
-K&amp;R C.  Source code includes:  frame analysis, LDL' decomposition, LU decomposition, sub-space iteration, Stodola iteration, Sturm eigenvalue checking,  
+K&amp;R C.  Source code includes:  frame analysis, LDL' decomposition, LU decomposition, sub-space iteration, Stodola iteration, Sturm eigenvalue checking,
 Static Condensation, Guyan Reduction and Dynamic Condensation.  Graphical output and mode shape animation via Gnuplot.">
 
 <meta name="Keywords" content="Structural Dynamics, Structural Analysis, Frame Analysis, Structural Analysis Software, Geometric Stiffness, Geometric Stiffness Matrix, Modal Analysis, Modal Analysis Software, Structural Dynamics, Structural Dynamics Software, LDL Decomposition, LDL Decomposition, LU Decomposition, Sub-space Iteration, Gnuplot, Henri Gavin, Duke"></head><body>
 
 <img src="img/psoe.jpg" align="left" border="0" height="100">
 <font face="Arial, Helvetica, sans-serif" size="3">
-<nobr><b>A Manual and Reference for <a href="http://www.duke.edu/%7Ehpgavin/frame/index.html">a FRAME Analysis Program</a></b>
+<nobr><b>A Manual and Reference for <a href="http://www.duke.edu/%7Ehpgavin/frame/index.html">a Frame Analysis Program</a></b>
 </nobr><br>
 <a href="http://www-cee.egr.duke.edu/">
 Department of Civil and Environmental Engineering</a><br>
@@ -34,23 +34,23 @@ Henri.Gavin@Duke.edu
 
 <font face="Arial, Helvetica, sans-serif" size="2">
 </font><hr>
-<h4><font face="Arial, Helvetica, sans-serif" size="2">FRAME</font></h4>
+<h4><font face="Arial, Helvetica, sans-serif" size="2">FRAME3DD</font></h4>
 <!-- <h4>DESCRIPTION </h4> -->
 <p>
-<font face="Arial, Helvetica, sans-serif" size="2">     <b>FRAME</b> is a program for the static and dynamic structural analysis of two- and three-dimensional frames and trusses with elastic and
-geometric stiffness.  
+<font face="Arial, Helvetica, sans-serif" size="2">     <b>FRAME3DD</b> is a program for the static and dynamic structural analysis of two- and three-dimensional frames and trusses with elastic and
+geometric stiffness.
 </font></p>
 
 <p>
-<font face="Arial, Helvetica, sans-serif" size="2">     <b>FRAME</b> reads an Input Data file, containing joint coordinates, member
+<font face="Arial, Helvetica, sans-serif" size="2">     <b>FRAME3DD</b> reads an Input Data file, containing joint coordinates, member
      geometry, material moduli, restrained joints,
      prescribed displacements, load information, and optionally, mass
-     information if a modal analysis is to be carried out.  
+     information if a modal analysis is to be carried out.
 <!-- (The Input/Output file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
 </font></p>
 
 <p>
-<font face="Arial, Helvetica, sans-serif" size="2"> <b>FRAME</b>
+<font face="Arial, Helvetica, sans-serif" size="2"> <b>FRAME3DD</b>
 appends the Input Data with Output Data, resulting in a single
 Input/Output file. The Output Data recapitulates the input information,
 gives joint displacements in global coordinates, member
@@ -58,15 +58,15 @@ end-forces in local coordinates, reactions in global coordinates, and
 natural frequencies and mode shapes in global coordinates. </font></p>
 
 <p>
-<font face="Arial, Helvetica, sans-serif" size="2">     <b>FRAME</b> is free software; you may redistribute it and/or modify it under 
+<font face="Arial, Helvetica, sans-serif" size="2">     <b>FRAME3DD</b> is free software; you may redistribute it and/or modify it under
      the terms of the GNU General Public License (<a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>) as published by the
      <a href="http://www.fsf.org/">Free Software Foundation</a>.
-     <b>FRAME</b> is distributed in the hope that it will be useful, but WITHOUT ANY
+     <b>FRAME3DD</b> is distributed in the hope that it will be useful, but WITHOUT ANY
     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
      FOR A PARTICULAR PURPOSE.  See the GNU General Public License (<a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>) for details.
 </font></p>
 <!--
-Free software for static and dynamic structural analysis of 2D 
+Free software for static and dynamic structural analysis of 2D
 and 3D frames and trusses with elastic and geometric stiffness.
 Computes the static deflections, reactions, internal element
 forces, natural frequencies, mode shapes and modal participation
@@ -75,7 +75,7 @@ direct stiffness and mass assembly.  Written in K&R C.  Source code
 includes: frame analysis, LDL' decomposition, LU decomposition,
 Newton-Raphson iteration, sub-space iteration, Stodola iteration,
 Sturm eigenvalue check, and Static Condensation, Guyan Reduction,
-Dynamic Condensation.  Graphical output and mode shape animation 
+Dynamic Condensation.  Graphical output and mode shape animation
 via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.0.
 <hr>
 <h4>SYNOPSIS </h4>
@@ -90,32 +90,32 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.0.
 <h4><font face="Arial, Helvetica, sans-serif" size="2">GETTING STARTED </font></h4>
 <ol>
 <font face="Arial, Helvetica, sans-serif" size="2"><li>       Read the Manual and Reference (this file).
-</li><li>       Download and install the <b>FRAME</b> executable and Gnuplot for your operating system.  (See below.)
+</li><li>       Download and install the <b>FRAME3DD</b> executable and Gnuplot for your operating system.  (See below.)
 </li><li>       Download some of the example Input/Output files and compare them to the corresponding plots and movies.
 </li><li>       Open a terminal window and run the program.  <br>
           <font face="courier">frame [example Input/Output file]</font>
 </li><li>     Check the computed Output Data, which is written to the end of the Input/Output file.
-<!--     Running this program will create many files.  Most of them are used 
-         for graphics and should be written to the  /tmp  directory. 
-<li>      One of the files will be written to the current working directory and will be called 
+<!--     Running this program will create many files.  Most of them are used
+         for graphics and should be written to the  /tmp  directory.
+<li>      One of the files will be written to the current working directory and will be called
          something like frA.plt   This file is used for plotting.   -->
 </li><li>      Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.duke.edu/%7Ehpgavin/gnuplot.html">Gnuplot</a>, and simply typing ...<br>
            <font face="courier"> gnuplot&gt;    load 'example.plt' </font> <br>
-      where the <font face="courier">example.plt</font> is a filename specified as part of the Input Data. 
+      where the <font face="courier">example.plt</font> is a filename specified as part of the Input Data.
       Observe a series of plots by hitting the Return (or Enter) key between plots.
          If a dynamic analysis was performed, you will enjoy an animation of
          selected mode shapes.   Continue to hit the Return (or Enter) key until
-         the last plot is displayed.  
+         the last plot is displayed.
 </li></font></ol>
 
 <font face="Arial, Helvetica, sans-serif" size="2"><b>Input Data and Output Data</b>
 
 </font><p>
 <font face="Arial, Helvetica, sans-serif" size="2">The Input Data file is a plain ASCII text file and must adhere to the format described below.
-Several examples are given at <a href="http://www.duke.edu/%7Ehpgavin/frame/">http://www.duke.edu/~hpgavin/frame/</a>. 
-   Comments may be placed anywhere in the file and are helpful in organizing the Input Data.   
+Several examples are given at <a href="http://www.duke.edu/%7Ehpgavin/frame/">http://www.duke.edu/~hpgavin/frame/</a>.
+   Comments may be placed anywhere in the file and are helpful in organizing the Input Data.
 A comment begins with one of the following four characters:
-     <font face="courier"># % ? ; </font> and continues to the end of the line.   
+     <font face="courier"># % ? ; </font> and continues to the end of the line.
 </font></p>
 
 
@@ -125,7 +125,7 @@ Input Data file, start with an example that resembles the system you
 would like to analyze. Carefully compare the graphical output of the
 example, the Output Data written at the end of the Input/Output file,
 the Input Data at the beginning of the Input/Output file, and the <b>Input Data Format</b>, with the <b>Definition of Variables</b>
-         at the end of this page.   
+         at the end of this page.
 Edit your Input Data file with your favorite text editor
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
@@ -133,9 +133,9 @@ Edit your Input Data file with your favorite text editor
  <a href="http://www.apple.com/support/mac101/work/23/">TextEdit (OS X)</a>,
  <a href="http://www.textedit.org/">TextEdit (Windows)</a>,
  <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>, etc.)
-It might take a few tries to get your Input Data just right.  
-      <b>FRAME</b> checks the input data for errors prior to anlayzing the system
-and displays descriptive diagnostic messages when errors are found with the Input Data.  
+It might take a few tries to get your Input Data just right.
+      <b>FRAME3DD</b> checks the input data for errors prior to anlayzing the system
+and displays descriptive diagnostic messages when errors are found with the Input Data.
 </font></p>
 
 <hr>
@@ -144,7 +144,7 @@ and displays descriptive diagnostic messages when errors are found with the Inpu
 <font face="Arial, Helvetica, sans-serif" size="2">For any (?) Linux 2.6 kernel running on an Intel or AMD processor.
 
 </font><ol>
-<font face="Arial, Helvetica, sans-serif" size="2"><li>        Download the <b>FRAME</b> binary file and save as "frame" on your Desktop,
+<font face="Arial, Helvetica, sans-serif" size="2"><li>        Download the <b>FRAME3DD</b> binary file and save as "frame" on your Desktop,
          or some other directory:<br> | <a href="http://www.duke.edu/%7Ehpgavin/frame/Linux/frame">RIGHT-CLICK-HERE-FOR-LINUX</a> | <a href="http://www.duke.edu/%7Ehpgavin/frame/Sun/frame">RIGHT-CLICK-HERE-FOR-SUN</a> |
 <!-- <li>        RPM's for a variety of distributions are <a href="
 http://software.opensuse.org/download/home:/jdpipe/">here</a>. -->
@@ -156,12 +156,12 @@ http://software.opensuse.org/download/home:/jdpipe/">here</a>. -->
          Create a file called  <font face="courier">~/.bash_profile</font> containing the line:<br>
              <font face="courier">export PATH=".:$PATH"</font><br>
          Exit the terminal by typing ... <font face="courier">exit</font>
-</li><li>        Run <b>FRAME</b> from a terminal window  ...<br>
+</li><li>        Run <b>FRAME3DD</b> from a terminal window  ...<br>
             <font face="courier">...$   cd ~/Desktop</font><br>
             <font face="courier">...$   frame example.frm</font><br>
-         where <font face="courier">example.frm</font> is the name of your Input Data file. 
+         where <font face="courier">example.frm</font> is the name of your Input Data file.
 
-</li><li>       The graphical output is viewed with <a href="http://www.duke.edu/%7Ehpgavin/gnuplot.html">Gnuplot</a>, which is probably already installed. 
+</li><li>       The graphical output is viewed with <a href="http://www.duke.edu/%7Ehpgavin/gnuplot.html">Gnuplot</a>, which is probably already installed.
 
          Open a terminal window and ...<br>
          <font face="courier">     ...$  cd ~/Desktop</font><br>
@@ -178,17 +178,17 @@ To create a PostScript file of your plot, download and save the Gnuplot script:
 </font>
 After finishing with your plots, quit Gnuplot by typing ...  <br>
           <font face="courier"> gnuplot&gt;  quit</font>
-</li><li>        Edit the Input/Output files with <a href="http://thomer.com/vi/vi.html">vi</a>, <a href="http://www.gnome.org/projects/gedit/">gedit</a>, <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>, or the like. 
+</li><li>        Edit the Input/Output files with <a href="http://thomer.com/vi/vi.html">vi</a>, <a href="http://www.gnome.org/projects/gedit/">gedit</a>, <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>, or the like.
 
 </li></font></ol>
 
 <hr>
 <h4><font face="Arial, Helvetica, sans-serif" size="2">INSTALLING THE OS X VERSION </font></h4>
 
-<font face="Arial, Helvetica, sans-serif" size="2">For OS X running on a PowerPC (PPC) or Intel processor. 
+<font face="Arial, Helvetica, sans-serif" size="2">For OS X running on a PowerPC (PPC) or Intel processor.
 
 </font><ol>
-<font face="Arial, Helvetica, sans-serif" size="2"><li>        Download the <b>FRAME</b> application and save as "frame" on your Desktop,
+<font face="Arial, Helvetica, sans-serif" size="2"><li>        Download the <b>FRAME3DD</b> application and save as "frame" on your Desktop,
          or some other directory:<br> | <a href="http://www.duke.edu/%7Ehpgavin/frame/OSX-PPC/frame">CTRL-CLICK-HERE-FOR-PPC</a> | <a href="http://www.duke.edu/%7Ehpgavin/frame/OSX-Intel/frame">CTRL-CLICK-HERE-FOR-INTEL</a> |
 </li><li>        Download and save an example Input/Output file, such as <font face="courier">exA.frm</font>,
          on your Desktop, or some other directory:<br> | <a href="http://www.duke.edu/%7Ehpgavin/frame/exA.frm">CTRL-CLICK-HERE</a> |
@@ -198,11 +198,11 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
          Create a plain text file (using TextEdit) called  <font face="courier">~/.profile</font> containing the line:<br>
              <font face="courier">export PATH=".:$PATH:/usr/local/bin"</font><br>
          Quit the Terminal application.  [APPLE] [Q]
-</li><li>        Run <b>FRAME</b> from a Terminal window:  (Applications &gt; Utilities &gt; Terminal) ... <br>
+</li><li>        Run <b>FRAME3DD</b> from a Terminal window:  (Applications &gt; Utilities &gt; Terminal) ... <br>
             <font face="courier">...$   cd ~/Desktop</font><br>
             <font face="courier">...$   frame example.frm</font><br>
          where <font face="courier">example.frm</font> is the name of your Input Data file.
-<!-- <li>        Run <b>FRAME</b> from a Terminal window  (another way).
+<!-- <li>        Run <b>FRAME3DD</b> from a Terminal window  (another way).
              Click on the <b>frame</b> icon in your Desktop.
              A Terminal window should automatically open.
              When asked for the Input/Output file name, type ...<br>
@@ -227,16 +227,16 @@ or <a href="http://macvim.org/OSX/index.php">vi</a><br>
             Enter the administrator password when asked.
 <!--        Download and install <a href="http://sourceforge.net/projects/aquaterm/">AquaTerm v1.0.0</a> (not v1.0.1) . -->
 </li><li>         If you have already installed AquaTerm v1.0.1, you may not be able
-         to instal v1.0.0.   <br> 
+         to instal v1.0.0.   <br>
 In that case open a Terminal window (Applications &gt; Utilities &gt; Terminal) and ... <br>
             <font face="courier">...$ cd /usr/local/lib/ </font><br>
             <font face="courier">...$ sudo ln -s libaquaterm.1.0.1.dylib libaquaterm.1.0.0.dylib </font><br>
                     Enter the administrator password when asked.
 </li></font></ol>
-<font face="Arial, Helvetica, sans-serif" size="2">         
+<font face="Arial, Helvetica, sans-serif" size="2">
 </font><p>
 <font face="Arial, Helvetica, sans-serif" size="2">For a version of Gnuplot for OS X-Intel, or for a version with mouse-scrolling and panning features,
-install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href="http://developer.apple.com/tools/">Apple Development Tools</a>, and then <a href="http://maba.wordpress.com/2006/08/02/scientific-plotting-on-mac-os-x-using-gnuplot-and-plot/">compile Gnuplot from sources</a>.  
+install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href="http://developer.apple.com/tools/">Apple Development Tools</a>, and then <a href="http://maba.wordpress.com/2006/08/02/scientific-plotting-on-mac-os-x-using-gnuplot-and-plot/">compile Gnuplot from sources</a>.
 </font></p>
 
 <p>
@@ -257,8 +257,8 @@ install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href=
 <!--          <font face="courier"> gnuplot>  set term aqua</font><br> -->
           <font face="courier"> gnuplot&gt;  plot sin(x)</font><br>
           <font face="courier"> gnuplot&gt;  quit</font>
-     
-</li><li>        Visualize your <b>FRAME</b> analysis output.
+
+</li><li>        Visualize your <b>FRAME3DD</b> analysis output.
          Open a Terminal window (Applications &gt; Utilities &gt; Terminal) and ...<br>
           <font face="courier">    ...$  cd ~/Desktop</font><br>
           <font face="courier">    ...$  gnuplot</font><br>
@@ -269,7 +269,7 @@ install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href=
          and animations until the <font face="courier"> gnuplot&gt;</font> prompt returns.<br>
          Save or print plots using [APPLE] [P].<br>
 After finishing with your plots, quit Gnuplot by typing ...  <br>
-          <font face="courier"> gnuplot&gt;  quit</font>  
+          <font face="courier"> gnuplot&gt;  quit</font>
 </li></font></ol>
 <p></p>
 
@@ -280,38 +280,38 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
 <font face="Arial, Helvetica, sans-serif" size="2">For DOS and MS-Windows, the following special guidelines should be followed:
 
 </font><ol>
-<font face="Arial, Helvetica, sans-serif" size="2"><li>        Download the <b>FRAME</b> executeable and save as "frame.exe" on your Desktop,
+<font face="Arial, Helvetica, sans-serif" size="2"><li>        Download the <b>FRAME3DD</b> executeable and save as "frame.exe" on your Desktop,
          or some other directory:<br> | <a href="http://www.duke.edu/%7Ehpgavin/frame/DOS/frame.exe">RIGHT-CLICK-HERE</a> |
 </li><li>        Download and save an example Input/Output file, such as <font face="courier">exA.frm</font>,
          on your Desktop, or some other directory:<br> | <a href="http://www.duke.edu/%7Ehpgavin/frame/exA.frm">RIGHT-CLICK-HERE</a> |
 </li><li>       Create a directory called   <font face="courier">C:\tmp</font>   if it doesn't already exit.
-</li><li>       The plot filename (plot_file) must have eight or fewer 
+</li><li>       The plot filename (plot_file) must have eight or fewer
          characters before the period (.) and three or fewer characters
          after the period.   No more than one period (.) may be included
-         in the file name. 
-       The mesh data file name (<font face="courier">mesh_file)</font> should contain no more 
+         in the file name.
+       The mesh data file name (<font face="courier">mesh_file)</font> should contain no more
          than seven characters, and no character may be a period (.).
        The mode shape data file name (<font face="courier">mode_file</font>) should contain no more
          than five  characters, and no character may be a period (.).
-       The <a href="http://www.duke.edu/%7Ehpgavin/frame/index.html">example Input/Output files</a>, exA.frm ... exG.frm, adhere to these rules.  
+       The <a href="http://www.duke.edu/%7Ehpgavin/frame/index.html">example Input/Output files</a>, exA.frm ... exG.frm, adhere to these rules.
 </li><li>       You may need to change the line <font face="courier">/tmp/mesh_file</font> to <font face="courier">C:\tmp\mesh_file</font>
          and the line <font face="courier">/tmp/mode_file</font> to <font face="courier">C:\tmp\mode_file</font>
-</li><li>       Run <b>FRAME</b> from a MS-DOS window or Command Prompt window ...<br>
+</li><li>       Run <b>FRAME3DD</b> from a MS-DOS window or Command Prompt window ...<br>
              (Start &gt; Programs &gt; Accessories &gt; Command Prompt)<br>
              <font face="courier">...&gt; cd C:\Documents and Settings\your_name_here\My Documents\</font><br>
              <font face="courier">...&gt; frame example.frm</font><br>
-         where <font face="courier">example.frm</font> is the name of your Input Data file.  
+         where <font face="courier">example.frm</font> is the name of your Input Data file.
 
 
 </li><li>       The graphical output is best viewed with the <a href="ftp://ftp.gnuplot.info/pub/gnuplot/gp400win32.zip">MS-Windows version of Gnuplot</a>.
-       The <a href="ftp://ftp.gnuplot.info/pub/gnuplot/gp400dj2.zip">DOS version of Gnuplot</a> works except for mode shape animation.   
+       The <a href="ftp://ftp.gnuplot.info/pub/gnuplot/gp400dj2.zip">DOS version of Gnuplot</a> works except for mode shape animation.
        Right-clicking on one of these two links will download a <font face="courier">.zip</font> file for Gnuplot.
        Click on <b>Open</b> to start WinZip, and <b>Extract</b> to creat a <b>Gnuplot</b> folder in <b>My Documents</b>.
        Open the folder <b>My Documents\Gnuplot\bin</b> and right click on <b>wgnuplot</b>
-       to create a shortcut to your <b>Desktop</b>.   
+       to create a shortcut to your <b>Desktop</b>.
        Clicking on the <b>wgnuplot</b> icon on the desktop will start Gnuplot.
-       To load the plot into Gnuplot, first change directories to 
-       the directory in which you are running the <b>FRAME</b> analysis, by clicking
+       To load the plot into Gnuplot, first change directories to
+       the directory in which you are running the <b>FRAME3DD</b> analysis, by clicking
        on the <b>ChDir</b> button at the top of the Gnuplot window and typing ...<br>
          <font face="courier">C:\Documents and Settings\your_name_here\My Documents </font><br>
        Display the plot of your structure by typing ...<br>
@@ -320,7 +320,7 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
          Hit the 'Return' key in the Terminal window to see the sequence of plots
          and animations until the <font face="courier"> gnuplot&gt;</font> prompt returns.<br>
 </li><li>       Edit your input data file using any plain text editor, i.e.,
-             (Start &gt; Programs &gt; Accessories &gt; Notepad) 
+             (Start &gt; Programs &gt; Accessories &gt; Notepad)
 or <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>.
 </li><li>       You may wish to delete all the files in <font face="courier">C:\tmp\</font> when you have finished
          your analyses.  <br>
@@ -331,7 +331,7 @@ or <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.ex
 
 <!--
 <p>
-       For an introduction to the theory of framed structures, check 
+       For an introduction to the theory of framed structures, check
        <a href="http://www.duke.edu/~hpgavin/ce131/index.html">http://www.duke.edu/~hpgavin/ce131/</a> and <a href="http://www.duke.edu/~hpgavin/ce283/index.html">http://www.duke.edu/~hpgavin/ce283/</a>.
 </p>
 -->
@@ -341,9 +341,9 @@ or <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.ex
 </font><p>
 <font face="Arial, Helvetica, sans-serif" size="2">     The Output Data is formated using floating point display, not scientific notation.  To
      obtain the greatest number of significant digits in the output, use units of force
-     and length such that the modulus of elasticity occupies three to five figures before 
+     and length such that the modulus of elasticity occupies three to five figures before
      the decimal point.  For example, if the frame to be analyzed is made of steel or
-     aluminum, use units of (kips (1000 pounds) and inches), or (kilo-Newtons, millimeters, 
+     aluminum, use units of (kips (1000 pounds) and inches), or (kilo-Newtons, millimeters,
      and kiloTons), or (GigaNewtons, meters, and MegaTons).
 </font></p>
 
@@ -351,11 +351,11 @@ or <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.ex
 <font face="Arial, Helvetica, sans-serif" size="2"><b>Cross Section Properties and Coordinate Transformation</b><br>
 
 </font><p>
-<font face="Arial, Helvetica, sans-serif" size="2">     To analyze a structure as a "truss" with this software, specify <font face="courier">Jxx</font>, <font face="courier">Iyy</font>, and 
+<font face="Arial, Helvetica, sans-serif" size="2">     To analyze a structure as a "truss" with this software, specify <font face="courier">Jxx</font>, <font face="courier">Iyy</font>, and
 <font face="courier">Izz</font>
      to be much smaller than they would be normally, but not zero.   If the shear forces and bending
      moments in your structural elements are extremely small, then your structural model
-     represents a "truss" approximation of the actual structure.    See example A.  
+     represents a "truss" approximation of the actual structure.    See example A.
 </font></p>
 
 <p>
@@ -366,29 +366,29 @@ or <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.ex
      perpendicular to its local <i>x</i>-axis.   The local <i>y</i>-axis and <i>z</i>-axis are aligned
      with the principle directions of the cross section.  The bending moments
      of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of inertia for
-     the cross section.   
+     the cross section.
 </font></p>
 
 <!--
 <p>
-     The beam cross section shapes are assumed to be symmetric about 
-     both the local <i>Y</i>-axis and the local <i>Z</i>-axis.  By 'rolling' the beam about 
+     The beam cross section shapes are assumed to be symmetric about
+     both the local <i>Y</i>-axis and the local <i>Z</i>-axis.  By 'rolling' the beam about
      the local <i>x</i>-axis, however,  transverse loads in the local <i>y</i>-direction can
      cause bending about both the <i>Z</i>-axis and the <i>Y</i>-axis and shear deformation
-     in both the <i>Y</i>-direction and <i>Z</i>-direction.  
+     in both the <i>Y</i>-direction and <i>Z</i>-direction.
 </p>
 -->
 
 <p>
 <font face="Arial, Helvetica, sans-serif" size="2">When a beam or bar element is placed into the structure
-     it is translated and rotated and optionally rolled about its local <i>x</i>-axis.   
+     it is translated and rotated and optionally rolled about its local <i>x</i>-axis.
      By allowing the member to be
      'rolled' about its local <i>x</i>-axis during the stiffness matrix assembly process,
      cross-axis bending effects are included.
      Issues related to rolling of cross sections and cross-axis bending
      are important only for three-dimensional structural systems or planar
      structures with out-of-plane deformation, such as grillages.  For planar
-     structures with deformations only in the plane, these issues do not arise. 
+     structures with deformations only in the plane, these issues do not arise.
      In addition, these issues do not arise for three-dimensional structures
      made entirely of elements for which <i>Iyy=Izz</i>, i.e., square and circular cross
      sections.
@@ -397,27 +397,27 @@ or <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.ex
 <p>
 <font face="Arial, Helvetica, sans-serif" size="2">     The default coordinate transformation process starts with the beam
      element's centroidal axis placed along the global <i>X</i>-axis, and the principle
-     axes of the cross section are aligned with the global <i>Y</i>- and <i>Z</i>-axes.  
-     To place the beam in the structure, first it is rotated about the 
+     axes of the cross section are aligned with the global <i>Y</i>- and <i>Z</i>-axes.
+     To place the beam in the structure, first it is rotated about the
      global <i>Y</i>-axis, then about the global <i>Z</i>-axis, then 'rolled' or spun
      about the local <i>x</i>-axis.   If the roll angle is zero, this process results
      in a transformation for which loads in the global <i>Z</i>-direction will cause no
      cross-axis bending.   In this code, this type of coordinate transformation is
      called "<i>Z</i>-axis is vertical" and is selected primarily for the sake of visualization
-     with Gnuplot, in which the <i>Z</i>-axis is vertical for all three-dimensional plots. 
+     with Gnuplot, in which the <i>Z</i>-axis is vertical for all three-dimensional plots.
 </font></p>
-<font face="Arial, Helvetica, sans-serif" size="2"> 
+<font face="Arial, Helvetica, sans-serif" size="2">
 </font><p>
 <font face="Arial, Helvetica, sans-serif" size="2">     An alternative, more customary, coordinate transformation process is also
      implemented in the software.  In the alternative coordinate transformation
      process, the beam is first rotated about the global <i>Z</i>-axis, then about the
      global <i>Y</i>-axis, then rolled about the local <i>x</i>-axis.  If the roll angle is zero,
-     this transformation results in a beam with no cross-axis bending due to 
+     this transformation results in a beam with no cross-axis bending due to
      loads are applied in the global <i>Y</i>-direction.   In the code, this type of
-     transformation is called "<i>Y</i>-axis is vertical."   Again, for planar structures, 
+     transformation is called "<i>Y</i>-axis is vertical."   Again, for planar structures,
      with no out-of-plane bending, which lie in the global <i>X-Y</i>, <i>Y-Z</i>, or <i>X-Z</i> planes,
      and for structures made entirely of bars with Iyy=Izz, the details of the
-     coordinate transformation procedure do not matter.  
+     coordinate transformation procedure do not matter.
      For a derivation of the alternative coordinate transformation method, refer
      to section 8.3 of the textbook <i>Matrix Analysis of Structures</i>
 by A. Kassimali.
@@ -426,7 +426,7 @@ by A. Kassimali.
 <font face="Arial, Helvetica, sans-serif" size="2"><b>Torsion</b><br>
 
 </font><p>
-<font face="Arial, Helvetica, sans-serif" size="2">     Polar Moments of Inertia depend on the shape of the cross-section.  
+<font face="Arial, Helvetica, sans-serif" size="2">     Polar Moments of Inertia depend on the shape of the cross-section.
          For sections with a circular cross section:   <br>
 <i>                Jxx = Iyy + Izz </i>
 
@@ -438,7 +438,7 @@ by A. Kassimali.
 <br>
 
                 <img src="img/tors.jpg" align="middle" border="0"><br>
-         For more details, see page 271 of Timoshenko and Goodier (1951).  
+         For more details, see page 271 of Timoshenko and Goodier (1951).
 </font></p>
 
 <p>
@@ -452,7 +452,7 @@ by A. Kassimali.
 </font></p>
 
 <p>
-<font face="Arial, Helvetica, sans-serif" size="2">     Restraint to <a href="http://www.archoneng.com/tptasm.html">warping deformation</a> is not considered in the analysis.  
+<font face="Arial, Helvetica, sans-serif" size="2">     Restraint to <a href="http://www.archoneng.com/tptasm.html">warping deformation</a> is not considered in the analysis.
 </font></p>
 
 <font face="Arial, Helvetica, sans-serif" size="2"><b>Shear Deformation, Dynamics, Geometric Stiffness, and Buckling </b>
@@ -460,7 +460,7 @@ by A. Kassimali.
 
 
 </font><p>
-<font face="Arial, Helvetica, sans-serif" size="2">     The <b>FRAME</b>
+<font face="Arial, Helvetica, sans-serif" size="2">     The <b>FRAME3DD</b>
 analysis will optionally include the effects of shear deformation
 and/or geometric stiffness.
 The geometric stiffness matrix includes the effects of axial forces
@@ -470,15 +470,15 @@ geometric stiffness matrix includes shear deformation effects. If shear
 deformation effects are not to be included, simply set the <font face="courier">shear</font>
      variable to zero (0).  If shear deformation effects are neglected then the
      values for the shear areas <font face="courier">Asy</font> and <font face="courier">Asz</font> will <i>not</i> be used in the calculations.
-     Any non-zero value for <font face="courier">Asy</font> and <font face="courier">Asz</font> will do.  
+     Any non-zero value for <font face="courier">Asy</font> and <font face="courier">Asz</font> will do.
 </font></p>
 
 <p>
-<font face="Arial, Helvetica, sans-serif" size="2">     The <b>FRAME</b> analysis will optionally include a dynamic analysis for natural modes
-     of vibration. 
+<font face="Arial, Helvetica, sans-serif" size="2">     The <b>FRAME3DD</b> analysis will optionally include a dynamic analysis for natural modes
+     of vibration.
        Dynamic properties may be obtained for the un-stressed or the stressed
        structure by either neglecting or including geometric stiffness effects.
-      The mass may be modeled using either the consistent mass matrix or the 
+      The mass may be modeled using either the consistent mass matrix or the
        lumped mass matrix.
 </font></p>
 
@@ -488,7 +488,7 @@ deformation effects are not to be included, simply set the <font face="courier">
        in order to compute natural frequencies and mode shapes.  If one or more
        rigid-body modes (with zero frequency) are present, then the computation of
        the natural frequencies should make use of frequency shifting.
-      A Sturm check is carried out to determine if any eigen-values were missed.  
+      A Sturm check is carried out to determine if any eigen-values were missed.
 </font></p>
 
 
@@ -501,13 +501,13 @@ deformation effects are not to be included, simply set the <font face="courier">
        is a pseudo-inverse-modal-matrix method, and the resulting condensed mass and
        stiffness matrices may be ill-conditioned.  The pseudo-inverse of the modal
        matrix is computed using a regularization method which somewhat improves the
-       conditioning of the condensed mass and stiffness matrices.  
+       conditioning of the condensed mass and stiffness matrices.
 </font><p></p>
 
 <p>
 <font face="Arial, Helvetica, sans-serif" size="2">If a dynamic analysis is not to be performed, simply set the <font face="courier">modes</font>
      variable (the number of desired modes) to zero (0).    If modes is set to zero,
-     <b>FRAME</b> will stop reading the Input/Output file at this point.   If modes is set
+     <b>FRAME3DD</b> will stop reading the Input/Output file at this point.   If modes is set
      to zero, there is no need to provide numerical values for the quantities from <font face="courier">lump</font>
      to <font face="courier">czz[nC]</font>.   (See the <b>Input Data Format</b> specification and <b>Definition of Variables</b>
      below.)
@@ -519,7 +519,7 @@ deformation effects are not to be included, simply set the <font face="courier">
      definite.   Additionally, you may compute the fundamental natural frequency of
      the structure and observe how the fundamental frequency decreases with increased
      loading.  In principle, the fundamental frequency is zero when the loads are at the buckling
-     load.  
+     load.
 </font></p>
 
 <p>
@@ -527,22 +527,22 @@ deformation effects are not to be included, simply set the <font face="courier">
      are close to the buckling load of the structure, then it is recommended to put
      two or three joints along each beam element.  (i.e. divide each beam element
      into three or four beam segments).   Including these extra joints is strongly
-     recommended if a buckling analysis is to be performed.  
+     recommended if a buckling analysis is to be performed.
 </font></p>
 
 <p>
 <font face="Arial, Helvetica, sans-serif" size="2">     Whenever geometric stiffness effects are included, the analysis is non-linear
      and superposition does not hold.  The geometric stiffness matrix is a secant
      stiffness matrix.  In most cases the geometric stiffness matrix lies between the
-     un-stressed stiffness matrix and the tangent stiffness matrix.  
+     un-stressed stiffness matrix and the tangent stiffness matrix.
 </font></p>
 
 <font face="Arial, Helvetica, sans-serif" size="2"><b> Connections</b><br>
 
 </font><p>
 <font face="Arial, Helvetica, sans-serif" size="2">All connections are moment-resisting.   Moment-free conditions can be modeled explicitely
-only at pinned reactions.  Internal hinges may be modeled using a short element with 
-low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>. 
+only at pinned reactions.  Internal hinges may be modeled using a short element with
+low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>.
 Beams may be considered infinitely rigid within a sphere of a specified radius around a joint.
 </font></p>
 
@@ -575,28 +575,28 @@ Thermal loads assume a linear temperature gradient through the member.
 <!--
 efunda
 <ul>
-<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsW.cfm">Steel W-section I beams</a> 
-<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsS.cfm"> Steel S-section I beams</a> 
-<li><a href="http://www.efunda.com/math/areas/RolledSteelChannels.cfm">Steel Channels</a> 
-<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsL.cfm">Steel Angles</a> 
-<li><a href="http://www.efunda.com/math/areas/AluminumIbeams.cfm">Aluminum I beams</a> 
-<li><a href="http://www.efunda.com/math/areas/AluminumChannels.cfm">Aluminum Channels</a> 
+<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsW.cfm">Steel W-section I beams</a>
+<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsS.cfm"> Steel S-section I beams</a>
+<li><a href="http://www.efunda.com/math/areas/RolledSteelChannels.cfm">Steel Channels</a>
+<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsL.cfm">Steel Angles</a>
+<li><a href="http://www.efunda.com/math/areas/AluminumIbeams.cfm">Aluminum I beams</a>
+<li><a href="http://www.efunda.com/math/areas/AluminumChannels.cfm">Aluminum Channels</a>
 </ul>
 -->
 
 <font face="Arial, Helvetica, sans-serif" size="2"><b> Cross Section Properties of some Standard Wood Sections</b><br>
 
 <font face="courier" size="3">
-<pre>             Ax      Asy     Asz     Jxx     Iyy     Izz   
+<pre>             Ax      Asy     Asz     Jxx     Iyy     Izz
              in^2    in^2    in^2    in^4    in^4    in^4
 
-     2x3    3.750   2.500   2.500   1.776   1.953   0.708 
+     2x3    3.750   2.500   2.500   1.776   1.953   0.708
      2x4    5.250   3.500   3.500   2.875   6.359   0.984
-     2x5    6.750   4.500   4.500   3.984  11.390   1.266  
-     2x6    8.250   5.500   5.500   5.099  20.800   1.547 
+     2x5    6.750   4.500   4.500   3.984  11.390   1.266
+     2x6    8.250   5.500   5.500   5.099  20.800   1.547
      2x8   10.850   7.233   7.233   7.057  47.630   2.039
-     2x10  13.880   9.253   9.253   9.299  98.930   2.602  
-     2x12  16.880  11.253  11.253  11.544 178.000   3.164 
+     2x10  13.880   9.253   9.253   9.299  98.930   2.602
+     2x12  16.880  11.253  11.253  11.544 178.000   3.164
      2x14  19.880  13.253  13.253  13.790 290.800   3.727
 </pre>
 </font>
@@ -614,7 +614,7 @@ efunda
 
 <ul>
 
-<font face="Arial, Helvetica, sans-serif" size="2"><li>       <b>FRAME</b> imposes no limit on the number of degrees of freedom.
+<font face="Arial, Helvetica, sans-serif" size="2"><li>       <b>FRAME3DD</b> imposes no limit on the number of degrees of freedom.
        Dynamic memory allocation is accomplished by the public-domain routines
        found in Press, W.H., et al,  <i>Numerical Recipes In C</i>, (Cambridge, England: Cambridge University Press, 1991).
 
@@ -640,7 +640,7 @@ efunda
        At each LDL' back-substitution iteration, the equilibrium error is displayed
        to the screen as the `RMS matrix error'.  This error is the root-mean-square of
        <i>dD(i)</i>.   Iterations are stopped when this error decreases by less than ten
-       percent in an iteration.  
+       percent in an iteration.
 
 </li><li>       When geometric stiffness effects are included, the solution is obtained
        iteratively, using a quasi Newton-Raphson method:<br>
@@ -658,8 +658,8 @@ efunda
        to the screen.   This error is the root-mean-square of (<i>F - K(D(i)) D(i)</i>)
        divided by the root-mean-square of <i>F</i>.   Newton-Raphson iterations stop when
        this error is less than the convergence tolerance.  The convergence tolerance
-       is specified as the convergence tolerance for the modal-analysis. 
-       The default value is 0.00001   
+       is specified as the convergence tolerance for the modal-analysis.
+       The default value is 0.00001
 
 </li><li>       The accuracy of the final solution is checked using a global equilibrium check
        and the equilibrium error is reported.  The `RMS relative equilibrium error' is
@@ -668,7 +668,7 @@ efunda
        the applied loads.   This equilibrium error is typically less than one part
        in one-billion when geometric stiffness effects are neglected.  If an analysis
        has an RMS equilibrium error larger than 0.001, the results should not be
-       trusted.  
+       trusted.
 
 </li><li>       Natural frequencies and mass-normalized mode-shapes of the lower modes may be
        obtained using a generalized Jacobi sub-space iteration procedure
@@ -689,12 +689,12 @@ Sub-space iterations are stopped when the error is less than the specified
 
 <ul>
 <font face="Arial, Helvetica, sans-serif" size="2"><li>       A GUI (ideally GPL'able), currently a <a href="http://www.trolltech.com/products/qt">Qt</a> GUI is in progress (Nov. 8 2004)
-</li><li>       Consistent mass matrix including the effects of shear deformation on rotatory inertia 
+</li><li>       Consistent mass matrix including the effects of shear deformation on rotatory inertia
 </li><li>       Dynamic time-history analysis with the HHT-alpha method
 </li><li>       Spectral modal superposition
 </li><li>       Member end joint releases
-</li><li>       Membrane elements 
-</li><li>       Plate elements  
+</li><li>       Membrane elements
+</li><li>       Plate elements
 </li><li>       Sky-line matrix storage and <a href="http://ascendwiki.cheme.cmu.edu/Survey_of_sparse_matrix_software">sparse matrix solvers</a>
 </li><li>       ... your recommendations ... send me an e-mail!
 </li></font></ul>
@@ -706,7 +706,7 @@ Sub-space iterations are stopped when the error is less than the specified
 <pre>A one-line descriptive title of your analysis MUST be the FIRST line of the file
 
 nJ       nM                                      % number of joints and members
-  J[1]       x[1]       y[1]       z[1]     r[1]       
+  J[1]       x[1]       y[1]       z[1]     r[1]
     :          :          :          :        :  % joint numbers and coordinates
   J[nJ]      x[nJ]      y[nJ]      z[nJ]    r[1]
 
@@ -716,14 +716,14 @@ M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jxx[1]  Iyy[1]  Izz[1]  E[1]  G[1]  p
   :      :      :      :       :       :       :       :       :     :     :     :
 M[nM] J1[nM] J2[nM] Ax[nM] Asy[nM] Asz[nM] Jxx[nM] Iyy[nM] Izz[nM] E[nM] G[nM] p[nM]
 
-shear                               % 1: include shear deformation;   0: don't 
-geom                                % 1: include geometric stiffness; 0: don't 
+shear                               % 1: include shear deformation;   0: don't
+geom                                % 1: include geometric stiffness; 0: don't
 /tmp/mesh_file                      % mesh data file name for plotting
-plot_file                           % plot file name 
-exagg                               % exaggerate deformations 
-anlyz                               % 1: stiffness analysis; 0: data check only 
+plot_file                           % plot file name
+exagg                               % exaggerate deformations
+anlyz                               % 1: stiffness analysis; 0: data check only
 
-nF                                                    % number of loaded joints 
+nF                                                    % number of loaded joints
   J[1]    Fx[1]   Fy[1]   Fz[1]   Mxx[1]  Myy[1]  Mzz[1]
     :        :       :       :        :       :       :          % nodal forces
   J[nF]   Fx[nF]  Fy[nF]  Fz[nF]  Mxx[nF] Myy[nF] Mzz[nF]
@@ -738,39 +738,39 @@ nP                                         % number of concentrated point loads
     :        :       :       :      :      %  and x=distance from coordinate J1
   M[nP]   Px[nP]  Py[nP]  Pz[nP]  x[nP]
 
-nT                                 % number of members with temperature changes 
-  M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % member no., 
-    :     :       :       :        :       :       :       :      % temp. coef. 
-  M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, &amp; temps 
+nT                                 % number of members with temperature changes
+  M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % member no.,
+    :     :       :       :        :       :       :       :      % temp. coef.
+  M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, &amp; temps
 
-nR                                            % number of joints with reactions 
+nR                                            % number of joints with reactions
   J[1]    Rx[1]   Ry[1]   Rz[1]   Rxx[1]  Ryy[1]  Rzz[1]
-    :        :       :       :        :       :       :       % 0:free, 1:fixed 
+    :        :       :       :        :       :       :       % 0:free, 1:fixed
  J[nR]    Rx[nR]  Ry[nR]  Rz[nR]  Rxx[nR] Ryy[nR] Rzz[nR]
 
-nD                      % number of joints with prescribed displacements  
+nD                      % number of joints with prescribed displacements
   J[1]   Dx[1]  Dy[1]  Dz[1]  Dxx[1]  Dyy[1]  Dzz[1]
-    :       :      :      :       :       :       :  % prescribed displacements 
+    :       :      :      :       :       :       :  % prescribed displacements
   J[nD]  Dx[nD] Dy[nD] Dz[nD] Dxx[nD] Dyy[nD] Dzz[nD]
 
-modes                                          %       number of desired modes 
+modes                                          %       number of desired modes
 Mmethod                                        % 1: Subspace Jacobi, 2: Stodola
-lump                                           % 0: consistent mass, 1: lumped 
-/tmp/mode_file                                 %     mode shape data file name 
-tol                                            %  convergence tolerance ~ 1e-4 
-shift             % shift-factor for rigid body modes, make 0 for pos.def. [K] 
+lump                                           % 0: consistent mass, 1: lumped
+/tmp/mode_file                                 %     mode shape data file name
+tol                                            %  convergence tolerance ~ 1e-4
+shift             % shift-factor for rigid body modes, make 0 for pos.def. [K]
 
  M[1]  d[1]  BMs[1]
    :     :       :                           % beam density and extra beam mass
  M[nM] d[nM] BMs[nM]
 
 nI                          % number of joints with extra joint mass or inertia
- J[1]  JMs[1]   JMx[1]  JMy[1]  JMz[1]     % joint masses and rotatory inertias 
-   :       :        :       :       :                      % global coordinates 
+ J[1]  JMs[1]   JMx[1]  JMy[1]  JMz[1]     % joint masses and rotatory inertias
+   :       :        :       :       :                      % global coordinates
  J[nI] JMs[nI]  JMx[nI] JMy[nI] JMz[nI]
 
-nA                                    % number of modes to be animated 
- anim[0] ... anim[nA] % list of modes to be animated, sorted by increasing freq. 
+nA                                    % number of modes to be animated
+ anim[0] ... anim[nA] % list of modes to be animated, sorted by increasing freq.
 pan                                         % 1: pan during animation; 0: don't
 
 Cmethod % matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
@@ -834,7 +834,7 @@ nC                                                % number of condensed joints
        JMz       - extra rotatory inertia of a joint about global z coord. dir.
        Jxx       - Torsional moment of inertia of member i
        lump      - 1: use lumped mass matrix, 0: use consistent mass matrix
-       M         - Member number 
+       M         - Member number
        Mxx       - Joint Moment about the global X axis
        Myy       - Joint Moment about the global Y axis
        Mzz       - Joint Moment about the global Z axis
@@ -844,12 +844,12 @@ nC                                                % number of condensed joints
        Mmethod   - the modal analysis method 1: Subspace Jacobi, 2: Stodola
        mode_file - Data file for the Gnuplot-formatted mode data for plotting
        nA        - number of mode shapes to animate must be less than 20
-       nC        - number of joints for matrix condensation 
+       nC        - number of joints for matrix condensation
        nD        - number of prescribed joint displacements not greater than nR
        nF        - number of loaded joints
        nI        - number of joints with extra joint mass or inertia
        nJ        - number of Joints
-       nM        - number of Members 
+       nM        - number of Members
        nP        - number of concentrated member loads
        nR        - number of restrained joints
        nT        - number of members with temperature changes
@@ -865,7 +865,7 @@ nC                                                % number of condensed joints
        Rxx       - 1: Moment Restrained about the global X axis, 0: free
        Ryy       - 1: Moment Restrained about the global Y axis, 0: free
        Rzz       - 1: Moment Restrained about the global Z axis, 0: free
-       r         - r radius of rigid sphere around joint i 
+       r         - r radius of rigid sphere around joint i
        shear     - 1: include shear deformations, 0: do not.
        shift     - shift factor for non-definite stiffness matrices
        tol       - tolerance for finding mode shapes ~ 1.e-4
@@ -887,16 +887,16 @@ nC                                                % number of condensed joints
 <h4><font face="Arial, Helvetica, sans-serif" size="2">REFERENCES </font></h4>
 
 <font face="Arial, Helvetica, sans-serif" size="2">This software was developed using methods presented in the following texts.
-The books by <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/qid=1036162662/sr=1-4/ref=sr_1_4/002-7358683-1549619?v=glance">A. Kassimali</a> and <a href="http://www.amazon.com/exec/obidos/ASIN/0486649482/qid=1003514977/sr=1-1/ref=sr_1_8_1/002-2386037-4350467">J.S. Przemieniecki</a> provide good starting points.  
+The books by <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/qid=1036162662/sr=1-4/ref=sr_1_4/002-7358683-1549619?v=glance">A. Kassimali</a> and <a href="http://www.amazon.com/exec/obidos/ASIN/0486649482/qid=1003514977/sr=1-1/ref=sr_1_8_1/002-2386037-4350467">J.S. Przemieniecki</a> provide good starting points.
 
 </font><ol>
-<font face="Arial, Helvetica, sans-serif" size="2"><li> Howard G. Allen, 
+<font face="Arial, Helvetica, sans-serif" size="2"><li> Howard G. Allen,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0070841004/qid%3D1010096524/ref%3Dsr%5F11%5F0%5F1/103-4346676-9568602">Background to Buckling</a>,
-     McGraw-Hill, 1980.                 ASIN: 0070841004 
+     McGraw-Hill, 1980.                 ASIN: 0070841004
 
 </li><li> Klaus-Jurgen Bathe,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0133014584/qid=1003515087/sr=1-1/ref=sr_1_27_1/002-2386037-4350467">Finite Element Procedures</a>,
-    Prentice-Hall, 1995.                ISBN: 0133014584 
+    Prentice-Hall, 1995.                ISBN: 0133014584
 
 </li><li> Arthur P. Boresi, Richard J. Schmidt, and Omar M. Sidebottom,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0471551570/ref=pd_cp_nsr_b_1/002-2386037-4350467">Advanced Mechanics of Materials</a>,
@@ -904,17 +904,17 @@ The books by <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/q
 
 </li><li> Raymond W. Clough and Joseph Penzien,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0070113920/qid%3D1003514837/ref%3Dsr%5F11%5F0%5F1/002-2386037-4350467">Dynamics of Structures</a>,
-    McGraw-Hill, 1993.                  ASIN: 0070113920 
+    McGraw-Hill, 1993.                  ASIN: 0070113920
 
 </li><li> J. P. Den Hartog,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0486654079/qid=1003515697/sr=2-1/ref=sr_2_11_1/002-2386037-4350467">Advanced Strength of Materials</a>,
-    Dover Press, 1987.                  ISBN: 0486654079 
+    Dover Press, 1987.                  ISBN: 0486654079
 
-</li><li> Thomas J. R. Hughes, 
+</li><li> Thomas J. R. Hughes,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0486411818/ref=pd_pym_sim_1_2/002-2386037-4350467">The Finite Element Method: Linear Static and Dynamic Finite Element Analysis</a>,
-    Dover Press, 2000.                  ISBN: 0486411818 
+    Dover Press, 2000.                  ISBN: 0486411818
 
-</li><li> Aslam Kassimali, 
+</li><li> Aslam Kassimali,
     <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/qid=1036162662/sr=1-4/ref=sr_1_4/002-7358683-1549619?v=glance">Matrix Analysis of Structures</a>,
     Brooks/Cole, 1999.                  ISBN: 0534206700
 
@@ -939,15 +939,15 @@ ISBN: 0471376515
 
 </li><li> William H. Press, Saul A. Teukolsky, William T. Vetterling, Brian P. Flannery,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0521431085/qid=1003515201/sr=1-1/ref=sr_1_10_1/002-2386037-4350467">Numerical Recipes in C: The Art of Scientific Computing</a>,
-    Cambridge University Press, 1993.   ISBN: 0521431085 
+    Cambridge University Press, 1993.   ISBN: 0521431085
 
-</li><li> J.S. Przemieniecki, 
+</li><li> J.S. Przemieniecki,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0486649482/qid=1003514977/sr=1-1/ref=sr_1_8_1/002-2386037-4350467">Theory of Matrix Structural Analysis</a>,
-    Dover Press, 1985.                  ISBN: 0486649482 
+    Dover Press, 1985.                  ISBN: 0486649482
 
 </li><li> Robert E. Sennett,
     <a href="http://www.amazon.com/exec/obidos/ASIN/1577661435/qid=1003515858/sr=1-2/ref=sr_1_12_2/002-2386037-4350467">Matrix Analysis of Structures</a>,
-    Waveland Press, 2000.               ISBN: 1577661435 
+    Waveland Press, 2000.               ISBN: 1577661435
 
 </li><li> S. Timoshenko and J.N. Goodier, Theory of Elasticity, 2nd ed.,
     McGraw Hill, 1951.
@@ -970,13 +970,13 @@ reduction, and dynamic condensation. <font face="courier" size="3">
     -----------    --------------------------------------------------------  -----------------
     frame.c        K&amp;R C source-code for frame analysis                      20 December 2007
     eig.c          K&amp;R C source-code for generalized eigenvalue analysis      7 November 2002
-    ldl_dcmp.c     K&amp;R C source-code for LDL' decomposition                  26 December 2001 
+    ldl_dcmp.c     K&amp;R C source-code for LDL' decomposition                  26 December 2001
     lu_dcmp.c      K&amp;R C source-code for LU decomposition                     5 May      1998
     nrutil.c       K&amp;R C source-code for dynamic memory allocation           23 April    2001
 </pre>
 </font>
 </font><p>
-<font face="Arial, Helvetica, sans-serif" size="2"><b>FRAME</b> compiles with the <a href="http://gcc.gnu.org/">gcc compiler</a>,
+<font face="Arial, Helvetica, sans-serif" size="2"><b>FRAME3DD</b> compiles with the <a href="http://gcc.gnu.org/">gcc compiler</a>,
 the <a href="http://www.delorie.com/djgpp/"> DJGPP gcc compiler</a>,
 and the <a href="http://www.cs.virginia.edu/%7Elcc-win32/"> LCC-win32
 compiler</a>.
@@ -988,10 +988,10 @@ compiler</a>.
 
 <b>Author</b>
 <font face="courier" size="3">
-<pre>    Henri P. Gavin 
+<pre>    Henri P. Gavin
     Department of Civil and Environmental Engineering
-    Duke University, Box 90287 
-    Durham, NC  27708--0287 
+    Duke University, Box 90287
+    Durham, NC  27708--0287
 
     <a href="mailto:Henri.Gavin@Duke.edu">Henri.Gavin@Duke.edu
 </a>
@@ -1004,34 +1004,34 @@ compiler</a>.
 <hr>
 <font face="Verdana, Arial, sans-serif" size="1">
 </font><p>
-<font face="Verdana, Arial, sans-serif" size="1">FRAME is free software; you may redistribute it and/or modify it under the terms
+<font face="Verdana, Arial, sans-serif" size="1">FRAME3DD is free software; you may redistribute it and/or modify it under the terms
 of the GNU General Public License (<a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>) as published by the <a href="http://www.fsf.org/">Free Software Foundation</a>.
 Simply put, the GPL says that anyone who redistributes the software,
 with or without changes, must pass along the freedom to further copy
-and change it. By distributing the complete source code for FRAME under
+and change it. By distributing the complete source code for FRAME3DD under
 the terms of the GPL, we guarantee that you and all other users will
-have the freedom to redistribute and change FRAME.
+have the freedom to redistribute and change FRAME3DD.
 </font></p>
 
 <p>
-<font face="Verdana, Arial, sans-serif" size="1">FRAME is distributed in the hope that it will be useful, but WITHOUT ANY
+<font face="Verdana, Arial, sans-serif" size="1">FRAME3DD is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE.
 See the GNU General Public License
-(<a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>) 
+(<a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>)
 and the GNU General Public License
 <a href="http://www.gnu.org/copyleft/gpl-faq.html">FAQ</a>
 for more details.
 </font></p>
 
 <p>
-<font face="Verdana, Arial, sans-serif" size="1">Source code is available upon request.  
+<font face="Verdana, Arial, sans-serif" size="1">Source code is available upon request.
 </font></p>
 
 <center>
-<font face="Verdana, Arial, sans-serif" size="1">Copyright (C) 1992-2007 Henri P. Gavin. 
+<font face="Verdana, Arial, sans-serif" size="1">Copyright (C) 1992-2007 Henri P. Gavin.
 Verbatim copying and distribution is permitted in any medium, provided this notice is preserved. <br><br>
-Duke University<br> Department of Civil and Environmental Engineering<br> Durham, NC 27708-0287 
+Duke University<br> Department of Civil and Environmental Engineering<br> Durham, NC 27708-0287
 </font></center>
 <font face="Verdana, Arial, sans-serif" size="1"><br>updated: May 6
 2003, Nov 8 2004, Nov 22 2004, Nov 29 2004, Dec 2 2004, Dec 10 2004,
