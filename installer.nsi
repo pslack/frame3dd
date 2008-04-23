@@ -9,6 +9,7 @@
 Name "FRAME3DD"
 
 !include LogicLib.nsh
+!include nsis\registerExtension.nsh
 
 ; The file to write
 !ifdef OUTFILE
@@ -50,7 +51,6 @@ Section "FRAME3DD (required)"
 	; Set output path to the installation directory.
 	SetOutPath $INSTDIR
 	File "build\frame3dd.exe"
-	File "build\microstranparser.dll"
 	File "README.txt"
 	File "README-win32.txt"
 	File "TODO.txt"
@@ -87,6 +87,23 @@ Section "FRAME3DD (required)"
 	
 SectionEnd
 
+Section "Microstran Viewer"
+	DetailPrint "--- Microstran Viewer ---"
+	SetOutPath $INSTDIR
+	File "build\microstranparser.dll"
+	File "build\arc2iv.exe"
+	File "build\forcebalance.exe"
+	File "src\microstran\properties.txt"
+	
+	${registerExtension} "$INSTDIR\arc2iv.exe" ".arc" "Microstran Archive File"
+	
+	; Record the fact that we've got the Microstran components installed
+	WriteRegDWORD HKLM SOFTWARE\FRAME3DD "MSTRANP_INSTALLED" 1
+
+SectionEnd
+
+
+
 ;---------------------------------
 
 ; Optional section (can be disabled by the user)
@@ -111,13 +128,25 @@ Section "Uninstall"
 ;--- start menu ---
 
 	ReadRegDWORD $1 HKLM "SOFTWARE\FRAME3DD" "StartMenu"
-	IntCmp $1 0 unnostart unstart 
-unstart:
-	; Remove shortcuts, if any
-	DetailPrint "--- REMOVING START MENU SHORTCUTS ---"
-	RmDir /r "$SMPROGRAMS\FRAME3DD"
+	${If} $1 == 1
+		; Remove shortcuts, if any
+		DetailPrint "--- REMOVING START MENU SHORTCUTS ---"
+		RmDir /r "$SMPROGRAMS\FRAME3DD"
+	${EndIf}
 
-unnostart:
+;--- MSTRANP components ---
+
+	ReadRegDWORD $1 HKLM "SOFTWARE\FRAME3DD" "MSTRANP_INSTALLED"	
+	${If} $1 == 1
+		; Remove Microstran parser components
+		DetailPrint "--- REMOVING MICROSTRAN PARSER COMPONENTS ---"
+		${unregisterExtension} ".arc" "Microstran Archive File"
+		Delete "$INSTDIR\microstranparser.dll"
+		Delete "$INSTDIR\arc2iv.exe"
+		Delete "$INSTDIR\forcebalance.exe"
+		Delete "$INSTDIR\properties.txt"
+
+	${EndIf}
 
 ;--- common components ---
 
