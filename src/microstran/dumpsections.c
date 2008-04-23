@@ -55,10 +55,20 @@ int main(int argc, char **argv){
 		return 1;
 	}else{
 		fprintf(stderr,"SECTION FOUND\n");
+
+		section_print(stderr,s);
+
 		if(section_is_chs(s)){
 			fprintf(stderr,"CHS\n");
 			fprintf(stderr,"outside diameter = %f\n", section_chs_outside_diameter(s));
 			fprintf(stderr,"thickness = %f\n\n", section_chs_thickness(s));
+		}
+
+		section_outline *o;
+		o = section_get_outline(s);
+		if(o){
+			fprintf(stderr,"\nOutline:\n");
+			section_outline_print(stderr,o);
 		}
 	}
 	return 0;

@@ -152,7 +152,18 @@ typedef struct section_library_struct{
 
 MSTRANP_API void section_outline_destroy(section_outline *o);
 
+/**
+	Create a copy of a section_outline with inverted y coordinates.
+	This function also re-orders the 'trace' array, to obey the 'stuff-to-the-
+	right' rule for the section outline, required for accurate graphical 
+	rendering.
+*/
 MSTRANP_API section_outline  *section_outline_copy_inverted(section_outline *o);
+
+/**
+	Write the data contained in a section outline for debuggin purposes.
+*/
+MSTRANP_API int section_outline_print(FILE *f, const section_outline *o);
 
 MSTRANP_API section_library *section_library_create();
 MSTRANP_API void section_library_destroy(section_library *l);
@@ -191,6 +202,13 @@ MSTRANP_API char section_tophat_inverted(const section *s);
 MSTRANP_API section_outline *section_tophat_outline(const section *s);
 
 MSTRANP_API int section_print(FILE *f, const section *s);
+
+/**
+	Get section outline, if available for this section.
+	If not available (eg for CHS), return NULL (in which case other
+	methods need to be used for graphical rendering)
+*/
+MSTRANP_API section_outline *section_get_outline(const section *s);
 
 /** approximate diameter of section for use in fast rendering routines */
 MSTRANP_API double section_outline_approx_diameter(const section_outline *o);

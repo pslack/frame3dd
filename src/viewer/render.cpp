@@ -363,7 +363,8 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 
 #if 1
 	SoShapeHints *sha = new SoShapeHints;
-	sha->vertexOrdering = SoShapeHints::CLOCKWISE;
+	sha->vertexOrdering = SoShapeHints::UNKNOWN_ORDERING;
+	sha->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
     sha->faceType = SoShapeHints::UNKNOWN_FACE_TYPE;
 	detailed->addChild(sha);
 #endif
@@ -424,6 +425,14 @@ SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_str
 		i3[ni++] = nv + v1;
 		i3[ni++] = SO_END_FACE_INDEX;
 	}
+
+#if 1
+	SoShapeHints *sha1 = new SoShapeHints;
+	sha1->vertexOrdering = SoShapeHints::CLOCKWISE;
+	sha1->shapeType = SoShapeHints::UNKNOWN_SHAPE_TYPE;
+    sha1->faceType = SoShapeHints::UNKNOWN_FACE_TYPE;
+	detailed->addChild(sha1);
+#endif
 
 	// add the ends of the prism
 #if 1

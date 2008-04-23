@@ -312,16 +312,17 @@ section_outline *section_outline_copy_inverted(section_outline *o){
 
 	o1 = NEW(section_outline);
 	o1->point = array_copy(o->point);
+	o1->trace = ARRAY_CREATE(int,n);
 
 	for(i=0; i<n; ++i){
 		t = (int *)array_get(&o->trace, n - 1 - i);
-		array_set(&(o->trace),i,t);
+		array_set(&(o1->trace),i,t);
 	}
 
 	// now flip the up-down coordinates
-	n = ARRAY_NUM(o->point);
+	n = ARRAY_NUM(o1->point);
 	for(i=0; i<n; ++i){
-		v = array_get(&o->point, i);
+		v = array_get(&o1->point, i);
 		v->y = -v->y;
 	}
 
@@ -344,6 +345,12 @@ int section_print(FILE *f, const section *s){
 	}else if(section_is_shs(s)){
 		n += fprintf(f,"%s\n",s->name);
 		n += fprintf(f,"\tSHS, width and depth = %f, thickness = %f\n", s->shs.d, s->shs.t);
+	}else if(section_is_tophat(s)){
+		n += fprintf(f,"%s\n",s->name);
+		n += fprintf(f,"\tTOPHAT, a = %f, b = %f, c = %f, d = %f, thickness = %f%s\n"
+			, s->tophat.a, s->tophat.b, s->tophat.c, s->tophat.d
+			, s->tophat.t, (s->tophat.inverted? ", INVERTED" : "")
+		);
 	}
 	return n;
 }
@@ -374,6 +381,46 @@ double section_outline_approx_diameter(const section_outline *o){
 		if(fabs(p->y) > maxy)maxy=fabs(p->y);
 	}
 	return 2.*sqrt(SQ(maxx)+SQ(maxy));
+}
+
+section_outline *section_get_outline(const section *s){
+	switch(s->type){
+		case SECTION_ISEC: return section_isec_outline(s);
+		case SECTION_SHS: return section_shs_outline(s);
+		case SECTION_TOPHAT: return section_tophat_outline(s);
+		default:
+			return NULL;
+	}
+}
+
+int section_outline_print(FILE *f, const section_outline *o){
+	unsigned i;
+	int t;
+	vec2 *v;
+	unsigned n;
+	unsigned c;
+	n = ARRAY_NUM(o->trace);
+	c += fprintf(f,"%d trace points on %d vertices:\n",ARRAY_NUM(o->trace),ARRAY_NUM(o->point));
+	int from=0;
+	for(i=0; i<n; ++i){
+		t = *(int *)array_get(&o->trace,i);
+		if(t==-1){
+			from = 0; 
+			c += fprintf(f," . . .\n");
+			continue;
+		}
+		v = (vec2 *)array_get(&o->point,t);
+		if(from){
+			c += fprintf(f," --> ");
+		}else{
+			c += fprintf(f,"     ");
+		}
+
+		c += fprintf(f,"%d:(%f,%f)\n", t, v->x, v->y);
+		from = 1;
+	}
+	c += fprintf(f,"\n");
+	return c;
 }
 
 section_library *section_library_create(){
