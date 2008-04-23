@@ -98,6 +98,7 @@ struct section_tophat_struct{
 	double theta; /**< angle of sidewalls to vertical (in radians) */
 	double phi; /**< angle of lip to vertical (in radians) */
 	double t; /**< sheetmetal thickness (in m) */
+	char inverted; /**< direction of section in ±Y direction 0=open downwards, 1= open upwards */
 	/* don't know what structural properties to define here yet */
 };
 
@@ -127,6 +128,14 @@ typedef struct vec2_struct{
 
 /**
 	Section outline (trace of points for use in rendering steel sections)
+
+	The section is defined as a number of vertices (of type vec2) which are
+	indexed in the array 'point'. The section outline is then created as a
+	series of these indices. For each edge that is traced, the 'stuff' is 
+	assumed to be on the RIGHT of the line in the direction of travel.
+
+	If there are discontinuities in the section, these are represented by a
+	'pen up' code (=-1) in the trace array.
 */
 typedef struct section_outline_struct {
 	array point; /**< (of vec2) vertices in the cross-section */
@@ -142,6 +151,8 @@ typedef struct section_library_struct{
 } section_library;
 
 MSTRANP_API void section_outline_destroy(section_outline *o);
+
+MSTRANP_API section_outline  *section_outline_copy_inverted(section_outline *o);
 
 MSTRANP_API section_library *section_library_create();
 MSTRANP_API void section_library_destroy(section_library *l);
@@ -176,6 +187,7 @@ MSTRANP_API double section_tophat_lip_width(const section *s);
 MSTRANP_API double section_tophat_theta(const section *s);
 MSTRANP_API double section_tophat_phi(const section *s);
 MSTRANP_API double section_tophat_thickness(const section *s);
+MSTRANP_API char section_tophat_inverted(const section *s);
 MSTRANP_API section_outline *section_tophat_outline(const section *s);
 
 MSTRANP_API int section_print(FILE *f, const section *s);

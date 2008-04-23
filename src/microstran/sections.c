@@ -142,6 +142,10 @@ double section_tophat_phi(const section *s){
 	return s->tophat.phi;
 }
 
+char section_tophat_inverted(const section *s){
+	assert(section_is_tophat(s));
+	return s->tophat.inverted;
+}
 
 /* utility routine for use with array_set */
 static vec2 *vec2_set(vec2 *v, double x, double y){
@@ -226,7 +230,7 @@ section_outline *section_shs_outline(const section *s){
 	We can use this to generate 3D 'prism' geometry elsewhere.
 */
 section_outline *section_tophat_outline(const section *s){
-	section_outline *o;
+	section_outline *o, *oi;
 	vec2 v;
 	assert(section_is_tophat(s));
 	double a = s->tophat.a;
@@ -278,7 +282,8 @@ section_outline *section_tophat_outline(const section *s){
 	double cx, cy;
 	cx = 0;
 	cy = 0.5 * b;
-	// adjust for location of the centroid
+	
+	/* adjust for location of the centroid */
 	unsigned n = ARRAY_NUM(o->point);
 	for(i=0;i<n;++i){
 		vec2 *p = (vec2 *)array_get(&(o->point),i);
@@ -286,10 +291,42 @@ section_outline *section_tophat_outline(const section *s){
 		p->y -= cy;
 	}
 
+	/* invert if necessary */
+	if(s->tophat.inverted){
+		oi = section_outline_copy_inverted(o);
+		section_outline_destroy(o);
+		return oi;
+	}
+
 	return o;
 }
 
+section_outline *section_outline_copy_inverted(section_outline *o){
+	/* to copy an inverted section outline, we must reverse the order of the
+	 	points, because otherwise the section will also be inside out. */
 
+	section_outline *o1;
+	int *t;
+	unsigned i, n = ARRAY_NUM(o->trace);
+	vec2 *v;
+
+	o1 = NEW(section_outline);
+	o1->point = array_copy(o->point);
+
+	for(i=0; i<n; ++i){
+		t = (int *)array_get(&o->trace, n - 1 - i);
+		array_set(&(o->trace),i,t);
+	}
+
+	// now flip the up-down coordinates
+	n = ARRAY_NUM(o->point);
+	for(i=0; i<n; ++i){
+		v = array_get(&o->point, i);
+		v->y = -v->y;
+	}
+
+	return o1;
+}
 
 void section_outline_destroy(section_outline *o){
 	array_destroy(&(o->point));

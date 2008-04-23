@@ -212,6 +212,7 @@ cbool parseSHS(parse *p, section *s1){
 */
 cbool parseTopHat(parse *p, section *s1){
 	struct section_tophat_struct s;
+	s.inverted = 0;
 	return (
 		maybe(parseWS(p))
 		&& (parseThisString(p,"TOPHAT"))
@@ -229,8 +230,13 @@ cbool parseTopHat(parse *p, section *s1){
 		&& parseDouble(p, &s.phi)
 		&& parseWS(p)
 		&& parseDouble(p,&s.t)
-		&& maybe(parseWS(p))
-		&& parseEOLplus(p)
+		&& maybe(
+			parseWS(p)
+			&& (
+				parseThisString(p,"INVERTED")
+				&& assign(s.inverted = 1)
+			)
+		) && parseEOLplus(p)
 		&& assign(s.a *= 1e-3)
 		&& assign(s.b *= 1e-3)
 		&& assign(s.c *= 1e-3)

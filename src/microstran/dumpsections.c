@@ -24,7 +24,7 @@
 
 int main(int argc, char **argv){
 	const char *filename = "src/microstran/properties.txt";
-	if(argc==2){
+	if(argc>=2){
 		filename = argv[1];
 	}
 
@@ -35,6 +35,11 @@ int main(int argc, char **argv){
 		exit(1);
 	}
 
+	const char *sn = "100X100X9.0SHS";
+	if(argc >=3){
+		sn = argv[2];
+	}
+
 	parse *p;
 	p = parseCreateFileName(filename);
 
@@ -42,7 +47,6 @@ int main(int argc, char **argv){
 	l = section_library_create();
 	parseSections(p,l);
 
-	const char *sn = "100X100X9.0SHS";
 	fprintf(stderr,"\n\nLooking up section '%s'...\n",sn);
 	const section *s;
 	s = section_find(l,sn);

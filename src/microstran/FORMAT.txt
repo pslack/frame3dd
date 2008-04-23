@@ -73,8 +73,21 @@ Code:
 
 Interpretation:
  PROP propid source asw?   NAME            ???
-       A_g         ?????      ?????     J          I_yy          I_xx
+       A_g         Ay?      Az?     J          I_yy          I_xx
 
+Here,
+	A_g    gross section area
+	J      torsional modulus ('St. Venant Torsion Constant')
+	Ay     shear area in y direction
+	Ax     shear area in x direction
+	I_yy   effective second moment of area from bending about y axis
+	I_xx   effective second moment of area for bending about x axis
+
+These terms follow the conventions used in the OneSteel section properties
+data. Note the difference in the 'x' and 'z' axis conventions used by
+Microstran!
+
+	
 There is some support for custom sections also in place. Here is an example
 of what that looks like:
 
