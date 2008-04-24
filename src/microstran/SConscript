@@ -20,6 +20,7 @@ srcs = Split("""
 	ctrans.c
 	forces.c
 	forceparser.c
+	defaultpaths.c
 """)
 # bdd.c row.c  table.c  print.c   iter.c  list.c  
 

@@ -42,9 +42,10 @@ using namespace std;
 #include <microstran/modelparser.h>
 #include <microstran/sectionsparser.h>
 #include <microstran/ctrans.h>
+#include <microstran/defaultpaths.h>
 
 const char *defaultsceneoutfile = "microstranmodel.iv";
-const char *defaultlibfile = "src/microstran/properties.txt";
+char defaultlibfile[1024];
 
 void usage(const char *progname){
 	fprintf(stderr,"Usage: %s [-o[OUTFILE]] [-a MIN] [-b MAX] [-m] [-h] [-l LIBFILE] [-t] INFILE\n",progname);
@@ -75,6 +76,10 @@ int main(int argc, char **argv){
 
 	unsigned minmemb = 0;
 	unsigned maxmemb = UINT_MAX;
+
+	stringstream ss0;
+	ss0 << get_default_data_path() << FRAME3DD_PATHSEP << "properties.txt";	
+	strcpy(defaultlibfile,ss0.str().c_str());
 
 	char c;
 	while((c=getopt(argc,argv,"a:b:mho::l:t"))!=-1){

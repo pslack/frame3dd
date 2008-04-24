@@ -32,4 +32,12 @@
 # error "NO MSTRANP_API, MSTRANP_EXPORT, MSTRANP_IMPORT DEFINED"
 #endif
 
+#ifdef WIN32
+# define FRAME3DD_PATHSEP "\\"
+# define FRAME3DD_DEFAULT_DATA_DIR "c:\\Program Files\\FRAME3DD"
+#else
+# define FRAME3DD_DEFAULT_DATA_DIR "/home/john/frame3dd/src/microstran"
+# define FRAME3DD_PATHSEP "/"
+#endif
+
 #endif
