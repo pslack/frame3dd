@@ -271,6 +271,8 @@ SoSeparator *face(const SbVec3f &n, const vector<SbVec3f> &vertices, const SbCol
 	@param B second endpoint
 	@param o section outline, tells how to draw the section.
 	@param O orientation vector for the +X axis of the local coordinate system (see memb_get_orientation for the way that this is calculated)
+
+	@TODO FIXME the orientation code should be simplified using ctrans_rotation_axes
 */
 SoSeparator *prism(const SbVec3f &A, const SbVec3f &B, const section_outline_struct &o, const SbColor &c, const SbVec3f &O){
 	SoSeparator *s = new SoSeparator;
