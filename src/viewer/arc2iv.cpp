@@ -264,6 +264,9 @@ int main(int argc, char **argv){
 					c = RED;
 					double d = section_chs_outside_diameter(s) / 1000.; /* convert to metres */
 					root->addChild(cylinder(vA,vB,d/2.,c));
+				}else if(section_is_rod(s)){
+					c = CYAN;
+					root->addChild(cylinder(vA,vB,section_rod_diameter(s)/2.,c));
 				}else if(section_is_isec(s)){
 					c = GREEN;
 					section_outline *o = section_isec_outline(s);

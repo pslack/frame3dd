@@ -35,7 +35,7 @@ int main(int argc, char **argv){
 		exit(1);
 	}
 
-	const char *sn = "139.7X5.0CHS";
+	const char *sn = "12ROD";
 	if(argc >=3){
 		sn = argv[2];
 	}

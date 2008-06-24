@@ -36,6 +36,7 @@ typedef enum{
 	,SECTION_ISEC
 	,SECTION_SHS
 	,SECTION_TOPHAT
+	,SECTION_ROD
 } section_type;
 
 /**
@@ -102,6 +103,18 @@ struct section_tophat_struct{
 	/* don't know what structural properties to define here yet */
 };
 
+/**
+	CHS section properties
+*/
+struct section_rod_struct{
+	double d; /**< diameter (in m) */
+	double A; /**< area (m²) */
+	double Ax;
+	double J;
+	double Ix;
+	double M;
+};
+
 #define SECTION_NAME_MAX 40
 
 /**
@@ -115,6 +128,7 @@ struct section_struct{
 		struct section_isec_struct isec;
 		struct section_shs_struct shs;
 		struct section_tophat_struct tophat;
+		struct section_rod_struct rod;
 	};
 };
 typedef struct section_struct section;
@@ -200,6 +214,10 @@ MSTRANP_API double section_tophat_phi(const section *s);
 MSTRANP_API double section_tophat_thickness(const section *s);
 MSTRANP_API char section_tophat_inverted(const section *s);
 MSTRANP_API section_outline *section_tophat_outline(const section *s);
+
+/* chs routines */
+MSTRANP_API int section_is_rod(const section *s);
+MSTRANP_API double section_rod_diameter(const section *s);
 
 MSTRANP_API int section_print(FILE *f, const section *s);
 

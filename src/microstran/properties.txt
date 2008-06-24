@@ -227,4 +227,39 @@ LH8060-INVx1.2  TOPHAT 60 80 30 10 4 10 1.2 INVERTED
 LH80603010x0.75 TOPHAT 60 80 30 10 4 10 0.75
 LH806-INVx0.75 TOPHAT 60 80 30 10 4 10 0.75 INVERTED
 LH90722610x6.0     TOPHAT 71.56 89.50 26 10 5 10 6
+#
+# ROD SECTIONS
+# Sizes as provided in Microstran. No section strength data is provided here
+# although it probably should be. Perhaps it's OK just to calculate the values
+# for such a simple section.
+#
+# name ROD D  A Ax J  Ix M
+#          mm
+10ROD ROD 10 0  0  0  0  0
+12ROD ROD 12 0  0  0  0  0
+14ROD ROD 14 0  0  0  0  0
+16ROD ROD 16 0  0  0  0  0
+18ROD ROD 18 0  0  0  0  0
+20ROD ROD 20 0  0  0  0  0
+22ROD ROD 22 0  0  0  0  0
+24ROD ROD 24 0  0  0  0  0
+26ROD ROD 26 0  0  0  0  0
+30ROD ROD 30 0  0  0  0  0
+32ROD ROD 32 0  0  0  0  0
+33ROD ROD 33 0  0  0  0  0
+36ROD ROD 36 0  0  0  0  0
+39ROD ROD 39 0  0  0  0  0
+42ROD ROD 42 0  0  0  0  0
+45ROD ROD 45 0  0  0  0  0
+48ROD ROD 48 0  0  0  0  0
+50ROD ROD 50 0  0  0  0  0
+56ROD ROD 56 0  0  0  0  0
+60ROD ROD 60 0  0  0  0  0
+65ROD ROD 65 0  0  0  0  0
+75ROD ROD 75 0  0  0  0  0
+80ROD ROD 80 0  0  0  0  0
+90ROD ROD 90 0  0  0  0  0
+100ROD ROD 100 0  0  0  0  0
 
+
+# 

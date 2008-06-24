@@ -249,6 +249,33 @@ cbool parseTopHat(parse *p, section *s1){
 	);
 }
 
+/**
+	Parse the fields for a rod section (we've already read the name)
+*/
+cbool parseRod(parse *p, section *s1){
+	struct section_rod_struct s;
+	return (
+		maybe(parseWS(p))
+		&& parseThisString(p,"ROD")
+		&& parseWS(p)
+		&& parseDouble(p,&s.d)
+		&& parseWS(p)
+		&& parseDouble(p,&s.A)
+		&& parseWS(p)
+		&& parseDouble(p,&s.Ax)
+		&& parseWS(p)
+		&& parseDouble(p,&s.J)
+		&& parseWS(p)
+		&& parseDouble(p,&s.Ix)
+		&& parseWS(p)
+		&& parseDouble(p,&s.M)
+		&& parseEOLplus(p)
+		&& assign(s.d *= 1e-3)
+		&& assign(s1->type = SECTION_ROD)
+		&& assign(s1->rod = s)
+	);
+}	
+
 
 cbool parseSection(parse *p, section_library *l){
 	section s;
@@ -260,6 +287,7 @@ cbool parseSection(parse *p, section_library *l){
 			|| parseIsec(p, &s)
 			|| parseSHS(p, &s)
 			|| parseTopHat(p, &s)
+			|| parseRod(p, &s)
 			/* || parseUB(...) */
 			/* etc */
 		) && assign(array_append(&(l->a),&s)) 

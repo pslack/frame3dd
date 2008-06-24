@@ -147,6 +147,18 @@ char section_tophat_inverted(const section *s){
 	return s->tophat.inverted;
 }
 
+/* Rod routines */
+
+int section_is_rod(const section *s){
+	if(s->type==SECTION_ROD)return 1;
+	return 0;
+}
+
+double section_rod_diameter(const section *s){
+	assert(section_is_rod(s));
+	return s->rod.d;
+}
+
 /* utility routine for use with array_set */
 static vec2 *vec2_set(vec2 *v, double x, double y){
 	v->x = x;
@@ -351,6 +363,9 @@ int section_print(FILE *f, const section *s){
 			, s->tophat.a, s->tophat.b, s->tophat.c, s->tophat.d
 			, s->tophat.t, (s->tophat.inverted? ", INVERTED" : "")
 		);
+	}else if(section_is_rod(s)){
+		n += fprintf(f,"%s\n",s->name);
+		n += fprintf(f,"\tROD, diameter = %f\n",s->rod.d);
 	}
 	return n;
 }
