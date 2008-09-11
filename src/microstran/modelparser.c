@@ -372,6 +372,49 @@ cbool parseNDLD(parse *p, case_stmt *c){
 	);
 }
 
+/*
+	Two possible member load statements that we need to parse and ignore:s
+		MBLD  6000  CONC  MY  GL  FR         6.0000       0.5000
+		MBLD  6000  CONC  FZ  GL  FR        -3.0000       0.5000
+*/
+cbool parseMBLD(parse *p, case_stmt *c){
+	unsigned membid;
+	const char FZ[] = "FZ";
+	const char MY[] = "MY";
+	const char *dir;
+	double a, b;
+	static cbool warnignored = 0;
+#define ASSIGN(Z) 1
+	return (
+		parseComments(p)
+		&& parseThisString(p,"MBLD") && ASSIGN(fprintf(stderr,"MBLD"))	
+		&& parseWS(p) && ASSIGN(fprintf(stderr,"NDLD"))
+		&& parseNumber(p,&membid)
+		&& parseWS(p) 
+		&& (
+			parseThisString(p,"CONC")
+		) && parseWS(p)  && (
+			(parseThisString(p,MY) && assign(dir=MY))
+			|| (parseThisString(p,FZ) && assign(dir=FZ))
+		) && parseWS(p) && (
+			parseThisString(p,"GL")
+		) && parseWS(p) && (
+			parseThisString(p,"FR")
+		)
+		&& parseWS(p)
+		&& parseDouble(p,&a) /* what's this? */
+		&& parseWS(p)
+		&& parseDouble(p,&b) /* what's this? */
+		&& parseEOLplus(p) //&& assign(fprintf(stderr," "))
+		&& (warnignored || (
+			assign(fprintf(stderr,"WARNING: 'MBLD' statement(s) ignored.\n")) 
+			&& assign(warnignored=1)
+		))
+#undef ASSIGN
+	);
+}
+
+
 cbool parseCOMB(parse *p, model *a, case_stmt *c){
 	unsigned subcaseid;
 	double factor;
@@ -410,9 +453,9 @@ cbool parseCASE(parse *p, model *a){
 		&& (
 			(
 				parseGRAV(p,&c)
-				&& many(parseNDLD(p,&c))
+				&& many((parseNDLD(p,&c) || parseMBLD(p,&c)))
 			) || (
-				one_or_more(parseNDLD(p,&c))
+				one_or_more((parseNDLD(p,&c) || parseMBLD(p,&c)))
 			) || (
 				one_or_more(parseCOMB(p,a,&c))
 			)
