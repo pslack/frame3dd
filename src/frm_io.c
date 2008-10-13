@@ -39,7 +39,10 @@
 /* #define MASSDATA_DEBUG */
 
 /* forward decls */
+
+#ifndef HAVE_ITOA
 static void itoa(int n, char s[], int k);
+#endif
 
 static void getline_no_comment(
 		FILE *fp      /**< pointer to the file from which to read */
@@ -70,7 +73,7 @@ void read_input_data(
 		    exit(1);
 		}
 		fscanf(fp, "%lf %lf %lf %lf", &pos[j].x, &pos[j].y, &pos[j].z, &r[j]);
-		r[j] = fabs(r[j]); 
+		r[j] = fabs(r[j]);
 	}
 	for (i=1;i<=nM;i++) {		/* read member properties	*/
 		fscanf(fp, "%d", &j );
@@ -200,13 +203,13 @@ void frm_getline (
 
 /*-----------------------------------------------------------------------------
 PARSE_INPUT                                                             7may03
- remove comments from the input file, and write a 'clean' input file 
+ remove comments from the input file, and write a 'clean' input file
 -----------------------------------------------------------------------------*/
 void parse_input(FILE *fp){
 	FILE	*fpc;		/* cleaned inout/output file pointer	*/
 	char	line[256];
 
-	if ((fpc = fopen ("frame3dd.cln", "w")) == NULL) {	
+	if ((fpc = fopen ("frame3dd.cln", "w")) == NULL) {
 		fprintf (stderr," error: cannot open file 'frame.cln'\n");
 		exit(1);
 	}
@@ -224,7 +227,7 @@ void parse_input(FILE *fp){
 /*-----------------------------------------------------------------------------
 GETLINE_NO_COMMENT                                                      7may03
  get a line into a character string. from K&R
- get the line only up to one of the following characters:  \n  %  #  ;  ? 
+ get the line only up to one of the following characters:  \n  %  #  ;  ?
 
 -----------------------------------------------------------------------------*/
 void getline_no_comment(
@@ -239,8 +242,8 @@ void getline_no_comment(
             s[i++] = c;
 /*      if (c == '\n')  s[i++] = c;     */
     s[i] = '\0';
-	if (c != '\n') 
-		while (--lim > 0 && (c=getc(fp)) != EOF && c != '\n') 
+	if (c != '\n')
+		while (--lim > 0 && (c=getc(fp)) != EOF && c != '\n')
 		/* read the rest of the line, otherwise do nothing */ ;
 
 	if ( c == EOF ) s[0] = EOF;
@@ -250,20 +253,20 @@ void getline_no_comment(
 
 
 /*------------------------------------------------------------------------------
-ASSEMBLE_LOADS  -  
+ASSEMBLE_LOADS  -
 read load information data, assemble un-restrained load vectors	9sep08
 ------------------------------------------------------------------------------*/
 void assemble_loads(
 		FILE *fp
-		, int nL, int nJ, vec3 *pos 
+		, int nL, int nJ, vec3 *pos
 		, float *L, float *Le, float *Ax, float *Asy, float *Asz
 		, float *Iy, float *Iz, float *E, float *G
-		, float *p, int shear 
-		, int *J1, int *J2 
+		, float *p, int shear
+		, int *J1, int *J2
 		, int DoF
-		, int nM, int *nF, int *nW, int *nP, int *nT 
+		, int nM, int *nF, int *nW, int *nP, int *nT
 		, float **F_mech, float **F_temp
-		, float ***W, float ***P, float ***T 
+		, float ***W, float ***P, float ***T
 		, float ***feF_mech, float ***feF_temp
 ){
 	float	Nx1, Vy1, Vz1, Mx1, My1, Mz1,	/* fixed end forces */
@@ -275,11 +278,11 @@ void assemble_loads(
 	int	i,j,l, lc, n, j1, j2;
 
 	for (j=1; j<=DoF; j++)
-		for (lc=1; lc <= nL; lc++) 
+		for (lc=1; lc <= nL; lc++)
 			F_mech[lc][j] = F_temp[lc][j] = 0.0;
-	for (i=1; i<=12; i++) 
-		for (n=1; n<=nM; n++) 
-			for (lc=1; lc <= nL; lc++) 
+	for (i=1; i<=12; i++)
+		for (n=1; n<=nM; n++)
+			for (lc=1; lc <= nL; lc++)
 				feF_mech[lc][n][i] = feF_temp[lc][n][i] = 0.0;
 
 
@@ -313,7 +316,7 @@ void assemble_loads(
 		exit(1);
 	  }
 	  for (i=1; i <= nW[lc]; i++) {	/* ! local member coordinates !	*/
-		fscanf(fp,"%d", &n );		
+		fscanf(fp,"%d", &n );
 		if ( n < 1 || n > nM ) {
 		    fprintf(stderr,"  error in uniform distributed loads: member number %d is out of range\n",n);
 		    exit(1);
@@ -378,7 +381,7 @@ void assemble_loads(
 		exit(1);
 	  }
 	  for (i=1; i <= nP[lc]; i++) {	/* ! local member coordinates !	*/
-		fscanf(fp,"%d", &n );		
+		fscanf(fp,"%d", &n );
 		if ( n < 1 || n > nM ) {
 		    fprintf(stderr,"   error in internal point loads: member number %d is out of range\n",n);
 		    exit(1);
@@ -411,13 +414,13 @@ void assemble_loads(
 		Vz2 = (1./(1.+Ksy))*P[lc][i][4]*a*a*(3.*b + a) / ( L[n]*L[n]*L[n] )+
 			(Ksy/(1.+Ksy)) * P[lc][i][4]*a/L[n];
 		Mx1 = Mx2 = 0.0;
-		My1 = -(1./(1.+Ksy)) * P[lc][i][4]*a*b*b / ( L[n]*L[n] ) - 
+		My1 = -(1./(1.+Ksy)) * P[lc][i][4]*a*b*b / ( L[n]*L[n] ) -
 			(Ksy/(1.+Ksy))* P[lc][i][4]*a*b / (2.*L[n]);
-		My2 =  (1./(1.+Ksy)) * P[lc][i][4]*a*a*b / ( L[n]*L[n] ) + 
+		My2 =  (1./(1.+Ksy)) * P[lc][i][4]*a*a*b / ( L[n]*L[n] ) +
 			(Ksy/(1.+Ksy))* P[lc][i][4]*a*b / (2.*L[n]);
-		Mz1 =  (1./(1.+Ksz)) * P[lc][i][3]*a*b*b / ( L[n]*L[n] ) + 
+		Mz1 =  (1./(1.+Ksz)) * P[lc][i][3]*a*b*b / ( L[n]*L[n] ) +
 			(Ksz/(1.+Ksz))* P[lc][i][3]*a*b / (2.*L[n]);
-		Mz2 = -(1./(1.+Ksz)) * P[lc][i][3]*a*a*b / ( L[n]*L[n] ) - 
+		Mz2 = -(1./(1.+Ksz)) * P[lc][i][3]*a*a*b / ( L[n]*L[n] ) -
 			(Ksz/(1.+Ksz))* P[lc][i][3]*a*b / (2.*L[n]);
 
 		j1 = J1[n];	j2 = J2[n];
@@ -450,7 +453,7 @@ void assemble_loads(
 		exit(1);
 	  }
 	  for (i=1; i <= nT[lc]; i++) {	/* ! member coordinates !	*/
-		fscanf(fp,"%d", &n );		
+		fscanf(fp,"%d", &n );
 		if ( n < 1 || n > nM ) {
 		    fprintf(stderr,"  error in temperature loads: member number %d is out of range\n",n);
 		    exit(1);
@@ -469,7 +472,7 @@ void assemble_loads(
 
 		Nx2 = (a/4.0)*( T[lc][i][5]+T[lc][i][6]+T[lc][i][7]+T[lc][i][8])*E[n]*Ax[n];
 		Nx1 = -Nx2;
-		Vy1 = Vy2 = Vz1 = Vz2 = 0.0; 
+		Vy1 = Vy2 = Vz1 = Vz2 = 0.0;
 		Mx1 = Mx2 = 0.0;
 		My1 =  (a/hz)*(T[lc][i][8]-T[lc][i][7])*E[n]*Iy[n];
 		My2 = -My1;
@@ -517,7 +520,7 @@ READ_REACTION_DATA  -  Read fixed joint displacement boundary conditions 7sep08
 void read_reaction_data (
 		FILE *fp
 		, int DoF, int *nD, int *nR
-		, int nJ, float *Dp, int *R, int *sumR 
+		, int nJ, float *Dp, int *R, int *sumR
 ){
 	int	i,j,l;
 
@@ -564,7 +567,7 @@ void read_reaction_data (
 	*sumR=0;	for (i=1;i<=DoF;i++)	*sumR += R[i];
 	if ( *sumR < 4 ) {
 	    fprintf(stderr,"  warning:  Un-restrained structure\n");
-	    fprintf(stderr,"  %d imposed reactions.", *sumR ); 
+	    fprintf(stderr,"  %d imposed reactions.", *sumR );
 	    fprintf(stderr,"  At least 4 reactions are required.\n");
 	    /*	exit(1); */
 	}
@@ -599,20 +602,20 @@ void read_reaction_data (
 READ_MASSES  -  read member densities and extra inertial mass data	16aug01
 ------------------------------------------------------------------------------*/
 void read_mass_data(
-		FILE *fp, 
-		int nJ, int nM, int *nI, 
-		float *d, float *BMs, 
-		float *JMs, float *JMx, float *JMy, float *JMz, 
-		float *L, float *Ax, 
-		float *total_mass, float *struct_mass, 
-		int *modes, int *Mmethod, int *lump, 
-		char modefile[], 
+		FILE *fp,
+		int nJ, int nM, int *nI,
+		float *d, float *BMs,
+		float *JMs, float *JMx, float *JMy, float *JMz,
+		float *L, float *Ax,
+		float *total_mass, float *struct_mass,
+		int *modes, int *Mmethod, int *lump,
+		char modefile[],
 		float *tol, float *shift, int anim[], int *pan
 ){
 /*	float	ms = 0.0; */
 	int	chk, j, jnt, m, mem, nA;
 
-	*total_mass = *struct_mass = 0.0;	
+	*total_mass = *struct_mass = 0.0;
 
 
 	chk = fscanf ( fp, "%d", modes );
@@ -637,8 +640,8 @@ void read_mass_data(
 
 #ifdef MASSDATA_DEBUG
 	FILE	*mf;				// mass data file
-	mf = fopen("MassData.txt","w");	// open mass data file 
-	if ((mf = fopen ("MassData.txt", "w")) == NULL) {	
+	mf = fopen("MassData.txt","w");	// open mass data file
+	if ((mf = fopen ("MassData.txt", "w")) == NULL) {
 	  fprintf (stderr," error: cannot open file 'MassData.txt'\n");
 	  exit(1);
 	}
@@ -706,7 +709,7 @@ void read_mass_data(
 	printf(" number of modes to be animated ");
 	dots(21);
 	printf(" nA = %d\n",nA);
-	if (nA > 20) 
+	if (nA > 20)
 	  printf(" nA = %d, only 20 or fewer modes may be animated\n", nA );
 	for ( m = 0; m < 20; m++ )	anim[m] = 0;
 	for ( m = 0; m < nA; m++ )	fscanf ( fp, "%d", &anim[m] );
@@ -809,17 +812,17 @@ void read_condense (
 WRITE_INPUT_DATA  -  save input data					7nov02
 ------------------------------------------------------------------------------*/
 void write_input_data(
-	FILE *fp, 
-	char *title, int nJ, int nM, int nL, 
+	FILE *fp,
+	char *title, int nJ, int nM, int nL,
 	int nD, int nR,
-	int *nF, int *nW, int *nP, int *nT, 
-	vec3 *pos, float *r, 
-	int *J1, int *J2, 
-	float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz, 
-	float *E, float *G, float *p, float **F, float *Dp, 
-	int *R, 
-	float ***W, float ***P, float ***T, 
-	int shear, int anlyz, int geom 
+	int *nF, int *nW, int *nP, int *nT,
+	vec3 *pos, float *r,
+	int *J1, int *J2,
+	float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz,
+	float *E, float *G, float *p, float **F, float *Dp,
+	int *R,
+	float ***W, float ***P, float ***T,
+	int shear, int anlyz, int geom
 ){
 	int	i,j,n, lc;
         time_t  now;            /* modern time variable type    (DJGPP) */
@@ -839,7 +842,7 @@ void write_input_data(
 	fprintf(fp,"%s\n",title);
 	fprintf(fp, "%s", ctime(&now) );
 	for (i=1; i<=80; i++)	fprintf(fp,"_"); fprintf(fp,"\n");
-	
+
 
 	fprintf(fp,"%d JOINTS;    %d MEMBERS;    %d LOAD CASES;\n",nJ,nM,nL);
 	fprintf(fp,"%d FIXED JOINTS;   ", nR);
@@ -897,7 +900,7 @@ void write_input_data(
 			for (i=5; i>=0; i--) fprintf(fp, " %11.3f", F[lc][6*j-i] );
 			fprintf(fp, "\n");
 		}
-	    }  
+	    }
 	  }
 
 	  if ( nW[lc] > 0 ) {
@@ -908,7 +911,7 @@ void write_input_data(
 		fprintf(fp, " %5d", (int) (W[lc][n][1]) );
 		for (i=2; i<=4; i++) fprintf(fp, " %16.8f", W[lc][n][i] );
 		fprintf(fp, "\n");
-	    }  
+	    }
 	  }
 
 	  if ( nP[lc] > 0 ) {
@@ -919,7 +922,7 @@ void write_input_data(
 		fprintf(fp, " %5d", (int) (P[lc][n][1]) );
 		for (i=2; i<=5; i++) fprintf(fp, " %11.3f", P[lc][n][i] );
 		fprintf(fp, "\n");
-	    }  
+	    }
 	  }
 
 	  if ( nT[lc] > 0 ) {
@@ -932,7 +935,7 @@ void write_input_data(
 		fprintf(fp, " %9.2e", T[lc][n][2] );
 		for (i=3; i<=8; i++) fprintf(fp, " %9.3f", T[lc][n][i] );
 		fprintf(fp, "\n");
-	    }  
+	    }
 	  }
 	}					/* end load case loop	*/
 
@@ -965,11 +968,11 @@ void write_input_data(
 WRITE_STATIC_RESULTS -  save joint displacements and member end forces	9sep08
 ------------------------------------------------------------------------------*/
 void write_static_results (
-		FILE *fp, int nJ, int nM, int nL, int lc, int DoF, 
-		int *J1, int *J2, 
-		float *F, float *D, int *R, 
-		float **Q, float err, 
-		int ok 
+		FILE *fp, int nJ, int nM, int nL, int lc, int DoF,
+		int *J1, int *J2,
+		float *F, float *D, int *R,
+		float **Q, float err,
+		int ok
 ){
 	float	disp;
 	int	i,j,n;
@@ -982,7 +985,7 @@ void write_static_results (
 	}
 
         fprintf(fp,"\nL O A D   C A S E   %d   O F   %d  ... \n\n", lc, nL);
-		 
+
 	fprintf(fp,"J O I N T   D I S P L A C E M E N T S");
 	fprintf(fp,"\t\t\t\t\t(global)\n");
 	fprintf(fp,"  Joint    X-dsp       Y-dsp       Z-dsp");
@@ -1058,11 +1061,11 @@ save joint displacements and member end forces in an m-file
 this function interacts with frame_3dd.m, an m-file interface to frame3dd
 ------------------------------------------------------------------------------*/
 void write_static_mfile ( char *argv[],
-		int nJ, int nM, int nL, int lc, int DoF, 
-		int *J1, int *J2, 
-		float *F, float *D, int *R, 
-		float **Q, float err, 
-		int ok 
+		int nJ, int nM, int nL, int lc, int DoF,
+		int *J1, int *J2,
+		float *F, float *D, int *R,
+		float **Q, float err,
+		int ok
 ){
 	FILE	*fpm;
 	float	disp;
@@ -1097,7 +1100,7 @@ void write_static_mfile ( char *argv[],
 	}
 
         fprintf(fpm,"\n%% L O A D   C A S E   %d   O F   %d  ... \n\n", lc, nL);
-		 
+
 	fprintf(fpm,"%% J O I N T   D I S P L A C E M E N T S");
 	fprintf(fpm,"\t\t(global)\n");
 	fprintf(fpm,"%%\tX-dsp\t\tY-dsp\t\tZ-dsp\t\tX-rot\t\tY-rot\t\tZ-rot\n");
@@ -1172,11 +1175,11 @@ void write_static_mfile ( char *argv[],
 WRITE_MODAL_RESULTS -  save modal frequencies and mode shapes		16aug01
 ------------------------------------------------------------------------------*/
 void write_modal_results(
-		FILE *fp, 
-		int nJ, int nM, int nI, int DoF, 
-		float **M, float *f, float **V, 
-		float total_mass, float struct_mass, 
-		int iter, int sumR, int modes, 
+		FILE *fp,
+		int nJ, int nM, int nI, int DoF,
+		float **M, float *f, float **V,
+		float total_mass, float struct_mass,
+		int iter, int sumR, int modes,
 		float shift, int lump, float tol, int ok
 ){
 	int	i, j, k, m, num_modes;
@@ -1194,7 +1197,7 @@ void write_modal_results(
 		for (j=2; j<=DoF; j+=6) msY[i] += M[i][j];
 		for (j=3; j<=DoF; j+=6) msZ[i] += M[i][j];
 	}
-	
+
 	if ( (DoF - sumR) > modes )	num_modes = modes;
 	else	num_modes = DoF - sumR;
 
@@ -1217,7 +1220,7 @@ void write_modal_results(
 	fprintf(fp,"N A T U R A L   F R E Q U E N C I E S   & \n");
 	fprintf(fp,"M A S S   N O R M A L I Z E D   M O D E   S H A P E S \n");
 	fprintf(fp," convergence tolerance: %.3e \n", tol);
-	for (m=1; m<=num_modes; m++) { 
+	for (m=1; m<=num_modes; m++) {
 	    mpfX = 0.0;	for (i=1; i<=DoF; i++)    mpfX += V[i][m]*msX[i];
 	    mpfY = 0.0;	for (i=1; i<=DoF; i++)    mpfY += V[i][m]*msY[i];
 	    mpfZ = 0.0;	for (i=1; i<=DoF; i++)    mpfZ += V[i][m]*msZ[i];
@@ -1261,10 +1264,10 @@ create mesh data of deformed and undeformed mesh, use gnuplot	22feb99
 useful gnuplot options: set noxtics noytics noztics noborder view nokey
 ------------------------------------------------------------------------------*/
 void static_mesh(
-		char IO_file[], char meshfile[], char plotfile[], 
-		char *title, int nJ, int nM, int nL, int lc, int DoF, 
-		vec3 *pos, float *L, 
-		int *J1, int *J2, float *p, float *D, 
+		char IO_file[], char meshfile[], char plotfile[],
+		char *title, int nJ, int nM, int nL, int lc, int DoF,
+		vec3 *pos, float *L,
+		int *J1, int *J2, float *p, float *D,
 		float exg, int anlyz
 ){
 	FILE	*fpmfx, *fpm;
@@ -1353,7 +1356,7 @@ void static_mesh(
 		printf (" error: cannot open plot file: %s\n", plotfile);
 		exit(1);
 	    }
-	} 
+	}
 
 	if (lc == 1) {		/* first load case */
 
@@ -1374,9 +1377,9 @@ void static_mesh(
 	 fprintf(fpm,"set nozeroaxis\n");
 	 fprintf(fpm,"set nokey\n");
 	 fprintf(fpm,"set nolabel\n");
- 	
+
  	 fprintf(fpm,"# NODE NUMBER LABELS\n");
-	 for (j=1; j<=nJ; j++) 
+	 for (j=1; j<=nJ; j++)
 		fprintf(fpm,"set label ' %d' at %12.4e, %12.4e, %12.4e\n",
 							j, pos[j].x,pos[j].y,pos[j].z );
 
@@ -1392,7 +1395,7 @@ void static_mesh(
 	 fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w lp ", meshfile);
 	 if (!anlyz) fprintf(fpm,"lw 2 lt 1 pt 6 \n");
 	 else fprintf(fpm,"lw 1 lt 5 pt 6, '%s' u 1:2 t 'load case %d of %d' w l lw 2 lt 3\n", meshfl, lc, nL );
- 
+
 	 fprintf(fpm,"%c set parametric\n", D3 );
 	 fprintf(fpm,"%c set view 60, 70, 1 \n", D3 );
 	 fprintf(fpm,"%c set nokey\n", D3 );
@@ -1417,7 +1420,7 @@ void static_mesh(
 	 fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w lp ", meshfile);
 	 if (!anlyz) fprintf(fpm,"lw 2 lt 1 pt 6 \n");
 	 else fprintf(fpm,"lw 1 lt 5 pt 6, '%s' u 1:2 t 'load case %d of %d' w l lw 2 lt 3\n", meshfl, lc, nL );
- 
+
 	 fprintf(fpm,"%c set parametric\n", D3 );
 	 fprintf(fpm,"%c set view 60, 70, 1 \n", D3 );
 	 fprintf(fpm,"%c set nokey\n", D3 );
@@ -1470,7 +1473,7 @@ void modal_mesh(
 		for (j=2; j<=DoF; j+=6) msY[i] += M[i][j];
 		for (j=3; j<=DoF; j+=6) msZ[i] += M[i][j];
 	}
-	
+
 	if (!anlyz) exg = 0.0;
 
 	for (m=1; m<=modes; m++) {
@@ -1500,7 +1503,7 @@ void modal_mesh(
 
 		fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
 
-		for(n=1; n<=nM; n++) 
+		for(n=1; n<=nM; n++)
 			bent_beam ( fpm, J1[n], J2[n], pos, L[n], p[n], v, exg );
 
 		for ( j=1; j<=nJ; j++ ) {
@@ -1600,7 +1603,7 @@ void animate(
 		exit(1);
 	}
 	i = 0;
-	while ( (m = anim[i]) != 0 && i < 20) { 
+	while ( (m = anim[i]) != 0 && i < 20) {
 	 if ( i==0 ) {
 
 	   fprintf(fpm,"\n# --- M O D E   S H A P E   A N I M A T I O N ---\n");
@@ -1624,7 +1627,7 @@ void animate(
 			z_min-0.2*(z_max-z_min), z_max+0.2*(z_max-z_min) );
 	   else fprintf(fpm,"set zrange [ %lf : %lf ] \n",
 			z_min-exg, z_max+exg );
- 	
+
 	   fprintf(fpm,"%c set parametric\n", D3 );
 	   fprintf(fpm,"%c set view 60, 70, 1 \n", D3 );
 	   fprintf(fpm,"%c set xlabel \n", D3 );
@@ -1638,12 +1641,12 @@ void animate(
 
 	 frame_number = 0;
 	 total_frames = 2*CYCLES*frames;
-	 for ( c=1; c <= CYCLES; c++ ) { 
+	 for ( c=1; c <= CYCLES; c++ ) {
 	  for ( fr=0; fr<=frames; fr++ ) {
 
 	    strcpy(modefl,modefile);
 	    strcpy(framefl,modefile);
-	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2); 
+	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2);
 	    strcat(framefl,s1);
 	    strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 	    s1[0] = '-'; s1[1] = 'f'; s1[2] = '-'; s1[3] = '\0';
@@ -1655,24 +1658,24 @@ void animate(
 		fprintf(fpm,"plot '%s' u 2:3 w l lw 1 lt 5, ", meshfile );
 	 	fprintf(fpm," '%s' u 1:2 w l lw 2 lt 3 ;", modefl );
 	    } else {
-	      if (pan) 
+	      if (pan)
  	        fprintf(fpm,"%c set view %5.1f, %5.1f, %4.2f \n", D3,
 		rot_x_init + (rot_x_final-rot_x_init)*frame_number/total_frames,
 		rot_z_init + (rot_z_final-rot_z_init)*frame_number/total_frames,
 		zoom_init + (zoom_final-zoom_init)*frame_number/total_frames );
 	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshfile);
 	      fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
-	    } 
+	    }
 	    if ( fr==0 && c==1 )	fprintf(fpm,"  pause 1.5 \n");
 	    else			fprintf(fpm,"  pause 0.05 \n");
 	    fprintf(fpm,"%c  load 'saveplot';\n",Movie);
-	    fprintf(fpm,"%c  !mv my-plot.ps %s\n", Movie, framefl );    
+	    fprintf(fpm,"%c  !mv my-plot.ps %s\n", Movie, framefl );
 	  }
 	  for ( fr = frames-1; fr > 0; fr-- ) {
 
 	    strcpy(modefl,modefile);
 	    strcpy(framefl,modefile);
-	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2); 
+	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2);
 	    strcat(framefl,s1);
 	    strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 	    s1[0] = '-'; s1[1] = 'f'; s1[2] = '-'; s1[3] = '\0';
@@ -1691,16 +1694,16 @@ void animate(
 		zoom_init + (zoom_final-zoom_init)*frame_number/total_frames );
 	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshfile);
 	      fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
-	    } 
+	    }
 	    fprintf(fpm,"  pause 0.05 \n");
 	    fprintf(fpm,"%c  load 'saveplot';\n",Movie);
-	    fprintf(fpm,"%c  !mv my-plot.ps %s\n", Movie, framefl );    
+	    fprintf(fpm,"%c  !mv my-plot.ps %s\n", Movie, framefl );
 	  }
 	 }
 	 fr = 0;
 
 	 strcpy(modefl,modefile);
-	 s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2); 
+	 s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2);
 	 strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 
 	 if ( D3 == '#' ) {
@@ -1709,7 +1712,7 @@ void animate(
 	 } else {
 		fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 2 lt 5, ",D3,meshfile);
 		fprintf(fpm," '%s' u 1:2:3 w l lw 3 lt 3 \n", modefl );
-	 } 
+	 }
 
 	 i++;
 	}
@@ -1718,11 +1721,11 @@ void animate(
 	v = vector(1,DoF);
 
 	i = 0;
-	while ( (m = anim[i]) != 0 ) { 
+	while ( (m = anim[i]) != 0 ) {
 	  for ( fr=0; fr<=frames; fr++ ) {
 
 	    strcpy(modefl,modefile);
-	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2); 
+	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2);
 	    strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 
 	    if ((fpm = fopen (modefl, "w")) == NULL) {
@@ -1742,7 +1745,7 @@ void animate(
 
 	    fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
 
-	    for (n=1; n<=nM; n++) 
+	    for (n=1; n<=nM; n++)
 
 		bent_beam ( fpm, J1[n], J2[n], pos, L[n], p[n], v, ex );
 
@@ -1767,7 +1770,7 @@ void bent_beam(
 		, float exg
 ){
 	float	t1, t2, t3, t4, t5, t6, t7, t8, t9, 	/* coord xfmn	*/
-		u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, 
+		u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12,
 		*a, *b, **A,
 		s, v, w, dx, dy, dz;
 	int	i1, i2, pd;
@@ -1827,7 +1830,7 @@ void bent_beam(
 			/* deformed shape in local coordinates */
 		v = a[1] + a[2]*s + a[3]*s*s + a[4]*s*s*s;
 		w = b[1] + b[2]*s + b[3]*s*s + b[4]*s*s*s;
-		
+
 			/* deformed shape in global coordinates */
 		dx = t1*s + t4*v + t7*w;
 		dy = t2*s + t5*v + t8*w;
@@ -1850,6 +1853,7 @@ void bent_beam(
 /*------------------------------------------------------------------------------
 ITOA  -  Convert an integer n to charcters in s, from K&R, 1978,   p. 59-60
 ------------------------------------------------------------------------------*/
+#ifndef HAVE_ITOA
 void itoa(int n, char s[], int k){
 	int	c, i, j, sign;
 
@@ -1858,7 +1862,7 @@ void itoa(int n, char s[], int k){
 	i = 0;
 	do {				/* generate digits in reverse order */
 		s[i++] = n % 10 + '0';	/* get next digit */
-	} while ((n /= 10) > 0);	/* delete it */	
+	} while ((n /= 10) > 0);	/* delete it */
 	for (;i<k;)	s[i++] = '0';	/* add leading '0' */
 	if (sign < 0)
 		s[i++] = '-';
@@ -1875,9 +1879,10 @@ void itoa(int n, char s[], int k){
 	}
 	return;
 }
+#endif
 
 /*------------------------------------------------------------------------------
-DOTS  -  print a set of dots (periods) 
+DOTS  -  print a set of dots (periods)
 ------------------------------------------------------------------------------*/
 void dots(int n){
 	int i;
