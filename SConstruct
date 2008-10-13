@@ -204,36 +204,11 @@ env.Alias("install",env['installdirs'])
 
 #------------
 # create the RPM .spec file
-#---------------------------------------------------
-# CPPUNIT
-
-if platform.system()=="Windows":
-	cppunit_config_command = ["cppunit-config"]
-else:	
-	cppunit_config_command = ["cppunit-config"]
-
-def CheckCppUnitConfig(context):
-	res = 0
-	context.Message("Checking for cppunit-config... ")
-	if context.env.WhereIs(cppunit_config_command[0]):
-		res = 1	
-		context.env.ParseConfig(cppunit_config_command + ["--libs","--cflags"])
-
-	context.Result(res)
-	return res
-
-def CheckCppUnit(context):
-	envtemp = conf.env.Copy()
-	conf.env.Parseconfig
-	
-		
-	context.Result(1)
-	return 1
 env.Append(SUBST_DICT= {
 	'@VERSION@':version
 })
 
-env.SubstInFile('frame3dd.spec.in')
+specfile = env.SubstInFile('frame3dd.spec.in')
 
 #------------
 # create distribution zip-file
@@ -265,7 +240,7 @@ if platform.system()=="Windows":
 
 #-------
 
-env.Default(env['PROGS'])
+env.Default(env['PROGS'] + specfile)
 
 
 # vim: set syntax=python:

@@ -20,6 +20,8 @@
 #ifndef FRAME_COMMON_H
 #define FRAME_COMMON_H
 
+/* this file contains some #defines to set up 'float' to be 'double' instead. */
+
 #ifndef PI
 #define PI	3.141592653589793
 #endif
@@ -31,8 +33,10 @@
 #define float double
 #define vector dvector
 #define matrix dmatrix
+#define D3matrix D3dmatrix
 #define free_vector free_dvector
 #define free_matrix free_dmatrix
+#define free_D3matrix free_D3dmatrix
 #define save_matrix save_dmatrix
 #define show_vector show_dvector 
 #define save_ut_matrix save_ut_dmatrix

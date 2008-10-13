@@ -1,6 +1,8 @@
-a tetrahedral fame - static and dynamic analysis 
+a tetrahedral frame - static and dynamic analysis 
 
-18	48                       % number of joints and number of members
+18                      % number of joints 
+48 			% number of members
+1                       % number of static load cases
 
 % joint  x       y       z       r
 
@@ -81,8 +83,8 @@ exC.plt                         % plot file name
 80.0                            % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
 
+				% Begin Static Load Case 1 of 1
 0                               % number of loaded joints
-
 
 5				% number of distributed loads
 % j      wx       wy     wz
@@ -94,6 +96,7 @@ exC.plt                         % plot file name
 
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
+				% End  Static Load Case 1 of 1
 
 4                               % number of joints with reactions
 % J     x y z xx yy zz          1= fixed, 0=free
@@ -172,18 +175,17 @@ exC.plt                         % plot file name
 
 
 ________________________________________________________________________________
--- FRAME version:   20 Dec 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
-                     http://www.duke.edu/~hpgavin/frame/ 
- FRAME is distributed in the hope that it will be useful but with no warranty;
- for details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
+FRAME3DD version: 20080909               http://www.duke.edu/~hpgavin/frame/ 
+GPL Copyright (C) 1992-2008, Henri P. Gavin 
+FRAME3DD is distributed in the hope that it will be useful but with no warranty.
+For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
-a tetrahedral fame - static and dynamic analysis  
-Thu Dec 20 16:32:24 2007
+a tetrahedral frame - static and dynamic analysis  
+Tue Sep  9 21:28:21 2008
 ________________________________________________________________________________
-JOINTS: 18    MEMBERS: 48   FIXED JOINTS: 4   PRESCRIBED DISPLACEMENTS: 0
-JOINT LOADS: 0   UNIFORM MEMBER LOADS: 5   CONCENTRATED MEMBER LOADS: 0   
-
+18 JOINTS;    48 MEMBERS;    1 LOAD CASES;
+4 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -259,7 +261,14 @@ M E M B E R   D A T A							(local)
    48    16    18   20.0   8.0   5.0   50.0   100.0   200.0  29000.0  1150.0   0
   Include shear deformations.
   Include geometric stiffness.
-J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S	(global)
+
+L O A D   C A S E   1   O F   1  ... 
+
+ 0 joints  with concentrated loads
+ 5 members with uniformly distributed loads
+ 0 members with concentrated point loads
+ 0 members with temperature loads
+ J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      2       0.000     -50.000       0.000       0.000       0.000    -833.333
      5       0.000    -100.000       0.000       0.000       0.000       0.000
@@ -267,7 +276,7 @@ J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S	(global)
     11       0.000    -100.000       0.000       0.000       0.000       0.000
     14       0.000    -100.000       0.000       0.000       0.000       0.000
     17       0.000     -50.000       0.000       0.000       0.000     833.333
-U N I F O R M   M E M B E R   L O A D S					(local)
+ U N I F O R M   M E M B E R   L O A D S					(local)
   Member      Wx               Wy               Wz
      5       0.00000000      -1.00000000       0.00000000
     14       0.00000000      -1.00000000       0.00000000
@@ -276,6 +285,9 @@ U N I F O R M   M E M B E R   L O A D S					(local)
     41       0.00000000      -1.00000000       0.00000000
 
 E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
+
+
+L O A D   C A S E   1   O F   1  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot

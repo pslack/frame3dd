@@ -1,6 +1,6 @@
 /*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
-	Copyright (C) 1992-2008  Henri P. Gavin
-
+ Copyright (C) 1992-2008  Henri P. Gavin
+ 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -1226,25 +1226,38 @@ int	n;
 }
 
 /*------------------------------------------------------------------------------
-DEALLOCATE  -  release the allocated memory				23feb94
+DEALLOCATE  -  release allocated memory					9sep08
 ------------------------------------------------------------------------------*/
-void deallocate( pos,r, L,Le, J1, J2, Ax,Asy,Asz, J,Iy,Iz, E, G,
-      K,Q,F,D,R,W,P,T, feF,Fo, d,BMs,JMs,JMx,JMy,JMz, M,f,V, nJ,nM,DoF, modes ) 
+void deallocate( 
+	int nJ, int nM, int nL, int *nF, int *nW, int *nP, int *nT
+	, int DoF, int modes
+	, vec3 *pos, float *r, float *L, float *Le
+	, int *J1, int *J2, int *R
+	, float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz
+	, float *E, float *G, float *p
+	, float ***W, float ***P, float ***T
+	, float **Fo_mech, float **Fo_temp, float *Fo_mech_lc, float *Fo_temp_lc
+	, float ***feF_mech, float ***feF_temp, float **feF
+	, float **Fo, float *Fo_lc, float *F_lc
+	, float **K, float **Q
+	, float *D, float *dD, float *Dp
+	, float *d, float *BMs, float *JMs, float *JMx, float *JMy, float *JMz
+	, float **M, float *f, float **V
+	, int *q, int *m
+){
 
-int	nJ, nM, DoF, *J1, *J2, *R;
-vec3 *pos;
-float	*r, *L, *Le, *Ax, *Asy,*Asz, *J,*Iy,*Iz, *E, *G,  **K,
-**Q,*F,*D,**W,**P,**T, **feF, *Fo, *d,*BMs,*JMs,*JMx,*JMy,*JMz, **M,*f,**V;
-{
 	free(pos);
 
 	free_vector(r,1,nJ);
 	free_vector(L,1,nM);
 	free_vector(Le,1,nM);
 
+// printf("..B\n");
 	free_ivector(J1,1,nM);
 	free_ivector(J2,1,nM);
+	free_ivector(R,1,DoF);
 
+// printf("..C\n");
 	free_vector(Ax,1,nM);
 	free_vector(Asy,1,nM);
 	free_vector(Asz,1,nM);
@@ -1253,19 +1266,39 @@ float	*r, *L, *Le, *Ax, *Asy,*Asz, *J,*Iy,*Iz, *E, *G,  **K,
 	free_vector(Iz,1,nM);
 	free_vector(E,1,nM);
 	free_vector(G,1,nM);
+	free_vector(p,1,nM);
 
+// printf("..D\n");
+	free_D3matrix(W,1,nL,1,nM,1,4);
+	free_D3matrix(P,1,nL,1,nM,1,5);
+	free_D3matrix(T,1,nL,1,nM,1,8);
+
+// printf("..E\n");
+	free_matrix(Fo_mech,1,nL,1,DoF);
+	free_matrix(Fo_temp,1,nL,1,DoF);
+	free_vector(Fo_mech_lc,1,DoF);
+	free_vector(Fo_temp_lc,1,DoF);
+
+// printf("..F\n");
+	free_matrix(Fo,1,nL,1,DoF);
+	free_vector(Fo_lc,1,DoF);
+	free_vector(F_lc,1,DoF);
+
+// printf("..G\n");
+	free_D3matrix(feF_mech,1,nL,1,nM,1,12);
+	free_D3matrix(feF_temp,1,nL,1,nM,1,12);
+	free_matrix(feF,1,nM,1,12);
+
+// printf("..H\n");
 	free_matrix(K,1,DoF,1,DoF);
 	free_matrix(Q,1,nM,1,12);
 
-	free_vector(F,1,DoF);
+// printf("..I\n");
 	free_vector(D,1,DoF);
-	free_ivector(R,1,DoF);
-	free_matrix(W,1,nM,1,4);
-	free_matrix(P,1,nM,1,5);
-	free_matrix(T,1,nM,1,8);
-	free_matrix(feF,1,nM,1,12);
-	free_vector(Fo,1,DoF);
+	free_vector(dD,1,DoF);
+	free_vector(Dp,1,DoF);
 
+// printf("..J\n");
 	free_vector(d,1,nM);
 	free_vector(BMs,1,nM);
 	free_vector(JMs,1,nJ);
@@ -1273,6 +1306,11 @@ float	*r, *L, *Le, *Ax, *Asy,*Asz, *J,*Iy,*Iz, *E, *G,  **K,
 	free_vector(JMy,1,nJ);
 	free_vector(JMz,1,nJ);
 
+// printf("..K\n");
+	free_ivector(q,1,DoF);
+	free_ivector(m,1,DoF);
+
+// printf("..L\n");
 	if ( modes > 0 ) {
 		free_matrix(M,1,DoF,1,DoF);
 		free_vector(f,1,modes);
@@ -1280,11 +1318,11 @@ float	*r, *L, *Le, *Ax, *Asy,*Asz, *J,*Iy,*Iz, *E, *G,  **K,
 	}
 }
 
-/* itoa moved to frm_io.c */
+/* itoa moved to frame3dd_io.c */
 
 /* removed strcat -- it's in <string.h> in the standard C library */
 
 /* removed strcpy -- it's in <string.h> in the standard C library */
 
-/* dots moved to frm_io.c */
+/* dots moved to frame3dd_io.c */
 

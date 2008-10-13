@@ -39,8 +39,7 @@ void assemble_K(
 
 /** apply boundary conditions */
 void apply_reactions(
-	int DoF, int *R
-	, float *Dp, float *Fo, float *F, float **K
+	int DoF, int *R, float *Dp, float *Fo, float *F, float **K
 );
 
 /** solve {F} =   [K]{D} via L D L' decomposition */
@@ -107,15 +106,21 @@ void dyn_conden(
 	release allocated memory
 */
 void deallocate( 
-	vec3 *pos, float *r, float *L, float *Le
-	, int *J1, int *J2
-	, float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz
-	, float *E, float *G, float **K, float **Q, float *F, float *D
-	, int *R
-	, float **W,  float **P,  float **T, float **feF
-	, float *Fo,  float *d,  float *BMs, float *JMs
-	, float *JMx, float *JMy, float *JMz,  float **M, float *f, float **V
-	, int nJ, int nM, int DoF, int modes 
+	int nJ, int nM, int nL, int *nF, int *nW, int *nP, int *nT, int DoF,
+	int modes,
+	vec3 *pos, float *r, float *L, float *Le,
+	int *J1, int *J2, int *R,
+	float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz,
+	float *E, float *G, float *p,
+	float ***W, float ***P, float ***T,
+	float **Fo_mech, float **Fo_temp, float *Fo_mech_lc, float *Fo_temp_lc,
+	float ***feF_mech, float ***feF_temp, float **feF,
+	float **Fo, float *Fo_lc, float *F_lc,
+	float **K, float **Q,
+	float *D, float *dD, float *Dp,
+	float *d, float *BMs, float *JMs, float *JMx, float *JMy, float *JMz,
+	float **M, float *f, float **V, 
+	int *q, int *m
 );
 
 

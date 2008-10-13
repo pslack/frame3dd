@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "coordtrans.h"
 
 #include <math.h>
@@ -38,7 +39,7 @@ void coord_trans(
 	Cp = cos(p);
 	Sp = sin(p);
 
-#if Zvert
+#if Zvert				// the global Z axis is vertical
 
 	if ( fabs(Cz) == 1.0 ) {
 		*t3 =  Cz;
@@ -63,7 +64,7 @@ void coord_trans(
 	   	*t9 = Cp*den;
 	}
 
-#else
+#else					// the global Y axis is vertical
 
 	if ( fabs(Cy) == 1.0 ) {
 		*t2 =  Cy;

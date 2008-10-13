@@ -1,6 +1,6 @@
 /*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
-	Copyright (C) 1992-2008  Henri P. Gavin
-
+ Copyright (C) 1992-2008  Henri P. Gavin
+ 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -39,6 +39,7 @@ void subspace(
 	, int *iter /**< sub-space iterations */
 	, int *ok /**< Sturm check result */
 );
+
 
 /**
 	carry out matrix-matrix-matrix multiplication for symmetric A

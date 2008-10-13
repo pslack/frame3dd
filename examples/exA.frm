@@ -1,6 +1,8 @@
 linear static analysis of a 2D truss with support settlement
 
-12	21    	% number of joints and number of members
+12				% number of joints 
+21				% number of members 
+2				% number of static load cases
 
 % joint  x       y       z       r
 
@@ -49,10 +51,9 @@ exA.plt	                        % plot file name
 1                               % 1: stiffness analysis, 0: data check only
 
 
-
+				% Begin Static Load Case 1 of 2
 5				% number of loaded joints
 %J      Fx       Fy     Fz      Mxx     Myy     Mzz
-
  2	0.0	-20.0	0.0	0.0	0.0	0.0
  3	0.0	-40.0	0.0	0.0	0.0	0.0
  4	0.0	-30.0  	0.0	0.0	0.0	0.0
@@ -62,6 +63,25 @@ exA.plt	                        % plot file name
 0				% number of distributed loads
 0				% number of internal concentrated loads
 0				% number of members with temperature loads
+				% End   Static Load Case 1 of 2
+
+				% Begin Static Load Case 2 of 2
+3				% number of loaded joints
+%J      Fx       Fy     Fz      Mxx     Myy     Mzz
+ 3	20.0	 0.0	0.0	0.0	0.0	0.0
+ 4	30.0	 0.0  	0.0	0.0	0.0	0.0
+ 5	20.0	 0.0  	0.0	0.0	0.0	0.0
+
+0				% number of distributed loads
+0				% number of internal concentrated loads
+
+3				% number of members with temperature loads
+%M  a      hy   hz   Ty+  Ty-  Tz+  Tz- 
+10 6e-12   1.5  1.5  10	  10   10   10
+13 6e-12   1.5  1.5  15   15   15   15  
+15 6e-12   1.5  1.5  17   17   17   17  
+				% End   Static Load Case 2 of 2
+
 
 12				% number of joints with reactions
 % J     x y z xx yy zz		1= fixed, 0=free
@@ -88,18 +108,17 @@ exA.plt	                        % plot file name
 
 
 ________________________________________________________________________________
--- FRAME version:   20 Dec 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
-                     http://www.duke.edu/~hpgavin/frame/ 
- FRAME is distributed in the hope that it will be useful but with no warranty;
- for details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
+FRAME3DD version: 20080909               http://www.duke.edu/~hpgavin/frame/ 
+GPL Copyright (C) 1992-2008, Henri P. Gavin 
+FRAME3DD is distributed in the hope that it will be useful but with no warranty.
+For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 linear static analysis of a 2D truss with support settlement 
-Thu Dec 20 16:32:17 2007
+Tue Sep  9 21:14:41 2008
 ________________________________________________________________________________
-JOINTS: 12    MEMBERS: 21   FIXED JOINTS: 12   PRESCRIBED DISPLACEMENTS: 1
-JOINT LOADS: 5   UNIFORM MEMBER LOADS: 0   CONCENTRATED MEMBER LOADS: 0   
-
+12 JOINTS;    21 MEMBERS;    2 LOAD CASES;
+12 FIXED JOINTS;   1 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -142,18 +161,49 @@ M E M B E R   D A T A							(local)
    21    11    12   30.0   1.0   1.0    1.0     1.0     0.0  10000.0   500.0   0
   Neglect shear deformations.
   Neglect geometric stiffness.
-J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S	(global)
+
+L O A D   C A S E   1   O F   2  ... 
+
+ 5 joints  with concentrated loads
+ 0 members with uniformly distributed loads
+ 0 members with concentrated point loads
+ 0 members with temperature loads
+ J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      2       0.000     -20.000       0.000       0.000       0.000       0.000
      3       0.000     -40.000       0.000       0.000       0.000       0.000
      4       0.000     -30.000       0.000       0.000       0.000       0.000
      5       0.000     -10.000       0.000       0.000       0.000       0.000
      6       0.000     -30.000       0.000       0.000       0.000       0.000
-P R E S C R I B E D   D I S P L A C E M E N T S			(global)
+
+L O A D   C A S E   2   O F   2  ... 
+
+ 3 joints  with concentrated loads
+ 0 members with uniformly distributed loads
+ 0 members with concentrated point loads
+ 3 members with temperature loads
+ J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
+  Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
+     3      20.000      -0.000       0.000       0.000       0.000       0.000
+     4      30.000      -0.000       0.000       0.000       0.000       0.000
+     5      20.000       0.000       0.000       0.000       0.000       0.000
+     6       0.000      -0.000       0.000       0.000       0.000       0.000
+     9       0.000       0.000       0.000       0.000       0.000       0.000
+    11      -0.000       0.000       0.000       0.000       0.000       0.000
+ M E M B E R   T E M P E R A T U R E   C H A N G E S			(local)
+  Member    coef      hy        hz        Ty+       Ty-       Tz+       Tz-
+    10  6.00e-12     1.500     1.500    10.000    10.000    10.000    10.000
+    13  6.00e-12     1.500     1.500    15.000    15.000    15.000    15.000
+    15  6.00e-12     1.500     1.500    17.000    17.000    17.000    17.000
+
+P R E S C R I B E D   D I S P L A C E M E N T S   (for all load cases) (global)
   Joint       Dx          Dy          Dz          Dxx         Dyy         Dzz
      8       0.010       0.000       0.000       0.000       0.000       0.000
 
 E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
+
+
+L O A D   C A S E   1   O F   2  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
@@ -228,3 +278,79 @@ R E A C T I O N S							(global)
     11       0.0         0.0         0.0         0.0         0.0         0.0  
     12       0.0         0.0         0.0         0.0         0.0         0.0  
 R M S   E Q U I L I B R I U M    E R R O R: 3.757e-15
+
+L O A D   C A S E   2   O F   2  ... 
+
+J O I N T   D I S P L A C E M E N T S					(global)
+  Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+     1    0.0         0.0         0.0         0.0         0.0        -0.001699
+     2    0.006103   -0.017471    0.0         0.0         0.0        -0.001125
+     3    0.011546   -0.026196    0.0         0.0         0.0        -0.000324
+     4    0.016188   -0.024837    0.0         0.0         0.0         0.000252
+     5    0.018309   -0.019513    0.0         0.0         0.0         0.000558
+     6    0.019630   -0.010748    0.0         0.0         0.0         0.000753
+     7    0.020291    0.0         0.0         0.0         0.0         0.000891
+     8    0.020000   -0.018131    0.0         0.0         0.0        -0.001149
+     9    0.016697   -0.026196    0.0         0.0         0.0        -0.000313
+    10    0.014715   -0.024837    0.0         0.0         0.0         0.000256
+    11    0.012733   -0.019513    0.0         0.0         0.0         0.000566
+    12    0.012072   -0.010087    0.0         0.0         0.0         0.000723
+M E M B E R   E N D   F O R C E S					(local)
+  Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+     1      1   -152.578t      0.000      0.0        0.0        0.0       -0.003
+     1      2    152.578t     -0.000      0.0        0.0        0.0        0.007
+     2      2   -136.062t      0.0        0.0        0.0        0.0       -0.007
+     2      3    136.062t      0.0        0.0        0.0        0.0        0.007
+     3      3   -116.061t     -0.001      0.0        0.0        0.0       -0.012
+     3      4    116.061t      0.001      0.0        0.0        0.0       -0.003
+     4      4    -53.031t     -0.000      0.0        0.0        0.0       -0.004
+     4      5     53.031t      0.000      0.0        0.0        0.0        0.001
+     5      5    -33.030t     -0.001      0.0        0.0        0.0       -0.005
+     5      6     33.030t      0.001      0.0        0.0        0.0       -0.002
+     6      6    -16.515t     -0.001      0.0        0.0        0.0       -0.005
+     6      7     16.515t      0.001      0.0        0.0        0.0       -0.003
+     7      1    -23.358t      0.001      0.0        0.0        0.0        0.003
+     7      8     23.358t     -0.001      0.0        0.0        0.0        0.009
+     8      2     16.516c      0.000      0.0        0.0        0.0        0.001
+     8      8    -16.516c     -0.000      0.0        0.0        0.0        0.001
+     9      2    -23.357t      0.000      0.0        0.0        0.0       -0.002
+     9      9     23.357t     -0.000      0.0        0.0        0.0        0.008
+    10      3      0.001c      0.001      0.0        0.0        0.0        0.005
+    10      9     -0.001c     -0.001      0.0        0.0        0.0        0.006
+    11      4     23.353c     -0.000      0.0        0.0        0.0        0.001
+    11      9    -23.353c      0.000      0.0        0.0        0.0       -0.006
+    12      4      0.001c      0.001      0.0        0.0        0.0        0.007
+    12     10     -0.001c     -0.001      0.0        0.0        0.0        0.007
+    13      4    -23.356t      0.000      0.0        0.0        0.0       -0.000
+    13     11     23.356t     -0.000      0.0        0.0        0.0        0.003
+    14      5      0.000c      0.001      0.0        0.0        0.0        0.005
+    14     11     -0.000c     -0.001      0.0        0.0        0.0        0.005
+    15      6     23.354c      0.0        0.0        0.0        0.0        0.001
+    15     11    -23.354c      0.0        0.0        0.0        0.0       -0.001
+    16      6    -16.514t      0.001      0.0        0.0        0.0        0.006
+    16     12     16.514t     -0.001      0.0        0.0        0.0        0.005
+    17      7     23.356c      0.000      0.0        0.0        0.0        0.003
+    17     12    -23.356c     -0.000      0.0        0.0        0.0        0.001
+    18      8     82.577c     -0.000      0.0        0.0        0.0       -0.010
+    18      9    -82.577c      0.000      0.0        0.0        0.0        0.004
+    19      9     49.548c     -0.001      0.0        0.0        0.0       -0.012
+    19     10    -49.548c      0.001      0.0        0.0        0.0       -0.002
+    20     10     49.547c     -0.000      0.0        0.0        0.0       -0.004
+    20     11    -49.547c      0.000      0.0        0.0        0.0        0.001
+    21     11     16.516c     -0.001      0.0        0.0        0.0       -0.008
+    21     12    -16.516c      0.001      0.0        0.0        0.0       -0.006
+R E A C T I O N S							(global)
+  Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
+     1    -169.095     -16.516       0.0         0.0         0.0         0.0  
+     2       0.0         0.0         0.0         0.0         0.0         0.0  
+     3       0.0         0.0         0.0         0.0         0.0         0.0  
+     4       0.0         0.0         0.0         0.0         0.0         0.0  
+     5       0.0         0.0         0.0         0.0         0.0         0.0  
+     6       0.0         0.0         0.0         0.0         0.0         0.0  
+     7       0.0        16.516       0.0         0.0         0.0         0.0  
+     8      99.095       0.0         0.0         0.0         0.0         0.0  
+     9       0.0         0.0         0.0         0.0         0.0         0.0  
+    10       0.0         0.0         0.0         0.0         0.0         0.0  
+    11       0.0         0.0         0.0         0.0         0.0         0.0  
+    12       0.0         0.0         0.0         0.0         0.0         0.0  
+R M S   E Q U I L I B R I U M    E R R O R: 7.534e-15

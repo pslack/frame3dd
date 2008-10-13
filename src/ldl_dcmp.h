@@ -17,7 +17,6 @@
 	@file
 	LDL' decomposition and back-substitution
 */
-
 #ifndef FRAME_LDL_DCMP_H
 #define FRAME_LDL_DCMP_H
 

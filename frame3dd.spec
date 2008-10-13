@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	@VERSION@
+Version:	0.20080911
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.

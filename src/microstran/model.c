@@ -464,7 +464,6 @@ cbool model_add_matl(model *a, unsigned id, double E, double sigma_y
 }
 
 cbool model_add_case(model *a,case_stmt *c){
-	case_stmt *c1;
 	unsigned caseindex;
 	if(model_find_case(a,c->id, &caseindex)){
 		fprintf(stderr,"case ID %d already in use\n",c->id);
@@ -478,6 +477,7 @@ cbool model_add_case(model *a,case_stmt *c){
 	}
 
 #ifdef CASE_DEBUG
+	/* case_stmt *c1; */
 	c1 = array_get(&a->cases, caseindex);
 	fprintf(stderr,"Added case %d '%s' (%d %s)\n",c1->id, c1->name, ARRAY_NUM(c1->data), (c1->type==CASE_LOADS ? "loads" : "subcases"));
 	if(c1->type ==CASE_COMB){

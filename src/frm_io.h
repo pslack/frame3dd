@@ -27,14 +27,10 @@
 	get line into a character string. from K&R.
 	@NOTE this is different from the GNU 'getline'.
 */
-void frm_getline(
-		FILE	*fp
-		, char    *s
-		, int     lim
-);
+void frm_getline( FILE *fp, char *s, int lim );
 
 /* read input data file			*/
-void read_input(
+void read_input_data(
 		FILE *fp
 		, int nJ, int nM, vec3 *pos
 		, float *r, float *L, float *Le
@@ -50,99 +46,114 @@ void parse_input(FILE *fp);
 /**
 	read load information data, form un-restrained load vector
 */
-void read_loads(
-		FILE *fp
-		, int nJ, vec3 *pos
-		, float *L, float *Le, float *Ax, float *Asy, float *Asz
-		, float *Iy, float *Iz, float *E, float *G
-		, float *p, int shear
-		, int *J1, int *J2
-		, int DoF
-		, int nM, int *nF, int *nW, int *nP, int *nT
-		, float *F_mech, float *F_temp
-		, float **W, float **P, float **T, float **feF_mech, float **feF_temp
+void assemble_loads(
+		FILE *fp, 
+		int nL, int nJ, vec3 *pos,
+		float *L, float *Le, float *Ax, float *Asy, float *Asz, 
+		float *Iy, float *Iz, float *E, float *G, 
+		float *p, int shear,
+		int *J1, int *J2,
+		int DoF, 
+		int nM, int *nF, int *nW, int *nP, int *nT, 
+		float **F_mech, float **F_temp, 
+		float ***W, float ***P, float ***T, 
+		float ***feF_mech, float ***feF_temp
 );
 
 /**
 	Read fixed joint displacement boundary conditions
 */
-void read_reactions(
-		FILE *fp
-		, int DoF, int *nD, int *nR
-		, int nJ, float *Dp, int *R, int *sumR 
+void read_reaction_data(
+		FILE *fp, 
+		int DoF, int *nD, int *nR, 
+		int nJ, float *Dp, int *R, int *sumR 
 );
 
 /**
 	read member densities and extra inertial mass data
 */
-void read_masses(
-		FILE *fp
-		, int nJ, int nM, int *nI
-		, float *d, float *BMs, float *JMs, float *JMx, float *JMy, float *JMz
-		, float *L, float *Ax
-		, float *total_mass, float *struct_mass
-		, int *modes, int *Mmethod, int *lump
-		, char modefile[]
-		, float *tol, float *shift, int anim[], int *pan
+void read_mass_data(
+		FILE *fp, 
+		int nJ, int nM, int *nI, 
+		float *d, float *BMs, 
+		float *JMs, float *JMx, float *JMy, float *JMz, 
+		float *L, float *Ax, 
+		float *total_mass, float *struct_mass, 
+		int *modes, int *Mmethod, int *lump, 
+		char modefile[], 
+		float *tol, float *shift, int anim[], int *pan 
 );
 
 /**
 	read matrix condensation information
 */
 void read_condense(
-		FILE *fp
-		, int nJ, int modes
-		, int *nC, int *Cdof, int *Cmethod, int *q, int *m
+		FILE *fp, 
+		int nJ, int modes, 
+		int *nC, int *Cdof, int *Cmethod, int *q, int *m
 );
 
 /**
-	save input data
+	write input data to a file
 */
-void control_data(
-		FILE *fp
-		, char *title, int nJ, int nM, int nF, int nD, int nR, int nW, int nP,int nT
-		, vec3 *pos, float *r
-		, int *J1, int *J2
-		, float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz
-		, float *E, float *G, float *p, float *F, float *Dp
-		, int *R
-		, float **W, float **P, float **T
-		, int shear, int anlyz, int geom
+void write_input_data(
+		FILE *fp, 
+		char *title, int nJ, int nM,  int nL, 
+		int nD, int nR, 
+		int *nF, int *nW, int *nP, int *nT,
+		vec3 *pos, float *r,
+		int *J1, int *J2,
+		float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz,
+		float *E, float *G, float *p, float **F, float *Dp,
+		int *R,
+		float ***W, float ***P, float ***T,
+		int shear, int anlyz, int geom
 );
 
 /**
-	save joint displacements and member end forces		15oct98
+	save joint displacements and member end forces in a text file	9sep08
 */
-void save_results(
-		FILE *fp, int nJ, int nM, int DoF, int *J1, int *J2
-		, float *F, float *D, int *R
-		, float **Q, float err
-		, int ok 
+void write_static_results(
+		FILE *fp, int nJ, int nM, int nL, int lc, int DoF, 
+		int *J1, int *J2, 
+		float *F, float *D, int *R, 
+		float **Q, float err, 
+		int ok 
 );
+/**
+	save joint displacements and member end forces in an m-file	9sep08
+*/
+void write_static_mfile ( char *argv[],
+                int nJ, int nM, int nL, int lc, int DoF,
+                int *J1, int *J2,
+                float *F, float *D, int *R,
+                float **Q, float err,
+                int ok
+);
+
 
 /**
 	save modal frequencies and mode shapes			16aug01
 */
-void modal_results(
-		FILE *fp
-		, int nJ, int nM, int nI, int DoF
-		, float **M, float *f, float **V
-		, float total_mass, float struct_mass
-		, int iter, int sumR, int modes
-		, float shift, int lump, float tol
-		, int ok
+void write_modal_results(
+		FILE *fp, 
+		int nJ, int nM, int nI, int DoF, 
+		float **M, float *f, float **V, 
+		float total_mass, float struct_mass, 
+		int iter, int sumR, int modes, 
+		float shift, int lump, float tol, int ok 
 );
 
 /**	
 	create mesh data of deformed and undeformed mesh, use gnuplot	22feb99
 	useful gnuplot options: set noxtics noytics noztics noborder view nokey
 */
-void mesh(
-		char IO_file[], char meshfile[], char plotfile[]
-		, char *title, int nJ, int nM, int DoF
-		, vec3 *pos, float *L
-		, int *J1, int *J, float *p, float *D
-		, float exg, int anlyz
+void static_mesh(
+		char IO_file[], char meshfile[], char plotfile[], 
+		char *title, int nJ, int nM, int nL, int lc, int DoF, 
+		vec3 *pos, float *L, 
+		int *J1, int *J, float *p, float *D, 
+		float exg, int anlyz
 );
 
 /**

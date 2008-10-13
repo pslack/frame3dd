@@ -1,6 +1,6 @@
 /*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
-	Copyright (C) 1992-2008  Henri P. Gavin
-
+ Copyright (C) 1992-2008  Henri P. Gavin
+ 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -48,9 +48,9 @@ static void rotate(
 	, int i, int j
 );
 
-static float xAy1(float *x, float **A, float *y, int n, float *d);
+static float xAy1 ( float *x, float **A, float *y, int n, float *d );
 
-static void mat_mult1(float **A, float **B, float *u, int n, int j);
+static void mat_mult1 ( float **A, float **B, float *u, int n, int j );
 
 void mat_mult2(float **A, float **B, float **C, int I, int J, int K);
 
@@ -257,9 +257,7 @@ void subspace(
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  1 March 2007
  Bathe, Finite Element Procecures in Engineering Analysis, Prentice Hall, 1982
 -----------------------------------------------------------------------------*/
-void jacobi ( K, M, E, V, n )
-float	**K, **M, *E, **V;
-int	n;
+void jacobi ( float **K, float **M, float *E, float **V, int n )
 {
 	int	iter,
 		d,i,j,k;
@@ -328,10 +326,7 @@ ROTATE - rotate an n by n symmetric matrix A such that A[i][j] = A[j][i] = 0
      A = P' * A * P  where diag(P) = 1 and P[i][j] = alpha and P[j][i] = beta.
      Since P is sparse, this matrix multiplcation can be done efficiently.  
 -----------------------------------------------------------------------------*/
-void rotate ( A, n, alpha, beta, i, j )
-float	**A, alpha, beta;
-int	i, j, n;
-{
+void rotate ( float **A, int n, float alpha, float beta, int i, int j ){
 	float	Aii, Ajj, Aij,			/* elements of A	*/
 		*Ai, *Aj;		/* i-th and j-th rows of A */
 	int	k;
@@ -374,10 +369,11 @@ with shifting. 								15oct98
 
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  12 Jul 2001
 ------------------------------------------------------------------------------*/
-void stodola ( K, M, n, m, w, V, tol, shift, iter, ok )
-float	**K, **M, *w, **V, tol, shift;	
-int	n, m, *iter, *ok;	/* DoF and number of required modes	*/
-{
+void stodola (
+	float **K, float **M, /* stiffness and mass matrices */
+	int n, int m, /* DoF and number of required modes	*/
+	float *w, float **V, float tol, float shift, int *iter, int *ok
+){
 	float	**D,		/* the dynamics matrix, D = K^(-1) M	*/
 		d_min = 0.0,	/* minimum value of D[i][i]		*/
 		d_max = 0.0,	/* maximum value of D[i][i]		*/
@@ -586,11 +582,9 @@ void xtAx(float **A, float **X, float **C, int N, int J){
 
 /*------------------------------------------------------------------------------
 mat_mult1  -  matrix-matrix multiplication for symmetric A		27apr01
+		u = A * B(:,j)
 ------------------------------------------------------------------------------*/
-void	mat_mult1 ( A, B, u, n, j )       /*      u = A * B(:,j)      */
-float   **A, **B, *u;
-int     n, j;
-{
+void mat_mult1 ( float **A, float **B, float *u, int n, int j ){
         int     i, k;
 
         for (i=1; i<=n; i++)	u[i] = 0.0;
@@ -608,10 +602,7 @@ int     n, j;
 /*------------------------------------------------------------------------------
 mat_mult2  -  matrix-matrix multiplication 	C = A * B		27apr01
 ------------------------------------------------------------------------------*/
-void	mat_mult2 ( A, B, C, I,J,K )
-float   **A, **B, **C;
-int     I, J, K;
-{
+void mat_mult2 ( float **A, float **B, float **C, int I, int J, int K ){
 	int     i, j, k;
 
 	for (i=1; i<=I; i++)  
@@ -633,10 +624,7 @@ this routine sorts the eigenvalues into ascending order, and rearranges
 the columns of v correspondingly.  The method is straight insertion.
 Adapted from Numerical Recipes in C, Ch 11
 ------------------------------------------------------------------------------*/
-void eigsort ( e, v, n, m )
-float   *e, **v;
-int	n, m;				   /* n ~ DoF, m ~ modes in V */
-{
+void eigsort ( float *e, float **v, int n, int m ){
 	int	k,j,i;
 	float   p=0;
 
@@ -665,14 +653,15 @@ STURM  -  Determine the number of eigenvalues, w, of the general eigen-problem
   K is an n by n  symmetric real (stiffness) matrix
   M is an n by n  symmetric positive definate real (mass) matrix
   w is a diagonal matrix of eigen-values
-  ws is the limit
+  ws is the limit 
+  n is the number of DoF 
+  m is the number of required modes
+ 
 
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  30 Aug 2001
  Bathe, Finite Element Procecures in Engineering Analysis, Prentice Hall, 1982
 -----------------------------------------------------------------------------*/
-int sturm( K, M, n, m, shift, ws )
-float	**K, **M, shift, ws;
-int	n, m;			/* DoF and number of required modes	*/
+int sturm( float **K, float **M, int n, int m, float shift, float ws )
 {
 	float	ws_shift, *d;
 	int	ok=0, i,j, modes;
@@ -702,13 +691,11 @@ int	n, m;			/* DoF and number of required modes	*/
 	return ok;
 }
 
+
 /*----------------------------------------------------------------------------
 CHECK_NON_NEGATIVE -  checks that a value is non-negative
 -----------------------------------------------------------------------------*/
-void check_non_negative(x,i)
-float	x;
-int	i;
-{
+void check_non_negative( float x, int i){
 	if ( x <= 1.0e-100 )  {
 		printf(" value %e is less than or equal to zero ", x );
 		printf(" i = %d \n", i );

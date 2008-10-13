@@ -1,6 +1,8 @@
 A three dimensional frame
 
-15      24                      % number of joints and number of members
+15                      % number of joints 
+24			% number of members
+1			% number of static load cases
 
 % joint    x         y         z         r
  
@@ -57,6 +59,7 @@ exG.plt				% plot file name
 
 
 
+				% Begin Static Load Case 1 of 1
 1                               % number of loaded joints
 % J       Fx         Fy     Fz     Mxx     Myy     Mzz
   15       0        200      0       0       0       0
@@ -76,9 +79,9 @@ exG.plt				% plot file name
   23      0          0      -2.361
   24      0          0      -2.361
 
-
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
+				% End   Static Load Case 1 of 1
 
 
 3                               % number of joints with reactions
@@ -131,18 +134,17 @@ exG.plt				% plot file name
 
 
 ________________________________________________________________________________
--- FRAME version:   20 Dec 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
-                     http://www.duke.edu/~hpgavin/frame/ 
- FRAME is distributed in the hope that it will be useful but with no warranty;
- for details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
+FRAME3DD version: 20080909               http://www.duke.edu/~hpgavin/frame/ 
+GPL Copyright (C) 1992-2008, Henri P. Gavin 
+FRAME3DD is distributed in the hope that it will be useful but with no warranty.
+For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 A three dimensional frame 
-Thu Dec 20 16:32:53 2007
+Tue Sep  9 21:49:24 2008
 ________________________________________________________________________________
-JOINTS: 15    MEMBERS: 24   FIXED JOINTS: 3   PRESCRIBED DISPLACEMENTS: 0
-JOINT LOADS: 1   UNIFORM MEMBER LOADS: 12   CONCENTRATED MEMBER LOADS: 0   
-
+15 JOINTS;    24 MEMBERS;    1 LOAD CASES;
+3 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -191,7 +193,14 @@ M E M B E R   D A T A							(local)
    24    15    13  100.0  60.0  60.0  500.0  1000.0  1000.0  10000.0  7000.0   0
   Include shear deformations.
   Include geometric stiffness.
-J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S	(global)
+
+L O A D   C A S E   1   O F   1  ... 
+
+ 1 joints  with concentrated loads
+ 12 members with uniformly distributed loads
+ 0 members with concentrated point loads
+ 0 members with temperature loads
+ J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      4       0.000       0.000    -380.198   -1681.148   10271.640       0.000
      5       0.000       0.000    -380.198   -1681.148  -10271.640       0.000
@@ -205,7 +214,7 @@ J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S	(global)
     13       0.000       0.000    -380.198   -1681.148   10271.640       0.000
     14       0.000       0.000    -380.198   -1681.148  -10271.640       0.000
     15       0.000     200.000    -288.197    3362.296       0.000       0.000
-U N I F O R M   M E M B E R   L O A D S					(local)
+ U N I F O R M   M E M B E R   L O A D S					(local)
   Member      Wx               Wy               Wz
     13       0.00000000       0.00000000      -2.36100000
     14       0.00000000       0.00000000      -2.36100000
@@ -221,6 +230,9 @@ U N I F O R M   M E M B E R   L O A D S					(local)
     24       0.00000000       0.00000000      -2.36100000
 
 E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
+
+
+L O A D   C A S E   1   O F   1  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot

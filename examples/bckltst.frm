@@ -1,6 +1,6 @@
 test buckling calculation
 
-5 4
+5 4 1
 
 1 0   0 0 0
 2 25  0 0 0

@@ -1,6 +1,8 @@
 dynamic properties of an un-restrained frame with a triangular section
 
-24	30	          % number of joints and number of members
+24			% number of joints
+30			% number of members
+1			% number of static load cases
 
 
 % joint  x       y       z       r
@@ -72,10 +74,13 @@ exD.plt                         % plot file name
 20.0                            % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
 
+				% Begin Static Load Case 1 of 1
 0                               % number of loaded joints
 0                               % number of distributed loads
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
+				% End   Static Load Case 1 of 1
+
 0                               % number of joints with reactions
 0                               % number of joints with support settlements
 
@@ -131,18 +136,17 @@ exD.plt                         % plot file name
 
 
 ________________________________________________________________________________
--- FRAME version:   20 Dec 2007, GPL Copyright (C) 1992-2007, Henri P. Gavin --
-                     http://www.duke.edu/~hpgavin/frame/ 
- FRAME is distributed in the hope that it will be useful but with no warranty;
- for details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
+FRAME3DD version: 20080909               http://www.duke.edu/~hpgavin/frame/ 
+GPL Copyright (C) 1992-2008, Henri P. Gavin 
+FRAME3DD is distributed in the hope that it will be useful but with no warranty.
+For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 dynamic properties of an un-restrained frame with a triangular section 
-Thu Dec 20 16:32:30 2007
+Tue Sep  9 21:48:42 2008
 ________________________________________________________________________________
-JOINTS: 24    MEMBERS: 30   FIXED JOINTS: 0   PRESCRIBED DISPLACEMENTS: 0
-JOINT LOADS: 0   UNIFORM MEMBER LOADS: 0   CONCENTRATED MEMBER LOADS: 0   
-
+24 JOINTS;    30 MEMBERS;    1 LOAD CASES;
+0 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -207,7 +211,17 @@ M E M B E R   D A T A							(local)
   Include shear deformations.
   Neglect geometric stiffness.
 
+L O A D   C A S E   1   O F   1  ... 
+
+ 0 joints  with concentrated loads
+ 0 members with uniformly distributed loads
+ 0 members with concentrated point loads
+ 0 members with temperature loads
+
 E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
+
+
+L O A D   C A S E   1   O F   1  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
