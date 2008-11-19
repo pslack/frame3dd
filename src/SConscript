@@ -22,7 +22,7 @@ srcs = [
 	, 'coordtrans.c'
 ]
 
-prog_env = env.Copy()
+prog_env = env.Clone()
 
 obj_env = env.Clone()
 if env.get('HAVE_ITOA'):

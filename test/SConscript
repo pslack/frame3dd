@@ -2,7 +2,7 @@ Import('env')
 
 if env.get('HAVE_CPPUNIT'):
 
-	test_env = env.Copy()
+	test_env = env.Clone()
 
 	test_env.Append(
 		LIBS = ['microstranparser']

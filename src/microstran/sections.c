@@ -413,18 +413,18 @@ int section_outline_print(FILE *f, const section_outline *o){
 	int t;
 	vec2 *v;
 	unsigned n;
-	unsigned c;
+	unsigned c = 0;
 	n = ARRAY_NUM(o->trace);
 	c += fprintf(f,"%d trace points on %d vertices:\n",ARRAY_NUM(o->trace),ARRAY_NUM(o->point));
 	int from=0;
 	for(i=0; i<n; ++i){
-		t = *(int *)array_get(&o->trace,i);
+		t = *(int *)array_get((array *)&o->trace,i);
 		if(t==-1){
 			from = 0; 
 			c += fprintf(f," . . .\n");
 			continue;
 		}
-		v = (vec2 *)array_get(&o->point,t);
+		v = (vec2 *)array_get((array *)&o->point,t);
 		if(from){
 			c += fprintf(f," --> ");
 		}else{

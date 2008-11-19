@@ -40,7 +40,7 @@ def generate(env):
 			
 		else:
 			cmd = ['soqt-config','--cppflags','--ldflags','--libs']
-			env1 = env.Copy()
+			env1 = env.Clone()
 			env1.ParseConfig(cmd)
 			env['SOQT_CPPPATH'] = env1.get('CPPPATH')
 			env['SOQT_LIBPATH'] = env1.get('LIBPATH')
