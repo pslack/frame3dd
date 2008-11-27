@@ -1,18 +1,24 @@
-/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
-	Copyright (C) 1992-2008  Henri P. Gavin
-
-    This program is free software: you can redistribute it and/or modify
+/*
+ FRAME3DD:
+ Static and dynamic structural analysis of 2D and 3D frames and trusses with
+ elastic and geometric stiffness.
+ ---------------------------------------------------------------------------
+ http://www.duke.edu/~hpgavin/frame/
+ ---------------------------------------------------------------------------
+ Copyright (C) 1992-2008  Henri P. Gavin
+ 
+    FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
+    FRAME3DD is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "coordtrans.h"
@@ -20,19 +26,19 @@
 #include <math.h>
 
 void coord_trans(
-		vec3 *pos
-		, float L
-		, int j1, int j2
-		, float *t1, float *t2, float *t3, float *t4, float *t5
-		, float *t6, float *t7, float *t8, float *t9
-		, float p /**< the roll angle (radians) */
-){
-	float	Cx, Cy, Cz, den,		/* direction cosines	*/
-		Cp, Sp;			/* cosine and sine of roll angle */
+		float *x, float *y, float *z,	// coordinate locations
+		float L,			// element lengths
+		int j1, int j2,			// end joint numbers 
+		float *t1, float *t2, float *t3, float *t4, float *t5,
+		float *t6, float *t7, float *t8, float *t9,
+		float p )			// the roll angle (radians) 
+{
+	float	Cx, Cy, Cz, den,	// direction cosines
+		Cp, Sp;			// cosine and sine of roll angle
 
-	Cx = (pos[j2].x - pos[j1].x) / L;
-	Cy = (pos[j2].y - pos[j1].y) / L;
-	Cz = (pos[j2].z - pos[j1].z) / L;
+	Cx = (x[j2] - x[j1]) / L;
+	Cy = (y[j2] - y[j1]) / L;
+	Cz = (z[j2] - z[j1]) / L;
 
 	*t1 = *t2 = *t3 = *t4 = *t5 = *t6 = *t7 = *t8 = *t9 = 0.0;
 

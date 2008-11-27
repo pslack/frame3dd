@@ -1,18 +1,24 @@
-/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
-	Copyright (C) 1992-2008  Henri P. Gavin
-
-    This program is free software: you can redistribute it and/or modify
+/*
+ FRAME3DD:
+ Static and dynamic structural analysis of 2D and 3D frames and trusses with
+ elastic and geometric stiffness.
+ ---------------------------------------------------------------------------
+ http://www.duke.edu/~hpgavin/frame/
+ ---------------------------------------------------------------------------
+ Copyright (C) 1992-2008  Henri P. Gavin
+ 
+    FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
+    FRAME3DD is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//**
 	@file
 	routines to perform L D L' - decomposition
@@ -44,16 +50,16 @@ LDL_DCMP  -  Solves [A]{x} = {b} simply and efficiently by performing an
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  9 Oct 2001
  Bathe, Finite Element Procecures in Engineering Analysis, Prentice Hall, 1982
 -----------------------------------------------------------------------------*/
-void ldl_dcmp ( A, n, d, b, x, reduce, solve, pd )
-float	**A,	/* the system matrix, and L of the L D L' decomposition	*/
-	*d,	/* diagonal of D in the  L D L' - decomposition		*/
-	*b,	/* the right hand side vector				*/
-	*x;	/* the solution vector					*/
-int	n,	/* the dimension of the matrix				*/	
-	reduce,	/* 1: do a forward reduction of A;    0: do no reduction */
-	solve,	/* 1: do a back substitution for {x}; 0: do no bk-sub'n	*/
-	*pd;	/* 1: definite matrix  and  successful L D L' decomp'n	*/
-{
+void ldl_dcmp (
+	float **A,  /* the system matrix, and L of the L D L' decomposition */
+	int n,	    /* the dimension of the matrix                          */	
+	float *d,   /* diagonal of D in the  L D L' - decomposition         */
+	float *b,   /* the right hand side vector                           */
+	float *x,   /* the solution vector                                  */
+	int reduce, /* 1: do a forward reduction of A; 0: do no reduction   */
+	int solve,  /* 1: do a back substitution for {x}; 0: do no bk-sub'n */
+	int *pd	    /* 1: definite matrix  and  successful L D L' decomp'n  */
+){
 	int	i, j, k, m;
 	*pd = 0;	/* number of negative elements on the diagonal of D */
 
@@ -118,9 +124,7 @@ LDL_MPROVE  -  Improves a solution vector x[1..n] of the linear set of equations
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  4 May 2001
 -----------------------------------------------------------------------------*/
 void ldl_mprove(
-		 float **A
-		, int n, float *d, float *b, float *x
-		, float *err, int *ok
+	float **A, int n, float *d, float *b, float *x, float *err, int *ok
 ){
 	double  sdp;		/* accumulate the r.h.s. in double precision */
 	float   *r,		/* the residual error		  	*/
@@ -167,8 +171,7 @@ PSEUDO_INV - calculate the pseudo-inverse of A ,
              A is m by n      Ai is m by n                              8oct01
 -----------------------------------------------------------------------------*/
 void pseudo_inv(
-		float **A, float **Ai
-		, int n, int m, float beta
+	float **A, float **Ai, int n, int m, float beta
 ){
 	float	*diag, *b, *x, **AtA, **AtAi, tmp, tr_AtA=0.0,
 		*vector(), **matrix(), error;
@@ -248,9 +251,7 @@ void pseudo_inv(
 /* ---------------------------------------------------------------------------
 REL_NORM -  compute the relative 2-norm between two vectors       26dec01 
 --------------------------------------------------------------------------- */
-float rel_norm( N, D, n )
-float	*N, *D;
-int	n;
+float rel_norm( float *N, float *D, int n )
 {
 	float	nN = 0.0, nD = 0.0;
 	int	i;
