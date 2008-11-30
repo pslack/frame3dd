@@ -1,7 +1,12 @@
 /** @file
 	Memory allocation functions from Numerical Recipes in C, by Press,
 	Cambridge University Press, 1988
-	http://www.nr.com/public-domain.html
+
+	From http://www.nr.com/public-domain.html:
+	"In general, the Numerical Recipes routines are NOT in the public domain,
+	and are NOT available for use without a valid license. However, a few
+	small parts of Numerical Recipes have been put into the public domain. 
+	These can be freely copied and redistributed." 
 */
 
 

@@ -1,10 +1,4 @@
-/*
- FRAME:
- Static and dynamic structural analysis of 2D and 3D frames and trusses with
- elastic and geometric stiffness.
- ---------------------------------------------------------------------------
- http://www.duke.edu/~hpgavin/frame/
- ---------------------------------------------------------------------------
+/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
  Copyright (C) 1992-2008  Henri P. Gavin
  
     This program is free software: you can redistribute it and/or modify
@@ -19,9 +13,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
-/**
+*//**
 	@file
 	Routines to solve the generalized eigenvalue problem
 
@@ -47,23 +39,28 @@
 
 /* forward declarations */
 
-static void jacobi ( float **K, float **M, float *E, float **V, int n );
+static void jacobi(
+	float **K, float **M, float *E, float **V, int n
+);
 
-static void rotate ( float **A, int n, float alpha, float beta , int i, int j );
+static void rotate(
+	float **A, int n, float alpha, float beta
+	, int i, int j
+);
 
 static float xAy1 ( float *x, float **A, float *y, int n, float *d );
 
-static void eigsort ( float *e, float **v, int n, int m );
-
 static void mat_mult1 ( float **A, float **B, float *u, int n, int j );
 
-static void mat_mult2 ( float **A, float **B, float **C, int I, int J, int K );
+void mat_mult2(float **A, float **B, float **C, int I, int J, int K);
 
-static void eigsort ( float *e, float **v, int n, int m );
+void eigsort (float *e, float **v, int n, int m);
 
-static int sturm ( float **K, float **M, int n, int m, float shift, float ws );
-
-static void check_non_negative( float x, int i );
+int sturm(
+	float **K, float **M
+	, int n, int m /* DoF and number of required modes	*/
+	, float shift, float ws
+);
 
 /*-----------------------------------------------------------------------------
 SUBSPACE - Find the lowest m eigen-values, w, and eigen-vectors, V, of the 
@@ -329,8 +326,7 @@ ROTATE - rotate an n by n symmetric matrix A such that A[i][j] = A[j][i] = 0
      A = P' * A * P  where diag(P) = 1 and P[i][j] = alpha and P[j][i] = beta.
      Since P is sparse, this matrix multiplcation can be done efficiently.  
 -----------------------------------------------------------------------------*/
-void rotate ( float **A, int n, float alpha, float beta, int i, int j )
-{
+void rotate ( float **A, int n, float alpha, float beta, int i, int j ){
 	float	Aii, Ajj, Aij,			/* elements of A	*/
 		*Ai, *Aj;		/* i-th and j-th rows of A */
 	int	k;
@@ -376,8 +372,8 @@ with shifting. 								15oct98
 void stodola (
 	float **K, float **M, /* stiffness and mass matrices */
 	int n, int m, /* DoF and number of required modes	*/
-	float *w, float **V, float tol, float shift, int *iter, int *ok )
-{
+	float *w, float **V, float tol, float shift, int *iter, int *ok
+){
 	float	**D,		/* the dynamics matrix, D = K^(-1) M	*/
 		d_min = 0.0,	/* minimum value of D[i][i]		*/
 		d_max = 0.0,	/* maximum value of D[i][i]		*/
@@ -529,8 +525,7 @@ void stodola (
 /*------------------------------------------------------------------------------
 xAy1  -  carry out vector-matrix-vector multiplication for symmetric A	7apr94
 ------------------------------------------------------------------------------*/
-float xAy1(float *x, float **A, float *y, int n, float *d)
-{
+float xAy1(float *x, float **A, float *y, int n, float *d){
 
 	float	xtAy = 0.0;
 	int	i,j;
@@ -551,8 +546,7 @@ float xAy1(float *x, float **A, float *y, int n, float *d)
 xtAx -  carry out matrix-matrix-matrix multiplication for symmetric A	7nov02
 	C = X' A X     C is J by J	X is N by J	A is N by N	 
 ------------------------------------------------------------------------------*/
-void xtAx(float **A, float **X, float **C, int N, int J)
-{
+void xtAx(float **A, float **X, float **C, int N, int J){
 
 	float	**AX;
 	int	i,j,k;
@@ -590,8 +584,7 @@ void xtAx(float **A, float **X, float **C, int N, int J)
 mat_mult1  -  matrix-matrix multiplication for symmetric A		27apr01
 		u = A * B(:,j)
 ------------------------------------------------------------------------------*/
-void mat_mult1 ( float **A, float **B, float *u, int n, int j ) 
-{
+void mat_mult1 ( float **A, float **B, float *u, int n, int j ){
         int     i, k;
 
         for (i=1; i<=n; i++)	u[i] = 0.0;
@@ -609,8 +602,7 @@ void mat_mult1 ( float **A, float **B, float *u, int n, int j )
 /*------------------------------------------------------------------------------
 mat_mult2  -  matrix-matrix multiplication 	C = A * B		27apr01
 ------------------------------------------------------------------------------*/
-void mat_mult2 ( float **A, float **B, float **C, int I, int J, int K )
-{
+void mat_mult2 ( float **A, float **B, float **C, int I, int J, int K ){
 	int     i, j, k;
 
 	for (i=1; i<=I; i++)  
@@ -632,8 +624,7 @@ this routine sorts the eigenvalues into ascending order, and rearranges
 the columns of v correspondingly.  The method is straight insertion.
 Adapted from Numerical Recipes in C, Ch 11
 ------------------------------------------------------------------------------*/
-void eigsort ( float *e, float **v, int n, int m )
-{
+void eigsort ( float *e, float **v, int n, int m ){
 	int	k,j,i;
 	float   p=0;
 
@@ -704,8 +695,7 @@ int sturm( float **K, float **M, int n, int m, float shift, float ws )
 /*----------------------------------------------------------------------------
 CHECK_NON_NEGATIVE -  checks that a value is non-negative
 -----------------------------------------------------------------------------*/
-void check_non_negative( float x, int i)
-{
+void check_non_negative( float x, int i){
 	if ( x <= 1.0e-100 )  {
 		printf(" value %e is less than or equal to zero ", x );
 		printf(" i = %d \n", i );

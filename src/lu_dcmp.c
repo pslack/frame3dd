@@ -1,24 +1,18 @@
-/*
- FRAME3DD:
- Static and dynamic structural analysis of 2D and 3D frames and trusses with
- elastic and geometric stiffness.
- ---------------------------------------------------------------------------
- http://www.duke.edu/~hpgavin/frame/
- ---------------------------------------------------------------------------
- Copyright (C) 1992-2008  Henri P. Gavin
- 
-    FRAME3DD is free software: you can redistribute it and/or modify
+/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
+	Copyright (C) 1992-2008  Henri P. Gavin
+
+    This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    FRAME3DD is distributed in the hope that it will be useful,
+    This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *//** @file
 	Routines to perform L U - decomposition 
 */
@@ -41,12 +35,12 @@ LU_DCMP  -  Solves [A]{x} = {b} simply and efficiently by performing an
 
 ------------------------------------------------------------------------------*/
 void lu_dcmp (
-	float **A, /* the system matrix, and it's LU- reduction		*/
-	int n,	   /* the dimension of the matrix			*/	
-	float *b,  /* the right hand side vector, and the solution vector   */
-	int reduce,/* 1: do a forward reduction; 0: don't do the reduction  */
-	int solve, /* 1: do a back substitution for {x};  0: do no bk-sub'n */
-	int *pd	   /* 1: positive diagonal  and  successful LU decomp'n	*/
+		float **A /* the system matrix, and it's LU- reduction		*/
+		, int n /* the dimension of the matrix				*/	
+		, float *b /* the right hand side vector, and the solution vector	*/
+		, int reduce /* 1: do a forward reduction; 0: don't do the reduction */
+		, int solve /* 1: do a back substitution for {x};  0: do no bk-sub'n */
+		, int *pd /* 1: positive diagonal  and  successful LU decomp'n	*/
 ){
 	float	pivot;		/* a diagonal element of [A]		*/
 	int	i, j, k;

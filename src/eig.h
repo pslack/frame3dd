@@ -1,10 +1,4 @@
-/*
- FRAME:
- Static and dynamic structural analysis of 2D and 3D frames and trusses with
- elastic and geometric stiffness.
- ---------------------------------------------------------------------------
- http://www.duke.edu/~hpgavin/frame/
- ---------------------------------------------------------------------------
+/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
  Copyright (C) 1992-2008  Henri P. Gavin
  
     This program is free software: you can redistribute it and/or modify
@@ -19,9 +13,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
-/** @file
+*//** @file
 	Routines to solve the generalized eigenvalue problem
 
 	H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  1 March 2007
@@ -49,6 +41,11 @@ void subspace(
 );
 
 
+/**
+	carry out matrix-matrix-matrix multiplication for symmetric A
+	C = X' A X     C is J by J	X is N by J	A is N by N
+*/
+void xtAx(float **A, float **X, float **C, int N, int J);
 
 /**
 	calculate the lowest m eigen-values and eigen-vectors of the
@@ -59,16 +56,10 @@ void subspace(
 	@param m number of required modes
 */
 void stodola(
-	float **K, float **M, int n, int m, float *w, float **V, float tol, float shift, int *iter, int *ok );
-
-
-
-/**
-	carry out matrix-matrix-matrix multiplication for symmetric A
-	C = X' A X     C is J by J	X is N by J	A is N by N
-*/
-void xtAx(float **A, float **X, float **C, int N, int J);
-
+	float **K, float **M
+	, int n, int m
+	, float *w, float **V, float tol, float shift, int *iter, int *ok
+);
 
 #endif /* FRAME_EIG_H */
 
