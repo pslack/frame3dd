@@ -243,4 +243,4 @@ if platform.system()=="Windows":
 env.Default(env['PROGS'] + specfile)
 
 
-# vim: set syntax=python:
+# vim: set syntax=python

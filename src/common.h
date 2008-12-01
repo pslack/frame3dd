@@ -26,6 +26,7 @@
 #ifndef FRAME_COMMON_H
 #define FRAME_COMMON_H
 
+
 #ifndef VERSION
 # define VERSION "20080909"
 #endif
@@ -36,11 +37,9 @@
 #endif
 
 
-
 #define Zvert 1		/* Zvert=0: Y axis is vertical ... rot Z, then rot Y */
 			/* Zvert=1: Z axis is vertical ... rot Y, then rot Z */
 
-/* also modify all fscanf lines ...     :1,$ s/%f/%lf/g    :1,$ s/%lf/%f/g    */
 
 #endif /* FRAME_COMMON_H */
 
