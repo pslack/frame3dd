@@ -39,8 +39,8 @@ exB.plt                         % plot file name
 0				% number of loaded joints
 2                               % number of distributed loads
 % M    Wx   Wy   Wz
-  2    0    0.0  0
-  1    0    0    0.0
+  2    0    0.1  0
+  1    0    0    0.1
 0                               % number of internal concentrated loads
 1                               % number of members with temperature loads
 %M  alpha   hy   hz   Ty+  Ty-  Tz+  Tz-
@@ -89,14 +89,14 @@ exB.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://www.duke.edu/~hpgavin/frame/ 
+FRAME3DD version: 20080909               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 pyramid-shaped frame --- static and dynamic analysis 
-Tue Sep  9 21:28:04 2008
+Mon Dec  1 13:06:28 2008
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;
 4 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;
@@ -137,12 +137,13 @@ L O A D   C A S E   2   O F   3  ...
  1 members with temperature loads
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
-     1      19.969      14.977      16.641    -835.008     373.744     665.640
-     2     -19.969     -14.977     -16.641     835.008    -373.744    -665.640
+     1      21.378      19.188      24.141    -877.323     500.272     890.987
+     2     -23.969     -17.977      -9.141     997.508    -590.411    -665.640
+     3       5.408       7.211       0.000    -120.185      90.139    -225.347
  U N I F O R M   M E M B E R   L O A D S					(local)
   Member      Wx               Wy               Wz
-     2       0.00000000       0.00000000       0.00000000
-     1       0.00000000       0.00000000       0.00000000
+     2       0.00000000       0.10000000       0.00000000
+     1       0.00000000       0.00000000       0.10000000
  M E M B E R   T E M P E R A T U R E   C H A N G E S			(local)
   Member    coef      hy        hz        Ty+       Ty-       Tz+       Tz-
      1  1.00e-04     1.500     1.500    80.000    20.000    30.000   -10.000
@@ -193,24 +194,24 @@ L O A D   C A S E   2   O F   3  ...
 
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1    0.221507    0.353911    0.237935   -0.053137    0.019215    0.045722
+     1    0.242338    0.433439    0.345171   -0.056188    0.025442    0.061201
 M E M B E R   E N D   F O R C E S					(local)
   Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
-     1      1      4.700c      1.952      2.555      0.805    491.017   -562.787
-     1      2     -4.700c     -1.952     -2.555     -0.805   -951.712    914.673
-     2      1     -8.943t      0.462      1.004   -136.532   -117.990     50.616
-     2      3      8.943t     -0.462     -1.004    136.532    -63.043     32.714
-     3      1     10.658c      0.821     -2.317    -99.284    287.479     97.134
-     3      4    -10.658c     -0.821      2.317     99.284    130.208     50.852
-     4      1     -5.699t      2.311     -0.766     38.053     96.486    283.732
-     4      5      5.699t     -2.311      0.766    -38.053     41.538    132.812
+     1      1     -1.571t      2.374     -6.056    -17.957    714.258   -511.211
+     1      2      1.571t     -2.374    -11.972     17.957  -1247.464    939.266
+     2      1    -13.676t     -8.176      0.876   -163.181   -101.233   -175.905
+     2      3     13.676t     -9.851     -0.876    163.181    -56.772    326.886
+     3      1     10.330c      1.337     -2.612   -113.862    325.379    158.749
+     3      4    -10.330c     -1.337      2.612    113.862    145.435     82.297
+     4      1     -7.566t      2.874     -0.530     31.362     70.037    352.609
+     4      5      7.566t     -2.874      0.530    -31.362     25.576    165.511
 R E A C T I O N S							(global)
   Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
-     2       3.091       4.758       0.481    -976.387     457.350     761.501
-     3       5.230      -4.500      -5.796      67.573    -129.483     -48.515
-     4      -5.574      -5.207       7.840      10.529     170.657     -12.761
-     5      -2.747       4.948      -2.524     -58.530      -8.026     131.614
-R M S   E Q U I L I B R I U M    E R R O R: 1.156e-16
+     2       2.842       5.099     -10.833   -1177.240     676.400     771.556
+     3       2.803     -14.417      -8.315     219.615    -235.676     181.469
+     4      -4.915      -5.358       7.903      25.050     200.582       5.316
+     5      -3.547       6.253      -3.755     -67.917      18.968     155.110
+R M S   E Q U I L I B R I U M    E R R O R: 1.201e-16
 
 L O A D   C A S E   3   O F   3  ... 
 

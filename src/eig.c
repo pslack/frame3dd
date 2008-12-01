@@ -1,18 +1,24 @@
-/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
+/*
+ FRAME3DD:
+ Static and dynamic structural analysis of 2D and 3D frames and trusses with
+ elastic and geometric stiffness.
+ ---------------------------------------------------------------------------
+ http://www.duke.edu/~hpgavin/frame/
+ ---------------------------------------------------------------------------
  Copyright (C) 1992-2008  Henri P. Gavin
  
-    This program is free software: you can redistribute it and/or modify
+    FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
+    FRAME3DD is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//**
 	@file
 	Routines to solve the generalized eigenvalue problem
@@ -28,10 +34,7 @@
 #include <stdlib.h>
 
 #include "nrutil.h"
-
-/* must be included *after* nrutil.h because of #define float --> double */
-#include "common.h"
-
+#include "common.h" 
 #include "eig.h"
 #include "ldl_dcmp.h"
 
@@ -39,28 +42,19 @@
 
 /* forward declarations */
 
-static void jacobi(
-	float **K, float **M, float *E, float **V, int n
-);
+static void jacobi( double **K, double **M, double *E, double **V, int n );
 
-static void rotate(
-	float **A, int n, float alpha, float beta
-	, int i, int j
-);
+static void rotate ( double **A, int n,double alpha, double beta, int i,int j);
 
-static float xAy1 ( float *x, float **A, float *y, int n, float *d );
+static double xAy1 ( double *x, double **A, double *y, int n, double *d );
 
-static void mat_mult1 ( float **A, float **B, float *u, int n, int j );
+static void mat_mult1 ( double **A, double **B, double *u, int n, int j );
 
-void mat_mult2(float **A, float **B, float **C, int I, int J, int K);
+void mat_mult2 ( double **A, double **B, double **C, int I, int J, int K);
 
-void eigsort (float *e, float **v, int n, int m);
+void eigsort ( double *e, double **v, int n, int m);
 
-int sturm(
-	float **K, float **M
-	, int n, int m /* DoF and number of required modes	*/
-	, float shift, float ws
-);
+int sturm ( double **K, double **M, int n, int m, double shift, double ws );
 
 /*-----------------------------------------------------------------------------
 SUBSPACE - Find the lowest m eigen-values, w, and eigen-vectors, V, of the 
@@ -75,14 +69,14 @@ where
  Bathe, Finite Element Procecures in Engineering Analysis, Prentice Hall, 1982
 -----------------------------------------------------------------------------*/
 void subspace(
-	float **K, float **M
-	, int n, int m /**< DoF and number of required modes	*/
-	, float *w, float **V
-	, float tol, float shift
-	, int *iter /**< sub-space iterations */
-	, int *ok /**< Sturm check result */
+	double **K, double **M,
+	int n, int m, /**< DoF and number of required modes	*/
+	double *w, double **V,
+	double tol, double shift,
+	int *iter, /**< sub-space iterations */
+	int *ok /**< Sturm check result */
 ){
-	float	**Kb, **Mb, **Xb, **Qb, *d, *u, *v, km, km_old,
+	double	**Kb, **Mb, **Xb, **Qb, *d, *u, *v, km, km_old,
 		error=1.0, w_old = 0.0;
 
 	int	i=0, j=0, k=0,
@@ -98,13 +92,13 @@ void subspace(
 		exit(1);
 	}
 
-	d  = vector(1,n);
-	u  = vector(1,n);
-	v  = vector(1,n);
-	Kb = matrix(1,m,1,m);
-	Mb = matrix(1,m,1,m);
-	Xb = matrix(1,n,1,m);
-	Qb = matrix(1,m,1,m);
+	d  = dvector(1,n);
+	u  = dvector(1,n);
+	v  = dvector(1,n);
+	Kb = dmatrix(1,m,1,m);
+	Mb = dmatrix(1,m,1,m);
+	Xb = dmatrix(1,n,1,m);
+	Qb = dmatrix(1,m,1,m);
 	idx = ivector(1,m);
 
 	for (i=1; i<=m; i++) {
@@ -115,7 +109,7 @@ void subspace(
 
 	for (i=1; i<=n; i++) for (j=1; j<=m; j++) Xb[i][j] = V[i][j] = 0.0;
 
-	modes = (int) ( (float)(0.5*m) > (float)(m-8.0) ? (int)(m/2.0) : m-8 );
+	modes = (int) ( (double)(0.5*m) > (double)(m-8.0) ? (int)(m/2.0) : m-8 );
 
 					/* shift eigen-values by this much */
 	for (i=1;i<=n;i++) for (j=i;j<=n;j++) K[i][j] += shift*M[i][j];
@@ -236,10 +230,10 @@ void subspace(
 
 	for (i=1;i<=n;i++) for (j=i;j<=n;j++) K[i][j] -= shift*M[i][j];
 
-	free_matrix(Kb,1,m,1,m);
-	free_matrix(Mb,1,m,1,m);
-	free_matrix(Xb,1,n,1,m);
-	free_matrix(Qb,1,m,1,m);
+	free_dmatrix(Kb,1,m,1,m);
+	free_dmatrix(Mb,1,m,1,m);
+	free_dmatrix(Xb,1,n,1,m);
+	free_dmatrix(Qb,1,m,1,m);
 
 	return;
 }
@@ -257,11 +251,11 @@ void subspace(
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  1 March 2007
  Bathe, Finite Element Procecures in Engineering Analysis, Prentice Hall, 1982
 -----------------------------------------------------------------------------*/
-void jacobi ( float **K, float **M, float *E, float **V, int n )
+void jacobi ( double **K, double **M, double *E, double **V, int n )
 {
 	int	iter,
 		d,i,j,k;
-	float	Kii, Kjj, Kij, Mii, Mjj, Mij, Vki, Vkj, 
+	double	Kii, Kjj, Kij, Mii, Mjj, Mij, Vki, Vkj, 
 		alpha, beta, gamma,
 		s, tol=0.0;
 
@@ -326,14 +320,14 @@ ROTATE - rotate an n by n symmetric matrix A such that A[i][j] = A[j][i] = 0
      A = P' * A * P  where diag(P) = 1 and P[i][j] = alpha and P[j][i] = beta.
      Since P is sparse, this matrix multiplcation can be done efficiently.  
 -----------------------------------------------------------------------------*/
-void rotate ( float **A, int n, float alpha, float beta, int i, int j ){
-	float	Aii, Ajj, Aij,			/* elements of A	*/
+void rotate ( double **A, int n, double alpha, double beta, int i, int j ){
+	double	Aii, Ajj, Aij,			/* elements of A	*/
 		*Ai, *Aj;		/* i-th and j-th rows of A */
 	int	k;
 
 
-	Ai = vector(1,n);
-	Aj = vector(1,n);
+	Ai = dvector(1,n);
+	Aj = dvector(1,n);
 
 	for (k=1; k<=n; k++) {
 		Ai[k] = A[i][k];
@@ -355,8 +349,8 @@ void rotate ( float **A, int n, float alpha, float beta, int i, int j ){
 	}
 	A[j][i] = A[i][j] = 0;
 
-	free_vector(Ai,1,n);
-	free_vector(Aj,1,n);
+	free_dvector(Ai,1,n);
+	free_dvector(Aj,1,n);
 
 	return;
 }
@@ -370,11 +364,11 @@ with shifting. 								15oct98
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  12 Jul 2001
 ------------------------------------------------------------------------------*/
 void stodola (
-	float **K, float **M, /* stiffness and mass matrices */
+	double **K, double **M, /* stiffness and mass matrices */
 	int n, int m, /* DoF and number of required modes	*/
-	float *w, float **V, float tol, float shift, int *iter, int *ok
+	double *w, double **V, double tol, double shift, int *iter, int *ok
 ){
-	float	**D,		/* the dynamics matrix, D = K^(-1) M	*/
+	double	**D,		/* the dynamics matrix, D = K^(-1) M	*/
 		d_min = 0.0,	/* minimum value of D[i][i]		*/
 		d_max = 0.0,	/* maximum value of D[i][i]		*/
 		d_old = 0.0,	/* previous extreme value of D[i][i]	*/
@@ -390,13 +384,13 @@ void stodola (
 		disp = 0,	/* 1: display convergence error; 0: dont*/
 		i,j,k;
 
-	D  = matrix(1,n,1,n);
-	d  = vector(1,n);
-	u  = vector(1,n);
-	v  = vector(1,n);
-	c  = vector(1,m);
+	D  = dmatrix(1,n,1,n);
+	d  = dvector(1,n);
+	u  = dvector(1,n);
+	v  = dvector(1,n);
+	c  = dvector(1,m);
 
-	modes = (int) ( (float)(0.5*m) > (float)(m-8) ? (int)(m/2.0) : m-8 );
+	modes = (int) ( (double)(0.5*m) > (double)(m-8) ? (int)(m/2.0) : m-8 );
 
 					/* shift eigen-values by this much */
 	for (i=1;i<=n;i++) for (j=i;j<=n;j++) K[i][j] += shift*M[i][j];
@@ -426,7 +420,7 @@ void stodola (
 	}
 
 #ifdef EIG_DEBUG
-	save_matrix ( n, n, D, "D" );		/* save dynamics matrix */
+	save_dmatrix ( n, n, D, "D" );		/* save dynamics matrix */
 #endif
 
 	*iter = 0;
@@ -509,14 +503,14 @@ void stodola (
 	*ok = sturm ( K, M, n, m, shift, w[modes]+tol );
 
 #ifdef EIG_DEBUG
-	save_matrix ( n, m, V, "V" );	/* save mode shape matrix */
+	save_dmatrix ( n, m, V, "V" );	/* save mode shape matrix */
 #endif
 
-	free_matrix(D,1,n,1,n);
-	free_vector(d,1,n);
-	free_vector(u,1,n);
-	free_vector(v,1,n);
-	free_vector(c,1,m);
+	free_dmatrix(D,1,n,1,n);
+	free_dvector(d,1,n);
+	free_dvector(u,1,n);
+	free_dvector(v,1,n);
+	free_dvector(c,1,m);
 
 	return;
 }
@@ -525,9 +519,9 @@ void stodola (
 /*------------------------------------------------------------------------------
 xAy1  -  carry out vector-matrix-vector multiplication for symmetric A	7apr94
 ------------------------------------------------------------------------------*/
-float xAy1(float *x, float **A, float *y, int n, float *d){
+double xAy1(double *x, double **A, double *y, int n, double *d){
 
-	float	xtAy = 0.0;
+	double	xtAy = 0.0;
 	int	i,j;
 
 	for (i=1; i<=n; i++) {				/* d = A y	*/
@@ -546,13 +540,13 @@ float xAy1(float *x, float **A, float *y, int n, float *d){
 xtAx -  carry out matrix-matrix-matrix multiplication for symmetric A	7nov02
 	C = X' A X     C is J by J	X is N by J	A is N by N	 
 ------------------------------------------------------------------------------*/
-void xtAx(float **A, float **X, float **C, int N, int J){
+void xtAx(double **A, double **X, double **C, int N, int J){
 
-	float	**AX;
+	double	**AX;
 	int	i,j,k;
 	/* ,l; -- unused */
 
-	AX = matrix(1,N,1,J);
+	AX = dmatrix(1,N,1,J);
 
 	for (i=1; i<=J; i++)	for (j=1; j<=J; j++)	 C[i][j] = 0.0;
 	for (i=1; i<=N; i++)	for (j=1; j<=J; j++)	AX[i][j] = 0.0;
@@ -575,7 +569,7 @@ void xtAx(float **A, float **X, float **C, int N, int J){
                 for (j=i; j<=J; j++) 
                         C[i][j] = C[j][i] = 0.5 * ( C[i][j] + C[j][i] );
 
-	free_matrix(AX,1,N,1,J);
+	free_dmatrix(AX,1,N,1,J);
 	return;
 }
 
@@ -584,7 +578,7 @@ void xtAx(float **A, float **X, float **C, int N, int J){
 mat_mult1  -  matrix-matrix multiplication for symmetric A		27apr01
 		u = A * B(:,j)
 ------------------------------------------------------------------------------*/
-void mat_mult1 ( float **A, float **B, float *u, int n, int j ){
+void mat_mult1 ( double **A, double **B, double *u, int n, int j ){
         int     i, k;
 
         for (i=1; i<=n; i++)	u[i] = 0.0;
@@ -602,7 +596,7 @@ void mat_mult1 ( float **A, float **B, float *u, int n, int j ){
 /*------------------------------------------------------------------------------
 mat_mult2  -  matrix-matrix multiplication 	C = A * B		27apr01
 ------------------------------------------------------------------------------*/
-void mat_mult2 ( float **A, float **B, float **C, int I, int J, int K ){
+void mat_mult2 ( double **A, double **B, double **C, int I, int J, int K ){
 	int     i, j, k;
 
 	for (i=1; i<=I; i++)  
@@ -624,9 +618,9 @@ this routine sorts the eigenvalues into ascending order, and rearranges
 the columns of v correspondingly.  The method is straight insertion.
 Adapted from Numerical Recipes in C, Ch 11
 ------------------------------------------------------------------------------*/
-void eigsort ( float *e, float **v, int n, int m ){
+void eigsort ( double *e, double **v, int n, int m ){
 	int	k,j,i;
-	float   p=0;
+	double   p=0;
 
 	for (i=1;i<m;i++) {
 		k=i;
@@ -661,14 +655,14 @@ STURM  -  Determine the number of eigenvalues, w, of the general eigen-problem
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  30 Aug 2001
  Bathe, Finite Element Procecures in Engineering Analysis, Prentice Hall, 1982
 -----------------------------------------------------------------------------*/
-int sturm( float **K, float **M, int n, int m, float shift, float ws )
+int sturm( double **K, double **M, int n, int m, double shift, double ws )
 {
-	float	ws_shift, *d;
+	double	ws_shift, *d;
 	int	ok=0, i,j, modes;
 	
-	d  = vector(1,n);
+	d  = dvector(1,n);
 
-	modes = (int) ( (float)(0.5*m) > (float)(m-8.0) ? (int)(m/2.0) : m-8 );
+	modes = (int) ( (double)(0.5*m) > (double)(m-8.0) ? (int)(m/2.0) : m-8 );
 
 	ws_shift = ws + shift;			/* shift [K]	*/
 	for (i=1; i<=n; i++) for (j=i; j<=n; j++) K[i][j] -= ws_shift*M[i][j];
@@ -686,7 +680,7 @@ int sturm( float **K, float **M, int n, int m, float shift, float ws )
 
 	for (i=1; i<=n; i++) for (j=i; j<=n; j++) K[i][j] += ws_shift*M[i][j];
 
-	free_vector(d,1,n);
+	free_dvector(d,1,n);
 
 	return ok;
 }
@@ -695,7 +689,8 @@ int sturm( float **K, float **M, int n, int m, float shift, float ws )
 /*----------------------------------------------------------------------------
 CHECK_NON_NEGATIVE -  checks that a value is non-negative
 -----------------------------------------------------------------------------*/
-void check_non_negative( float x, int i){
+void check_non_negative( double x, int i)
+{
 	if ( x <= 1.0e-100 )  {
 		printf(" value %e is less than or equal to zero ", x );
 		printf(" i = %d \n", i );

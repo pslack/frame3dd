@@ -1,18 +1,24 @@
-/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
-	Copyright (C) 1992-2008  Henri P. Gavin
-
-    This program is free software: you can redistribute it and/or modify
+/*
+ FRAME3DD:
+ Static and dynamic structural analysis of 2D and 3D frames and trusses with
+ elastic and geometric stiffness.
+ ---------------------------------------------------------------------------
+ http://www.duke.edu/~hpgavin/frame/
+ ---------------------------------------------------------------------------
+ Copyright (C) 1992-2008  Henri P. Gavin
+ 
+    FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
+    FRAME3DD is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//**
 	@file
 	Coordinate transformations for the FRAME3DD solver API.
@@ -20,8 +26,10 @@
 #ifndef FRAME_COORDTRANS_H
 #define FRAME_COORDTRANS_H
 
-#include "common.h"
 #include "microstran/vec3.h"
+
+#include "common.h" 
+
 
 /**
 	COORD_TRANS -  evaluate the 3D coordinate transformation coefficients 1dec04
@@ -39,12 +47,12 @@
 	Q=TF;   U=TD;   T'T=I;   Q=kU;   TF=kTD;   T'TF=T'kTD;   T'kT = K;   F=KD
 */
 void coord_trans(
-	vec3 *pos
-	, float L
-	, int j1, int j2
-	, float *t1, float *t2, float *t3, float *t4, float *t5
-	, float *t6, float *t7, float *t8, float *t9
-	, float p /**< the roll angle (radians) */
+	vec3 *pos, 
+	double L, 
+	int j1, int j2, 
+	double *t1, double *t2, double *t3, double *t4, double *t5, 
+	double *t6, double *t7, double *t8, double *t9, 
+	double p /**< the roll angle (radians) */
 );
 
 #endif /* FRAME_COORDTRANS_H */

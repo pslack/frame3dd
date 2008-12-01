@@ -1,18 +1,24 @@
-/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
-	Copyright (C) 1992-2008  Henri P. Gavin
-
-    This program is free software: you can redistribute it and/or modify
+/*
+ FRAME3DD:
+ Static and dynamic structural analysis of 2D and 3D frames and trusses with
+ elastic and geometric stiffness.
+ ---------------------------------------------------------------------------
+ http://www.duke.edu/~hpgavin/frame/
+ ---------------------------------------------------------------------------
+ Copyright (C) 1992-2008  Henri P. Gavin
+ 
+    FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
+    FRAME3DD is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//** @file
 	Main FRAME3DD program driver
 *//** @mainpage
@@ -44,15 +50,11 @@
 
 /* must come after the above, because of the sneaky #defines in common.h */
 #include "frame3dd.h"
-#include "common.h"
+#include "common.h" 
 #include "coordtrans.h"
 #include "ldl_dcmp.h"
 #include "eig.h"
-#include "frm_io.h"
-
-#ifndef VERSION
-# define VERSION "unknown"
-#endif
+#include "frame3dd_io.h"
 
 #define _NL_ 128
 
@@ -66,10 +68,9 @@ int main(int argc, char *argv[]){
 
 	FILE	*fp;		/* input/output file pointer		*/
 
-	vec3 *pos;/* joint coordinates (global)		*/
+	vec3	*pos;		/* X,Y,Z joint coordinates (global)	*/
 
-	float
-		*r,		/* joint size radius, for finite sizes	*/
+	double *r,		/* joint size radius, for finite sizes	*/
 		**K, **Ks,	/* global stiffness matrix		*/
 		traceK = 0.0,	/* trace of the global stiffness matrix	*/
 		**M = NULL,	/* global mass matrix			*/
@@ -201,54 +202,54 @@ int main(int argc, char *argv[]){
 
 	pos = (vec3 *)malloc(sizeof(vec3)*(1+nJ));
 
-	r   =  vector(1,nJ);	/* rigid radius around each joint	*/
-	L   =  vector(1,nM);	/* length of each element		*/
-	Le  =  vector(1,nM);	/* effective length of each element	*/
+	r   = dvector(1,nJ);	/* rigid radius around each joint	*/
+	L   = dvector(1,nM);	/* length of each element		*/
+	Le  = dvector(1,nM);	/* effective length of each element	*/
 
 	J1  = ivector(1,nM);	/* joint #1 of each element		*/
 	J2  = ivector(1,nM);	/* joint #2 of each element		*/
 	R   = ivector(1,DoF);	/* reaction force at each degree of freedom */
 
-	Ax  =  vector(1,nM);	/* cross section area of each element	*/
-	Asy =  vector(1,nM);	/* shear area in local y direction 	*/
-	Asz =  vector(1,nM);	/* shear area in local z direction	*/
-	J   =  vector(1,nM);	/* torsional moment of inertia 		*/
-	Iy  =  vector(1,nM);	/* bending moment of inertia about local y-axis	*/
-	Iz  =  vector(1,nM);	/* bending moment of inertia about local z-axis */
-	E   =  vector(1,nM);	/* Young's modulus of elasticity	*/
-	G   =  vector(1,nM);	/* shear modulus of elasticity		*/
-	p   =  vector(1,nM);	/* member rotation angle about local x axis */
+	Ax  = dvector(1,nM);	/* cross section area of each element	*/
+	Asy = dvector(1,nM);	/* shear area in local y direction 	*/
+	Asz = dvector(1,nM);	/* shear area in local z direction	*/
+	J   = dvector(1,nM);	/* torsional moment of inertia 		*/
+	Iy  = dvector(1,nM);	/* bending moment of inertia about local y-axis	*/
+	Iz  = dvector(1,nM);	/* bending moment of inertia about local z-axis */
+	E   = dvector(1,nM);	/* Young's modulus of elasticity	*/
+	G   = dvector(1,nM);	/* shear modulus of elasticity		*/
+	p   = dvector(1,nM);	/* member rotation angle about local x axis */
 
-	W   =  D3matrix(1,nL,1,nM,1,4);	/* distributed load on each member */
-	P   =  D3matrix(1,nL,1,nM,1,5); /* internal point load each member */
-	T   =  D3matrix(1,nL,1,nM,1,8); /* internal temp change each member */
+	W   =  D3dmatrix(1,nL,1,nM,1,4); /* distributed load on each member */
+	P   =  D3dmatrix(1,nL,1,nM,1,5); /* internal point load each member */
+	T   =  D3dmatrix(1,nL,1,nM,1,8); /* internal temp change each member */
 
-	Fo_mech  =  matrix(1,nL,1,DoF);	/* mechanical load vector	*/
-	Fo_temp  =  matrix(1,nL,1,DoF);	/* temperature load vector	*/
-	Fo_temp_lc =  vector(1,DoF); /* external load vector, load case lc */
-	Fo_mech_lc =  vector(1,DoF); /* external load vector, load case lc */
+	Fo_mech  = dmatrix(1,nL,1,DoF);	/* mechanical load vector	*/
+	Fo_temp  = dmatrix(1,nL,1,DoF);	/* temperature load vector	*/
+	Fo_temp_lc = dvector(1,DoF); /* external load vector, load case lc */
+	Fo_mech_lc = dvector(1,DoF); /* external load vector, load case lc */
 
-	Fo       =  matrix(1,nL,1,DoF);	/* external load vector		*/
-	Fo_lc    =  vector(1,DoF);	/* external load vector, load case lc */
-	F_lc     =  vector(1,DoF);	/* external load vector with react'ns */
+	Fo       = dmatrix(1,nL,1,DoF);	/* external load vector		*/
+	Fo_lc    = dvector(1,DoF);	/* external load vector, load case lc */
+	F_lc     = dvector(1,DoF);	/* external load vector with react'ns */
 
-	feF_mech =  D3matrix(1,nL,1,nM,1,12);	/* fixed end forces due to mechanical loads */
-	feF_temp =  D3matrix(1,nL,1,nM,1,12);	/* fixed end forces due to temperature loads */
-	feF      =  matrix(1,nM,1,12);	/* fixed end forces	*/
+	feF_mech =  D3dmatrix(1,nL,1,nM,1,12);	/* fixed end forces due to mechanical loads */
+	feF_temp =  D3dmatrix(1,nL,1,nM,1,12);	/* fixed end forces due to temperature loads */
+	feF      = dmatrix(1,nM,1,12);	/* fixed end forces	*/
 
-	K   =  matrix(1,DoF,1,DoF);	/* global stiffness matrix	*/
-	Q   =  matrix(1,nM,1,12);	/* end forces for each member	*/
+	K   = dmatrix(1,DoF,1,DoF);	/* global stiffness matrix	*/
+	Q   = dmatrix(1,nM,1,12);	/* end forces for each member	*/
 
-	D   =  vector(1,DoF);	/* displacments of each joint		*/
-	dD  =  vector(1,DoF);	/* incremental displacement  of each joint */
-	Dp  =  vector(1,DoF);	/* prescribed displacement of each joint */
+	D   = dvector(1,DoF);	/* displacments of each joint		*/
+	dD  = dvector(1,DoF);	/* incremental displacement  of each joint */
+	Dp  = dvector(1,DoF);	/* prescribed displacement of each joint */
 
-	d   =  vector(1,nM);	/* mass density for each member		*/
-	BMs =  vector(1,nM);	/* lumped beam mass for each member	*/
-	JMs =  vector(1,nJ);	/* joint mass for each joint		*/
-	JMx =  vector(1,nJ);	/* joint inertia about global X axis	*/
-	JMy =  vector(1,nJ);	/* joint inertia about global Y axis	*/
-	JMz =  vector(1,nJ);	/* joint inertia about global Z axis	*/
+	d   = dvector(1,nM);	/* mass density for each member		*/
+	BMs = dvector(1,nM);	/* lumped beam mass for each member	*/
+	JMs = dvector(1,nJ);	/* joint mass for each joint		*/
+	JMx = dvector(1,nJ);	/* joint inertia about global X axis	*/
+	JMy = dvector(1,nJ);	/* joint inertia about global Y axis	*/
+	JMz = dvector(1,nJ);	/* joint inertia about global Z axis	*/
 
 	q = ivector(1,DoF); 	/* vector of condensed degrees of freedom */
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
@@ -307,7 +308,7 @@ int main(int argc, char *argv[]){
 	  );
 
 #ifdef MATRIX_DEBUG
-	  save_matrix ( DoF, DoF, K, "Kf" );	     /* free stiffness matrix */
+	  save_dmatrix ( DoF, DoF, K, "Kf" );	     /* free stiffness matrix */
 #endif
 
 	  /* apply temperature loads first ... */
@@ -334,7 +335,7 @@ int main(int argc, char *argv[]){
 	  }
 
 //#ifdef MATRIX_DEBUG
-	  save_ut_matrix ( DoF, K, "Ks" );	   /* static stiffness matrix */
+	  save_ut_dmatrix ( DoF, K, "Ks" );	   /* static stiffness matrix */
 //#endif
 
 
@@ -342,8 +343,8 @@ int main(int argc, char *argv[]){
 
 	  /* Newton-Raphson iterations for geometric non-linearity */
 	  if ( geom ) {
-		Fe  =  vector( 1, DoF );	/* force equilibrium error  */
-		Ks  =  matrix( 1, DoF, 1, DoF );
+		Fe  = dvector( 1, DoF );	/* force equilibrium error  */
+		Ks  = dmatrix( 1, DoF, 1, DoF );
 		for (i=1;i<=DoF;i++) /* initialize Broyden secant stiffness */
 			for(j=i;j<=DoF;j++)
 				Ks[i][j]=Ks[j][i]=K[i][j];
@@ -398,8 +399,8 @@ int main(int argc, char *argv[]){
 	        fprintf(stderr," RMS equilibrium precision: %8.2e \n", error);
 	  }
 	  if ( geom ) {
-		free_vector(Fe, 1, DoF );
-		free_matrix(Ks, 1, DoF, 1, DoF );
+		free_dvector(Fe, 1, DoF );
+		free_dmatrix(Ks, 1, DoF, 1, DoF );
 	  }
 
 	  for (i=1; i<=12; i++)
@@ -431,15 +432,15 @@ int main(int argc, char *argv[]){
 
 		calc_modes = (modes+8)<(2*modes) ? modes+8 : 2*modes;
 
-		M   =  matrix(1,DoF,1,DoF);
-		f   =  vector(1,calc_modes);
-		V   =  matrix(1,DoF,1,calc_modes);
+		M   = dmatrix(1,DoF,1,DoF);
+		f   = dvector(1,calc_modes);
+		V   = dmatrix(1,DoF,1,calc_modes);
 
 		assemble_M ( M, DoF, nJ, nM, pos, r, L, J1, J2, Ax, J, Iy, Iz, p,
 					d, BMs, JMs, JMx, JMy, JMz, lump );
 
 #ifdef MATRIX_DEBUG
-		save_matrix ( DoF, DoF, M, "Mf" );	/* free mass matrix */
+		save_dmatrix ( DoF, DoF, M, "Mf" );	/* free mass matrix */
 #endif
 
 		for (j=1; j<=DoF; j++) {
@@ -457,8 +458,8 @@ int main(int argc, char *argv[]){
 		    }
 		}
 
-		save_ut_matrix ( DoF, K, "Kd" );	/* dynamic stff matx */
-		save_ut_matrix ( DoF, M, "Md" );	/* dynamic mass matx */
+		save_ut_dmatrix ( DoF, K, "Kd" );	/* dynamic stff matx */
+		save_ut_dmatrix ( DoF, M, "Md" );	/* dynamic mass matx */
 
 		if (anlyz) {
 		  if ( Mmethod == 1 )
@@ -496,8 +497,8 @@ int main(int argc, char *argv[]){
 		 exit(1);
 		}
 
-		Kc = matrix(1,Cdof,1,Cdof);
-		Mc = matrix(1,Cdof,1,Cdof);
+		Kc = dmatrix(1,Cdof,1,Cdof);
+		Mc = dmatrix(1,Cdof,1,Cdof);
 
 		if ( m[1] > 0 && modes > 0 )	Cfreq = f[m[1]];
 
@@ -514,11 +515,11 @@ int main(int argc, char *argv[]){
 			dyn_conden ( M,K, DoF, R, q, Cdof, Mc,Kc, V,f, m );
 			printf("   dynamic condensation of K and M complete\n");
 		}
-		save_matrix ( Cdof, Cdof, Kc, "Kc" );
-		save_matrix ( Cdof, Cdof, Mc, "Mc" );
+		save_dmatrix ( Cdof, Cdof, Kc, "Kc" );
+		save_dmatrix ( Cdof, Cdof, Mc, "Mc" );
 
-		free_matrix ( Kc, 1,Cdof,1,Cdof );
-		free_matrix ( Mc, 1,Cdof,1,Cdof );
+		free_dmatrix ( Kc, 1,Cdof,1,Cdof );
+		free_dmatrix ( Mc, 1,Cdof,1,Cdof );
 	}
 
 	printf("\n");

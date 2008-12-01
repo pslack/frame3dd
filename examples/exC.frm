@@ -175,14 +175,14 @@ exC.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://www.duke.edu/~hpgavin/frame/ 
+FRAME3DD version: 20080909               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 a tetrahedral frame - static and dynamic analysis  
-Tue Sep  9 21:28:21 2008
+Mon Dec  1 13:06:48 2008
 ________________________________________________________________________________
 18 JOINTS;    48 MEMBERS;    1 LOAD CASES;
 4 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;

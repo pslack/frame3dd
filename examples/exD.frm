@@ -136,14 +136,14 @@ exD.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://www.duke.edu/~hpgavin/frame/ 
+FRAME3DD version: 20080909               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 dynamic properties of an un-restrained frame with a triangular section 
-Tue Sep  9 21:48:42 2008
+Mon Dec  1 13:09:00 2008
 ________________________________________________________________________________
 24 JOINTS;    30 MEMBERS;    1 LOAD CASES;
 0 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;

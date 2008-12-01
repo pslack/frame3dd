@@ -1,18 +1,24 @@
-/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
-	Copyright (C) 1992-2008  Henri P. Gavin
-
-    This program is free software: you can redistribute it and/or modify
+/*
+ FRAME3DD:
+ Static and dynamic structural analysis of 2D and 3D frames and trusses with
+ elastic and geometric stiffness.
+ ---------------------------------------------------------------------------
+ http://www.duke.edu/~hpgavin/frame/
+ ---------------------------------------------------------------------------
+ Copyright (C) 1992-2008  Henri P. Gavin
+ 
+    FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
+    FRAME3DD is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//**
 	@file
 	routines to perform L D L' - decomposition
@@ -20,11 +26,6 @@
 
 #include <stdio.h>
 #include <math.h>
-
-/* NOTE that ldl_dcmp.h includes 'common.h' which does some sneaky #define
-	with the 'float' type!
-*/
-
 #include "ldl_dcmp.h"
 
 /*----------------------------------------------------------------------------- 
@@ -37,7 +38,7 @@ LDL_DCMP  -  Solves [A]{x} = {b} simply and efficiently by performing an
       The lower triangle of [A] is replaced by the lower triangle L of the 
       L D L' reduction.  The diagonal of D is returned in the vector {d}
 
- usage: float **A, *d, *b, *x;
+ usage: double **A, *d, *b, *x;
 	int   n, reduce, solve, pd;
 	ldl_dcmp ( A, n, d, b, x, reduce, solve, &pd );
 
@@ -45,7 +46,7 @@ LDL_DCMP  -  Solves [A]{x} = {b} simply and efficiently by performing an
  Bathe, Finite Element Procecures in Engineering Analysis, Prentice Hall, 1982
 -----------------------------------------------------------------------------*/
 void ldl_dcmp ( A, n, d, b, x, reduce, solve, pd )
-float	**A,	/* the system matrix, and L of the L D L' decomposition	*/
+double	**A,	/* the system matrix, and L of the L D L' decomposition	*/
 	*d,	/* diagonal of D in the  L D L' - decomposition		*/
 	*b,	/* the right hand side vector				*/
 	*x;	/* the solution vector					*/
@@ -111,26 +112,26 @@ LDL_MPROVE  -  Improves a solution vector x[1..n] of the linear set of equations
  Also input is the diagonal vector, {d} of [D] of the L D L' decompositon.
  On output, only {x} is modified to an improved set of values.
 
- usage: float **A, *d, *b, *x, err;
+ usage: double **A, *d, *b, *x, err;
 	int   n, ok;
 	ldl_mprove ( A, n, d, b, x, &err, &ok );
 
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  4 May 2001
 -----------------------------------------------------------------------------*/
 void ldl_mprove(
-		 float **A
-		, int n, float *d, float *b, float *x
-		, float *err, int *ok
+		 double **A
+		, int n, double *d, double *b, double *x
+		, double *err, int *ok
 ){
 	double  sdp;		/* accumulate the r.h.s. in double precision */
-	float   *r,		/* the residual error		  	*/
+	double   *r,		/* the residual error		  	*/
 		err_new=0,	/* the RMS error of the solution	*/
-		*vector();	/* allocate memory for a vector	of floats */
+		*dvector();	/* allocate memory for a vector	of doubles */
 	int	j,i, pd;
 	void	ldl_dcmp(),
-		free_vector();
+		free_dvector();
 
-	r=vector(1,n);
+	r=dvector(1,n);
 
 	for (i=1;i<=n;i++) {		/* calculate the r.h.s. of      */
 		sdp = b[i];		/* [A]{r} = {b} - [A]{x+r}      */
@@ -145,7 +146,7 @@ void ldl_mprove(
 
 	for (i=1;i<=n;i++)	err_new += r[i]*r[i];
 
-	err_new = sqrt ( err_new / (float) n );
+	err_new = sqrt ( err_new / (double) n );
 
 	*ok = 0;
 	if ( err_new / *err < 0.90 ) {		/* good improvement */
@@ -155,7 +156,7 @@ void ldl_mprove(
 		*ok = 1;	/* the solution has improved		*/
 	}
 
-	free_vector(r,1,n);
+	free_dvector(r,1,n);
 	return;
 }
 
@@ -167,19 +168,18 @@ PSEUDO_INV - calculate the pseudo-inverse of A ,
              A is m by n      Ai is m by n                              8oct01
 -----------------------------------------------------------------------------*/
 void pseudo_inv(
-		float **A, float **Ai
-		, int n, int m, float beta
+		double **A, double **Ai, int n, int m, double beta
 ){
-	float	*diag, *b, *x, **AtA, **AtAi, tmp, tr_AtA=0.0,
-		*vector(), **matrix(), error;
+	double	*diag, *b, *x, **AtA, **AtAi, tmp, tr_AtA=0.0,
+		*dvector(), **dmatrix(), error;
 	int     i,j,k, ok, disp=0;
-	void	ldl_dcmp(), ldl_mprove(), free_vector(), free_matrix();
+	void	ldl_dcmp(), ldl_mprove(), free_dvector(), free_dmatrix();
 
-        diag = vector(1,n);
-        b    = vector(1,n);
-        x    = vector(1,n);
-        AtA  = matrix(1,n,1,n);
-	AtAi = matrix(1,n,1,n);
+        diag = dvector(1,n);
+        b    = dvector(1,n);
+        x    = dvector(1,n);
+        AtA  = dmatrix(1,n,1,n);
+	AtAi = dmatrix(1,n,1,n);
 
 	if (beta>1) fprintf(stderr," pseudo_inv: warning beta = %lf\n", beta);
 
@@ -235,11 +235,11 @@ void pseudo_inv(
 		}
 	}
 
-	free_matrix (AtAi, 1,n,1,n);
-	free_matrix (AtA,  1,n,1,n);
-	free_vector (x, 1,n);
-	free_vector (b, 1,n);
-	free_vector (diag, 1,n);
+	free_dmatrix (AtAi, 1,n,1,n);
+	free_dmatrix (AtA,  1,n,1,n);
+	free_dvector (x, 1,n);
+	free_dvector (b, 1,n);
+	free_dvector (diag, 1,n);
 
 	return;
 }
@@ -248,11 +248,11 @@ void pseudo_inv(
 /* ---------------------------------------------------------------------------
 REL_NORM -  compute the relative 2-norm between two vectors       26dec01 
 --------------------------------------------------------------------------- */
-float rel_norm( N, D, n )
-float	*N, *D;
+double rel_norm( N, D, n )
+double	*N, *D;
 int	n;
 {
-	float	nN = 0.0, nD = 0.0;
+	double	nN = 0.0, nD = 0.0;
 	int	i;
 
 	for (i=1; i<=n; i++)	nN += N[i]*N[i];

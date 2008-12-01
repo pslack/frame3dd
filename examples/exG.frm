@@ -134,14 +134,14 @@ exG.plt				% plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://www.duke.edu/~hpgavin/frame/ 
+FRAME3DD version: 20080909               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 A three dimensional frame 
-Tue Sep  9 21:49:24 2008
+Mon Dec  1 13:10:31 2008
 ________________________________________________________________________________
 15 JOINTS;    24 MEMBERS;    1 LOAD CASES;
 3 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;

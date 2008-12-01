@@ -1,18 +1,24 @@
-/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
+/*
+ FRAME3DD:
+ Static and dynamic structural analysis of 2D and 3D frames and trusses with
+ elastic and geometric stiffness.
+ ---------------------------------------------------------------------------
+ http://www.duke.edu/~hpgavin/frame/
+ ---------------------------------------------------------------------------
  Copyright (C) 1992-2008  Henri P. Gavin
  
-    This program is free software: you can redistribute it and/or modify
+    FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
+    FRAME3DD is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//** @file
 	Routines to solve the generalized eigenvalue problem
 
@@ -32,12 +38,12 @@
 	@param V is a  rectangular matrix of eigen-vectors
 */
 void subspace(
-	float **K, float **M
-	, int n, int m /**< DoF and number of required modes	*/
-	, float *w, float **V
-	, float tol, float shift
-	, int *iter /**< sub-space iterations */
-	, int *ok /**< Sturm check result */
+	double **K, double **M,
+	int n, int m, /**< DoF and number of required modes	*/
+	double *w, double **V,
+	double tol, double shift,
+	int *iter, /**< sub-space iterations */
+	int *ok /**< Sturm check result */
 );
 
 
@@ -45,7 +51,7 @@ void subspace(
 	carry out matrix-matrix-matrix multiplication for symmetric A
 	C = X' A X     C is J by J	X is N by J	A is N by N
 */
-void xtAx(float **A, float **X, float **C, int N, int J);
+void xtAx(double **A, double **X, double **C, int N, int J);
 
 /**
 	calculate the lowest m eigen-values and eigen-vectors of the
@@ -56,9 +62,9 @@ void xtAx(float **A, float **X, float **C, int N, int J);
 	@param m number of required modes
 */
 void stodola(
-	float **K, float **M
-	, int n, int m
-	, float *w, float **V, float tol, float shift, int *iter, int *ok
+	double **K, double **M,
+	int n, int m,
+	double *w, double **V, double tol, double shift, int *iter, int *ok
 );
 
 #endif /* FRAME_EIG_H */

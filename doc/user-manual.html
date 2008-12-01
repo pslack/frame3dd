@@ -15,9 +15,9 @@ Graphical output and mode shape animation via Gnuplot.">
 
 <body>
 
-<img src="img/psoe.jpg" height="100" align="left" border="0">
+<img src="../Images/psoe.jpg" height="100" align="left" border="0">
 <font face="Arial, Helvetica, sans-serif" size="3">
-<nobr><b>A Manual and Reference for <a href="http://frame3dd.sf.net">a Structural Frame Analysis Program</a></b>
+<nobr><b>A Manual and Reference for <a href="index.html">a Structural Frame Analysis Program</a></b>
 </nobr><br>
 <a href="http://www-cee.egr.duke.edu/">
 Department of Civil and Environmental Engineering</a><br>
@@ -423,11 +423,39 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 
 <p>
 This m-function, <a href="Matlab/frame_3dd.m">frame_3dd.m</a>,
-executes the system command, frame3dd, to compute the solution.  
+executes the system command
+(frame3dd on Linux or OS-X, frame3dd.exe on Windows)
+to compute the solution.  
+The <b>Frame3DD</b> executable 
+(frame3dd on Linux or OS-X, frame3dd.exe on Windows)
+must be saved to a directory within
+a path appropriate for your system, or must be copied to your current
+working directory.
+</p>
+
+<p>
+<ol>
+<li> The Matlab file for your problem first sets up the various matrices defining the problem for analysis and calls frame_3dd.m <br> 
+A <a href="Matlab/exA.m">Matlab version of Example A</a> illustrates
+how to analyze problems using the Matlab interface to <b>Frame3DD</b>.<br>
+Matlab versions of the other examples are forthcoming.
+<li> frame_3dd.m writes IOdata.frm,
+<li> The executeable frame3dd appends IOdata.frm
+with the Output Data, and writes IOdata.m, containing the Output Data.<br>
+A Matlab file containing the Output Data is written whenever the frame3dd   
+executeable is run, whether or not the analysis is initiated by frame_3dd.m.
+<li> frame_3dd.m runs IOdata.m, containing the matrices D, R, F, L, and Ks,
+<li> frame_3dd.m returns D, R, F, L, and Ks, to the Matlab workspace, or your Matlab function. 
+</ol>
+</p>
+
+
+<p>
 This m-function interface to <b>Frame3DD</b>
 is currently capable of static analyses.  
-It does not (yet) implement the following features of <b>Frame3DD</b>.  
+It does not (yet) implement the following features of <b>Frame3DD</b>:  
 <ul>
+  <li> Matlab functions for graphical display of the results 
   <li> point forces applied between the joints of a member
   <li> temperature loads
   <li> multiple load cases
@@ -436,26 +464,6 @@ It does not (yet) implement the following features of <b>Frame3DD</b>.
 </ul>
 </p>
 
-<p>
-This Matlab interface to <b>Frame3DD</b> requires that the 
-<b>Frame3DD</b> executable is saved in a directory within
-a path appropriate for your system, or within the current
-working directory.
-The m-function <a href="Matlab/frame_3dd.m">frame_3dd.m</a>
-writes a formatted Input Data file and executes <b>Frame3DD</b>
-as a system call.
-<b>Frame3DD</b> appends the Input Data with the computed Output Data.
-The m-function <a href="Matlab/frame_3dd.m">frame_3dd.m</a>
-then reads a Matlab-formatted file containing the matrices D, R, F, and L,  
-and returns these results to the Matlab workspace. 
-Matlab functions for graphical display of the results are under development.  
-</p>
-
-<p>
-A <a href="Matlab/exA.m">Matlab version of Example A</a> illustrates
-how to analyze problems using the Matlab interface to <b>Frame3DD</b>.
-Matlab versions of the other examples are forthcoming.
-</p>
 
 <hr>
 <h4>STRUCTURAL MODELING </h4>

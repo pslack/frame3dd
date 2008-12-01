@@ -1061,16 +1061,17 @@ exH.plt                         % mesh annotation file name
  1  2  3  4  5                 % modes to animate
 1                              % pan during animation
 
+
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://www.duke.edu/~hpgavin/frame/ 
+FRAME3DD version: 20080909               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 a Pedestrian Ramp 
-Tue Sep  9 21:49:33 2008
+Mon Dec  1 13:21:12 2008
 ________________________________________________________________________________
 148 JOINTS;    295 MEMBERS;    1 LOAD CASES;
 36 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;

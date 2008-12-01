@@ -106,16 +106,17 @@ exA.plt	                        % plot file name
 0				% number of desired dynamic modes of vibration
 
 
+
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://www.duke.edu/~hpgavin/frame/ 
+FRAME3DD version: 20080909               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 linear static analysis of a 2D truss with support settlement 
-Tue Sep  9 21:14:41 2008
+Mon Dec  1 13:28:16 2008
 ________________________________________________________________________________
 12 JOINTS;    21 MEMBERS;    2 LOAD CASES;
 12 FIXED JOINTS;   1 PRESCRIBED DISPLACEMENTS;
