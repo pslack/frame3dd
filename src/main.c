@@ -170,7 +170,7 @@ int main(int argc, char *argv[]){
 		exit(1);
 	}
 
-	frm_getline(fp, title, 256);
+	frame3dd_getline(fp, title, 256);
 	fprintf(stderr," ** %s ** \n\n", title );
 
 	fscanf(fp, "%d %d %d", &nJ, &nM, &nL );

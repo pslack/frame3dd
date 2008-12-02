@@ -34,7 +34,7 @@
 #include "nrutil.h"
 
 /* must be included after nrutil, because of sneaky #define in common.h */
-#include "frm_io.h"
+#include "frame3dd_io.h"
 #include "lu_dcmp.h"
 #include "coordtrans.h"
 
@@ -51,22 +51,22 @@ static void itoa(int n, char s[], int k);
 #endif
 
 static void getline_no_comment(
-		FILE *fp,    /**< pointer to the file from which to read */
-		char *s,     /**< pointer to the string to which to write */
-		int lim      /**< the longest anticipated line length  */
+	FILE *fp,    /**< pointer to the file from which to read */
+	char *s,     /**< pointer to the string to which to write */
+	int lim      /**< the longest anticipated line length  */
 );
 
 /*------------------------------------------------------------------------------
 READ_INPUT_DATA  -  read material and geometry data, calc lengths	15dec97
 ------------------------------------------------------------------------------*/
 void read_input_data(
-		FILE *fp
-		int nJ, int nM, vec3 *pos,
-		double *r, double *L, double *Le,
-		int *J1, int *J2, int *anlyz, int *geom, double **Q,
-		double *Ax, double *Asy, double *Asz,
-		double *J, double *Iy, double *Iz, double *E, double *G, double *p,
-		int *shear, char meshfile[], char plotfile[], double *exagg
+	FILE *fp,
+	int nJ, int nM, vec3 *pos,
+	double *r, double *L, double *Le,
+	int *J1, int *J2, int *anlyz, int *geom, double **Q,
+	double *Ax, double *Asy, double *Asz,
+	double *J, double *Iy, double *Iz, double *E, double *G, double *p,
+	int *shear, char meshfile[], char plotfile[], double *exagg
 ){
 
 	int	j1, j2, i, j;
@@ -190,12 +190,12 @@ void read_input_data(
 
 
 /*-----------------------------------------------------------------------------
-GETLINE  -  get line into a character string. from K&R                  3feb94
+FRAME3DD_GETLINE -  get line into a character string. from K&R         3feb94
 -----------------------------------------------------------------------------*/
-void frm_getline (
-		FILE	*fp,
-		char    *s,
-		int     lim
+void frame3dd_getline (
+FILE	*fp,
+char    *s,
+int     lim
 ){
     int     c=0, i=0;
 
@@ -237,24 +237,28 @@ GETLINE_NO_COMMENT                                                      7may03
 
 -----------------------------------------------------------------------------*/
 void getline_no_comment(
-		FILE *fp,   /**< pointer to the file from which to read */
-		char *s,    /**< pointer to the string to which to write */
-		int lim    /**< the longest anticipated line length  */
+	FILE *fp,   /**< pointer to the file from which to read */
+	char *s,    /**< pointer to the string to which to write */
+	int lim    /**< the longest anticipated line length  */
 ){
-    int     c=0, i=0;
+	int     c=0, i=0;
 
-    while (--lim > 0 && (c=getc(fp)) != EOF && c != '\n'
-            && c != '%' && c != '#' && c != ';' && c != '?' )
-            s[i++] = c;
-/*      if (c == '\n')  s[i++] = c;     */
-    s[i] = '\0';
+	while (--lim > 0 && (c=getc(fp)) != EOF && c != '\n'
+		&& c != '%' && c != '#' && c != ';' && c != '?' ) {
+		if (c != ',')
+			s[i++] = c;
+		else
+			s[i++] = ' ';
+	/*      if (c == '\n')  s[i++] = c;     */
+	}
+	s[i] = '\0';
 	if (c != '\n')
 		while (--lim > 0 && (c=getc(fp)) != EOF && c != '\n')
 		/* read the rest of the line, otherwise do nothing */ ;
 
 	if ( c == EOF ) s[0] = EOF;
 
-    return;
+	return;
 }
 
 
