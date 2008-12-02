@@ -1,18 +1,24 @@
-/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
-	Copyright (C) 1992-2008  Henri P. Gavin
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+ FRAME3DD:
+ Static and dynamic structural analysis of 2D and 3D frames and trusses with
+ elastic and geometric stiffness.
+ ---------------------------------------------------------------------------
+ http://www.duke.edu/~hpgavin/frame/
+ ---------------------------------------------------------------------------
+ Copyright (C) 1992-2008  Henri P. Gavin
+ 
+ FRAME3DD is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ FRAME3DD is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//**
 	@file
 	Input/output routines for FRAME.
@@ -45,9 +51,9 @@ static void itoa(int n, char s[], int k);
 #endif
 
 static void getline_no_comment(
-		FILE *fp      /**< pointer to the file from which to read */
-		,char *s      /**< pointer to the string to which to write */
-		,int lim      /**< the longest anticipated line length  */
+		FILE *fp,    /**< pointer to the file from which to read */
+		char *s,     /**< pointer to the string to which to write */
+		int lim      /**< the longest anticipated line length  */
 );
 
 /*------------------------------------------------------------------------------
@@ -55,12 +61,12 @@ READ_INPUT_DATA  -  read material and geometry data, calc lengths	15dec97
 ------------------------------------------------------------------------------*/
 void read_input_data(
 		FILE *fp
-		, int nJ, int nM, vec3 *pos
-		, float *r, float *L, float *Le
-		, int *J1, int *J2, int *anlyz, int *geom, float **Q
-		, float *Ax, float *Asy, float *Asz
-		, float *J, float *Iy, float *Iz, float *E, float *G, float *p
-		, int *shear, char meshfile[], char plotfile[], float *exagg
+		int nJ, int nM, vec3 *pos,
+		double *r, double *L, double *Le,
+		int *J1, int *J2, int *anlyz, int *geom, double **Q,
+		double *Ax, double *Asy, double *Asz,
+		double *J, double *Iy, double *Iz, double *E, double *G, double *p,
+		int *shear, char meshfile[], char plotfile[], double *exagg
 ){
 
 	int	j1, j2, i, j;
@@ -187,9 +193,9 @@ void read_input_data(
 GETLINE  -  get line into a character string. from K&R                  3feb94
 -----------------------------------------------------------------------------*/
 void frm_getline (
-		FILE	*fp
-		, char    *s
-		, int     lim
+		FILE	*fp,
+		char    *s,
+		int     lim
 ){
     int     c=0, i=0;
 
@@ -231,9 +237,9 @@ GETLINE_NO_COMMENT                                                      7may03
 
 -----------------------------------------------------------------------------*/
 void getline_no_comment(
-		FILE *fp            /**< pointer to the file from which to read */
-		,char *s             /**< pointer to the string to which to write */
-		,int lim            /**< the longest anticipated line length  */
+		FILE *fp,   /**< pointer to the file from which to read */
+		char *s,    /**< pointer to the string to which to write */
+		int lim    /**< the longest anticipated line length  */
 ){
     int     c=0, i=0;
 
@@ -257,19 +263,19 @@ ASSEMBLE_LOADS  -
 read load information data, assemble un-restrained load vectors	9sep08
 ------------------------------------------------------------------------------*/
 void assemble_loads(
-		FILE *fp
-		, int nL, int nJ, vec3 *pos
-		, float *L, float *Le, float *Ax, float *Asy, float *Asz
-		, float *Iy, float *Iz, float *E, float *G
-		, float *p, int shear
-		, int *J1, int *J2
-		, int DoF
-		, int nM, int *nF, int *nW, int *nP, int *nT
-		, float **F_mech, float **F_temp
-		, float ***W, float ***P, float ***T
-		, float ***feF_mech, float ***feF_temp
+		FILE *fp,
+		int nL, int nJ, vec3 *pos,
+		double *L, double *Le, double *Ax, double *Asy, double *Asz,
+		double *Iy, double *Iz, double *E, double *G,
+		double *p, int shear,
+		int *J1, int *J2,
+		int DoF,
+		int nM, int *nF, int *nW, int *nP, int *nT,
+		double **F_mech, double **F_temp,
+		double ***W, double ***P, double ***T,
+		double ***feF_mech, double ***feF_temp
 ){
-	float	Nx1, Vy1, Vz1, Mx1, My1, Mz1,	/* fixed end forces */
+	double	Nx1, Vy1, Vz1, Mx1, My1, Mz1,	/* fixed end forces */
 		Nx2, Vy2, Vz2, Mx2, My2, Mz2,
 		Ksy, Ksz, 		/* shear deformatn coefficients	*/
 		a, b,				/* point load locations */
@@ -321,7 +327,7 @@ void assemble_loads(
 		    fprintf(stderr,"  error in uniform distributed loads: member number %d is out of range\n",n);
 		    exit(1);
 		}
-		W[lc][i][1] = (float) n;
+		W[lc][i][1] = (double) n;
 		for (l=2; l<=4; l++)	fscanf(fp,"%lf", &W[lc][i][l] );
 
 		if ( W[lc][i][2]==0 && W[lc][i][3]==0 && W[lc][i][4]==0 )
@@ -386,7 +392,7 @@ void assemble_loads(
 		    fprintf(stderr,"   error in internal point loads: member number %d is out of range\n",n);
 		    exit(1);
 		}
-		P[lc][i][1] = (float) n;
+		P[lc][i][1] = (double) n;
 		for (l=2; l<=5; l++)	fscanf(fp,"%lf", &P[lc][i][l] );
 		a = P[lc][i][5];	b = L[n] - a;
 
@@ -458,7 +464,7 @@ void assemble_loads(
 		    fprintf(stderr,"  error in temperature loads: member number %d is out of range\n",n);
 		    exit(1);
 		}
-		T[lc][i][1] = (float) n;
+		T[lc][i][1] = (double) n;
 		for (l=2; l<=8; l++)	fscanf(fp,"%lf", &T[lc][i][l] );
 		a  = T[lc][i][2];
 		hy = T[lc][i][3];
@@ -518,9 +524,9 @@ void assemble_loads(
 READ_REACTION_DATA  -  Read fixed joint displacement boundary conditions 7sep08
 ------------------------------------------------------------------------------*/
 void read_reaction_data (
-		FILE *fp
-		, int DoF, int *nD, int *nR
-		, int nJ, float *Dp, int *R, int *sumR
+		FILE *fp,
+		int DoF, int *nD, int *nR,
+		int nJ, double *Dp, int *R, int *sumR
 ){
 	int	i,j,l;
 
@@ -604,15 +610,15 @@ READ_MASSES  -  read member densities and extra inertial mass data	16aug01
 void read_mass_data(
 		FILE *fp,
 		int nJ, int nM, int *nI,
-		float *d, float *BMs,
-		float *JMs, float *JMx, float *JMy, float *JMz,
-		float *L, float *Ax,
-		float *total_mass, float *struct_mass,
+		double *d, double *BMs,
+		double *JMs, double *JMx, double *JMy, double *JMz,
+		double *L, double *Ax,
+		double *total_mass, double *struct_mass,
 		int *modes, int *Mmethod, int *lump,
 		char modefile[],
-		float *tol, float *shift, int anim[], int *pan
+		double *tol, double *shift, int anim[], int *pan
 ){
-/*	float	ms = 0.0; */
+/*	double	ms = 0.0; */
 	int	chk, j, jnt, m, mem, nA;
 
 	*total_mass = *struct_mass = 0.0;
@@ -723,9 +729,9 @@ void read_mass_data(
 READ_CONDENSE   -  read matrix condensation information 	        30aug01
 ------------------------------------------------------------------------------*/
 void read_condense (
-		FILE *fp
-		, int nJ, int modes
-		, int *nC, int *Cdof, int *Cmethod, int *q, int *m
+		FILE *fp,
+		int nJ, int modes,
+		int *nC, int *Cdof, int *Cmethod, int *q, int *m
 ){
 	int	i,j,k,  chk, **qm;
 
@@ -816,12 +822,12 @@ void write_input_data(
 	char *title, int nJ, int nM, int nL,
 	int nD, int nR,
 	int *nF, int *nW, int *nP, int *nT,
-	vec3 *pos, float *r,
+	vec3 *pos, double *r,
 	int *J1, int *J2,
-	float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz,
-	float *E, float *G, float *p, float **F, float *Dp,
+	double *Ax, double *Asy, double *Asz, double *J, double *Iy, double *Iz,
+	double *E, double *G, double *p, double **F, double *Dp,
 	int *R,
-	float ***W, float ***P, float ***T,
+	double ***W, double ***P, double ***T,
 	int shear, int anlyz, int geom
 ){
 	int	i,j,n, lc;
@@ -970,11 +976,11 @@ WRITE_STATIC_RESULTS -  save joint displacements and member end forces	9sep08
 void write_static_results (
 		FILE *fp, int nJ, int nM, int nL, int lc, int DoF,
 		int *J1, int *J2,
-		float *F, float *D, int *R,
-		float **Q, float err,
+		double *F, double *D, int *R,
+		double **Q, double err,
 		int ok
 ){
-	float	disp;
+	double	disp;
 	int	i,j,n;
 
 	if ( ok < 0 ) {
@@ -1063,12 +1069,12 @@ this function interacts with frame_3dd.m, an m-file interface to frame3dd
 void write_static_mfile ( char *argv[],
 		int nJ, int nM, int nL, int lc, int DoF,
 		int *J1, int *J2,
-		float *F, float *D, int *R,
-		float **Q, float err,
+		double *F, double *D, int *R,
+		double **Q, double err,
 		int ok
 ){
 	FILE	*fpm;
-	float	disp;
+	double	disp;
 	int	i,j,n;
 	char	*wa;
 	char	IOfilename[128];
@@ -1177,19 +1183,19 @@ WRITE_MODAL_RESULTS -  save modal frequencies and mode shapes		16aug01
 void write_modal_results(
 		FILE *fp,
 		int nJ, int nM, int nI, int DoF,
-		float **M, float *f, float **V,
-		float total_mass, float struct_mass,
+		double **M, double *f, double **V,
+		double total_mass, double struct_mass,
 		int iter, int sumR, int modes,
-		float shift, int lump, float tol, int ok
+		double shift, int lump, double tol, int ok
 ){
 	int	i, j, k, m, num_modes;
-	float	mpfX, mpfY, mpfZ,	/* mode participation factors	*/
+	double	mpfX, mpfY, mpfZ,	/* mode participation factors	*/
 		*msX, *msY, *msZ;
-	float	fs;
+	double	fs;
 
-	msX = vector(1,DoF);
-	msY = vector(1,DoF);
-	msZ = vector(1,DoF);
+	msX = dvector(1,DoF);
+	msY = dvector(1,DoF);
+	msZ = dvector(1,DoF);
 
 	for (i=1; i<=DoF; i++) {
 		msX[i] = msY[i] = msZ[i] = 0.0;
@@ -1250,9 +1256,9 @@ void write_modal_results(
         } else  fprintf(fp," ... All %d modes were found.\n", modes );
 
 
-	free_vector(msX,1,DoF);
-	free_vector(msY,1,DoF);
-	free_vector(msZ,1,DoF);
+	free_dvector(msX,1,DoF);
+	free_dvector(msY,1,DoF);
+	free_dvector(msZ,1,DoF);
 	fflush(fp);
 	return;
 }
@@ -1266,12 +1272,12 @@ useful gnuplot options: set noxtics noytics noztics noborder view nokey
 void static_mesh(
 		char IO_file[], char meshfile[], char plotfile[],
 		char *title, int nJ, int nM, int nL, int lc, int DoF,
-		vec3 *pos, float *L,
-		int *J1, int *J2, float *p, float *D,
-		float exg, int anlyz
+		vec3 *pos, double *L,
+		int *J1, int *J2, double *p, double *D,
+		double exg, int anlyz
 ){
 	FILE	*fpmfx, *fpm;
-	float	mx, my, mz;	/* coordinates of the member labels	*/
+	double	mx, my, mz;	/* coordinates of the member labels	*/
 	int	j1, j2, i, j, m, X=0, Y=0, Z=0;
 	char	meshfl[64], str[8], D3 = '#';
     time_t  now;            /* modern time variable type    (DJGPP) */
@@ -1321,17 +1327,17 @@ void static_mesh(
 		j = J1[m];	i = 6*(j-1);
 		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, pos[j].x,pos[j].y,pos[j].z);
 		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-			pos[j].x + exg*D[i+1]
-			, pos[j].y + exg*D[i+2]
-			, pos[j].z + exg*D[i+3]
+			pos[j].x + exg*D[i+1],
+			pos[j].y + exg*D[i+2],
+			pos[j].z + exg*D[i+3]
 		);
 
 		j = J2[m];	i = 6*(j-1);
 		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, pos[j].x,pos[j].y,pos[j].z);
 		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-			pos[j].x + exg*D[i+1]
-			, pos[j].y + exg*D[i+2]
-			, pos[j].z + exg*D[i+3]
+			pos[j].x + exg*D[i+1],
+			pos[j].y + exg*D[i+2],
+			pos[j].z + exg*D[i+3]
 		);
 		fprintf(fpm,"\n\n");
 	}
@@ -1445,27 +1451,27 @@ MODAL_MESH  -  create mesh data of the mode-shape meshes, use gnuplot	19oct98
 	 useful gnuplot options: set noxtics noytics noztics noborder view nokey
 ------------------------------------------------------------------------------*/
 void modal_mesh(
-		char IO_file[], char meshfile[], char modefile[]
-		, char plotfile[], char *title
-		, int nJ, int nM, int DoF, int modes
-		, vec3 *pos, float *L
-		, int *J1, int *J2, float *p
-		, float **M, float *f, float **V
-		, float exg, int anlyz
+		char IO_file[], char meshfile[], char modefile[],
+		char plotfile[], char *title,
+		int nJ, int nM, int DoF, int modes,
+		vec3 *pos, double *L,
+		int *J1, int *J2, double *p,
+		double **M, double *f, double **V,
+		double exg, int anlyz
 ){
 	FILE	*fpm;
-	float mpfX, mpfY, mpfZ;	/* mode participation factors	*/
-	float *msX, *msY, *msZ;
-	float *v;		/* a mode-shape vector */
+	double mpfX, mpfY, mpfZ;	/* mode participation factors	*/
+	double *msX, *msY, *msZ;
+	double *v;		/* a mode-shape vector */
 
 	int	i, j, m,n, X=0, Y=0, Z=0;
 	char	D3 = '#', s1[16],  s2[16], modefl[64];
 
 
-	msX = vector(1,DoF);
-	msY = vector(1,DoF);
-	msZ = vector(1,DoF);
-	v   = vector(1,DoF);
+	msX = dvector(1,DoF);
+	msY = dvector(1,DoF);
+	msZ = dvector(1,DoF);
+	v   = dvector(1,DoF);
 
 	for (i=1; i<=DoF; i++) {	/* modal participation factors */
 		msX[i] = msY[i] = msZ[i] = 0.0;
@@ -1539,10 +1545,10 @@ void modal_mesh(
 
 	}
 
-	free_vector(msX,1,DoF);
-	free_vector(msY,1,DoF);
-	free_vector(msZ,1,DoF);
-	free_vector(v,1,DoF);
+	free_dvector(msX,1,DoF);
+	free_dvector(msY,1,DoF);
+	free_dvector(msZ,1,DoF);
+	free_dvector(v,1,DoF);
 }
 
 /*------------------------------------------------------------------------------
@@ -1552,18 +1558,18 @@ ANIMATE -  create mesh data of animated mode-shape meshes, use gnuplot	16dec98
 	 ... requires ImageMagick and mpeg2vidcodec packages
 ------------------------------------------------------------------------------*/
 void animate(
-	char IO_file[], char meshfile[], char modefile[], char plotfile[]
-	, char *title
-	, int anim[]
-	, int nJ, int nM, int DoF, int modes
-	, vec3 *pos, float *L, float *p
-	, int *J1, int *J2, float *f, float **V
-	, float exg
-	, int pan
+	char IO_file[], char meshfile[], char modefile[], char plotfile[],
+	char *title,
+	int anim[],
+	int nJ, int nM, int DoF, int modes,
+	vec3 *pos, double *L, double *p,
+	int *J1, int *J2, double *f, double **V,
+	double exg,
+	int pan
 ){
 	FILE	*fpm;
 
-	float x_min = 0, x_max = 0,
+	double x_min = 0, x_max = 0,
 		y_min = 0, y_max = 0,
 		z_min = 0, z_max = 0,
 		rot_x_init = 70,	/* inital x-rotation in 3D animation */
@@ -1718,7 +1724,7 @@ void animate(
 	}
 	fclose(fpm);
 
-	v = vector(1,DoF);
+	v = dvector(1,DoF);
 
 	i = 0;
 	while ( (m = anim[i]) != 0 ) {
@@ -1753,7 +1759,7 @@ void animate(
           }
 	  i++;
 	}
-	free_vector(v,1,DoF);
+	free_dvector(v,1,DoF);
 	return;
 }
 
@@ -1764,20 +1770,19 @@ and beam end rotations.  Saves deflected shapes to a file.  These bent shapes
 are exact for mode-shapes, and for frames loaded at their joints.	22feb99
 ------------------------------------------------------------------------------*/
 void bent_beam(
-		FILE *fp, int j1, int j2
-		, vec3 *pos
-		, float L, float p, float *D
-		, float exg
+	FILE *fp, int j1, int j2,
+	vec3 *pos,
+	double L, double p, double *D, double exg
 ){
-	float	t1, t2, t3, t4, t5, t6, t7, t8, t9, 	/* coord xfmn	*/
+	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, 	/* coord xfmn	*/
 		u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12,
 		*a, *b, **A,
 		s, v, w, dx, dy, dz;
 	int	i1, i2, pd;
 
-	A = matrix(1,4,1,4);
-	a = vector(1,4);
-	b = vector(1,4);
+	A = dmatrix(1,4,1,4);
+	a = dvector(1,4);
+	b = dvector(1,4);
 
 	coord_trans ( pos, L, j1, j2,
 				&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p );
@@ -1842,9 +1847,9 @@ void bent_beam(
 	}
 	fprintf(fp,"\n\n");
 
-	free_matrix(A,1,4,1,4);
-	free_vector(a,1,4);
-	free_vector(b,1,4);
+	free_dmatrix(A,1,4,1,4);
+	free_dvector(a,1,4);
+	free_dvector(b,1,4);
 
 	return;
 }

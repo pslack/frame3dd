@@ -1,18 +1,24 @@
-/*	FRAME3DD: Static and dynamic structural analysis of 2D & 3D frames and trusses
-	Copyright (C) 1992-2008  Henri P. Gavin
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+ FRAME3DD:
+ Static and dynamic structural analysis of 2D and 3D frames and trusses with
+ elastic and geometric stiffness.
+ ---------------------------------------------------------------------------
+ http://www.duke.edu/~hpgavin/frame/
+ ---------------------------------------------------------------------------
+ Copyright (C) 1992-2008  Henri P. Gavin
+ 
+ FRAME3DD is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ FRAME3DD is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//**
 	@file
 	Frame input/output functions (FRAME3DD native format)
@@ -31,13 +37,13 @@ void frm_getline( FILE *fp, char *s, int lim );
 
 /* read input data file			*/
 void read_input_data(
-		FILE *fp
-		, int nJ, int nM, vec3 *pos
-		, float *r, float *L, float *Le
-		, int *J1, int *J2, int *anlyz, int *geom, float **Q
-		, float *Ax, float *Asy, float *Asz
-		, float *J, float *Iy, float *Iz, float *E, float *G, float *p
-		, int *shear, char meshfile[], char plotfile[], float *exagg
+		FILE *fp,
+		int nJ, int nM, vec3 *pos,
+		double *r, double *L, double *Le,
+		int *J1, int *J2, int *anlyz, int *geom, double **Q,
+		double *Ax, double *Asy, double *Asz,
+		double *J, double *Iy, double *Iz, double *E, double *G, double *p,
+		int *shear, char meshfile[], char plotfile[], double *exagg
 );
 
 /* re-write input file without comments */
@@ -49,15 +55,15 @@ void parse_input(FILE *fp);
 void assemble_loads(
 		FILE *fp, 
 		int nL, int nJ, vec3 *pos,
-		float *L, float *Le, float *Ax, float *Asy, float *Asz, 
-		float *Iy, float *Iz, float *E, float *G, 
-		float *p, int shear,
+		double *L, double *Le, double *Ax, double *Asy, double *Asz, 
+		double *Iy, double *Iz, double *E, double *G, 
+		double *p, int shear,
 		int *J1, int *J2,
 		int DoF, 
 		int nM, int *nF, int *nW, int *nP, int *nT, 
-		float **F_mech, float **F_temp, 
-		float ***W, float ***P, float ***T, 
-		float ***feF_mech, float ***feF_temp
+		double **F_mech, double **F_temp, 
+		double ***W, double ***P, double ***T, 
+		double ***feF_mech, double ***feF_temp
 );
 
 /**
@@ -66,7 +72,7 @@ void assemble_loads(
 void read_reaction_data(
 		FILE *fp, 
 		int DoF, int *nD, int *nR, 
-		int nJ, float *Dp, int *R, int *sumR 
+		int nJ, double *Dp, int *R, int *sumR 
 );
 
 /**
@@ -75,13 +81,13 @@ void read_reaction_data(
 void read_mass_data(
 		FILE *fp, 
 		int nJ, int nM, int *nI, 
-		float *d, float *BMs, 
-		float *JMs, float *JMx, float *JMy, float *JMz, 
-		float *L, float *Ax, 
-		float *total_mass, float *struct_mass, 
+		double *d, double *BMs, 
+		double *JMs, double *JMx, double *JMy, double *JMz, 
+		double *L, double *Ax, 
+		double *total_mass, double *struct_mass, 
 		int *modes, int *Mmethod, int *lump, 
 		char modefile[], 
-		float *tol, float *shift, int anim[], int *pan 
+		double *tol, double *shift, int anim[], int *pan 
 );
 
 /**
@@ -101,12 +107,12 @@ void write_input_data(
 		char *title, int nJ, int nM,  int nL, 
 		int nD, int nR, 
 		int *nF, int *nW, int *nP, int *nT,
-		vec3 *pos, float *r,
+		vec3 *pos, double *r,
 		int *J1, int *J2,
-		float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz,
-		float *E, float *G, float *p, float **F, float *Dp,
+		double *Ax, double *Asy, double *Asz, double *J, double *Iy, double *Iz,
+		double *E, double *G, double *p, double **F, double *Dp,
 		int *R,
-		float ***W, float ***P, float ***T,
+		double ***W, double ***P, double ***T,
 		int shear, int anlyz, int geom
 );
 
@@ -116,8 +122,8 @@ void write_input_data(
 void write_static_results(
 		FILE *fp, int nJ, int nM, int nL, int lc, int DoF, 
 		int *J1, int *J2, 
-		float *F, float *D, int *R, 
-		float **Q, float err, 
+		double *F, double *D, int *R, 
+		double **Q, double err, 
 		int ok 
 );
 /**
@@ -126,8 +132,8 @@ void write_static_results(
 void write_static_mfile ( char *argv[],
                 int nJ, int nM, int nL, int lc, int DoF,
                 int *J1, int *J2,
-                float *F, float *D, int *R,
-                float **Q, float err,
+                double *F, double *D, int *R,
+                double **Q, double err,
                 int ok
 );
 
@@ -138,10 +144,10 @@ void write_static_mfile ( char *argv[],
 void write_modal_results(
 		FILE *fp, 
 		int nJ, int nM, int nI, int DoF, 
-		float **M, float *f, float **V, 
-		float total_mass, float struct_mass, 
+		double **M, double *f, double **V, 
+		double total_mass, double struct_mass, 
 		int iter, int sumR, int modes, 
-		float shift, int lump, float tol, int ok 
+		double shift, int lump, double tol, int ok 
 );
 
 /**	
@@ -151,9 +157,9 @@ void write_modal_results(
 void static_mesh(
 		char IO_file[], char meshfile[], char plotfile[], 
 		char *title, int nJ, int nM, int nL, int lc, int DoF, 
-		vec3 *pos, float *L, 
-		int *J1, int *J, float *p, float *D, 
-		float exg, int anlyz
+		vec3 *pos, double *L, 
+		int *J1, int *J, double *p, double *D, 
+		double exg, int anlyz
 );
 
 /**
@@ -161,13 +167,13 @@ void static_mesh(
 	useful gnuplot options: set noxtics noytics noztics noborder view nokey
 */
 void modal_mesh(
-		char IO_file[], char meshfile[], char modefile[]
-		, char plotfile[], char *title
-		, int nJ, int nM, int DoF, int modes
-		, vec3 *pos, float *L
-		, int *J1, int *J2, float *p
-		, float **M, float *f, float **V
-		, float exg, int anlyz
+		char IO_file[], char meshfile[], char modefile[],
+		char plotfile[], char *title,
+		int nJ, int nM, int DoF, int modes,
+		vec3 *pos, double *L,
+		int *J1, int *J2, double *p,
+		double **M, double *f, double **V,
+		double exg, int anlyz
 );
 
 /**
@@ -178,13 +184,13 @@ void modal_mesh(
 */
 void animate(
 		char IO_file[], char meshfile[], char modefile[], char plotfile[]
-		, char *title
-		, int anim[]
-		, int nJ, int nM, int DoF, int modes
-		, vec3 *pos, float *L, float *p
-		, int *J1, int *J2, float *f, float **V
-		, float exg
-		, int pan
+		char *title,
+		int anim[],
+		int nJ, int nM, int DoF, int modes,
+		vec3 *pos, double *L, double *p,
+		int *J1, int *J2, double *f, double **V,
+		double exg,
+		int pan
 );
 
 /**
@@ -193,10 +199,10 @@ void animate(
 	are exact for mode-shapes, and for frames loaded at their joints.
 */
 void bent_beam(
-		FILE *fp, int j1, int j2
-		, vec3 *pos
-		, float L, float p, float *D
-		, float exg
+		FILE *fp, int j1, int j2,
+		vec3 *pos,
+		double L, double p, double *D,
+		double exg
 );
 
 /** print a set of dots (periods) */
