@@ -1,5 +1,9 @@
-TODO LIST for FRAME
--------------------
+TODO LIST for FRAME3DD
+----------------------
+
+Add support for separate prescribed displacements for each load case individually.
+
+Add support for .CSV input and output.
 
 Add comments to describe variables in src/*.h files
 
