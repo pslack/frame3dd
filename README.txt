@@ -35,7 +35,7 @@ README.txt   ... this file
 SConstruct   ... optionally used for compiling and building distribution
                  using scons ... http://www.scons.org/
 frame3dd.spec... build specification for scons, includes changelog
-saveplot     ... Gnuplot macro for saving Gnuplot plots as PostScript
+save.plt     ... Gnuplot macro for saving Gnuplot plots as PostScript
 
 doc/         ... documentation 
 examples/    ... examples of FRAME input/output files
@@ -43,13 +43,14 @@ scons/       ... used by scons to build distribution
 src/         ... C source code 
 
 to compile and build without scons ...
+
 gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 
 ---
 
 FRAME3DD author
 
-(c) 1992-2007 Henri Gavin - Associate Professor 
+(c) 1992-2008 Henri Gavin - Associate Professor 
 Department of Civil and Environmental Engineering
 Edmund T. Pratt School of Engineering
 Duke University - Box 90287, Durham, NC 27708-0287
