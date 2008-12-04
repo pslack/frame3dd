@@ -15,7 +15,7 @@ Graphical output and mode shape animation via Gnuplot.">
 
 <body>
 
-<img src="http://www.duke.edu/~hpgavin/Images/psoe.jpg" height="100" align="left" border="0">
+<img src="img/psoe.jpg" height="100" align="left" border="0">
 <font face="Arial, Helvetica, sans-serif" size="3">
 <nobr><b>A Manual and Reference for <a href="index.html">Frame3DD: A Structural Frame Analysis Program</a></b>
 </nobr><br>
@@ -88,7 +88,7 @@ includes: frame analysis, LDL' decomposition, LU decomposition,
 Newton-Raphson iteration, sub-space iteration, Stodola iteration,
 Sturm eigenvalue check, and Static Condensation, Guyan Reduction,
 Dynamic Condensation.  Graphical output and mode shape animation 
-via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.0.
+via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <hr>
 <h4>SYNOPSIS </h4>
        frame3dd [Input/Ouput file]
@@ -141,6 +141,7 @@ Edit your Input Data file with your favorite text editor
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
  <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>,
+ <a href="http://www.barebones.com/products/textwrangler/">TextWrangler (OS X)</a>, 
  <a href="http://www.apple.com/support/mac101/work/23/">TextEdit (OS X)</a>,
  <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++ (Windows)</a>,
  <a href="http://www.textedit.org/">TextEdit (Windows)</a>,
@@ -151,7 +152,7 @@ and displays descriptive diagnostic messages when errors are found with the Inpu
 </p>
 
 <hr>
-<h4>INSTALLING THE LINUX OR SUN VERSION </h4>
+<h4>HOW TO INSTALL THE LINUX OR SUN VERSIONS </h4>
 
 For any (?) Linux 2.6 kernel running on an Intel or AMD processor.
 
@@ -161,7 +162,7 @@ For any (?) Linux 2.6 kernel running on an Intel or AMD processor.
 <!-- <li>        RPM's for a variety of distributions are <a href="
 http://software.opensuse.org/download/home:/jdpipe/">here</a>. -->
 <li>        Download and save an example Input/Output file, such as <font face="courier">exA.frm</font>,
-         on your Desktop, or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/examples/exA.frm">RIGHT-CLICK-HERE</a> |
+         on your Desktop, or some other directory:<br> | <a href="../examples/exA.frm">RIGHT-CLICK-HERE</a> |
 <li>        Open a terminal window and ...<br>
             <font face="courier">...$   cd ~/Desktop</font><br>
             <font face="courier">...$   chmod +x frame3dd</font><br>
@@ -183,7 +184,7 @@ http://software.opensuse.org/download/home:/jdpipe/">here</a>. -->
          Hit the 'Return' key in the Terminal window to see the sequence of plots
          and animations until the <font face="courier"> gnuplot></font> prompt returns.<br>
 To create a PostScript file of your plot, download and save the Gnuplot script:
-<a href="http://www.duke.edu/~hpgavin/frame3dd/save.plt"><font face="courier">save.plt</font></a>, and use the following commands:<br>
+<a href="../save.plt"><font face="courier">save.plt</font></a>, and use the following commands:<br>
 <font face="courier">
       gnuplot> load 'save.plt'<br>
       gnuplot> !mv my-plot.ps another-file.ps<br>
@@ -195,7 +196,7 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
 </ol>
 
 <hr>
-<h4>INSTALLING THE OS X VERSION </h4>
+<h4>HOW TO INSTALL THE OS X VERSIONS </h4>
 
 For OS X running on a PowerPC (PPC) or Intel processor. 
 
@@ -203,11 +204,12 @@ For OS X running on a PowerPC (PPC) or Intel processor.
 <li>        Download the <b>Frame3DD</b> application and save as "frame3dd" on your Desktop,
          or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/OSX-PPC/frame3dd">CTRL-CLICK-HERE-FOR-PPC</a> | <a href="http://www.duke.edu/~hpgavin/frame3dd/OSX-Intel/frame3dd">CTRL-CLICK-HERE-FOR-INTEL</a> |
 <li>        Download and save an example Input/Output file, such as <font face="courier">exA.frm</font>,
-         on your Desktop, or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/examples/exA.frm">CTRL-CLICK-HERE</a> |
+         on your Desktop, or some other directory:<br> | <a href="../examples/exA.frm">CTRL-CLICK-HERE</a> |
 <li>        Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
             <font face="courier">...$   cd ~/Desktop</font><br>
             <font face="courier">...$   chmod +x frame3dd</font><br>
-         Create a plain text file (using TextEdit) called  <font face="courier">~/.profile</font> containing the line:<br>
+         Create a plain text file (using 
+<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a> or TextEdit) called  <font face="courier">~/.profile</font> containing the line:<br>
              <font face="courier">export PATH=".:$PATH:/usr/local/bin"</font><br>
          Quit the Terminal application.  [APPLE] [Q]
 <li>        Run <b>Frame3DD</b> from a Terminal window:  (Applications > Utilities > Terminal) ... <br>
@@ -219,7 +221,8 @@ For OS X running on a PowerPC (PPC) or Intel processor.
              A Terminal window should automatically open.
              When asked for the Input/Output file name, type ...<br>
                <font face="courier">/Users/your_name_here/Desktop/examples/exA.frm</font> -->
-<li>     Edit the Input/Output files with TextEdit (Applications > TextEdit)
+<li>     Edit the Input/Output files with 
+<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a> or TextEdit (Applications > TextEdit)
 or <a href="http://macvim.org/OSX/index.php">vi</a><br>
 
          Make sure you are in Plain Text mode  ...  [SHIFT] [APPLE] [T] ...  or ...   Format > Make Plain Text ... <br>
@@ -267,7 +270,7 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
 
 
 <hr>
-<h4>INSTALLING THE DOS/MS-Windows VERSION</h4>
+<h4>HOW TO INSTALL THE DOS AND MS-WINDWOS VERSION</h4>
 
 For DOS and MS-Windows, the following special guidelines should be followed:
 
@@ -323,7 +326,7 @@ or <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.ex
 
 
 <a name="FrameEd">
- <a href="http://www.duke.edu/~hpgavin/frame3dd//DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).<br>
+ <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).<br>
  The .zip file <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip">FrameEd.zip</a> includes: 
  <ul>
  <li>the GUI executeable, Frame_Ed.exe
@@ -406,7 +409,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 </p>
 
 <p>
-This m-function, <a href="../Matlab/frame_3dd.m">frame_3dd.m</a>,
+This m-function, <a href="http://www.duke.edu/~hpgavin/frame3dd/Matlab/frame_3dd.m">frame_3dd.m</a>,
 executes the system command
 (frame3dd on Linux or OS-X, frame3dd.exe on Windows)
 to compute the solution.  
@@ -617,7 +620,7 @@ where
 <!-- a = 0.224435; b = 0.160705 -->
 <br>
 
-                <img src="http://www.duke.edu/~hpgavin/frame3dd/img/tors.jpg" align="center" border="0"><br>
+                <img src="img/tors.jpg" align="center" border="0"><br>
          For more details, see page 271 of Timoshenko and Goodier (1951).  
 </p>
 
@@ -695,7 +698,7 @@ Four types of static loads may be specified.
 Multiple static load cases are generated by specifying 
 <a href="#Variables">the variable nL</a>
 in the 
-<a href="#InputData">Input Data</a>, and by specifying the four types of loads for each load case, as shown in <a href="http://www.duke.edu/~hpgavin/frame3dd/examples/exA.frm">Example A</a> and <a href="http://www.duke.edu/~hpgavin/frame3dd/examples/exB.frm">Example B</a>.
+<a href="#InputData">Input Data</a>, and by specifying the four types of loads for each load case, as shown in <a href="../examples/exA.frm">Example A</a> and <a href="../examples/exB.frm">Example B</a>.
 </p>
 
 <b> Support Conditions and Reactions </b><br>
@@ -876,13 +879,19 @@ Sub-space iterations are stopped when the error is less than the specified
 <h4>ENHANCEMENTS PROJECTED FOR FUTURE VERSIONS </h4>
 
 <ul>
-<li>       Support for alternative Input/Ouput file formats such as .csv or .xls
+<li>       Support for a .CSV Input/Ouput file format
 <li>       A GUI (ideally GPL'able)<br>
 <ul>
  <li> <a href="DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).
  (<a href="#FrameEd">See above</a>.)
  <li> Work has been done on a <a href="http://www.trolltech.com/products/qt">Qt</a> GUI (Fall 2004)<br>
- <li> A Google-sketchup interface is in the works (Summer 2008)
+ <li> A Microstran-Viewer interface is in the works
+<a href="http://frame3dd.svn.sourceforge.net/viewvc/frame3dd/trunk/src/microstran/">here</a>.
+(Summer 2008)
+ <li> A Google-sketchup interface is in the works <a href="http://www.steelweb.info/whatsnew.htm">here</a>
+and possibly 
+<a href="http://chakkree.blogspot.com/2008_05_01_archive.html">here</a>.
+(Summer 2008)
 </ul>
 <li>       Consistent mass matrix including the effects of shear deformation on rotatory inertia 
 <li>       Trapezoidally distributed loads
@@ -1247,7 +1256,7 @@ and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
 <table width="700" border="0" cellspacing="2" cellpadding="2" bold >
 <tr align="left" valign="middle">
 <td>
-<a href="http://www.fsf.org/copyleft/gpl.html"><img src="http://www.duke.edu/~hpgavin/frame3dd/img/gplv3-127x51.png" border="0"></a>
+<a href="http://www.fsf.org/copyleft/gpl.html"><img src="img/gplv3-127x51.png" border="0"></a>
 </td>
 <td width ="600">
 <font face="Verdana, Arial, sans-serif" size="1">
@@ -1301,6 +1310,6 @@ http://www.sourceforge.net/projects/frame3dd/</a>
 <br>updated: May 6 2003, Nov 8 2004, Nov 22 2004, Nov 29 2004, Dec 2 2004, Dec 10 2004, Dec 6 2006, Feb 22 2007, Mar 1 2007, June 6 2007, December 20 2007,
 March 14 2008, September 9 2008
 </font> <br>
-<a href="http://thomer.com/vi/vi.html"><img src="http://www.duke.edu/~hpgavin/Images/vi_logo_by_urmas_reinsalu.png" border="0"></a>
+<a href="http://thomer.com/vi/vi.html"><img src="img/vi_logo_by_urmas_reinsalu.png" border="0"></a>
 </body>
 </html>
