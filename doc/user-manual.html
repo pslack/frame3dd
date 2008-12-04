@@ -1,7 +1,7 @@
 <html>
 <head>
 
-<title> Static and Dynamic Structural Analysis of 2D and 3D Frames</title>
+<title>Static and Dynamic Structural Analysis of 2D and 3D Frames</title>
 
 <META NAME="Description" CONTENT=" Free software for static and dynamic analysis of 3D moment-resisting frames with elastic and geometric stiffness. Written in
  C.  Source code includes:  frame analysis, LDL' decomposition, LU decomposition, sub-space iteration, Stodola iteration, Sturm eigenvalue checking,  
@@ -15,9 +15,9 @@ Graphical output and mode shape animation via Gnuplot.">
 
 <body>
 
-<img src="../Images/psoe.jpg" height="100" align="left" border="0">
+<img src="http://www.duke.edu/~hpgavin/Images/psoe.jpg" height="100" align="left" border="0">
 <font face="Arial, Helvetica, sans-serif" size="3">
-<nobr><b>A Manual and Reference for <a href="index.html">a Structural Frame Analysis Program</a></b>
+<nobr><b>A Manual and Reference for <a href="index.html">Frame3DD: A Structural Frame Analysis Program</a></b>
 </nobr><br>
 <a href="http://www-cee.egr.duke.edu/">
 Department of Civil and Environmental Engineering</a><br>
@@ -124,7 +124,7 @@ Continue to hit the Return (or Enter) key until the last plot is displayed.
 <p>
 The Input Data file is a plain ASCII text file and must adhere to the format 
 <a href="#InputData">described below</a>.
-Several examples are given at <a href="http://www.duke.edu/~hpgavin/frame/">http://www.duke.edu/~hpgavin/frame/</a>. 
+Several examples are given at <a href="http://www.duke.edu/~hpgavin/frame3dd/">http://www.duke.edu/~hpgavin/frame3dd/</a>. 
    Comments may be placed anywhere in the file and are helpful in organizing the Input Data.   
 A comment begins with one of the following four characters:
      <font face="courier"># % ? ; </font> and continues to the end of the line.   
@@ -142,6 +142,7 @@ Edit your Input Data file with your favorite text editor
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
  <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>,
  <a href="http://www.apple.com/support/mac101/work/23/">TextEdit (OS X)</a>,
+ <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++ (Windows)</a>,
  <a href="http://www.textedit.org/">TextEdit (Windows)</a>,
  <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>, etc.)
 It might take a few tries to get your Input Data just right.  
@@ -156,14 +157,14 @@ For any (?) Linux 2.6 kernel running on an Intel or AMD processor.
 
 <ol>
 <li>        Download the <b>Frame3DD</b> binary file and save as "frame3dd" on your Desktop,
-         or some other directory:<br> | <a href="Linux/frame">RIGHT-CLICK-HERE-FOR-LINUX</a> | <a href="Sun/frame">RIGHT-CLICK-HERE-FOR-SUN</a> |
+         or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/Linux/frame3dd">RIGHT-CLICK-HERE-FOR-LINUX</a> | <a href="http://www.duke.edu/~hpgavin/frame3dd/Sun/frame3dd">RIGHT-CLICK-HERE-FOR-SUN</a> |
 <!-- <li>        RPM's for a variety of distributions are <a href="
 http://software.opensuse.org/download/home:/jdpipe/">here</a>. -->
 <li>        Download and save an example Input/Output file, such as <font face="courier">exA.frm</font>,
-         on your Desktop, or some other directory:<br> | <a href="examples/exA.frm">RIGHT-CLICK-HERE</a> |
+         on your Desktop, or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/examples/exA.frm">RIGHT-CLICK-HERE</a> |
 <li>        Open a terminal window and ...<br>
             <font face="courier">...$   cd ~/Desktop</font><br>
-            <font face="courier">...$   chmod +x frame</font><br>
+            <font face="courier">...$   chmod +x frame3dd</font><br>
          Create a file called  <font face="courier">~/.bash_profile</font> containing the line:<br>
              <font face="courier">export PATH=".:$PATH"</font><br>
          Exit the terminal by typing ... <font face="courier">exit</font>
@@ -182,7 +183,7 @@ http://software.opensuse.org/download/home:/jdpipe/">here</a>. -->
          Hit the 'Return' key in the Terminal window to see the sequence of plots
          and animations until the <font face="courier"> gnuplot></font> prompt returns.<br>
 To create a PostScript file of your plot, download and save the Gnuplot script:
-<a href="../save.plt"><font face="courier">save.plt</font></a>, and use the following commands:<br>
+<a href="http://www.duke.edu/~hpgavin/frame3dd/save.plt"><font face="courier">save.plt</font></a>, and use the following commands:<br>
 <font face="courier">
       gnuplot> load 'save.plt'<br>
       gnuplot> !mv my-plot.ps another-file.ps<br>
@@ -200,12 +201,12 @@ For OS X running on a PowerPC (PPC) or Intel processor.
 
 <ol>
 <li>        Download the <b>Frame3DD</b> application and save as "frame3dd" on your Desktop,
-         or some other directory:<br> | <a href="OSX-PPC/frame">CTRL-CLICK-HERE-FOR-PPC</a> | <a href="OSX-Intel/frame">CTRL-CLICK-HERE-FOR-INTEL</a> |
+         or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/OSX-PPC/frame3dd">CTRL-CLICK-HERE-FOR-PPC</a> | <a href="http://www.duke.edu/~hpgavin/frame3dd/OSX-Intel/frame3dd">CTRL-CLICK-HERE-FOR-INTEL</a> |
 <li>        Download and save an example Input/Output file, such as <font face="courier">exA.frm</font>,
-         on your Desktop, or some other directory:<br> | <a href="examples/exA.frm">CTRL-CLICK-HERE</a> |
+         on your Desktop, or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/examples/exA.frm">CTRL-CLICK-HERE</a> |
 <li>        Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
             <font face="courier">...$   cd ~/Desktop</font><br>
-            <font face="courier">...$   chmod +x frame</font><br>
+            <font face="courier">...$   chmod +x frame3dd</font><br>
          Create a plain text file (using TextEdit) called  <font face="courier">~/.profile</font> containing the line:<br>
              <font face="courier">export PATH=".:$PATH:/usr/local/bin"</font><br>
          Quit the Terminal application.  [APPLE] [Q]
@@ -214,7 +215,7 @@ For OS X running on a PowerPC (PPC) or Intel processor.
             <font face="courier">...$   frame3dd example.frm</font><br>
          where <font face="courier">example.frm</font> is the name of your Input Data file.
 <!-- <li>        Run <b>Frame3DD</b> from a Terminal window  (another way).
-             Click on the <b>frame</b> icon in your Desktop.
+             Click on the <b>frame3dd</b> icon in your Desktop.
              A Terminal window should automatically open.
              When asked for the Input/Output file name, type ...<br>
                <font face="courier">/Users/your_name_here/Desktop/examples/exA.frm</font> -->
@@ -225,43 +226,23 @@ or <a href="http://macvim.org/OSX/index.php">vi</a><br>
 </ol>
 
 <p>
-       The graphical output is viewed with Gnuplot.  You'll need both <a href="http://sourceforge.net/projects/aquaterm/">AquaTerm</a> and <a href="http://sourceforge.net/projects/gnuplot/">Gnuplot</a>.
+       The graphical output is viewed with Gnuplot.  You'll need both <a href="
+http://darwinports.com/">DarwinPorts</a> and <a href="http://gnuplot.darwinports.com">Gnuplot</a> for OS X.
 </p>
 
-<p>
-        Download and install <a href="http://sourceforge.net/project/showfiles.php?group_id=39915">AquaTerm v1.0.0</a> (not v1.0.1).
-</p>
-<ol>
-<li>         Click on "v1.0.0" then click on "AquaTerm1.0.0.dmg" to start the download.
-<li>         Click on the "AquaTerm1.0.0.dmg" icon in your HardDisk download directory.
-<li>         Click on the "AquaTerm.pkg" icon and continue with the installation.<br>
-            Enter the administrator password when asked.
-<!--        Download and install <a href="http://sourceforge.net/projects/aquaterm/">AquaTerm v1.0.0</a> (not v1.0.1) . -->
-<li>         If you have already installed AquaTerm v1.0.1, you may not be able
-         to instal v1.0.0.   <br> 
-In that case open a Terminal window (Applications > Utilities > Terminal) and ... <br>
-            <font face="courier">...$ cd /usr/local/lib/ </font><br>
-            <font face="courier">...$ sudo ln -s libaquaterm.1.0.1.dylib libaquaterm.1.0.0.dylib </font><br>
-                    Enter the administrator password when asked.
-</ol>
          
+<!--
 <p>
 For a version of Gnuplot for OS X-Intel, or for a version with mouse-scrolling and panning features,
 install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href="http://developer.apple.com/tools/">Apple Development Tools</a>, and then <a href="http://maba.wordpress.com/2006/08/02/scientific-plotting-on-mac-os-x-using-gnuplot-and-plot/">compile Gnuplot from sources</a>.  
 </p>
+-->
 
-<p>
-To download and install Gnuplot 4.0.0 for OS X running on PowerPC:<br>
-|<a href="http://sourceforge.net/project/showfiles.php?group_id=2055">CLICK-HERE</a>| ... and ...
 <ol>
-<li>         Click on the green Download button for "gnuplot 4.0.0"
-<li>         Click on "Gnuplot-4.0.0.dmg" and save to disk.
-<li>         Click on the "Gnuplot-4.0.0.dmg" icon in your HardDisk download directory.
-<li>         Click on the "gnuplot.pkg" icon and continue with the installation.<br>
-         Enter the administrator password when asked.
-<li>         Create a file called "~/.gnuplot" (using TextEdit) containing the single line: <br>
-<font face="courier"> set term aqua </font> <br>
-
+<li> First install DarwinPorts, and then install Gnuplot.
+<li>Follow the instructions |<a href="http://darwinports.com/">HERE</a>| to download and install DarwinPorts.
+<li> Follow the instructions |<a href="http://gnuplot.darwinports.com/">HERE</a>| 
+to download and install Gnuplot 4.2.4 for OS X.
 <li>        Test that Gnuplot works.
          Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
           <font face="courier">    ...$  gnuplot</font><br>
@@ -292,9 +273,9 @@ For DOS and MS-Windows, the following special guidelines should be followed:
 
 <ol>
 <li>        Download the <b>Frame3DD</b> executeable and save as "frame3dd.exe" on your Desktop,
-         or some other directory:<br> | <a href="DOS/frame.exe">RIGHT-CLICK-HERE</a> |
+         or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/frame3dd.exe">RIGHT-CLICK-HERE</a> |
 <li>        Download and save an example Input/Output file, such as <font face="courier">exA.frm</font>,
-         on your Desktop, or some other directory:<br> | <a href="examples/exA.frm">RIGHT-CLICK-HERE</a> |
+         on your Desktop, or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/examples/exA.frm">RIGHT-CLICK-HERE</a> |
 <li>       Create a directory called   <font face="courier">C:\tmp</font>   if it doesn't already exit.
 <li>       The plot filename (plot_file) must have eight or fewer 
          characters before the period (.) and three or fewer characters
@@ -304,7 +285,7 @@ For DOS and MS-Windows, the following special guidelines should be followed:
          than seven characters, and no character may be a period (.).
        The mode shape data file name (<font face="courier">mode_file</font>) should contain no more
          than five  characters, and no character may be a period (.).
-       The <a href="http://www.duke.edu/~hpgavin/frame/index.html">example Input/Output files</a>, exA.frm ... exJ.frm, adhere to these rules.  
+       The <a href="http://www.duke.edu/~hpgavin/frame3dd/index.html">example Input/Output files</a>, exA.frm ... exJ.frm, adhere to these rules.  
 <li>       You may need to change the line <font face="courier">/tmp/mesh_file</font> to <font face="courier">C:\tmp\mesh_file</font>
          and the line <font face="courier">/tmp/mode_file</font> to <font face="courier">C:\tmp\mode_file</font>
 <li>       Run <b>Frame3DD</b> from a MS-DOS window or Command Prompt window ...<br>
@@ -314,8 +295,10 @@ For DOS and MS-Windows, the following special guidelines should be followed:
          where <font face="courier">example.frm</font> is the name of your Input Data file.  
 
 
-<li>       The graphical output is best viewed with the <a href="ftp://ftp.gnuplot.info/pub/gnuplot/gp400win32.zip">MS-Windows version of Gnuplot</a>.
-       The <a href="ftp://ftp.gnuplot.info/pub/gnuplot/gp400dj2.zip">DOS version of Gnuplot</a> works except for mode shape animation.   
+<li>       The graphical output is best viewed with the
+<a href="http://downloads.sourceforge.net/gnuplot/gp424win32.zip?use_mirror=">
+MS-Windows version of Gnuplot</a>.
+       The <a href="http://downloads.sourceforge.net/gnuplot/gp424dj2.zip?use_mirror=">DOS version of Gnuplot</a> works except for mode shape animation.   
        Right-clicking on one of these two links will download a <font face="courier">.zip</font> file for Gnuplot.
        Click on <b>Open</b> to start WinZip, and <b>Extract</b> to creat a <b>Gnuplot</b> folder in <b>My Documents</b>.
        Open the folder <b>My Documents\Gnuplot\bin</b> and right click on <b>wgnuplot</b>
@@ -331,16 +314,17 @@ For DOS and MS-Windows, the following special guidelines should be followed:
          Hit the 'Return' key in the Terminal window to see the sequence of plots
          and animations until the <font face="courier"> gnuplot></font> prompt returns.<br>
 <li>       Edit your Input Data file using any plain text editor, i.e.,
-             (Start > Programs > Accessories > Notepad) 
+             (Start > Programs > Accessories > 
+ <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>)
 or <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>.
-<li>       You may wish to delete all the files in <font face="courier">C:\tmp\</font> when you have finished
+<li>       You may wish to delete all the files in the <font face="courier">C:\tmp</font> directory when you have finished
          your analyses.  <br>
 </ol>
 
 
 <a name="FrameEd">
- <a href="DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).<br>
- The .zip file <a href="DOS/FrameEd.zip">FrameEd.zip</a> includes: 
+ <a href="http://www.duke.edu/~hpgavin/frame3dd//DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).<br>
+ The .zip file <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip">FrameEd.zip</a> includes: 
  <ul>
  <li>the GUI executeable, Frame_Ed.exe
  <li>the frame analysis executeable, Frame3d.exe, for the 20020103 version
@@ -365,7 +349,7 @@ to match the first mode.
 
 <p>
 <b>Frame3DD</b> may optionally be executed from within Matlab on any platform,
-via the Matlab interface function <a href="Matlab/frame_3dd.m">frame_3dd.m</a> 
+via the Matlab interface function <a href="http://www.duke.edu/~hpgavin/frame3dd/Matlab/frame_3dd.m">frame_3dd.m</a> 
 <pre>
 function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 % [D,R,F,L,Ks] = frame_3dd (XYZ,JTS,RCT,EAIJ,P,W,D)
@@ -422,7 +406,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 </p>
 
 <p>
-This m-function, <a href="Matlab/frame_3dd.m">frame_3dd.m</a>,
+This m-function, <a href="../Matlab/frame_3dd.m">frame_3dd.m</a>,
 executes the system command
 (frame3dd on Linux or OS-X, frame3dd.exe on Windows)
 to compute the solution.  
@@ -436,7 +420,7 @@ working directory.
 <p>
 <ol>
 <li> The Matlab file for your problem first sets up the various matrices defining the problem for analysis and calls frame_3dd.m <br> 
-A <a href="Matlab/exA.m">Matlab version of Example A</a> illustrates
+A <a href="http://www.duke.edu/~hpgavin/frame3dd/Matlab/exA.m">Matlab version of Example A</a> illustrates
 how to analyze problems using the Matlab interface to <b>Frame3DD</b>.<br>
 Matlab versions of the other examples are forthcoming.
 <li> frame_3dd.m writes IOdata.frm,
@@ -633,7 +617,7 @@ where
 <!-- a = 0.224435; b = 0.160705 -->
 <br>
 
-                <img src="img/tors.jpg" align="center" border="0"><br>
+                <img src="http://www.duke.edu/~hpgavin/frame3dd/img/tors.jpg" align="center" border="0"><br>
          For more details, see page 271 of Timoshenko and Goodier (1951).  
 </p>
 
@@ -711,7 +695,7 @@ Four types of static loads may be specified.
 Multiple static load cases are generated by specifying 
 <a href="#Variables">the variable nL</a>
 in the 
-<a href="#InputData">Input Data</a>, and by specifying the four types of loads for each load case, as shown in <a href="examples/exA.frm">Example A</a> and <a href="examples/exB.frm">Example B</a>.
+<a href="#InputData">Input Data</a>, and by specifying the four types of loads for each load case, as shown in <a href="http://www.duke.edu/~hpgavin/frame3dd/examples/exA.frm">Example A</a> and <a href="http://www.duke.edu/~hpgavin/frame3dd/examples/exB.frm">Example B</a>.
 </p>
 
 <b> Support Conditions and Reactions </b><br>
@@ -1172,12 +1156,12 @@ and the texts by
     Brooks/Cole, 1999.                  ISBN: 0534206700
 
 <li> Jaroslav Mackerle,
-    ``<a href="doc/mackerle97.pdf">Finite element linear and nonlinear, static and dynamic analysis of structural
+    ``<a href="mackerle97.pdf">Finite element linear and nonlinear, static and dynamic analysis of structural
     elements: a bibliography (1992-1995)</a>,''
     Engineering Computations, vol. 14, no. 4, pp. 347-440,  1997.
 
 <li> Jaroslav Mackerle,
-    ``<a href="doc/mackerle00.html">Finite element linear and nonlinear, static and dynamic analysis of structural
+    ``<a href="mackerle00.html">Finite element linear and nonlinear, static and dynamic analysis of structural
     elements - an addendum - A bibliography (1996-1999)</a>,''
     Engineering Computations, vol. 17, no. 3, pp. 274-351,  2000.
 
@@ -1187,7 +1171,7 @@ Matrix Structural Analysis, 2nd ed.</a> John Wiley, 1999.
 ISBN: 0471376515
 
 <li> W.D. Pilkey, Weize Kang and Uwe Schramm,
-    ``<a href="doc/pilkey95.pdf">New structural matrices for a beam element with shear deformation</a>,''
+    ``<a href="pilkey95.pdf">New structural matrices for a beam element with shear deformation</a>,''
     Finite Elements in Analysis and Design, vol. 19, pp. 25-44,  1995.
 
 <li> William H. Press, Saul A. Teukolsky, William T. Vetterling, Brian P. Flannery,
@@ -1263,7 +1247,7 @@ and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
 <table width="700" border="0" cellspacing="2" cellpadding="2" bold >
 <tr align="left" valign="middle">
 <td>
-<a href="http://www.fsf.org/copyleft/gpl.html"><img src="img/gplv3-127x51.png" border="0"></a>
+<a href="http://www.fsf.org/copyleft/gpl.html"><img src="http://www.duke.edu/~hpgavin/frame3dd/img/gplv3-127x51.png" border="0"></a>
 </td>
 <td width ="600">
 <font face="Verdana, Arial, sans-serif" size="1">
@@ -1317,6 +1301,6 @@ http://www.sourceforge.net/projects/frame3dd/</a>
 <br>updated: May 6 2003, Nov 8 2004, Nov 22 2004, Nov 29 2004, Dec 2 2004, Dec 10 2004, Dec 6 2006, Feb 22 2007, Mar 1 2007, June 6 2007, December 20 2007,
 March 14 2008, September 9 2008
 </font> <br>
-<a href="http://thomer.com/vi/vi.html"><img src="../Images/vi_logo_by_urmas_reinsalu.png" border="0"></a>
+<a href="http://thomer.com/vi/vi.html"><img src="http://www.duke.edu/~hpgavin/Images/vi_logo_by_urmas_reinsalu.png" border="0"></a>
 </body>
 </html>
