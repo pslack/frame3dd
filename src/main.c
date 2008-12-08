@@ -187,6 +187,10 @@ int main(int argc, char *argv[]){
             fprintf(stderr,"warning: %d joints and %d members...", nJ, nM );
 	    fprintf(stderr," not enough members to connect all joints.\n");
         }
+        if ( nL < 1 ) {
+            fprintf(stderr,"error: the number of load cases must be at least 1\n");
+	    exit(1);
+        }
         if ( nL >= _NL_ ) {
             fprintf(stderr,"error: maximum of %d load cases allowed\n", _NL_-1 );
 	    exit(1);
