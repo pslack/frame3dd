@@ -1070,12 +1070,10 @@ WRITE_STATIC_MFILE -  	9sep08
 save joint displacements and member end forces in an m-file
 this function interacts with frame_3dd.m, an m-file interface to frame3dd
 ------------------------------------------------------------------------------*/
-void write_static_mfile ( char *argv[],
-		int nJ, int nM, int nL, int lc, int DoF,
-		int *J1, int *J2,
-		double *F, double *D, int *R,
-		double **Q, double err,
-		int ok
+void write_static_mfile (
+	char *argv[],
+	int nJ, int nM, int nL, int lc, int DoF, int *J1, int *J2,
+	double *F, double *D, int *R, double **Q, double err, int ok
 ){
 	FILE	*fpm;
 	double	disp;
@@ -1086,16 +1084,22 @@ void write_static_mfile ( char *argv[],
 	i=0;
 	while (i<128) {
 		IOfilename[i] = argv[1][i];
-		if (IOfilename[i] == '\0') { IOfilename[i] = '.'; break; }
-		if (IOfilename[i] == '.')	break;
+		if (IOfilename[i] == '\0' || IOfilename[i] == '.') {
+			IOfilename[i] = '_';
+			break;
+		}
 		i++;
-	} IOfilename[i+1]='m'; IOfilename[i+2]='\0';
+	}
+	IOfilename[i+1]='m';
+	IOfilename[i+2]='.';
+	IOfilename[i+3]='m';
+	IOfilename[i+4]='\0';
 
 	wa  = "a";
 	if (lc == 1) wa = "w";
 
 	if ((fpm = fopen (IOfilename, wa)) == NULL) {
-	  fprintf (stderr," error: cannot open file 'frame3dd_mfile.m'\n");
+	  fprintf (stderr," error: cannot open file %s\n", IOfilename );
 	  exit(1);
 	}
 
@@ -1122,7 +1126,7 @@ void write_static_mfile ( char *argv[],
 		for ( i=5; i>=0; i-- ) {
                         if ( fabs(D[6*j-i]) < 1.e-8 )
                                 fprintf (fpm, "\t0.0\t");
-                        else    fprintf (fpm, "\t%e",  D[6*j-i] );
+                        else    fprintf (fpm, "\t%13.6e",  D[6*j-i] );
 		}
 		if ( j < nJ )	fprintf(fpm," ; \n");
 		else		fprintf(fpm," ]'; \n\n");
@@ -1137,19 +1141,19 @@ void write_static_mfile ( char *argv[],
 	for (n=1; n<= nM; n++) {
 		if ( fabs(Q[n][1]) < 0.0001 )
 			fprintf (fpm, "\t0.0\t");
-		else    fprintf (fpm, "\t%e", Q[n][1] );
+		else    fprintf (fpm, "\t%13.6e", Q[n][1] );
 		for (i=2; i<=6; i++) {
 			if ( fabs(Q[n][i]) < 0.0001 )
 				fprintf (fpm, "\t0.0\t");
-			else    fprintf (fpm, "\t%e", Q[n][i] );
+			else    fprintf (fpm, "\t%13.6e", Q[n][i] );
 		}
 		if ( fabs(Q[n][7]) < 0.0001 )
 			fprintf (fpm, "\t0.0\t");
-		else    fprintf (fpm, "\t%e", Q[n][7] );
+		else    fprintf (fpm, "\t%13.6e", Q[n][7] );
 		for (i=8; i<=12; i++) {
 			if ( fabs(Q[n][i]) < 0.0001 )
 				fprintf (fpm, "\t0.0\t");
-			else    fprintf (fpm, "\t%e", Q[n][i] );
+			else    fprintf (fpm, "\t%13.6e", Q[n][i] );
 		}
 		if ( n < nM )	fprintf(fpm," ; \n");
 		else		fprintf(fpm," ]'; \n\n");
@@ -1160,20 +1164,17 @@ void write_static_mfile ( char *argv[],
         fprintf(fpm,"R%d=[",lc);
 	for (j=1; j<=nJ; j++) {
 		i = 6*(j-1);
-		if ( R[i+1] || R[i+2] || R[i+3] ||
-		     R[i+4] || R[i+5] || R[i+6] ) {
-                        for (i=5; i>=0; i--) {
-                                if ( !R[6*j-i] || fabs(F[6*j-i]) < 0.0001 )
-                                        fprintf (fpm, "\t0.0\t");
-                                else    fprintf (fpm, "\t%e", -F[6*j-i] );
-                        }
-			if ( j < nJ )	fprintf(fpm," ; \n");
-			else		fprintf(fpm," ]'; \n\n");
+		for (i=5; i>=0; i--) {
+			if ( !R[6*j-i] || fabs(F[6*j-i]) < 0.0001 )
+				fprintf (fpm, "\t0.0\t");
+			else    fprintf (fpm, "\t%13.6e", -F[6*j-i] );
 		}
+		if ( j < nJ )	fprintf(fpm," ; \n");
+		else		fprintf(fpm," ]'; \n\n");
 	}
 
 	fprintf(fpm,"%% R M S   E Q U I L I B R I U M    E R R O R: %9.3e\n", err );
-	fprintf(fpm,"\n\n  load Ks; \n\n");
+	fprintf(fpm,"\n\n  load Ks \n\n");
 
 	fclose(fpm);
 
