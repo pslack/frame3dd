@@ -104,7 +104,7 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li>       Read the Manual and Reference (this file).
 <li>       Download and install the <b>Frame3DD</b> executable and Gnuplot for your operating system.  (See below.)
 <li>       Download some of the example Input/Output files and compare them to the corresponding plots and movies.
-<li>       Open a terminal window and run the program.  <br>
+<li>       Open a terminal window to run the program.  <br>
           <font face="courier">frame3dd [example Input/Output file]</font>
 <li>     Read the computed Output Data, which is written to the end of the Input/Output file.
 <!--     Running this program will create many files.  Most of them are used 
@@ -128,6 +128,10 @@ Several examples are given at <a href="http://www.duke.edu/~hpgavin/frame3dd/">h
    Comments may be placed anywhere in the file and are helpful in organizing the Input Data.   
 A comment begins with one of the following four characters:
      <font face="courier"># % ? ; </font> and continues to the end of the line.   
+All commas in the Input Data are ignored.  
+Floating point numbers must be entered as 1.234 1234 or 1.234e3.
+Arithmatic operations such as 1.234*10^3 or 6*sin(pi/2) are <b>not</b> allowed
+in the Input Data unless the <a href="#Matlab">Matlab interface</a> is used.  
 </p>
 
 
@@ -270,7 +274,7 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
 
 
 <hr>
-<h4>HOW TO INSTALL THE DOS AND MS-WINDWOS VERSION</h4>
+<h4>HOW TO INSTALL THE DOS AND MS-WINDOWS VERSION</h4>
 
 For DOS and MS-Windows, the following special guidelines should be followed:
 
@@ -348,6 +352,7 @@ to match the first mode.
 </a>
 
 <hr>
+<a name="Matlab">
 <h4>MATLAB INTERFACE</h4>
 
 <p>
@@ -428,11 +433,11 @@ how to analyze problems using the Matlab interface to <b>Frame3DD</b>.<br>
 Matlab versions of the other examples are forthcoming.
 <li> frame_3dd.m writes IOdata.frm,
 <li> The executeable frame3dd appends IOdata.frm
-with the Output Data, and writes IOdata.m, containing the Output Data.<br>
-A Matlab file containing the Output Data is written whenever the frame3dd   
+with the Output Data, and writes IOdata_out.m, containing the Output Data.<br>
+An m-file containing the Output Data is written whenever the frame3dd   
 executeable is run, whether or not the analysis is initiated by frame_3dd.m.
-<li> frame_3dd.m runs IOdata.m, containing the matrices D, R, F, L, and Ks,
-<li> frame_3dd.m returns D, R, F, L, and Ks, to the Matlab workspace, or your Matlab function. 
+<li> frame_3dd.m runs IOdata_out.m, containing the matrices D, R, F, L, and Ks,
+<li> frame_3dd.m returns D, R, F, L, and Ks, to the Matlab workspace, or to your Matlab function. 
 </ol>
 </p>
 

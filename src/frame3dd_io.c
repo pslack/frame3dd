@@ -1076,7 +1076,6 @@ void write_static_mfile (
 	double *F, double *D, int *R, double **Q, double err, int ok
 ){
 	FILE	*fpm;
-	double	disp;
 	int	i,j,n;
 	char	*wa;
 	char	IOfilename[128];
@@ -1090,10 +1089,12 @@ void write_static_mfile (
 		}
 		i++;
 	}
-	IOfilename[i+1]='m';
-	IOfilename[i+2]='.';
-	IOfilename[i+3]='m';
-	IOfilename[i+4]='\0';
+	IOfilename[i+1]='o';
+	IOfilename[i+2]='u';
+	IOfilename[i+3]='t';
+	IOfilename[i+4]='.';
+	IOfilename[i+5]='m';
+	IOfilename[i+6]='\0';
 
 	wa  = "a";
 	if (lc == 1) wa = "w";
@@ -1120,9 +1121,6 @@ void write_static_mfile (
 	fprintf(fpm,"%%\tX-dsp\t\tY-dsp\t\tZ-dsp\t\tX-rot\t\tY-rot\t\tZ-rot\n");
         fprintf(fpm,"D%d=[",lc);
 	for (j=1; j<= nJ; j++) {
-	    disp = 0.0;
-	    for ( i=5; i>=0; i-- ) disp += fabs( D[6*j-i] );
-	    if ( disp > 0.0 ) {
 		for ( i=5; i>=0; i-- ) {
                         if ( fabs(D[6*j-i]) < 1.e-8 )
                                 fprintf (fpm, "\t0.0\t");
@@ -1130,7 +1128,6 @@ void write_static_mfile (
 		}
 		if ( j < nJ )	fprintf(fpm," ; \n");
 		else		fprintf(fpm," ]'; \n\n");
-	    }
 	}
 
 	fprintf(fpm,"%% M E M B E R   E N D   F O R C E S");

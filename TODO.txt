@@ -1,7 +1,8 @@
 TODO LIST for FRAME3DD
 ----------------------
 
-Add support for separate prescribed displacements for each load case individually.
+Add support for separate prescribed displacements for each
+load case individually.
 
 Add support for .CSV input and output.
 
@@ -19,14 +20,14 @@ migrate to a more object-oriented coding style, and simplify the passing
 of parameters to functions.
 
 Implement import of Microstran .arc format. We can already parse these files
-(including many constructs that aren't supported by FRAME) but we can not yet
-actually calculate using the parsed data.
+(including many constructs that aren't supported by FRAME3DD)
+but we can not yet actually calculate using the parsed data.
 
 Consider making use of third-party matrix routines, rather to providing them
 ourselves. Good options would be UMFPACK (for sparse matrices) or LAPACK (dense).
 There would be assumed to be some efficiency improvements as a result of this
 also, particularly if sparse matrix methods can be used.
 
-Fix rendering of members with offsets specified in local coordinates (ie MOFF LO
-statements).
+Fix rendering of members with offsets specified in local coordinates
+(ie MOFF LO statements).
 
