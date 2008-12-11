@@ -46,9 +46,7 @@
 
 /* forward decls */
 
-#ifndef HAVE_ITOA
-static void itoa(int n, char s[], int k);
-#endif
+static void my_itoa(int n, char s[], int k); /* specialized for portability */
 
 static void getline_no_comment(
 	FILE *fp,    /**< pointer to the file from which to read */
@@ -650,7 +648,7 @@ void read_mass_data(
 
 #ifdef MASSDATA_DEBUG
 	FILE	*mf;				// mass data file
-	mf = fopen("MassData.txt","w");	// open mass data file
+	mf = fopen("MassData.txt","w");		// open mass data file
 	if ((mf = fopen ("MassData.txt", "w")) == NULL) {
 	  fprintf (stderr," error: cannot open file 'MassData.txt'\n");
 	  exit(1);
@@ -699,15 +697,15 @@ void read_mass_data(
 	    	fprintf(stderr,"  warning: All extra joint inertia at joint %d  are zero\n", jnt );
 	}
 
-	for (m=1;m<=nM;m++) {			/* check inertia data	*/
+	for (m=1;m<=nM;m++) {			/* chec inertia data	*/
 	    if ( d[m] < 0.0 || BMs[m] < 0.0 || d[m]+BMs[m] <= 0.0 ) {
 		fprintf(stderr,"  error: Non-positive mass or density\n");
 		fprintf(stderr,"  d[%d]= %lf  BMs[%d]= %lf\n",m,d[m],m,BMs[m]);
 		exit(1);
 	    }
 	}
-/*	for (m=1;m<=nM;m++)	ms += BMs[m]; // consistent mass doesn't agree */
-/*	if ( ms > 0.0 )		*lump = 1;    // with concentrated masses, BMs  */
+/*	for (m=1;m<=nM;m++) ms += BMs[m]; // consistent mass doesn't agree  */
+/*	if ( ms > 0.0 )	    *lump = 1;    // with concentrated masses, BMs  */
 
 	printf(" structural mass ");
 	dots(36);
@@ -1282,14 +1280,14 @@ void static_mesh(
 	double	mx, my, mz;	/* coordinates of the member labels	*/
 	int	j1, j2, i, j, m, X=0, Y=0, Z=0;
 	char	meshfl[64], str[8], D3 = '#';
-    time_t  now;            /* modern time variable type    (DJGPP) */
+	time_t  now;            /* modern time variable type    (DJGPP) */
 
 	strcpy(meshfl,meshfile);
 	str[0]='f'; str[1]='\0';
 	strcat(meshfl,str);
 	str[0]='.'; str[1]='\0';
 	strcat(meshfl,str);
-	itoa(lc,str,3);
+	my_itoa(lc,str,3);
 	strcat(meshfl,str);
 
 	if ((fpmfx = fopen (meshfl, "w")) == NULL) {
@@ -1487,7 +1485,7 @@ void modal_mesh(
 	for (m=1; m<=modes; m++) {
 
 		strcpy(modefl,modefile);
-		s1[0]='-'; s1[1]='\0'; itoa(m,s2,2);  strcat(s1,s2);  strcat(modefl,s1);
+		s1[0]='-'; s1[1]='\0'; my_itoa(m,s2,2);  strcat(s1,s2);  strcat(modefl,s1);
 
 		if ((fpm = fopen (modefl, "w")) == NULL) {
 			printf (" error: cannot open modal mesh file: %s\n", modefl);
@@ -1654,11 +1652,11 @@ void animate(
 
 	    strcpy(modefl,modefile);
 	    strcpy(framefl,modefile);
-	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2);
+	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
 	    strcat(framefl,s1);
-	    strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
+	    strcat(s1,".");  my_itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 	    s1[0] = '-'; s1[1] = 'f'; s1[2] = '-'; s1[3] = '\0';
-	    itoa(frame_number++,s2,3); strcat(s1,s2); strcat(framefl,s1);
+	    my_itoa(frame_number++,s2,3); strcat(s1,s2); strcat(framefl,s1);
 	    s1[0] = '.'; s1[1] = 'p'; s1[2] = 's'; s1[3] = '\0';
 	    strcat(framefl,s1);
 
@@ -1683,11 +1681,11 @@ void animate(
 
 	    strcpy(modefl,modefile);
 	    strcpy(framefl,modefile);
-	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2);
+	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
 	    strcat(framefl,s1);
-	    strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
+	    strcat(s1,".");  my_itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 	    s1[0] = '-'; s1[1] = 'f'; s1[2] = '-'; s1[3] = '\0';
-	    itoa(frame_number++,s2,3); strcat(s1,s2); strcat(framefl,s1);
+	    my_itoa(frame_number++,s2,3); strcat(s1,s2); strcat(framefl,s1);
 	    s1[0] = '.'; s1[1] = 'p'; s1[2] = 's'; s1[3] = '\0';
 	    strcat(framefl,s1);
 
@@ -1711,8 +1709,8 @@ void animate(
 	 fr = 0;
 
 	 strcpy(modefl,modefile);
-	 s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2);
-	 strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
+	 s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
+	 strcat(s1,".");  my_itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 
 	 if ( D3 == '#' ) {
 	 	fprintf(fpm,"plot '%s' u 2:3 w l lw 2 lt 5, ", meshfile );
@@ -1733,8 +1731,8 @@ void animate(
 	  for ( fr=0; fr<=frames; fr++ ) {
 
 	    strcpy(modefl,modefile);
-	    s1[0] = '-';  s1[1] = '\0';  itoa(m,s2,2);  strcat(s1,s2);
-	    strcat(s1,".");  itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
+	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
+	    strcat(s1,".");  my_itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 
 	    if ((fpm = fopen (modefl, "w")) == NULL) {
 		printf (" error: cannot open modal mesh file: %s\n", modefl);
@@ -1858,10 +1856,10 @@ void bent_beam(
 
 
 /*------------------------------------------------------------------------------
-ITOA  -  Convert an integer n to charcters in s, from K&R, 1978,   p. 59-60
+MY_ITOA  -  Convert an integer n to charcters in s, from K&R, 1978,   p. 59-60
+... specialized for portability between GNU GCC and DJGPP GCC
 ------------------------------------------------------------------------------*/
-#ifndef HAVE_ITOA
-void itoa(int n, char s[], int k){
+void my_itoa(int n, char s[], int k){
 	int	c, i, j, sign;
 
 	if ((sign = n) < 0) 		/* record sign */
@@ -1886,7 +1884,7 @@ void itoa(int n, char s[], int k){
 	}
 	return;
 }
-#endif
+
 
 /*------------------------------------------------------------------------------
 DOTS  -  print a set of dots (periods)

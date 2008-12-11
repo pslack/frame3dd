@@ -1,4 +1,4 @@
-A three dimensional frame
+Example G: a building with a set-back 
 
 15                      % number of joints 
 24			% number of members
@@ -140,8 +140,8 @@ FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
-A three dimensional frame 
-Mon Dec  1 13:10:31 2008
+Example G: a three dimensional frame 
+Thu Dec 11 10:16:47 2008
 ________________________________________________________________________________
 15 JOINTS;    24 MEMBERS;    1 LOAD CASES;
 3 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;

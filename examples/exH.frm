@@ -1,4 +1,4 @@
-a Pedestrian Ramp
+Example H: a pedestrian ramp
 
 148                     % number of joints 
 295			% number of members
@@ -1070,8 +1070,8 @@ FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
-a Pedestrian Ramp 
-Mon Dec  1 13:21:12 2008
+Example H: a pedestrian ramp 
+Thu Dec 11 10:16:53 2008
 ________________________________________________________________________________
 148 JOINTS;    295 MEMBERS;    1 LOAD CASES;
 36 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;

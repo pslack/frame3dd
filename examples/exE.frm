@@ -1,4 +1,4 @@
-a three dimensional structure showing lateral-torsional dynamic modes
+Example E: a three dimensional structure showing lateral-torsional dynamic modes
 
 12			% number of joints
 15			% number of members
@@ -113,8 +113,8 @@ FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
-a three dimensional structure showing lateral-torsional dynamic modes 
-Mon Dec  1 13:09:31 2008
+Example E: a three dimensional structure showing lateral-torsional dynamic modes 
+Thu Dec 11 10:16:34 2008
 ________________________________________________________________________________
 12 JOINTS;    15 MEMBERS;    1 LOAD CASES;
 3 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;

@@ -1,4 +1,4 @@
-a tetrahedral frame - static and dynamic analysis 
+Example C: a tetrahedral frame - static and dynamic analysis 
 
 18                      % number of joints 
 48 			% number of members
@@ -181,8 +181,8 @@ FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
-a tetrahedral frame - static and dynamic analysis  
-Mon Dec  1 13:06:48 2008
+Example C: a tetrahedral frame - static and dynamic analysis  
+Thu Dec 11 10:16:25 2008
 ________________________________________________________________________________
 18 JOINTS;    48 MEMBERS;    1 LOAD CASES;
 4 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;

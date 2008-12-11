@@ -1,4 +1,4 @@
-a seismically-isolated building model
+Example F: a seismically-isolated building model
 
 36		% number of joints 
 58		% number of members
@@ -280,8 +280,8 @@ FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
-a seismically-isolated building model 
-Mon Dec  1 13:10:04 2008
+Example F: a seismically-isolated building model 
+Thu Dec 11 10:16:39 2008
 ________________________________________________________________________________
 36 JOINTS;    58 MEMBERS;    1 LOAD CASES;
 14 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;

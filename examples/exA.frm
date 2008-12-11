@@ -1,4 +1,4 @@
-linear static analysis of a 2D truss with support settlement
+Example A: linear static analysis of a 2D truss with support settlement
 
 12				% number of joints 
 21				% number of members 
@@ -115,8 +115,8 @@ FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
-linear static analysis of a 2D truss with support settlement 
-Mon Dec  1 13:28:16 2008
+Example A: linear static analysis of a 2D truss with support settlement 
+Thu Dec 11 10:16:18 2008
 ________________________________________________________________________________
 12 JOINTS;    21 MEMBERS;    2 LOAD CASES;
 12 FIXED JOINTS;   1 PRESCRIBED DISPLACEMENTS;

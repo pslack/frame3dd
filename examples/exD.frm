@@ -1,4 +1,4 @@
-dynamic properties of an un-restrained frame with a triangular section
+Example D: dynamic properties of an un-restrained frame with a triangular section
 
 24			% number of joints
 30			% number of members
@@ -142,8 +142,8 @@ FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
-dynamic properties of an un-restrained frame with a triangular section 
-Mon Dec  1 13:09:00 2008
+Example D: dynamic properties of an un-restrained frame with a triangular section 
+Thu Dec 11 10:22:11 2008
 ________________________________________________________________________________
 24 JOINTS;    30 MEMBERS;    1 LOAD CASES;
 0 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;

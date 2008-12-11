@@ -65,9 +65,12 @@ rm -rf %{buildroot}
 * Thu Dec 11 2008 Henri Gavin <henri.gavin@duke.edu> 20081211
 - Fixed bugs in writing Matlab m-file output.
 - documentation updated.  
+- renamed itoa function to my_itoa for portability to various compilers
+
 * Mon Dec 08 2008 Henri Gavin <henri.gavin@duke.edu> 20081208
 - An error message is now displayed if nL < 1
 - documentation updated.
+
 * Mon Dec 01 2008 Henri Gavin <henri.gavin@duke.edu> 20081201
 - Removed the redefine of float to double, now all floating point
   variables are defined as doubles.

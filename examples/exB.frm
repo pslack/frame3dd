@@ -1,4 +1,4 @@
-pyramid-shaped frame --- static and dynamic analysis
+Example B: a pyramid-shaped frame --- static and dynamic analysis
 
 5			% number of joints 
 4			% number of members			
@@ -95,8 +95,8 @@ FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
-pyramid-shaped frame --- static and dynamic analysis 
-Mon Dec  1 13:06:28 2008
+Example B: a pyramid-shaped frame --- static and dynamic analysis 
+Thu Dec 11 10:16:22 2008
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;
 4 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;
