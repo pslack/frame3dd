@@ -165,7 +165,7 @@ int main(int argc, char *argv[]){
 	fclose(fp);
 
 	/*open clean input file*/
-	if ((fp = fopen ("frame3dd.cln", "r")) == NULL) {
+	if ((fp = fopen ("/tmp/frame3dd.cln", "r")) == NULL) {
 		fprintf (stderr," error: cannot open cleaned input file \n");
 		exit(1);
 	}

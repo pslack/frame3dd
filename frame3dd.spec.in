@@ -62,10 +62,14 @@ rm -rf %{buildroot}
 
 %changelog
 
+* Fri Dec 12 2008 Henri Gavin <henri.gavin@duke.edu> 20081212
+- The file frame3dd.cln is now written to /tmp/
+
 * Thu Dec 11 2008 Henri Gavin <henri.gavin@duke.edu> 20081211
 - Fixed bugs in writing Matlab m-file output.
-- documentation updated.  
-- renamed itoa function to my_itoa for portability to various compilers
+- Documentation updated.  
+- The name of the outout m-file will not conflict with other file names.
+- Renamed itoa function to my_itoa for portability reasons 
 
 * Mon Dec 08 2008 Henri Gavin <henri.gavin@duke.edu> 20081208
 - An error message is now displayed if nL < 1
@@ -75,8 +79,7 @@ rm -rf %{buildroot}
 - Removed the redefine of float to double, now all floating point
   variables are defined as doubles.
   In a future version variables that can actually be floats, such
-  as variables read from input data files, will be re-defined as
-  floats.
+  as variables read from input data files, will be re-defined as floats.
 - Support for vec3 is retained througout.
 - renamed frm_io.c to frame3dd_io.c
 - renamed frm_io.h to frame3dd_io.h

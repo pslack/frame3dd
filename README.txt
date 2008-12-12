@@ -27,6 +27,12 @@ General Public License (GPL) for details.
 
 ---
 
+You should have obtained this distribution from SourceForge.net 
+
+svn co https://frame3dd.svn.sourceforge.net/svnroot/frame3dd frame3dd 
+
+---
+
 Included in this distribution:
 
 LICENSE.txt  ... GNU GPL license

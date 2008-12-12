@@ -213,8 +213,8 @@ void parse_input(FILE *fp){
 	FILE	*fpc;		/* cleaned inout/output file pointer	*/
 	char	line[256];
 
-	if ((fpc = fopen ("frame3dd.cln", "w")) == NULL) {
-		fprintf (stderr," error: cannot open file 'frame.cln'\n");
+	if ((fpc = fopen ("/tmp/frame3dd.cln", "w")) == NULL) {
+		fprintf (stderr," error: cannot open file '/tmp/frame.cln'\n");
 		exit(1);
 	}
 
@@ -1076,23 +1076,26 @@ void write_static_mfile (
 	FILE	*fpm;
 	int	i,j,n;
 	char	*wa;
-	char	IOfilename[128];
+	char	IOfilename[128]; 
 
 	i=0;
+	j=0; 
 	while (i<128) {
-		IOfilename[i] = argv[1][i];
-		if (IOfilename[i] == '\0' || IOfilename[i] == '.') {
-			IOfilename[i] = '_';
+		IOfilename[j] = argv[1][i];
+		if ( IOfilename[j] == '+' ||
+		     IOfilename[j] == '-' ||
+		     IOfilename[j] == '*' ||
+		     IOfilename[j] == '^' ||
+                     IOfilename[j] == '.' ||
+                     IOfilename[j] == '\0') {
+			IOfilename[j] = '_';
 			break;
 		}
 		i++;
+		j++;
 	}
-	IOfilename[i+1]='o';
-	IOfilename[i+2]='u';
-	IOfilename[i+3]='t';
-	IOfilename[i+4]='.';
-	IOfilename[i+5]='m';
-	IOfilename[i+6]='\0';
+	IOfilename[++j] = '\0';
+	strcat(IOfilename,"out.m");
 
 	wa  = "a";
 	if (lc == 1) wa = "w";
@@ -1283,12 +1286,9 @@ void static_mesh(
 	time_t  now;            /* modern time variable type    (DJGPP) */
 
 	strcpy(meshfl,meshfile);
-	str[0]='f'; str[1]='\0';
-	strcat(meshfl,str);
-	str[0]='.'; str[1]='\0';
-	strcat(meshfl,str);
-	my_itoa(lc,str,3);
-	strcat(meshfl,str);
+	str[0]='f'; str[1]='\0';	strcat(meshfl,str);
+	str[0]='.'; str[1]='\0';	strcat(meshfl,str);
+	my_itoa(lc,str,3);		strcat(meshfl,str);
 
 	if ((fpmfx = fopen (meshfl, "w")) == NULL) {
 		printf (" error: cannot open meshfile: %s\n", meshfile);
@@ -1654,7 +1654,7 @@ void animate(
 	    strcpy(framefl,modefile);
 	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
 	    strcat(framefl,s1);
-	    strcat(s1,".");  my_itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
+	    strcat(s1,"."); my_itoa(fr,s2,3); strcat(s1,s2); strcat(modefl,s1);
 	    s1[0] = '-'; s1[1] = 'f'; s1[2] = '-'; s1[3] = '\0';
 	    my_itoa(frame_number++,s2,3); strcat(s1,s2); strcat(framefl,s1);
 	    s1[0] = '.'; s1[1] = 'p'; s1[2] = 's'; s1[3] = '\0';
@@ -1683,7 +1683,7 @@ void animate(
 	    strcpy(framefl,modefile);
 	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
 	    strcat(framefl,s1);
-	    strcat(s1,".");  my_itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
+	    strcat(s1,"."); my_itoa(fr,s2,3); strcat(s1,s2); strcat(modefl,s1);
 	    s1[0] = '-'; s1[1] = 'f'; s1[2] = '-'; s1[3] = '\0';
 	    my_itoa(frame_number++,s2,3); strcat(s1,s2); strcat(framefl,s1);
 	    s1[0] = '.'; s1[1] = 'p'; s1[2] = 's'; s1[3] = '\0';
@@ -1732,7 +1732,7 @@ void animate(
 
 	    strcpy(modefl,modefile);
 	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
-	    strcat(s1,".");  my_itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
+	    strcat(s1,"."); my_itoa(fr,s2,3); strcat(s1,s2); strcat(modefl,s1);
 
 	    if ((fpm = fopen (modefl, "w")) == NULL) {
 		printf (" error: cannot open modal mesh file: %s\n", modefl);
