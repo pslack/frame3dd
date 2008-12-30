@@ -62,14 +62,20 @@ rm -rf %{buildroot}
 
 %changelog
 
+* Tue Dec 30 2008 Henri Gavin <henri.gavin@duke.edu> 20081230
+- Input data file format changed as follows:
+  > Reaction data are listed just after the Member data.
+  > Prescribed displacements are listed separately for each load case.
+- TODO, Website, Examples, and Documentation updated.
+
 * Fri Dec 12 2008 Henri Gavin <henri.gavin@duke.edu> 20081212
 - The file frame3dd.cln is now written to /tmp/
 
 * Thu Dec 11 2008 Henri Gavin <henri.gavin@duke.edu> 20081211
 - Fixed bugs in writing Matlab m-file output.
-- Documentation updated.  
+- Documentation updated.
 - The name of the outout m-file will not conflict with other file names.
-- Renamed itoa function to my_itoa for portability reasons 
+- Renamed itoa function to my_itoa for portability reasons.
 
 * Mon Dec 08 2008 Henri Gavin <henri.gavin@duke.edu> 20081208
 - An error message is now displayed if nL < 1
@@ -124,5 +130,8 @@ rm -rf %{buildroot}
 - Updated to new version received from H Gavin by email.
 
 * Wed Jun 28 2007 John Pye <john@curioussymbols.com> 20070301
-- Initial version
+- Start of Frame3DD SourceForge project
+
+* Fri Jan 01 1993 Henri Gavin <henri.gavin@duke.edu> 19930101
+- initiation of program at the University of Michigan
 

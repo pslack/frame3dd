@@ -1,9 +1,6 @@
 TODO LIST for FRAME3DD
 ----------------------
 
-Add support for separate prescribed displacements for each
-load case individually.
-
 Add support for .CSV input and output.
 
 Add comments to describe variables in src/*.h files
@@ -30,4 +27,11 @@ also, particularly if sparse matrix methods can be used.
 
 Fix rendering of members with offsets specified in local coordinates
 (ie MOFF LO statements).
+
+
+COMPLETED ITEMS
+------------------
+
+Add support for separate prescribed displacements for each
+load case individually.  (Dec 30 2008)
 
