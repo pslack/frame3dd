@@ -61,10 +61,9 @@ void read_input_data(
 	FILE *fp,
 	int nJ, int nM, vec3 *pos,
 	double *r, double *L, double *Le,
-	int *J1, int *J2, int *anlyz, int *geom, double **Q,
+	int *J1, int *J2,
 	double *Ax, double *Asy, double *Asz,
-	double *J, double *Iy, double *Iz, double *E, double *G, double *p,
-	int *shear, char meshfile[], char plotfile[], double *exagg
+	double *J, double *Iy, double *Iz, double *E, double *G, double *p
 ){
 
 	int	j1, j2, i, j;
@@ -160,6 +159,23 @@ void read_input_data(
 		   exit(1);
 		}
 	}
+
+	return;
+}
+
+
+/*------------------------------------------------------------------------------
+READ_RUN_DATA  -  read information for analysis                   29dec08
+------------------------------------------------------------------------------*/
+void read_run_data (
+	FILE	*fp,
+	int	*shear,
+	int	*geom,
+	char	*meshfile,
+	char	*plotfile,
+	double	*exagg,
+	int	*anlyz
+){
 	fscanf( fp, "%d %d %s %s %lf %d",
 			shear, geom, meshfile, plotfile, exagg, anlyz );
 
@@ -180,8 +196,6 @@ void read_input_data(
 	    fprintf(stderr," factor greater than zero\n");
 	    exit(1);
 	}
-
-	for (i=1;i<=nM;i++)	for(j=1;j<=12;j++)	Q[i][j] = 0.0;
 
 	return;
 }
@@ -261,6 +275,69 @@ void getline_no_comment(
 
 
 /*------------------------------------------------------------------------------
+READ_REACTION_DATA - Read fixed joint displacement boundary conditions 29dec09
+------------------------------------------------------------------------------*/
+void read_reaction_data (
+	FILE *fp, int DoF, int *nR, int nJ, int *R, int *sumR
+){
+	int	i,j,l;
+
+	for (i=1; i<=DoF; i++)	R[i] = 0;
+
+	fscanf(fp,"%d", nR );	/* read restrained degrees of freedom */
+	printf(" number of joints with reactions ");
+	dots(20);
+	printf(" nR = %3d\n",*nR);
+	if ( *nR < 0 || *nR > DoF/6 ) {
+		fprintf(stderr,"  error: valid ranges for nR is 0 ... %d \n", DoF/6 );
+		exit(1);
+	}
+
+	for (i=1; i <= *nR; i++) {
+	    fscanf(fp,"%d", &j);
+	    for (l=5; l >=0; l--) {
+
+		fscanf(fp,"%d", &R[6*j-l] );
+
+		if ( j > nJ ) {
+		    fprintf(stderr,"  error in reaction data: joint number %d is greater than the number of joints, %d \n", j, nJ );
+		    exit(1);
+		}
+		if ( R[6*j-l] != 0 && R[6*j-l] != 1 ) {
+		    fprintf(stderr,"  error in reaction data: Reaction data must be 0 or 1\n");
+		    fprintf(stderr,"  Data for joint %d, DoF %d is %d\n",
+							j, 6-l, R[6*j-l] );
+		    exit(1);
+		}
+	    }
+	    *sumR = 0;
+	    for (l=5; l >=0; l--) 	*sumR += R[6*j-l];
+	    if ( *sumR == 0 ) {
+		fprintf(stderr,"  error: joint %3d has no reactions\n", j);
+		fprintf(stderr,"  Remove joint %3d from the list of reactions\n", j);
+		fprintf(stderr,"  and set nR to %3d \n", *nR-1);
+		exit(1);
+	    }
+	}
+	*sumR=0;	for (i=1;i<=DoF;i++)	*sumR += R[i];
+	if ( *sumR < 4 ) {
+	    fprintf(stderr,"  warning:  Un-restrained structure\n");
+	    fprintf(stderr,"  %d imposed reactions.", *sumR );
+	    fprintf(stderr,"  At least 4 reactions are required to support static loads.\n");
+	    /*	exit(1); */
+	}
+	if ( *sumR >= DoF ) {
+	    fprintf(stderr,"  error in reaction data:  Fully restrained structure\n");
+	    fprintf(stderr,"  %d imposed reactions >= %d degrees of freedom\n",
+								*sumR, DoF );
+	    exit(1);
+	}
+
+	return;
+}
+
+
+/*------------------------------------------------------------------------------
 ASSEMBLE_LOADS  -
 read load information data, assemble un-restrained load vectors	9sep08
 ------------------------------------------------------------------------------*/
@@ -272,10 +349,11 @@ void assemble_loads(
 		double *p, int shear,
 		int *J1, int *J2,
 		int DoF,
-		int nM, int *nF, int *nW, int *nP, int *nT,
+		int nM, int *nF, int *nW, int *nP, int *nT, int *nD,
+		double **Q, 
 		double **F_mech, double **F_temp,
 		double ***W, double ***P, double ***T,
-		double ***feF_mech, double ***feF_temp
+		double ***feF_mech, double ***feF_temp, double **Dp, int *R 
 ){
 	double	Nx1, Vy1, Vz1, Mx1, My1, Mz1,	/* fixed end forces */
 		Nx2, Vy2, Vz2, Mx2, My2, Mz2,
@@ -293,6 +371,9 @@ void assemble_loads(
 			for (lc=1; lc <= nL; lc++)
 				feF_mech[lc][n][i] = feF_temp[lc][n][i] = 0.0;
 
+	for (i=1; i<=DoF; i++)	for (lc=1; lc<=nL; lc++) Dp[lc][i] = 0.0;
+
+	for (i=1;i<=nM;i++)	for(j=1;j<=12;j++)	Q[i][j] = 0.0;
 
 	for (lc = 1; lc <= nL; lc++) {		/* begin load-case loop */
 
@@ -301,7 +382,7 @@ void assemble_loads(
 	  fscanf(fp,"%d", &nF[lc] );		/* joint point loads		*/
 	  printf("  number of loaded joints ");
 	  dots(27);
-	  printf(" nF = %d\n", nF[lc]);
+	  printf(" nF = %3d\n", nF[lc]);
 	  for (i=1; i <= nF[lc]; i++) {	/* ! global structural coordinates ! */
 		fscanf(fp,"%d", &j);
 		if ( j < 1 || j > nJ ) {
@@ -318,7 +399,7 @@ void assemble_loads(
 	  fscanf(fp,"%d", &nW[lc] );	/* uniform distributed loads	*/
 	  printf("  number of uniform distributed loads ");
 	  dots(15);
-	  printf(" nW = %d\n", nW[lc]);
+	  printf(" nW = %3d\n", nW[lc]);
 	  if ( nW[lc] < 0 || nW[lc] > nM ) {
 		fprintf(stderr,"  error: valid ranges for nW is 0 ... %d \n", nM );
 		exit(1);
@@ -383,7 +464,7 @@ void assemble_loads(
 	  fscanf(fp,"%d", &nP[lc] );		/* concentrated point loads	*/
 	  printf("  number of concentrated member point loads ");
 	  dots(9);
-	  printf(" nP = %d\n", nP[lc]);
+	  printf(" nP = %3d\n", nP[lc]);
 	  if ( nP[lc] < 0 || nP[lc] > nM ) {
 		fprintf(stderr,"  error: valid ranges for nP is 0 ... %d \n", nM );
 		exit(1);
@@ -455,7 +536,7 @@ void assemble_loads(
 	  fscanf(fp,"%d", &nT[lc] );		/* thermal loads		*/
 	  printf("  number of members with temperature changes ");
 	  dots(8);
-	  printf(" nT = %d\n", nT[lc] );
+	  printf(" nT = %3d\n", nT[lc] );
 	  if ( nT[lc] < 0 || nT[lc] > nM ) {
 		fprintf(stderr,"  error: valid ranges for nT is 0 ... %d \n", nM );
 		exit(1);
@@ -516,85 +597,15 @@ void assemble_loads(
 	     for (i=7; i<=12; i++) F_temp[lc][6*j2-12+i] += feF_temp[lc][n][i];
 	  }
 
-	}					/* end load-case loop */
-
-	return;
-}
-
-
-/*------------------------------------------------------------------------------
-READ_REACTION_DATA  -  Read fixed joint displacement boundary conditions 7sep08
-------------------------------------------------------------------------------*/
-void read_reaction_data (
-		FILE *fp,
-		int DoF, int *nD, int *nR,
-		int nJ, double *Dp, int *R, int *sumR
-){
-	int	i,j,l;
-
-	for (i=1; i<=DoF; i++)  {
-		Dp[i] = 0.0;
-		R[i] = 0;
-	}
-
-	fscanf(fp,"%d", nR );	/* read restrained degrees of freedom */
-	printf(" number of joints with reactions ");
-	dots(20);
-	printf(" nR = %d\n",*nR);
-	if ( *nR < 0 || *nR > DoF/6 ) {
-		fprintf(stderr,"  error: valid ranges for nR is 0 ... %d \n", DoF/6 );
-		exit(1);
-	}
-
-	for (i=1; i <= *nR; i++) {
-	    fscanf(fp,"%d", &j);
-	    for (l=5; l >=0; l--) {
-
-		fscanf(fp,"%d", &R[6*j-l] );
-
-		if ( j > nJ ) {
-		    fprintf(stderr,"  error in reaction data: joint number %d is greater than the number of joints, %d \n", j, nJ );
-		    exit(1);
-		}
-		if ( R[6*j-l] != 0 && R[6*j-l] != 1 ) {
-		    fprintf(stderr,"  error in reaction data: Reaction data must be 0 or 1\n");
-		    fprintf(stderr,"  Data for joint %d, DoF %d is %d\n",
-							j, 6-l, R[6*j-l] );
-		    exit(1);
-		}
-	    }
-	    *sumR = 0;
-	    for (l=5; l >=0; l--) 	*sumR += R[6*j-l];
-	    if ( *sumR == 0 ) {
-		fprintf(stderr,"  error: joint %3d has no reactions\n", j);
-		fprintf(stderr,"  Remove joint %3d from the list of reactions\n", j);
-		fprintf(stderr,"  and set nR to %3d \n", *nR-1);
-		exit(1);
-	    }
-	}
-	*sumR=0;	for (i=1;i<=DoF;i++)	*sumR += R[i];
-	if ( *sumR < 4 ) {
-	    fprintf(stderr,"  warning:  Un-restrained structure\n");
-	    fprintf(stderr,"  %d imposed reactions.", *sumR );
-	    fprintf(stderr,"  At least 4 reactions are required.\n");
-	    /*	exit(1); */
-	}
-	if ( *sumR >= DoF ) {
-	    fprintf(stderr,"  error in reaction data:  Fully restrained structure\n");
-	    fprintf(stderr,"  %d imposed reactions >= %d degrees of freedom\n",
-								*sumR, DoF );
-	    exit(1);
-	}
-
-	fscanf(fp,"%d", nD );		/* read prescribed displacements */
-	printf(" number of joints with prescribed displacements ");
-	dots(5);
-	printf(" nD = %d\n",*nD);
-	for (i=1; i <= *nD; i++) {
+	  fscanf(fp,"%d", &nD[lc] );	/* read prescribed displacements */
+	  printf("  number of joints with prescribed displacements ");
+	  dots(4);
+	  printf(" nD = %3d\n", nD[lc] );
+	  for (i=1; i <= nD[lc]; i++) {
 		fscanf(fp,"%d", &j);
 		for (l=5; l >=0; l--) {
-			fscanf(fp,"%lf", &Dp[6*j-l] );
-			if ( R[6*j-l] == 0 && Dp[6*j-l] != 0.0 ) {
+			fscanf(fp,"%lf", &Dp[lc][6*j-l] );
+			if ( R[6*j-l] == 0 && Dp[lc][6*j-l] != 0.0 ) {
 			    printf(" Initial displacements can be prescribed");
 			    printf(" only at restrained coordinates\n");
 			    printf(" joint: %d  dof: %d  R: %d\n",
@@ -602,9 +613,13 @@ void read_reaction_data (
 			    exit(1);
 			}
 		}
-	}
+	  }
+
+	}					/* end load-case loop */
+
 	return;
 }
+
 
 /*------------------------------------------------------------------------------
 READ_MASSES  -  read member densities and extra inertial mass data	16aug01
@@ -641,7 +656,7 @@ void read_mass_data(
 
 	printf(" modal analysis method ");
 	dots(30);
-	printf(" %d ",*Mmethod);
+	printf(" %3d ",*Mmethod);
 	if ( *Mmethod == 1 ) printf(" (Subspace-Jacobi)\n");
 	if ( *Mmethod == 2 ) printf(" (Stodola)\n");
 
@@ -680,7 +695,7 @@ void read_mass_data(
 	fscanf(fp,"%d", nI );
 	printf(" number of joints with extra lumped inertia ");
         dots(9);
-        printf(" nI = %d\n",*nI);
+        printf(" nI = %3d\n",*nI);
 	for (j=1; j <= *nI; j++) {
 		fscanf(fp, "%d", &jnt );
 		if ( jnt < 1 || jnt > nJ ) {
@@ -716,7 +731,7 @@ void read_mass_data(
 	fscanf ( fp, "%d", &nA );
 	printf(" number of modes to be animated ");
 	dots(21);
-	printf(" nA = %d\n",nA);
+	printf(" nA = %3d\n",nA);
 	if (nA > 20)
 	  printf(" nA = %d, only 20 or fewer modes may be animated\n", nA );
 	for ( m = 0; m < 20; m++ )	anim[m] = 0;
@@ -726,6 +741,7 @@ void read_mass_data(
 
 	return;
 }
+
 
 /*------------------------------------------------------------------------------
 READ_CONDENSE   -  read matrix condensation information 	        30aug01
@@ -764,7 +780,7 @@ void read_condense (
 
 	printf(" number of joints with condensed DoF's ");
 	dots(14);
-	printf(" nC = %d\n", *nC );
+	printf(" nC = %3d\n", *nC );
 
 	if ( (*nC) > nJ ) {
 	  fprintf(stderr," error in matrix condensation data: \n");
@@ -822,12 +838,12 @@ WRITE_INPUT_DATA  -  save input data					7nov02
 void write_input_data(
 	FILE *fp,
 	char *title, int nJ, int nM, int nL,
-	int nD, int nR,
+	int *nD, int nR,
 	int *nF, int *nW, int *nP, int *nT,
 	vec3 *pos, double *r,
 	int *J1, int *J2,
 	double *Ax, double *Asy, double *Asz, double *J, double *Iy, double *Iz,
-	double *E, double *G, double *p, double **F, double *Dp,
+	double *E, double *G, double *p, double **F, double **Dp,
 	int *R,
 	double ***W, double ***P, double ***T,
 	int shear, int anlyz, int geom
@@ -890,20 +906,22 @@ void write_input_data(
 	else		fprintf(fp,"  Neglect geometric stiffness.\n");
 
 	for (lc = 1; lc <= nL; lc++) {		/* start load case loop */
+
 	  fprintf(fp,"\nL O A D   C A S E   %d   O F   %d  ... \n\n", lc,nL);
-	  fprintf(fp," %d joints  with concentrated loads\n", nF[lc] );
-	  fprintf(fp," %d members with uniformly distributed loads\n", nW[lc] );
-	  fprintf(fp," %d members with concentrated point loads\n", nP[lc] );
-	  fprintf(fp," %d members with temperature loads\n", nT[lc] );
-	  if ( nF[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nT[lc] > 0) {
+	  fprintf(fp," %3d joints  with concentrated loads\n", nF[lc] );
+	  fprintf(fp," %3d members with uniformly distributed loads\n", nW[lc]);
+	  fprintf(fp," %3d members with concentrated point loads\n", nP[lc] );
+	  fprintf(fp," %3d members with temperature loads\n", nT[lc] );
+	  fprintf(fp," %3d joints  with prescribed displacements\n", nD[lc] );
+	  if ( nF[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nT[lc] > 0 ) {
 	    fprintf(fp," J O I N T   L O A D S");
 	    fprintf(fp,"  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)\n");
 	    fprintf(fp,"  Joint       Fx          Fy          Fz");
 	    fprintf(fp,"          Mxx         Myy         Mzz\n");
 	    for (j=1; j<=nJ; j++) {
 		i = 6*(j-1);
-		if ( F[lc][i+1] != 0.0 || F[lc][i+2] != 0.0 || F[lc][i+3] != 0.0 ||
-		     F[lc][i+4] != 0.0 || F[lc][i+5] != 0.0 || F[lc][i+6] != 0.0 ) {
+		if ( F[lc][i+1]!=0.0 || F[lc][i+2]!=0.0 || F[lc][i+3]!=0.0 ||
+		     F[lc][i+4]!=0.0 || F[lc][i+5]!=0.0 || F[lc][i+6]!=0.0 ) {
 			fprintf(fp, " %5d", j);
 			for (i=5; i>=0; i--) fprintf(fp, " %11.3f", F[lc][6*j-i] );
 			fprintf(fp, "\n");
@@ -945,23 +963,26 @@ void write_input_data(
 		fprintf(fp, "\n");
 	    }
 	  }
-	}					/* end load case loop	*/
 
-	if ( nD > 0 ) {
+	  if ( nD[lc] > 0 ) {
 	    fprintf(fp,"\nP R E S C R I B E D   D I S P L A C E M E N T S");
-	    fprintf(fp,"   (for all load cases) (global)\n");
+	    fprintf(fp,"                        (global)\n");
 	    fprintf(fp,"  Joint       Dx          Dy          Dz");
 	    fprintf(fp,"          Dxx         Dyy         Dzz\n");
 	    for (j=1; j<=nJ; j++) {
 		i = 6*(j-1);
-		if ( Dp[i+1] != 0.0 || Dp[i+2] != 0.0 || Dp[i+3] != 0.0 ||
-		     Dp[i+4] != 0.0 || Dp[i+5] != 0.0 || Dp[i+6] != 0.0 ) {
+		if ( Dp[lc][i+1]!=0.0 || Dp[lc][i+2]!=0.0 || Dp[lc][i+3]!=0.0 ||
+		     Dp[lc][i+4]!=0.0 || Dp[lc][i+5]!=0.0 || Dp[lc][i+6]!=0.0 ){
 			fprintf(fp, " %5d", j);
-			for (i=5; i>=0; i--) fprintf(fp, " %11.3f", Dp[6*j-i] );
+			for (i=5; i>=0; i--) fprintf(fp, " %11.3f",
+							Dp[lc][6*j-i] );
 			fprintf(fp, "\n");
 		}
 	    }
-	}
+	  }
+
+	}					/* end load case loop	*/
+
 	if (anlyz) {
 	 fprintf(fp,"\nE L A S T I C   S T I F F N E S S   A N A L Y S I S");
 	 fprintf(fp,"   via  L D L'  decomposition\n\n");

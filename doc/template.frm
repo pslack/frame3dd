@@ -12,6 +12,11 @@ nL						% number of static load cases
   :      :      :       :       :       :       :      :      :       :     :     :
   M[nM]  J1[nM] J2[nM]  Ax[nM] Asy[nM] Asz[nM] Jp[nM] Iy[nM] Iz[nM]  E[nM] G[nM] p[nM]
 
+nR					       % number of joints with reactions
+  J[1]	Rx[1]	Ry[1]	Rz[1]	Rxx[1]	Ryy[1]	Rzz[1]
+  :	:	:	:	:	:	:	       % 0:free, 1:fixed
+  J[nR]	Rx[nR]	Ry[nR]	Rz[nR]	Rxx[nR]	Ryy[nR]	Rzz[nR]
+
 shear						  % 1: include shear deformation
 /tmp/mesh_file						   % mesh data file name
 plot_file					     % mesh annotation file name
@@ -38,6 +43,11 @@ nT					 % number of members temperature changes
   M[1]	a[1]	hy[1]	hz[1]	Ty+[1]	Ty-[1]	Tz+[1]	Tz-[1]	% member no.,   
   :	:	:	:	:	:	:	:	% temp. coef.
   M[nT]	a[nT]	hy[nT]	hz[nT]	Ty+[nT]	Ty-[nT]	Tz+[nT]	Tz-[nT] % sizes, & temps
+
+nD		         % number of joints with prescribed displacements nD<=nR
+  J[1]	Dx[1]	Dy[1]	Dz[3]	Dxx[1]	Dyy[1]	Dzz[1]
+  :	:	:	:	:	:	:     % prescribed displacements
+  J[nD]	Dx[nD]	Dy[nD]	Dz[nD]	Dxx[nD]	Dyy[nD]	Dzz[nD]
 % End Static Load Case 1
 
 % Begin Static Load Case 2
@@ -60,19 +70,14 @@ nT					 % number of members temperature changes
   M[1]	a[1]	hy[1]	hz[1]	Ty+[1]	Ty-[1]	Tz+[1]	Tz-[1]	% member no.,   
   :	:	:	:	:	:	:	:	% temp. coef.
   M[nT]	a[nT]	hy[nT]	hz[nT]	Ty+[nT]	Ty-[nT]	Tz+[nT]	Tz-[nT] % sizes, & temps
-% End Static Load Case 2
-
-% repeat up to 128 static load cases
-
-nR					       % number of joints with reactions
-  J[1]	Rx[1]	Ry[1]	Rz[1]	Rxx[1]	Ryy[1]	Rzz[1]
-  :	:	:	:	:	:	:	       % 0:free, 1:fixed
-  J[nR]	Rx[nR]	Ry[nR]	Rz[nR]	Rxx[nR]	Ryy[nR]	Rzz[nR]
 
 nD		         % number of joints with prescribed displacements nD<=nR
   J[1]	Dx[1]	Dy[1]	Dz[3]	Dxx[1]	Dyy[1]	Dzz[1]
   :	:	:	:	:	:	:     % prescribed displacements
   J[nD]	Dx[nD]	Dy[nD]	Dz[nD]	Dxx[nD]	Dyy[nD]	Dzz[nD]
+% End Static Load Case 2
+
+% repeat up to 128 static load cases
 
 modes					              % number of desired modes
 Mmethod                                        % 1: Subspace Jacobi, 2: Stodola

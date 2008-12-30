@@ -48,7 +48,6 @@
 
 #include "nrutil.h"
 
-/* must come after the above, because of the sneaky #defines in common.h */
 #include "frame3dd.h"
 #include "common.h" 
 #include "coordtrans.h"
@@ -56,7 +55,6 @@
 #include "eig.h"
 #include "frame3dd_io.h"
 
-#define _NL_ 128
 
 int main(int argc, char *argv[]){
 
@@ -86,7 +84,7 @@ int main(int argc, char *argv[]){
 		*D, *dD,	/* displacement and displ increment	*/
 		/*dDdD = 0.0,*/	/* dD' * dD				*/
 		*Fe,		/* equilibrium error in nonlinear anlys	*/
-		*Dp,		/* prescribed joint displacements	*/
+		**Dp,		/* prescribed joint displacements	*/
 		***W,		/* uniform distributed member loads	*/
 		***P,		/* member concentrated loads		*/
 		***T,		/* member temperature  loads		*/
@@ -102,32 +100,32 @@ int main(int argc, char *argv[]){
 		total_mass,	/* total structural mass and extra mass */
 		*JMx,*JMy,*JMz,	/* inertia of a joint in global coord	*/
 		tol = 1e-5,	/* tolerance for modal convergence	*/
-		shift		/* shift-factor for rigid-body-modes	*/
-		,*f = NULL  /* resonant frequencies */
-		,**V = NULL,/* resonant mode-shapes	*/
+		shift = 0.0,	/* shift-factor for rigid-body-modes	*/
+		*f  = NULL,	/* resonant frequencies			*/
+		**V = NULL,	/* resonant mode-shapes			*/
 		error = 1.0,	/* rms equilibrium error and reactions	*/
 		Cfreq = 0.0,	/* frequency used for Guyan condensation*/
 		**Kc, **Mc,	/* condensed stiffness and mass matrices*/
 		exagg;		/* exaggerate deformations in mesh data	*/
 
-	int	nJ,		/* number of Joints 			*/
-		nM,		/* number of Members			*/
-		nL, lc,		/* number of Load cases			*/
-		DoF, i, j, n,	/* number of Degrees of Freedom		*/
-		nR,		/* number of restrained joints		*/
-		nD,		/* number of prescribed nodal displ'nts	*/
+	int	nJ=0,		/* number of Joints 			*/
+		nM=0,		/* number of Members			*/
+		nL=0, lc=0,	/* number of Load cases			*/
+		DoF=0, i, j, n,	/* number of Degrees of Freedom		*/
+		nR=0,		/* number of restrained joints		*/
+		nD[_NL_],	/* number of prescribed nodal displ'nts	*/
 		nF[_NL_],	/* number of loaded joints		*/
 		nW[_NL_],	/* number of members w/ unif distr loads*/
 		nP[_NL_],	/* number of members w/ conc point loads*/
 		nT[_NL_],	/* number of members w/ temp. changes	*/
-		nI,             /* number of joints w/ extra inertia	*/
-		nC,		/* number of condensed joints		*/
+		nI=0,		/* number of joints w/ extra inertia	*/
+		nC=0,		/* number of condensed joints		*/
 		*J1, *J2,	/* begin and end joint numbers		*/
-		shear,		/* indicates shear deformationi		*/
+		shear=0,	/* indicates shear deformationi		*/
 		geom=0,		/* indicates  geometric nonlinearity	*/
 		anlyz=1,	/* 1: stiffness analysis, 0: data check	*/
 		*R, sumR,	/* reaction data, total no. of reactions*/
-		modes,		/* number of desired modes		*/
+		modes=0,	/* number of desired modes		*/
 		Mmethod,	/* 1: Subspace Jacobi, 2: Stodola	*/
 		calc_modes,	/* number of modes to calculate		*/
 		lump=1,		/* 1: lumped, 0: consistent mass matrix */
@@ -135,16 +133,18 @@ int main(int argc, char *argv[]){
 		ok=1,		/* number of (-ve) diag. terms of L D L' */
 		anim[20],	/* the modes to be animated		*/
 		pan=1,		/* 1: pan during animation; 0: don't	*/
-		Cdof,		/* number of condensed degrees o freedom*/
-		Cmethod,	/* matrix condensation method		*/
+		Cdof=0,		/* number of condensed degrees o freedom*/
+		Cmethod=0,	/* matrix condensation method		*/
 		*q,		/* vector of DoF's to condense		*/
 		*m;		/* vector of modes to condense		*/
 
-    fprintf(stderr," FRAME3DD version: %s\n", VERSION);
-    fprintf(stderr," GPL Copyright (C) 1992-2008, Henri P. Gavin\n");
-    fprintf(stderr," http://frame3dd.sf.net\n");
-    fprintf(stderr," This is free software with absolutely no warranty.\n");
-    fprintf(stderr," For details, see LICENSE.txt\n\n");
+	char	tm = 0;		/* flag for thermal or mechanical loads	*/
+
+	fprintf(stderr," FRAME3DD version: %s\n", VERSION);
+	fprintf(stderr," GPL Copyright (C) 1992-2008, Henri P. Gavin\n");
+	fprintf(stderr," http://frame3dd.sf.net\n");
+	fprintf(stderr," This is free software with absolutely no warranty.\n");
+	fprintf(stderr," For details, see LICENSE.txt\n\n");
 
 	if (argc < 2) {
 		fprintf (stderr," Please enter the input/output file name: ");
@@ -157,9 +157,6 @@ int main(int argc, char *argv[]){
 		fprintf (stderr," usage: frame infile\n");
 		exit(1);
 	}
-
-
-	lc = 0; /* needs initialising, according to GCC */
 
 	parse_input(fp);
 	fclose(fp);
@@ -176,13 +173,13 @@ int main(int argc, char *argv[]){
 	fscanf(fp, "%d %d %d", &nJ, &nM, &nL );
 	printf(" number of joints ");
 	dots(35);
-	printf(" nJ = %d\n", nJ);
+	printf(" nJ = %3d\n", nJ);
 	printf(" number of members ");
 	dots(34);
-	printf(" nM = %d\n", nM);
+	printf(" nM = %3d\n", nM);
 	printf(" number of load cases ");
 	dots(31);
-	printf(" nL = %d\n", nL);
+	printf(" nL = %3d\n", nL);
         if ( nJ > nM + 1) {
             fprintf(stderr,"warning: %d joints and %d members...", nJ, nM );
 	    fprintf(stderr," not enough members to connect all joints.\n");
@@ -246,7 +243,7 @@ int main(int argc, char *argv[]){
 
 	D   = dvector(1,DoF);	/* displacments of each joint		*/
 	dD  = dvector(1,DoF);	/* incremental displacement  of each joint */
-	Dp  = dvector(1,DoF);	/* prescribed displacement of each joint */
+	Dp  = dmatrix(1,nL,1,DoF); /* prescribed displacement of each joint */
 
 	d   = dvector(1,nM);	/* mass density for each member		*/
 	BMs = dvector(1,nM);	/* lumped beam mass for each member	*/
@@ -259,23 +256,27 @@ int main(int argc, char *argv[]){
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
 
 	read_input_data(
-		fp, nJ, nM, pos, r, L, Le, J1, J2, &anlyz, &geom, Q,
-		Ax,Asy,Asz, J,Iy,Iz, E,G, p, &shear, mesh_file,plot_file,&exagg
+		fp, nJ, nM, pos, r, L, Le, J1, J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p
 	);
 	printf("   input data complete\n");
 
+	read_reaction_data ( fp, DoF, &nR, nJ, R, &sumR );
+	printf("   reaction data complete\n");
+
+	read_run_data (
+		fp, &shear, &geom, mesh_file, plot_file, &exagg, &anlyz
+	);
+
 	assemble_loads (
 		fp, nL, nJ, pos, L, Le, Ax,Asy,Asz, Iy,Iz, E, G, p, shear,
-		J1, J2, DoF, nM, nF, nW, nP, nT,
-		Fo_mech, Fo_temp, W, P, T, feF_mech, feF_temp
+		J1, J2, DoF, nM, nF, nW, nP, nT, nD, 
+		Q, Fo_mech, Fo_temp, W, P, T, feF_mech, feF_temp, Dp, R
 	);
 	for (i=1; i<=DoF; i++)
 		for (lc=1; lc<=nL; lc++)
 			Fo[lc][i] = Fo_temp[lc][i] + Fo_mech[lc][i];
 	printf("   load data complete\n");
 
-	read_reaction_data ( fp, DoF, &nD, &nR, nJ, Dp, R, &sumR );
-	printf("   reaction data complete\n");
 
 	read_mass_data (
 		fp, nJ, nM, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax,
@@ -295,13 +296,17 @@ int main(int argc, char *argv[]){
 		exit(1);
 	}
 
-	write_input_data ( fp, title, nJ,nM,nL, nD,nR, nF,nW,nP,nT,
-			pos, r, J1,J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p,
-			Fo,Dp,R,W,P,T, shear, anlyz, geom );
+	write_input_data (
+		fp, title, nJ,nM,nL, nD,nR, nF,nW,nP,nT,
+		pos, r, J1,J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p,
+		Fo, Dp, R, W, P, T, shear, anlyz, geom
+	);
 
 	if (anlyz) {			/* solve the problem  */
 
 	 for (lc=1; lc<=nL; lc++) {		/* begin load case loop */
+
+	  fprintf(stderr,"\n Load Case %d of %d ... \n", lc, nL );
 
 	  for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
 	  for (i=1; i<=DoF; i++)	Fo_temp_lc[i] = Fo_temp[lc][i];
@@ -317,8 +322,8 @@ int main(int argc, char *argv[]){
 
 	  /* apply temperature loads first ... */
 	  if (nT[lc] > 0) {
-		fprintf(stderr,"\n Linear Elastic Analysis ... Temperature Loads\n");
-		apply_reactions ( DoF, R, Dp, Fo_temp_lc, F_lc, K );
+		fprintf(stderr," Linear Elastic Analysis ... Temperature Loads\n");
+		apply_reactions ( DoF, R, Dp, lc, Fo_temp_lc, F_lc, K, 't' );
 		solve_system( K, dD, F_lc, DoF, &ok );
 		for (i=1; i<=DoF; i++)	D[i] += dD[i];
 		end_forces ( Q, nM, pos, L, Le, J1,J2,
@@ -329,18 +334,18 @@ int main(int argc, char *argv[]){
 			Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
 	  /* then add mechanical loads ... */
-	  if ( nF[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 ) {
-		fprintf(stderr,"\n Linear Elastic Analysis ... Mechanical Loads\n");
-		apply_reactions ( DoF, R, Dp, Fo_mech_lc, F_lc, K );
+	  if ( nF[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nD[lc] > 0 ) {
+		fprintf(stderr," Linear Elastic Analysis ... Mechanical Loads\n");
+		apply_reactions ( DoF, R, Dp, lc, Fo_mech_lc, F_lc, K, 'm' );
 		solve_system( K, dD, F_lc, DoF, &ok );
 		for (i=1; i<=DoF; i++)	D[i] += dD[i];
 		end_forces ( Q, nM, pos, L, Le, J1,J2,
 			Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 	  }
 
-//#ifdef MATRIX_DEBUG
+#ifdef MATRIX_DEBUG
 	  save_ut_dmatrix ( DoF, K, "Ks" );	   /* static stiffness matrix */
-//#endif
+#endif
 
 
 	  for (i=1; i<=DoF; i++)   Fo_lc[i] = Fo_temp_lc[i] + Fo_mech_lc[i];
@@ -361,7 +366,7 @@ int main(int argc, char *argv[]){
 		assemble_K ( K, DoF, nM, pos, r, L, Le, J1, J2,
 			Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
-		apply_reactions ( DoF, R, Dp, Fo_lc, F_lc, K );
+		apply_reactions ( DoF, R, Dp, lc, Fo_lc, F_lc, K, 'm' );
 
 		for (i=1; i<=DoF; i++) {	/* equilibrium error	*/
 			Fe[i] = F_lc[i];
@@ -378,7 +383,7 @@ int main(int argc, char *argv[]){
 			for (j=1; j<=DoF; j++)
 				Ks[i][j] -= Fe[i]*dD[j] / dDdD;
 */
-		apply_reactions ( DoF, R, Dp, Fe, Fe, Ks );
+		apply_reactions ( DoF, R, Dp, lc, Fe, Fe, Ks, 'm' );
 		solve_system ( K, dD, Fe, DoF, &ok );
 
 		if ( ok < 0 ) {
@@ -410,6 +415,7 @@ int main(int argc, char *argv[]){
 	  for (i=1; i<=12; i++)
 		for (n=1; n<=nM; n++)
 			feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
+
 	  equilibrium(pos, L, J1,J2, Fo_lc, R, p, Q, feF, nM, DoF, &error );
 
 	  write_static_results ( fp, nJ,nM,nL,lc, DoF, J1,J2, Fo_lc,

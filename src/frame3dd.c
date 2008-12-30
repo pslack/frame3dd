@@ -340,12 +340,14 @@ int	r;
 #endif
 
 /*------------------------------------------------------------------------------
-APPLY_REACTIONS -  apply fixed joint displacement boundary conditions	23feb94
+APPLY_REACTIONS -  apply fixed joint displacement boundary conditions	30dec08
 The original external load vector, Fo is returned unchanged;
-The load vector modified for prescribed displacements, Dp, is returned as F
+The load vector modified for prescribed displacements Dp is returned as F
 ------------------------------------------------------------------------------*/
 void apply_reactions(
-		int DoF, int *R, double *Dp, double *Fo, double *F, double **K
+	int DoF, int *R, double **Dp, int lc,
+	double *Fo, double *F, double **K,
+	char	tm	/* 'm' means mech. loads, 't' means temp loads only */
 ){
 	int	i,j;
 
@@ -353,10 +355,15 @@ void apply_reactions(
 
 	for (i=1; i<=DoF; i++) {		/* modify the force vector */
 		if ( R[i] ) {
-			F[i] = Dp[i];
+			if (tm == 'm')	F[i] = Dp[lc][i];
+			else		F[i] = 0.0;
 		} else {
-			for (j=1; j<=DoF; j++) 
-				if ( R[j] ) F[i] -= K[i][j]*Dp[j];
+		    for (j=1; j<=DoF; j++) {
+			if ( R[j] ) {
+				if (tm == 'm')	F[i] -= K[i][j]*Dp[lc][j];
+				else		F[i] = 0.0;
+			}
+		    }
 		}
 	}
 			
@@ -407,11 +414,11 @@ int	DoF, *ok;
 END_FORCES  -  evaluate the member end forces for every member		23feb94
 ------------------------------------------------------------------------------*/
 void end_forces(
-		double **Q, int nM, vec3 *pos,
-		double *L, double *Le,
-		int *J1, int *J2, double *Ax, double *Asy, double *Asz,
-		double *J, double *Iy, double *Iz, double *E, double *G, double *p,
-		double *D, int shear, int geom
+	double **Q, int nM, vec3 *pos,
+	double *L, double *Le,
+	int *J1, int *J2, double *Ax, double *Asy, double *Asz,
+	double *J, double *Iy, double *Iz, double *E, double *G, double *p,
+	double *D, int shear, int geom
 ){
 	double	*s;
 	int	i,j;
@@ -1241,7 +1248,7 @@ void deallocate(
 	double ***feF_mech, double ***feF_temp, double **feF,
 	double **Fo, double *Fo_lc, double *F_lc,
 	double **K, double **Q,
-	double *D, double *dD, double *Dp,
+	double *D, double *dD, double **Dp,
 	double *d, double *BMs, double *JMs, double *JMx, double *JMy, double *JMz,
 	double **M, double *f, double **V,
 	int *q, int *m
@@ -1297,7 +1304,7 @@ void deallocate(
 // printf("..I\n");
 	free_dvector(D,1,DoF);
 	free_dvector(dD,1,DoF);
-	free_dvector(Dp,1,DoF);
+	free_dmatrix(Dp,1,nL,1,DoF);
 
 // printf("..J\n");
 	free_dvector(d,1,nM);

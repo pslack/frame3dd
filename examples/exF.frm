@@ -116,6 +116,26 @@ Example F: a seismically-isolated building model
 57   9  14  17671  9000  9000   4.970e7    2.48e7    2.48e7   200e2  1.2e0 0
 58  10  15  17671  9000  9000   4.970e7    2.48e7    2.48e7   200e2  1.2e0 0
   
+14                              % number of joints with reactions
+% J     x       y       z      xx      yy      zz          1= fixed, 0=free
+
+  1	1	0	1	0	0	1
+  2     1       0       0       0       0       0
+  3     1       0       0       0       0       0
+  4	1	0	1	0	0	1
+  5	1	0	1	0	0	1
+  7	1	0	1	0	0	1
+  8	1	0	1	0	0	1
+  9     1       0       0       0       0       0
+ 10     1       0       0       0       0       0
+ 11	1	0	1	0	0	1
+
+ 12     1       1       1       1       1       1
+ 13     1       1       1       1       1       1
+ 14     1       1       1       1       1       1
+ 15     1       1       1       1       1       1
+
+
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
 /tmp/exF-msh                    % mesh data file name
@@ -157,28 +177,9 @@ exF.plt				% plot file name
 0                               % number of distributed loads
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
+0                               % number of joints with support settlements
 				% End   Static Load Case 1 of 1
 
-14                              % number of joints with reactions
-% J     x       y       z      xx      yy      zz          1= fixed, 0=free
-
-  1	1	0	1	0	0	1
-  2     1       0       0       0       0       0
-  3     1       0       0       0       0       0
-  4	1	0	1	0	0	1
-  5	1	0	1	0	0	1
-  7	1	0	1	0	0	1
-  8	1	0	1	0	0	1
-  9     1       0       0       0       0       0
- 10     1       0       0       0       0       0
- 11	1	0	1	0	0	1
-
- 12     1       1       1       1       1       1
- 13     1       1       1       1       1       1
- 14     1       1       1       1       1       1
- 15     1       1       1       1       1       1
-
-0                               % number of joints with support settlements
 
 15                              % number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
@@ -274,17 +275,17 @@ exF.plt				% plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://frame3dd.sf.net/
+FRAME3DD version: 20081230               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example F: a seismically-isolated building model 
-Thu Dec 11 10:16:39 2008
+Tue Dec 30 10:36:14 2008
 ________________________________________________________________________________
 36 JOINTS;    58 MEMBERS;    1 LOAD CASES;
-14 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;
+14 FIXED JOINTS;   -1077288440 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -391,10 +392,11 @@ M E M B E R   D A T A							(local)
 
 L O A D   C A S E   1   O F   1  ... 
 
- 25 joints  with concentrated loads
- 0 members with uniformly distributed loads
- 0 members with concentrated point loads
- 0 members with temperature loads
+  25 joints  with concentrated loads
+   0 members with uniformly distributed loads
+   0 members with concentrated point loads
+   0 members with temperature loads
+   0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      1       0.000       0.000   -9800.000       0.000       0.000       0.000

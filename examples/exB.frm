@@ -19,6 +19,14 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
 3 1 4	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
 4 1 5	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
 
+4                               % number of joints with reactions
+% J     x y z xx yy zz          1= fixed, 0=free
+
+  2	1 1 1 1 1 1
+  3	1 1 1 1 1 1
+  4	1 1 1 1 1 1
+  5	1 1 1 1 1 1
+ 
 1                               % 1: include shear deformation
 0                               % 1: include geometric stiffness
 /tmp/exB-msh                    % mesh data file name
@@ -33,6 +41,7 @@ exB.plt                         % plot file name
 0                               % number of distributed loads
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
+0                               % number of joints with support settlements
 				% End   Static Load Case 1 of 3
 
 				% Begin Static Load Case 2 of 3
@@ -45,6 +54,7 @@ exB.plt                         % plot file name
 1                               % number of members with temperature loads
 %M  alpha   hy   hz   Ty+  Ty-  Tz+  Tz-
 1   1e-4    1.5  1.5  80   20   30  -10
+0                               % number of joints with support settlements
 				% End   Static Load Case 2 of 3
 
 				% Begin Static Load Case 3 of 3
@@ -55,17 +65,9 @@ exB.plt                         % plot file name
   1    0    10   -90  30
   2    0   -20    20  30
 0                               % number of members with temperature loads
+0                               % number of joints with support settlements
 				% End   Static Load Case 3 of 3
 
-4                               % number of joints with reactions
-% J     x y z xx yy zz          1= fixed, 0=free
-
-  2	1 1 1 1 1 1
-  3	1 1 1 1 1 1
-  4	1 1 1 1 1 1
-  5	1 1 1 1 1 1
- 
-0                               % number of joints with support settlements
 
 6				% number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
@@ -89,17 +91,17 @@ exB.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://frame3dd.sf.net/
+FRAME3DD version: 20081230               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis 
-Thu Dec 11 10:16:22 2008
+Tue Dec 30 10:03:30 2008
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;
-4 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;
+4 FIXED JOINTS;   -1080248520 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -121,20 +123,22 @@ M E M B E R   D A T A							(local)
 
 L O A D   C A S E   1   O F   3  ... 
 
- 1 joints  with concentrated loads
- 0 members with uniformly distributed loads
- 0 members with concentrated point loads
- 0 members with temperature loads
+   1 joints  with concentrated loads
+   0 members with uniformly distributed loads
+   0 members with concentrated point loads
+   0 members with temperature loads
+   0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      1      10.000     -20.000    -100.000       0.000       0.000       0.000
 
 L O A D   C A S E   2   O F   3  ... 
 
- 0 joints  with concentrated loads
- 2 members with uniformly distributed loads
- 0 members with concentrated point loads
- 1 members with temperature loads
+   0 joints  with concentrated loads
+   2 members with uniformly distributed loads
+   0 members with concentrated point loads
+   1 members with temperature loads
+   0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      1      21.378      19.188      24.141    -877.323     500.272     890.987
@@ -150,10 +154,11 @@ L O A D   C A S E   2   O F   3  ...
 
 L O A D   C A S E   3   O F   3  ... 
 
- 0 joints  with concentrated loads
- 0 members with uniformly distributed loads
- 2 members with concentrated point loads
- 0 members with temperature loads
+   0 joints  with concentrated loads
+   0 members with uniformly distributed loads
+   2 members with concentrated point loads
+   0 members with temperature loads
+   0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      1      35.737      -0.601     -48.621     361.106   -1067.740    -105.385
@@ -194,24 +199,24 @@ L O A D   C A S E   2   O F   3  ...
 
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1    0.242338    0.433439    0.345171   -0.056188    0.025442    0.061201
+     1    0.020830    0.079528    0.107236   -0.003051    0.006227    0.015479
 M E M B E R   E N D   F O R C E S					(local)
   Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
-     1      1     -1.571t      2.374     -6.056    -17.957    714.258   -511.211
-     1      2      1.571t     -2.374    -11.972     17.957  -1247.464    939.266
-     2      1    -13.676t     -8.176      0.876   -163.181   -101.233   -175.905
-     2      3     13.676t     -9.851     -0.876    163.181    -56.772    326.886
-     3      1     10.330c      1.337     -2.612   -113.862    325.379    158.749
-     3      4    -10.330c     -1.337      2.612    113.862    145.435     82.297
-     4      1     -7.566t      2.874     -0.530     31.362     70.037    352.609
-     4      5      7.566t     -2.874      0.530    -31.362     25.576    165.511
+     1      1     23.729c      0.423     -8.612    -18.762   1023.242   -748.425
+     1      2    -23.729c     -0.423     -9.416     18.762  -1095.752    824.593
+     2      1     -4.733t     -8.639     -0.128    -26.648     16.758   -226.521
+     2      3      4.733t     -9.389      0.128     26.648      6.271    294.172
+     3      1     -0.328t      0.516     -0.295    -14.577     37.900     61.615
+     3      4      0.328t     -0.516      0.295     14.577     15.227     31.445
+     4      1     -1.866t      0.563      0.235     -6.691    -26.449     68.878
+     4      5      1.866t     -0.563     -0.235      6.691    -15.963     32.699
 R E A C T I O N S							(global)
   Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
-     2       2.842       5.099     -10.833   -1177.240     676.400     771.556
-     3       2.803     -14.417      -8.315     219.615    -235.676     181.469
-     4      -4.915      -5.358       7.903      25.050     200.582       5.316
-     5      -3.547       6.253      -3.755     -67.917      18.968     155.110
-R M S   E Q U I L I B R I U M    E R R O R: 1.201e-16
+     2      19.720      15.318       5.328   -1035.861     592.794     675.695
+     3      -2.426      -9.917      -2.519     152.042    -106.193     229.984
+     4       0.659      -0.151       0.063      14.521      29.925      18.077
+     5      -0.800       1.304      -1.231      -9.387      26.994      23.495
+R M S   E Q U I L I B R I U M    E R R O R: 8.400e-01
 
 L O A D   C A S E   3   O F   3  ... 
 

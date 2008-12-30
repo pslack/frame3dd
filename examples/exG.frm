@@ -50,13 +50,19 @@ Example G: a building with a set-back
 23     14 15  100  60    60    500   1000  1000   10000   7000 0
 24     15 13  100  60    60    500   1000  1000   10000   7000 0
 
+3                               % number of joints with reactions
+% J     x  y  z xx yy zz          1= fixed, 0=free
+  1     1  1  1  1  1  1
+  2     1  1  1  1  1  1
+  3     1  1  1  1  1  1
+
+
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
 /tmp/exG-msh                    % mesh data file name
 exG.plt				% plot file name
 2.0                             % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
-
 
 
 				% Begin Static Load Case 1 of 1
@@ -81,17 +87,9 @@ exG.plt				% plot file name
 
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
+0                               % number of joints with support settlements
 				% End   Static Load Case 1 of 1
 
-
-3                               % number of joints with reactions
-% J     x  y  z xx yy zz          1= fixed, 0=free
-
-  1     1  1  1  1  1  1
-  2     1  1  1  1  1  1
-  3     1  1  1  1  1  1
-
-0                               % number of joints with support settlements
 
 4                               % number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
@@ -134,17 +132,17 @@ exG.plt				% plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://frame3dd.sf.net/
+FRAME3DD version: 20081230               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
-Example G: a three dimensional frame 
-Thu Dec 11 10:16:47 2008
+Example G: a building with a set-back  
+Tue Dec 30 10:37:51 2008
 ________________________________________________________________________________
 15 JOINTS;    24 MEMBERS;    1 LOAD CASES;
-3 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;
+3 FIXED JOINTS;   -1075198968 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -196,10 +194,11 @@ M E M B E R   D A T A							(local)
 
 L O A D   C A S E   1   O F   1  ... 
 
- 1 joints  with concentrated loads
- 12 members with uniformly distributed loads
- 0 members with concentrated point loads
- 0 members with temperature loads
+   1 joints  with concentrated loads
+  12 members with uniformly distributed loads
+   0 members with concentrated point loads
+   0 members with temperature loads
+   0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      4       0.000       0.000    -380.198   -1681.148   10271.640       0.000

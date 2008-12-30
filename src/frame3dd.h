@@ -27,7 +27,12 @@
 #ifndef FRAME_FRAME_H
 #define FRAME_FRAME_H
 
+/* for Micro-Stran compatability, structure for cartesian vectors */
 #include "microstran/vec3.h"
+
+/* maximum number of load cases */
+#define _NL_ 128
+
 
 /** form the global stiffness matrix */
 void assemble_K(
@@ -40,15 +45,19 @@ void assemble_K(
 	int shear, int geom, double **Q
 );
 
+
 /** apply boundary conditions */
 void apply_reactions(
-	int DoF, int *R, double *Dp, double *Fo, double *F, double **K
+	int DoF, int *R, double **Dp, int lc, 
+	double *Fo, double *F, double **K, char tm
 );
+
 
 /** solve {F} =   [K]{D} via L D L' decomposition */
 void solve_system(
 	double **K, double *D, double *F, int DoF, int *ok
 );
+
 
 /** evaluate the member end forces for every member */
 void end_forces(
@@ -59,12 +68,14 @@ void end_forces(
 	double *D, int shear, int geom
 );
 
+
 /** perform an equilibrium check, F returned as reactions */
 void equilibrium(	
 	vec3 *pos,
 	double *L, int *J1, int *J2, double *F, int *R, double *p,
 	double **Q, double **feF, int nM, int DoF, double *err
 );
+
 
 /** assemble global mass matrix from element mass & inertia */
 void assemble_M(
@@ -75,6 +86,7 @@ void assemble_M(
 	double *d, double *BMs, double *JMs, double *JMx, double *JMy, double *JMz,
 	int lump
 );
+
 
 /** static condensation of stiffness matrix from NxN to nxn */
 void condense(
@@ -94,6 +106,7 @@ void guyan(
 	double **Mc, double **Kc, double w2 
 );
 
+
 /**
 	dynamic condensation of mass and stiffness matrices
 	matches the response at a set of frequencies
@@ -104,6 +117,7 @@ void dyn_conden(
 	double **M, double **K, int N, int *R, int *p, int n,
 	double **Mc, double **Kc, double **V, double *f, int *m
 );
+
 
 /**
 	release allocated memory
@@ -120,7 +134,7 @@ void deallocate(
 	double ***feF_mech, double ***feF_temp, double **feF,
 	double **Fo, double *Fo_lc, double *F_lc,
 	double **K, double **Q,
-	double *D, double *dD, double *Dp,
+	double *D, double *dD, double **Dp,
 	double *d, double *BMs, double *JMs, double *JMx, double *JMy, double *JMz,
 	double **M, double *f, double **V, 
 	int *q, int *m

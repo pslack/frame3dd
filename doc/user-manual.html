@@ -30,7 +30,7 @@ Duke University</a> - Box 90287,
 </font>
 
 <p><i><font face="Verdana, Arial, Helvetica, sans-serif" size="2">
-<a href="http://cee.duke.edu/ARCHIVES/people/faculty/gavin.shtml">Henri Gavin</a>
+<a href="http://cee.duke.edu/ARCHIVES/people/faculty/gavin.shtml">Henri P. Gavin</a>, P.E., Ph.D., 
 - Associate Professor -
 <a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;&#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;">
 &#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;
@@ -48,10 +48,7 @@ geometric stiffness.
 </p>
 
 <p>
-     <b>Frame3DD</b> reads an Input Data file, containing joint coordinates, member
-     geometry, material moduli, restrained joints,
-     prescribed displacements, load information, and optionally, mass
-     information if a modal analysis is to be carried out.  
+     <b>Frame3DD</b> reads an Input Data file, containing joint coordinates, member geometry, material moduli, restrained joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.  
 <!-- (The Input/Output file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
 </p>
 
@@ -96,7 +93,7 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 -->
 
 <hr>
-<h4>RELEASE DATE OF MOST RECENT VERSION:  September 9, 2008 (20080909) </h4>
+<h4>RELEASE DATE OF MOST RECENT VERSION:  December 30, 2008 (20081230) </h4>
     
 <hr>
 <h4>GETTING STARTED </h4>
@@ -156,7 +153,7 @@ and displays descriptive diagnostic messages when errors are found with the Inpu
 </p>
 
 <hr>
-<h4>HOW TO INSTALL THE LINUX OR SUN VERSIONS </h4>
+<h4>HOW TO INSTALL AND RUN THE LINUX OR SUN VERSIONS </h4>
 
 For any (?) Linux 2.6 kernel running on an Intel or AMD processor.
 
@@ -200,7 +197,7 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
 </ol>
 
 <hr>
-<h4>HOW TO INSTALL THE OS X VERSIONS </h4>
+<h4>HOW TO INSTALL AND RUN THE OS X VERSIONS </h4>
 
 For OS X running on a PowerPC (PPC) or Intel processor. 
 
@@ -274,7 +271,7 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
 
 
 <hr>
-<h4>HOW TO INSTALL THE DOS AND MS-WINDOWS VERSION</h4>
+<h4>HOW TO INSTALL AND RUN THE DOS AND MS-WINDOWS VERSION</h4>
 
 For DOS and MS-Windows, the following special guidelines should be followed:
 
@@ -725,6 +722,7 @@ with the desired flexibility.
 
 <p>
 Static joint displacements may be prescribed only at restrained degrees of freedom.
+Prescribed displacements are specified separately for each load case.  
 </p>
 
 <b> Dynamic Modal Analysis </b><br>
@@ -934,6 +932,11 @@ M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jxx[1]  Iyy[1]  Izz[1]  E[1]  G[1]  p
   :      :      :      :       :       :       :       :       :     :     :     :
 M[nM] J1[nM] J2[nM] Ax[nM] Asy[nM] Asz[nM] Jxx[nM] Iyy[nM] Izz[nM] E[nM] G[nM] p[nM]
 
+nR                                            % number of joints with reactions 
+  J[1]    Rx[1]   Ry[1]   Rz[1]   Rxx[1]  Ryy[1]  Rzz[1]
+    :        :       :       :        :       :       :       % 0:free, 1:fixed 
+ J[nR]    Rx[nR]  Ry[nR]  Rz[nR]  Rxx[nR] Ryy[nR] Rzz[nR]
+
 shear                               % 1: include shear deformation;   0: don't 
 geom                                % 1: include geometric stiffness; 0: don't 
 /tmp/mesh_file                      % mesh data file name for plotting
@@ -961,6 +964,11 @@ nT                                 % number of members with temperature changes
   M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % member no., 
     :     :       :       :        :       :       :       :      % temp. coef. 
   M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, & temps 
+
+nD                             % number of joints with prescribed displacements
+  J[1]   Dx[1]  Dy[1]  Dz[1]  Dxx[1]  Dyy[1]  Dzz[1]
+    :       :      :      :       :       :       :  % prescribed displacements
+  J[nD]  Dx[nD] Dy[nD] Dz[nD] Dxx[nD] Dyy[nD] Dzz[nD]
 %  end  static load case 1 --------------------------------------------------
 
 % begin static load case 2 --------------------------------------------------
@@ -983,20 +991,15 @@ nT                                 % number of members with temperature changes
   M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % member no., 
     :     :       :       :        :       :       :       :      % temp. coef. 
   M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, & temps 
+
+nD                             % number of joints with prescribed displacements
+  J[1]   Dx[1]  Dy[1]  Dz[1]  Dxx[1]  Dyy[1]  Dzz[1]
+    :       :      :      :       :       :       :  % prescribed displacements 
+  J[nD]  Dx[nD] Dy[nD] Dz[nD] Dxx[nD] Dyy[nD] Dzz[nD]
 %  end  static load case 2 -------------------------------------------------
 
 % repeat the static load data nL times ... up to 127 static load cases
 
-
-nR                                            % number of joints with reactions 
-  J[1]    Rx[1]   Ry[1]   Rz[1]   Rxx[1]  Ryy[1]  Rzz[1]
-    :        :       :       :        :       :       :       % 0:free, 1:fixed 
- J[nR]    Rx[nR]  Ry[nR]  Rz[nR]  Rxx[nR] Ryy[nR] Rzz[nR]
-
-nD                      % number of joints with prescribed displacements  
-  J[1]   Dx[1]  Dy[1]  Dz[1]  Dxx[1]  Dyy[1]  Dzz[1]
-    :       :      :      :       :       :       :  % prescribed displacements 
-  J[nD]  Dx[nD] Dy[nD] Dz[nD] Dxx[nD] Dyy[nD] Dzz[nD]
 
 modes                                          %       number of desired modes 
 Mmethod                                        % 1: Subspace Jacobi, 2: Stodola
@@ -1313,7 +1316,7 @@ http://www.sourceforge.net/projects/frame3dd/</a>
 
 <font face="Verdana, Arial, sans-serif" size="1" width="700">
 <br>updated: May 6 2003, Nov 8 2004, Nov 22 2004, Nov 29 2004, Dec 2 2004, Dec 10 2004, Dec 6 2006, Feb 22 2007, Mar 1 2007, Jun 6 2007, Dec 20 2007,
-Mar 14 2008, Sep 9 2008
+Mar 14 2008, Sep 9 2008, Dec 30 2008
 </font> <br>
 <a href="http://thomer.com/vi/vi.html"><img src="img/vi_logo_by_urmas_reinsalu.png" border="0"></a>
 </body>

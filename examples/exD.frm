@@ -66,6 +66,7 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
 29 23 24  125	100	100	5000	2500	2500	2000	1000 0
 30 24 19  125	100	100	5000	2500	2500	2000	1000 0
 
+0                               % number of joints with reactions
 
 1                               % 1: include shear deformation
 0                               % 1: include geometric stiffness
@@ -79,10 +80,8 @@ exD.plt                         % plot file name
 0                               % number of distributed loads
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
-				% End   Static Load Case 1 of 1
-
-0                               % number of joints with reactions
 0                               % number of joints with support settlements
+				% End   Static Load Case 1 of 1
 
 
 14                              % number of desired dynamic modes of vibration
@@ -136,17 +135,17 @@ exD.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://frame3dd.sf.net/
+FRAME3DD version: 20081230               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example D: dynamic properties of an un-restrained frame with a triangular section 
-Thu Dec 11 10:22:11 2008
+Tue Dec 30 10:31:59 2008
 ________________________________________________________________________________
 24 JOINTS;    30 MEMBERS;    1 LOAD CASES;
-0 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;
+0 FIXED JOINTS;   -1077478952 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -213,10 +212,11 @@ M E M B E R   D A T A							(local)
 
 L O A D   C A S E   1   O F   1  ... 
 
- 0 joints  with concentrated loads
- 0 members with uniformly distributed loads
- 0 members with concentrated point loads
- 0 members with temperature loads
+   0 joints  with concentrated loads
+   0 members with uniformly distributed loads
+   0 members with concentrated point loads
+   0 members with temperature loads
+   0 joints  with prescribed displacements
 
 E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 

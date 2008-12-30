@@ -2,7 +2,7 @@ Example C: a tetrahedral frame - static and dynamic analysis
 
 18                      % number of joints 
 48 			% number of members
-1                       % number of static load cases
+ 1                      % number of static load cases
 
 % joint  x       y       z       r
 
@@ -76,6 +76,14 @@ Example C: a tetrahedral frame - static and dynamic analysis
 47  17 18	10.0	7.0	5.0	50.0	100.0	200.0	29000	1150 0
 48  16 18	20.0	8.0	5.0	50.0	100.0	200.0	29000	1150 0
 
+4                               % number of joints with reactions
+% J     x y z xx yy zz          1= fixed, 0=free
+
+ 1	1 1 1 0 0 0
+ 3	1 1 1 0 0 0
+ 16	1 1 1 0 0 0
+ 18	1 1 1 0 0 0
+
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
 /tmp/exC-msh                    % mesh data file name
@@ -96,18 +104,8 @@ exC.plt                         % plot file name
 
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
-				% End  Static Load Case 1 of 1
-
-4                               % number of joints with reactions
-% J     x y z xx yy zz          1= fixed, 0=free
-
- 1	1 1 1 0 0 0
- 3	1 1 1 0 0 0
- 16	1 1 1 0 0 0
- 18	1 1 1 0 0 0
-
 0                               % number of joints with support settlements
-
+				% End  Static Load Case 1 of 1
 
 10                              % number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
@@ -175,17 +173,17 @@ exC.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://frame3dd.sf.net/
+FRAME3DD version: 20081230               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example C: a tetrahedral frame - static and dynamic analysis  
-Thu Dec 11 10:16:25 2008
+Tue Dec 30 10:05:02 2008
 ________________________________________________________________________________
 18 JOINTS;    48 MEMBERS;    1 LOAD CASES;
-4 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;
+4 FIXED JOINTS;   -1081635352 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -264,10 +262,11 @@ M E M B E R   D A T A							(local)
 
 L O A D   C A S E   1   O F   1  ... 
 
- 0 joints  with concentrated loads
- 5 members with uniformly distributed loads
- 0 members with concentrated point loads
- 0 members with temperature loads
+   0 joints  with concentrated loads
+   5 members with uniformly distributed loads
+   0 members with concentrated point loads
+   0 members with temperature loads
+   0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      2       0.000     -50.000       0.000       0.000       0.000    -833.333

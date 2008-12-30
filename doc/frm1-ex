@@ -1,6 +1,6 @@
 ______________________________________________________________________
 DUKE UNIVERSITY ---- Dept. of Civil and Environmental Engineering
-CE 131 --- Theory of Structures				Fall 1997
+CE 131 --- Theory of Structures				Fall 2008
 ______________________________________________________________________
 
 	INPUT  FILE  DESCRIPTION  FOR  PROGRAM  FRAME  --  EXAMPLE 1
@@ -8,7 +8,7 @@ ______________________________________________________________________
 
 EXAMPLE INPUT FILE:		COMMENTS:
 
-4  3				number of joints      number of members
+4  3   1			number of joints, members, load cases
 
 1  0  0  0  0			joint data:
 2  0  8  0  0			joint no.   X-coord  Y-coord  Z-coord  radius
@@ -20,6 +20,11 @@ EXAMPLE INPUT FILE:		COMMENTS:
 1  1  2  1000 10 10 10 1000  40 100 120 0
 2  2  3  1000 10 10 10 1000 100 100 120 0
 3  3  4  1000 10 10 10 1000  60 100 120 0
+
+				restraint data:
+2				number of restrained joints
+ 1   1 1 1 1 1 0		joint no.  X Y Z  XX YY ZZ  restraints
+ 4   0 1 1 1 1 0		( 0: free   1: fixed )
 
 0				0: neglect shear deformations,  1: include 
 0                               0: neglect geometric stiffness, 1: include
@@ -39,12 +44,7 @@ frm1.ann			frame data annotation file name
 
 0				number of interior point loads
 0				number of temperature loads
-
-				restraint data:
-2				number of restrained joints
- 1   1 1 1 1 1 0		joint no.  X Y Z  XX YY ZZ  restraints
- 4   0 1 1 1 1 0		( 0: free   1: fixed )
-
 0				number of prescribed displacements
+
 0                               number of desired vibratory modes
 
