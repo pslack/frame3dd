@@ -71,7 +71,7 @@ rm -rf %{buildroot}
 - changed "modes" variable name to "nM" ... number of dynamic modes
 - change "pos" variable name to "xyz" ... joint locations
 - removed many #include "abc.h" lines from .c source files
-  without affecting the ability execute or to compile via  ... 
+  without affecting the ability to execute or to compile via  ... 
     gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 - TODO.txt, website, examples, and documentation updated.
 
