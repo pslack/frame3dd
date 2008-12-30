@@ -112,10 +112,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example E: a three dimensional structure showing lateral-torsional dynamic modes 
-Tue Dec 30 10:33:28 2008
+Tue Dec 30 15:24:54 2008
 ________________________________________________________________________________
 12 JOINTS;    15 MEMBERS;    1 LOAD CASES;
-3 FIXED JOINTS;   -1079058344 PRESCRIBED DISPLACEMENTS;
+3 FIXED JOINTS;   -1075500120 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -219,7 +219,7 @@ R E A C T I O N S							(global)
     11       0.275      -0.335       0.834      20.110      16.012      -0.023
 R M S   E Q U I L I B R I U M    E R R O R: 2.864e-07
 
-M O D A L   A N A L Y S I S   R E S U L T S
+B O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  3.388000e+00     Structural Mass:  8.116416e-13 
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta

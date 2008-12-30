@@ -25,6 +25,8 @@
 
 #include <stdio.h>
 
+#include "lu_dcmp.h"
+
 /*------------------------------------------------------------------------------
 LU_DCMP  -  Solves [A]{x} = {b} simply and efficiently by performing an 
   LU - decomposition of [A].  No pivoting is performed. 

@@ -31,12 +31,12 @@
 	{b} is replaced by {x} and [A] is replaced by the LU-reduction of itself.
 */
 void lu_dcmp (
-	double **A,  /* the system matrix, and its LU-reduction */
-	int n,      /* the dimension of the matrix */	
-	double *b,   /* the right hand side vector, and the solution vector */
-	int reduce, /* 1: do a forward reduction; 0: don't do the reduction */
-	int solve,  /* 1: do a back substitution for {x};  0: do no bk-sub'n */
-	int *pd     /* 1: positive diagonal  and  successful LU decomp'n*/
+	double **A, /**< the system matrix, and its LU-reduction */
+	int n,      /**< the dimension of the matrix */	
+	double *b,  /**< the right hand side vector, and the solution vector */
+	int reduce, /**< 1: do a forward reduction; 0: don't	*/
+	int solve,  /**< 1: do a back substitution for {x};  0: don't */
+	int *pd     /**< 1: positive diagonal  and  successful LU decomp'n */
 );
 
 #endif /* FRAME_LU_DCMP_H */

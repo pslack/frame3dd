@@ -139,10 +139,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example G: a building with a set-back  
-Tue Dec 30 10:37:51 2008
+Tue Dec 30 15:25:43 2008
 ________________________________________________________________________________
 15 JOINTS;    24 MEMBERS;    1 LOAD CASES;
-3 FIXED JOINTS;   -1075198968 PRESCRIBED DISPLACEMENTS;
+3 FIXED JOINTS;   -1073826504 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -304,7 +304,7 @@ R E A C T I O N S							(global)
      3       0.0       -50.248    3607.723   11108.943       0.0         0.0  
 R M S   E Q U I L I B R I U M    E R R O R: 2.412e-04
 
-M O D A L   A N A L Y S I S   R E S U L T S
+B O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  9.919573e-02     Structural Mass:  9.919573e-02 
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta

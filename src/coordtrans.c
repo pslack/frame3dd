@@ -21,12 +21,12 @@
     along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "coordtrans.h"
-
 #include <math.h>
 
+#include "coordtrans.h"
+
 void coord_trans(
-		vec3 *pos,
+		vec3 *xyz,
 		double L,
 		int j1, int j2,
 		double *t1, double *t2, double *t3, double *t4, double *t5,
@@ -36,9 +36,9 @@ void coord_trans(
 	double	Cx, Cy, Cz, den,		/* direction cosines	*/
 		Cp, Sp;			/* cosine and sine of roll angle */
 
-	Cx = (pos[j2].x - pos[j1].x) / L;
-	Cy = (pos[j2].y - pos[j1].y) / L;
-	Cz = (pos[j2].z - pos[j1].z) / L;
+	Cx = (xyz[j2].x - xyz[j1].x) / L;
+	Cy = (xyz[j2].y - xyz[j1].y) / L;
+	Cz = (xyz[j2].z - xyz[j1].z) / L;
 
 	*t1 = *t2 = *t3 = *t4 = *t5 = *t6 = *t7 = *t8 = *t9 = 0.0;
 

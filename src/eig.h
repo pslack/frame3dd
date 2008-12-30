@@ -38,12 +38,13 @@
 	@param V is a  rectangular matrix of eigen-vectors
 */
 void subspace(
-	double **K, double **M,
-	int n, int m, /**< DoF and number of required modes	*/
-	double *w, double **V,
-	double tol, double shift,
-	int *iter, /**< sub-space iterations */
-	int *ok /**< Sturm check result */
+	double **K, double **M,	/**< stiffness and mass matrices	*/
+	int n, int m,		/**< DoF and number of required modes	*/
+	double *w, double **V,	/**< modal frequencies and mode shapes	*/
+	double tol,		/**< covergence tolerence		*/
+	double shift,		/**< frequency shift for unrestrained frames */
+	int *iter,		/**< number of sub-space iterations	*/
+	int *ok			/**< Sturm check result			*/
 );
 
 
@@ -55,16 +56,20 @@ void xtAx(double **A, double **X, double **C, int N, int J);
 
 /**
 	calculate the lowest m eigen-values and eigen-vectors of the
-	generalized eigen-problem, K v = w M v, using a matrix iteration approach
-	with shifting.
+	generalized eigen-problem, K v = w M v, using a matrix
+	iteration approach with shifting.
 
 	@param n number of degrees of freedom
 	@param m number of required modes
 */
 void stodola(
-	double **K, double **M,
-	int n, int m,
-	double *w, double **V, double tol, double shift, int *iter, int *ok
+	double **K, double **M,	/**< stiffness and mass matrices	*/
+	int n, int m,		/**< DoF and number of required modes	*/
+	double *w, double **V,	/**< modal frequencies and mode shapes	*/
+	double tol,		/**< covergence tolerence		*/
+	double shift,		/**< frequency shift for unrestrained frames */
+	int *iter,		/**< number of sub-space iterations	*/
+	int *ok			/**< Sturm check result			*/
 );
 
 #endif /* FRAME_EIG_H */

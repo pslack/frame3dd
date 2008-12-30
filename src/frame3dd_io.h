@@ -25,6 +25,7 @@
 */
 
 #include "common.h"
+#include "time.h"
 #include "microstran/vec3.h"
 
 #include <stdio.h>
@@ -36,27 +37,35 @@
 void frm_getline( FILE *fp, char *s, int lim );
 
 
-/* re-write input file without comments */
+/* re-write input file without comments or commas */
 void parse_input(FILE *fp);
 
 
 /* read input data file			*/
 void read_input_data(
-	FILE *fp,
-	int nJ, int nM, vec3 *pos,
-	double *r, double *L, double *Le,
-	int *J1, int *J2, 
-	double *Ax, double *Asy, double *Asz,
-	double *J, double *Iy, double *Iz, double *E, double *G, double *p
+	FILE *fp,	/**< input data file pointer			*/
+	int nJ, int nB,	/**< number of joints, number of beam elements	*/
+	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
+	double *r,	/**< rigid radius of each joint			*/
+	double *L, double *Le,	/**< length of each beam element, effective */
+	int *J1, int *J2, 	/**< joint connectivity			*/
+	double *Ax, double *Asy, double *Asz,	/**< section areas	*/
+	double *J, double *Iy, double *Iz,	/**< section inertias	*/
+	double *E, double *G,	/**< elastic moduli and shear moduli	*/
+	double *p		/**< roll angle of each beam (radians)	*/
 );
 
 /** 
-	Read data describing run analysis
+	Read data controlling certain aspects of the analysis
 */
 void read_run_data (
-	FILE *fp, int *shear, int *geom,
-	char mesh_file[], char plot_file[],
-	double *exagg, int *anlyz
+	FILE *fp,	/**< input data file pointer			*/
+	int *shear,	/**< 1: include shear deformations, 0: don't	*/
+	int *geom,	/**< 1: include geometric stiffness, 0: don't	*/
+	char mesh_file[],	/**< file name for mesh data output	*/
+	char plot_file[],	/**< file name for Gnuplot script	*/
+	double *exagg,		/**< factor for deformation exaggeration */
+	int *anlyz	/* 1: perform elastic analysis, 0: don't	*/
 );
 
 
@@ -64,25 +73,40 @@ void read_run_data (
 	Read fixed joint displacement boundary conditions
 */
 void read_reaction_data(
-	FILE *fp, int DoF, int *nR, int nJ, int *R, int *sumR 
+	FILE *fp,	/**< input data file pointer			*/
+	int DoF,	/**< number of degrees of freedom		*/
+	int nJ,		/**< number of joints				*/
+	int *nR,	/**< number of joints with reactions		*/
+	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
+	int *sumR 	/**< sum of vector R				*/
 );
 
 
 /**
 	read load information data, form un-restrained load vector
 */
-void assemble_loads(
-	FILE *fp, 
-	int nL, int nJ, vec3 *pos,
-	double *L, double *Le, double *Ax, double *Asy, double *Asz, 
-	double *Iy, double *Iz, double *E, double *G, 
-	double *p, int shear,
-	int *J1, int *J2,
-	int DoF, 
-	int nM, int *nF, int *nW, int *nP, int *nT, int *nD,
-	double **Q, double **F_mech, double **F_temp, 
-	double ***W, double ***P, double ***T, 
-	double ***feF_mech, double ***feF_temp, double **Dp, int *R
+void read_and_assemble_loads(
+	FILE *fp,	/**< input data file pointer			*/
+	int nJ,		/**< number of joints				*/
+	int nB,		/**< number of beam elements			*/
+	int nL,		/**< number of load cases	i		*/
+	int DoF,	/**< number of degrees of freedom		*/
+	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
+	double *L, double *Le,	/**< length of each beam element, effective */
+	int *J1, int *J2, 	/**< joint connectivity			*/
+	double *Ax, double *Asy, double *Asz,	/**< section areas	*/
+	double *Iy, double *Iz,	/**< section inertias			*/
+	double *E, double *G,	/**< elastic moduli and shear moduli	*/
+	double *p,		/**< roll angle of each beam (radians)	*/
+	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
+	int shear,	/**< 1: include shear deformations, 0: don't	*/
+	int *nF, int *nW, int *nP, int *nT, int *nD,	/**< number of loads */
+	double **Q,		/**< beam element end forces, every beam */
+	double **F_mech, 	/**< mechanical loads			*/
+	double **F_temp, 	/**< thermal loads			*/
+	double ***W, double ***P, double ***T, 	/**< loads		*/
+	double **Dp,		/**< prescribed displacements at rctns	*/
+	double ***feF_mech, double ***feF_temp	/**< fixed end forces	*/
 );
 
 
@@ -90,15 +114,23 @@ void assemble_loads(
 	read member densities and extra inertial mass data
 */
 void read_mass_data(
-	FILE *fp, 
-	int nJ, int nM, int *nI, 
-	double *d, double *BMs, 
-	double *JMs, double *JMx, double *JMy, double *JMz, 
-	double *L, double *Ax, 
-	double *total_mass, double *struct_mass, 
-	int *modes, int *Mmethod, int *lump, 
-	char modefile[], 
-	double *tol, double *shift, int anim[], int *pan 
+	FILE *fp,	/**< input data file pointer			*/
+	int nJ, int nB,	/**< number of joints, number of beams		*/
+	int *nI,	/**< number of beams with extra inertia		*/
+	double *d, double *BMs, /**< beam density, extra beam mass	*/
+	double *JMs, double *JMx, double *JMy, double *JMz, /**< joint inertia*/
+	double *L,	/**< length of each beam element		*/
+	double *Ax, 	/**< cross section area of each beam element	*/
+	double *total_mass,	/**< total mass of structure and extra mass */
+	double *struct_mass, 	/**< mass of structural elements	*/
+	int *nM,	/**< number of modes to find			*/
+	int *Mmethod, 	/**< modal analysis method			*/
+	int *lump,	/**< 1: use lumped mass matrix, 0: consistent mass */
+	char modefile[], /**< filename for mode shape data for plotting	*/	
+	double *tol,	/**< convergence tolerance for mode shapes	*/
+	double *shift,	/**< frequency shift for unrestrained frames	*/
+	int *anim,	/**< list of modes to be graphically animated	*/
+	int *pan 	/**< 1: pan viewpoint during animation, 0: don't */
 );
 
 
@@ -106,9 +138,13 @@ void read_mass_data(
 	read matrix condensation information
 */
 void read_condense(
-	FILE *fp, 
-	int nJ, int modes, 
-	int *nC, int *Cdof, int *Cmethod, int *q, int *m
+	FILE *fp,	/**< input data file pointer			*/
+	int nJ, int nM, 	/**< number of joints, number of modes	*/
+	int *nC,	/**< number of joints with condensed DoF's	*/
+	int *Cdof,	/**< list of DoF's retained in condensed model	*/
+	int *Cmethod,	/**< matrix conden'n method, static, Guyan, dynamic*/
+	int *q,		/**< list of retained degrees of freedom	*/
+	int *m		/**< list of retained modes in dynamic condensation */
 );
 
 
@@ -116,14 +152,16 @@ void read_condense(
 	write input data to a file
 */
 void write_input_data(
-	FILE *fp, 
-	char *title, int nJ, int nM,  int nL, 
+	FILE *fp,	/**< input data file pointer			*/
+	char *title, int nJ, int nB,  int nL, 
 	int *nD, int nR, 
 	int *nF, int *nW, int *nP, int *nT,
-	vec3 *pos, double *r,
+	vec3 *xyz, double *r,
 	int *J1, int *J2,
-	double *Ax, double *Asy, double *Asz, double *J, double *Iy, double *Iz,
-	double *E, double *G, double *p, double **F, double **Dp,
+	double *Ax, double *Asy, double *Asz,
+	double *J, double *Iy, double *Iz,
+	double *E, double *G, double *p,
+	double **F, double **Dp,
 	int *R,
 	double ***W, double ***P, double ***T,
 	int shear, int anlyz, int geom
@@ -134,7 +172,7 @@ void write_input_data(
 	save joint displacements and member end forces in a text file	9sep08
 */
 void write_static_results(
-	FILE *fp, int nJ, int nM, int nL, int lc, int DoF, 
+	FILE *fp, int nJ, int nB, int nL, int lc, int DoF, 
 	int *J1, int *J2, 
 	double *F, double *D, int *R, 
 	double **Q, double err, 
@@ -146,7 +184,7 @@ void write_static_results(
 	save joint displacements and member end forces in an m-file	9sep08
 */
 void write_static_mfile ( char *argv[],
-	int nJ, int nM, int nL, int lc, int DoF,
+	int nJ, int nB, int nL, int lc, int DoF,
 	int *J1, int *J2,
 	double *F, double *D, int *R,
 	double **Q, double err,
@@ -159,10 +197,10 @@ void write_static_mfile ( char *argv[],
 */
 void write_modal_results(
 	FILE *fp, 
-	int nJ, int nM, int nI, int DoF, 
+	int nJ, int nB, int nI, int DoF, 
 	double **M, double *f, double **V, 
 	double total_mass, double struct_mass, 
-	int iter, int sumR, int modes, 
+	int iter, int sumR, int nM, 
 	double shift, int lump, double tol, int ok 
 );
 
@@ -173,8 +211,8 @@ void write_modal_results(
 */
 void static_mesh(
 	char IO_file[], char meshfile[], char plotfile[], 
-	char *title, int nJ, int nM, int nL, int lc, int DoF, 
-	vec3 *pos, double *L, 
+	char *title, int nJ, int nB, int nL, int lc, int DoF, 
+	vec3 *xyz, double *L, 
 	int *J1, int *J, double *p, double *D, 
 	double exg, int anlyz
 );
@@ -187,8 +225,8 @@ void static_mesh(
 void modal_mesh(
 	char IO_file[], char meshfile[], char modefile[],
 	char plotfile[], char *title,
-	int nJ, int nM, int DoF, int modes,
-	vec3 *pos, double *L,
+	int nJ, int nB, int DoF, int nM,
+	vec3 *xyz, double *L,
 	int *J1, int *J2, double *p,
 	double **M, double *f, double **V,
 	double exg, int anlyz
@@ -205,8 +243,8 @@ void animate(
 	char IO_file[], char meshfile[], char modefile[], char plotfile[],
 	char *title,
 	int anim[],
-	int nJ, int nM, int DoF, int modes,
-	vec3 *pos, double *L, double *p,
+	int nJ, int nB, int DoF, int nM,
+	vec3 *xyz, double *L, double *p,
 	int *J1, int *J2, double *f, double **V,
 	double exg,
 	int pan
@@ -221,7 +259,7 @@ void animate(
 */
 void bent_beam(
 	FILE *fp, int j1, int j2,
-	vec3 *pos,
+	vec3 *xyz,
 	double L, double p, double *D,
 	double exg
 );

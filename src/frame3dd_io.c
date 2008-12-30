@@ -27,16 +27,11 @@
 */
 
 #include <math.h>
-#include <time.h>
 #include <string.h>
 #include <stdlib.h>
 
-#include "nrutil.h"
-
-/* must be included after nrutil, because of sneaky #define in common.h */
 #include "frame3dd_io.h"
-#include "lu_dcmp.h"
-#include "coordtrans.h"
+#include "nrutil.h"
 
 #ifndef VERSION
 # define VERSION "unknown"
@@ -59,7 +54,7 @@ READ_INPUT_DATA  -  read material and geometry data, calc lengths	15dec97
 ------------------------------------------------------------------------------*/
 void read_input_data(
 	FILE *fp,
-	int nJ, int nM, vec3 *pos,
+	int nJ, int nB, vec3 *xyz,
 	double *r, double *L, double *Le,
 	int *J1, int *J2,
 	double *Ax, double *Asy, double *Asz,
@@ -75,12 +70,12 @@ void read_input_data(
 		    fprintf(stderr,"  Joint: %d  \n", j);
 		    exit(1);
 		}
-		fscanf(fp, "%lf %lf %lf %lf", &pos[j].x, &pos[j].y, &pos[j].z, &r[j]);
+		fscanf(fp, "%lf %lf %lf %lf", &xyz[j].x, &xyz[j].y, &xyz[j].z, &r[j]);
 		r[j] = fabs(r[j]);
 	}
-	for (i=1;i<=nM;i++) {		/* read member properties	*/
+	for (i=1;i<=nB;i++) {		/* read member properties	*/
 		fscanf(fp, "%d", &j );
-		if ( j <= 0 || j > nM ) {
+		if ( j <= 0 || j > nB ) {
 		    fprintf(stderr,"  error in member property data: Member number out of range  ");
 		    fprintf(stderr,"  Member: %d  \n", j);
 		    exit(1);
@@ -129,14 +124,14 @@ void read_input_data(
 		    exit(1);
 		}
 	}
-	for (i=1;i<=nM;i++) {		/* calculate member lengths	*/
+	for (i=1;i<=nB;i++) {		/* calculate member lengths	*/
 		j1 = J1[i];
 		j2 = J2[i];
 
 #define SQ(X) ((X)*(X))
-		L[i] =	SQ(pos[j2].x - pos[j1].x) +
-			SQ(pos[j2].y-pos[j1].y) +
-			SQ(pos[j2].z-pos[j1].z);
+		L[i] =	SQ(xyz[j2].x - xyz[j1].x) +
+			SQ(xyz[j2].y-xyz[j1].y) +
+			SQ(xyz[j2].z-xyz[j1].z);
 #undef SQ
 
 		L[i] = sqrt( L[i] );
@@ -278,7 +273,7 @@ void getline_no_comment(
 READ_REACTION_DATA - Read fixed joint displacement boundary conditions 29dec09
 ------------------------------------------------------------------------------*/
 void read_reaction_data (
-	FILE *fp, int DoF, int *nR, int nJ, int *R, int *sumR
+	FILE *fp, int DoF, int nJ, int *nR, int *R, int *sumR
 ){
 	int	i,j,l;
 
@@ -322,13 +317,13 @@ void read_reaction_data (
 	*sumR=0;	for (i=1;i<=DoF;i++)	*sumR += R[i];
 	if ( *sumR < 4 ) {
 	    fprintf(stderr,"  warning:  Un-restrained structure\n");
-	    fprintf(stderr,"  %d imposed reactions.", *sumR );
+	    fprintf(stderr,"  %d imxyzed reactions.", *sumR );
 	    fprintf(stderr,"  At least 4 reactions are required to support static loads.\n");
 	    /*	exit(1); */
 	}
 	if ( *sumR >= DoF ) {
 	    fprintf(stderr,"  error in reaction data:  Fully restrained structure\n");
-	    fprintf(stderr,"  %d imposed reactions >= %d degrees of freedom\n",
+	    fprintf(stderr,"  %d imxyzed reactions >= %d degrees of freedom\n",
 								*sumR, DoF );
 	    exit(1);
 	}
@@ -338,22 +333,26 @@ void read_reaction_data (
 
 
 /*------------------------------------------------------------------------------
-ASSEMBLE_LOADS  -
+READ_AND_ASSEMBLE_LOADS  -
 read load information data, assemble un-restrained load vectors	9sep08
 ------------------------------------------------------------------------------*/
-void assemble_loads(
+void read_and_assemble_loads(
 		FILE *fp,
-		int nL, int nJ, vec3 *pos,
-		double *L, double *Le, double *Ax, double *Asy, double *Asz,
-		double *Iy, double *Iz, double *E, double *G,
-		double *p, int shear,
+		int nJ, int nB, int nL, int DoF,
+		vec3 *xyz,
+		double *L, double *Le,
 		int *J1, int *J2,
-		int DoF,
-		int nM, int *nF, int *nW, int *nP, int *nT, int *nD,
+		double *Ax, double *Asy, double *Asz,
+		double *Iy, double *Iz, double *E, double *G,
+		double *p,
+		int *R,
+		int shear,
+		int *nF, int *nW, int *nP, int *nT, int *nD,
 		double **Q, 
 		double **F_mech, double **F_temp,
 		double ***W, double ***P, double ***T,
-		double ***feF_mech, double ***feF_temp, double **Dp, int *R 
+		double **Dp,
+		double ***feF_mech, double ***feF_temp
 ){
 	double	Nx1, Vy1, Vz1, Mx1, My1, Mz1,	/* fixed end forces */
 		Nx2, Vy2, Vz2, Mx2, My2, Mz2,
@@ -367,13 +366,13 @@ void assemble_loads(
 		for (lc=1; lc <= nL; lc++)
 			F_mech[lc][j] = F_temp[lc][j] = 0.0;
 	for (i=1; i<=12; i++)
-		for (n=1; n<=nM; n++)
+		for (n=1; n<=nB; n++)
 			for (lc=1; lc <= nL; lc++)
 				feF_mech[lc][n][i] = feF_temp[lc][n][i] = 0.0;
 
 	for (i=1; i<=DoF; i++)	for (lc=1; lc<=nL; lc++) Dp[lc][i] = 0.0;
 
-	for (i=1;i<=nM;i++)	for(j=1;j<=12;j++)	Q[i][j] = 0.0;
+	for (i=1;i<=nB;i++)	for(j=1;j<=12;j++)	Q[i][j] = 0.0;
 
 	for (lc = 1; lc <= nL; lc++) {		/* begin load-case loop */
 
@@ -400,13 +399,13 @@ void assemble_loads(
 	  printf("  number of uniform distributed loads ");
 	  dots(15);
 	  printf(" nW = %3d\n", nW[lc]);
-	  if ( nW[lc] < 0 || nW[lc] > nM ) {
-		fprintf(stderr,"  error: valid ranges for nW is 0 ... %d \n", nM );
+	  if ( nW[lc] < 0 || nW[lc] > nB ) {
+		fprintf(stderr,"  error: valid ranges for nW is 0 ... %d \n", nB );
 		exit(1);
 	  }
 	  for (i=1; i <= nW[lc]; i++) {	/* ! local member coordinates !	*/
 		fscanf(fp,"%d", &n );
-		if ( n < 1 || n > nM ) {
+		if ( n < 1 || n > nB ) {
 		    fprintf(stderr,"  error in uniform distributed loads: member number %d is out of range\n",n);
 		    exit(1);
 		}
@@ -429,7 +428,7 @@ void assemble_loads(
 
 		j1 = J1[n];	j2 = J2[n];
 
-		coord_trans ( pos, L[n], j1, j2,
+		coord_trans ( xyz, L[n], j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		/* debugging
@@ -465,13 +464,13 @@ void assemble_loads(
 	  printf("  number of concentrated member point loads ");
 	  dots(9);
 	  printf(" nP = %3d\n", nP[lc]);
-	  if ( nP[lc] < 0 || nP[lc] > nM ) {
-		fprintf(stderr,"  error: valid ranges for nP is 0 ... %d \n", nM );
+	  if ( nP[lc] < 0 || nP[lc] > nB ) {
+		fprintf(stderr,"  error: valid ranges for nP is 0 ... %d \n", nB );
 		exit(1);
 	  }
 	  for (i=1; i <= nP[lc]; i++) {	/* ! local member coordinates !	*/
 		fscanf(fp,"%d", &n );
-		if ( n < 1 || n > nM ) {
+		if ( n < 1 || n > nB ) {
 		    fprintf(stderr,"   error in internal point loads: member number %d is out of range\n",n);
 		    exit(1);
 		}
@@ -514,7 +513,7 @@ void assemble_loads(
 
 		j1 = J1[n];	j2 = J2[n];
 
-		coord_trans ( pos, L[n], j1, j2,
+		coord_trans ( xyz, L[n], j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		/* {F} = [T]'{Q} */
@@ -537,13 +536,13 @@ void assemble_loads(
 	  printf("  number of members with temperature changes ");
 	  dots(8);
 	  printf(" nT = %3d\n", nT[lc] );
-	  if ( nT[lc] < 0 || nT[lc] > nM ) {
-		fprintf(stderr,"  error: valid ranges for nT is 0 ... %d \n", nM );
+	  if ( nT[lc] < 0 || nT[lc] > nB ) {
+		fprintf(stderr,"  error: valid ranges for nT is 0 ... %d \n", nB );
 		exit(1);
 	  }
 	  for (i=1; i <= nT[lc]; i++) {	/* ! member coordinates !	*/
 		fscanf(fp,"%d", &n );
-		if ( n < 1 || n > nM ) {
+		if ( n < 1 || n > nB ) {
 		    fprintf(stderr,"  error in temperature loads: member number %d is out of range\n",n);
 		    exit(1);
 		}
@@ -570,7 +569,7 @@ void assemble_loads(
 
 		j1 = J1[n];	j2 = J2[n];
 
-		coord_trans ( pos, L[n], j1, j2,
+		coord_trans ( xyz, L[n], j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		/* {F} = [T]'{Q} */
@@ -589,7 +588,7 @@ void assemble_loads(
 		feF_temp[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 	  }
 
-	  for (n=1; n<=nM; n++) {
+	  for (n=1; n<=nB; n++) {
 	     j1 = J1[n];	j2 = J2[n];
 	     for (i=1; i<= 6; i++) F_mech[lc][6*j1- 6+i] += feF_mech[lc][n][i];
 	     for (i=7; i<=12; i++) F_mech[lc][6*j2-12+i] += feF_mech[lc][n][i];
@@ -626,12 +625,12 @@ READ_MASSES  -  read member densities and extra inertial mass data	16aug01
 ------------------------------------------------------------------------------*/
 void read_mass_data(
 		FILE *fp,
-		int nJ, int nM, int *nI,
+		int nJ, int nB, int *nI,
 		double *d, double *BMs,
 		double *JMs, double *JMx, double *JMy, double *JMz,
 		double *L, double *Ax,
 		double *total_mass, double *struct_mass,
-		int *modes, int *Mmethod, int *lump,
+		int *nM, int *Mmethod, int *lump,
 		char modefile[],
 		double *tol, double *shift, int anim[], int *pan
 ){
@@ -641,14 +640,14 @@ void read_mass_data(
 	*total_mass = *struct_mass = 0.0;
 
 
-	chk = fscanf ( fp, "%d", modes );
+	chk = fscanf ( fp, "%d", nM );
 
 	printf(" number of dynamic modes ");
 	dots(28);
-	printf(" modes = %d\n", *modes);
+	printf(" nM = %3d\n", *nM);
 
-	if ( *modes < 1 || chk != 1 ) {
-		*modes = 0;
+	if ( *nM < 1 || chk != 1 ) {
+		*nM = 0;
 		return;
 	}
 
@@ -676,7 +675,7 @@ void read_mass_data(
 	fscanf( fp, "%s", modefile );
 	fscanf( fp, "%lf", tol );
 	fscanf( fp, "%lf", shift );
-	for (m=1; m <= nM; m++) {	/* read inertia data	*/
+	for (m=1; m <= nB; m++) {	/* read inertia data	*/
 		fscanf(fp, "%d", &mem );
 		fscanf(fp, "%lf %lf", &d[mem], &BMs[mem] );
 		*total_mass  += d[mem]*Ax[mem]*L[mem] + BMs[mem];
@@ -712,14 +711,14 @@ void read_mass_data(
 	    	fprintf(stderr,"  warning: All extra joint inertia at joint %d  are zero\n", jnt );
 	}
 
-	for (m=1;m<=nM;m++) {			/* chec inertia data	*/
+	for (m=1;m<=nB;m++) {			/* chec inertia data	*/
 	    if ( d[m] < 0.0 || BMs[m] < 0.0 || d[m]+BMs[m] <= 0.0 ) {
 		fprintf(stderr,"  error: Non-positive mass or density\n");
 		fprintf(stderr,"  d[%d]= %lf  BMs[%d]= %lf\n",m,d[m],m,BMs[m]);
 		exit(1);
 	    }
 	}
-/*	for (m=1;m<=nM;m++) ms += BMs[m]; // consistent mass doesn't agree  */
+/*	for (m=1;m<=nB;m++) ms += BMs[m]; // consistent mass doesn't agree  */
 /*	if ( ms > 0.0 )	    *lump = 1;    // with concentrated masses, BMs  */
 
 	printf(" structural mass ");
@@ -748,7 +747,7 @@ READ_CONDENSE   -  read matrix condensation information 	        30aug01
 ------------------------------------------------------------------------------*/
 void read_condense (
 		FILE *fp,
-		int nJ, int modes,
+		int nJ, int nM,
 		int *nC, int *Cdof, int *Cmethod, int *q, int *m
 ){
 	int	i,j,k,  chk, **qm;
@@ -818,11 +817,11 @@ void read_condense (
 
 	for (i=1; i<= *Cdof; i++) {
 	 fscanf( fp, "%d", &m[i] );
-	 if ( (m[i] < 0 || m[i] > modes) && *Cmethod == 3 ) {
+	 if ( (m[i] < 0 || m[i] > nM) && *Cmethod == 3 ) {
 	  fprintf(stderr," error in matrix condensation data: \n");
 	  fprintf(stderr,"  error: m[%d] = %d \n",i,m[i]);
 	  fprintf(stderr,"  The condensed mode number must be between ");
-	  fprintf(stderr,"  1 and %d (modes).\n", modes);
+	  fprintf(stderr,"  1 and %d (modes).\n", nM);
 	  exit(1);
          }
 	}
@@ -837,10 +836,10 @@ WRITE_INPUT_DATA  -  save input data					7nov02
 ------------------------------------------------------------------------------*/
 void write_input_data(
 	FILE *fp,
-	char *title, int nJ, int nM, int nL,
+	char *title, int nJ, int nB, int nL,
 	int *nD, int nR,
 	int *nF, int *nW, int *nP, int *nT,
-	vec3 *pos, double *r,
+	vec3 *xyz, double *r,
 	int *J1, int *J2,
 	double *Ax, double *Asy, double *Asz, double *J, double *Iy, double *Iz,
 	double *E, double *G, double *p, double **F, double **Dp,
@@ -868,7 +867,7 @@ void write_input_data(
 	for (i=1; i<=80; i++)	fprintf(fp,"_"); fprintf(fp,"\n");
 
 
-	fprintf(fp,"%d JOINTS;    %d MEMBERS;    %d LOAD CASES;\n",nJ,nM,nL);
+	fprintf(fp,"%d JOINTS;    %d MEMBERS;    %d LOAD CASES;\n",nJ,nB,nL);
 	fprintf(fp,"%d FIXED JOINTS;   ", nR);
 	fprintf(fp,"%d PRESCRIBED DISPLACEMENTS;\n", nD );
 
@@ -888,13 +887,13 @@ void write_input_data(
 	for (i=1; i<=nJ; i++) {
 	 j = 6*(i-1);
 	 fprintf(fp,"%5d %14.6f %14.6f %14.6f %8.3f  %2d %2d %2d %2d %2d %2d\n",
-		i, pos[i].x, pos[i].y, pos[i].z, r[i],
+		i, xyz[i].x, xyz[i].y, xyz[i].z, r[i],
 			R[j+1], R[j+2], R[j+3], R[j+4], R[j+5], R[j+6] );
 	}
 	fprintf(fp,"M E M B E R   D A T A\t\t\t\t\t\t\t(local)\n");
 	fprintf(fp,"  Member J1    J2     Ax   Asy   Asz    ");
 	fprintf(fp,"Jxx     Iyy     Izz       E       G roll\n");
-	for (i=1; i<= nM; i++) {
+	for (i=1; i<= nB; i++) {
 		fprintf(fp,"%5d %5d %5d %6.1f %5.1f %5.1f",
 					i, J1[i],J2[i], Ax[i], Asy[i], Asz[i] );
 		fprintf(fp," %6.1f %7.1f %7.1f %8.1f %7.1f %3.0f\n",
@@ -997,7 +996,7 @@ void write_input_data(
 WRITE_STATIC_RESULTS -  save joint displacements and member end forces	9sep08
 ------------------------------------------------------------------------------*/
 void write_static_results (
-		FILE *fp, int nJ, int nM, int nL, int lc, int DoF,
+		FILE *fp, int nJ, int nB, int nL, int lc, int DoF,
 		int *J1, int *J2,
 		double *F, double *D, int *R,
 		double **Q, double err,
@@ -1036,7 +1035,7 @@ void write_static_results (
 	fprintf(fp,"\t\t\t\t\t(local)\n");
 	fprintf(fp,"  Member Joint      Nx          Vy         Vz");
 	fprintf(fp,"         Txx        Myy        Mzz\n");
-	for (n=1; n<= nM; n++) {
+	for (n=1; n<= nB; n++) {
 		fprintf(fp," %5d  %5d", n, J1[n]);
 		if ( fabs(Q[n][1]) < 0.0001 )
 			fprintf (fp, "      0.0   ");
@@ -1091,7 +1090,7 @@ this function interacts with frame_3dd.m, an m-file interface to frame3dd
 ------------------------------------------------------------------------------*/
 void write_static_mfile (
 	char *argv[],
-	int nJ, int nM, int nL, int lc, int DoF, int *J1, int *J2,
+	int nJ, int nB, int nL, int lc, int DoF, int *J1, int *J2,
 	double *F, double *D, int *R, double **Q, double err, int ok
 ){
 	FILE	*fpm;
@@ -1157,7 +1156,7 @@ void write_static_mfile (
 	fprintf(fpm,"%%\tNx_1\t\tVy_1\t\tVz_1\t\tTxx_1\t\tMyy_1\t\tMzz_1\t");
 	fprintf(fpm,"  \tNx_2\t\tVy_2\t\tVz_2\t\tTxx_2\t\tMyy_2\t\tMzz_2\n");
         fprintf(fpm,"F%d=[",lc);
-	for (n=1; n<= nM; n++) {
+	for (n=1; n<= nB; n++) {
 		if ( fabs(Q[n][1]) < 0.0001 )
 			fprintf (fpm, "\t0.0\t");
 		else    fprintf (fpm, "\t%13.6e", Q[n][1] );
@@ -1174,7 +1173,7 @@ void write_static_mfile (
 				fprintf (fpm, "\t0.0\t");
 			else    fprintf (fpm, "\t%13.6e", Q[n][i] );
 		}
-		if ( n < nM )	fprintf(fpm," ; \n");
+		if ( n < nB )	fprintf(fpm," ; \n");
 		else		fprintf(fpm," ]'; \n\n");
 	}
 
@@ -1206,10 +1205,10 @@ WRITE_MODAL_RESULTS -  save modal frequencies and mode shapes		16aug01
 ------------------------------------------------------------------------------*/
 void write_modal_results(
 		FILE *fp,
-		int nJ, int nM, int nI, int DoF,
+		int nJ, int nB, int nI, int DoF,
 		double **M, double *f, double **V,
 		double total_mass, double struct_mass,
-		int iter, int sumR, int modes,
+		int iter, int sumR, int nM,
 		double shift, int lump, double tol, int ok
 ){
 	int	i, j, k, m, num_modes;
@@ -1228,10 +1227,10 @@ void write_modal_results(
 		for (j=3; j<=DoF; j+=6) msZ[i] += M[i][j];
 	}
 
-	if ( (DoF - sumR) > modes )	num_modes = modes;
+	if ( (DoF - sumR) > nM )	num_modes = nM;
 	else	num_modes = DoF - sumR;
 
-	fprintf(fp,"\nM O D A L   A N A L Y S I S   R E S U L T S\n");
+	fprintf(fp,"\nB O D A L   A N A L Y S I S   R E S U L T S\n");
 	fprintf(fp,"  Total Mass:  %e   ", total_mass );
 	fprintf(fp,"  Structural Mass:  %e \n", struct_mass );
 	fprintf(fp,"J O I N T   M A S S E S");
@@ -1270,14 +1269,14 @@ void write_modal_results(
 
 	fprintf(fp,"M A T R I X    I T E R A T I O N S: %d\n", iter );
 
-	fs = sqrt(4.0*PI*PI*f[modes]*f[modes] + tol) / (2.0*PI);
+	fs = sqrt(4.0*PI*PI*f[nM]*f[nM] + tol) / (2.0*PI);
 
         fprintf(fp,"There are %d modes below %f Hz.", -ok, fs );
-        if ( -ok > modes ) {
-                fprintf(fp," ... %d modes were not found.\n", -ok-modes );
+        if ( -ok > nM ) {
+                fprintf(fp," ... %d modes were not found.\n", -ok-nM );
                 fprintf(fp," Try increasing the number of modes in \n");
                 fprintf(fp," order to get the missing modes below %f Hz.\n",fs);
-        } else  fprintf(fp," ... All %d modes were found.\n", modes );
+        } else  fprintf(fp," ... All %d modes were found.\n", nM );
 
 
 	free_dvector(msX,1,DoF);
@@ -1295,8 +1294,8 @@ useful gnuplot options: set noxtics noytics noztics noborder view nokey
 ------------------------------------------------------------------------------*/
 void static_mesh(
 		char IO_file[], char meshfile[], char plotfile[],
-		char *title, int nJ, int nM, int nL, int lc, int DoF,
-		vec3 *pos, double *L,
+		char *title, int nJ, int nB, int nL, int lc, int DoF,
+		vec3 *xyz, double *L,
 		int *J1, int *J2, double *p, double *D,
 		double exg, int anlyz
 ){
@@ -1341,32 +1340,32 @@ void static_mesh(
 	fprintf(fpmfx,"  deflection exaggeration: %.1f\n", exg );
 	fprintf(fpmfx,"#       X-dsp        Y-dsp        Z-dsp\n");
 
-	for (m=1; m<=nM; m++) {
+	for (m=1; m<=nB; m++) {
 
-		bent_beam ( fpmfx, J1[m], J2[m], pos, L[m], p[m], D, exg );
+		bent_beam ( fpmfx, J1[m], J2[m], xyz, L[m], p[m], D, exg );
 
 		j = J1[m];	i = 6*(j-1);
-		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, pos[j].x,pos[j].y,pos[j].z);
+		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, xyz[j].x,xyz[j].y,xyz[j].z);
 		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-			pos[j].x + exg*D[i+1],
-			pos[j].y + exg*D[i+2],
-			pos[j].z + exg*D[i+3]
+			xyz[j].x + exg*D[i+1],
+			xyz[j].y + exg*D[i+2],
+			xyz[j].z + exg*D[i+3]
 		);
 
 		j = J2[m];	i = 6*(j-1);
-		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, pos[j].x,pos[j].y,pos[j].z);
+		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, xyz[j].x,xyz[j].y,xyz[j].z);
 		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-			pos[j].x + exg*D[i+1],
-			pos[j].y + exg*D[i+2],
-			pos[j].z + exg*D[i+3]
+			xyz[j].x + exg*D[i+1],
+			xyz[j].y + exg*D[i+2],
+			xyz[j].z + exg*D[i+3]
 		);
 		fprintf(fpm,"\n\n");
 	}
 
 	for ( j=1; j<=nJ; j++ ) {
-		if (pos[j].x != 0.0) X=1;	/* check for three-dimensional frame */
-		if (pos[j].y != 0.0) Y=1;
-		if (pos[j].z != 0.0) Z=1;
+		if (xyz[j].x != 0.0) X=1;	/* check for three-dimensional frame */
+		if (xyz[j].y != 0.0) Y=1;
+		if (xyz[j].z != 0.0) Z=1;
 	}
 	if ( X && Y && Z ) D3 = ' ';
 
@@ -1408,14 +1407,14 @@ void static_mesh(
  	 fprintf(fpm,"# NODE NUMBER LABELS\n");
 	 for (j=1; j<=nJ; j++)
 		fprintf(fpm,"set label ' %d' at %12.4e, %12.4e, %12.4e\n",
-							j, pos[j].x,pos[j].y,pos[j].z );
+					j, xyz[j].x,xyz[j].y,xyz[j].z );
 
 	 fprintf(fpm,"# MEMBER NUMBER LABELS\n");
-	 for (m=1; m<=nM; m++) {
+	 for (m=1; m<=nB; m++) {
 		j1 = J1[m];	j2 = J2[m];
-		mx = 0.5 * ( pos[j1].x + pos[j2].x );
-		my = 0.5 * ( pos[j1].y + pos[j2].y );
-		mz = 0.5 * ( pos[j1].z + pos[j2].z );
+		mx = 0.5 * ( xyz[j1].x + xyz[j2].x );
+		my = 0.5 * ( xyz[j1].y + xyz[j2].y );
+		mz = 0.5 * ( xyz[j1].z + xyz[j2].z );
 		fprintf(fpm,"set label ' %d' at %12.4e, %12.4e, %12.4e\n",
 								m, mx, my, mz );
 	 }
@@ -1474,8 +1473,8 @@ MODAL_MESH  -  create mesh data of the mode-shape meshes, use gnuplot	19oct98
 void modal_mesh(
 		char IO_file[], char meshfile[], char modefile[],
 		char plotfile[], char *title,
-		int nJ, int nM, int DoF, int modes,
-		vec3 *pos, double *L,
+		int nJ, int nB, int DoF, int nM,
+		vec3 *xyz, double *L,
 		int *J1, int *J2, double *p,
 		double **M, double *f, double **V,
 		double exg, int anlyz
@@ -1503,7 +1502,7 @@ void modal_mesh(
 
 	if (!anlyz) exg = 0.0;
 
-	for (m=1; m<=modes; m++) {
+	for (m=1; m<=nM; m++) {
 
 		strcpy(modefl,modefile);
 		s1[0]='-'; s1[1]='\0'; my_itoa(m,s2,2);  strcat(s1,s2);  strcat(modefl,s1);
@@ -1530,13 +1529,13 @@ void modal_mesh(
 
 		fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
 
-		for(n=1; n<=nM; n++)
-			bent_beam ( fpm, J1[n], J2[n], pos, L[n], p[n], v, exg );
+		for(n=1; n<=nB; n++)
+			bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, exg );
 
 		for ( j=1; j<=nJ; j++ ) {
-			if (pos[j].x != 0.0) X=1;	/* check for three-dimensional frame */
-			if (pos[j].y != 0.0) Y=1;
-			if (pos[j].z != 0.0) Z=1;
+			if (xyz[j].x != 0.0) X=1;	/* check for three-dimensional frame */
+			if (xyz[j].y != 0.0) Y=1;
+			if (xyz[j].z != 0.0) Z=1;
 		}
 
 		if ( X && Y && Z ) D3 = ' ';
@@ -1582,8 +1581,8 @@ void animate(
 	char IO_file[], char meshfile[], char modefile[], char plotfile[],
 	char *title,
 	int anim[],
-	int nJ, int nM, int DoF, int modes,
-	vec3 *pos, double *L, double *p,
+	int nJ, int nB, int DoF, int nM,
+	vec3 *xyz, double *L, double *p,
 	int *J1, int *J2, double *f, double **V,
 	double exg,
 	int pan
@@ -1612,15 +1611,15 @@ void animate(
 		s1[16], s2[16], modefl[64], framefl[64];
 
 	for (j=1; j<=nJ; j++) {		/* check for three-dimensional frame */
-		if (pos[j].x != 0.0) X=1;
-		if (pos[j].y != 0.0) Y=1;
-		if (pos[j].z != 0.0) Z=1;
-		if (pos[j].x < x_min ) x_min = pos[j].x;
-		if (pos[j].y < y_min ) y_min = pos[j].y;
-		if (pos[j].z < z_min ) z_min = pos[j].z;
-		if ( x_max < pos[j].x ) x_max = pos[j].x;
-		if ( y_max < pos[j].y ) y_max = pos[j].y;
-		if ( z_max < pos[j].z ) z_max = pos[j].z;
+		if (xyz[j].x != 0.0) X=1;
+		if (xyz[j].y != 0.0) Y=1;
+		if (xyz[j].z != 0.0) Z=1;
+		if (xyz[j].x < x_min ) x_min = xyz[j].x;
+		if (xyz[j].y < y_min ) y_min = xyz[j].y;
+		if (xyz[j].z < z_min ) z_min = xyz[j].z;
+		if ( x_max < xyz[j].x ) x_max = xyz[j].x;
+		if ( y_max < xyz[j].y ) y_max = xyz[j].y;
+		if ( z_max < xyz[j].z ) z_max = xyz[j].z;
 	}
 	if ( X && Y && Z ) D3 = ' ';
 
@@ -1772,9 +1771,9 @@ void animate(
 
 	    fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
 
-	    for (n=1; n<=nM; n++)
+	    for (n=1; n<=nB; n++)
 
-		bent_beam ( fpm, J1[n], J2[n], pos, L[n], p[n], v, ex );
+		bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, ex );
 
 	    fclose(fpm);
           }
@@ -1792,7 +1791,7 @@ are exact for mode-shapes, and for frames loaded at their joints.	22feb99
 ------------------------------------------------------------------------------*/
 void bent_beam(
 	FILE *fp, int j1, int j2,
-	vec3 *pos,
+	vec3 *xyz,
 	double L, double p, double *D, double exg
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, 	/* coord xfmn	*/
@@ -1805,7 +1804,7 @@ void bent_beam(
 	a = dvector(1,4);
 	b = dvector(1,4);
 
-	coord_trans ( pos, L, j1, j2,
+	coord_trans ( xyz, L, j1, j2,
 				&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p );
 
 	i1 = 6*(j1-1);	i2 = 6*(j2-1);
@@ -1863,7 +1862,7 @@ void bent_beam(
 		dz = t3*s + t6*v + t9*w;
 
 		fprintf (fp," %12.4e %12.4e %12.4e\n",
-			pos[j1].x + dx, pos[j1].y + dy, pos[j1].z + dz
+			xyz[j1].x + dx, xyz[j1].y + dy, xyz[j1].z + dz
 		);
 	}
 	fprintf(fp,"\n\n");

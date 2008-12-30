@@ -78,11 +78,10 @@ Example C: a tetrahedral frame - static and dynamic analysis
 
 4                               % number of joints with reactions
 % J     x y z xx yy zz          1= fixed, 0=free
-
- 1	1 1 1 0 0 0
- 3	1 1 1 0 0 0
- 16	1 1 1 0 0 0
- 18	1 1 1 0 0 0
+ 1	1 1 1  0  0  0
+ 3	1 1 1  0  0  0
+ 16	1 1 1  0  0  0
+ 18	1 1 1  0  0  0
 
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
@@ -169,7 +168,7 @@ exC.plt                         % plot file name
 
 5                               % number of modes to animate
  1  2  3  4   5                 % modes to animate
-0                               % 1: pan during animation, 0: don't
+1                               % 1: pan during animation, 0: don't
 
 
 ________________________________________________________________________________
@@ -180,10 +179,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example C: a tetrahedral frame - static and dynamic analysis  
-Tue Dec 30 10:05:02 2008
+Tue Dec 30 15:23:11 2008
 ________________________________________________________________________________
 18 JOINTS;    48 MEMBERS;    1 LOAD CASES;
-4 FIXED JOINTS;   -1081635352 PRESCRIBED DISPLACEMENTS;
+4 FIXED JOINTS;   -1077565016 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -414,7 +413,7 @@ R E A C T I O N S							(global)
     18      25.888       0.759      -2.111       0.0         0.0         0.0  
 R M S   E Q U I L I B R I U M    E R R O R: 5.549e-04
 
-M O D A L   A N A L Y S I S   R E S U L T S
+B O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  2.265723e+01     Structural Mass:  2.265723e+01 
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta

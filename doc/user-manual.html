@@ -17,7 +17,7 @@ Graphical output and mode shape animation via Gnuplot.">
 
 <img src="img/psoe.jpg" height="100" align="left" border="0">
 <font face="Arial, Helvetica, sans-serif" size="3">
-<nobr><b>A Manual and Reference for <a href="index.html">Frame3DD: A Structural Frame Analysis Program</a></b>
+<nobr><b>A Manual and Reference for <a href="http://www.duke.edu/~hpgavin/frame3dd/index.html">Frame3DD: A Structural Frame Analysis Program</a></b>
 </nobr><br>
 <a href="http://www-cee.egr.duke.edu/">
 Department of Civil and Environmental Engineering</a><br>
@@ -775,14 +775,14 @@ A Sturm check is carried out to determine if any eigen-values were missed.
 </p>
 
 <p>
-If a dynamic analysis is not to be performed, simply set the <a href="#Variables"<i>modes</i>
-     variable</a> (the number of desired modes) to zero (0).    If modes is set to zero,
-     <b>Frame3DD</b> will stop reading the Input/Output file at this point.   If modes is set
-     to zero, there is no need to provide numerical values for the quantities from <i>lump</i>
-     to <i>m[3] ... </i>.   (See the 
+If a dynamic analysis is not to be performed, simply set the <a href="#Variables"<i>nM</i>variable</a> (the number of desired modes) to zero (0).   
+If <i>nM</i> is set to zero,
+<b>Frame3DD</b> will stop reading the Input/Output file at this point.   
+If <i>nM</i> is set to zero, there is no need to provide numerical values for the quantities from <i>lump</i> to <i>m[3] ... </i>.
+(See the 
 <a href="#InputData"><b>Input Data Format</b></a> specification and 
 <a href="#Variables"><b>Variable Definitions</b></a>
-     below.)
+below.)
 </p>
 
 <b> Matrix Condensation </b><br>
@@ -919,7 +919,7 @@ and possibly
 A one-line descriptive title of your analysis MUST be the FIRST line of the file
 
 nJ                                     % number of joints
-nM                                     % number of members
+nB                                     % number of beam elements
 nL                                     % number of static load cases, up to 127
 
   J[1]       x[1]       y[1]       z[1]     r[1]       
@@ -930,7 +930,7 @@ nL                                     % number of static load cases, up to 127
                                             % member numbers, loc'ns, and prop's
 M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jxx[1]  Iyy[1]  Izz[1]  E[1]  G[1]  p[1]
   :      :      :      :       :       :       :       :       :     :     :     :
-M[nM] J1[nM] J2[nM] Ax[nM] Asy[nM] Asz[nM] Jxx[nM] Iyy[nM] Izz[nM] E[nM] G[nM] p[nM]
+M[nB] J1[nB] J2[nB] Ax[nB] Asy[nB] Asz[nB] Jxx[nB] Iyy[nB] Izz[nB] E[nB] G[nB] p[nB]
 
 nR                                            % number of joints with reactions 
   J[1]    Rx[1]   Ry[1]   Rz[1]   Rxx[1]  Ryy[1]  Rzz[1]
@@ -1001,7 +1001,7 @@ nD                             % number of joints with prescribed displacements
 % repeat the static load data nL times ... up to 127 static load cases
 
 
-modes                                          %       number of desired modes 
+nM                                             %       number of desired modes 
 Mmethod                                        % 1: Subspace Jacobi, 2: Stodola
 lump                                           % 0: consistent mass, 1: lumped 
 /tmp/mode_file                                 %     mode shape data file name 
@@ -1010,7 +1010,7 @@ shift             % shift-factor for rigid body modes, make 0 for pos.def. [K]
 
  M[1]  d[1]  BMs[1]
    :     :       :                           % beam density and extra beam mass
- M[nM] d[nM] BMs[nM]
+ M[nB] d[nB] BMs[nB]
 
 nI                          % number of joints with extra joint mass or inertia
  J[1]  JMs[1]   JMx[1]  JMy[1]  JMz[1]     % joint masses and rotatory inertias 
@@ -1092,17 +1092,17 @@ nC                                                % number of condensed joints
        Mzz       - Joint Moment about the global Z axis
        m         - list of modes to match in dynamic condensation
        mesh_file - Data file for the Gnuplot-formatted mesh data for plotting
-       modes     - number of modes to be calculated
        Mmethod   - the modal analysis method 1: Subspace Jacobi, 2: Stodola
        mode_file - Data file for the Gnuplot-formatted mode data for plotting
-       nA        - number of mode shapes to animate must be less than 20
-       nC        - number of joints for matrix condensation 
-       nD        - number of joints wiht prescribed displacements (nD <= nR) 
+       nA        - number of mode shapes to Animate must be less than 20
+       nB        - number of Beam elements
+       nC        - number of joints for matrix Condensation 
+       nD        - number of joints wiht prescribed Displacements (nD <= nR) 
        nF        - number of joints with point Forces or concentrated moments
        nI        - number of joints with extra joint mass or Inertia
        nJ        - number of Joints
        nL        - number of static Load cases
-       nM        - number of Members 
+       nM        - number of Modes to be calculated
        nP        - number of members with concentrated member loads
        nR        - number of joints with Reaction forces
        nT        - number of members with Temperature changes

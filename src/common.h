@@ -36,10 +36,9 @@
 #define PI 3.14159265358979323846
 #endif
 
-
-#define Zvert 1		/* Zvert=0: Y axis is vertical ... rot Z, then rot Y */
-			/* Zvert=1: Z axis is vertical ... rot Y, then rot Z */
-
+// Zvert=0: Y axis is vertical... rotate about Z-axis, then rotate about Y-axis
+// Zvert=1: Z axis is vertical... rotate about Y-axis, then rotate about Z-axis
+#define Zvert 1	
 
 #endif /* FRAME_COMMON_H */
 

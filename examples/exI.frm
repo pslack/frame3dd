@@ -50,6 +50,12 @@ Example I: a triangular tower
 23     14 15  100  60    60    500   1000  1000   10000   7000 0
 24     15 13  100  60    60    500   1000  1000   10000   7000 0
 
+3                               % number of joints with reactions
+% J     x  y  z xx yy zz          1= fixed, 0=free
+  1     1  1  1  1  1  1
+  2     1  1  1  1  1  1
+  3     1  1  1  1  1  1
+
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
 /tmp/exI-msh                    % mesh data file name
@@ -80,17 +86,9 @@ exI.plt                         % mesh annotation file name
 
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
+0                               % number of joints with support settlements
 				% End   Static Load Case 1 of 1
 
-
-3                               % number of joints with reactions
-% J     x  y  z xx yy zz          1= fixed, 0=free
-
-  1     1  1  1  1  1  1
-  2     1  1  1  1  1  1
-  3     1  1  1  1  1  1
-
-0                               % number of joints with support settlements
 
 4                               % number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
@@ -134,17 +132,17 @@ exI.plt                         % mesh annotation file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20080909               http://frame3dd.sf.net/
+FRAME3DD version: 20081230               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2008, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
-Example I: a three dimensional frame 
-Thu Dec 11 10:17:21 2008
+Example I: a triangular tower  
+Tue Dec 30 15:29:34 2008
 ________________________________________________________________________________
 15 JOINTS;    24 MEMBERS;    1 LOAD CASES;
-3 FIXED JOINTS;   0 PRESCRIBED DISPLACEMENTS;
+3 FIXED JOINTS;   -1077689976 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -196,10 +194,11 @@ M E M B E R   D A T A							(local)
 
 L O A D   C A S E   1   O F   1  ... 
 
- 1 joints  with concentrated loads
- 12 members with uniformly distributed loads
- 0 members with concentrated point loads
- 0 members with temperature loads
+   1 joints  with concentrated loads
+  12 members with uniformly distributed loads
+   0 members with concentrated point loads
+   0 members with temperature loads
+   0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      4       0.000       0.000    -380.198   -1681.148   10271.640       0.000
@@ -305,7 +304,7 @@ R E A C T I O N S							(global)
      3       0.0       -50.248    3607.723   11108.943       0.0         0.0  
 R M S   E Q U I L I B R I U M    E R R O R: 2.412e-04
 
-M O D A L   A N A L Y S I S   R E S U L T S
+B O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  9.919573e-02     Structural Mass:  9.919573e-02 
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta

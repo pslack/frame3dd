@@ -121,10 +121,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example A: linear static analysis of a 2D truss with support settlement 
-Tue Dec 30 10:01:10 2008
+Tue Dec 30 15:22:26 2008
 ________________________________________________________________________________
 12 JOINTS;    21 MEMBERS;    2 LOAD CASES;
-12 FIXED JOINTS;   -1076665688 PRESCRIBED DISPLACEMENTS;
+12 FIXED JOINTS;   -1080215768 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________

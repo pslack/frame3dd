@@ -33,10 +33,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "nrutil.h"
-#include "common.h" 
 #include "eig.h"
-#include "ldl_dcmp.h"
+#include "common.h" 
+#include "nrutil.h"
 
 /* #define EIG_DEBUG */
 
@@ -70,11 +69,11 @@ where
 -----------------------------------------------------------------------------*/
 void subspace(
 	double **K, double **M,
-	int n, int m, /**< DoF and number of required modes	*/
+	int n, int m,	/**< DoF and number of required modes	*/
 	double *w, double **V,
 	double tol, double shift,
-	int *iter, /**< sub-space iterations */
-	int *ok /**< Sturm check result */
+	int *iter,	/**< sub-space iterations		*/
+	int *ok		/**< Sturm check result			*/
 ){
 	double	**Kb, **Mb, **Xb, **Qb, *d, *u, *v, km, km_old,
 		error=1.0, w_old = 0.0;

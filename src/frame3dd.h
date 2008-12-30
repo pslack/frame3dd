@@ -36,61 +36,105 @@
 
 /** form the global stiffness matrix */
 void assemble_K(
-	double **K,
-	int DoF, int nM,
-	vec3 *pos, double *r, double *L, double *Le,
-	int *J1, int *J2,
-	double *Ax, double *Asy, double *Asz,
-	double *J, double *Iy, double *Iz, double *E, double *G, double *p,
-	int shear, int geom, double **Q
+	double **K,		/**< stiffness matrix		*/
+	int DoF, int nB,	/**< degrees of freedom, number of beams */
+	vec3 *xyz,		/**< XYZ locations of every joint	*/
+	double *r,		/**< rigid radius of every joint	*/
+	double *L, double *Le,	/**< length of each beam element, effective */
+	int *J1, int *J2,	/**< joint connectivity			*/
+	double *Ax, double *Asy, double *Asz,	/**< section areas	*/
+	double *J, double *Iy, double *Iz,	/**< section inertias	*/
+	double *E, double *G,	/**< elastic and shear moduli		*/
+	double *p,		/**< roll angle, radians		*/
+	int shear,		/**< 1: include shear deformation, 0: don't */
+	int geom,		/**< 1: include goemetric stiffness, 0: don't */
+	double **Q		/**< beam element end forces for every beam */
 );
 
 
 /** apply boundary conditions */
 void apply_reactions(
-	int DoF, int *R, double **Dp, int lc, 
-	double *Fo, double *F, double **K, char tm
+	int DoF,	/**< number of degrees of freedom		*/
+	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
+	double **Dp,	/**< matrix of prescribed displacements, each DoF */	
+	int lc, 	/**< a load case number				*/
+	double *Fo,	/**< fixed end forces for unrestrained frame	*/
+	double *F,	/**< load vector for restrained frame		*/
+	double **K,	/**< stiffness matrix				*/
+	char tm		/**< tm='t': thermal loads; tm='m': mech. loads	*/
 );
 
 
 /** solve {F} =   [K]{D} via L D L' decomposition */
 void solve_system(
-	double **K, double *D, double *F, int DoF, int *ok
+	double **K,	/**< stiffness matrix for the restrained frame	*/
+	double *D,	/**< displacement vector to be solved		*/
+	double *F,	/**< load vector				*/
+	int DoF,	/**< number of degrees of freedom		*/
+	int *ok		/**< indicates positive definite stiffness matrix */
 );
 
 
 /** evaluate the member end forces for every member */
 void end_forces(
-	double **Q, int nM, vec3 *pos,
-	double *L, double *Le,
-	int *J1, int *J2, double *Ax, double *Asy, double *Asz,
-	double *J, double *Iy, double *Iz, double *E, double *G, double *p,
-	double *D, int shear, int geom
+	double **Q,	/**< beam element end forces for every beam	*/
+	int nB,		/**< number of beam elements			*/
+	vec3 *xyz,	/** XYZ locations of each joint			*/
+	double *L, double *Le,	/**< length of each beam element, effective */
+	int *J1, int *J2,	/**< joint connectivity			*/
+	double *Ax, double *Asy, double *Asz,	/**< section areas	*/
+	double *J, double *Iy, double *Iz,	/**< section inertias	*/
+	double *E, double *G,	/**< elastic and shear moduli		*/
+	double *p,		/**< roll angle, radians		*/
+	double *D,	/**< displacement vector			*/
+	int shear,	/**< 1: include shear deformation, 0: don't */
+	int geom	/**< 1: include goemetric stiffness, 0: don't */
 );
 
 
 /** perform an equilibrium check, F returned as reactions */
 void equilibrium(	
-	vec3 *pos,
-	double *L, int *J1, int *J2, double *F, int *R, double *p,
-	double **Q, double **feF, int nM, int DoF, double *err
+	vec3 *xyz,	/** XYZ locations of each joint			*/
+	double *L,	/**< length of each beam element, effective	*/
+	int *J1, int *J2, /**< joint connectivity			*/
+	double *F,	/**< load vector				*/
+	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
+	double *p,	/**< roll angle, radians			*/
+	double **Q,	/**< beam element end forces for every beam	*/
+	double **feF,	/**< fixed end forces for every beam element	*/
+	int nB,		/**< number of beam elements			*/
+	int DoF,	/**< number of degrees of freedom		*/
+	double *err	/**< root mean squared equilibrium error	*/
 );
 
 
 /** assemble global mass matrix from element mass & inertia */
 void assemble_M(
-	double **M, int DoF, int nJ, int nM,
-	vec3 *pos, double *r, double *L,
-	int *J1, int *J2,
-	double *Ax, double *J, double *Iy, double *Iz, double *p,
-	double *d, double *BMs, double *JMs, double *JMx, double *JMy, double *JMz,
-	int lump
+	double **M,	/**< mass matrix				*/
+	int DoF,	/**< number of degrees of freedom		*/
+	int nJ, int nB,	/**< number of joints, number of beam elements	*/
+	vec3 *xyz,	/** XYZ locations of each joint			*/
+	double *r,	/**< rigid radius of every joint		*/
+	double *L,	/**< length of each beam element, effective	*/
+	int *J1, int *J2, /**< joint connectivity			*/
+	double *Ax,	/**< joint connectivity				*/
+	double *J, double *Iy, double *Iz,	/**< section inertias	*/
+	double *p,	/**< roll angle, radians			*/
+	double *d,	/**< beam element density			*/
+	double *BMs,	/**< extra beam mass				*/
+	double *JMs,	/**< joint mass					*/
+	double *JMx, double *JMy, double *JMz,	/**< joint inertias	*/
+	int lump	/**< 1: lumped mass matrix, 0: consistent mass	*/
 );
 
 
 /** static condensation of stiffness matrix from NxN to nxn */
 void condense(
-	double **A, int N, int *q, int n, double **Ac
+	double **A,	/**< a square matrix				*/
+	int N,		/**< the dimension of the matrix		*/
+	int *q,		/**< list of matrix indices to retain		*/
+	int n,		/**< the dimension of the condensed matrix	*/
+	double **Ac	/**< the condensed matrix			*/
 );
 
 
@@ -101,9 +145,12 @@ void condense(
 	AIAA Journal, Vol. 3, No. 2 (1965) p 380.
 */
 void guyan(
-	double **M, double **K, int N,
-	int *q, int n,
-	double **Mc, double **Kc, double w2 
+	double **M, double **K,	/**< mass and stiffness matrices	*/
+	int N,			/**< dimension of the matrices, DoF	*/
+	int *q,			/**< list of degrees of freedom to retain */
+	int n,			/**< dimension of the condensed matrices */
+	double **Mc, double **Kc,	/**< the condensed matrices	*/
+	double w2 		/**< matched value of frequency squared	*/
 );
 
 
@@ -111,11 +158,17 @@ void guyan(
 	dynamic condensation of mass and stiffness matrices
 	matches the response at a set of frequencies
 
-	@NOTE Kc and Mc may be ill-conditioned, and possibly non-positive def.
+	@NOTE Kc and Mc may be ill-conditioned, and xyzsibly non-positive def.
 */
 void dyn_conden(
-	double **M, double **K, int N, int *R, int *p, int n,
-	double **Mc, double **Kc, double **V, double *f, int *m
+	double **M, double **K,	/**< mass and stiffness matrices	*/
+	int N,			/**< dimension of the matrices, DoF	*/
+	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
+	int *p,		/**< list of primary degrees of freedom		*/
+	int n,		/**< the dimension of the condensed matrix	*/
+	double **Mc, double **Kc,	/**< the condensed matrices	*/
+	double **V, double *f,	/**< mode shapes and natural frequencies*/
+	int *m		/**< list of modes to match in the condensed model */
 );
 
 
@@ -123,19 +176,23 @@ void dyn_conden(
 	release allocated memory
 */
 void deallocate( 
-	int nJ, int nM, int nL, int *nF, int *nW, int *nP, int *nT, int DoF,
+	int nJ, int nB, int nL, int *nF, int *nW, int *nP, int *nT, int DoF,
 	int modes,
-	vec3 *pos, double *r, double *L, double *Le,
+	vec3 *xyz, double *r, double *L, double *Le,
 	int *J1, int *J2, int *R,
-	double *Ax, double *Asy, double *Asz, double *J, double *Iy, double *Iz,
-	double *E, double *G, double *p,
+	double *Ax, double *Asy, double *Asz,
+	double *J, double *Iy, double *Iz,
+	double *E, double *G,
+	double *p,
 	double ***W, double ***P, double ***T,
-	double **Fo_mech, double **Fo_temp, double *Fo_mech_lc, double *Fo_temp_lc,
+	double **Fo_mech, double **Fo_temp,
+	double *Fo_mech_lc, double *Fo_temp_lc,
 	double ***feF_mech, double ***feF_temp, double **feF,
 	double **Fo, double *Fo_lc, double *F_lc,
 	double **K, double **Q,
 	double *D, double *dD, double **Dp,
-	double *d, double *BMs, double *JMs, double *JMx, double *JMy, double *JMz,
+	double *d, double *BMs,
+	double *JMs, double *JMx, double *JMy, double *JMz,
 	double **M, double *f, double **V, 
 	int *q, int *m
 );

@@ -47,12 +47,12 @@
 	Q=TF;   U=TD;   T'T=I;   Q=kU;   TF=kTD;   T'TF=T'kTD;   T'kT = K;   F=KD
 */
 void coord_trans(
-	vec3 *pos, 
-	double L, 
-	int j1, int j2, 
+	vec3 *xyz, 			// XYZ coordinate of all joints
+	double L, 			// length of all beam elements
+	int j1, int j2, 		// joint connectivity
 	double *t1, double *t2, double *t3, double *t4, double *t5, 
-	double *t6, double *t7, double *t8, double *t9, 
-	double p /**< the roll angle (radians) */
+	double *t6, double *t7, double *t8, double *t9, // coord transformation
+	double p			// the roll angle (radians) 
 );
 
 #endif /* FRAME_COORDTRANS_H */

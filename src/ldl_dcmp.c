@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 #include <math.h>
+
 #include "ldl_dcmp.h"
 
 /*----------------------------------------------------------------------------- 
@@ -45,16 +46,16 @@ LDL_DCMP  -  Solves [A]{x} = {b} simply and efficiently by performing an
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  9 Oct 2001
  Bathe, Finite Element Procecures in Engineering Analysis, Prentice Hall, 1982
 -----------------------------------------------------------------------------*/
-void ldl_dcmp ( A, n, d, b, x, reduce, solve, pd )
-double	**A,	/* the system matrix, and L of the L D L' decomposition	*/
-	*d,	/* diagonal of D in the  L D L' - decomposition		*/
-	*b,	/* the right hand side vector				*/
-	*x;	/* the solution vector					*/
-int	n,	/* the dimension of the matrix				*/	
-	reduce,	/* 1: do a forward reduction of A;    0: do no reduction */
-	solve,	/* 1: do a back substitution for {x}; 0: do no bk-sub'n	*/
-	*pd;	/* 1: definite matrix  and  successful L D L' decomp'n	*/
-{
+void ldl_dcmp (
+	double **A,	/**< the system matrix, and L of the L D L' decomp.*/
+	int n,		/**< the dimension of the matrix                */
+	double *d,	/**< diagonal of D in the  L D L' - decomp'n    */
+	double *b,	/**< the right hand side vector                 */
+	double *x,	/**< the solution vector                        */
+	int reduce,	/**< 1: do a forward reduction of A; 0: don't   */
+	int solve,	/**< 1: do a back substitution for {x}; 0: don't */
+	int *pd		/**< 1: definite matrix and successful L D L' decomp'n*/
+){
 	int	i, j, k, m;
 	*pd = 0;	/* number of negative elements on the diagonal of D */
 
@@ -119,9 +120,8 @@ LDL_MPROVE  -  Improves a solution vector x[1..n] of the linear set of equations
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  4 May 2001
 -----------------------------------------------------------------------------*/
 void ldl_mprove(
-		 double **A
-		, int n, double *d, double *b, double *x
-		, double *err, int *ok
+	double **A, int n, double *d, double *b, double *x, 
+	double *err, int *ok
 ){
 	double  sdp;		/* accumulate the r.h.s. in double precision */
 	double   *r,		/* the residual error		  	*/
@@ -248,9 +248,7 @@ void pseudo_inv(
 /* ---------------------------------------------------------------------------
 REL_NORM -  compute the relative 2-norm between two vectors       26dec01 
 --------------------------------------------------------------------------- */
-double rel_norm( N, D, n )
-double	*N, *D;
-int	n;
+double rel_norm( double *N, double *D, int n )
 {
 	double	nN = 0.0, nD = 0.0;
 	int	i;
