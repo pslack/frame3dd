@@ -4,7 +4,7 @@ Example A: linear static analysis of a 2D truss with support settlement
 21				% number of members 
  2				% number of static load cases
 
-% joint  x       y       z       r
+%joint  x       y       z       r
 
  1	0.0	0.0	0.0	0.0
  2	12.0	0.0	0.0	0.0
@@ -19,7 +19,7 @@ Example A: linear static analysis of a 2D truss with support settlement
 11	48.0	12.0	0.0	0.0
 12	60.0	12.0	0.0	0.0
 
-% m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz          E     G   p
+%m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz          E     G   p
 
  1 1 2	30.0	1.0	1.0	1.0	1.0	0.01	10000.0 500.0  0
  2 2 3	30.0	1.0	1.0	1.0	1.0	0.01	10000.0 500.0  0
@@ -44,7 +44,7 @@ Example A: linear static analysis of a 2D truss with support settlement
 21 11 12 30.0	1.0	1.0	1.0	1.0	0.01	10000.0 500.0  0
 
 12				% number of joints with reactions
-% J     x y z xx yy zz		1= fixed, 0=free
+%J     x y z xx yy zz		1= fixed, 0=free
 
   1	1 1 1  1  1  0
   2	0 0 1  1  1  0
@@ -81,7 +81,7 @@ exA.plt	                        % plot file name
 0				% number of members with temperature loads
 
 1				% number of joints with support settlements
-% J     Dx      Dy      Dz      Dxx     Dyy     Dzz
+%J     Dx      Dy      Dz      Dxx     Dyy     Dzz
   8 	0.01	0.0	0.0	0.0	0.0	0.0
 				% End   Static Load Case 1 of 2
 
@@ -102,7 +102,7 @@ exA.plt	                        % plot file name
 15 6e-12   1.5  1.5  17   17   17   17  
 
 2				% number of joints with support settlements
-% J     Dx      Dy      Dz      Dxx     Dyy     Dzz
+%J     Dx      Dy      Dz      Dxx     Dyy     Dzz
   1 	0.0    -0.01	0.0	0.0	0.0	0.0
   8 	0.05	0.0	0.0	0.0	0.0	0.0
 				% End   Static Load Case 2 of 2
@@ -121,10 +121,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example A: linear static analysis of a 2D truss with support settlement 
-Tue Dec 30 15:22:26 2008
+Wed Dec 31 10:42:31 2008
 ________________________________________________________________________________
 12 JOINTS;    21 MEMBERS;    2 LOAD CASES;
-12 FIXED JOINTS;   -1080215768 PRESCRIBED DISPLACEMENTS;
+12 FIXED JOINTS;   -1079908456 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -290,7 +290,7 @@ R E A C T I O N S							(global)
     10       0.0         0.0         0.0         0.0         0.0         0.0  
     11       0.0         0.0         0.0         0.0         0.0         0.0  
     12       0.0         0.0         0.0         0.0         0.0         0.0  
-R M S   E Q U I L I B R I U M    E R R O R: 3.757e-15
+R M S   E Q U I L I B R I U M    E R R O R: 9.629e-15
 
 L O A D   C A S E   2   O F   2  ... 
 

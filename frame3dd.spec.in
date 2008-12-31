@@ -62,6 +62,11 @@ rm -rf %{buildroot}
 
 %changelog
 
+* Wed Dec 31 2008 Henri Gavin <henri.gavin@duke.edu> 20081231
+- Moved rel_norm() from ldl_dcmp.c to frame3dd.c
+- User input variables are now float instead of double
+  ... except for joint location variable (xyz) which is still type vec3
+
 * Tue Dec 30 2008 Henri Gavin <henri.gavin@duke.edu> 20081230
 - The Input Data file format changed in two ways as follows:
   > Reaction data are listed just after the Member data.

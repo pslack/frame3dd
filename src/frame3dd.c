@@ -36,39 +36,39 @@
 /* forward declarations */
 
 static void elastic_K(
-	double **k, vec3 *xyz, double *r,
+	double **k, vec3 *xyz, float *r,
 	double L, double Le,
 	int j1, int j2,
-	double Ax, double Asy, double Asz,
-	double J, double Iy, double Iz, double E, double G, double p,
+	float Ax, float Asy, float Asz,
+	float J, float Iy, float Iz, float E, float G, float p,
 	int shear
 );
 
 static void geometric_K(
-	double **k, vec3 *xyz, double *r,
+	double **k, vec3 *xyz, float *r,
 	double L, double Le, 
-	int j1, int j2, double Ax, double Asy, double Asz, double J, 
-	double Iy, double Iz, double E, double G, double p, double T, 
+	int j1, int j2, float Ax, float Asy, float Asz, float J, 
+	float Iy, float Iz, float E, float G, float p, double T, 
 	int shear
 );
 
 static void member_force(
 	double *s, int M, vec3 *xyz, double L, double Le,
-	int j1, int j2, double Ax, double Asy, double Asz, double J,
-	double Iy, double Iz, double E, double G, double p, double *D,
+	int j1, int j2, float Ax, float Asy, float Asz, float J,
+	float Iy, float Iz, float E, float G, float p, double *D,
 	int shear, int geom
 );
 
 static void lumped_M(
 	double **m, vec3 *xyz,
-	double L, int j1, int j2, double Ax, double J, double Iy, double Iz,
-	double d, double p, double BMs
+	double L, int j1, int j2, float Ax, float J, float Iy, float Iz,
+	float d, float p, float BMs
 );
 
 static void consistent_M(
-	double **m, vec3 *xyz, double *r, double L,
-	int j1, int j2, double Ax, double J, double Iy, double Iz, double d,
-	double BMs, double p
+	double **m, vec3 *xyz, float *r, double L,
+	int j1, int j2, float Ax, float J, float Iy, float Iz, float d,
+	float BMs, float p
 );
 
 static void invAB(
@@ -84,7 +84,7 @@ void atma(
 	double t1, double t2, double t3,
 	double t4, double t5, double t6,
 	double t7, double t8, double t9,
-	double **m, double r1, double r2
+	double **m, float r1, float r2
 );
 
 
@@ -94,10 +94,10 @@ ASSEMBLE_K  -  assemble global stiffness matrix from individual elements 23feb94
 void assemble_K(
 	double **K,
 	int DoF, int nB,
-	vec3 *xyz, double *r, double *L, double *Le,
+	vec3 *xyz, float *r, double *L, double *Le,
 	int *J1, int *J2,
-	double *Ax, double *Asy, double *Asz,
-	double *J, double *Iy, double *Iz, double *E, double *G, double *p,
+	float *Ax, float *Asy, float *Asz,
+	float *J, float *Iy, float *Iz, float *E, float *G, float *p,
 	int shear, int geom, double **Q
 ){
 	double	**k;		/* element stiffness matrix in global coord */
@@ -125,7 +125,7 @@ void assemble_K(
 		Ax[i],Asy[i],Asz[i], J[i], Iy[i],Iz[i], E[i],G[i], p[i], shear);
 
 		if (geom)
-		 geometric_K( k, xyz,r, L[i], Le[i], J1[i], J2[i],
+		 geometric_K( k, xyz, r, L[i], Le[i], J1[i], J2[i],
 		           Ax[i], Asy[i],Asz[i], 
                            J[i], Iy[i], Iz[i], 
                            E[i],G[i], p[i], -Q[i][1], shear);
@@ -148,11 +148,11 @@ void assemble_K(
 ELASTIC_K - space frame elastic stiffness matrix in global coordnates	22oct02
 ------------------------------------------------------------------------------*/
 void elastic_K(
-	double **k, vec3 *xyz, double *r,
+	double **k, vec3 *xyz, float *r,
 	double L, double Le,
 	int j1, int j2,
-	double Ax, double Asy, double Asz,
-	double J, double Iy, double Iz, double E, double G, double p,
+	float Ax, float Asy, float Asz,
+	float J, float Iy, float Iz, float E, float G, float p,
 	int shear
 ){
 	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,     /* coord Xformn */
@@ -230,10 +230,10 @@ void elastic_K(
 GEOMETRIC_K - space frame geometric stiffness matrix, global coordnates 20dec07
 ------------------------------------------------------------------------------*/
 void geometric_K(
-	double **k, vec3 *xyz, double *r,
+	double **k, vec3 *xyz, float *r,
 	double L, double Le,
-	int j1, int j2, double Ax, double Asy, double Asz, double J,
-	double Iy, double Iz, double E, double G, double p, double T,
+	int j1, int j2, float Ax, float Asy, float Asz, float J,
+	float Iy, float Iz, float E, float G, float p, double T,
 	int shear
 ){
 	double t1, t2, t3, t4, t5, t6, t7, t8, t9; /* coord Xformn */
@@ -337,7 +337,7 @@ The original external load vector, Fo is returned unchanged;
 The load vector modified for prescribed displacements Dp is returned as F
 ------------------------------------------------------------------------------*/
 void apply_reactions(
-	int DoF, int *R, double **Dp, int lc,
+	int DoF, int *R, float **Dp, int lc,
 	double *Fo, double *F, double **K,
 	char	tm	/* 'm' means mech. loads, 't' means temp loads only */
 ){
@@ -409,8 +409,8 @@ void end_forces(
 	double **Q, int nB, vec3 *xyz,
 	double *L, double *Le,
 	int *J1, int *J2,
-	double *Ax, double *Asy, double *Asz,
-	double *J, double *Iy, double *Iz, double *E, double *G, double *p,
+	float *Ax, float *Asy, float *Asz,
+	float *J, float *Iy, float *Iz, float *E, float *G, float *p,
 	double *D, int shear, int geom
 ){
 	double	*s;
@@ -437,8 +437,8 @@ MEMBER_FORCE  -  evaluate the end forces for a member			12nov02
 ------------------------------------------------------------------------------*/
 void member_force(
 		double *s, int M, vec3 *xyz, double L, double Le,
-		int j1, int j2, double Ax, double Asy, double Asz, double J,
-		double Iy, double Iz, double E, double G, double p, double *D,
+		int j1, int j2, float Ax, float Asy, float Asz, float J,
+		float Iy, float Iz, float E, float G, float p, double *D,
 		int shear, int geom
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord Xformn	*/
@@ -541,7 +541,7 @@ EQUILIBRIUM  -  perform an equilibrium check, F returned as reactions   18sep02
 ------------------------------------------------------------------------------*/
 void equilibrium(	
 		vec3 *xyz,
-		double *L, int *J1, int *J2, double *F, int *R, double *p,
+		double *L, int *J1, int *J2, double *F, int *R, float *p,
 		double **Q, double **feF, int nB, int DoF, double *err
 ){
 	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
@@ -618,13 +618,14 @@ ASSEMBLE_M  -  assemble global mass matrix from element mass & inertia  24nov98
 ------------------------------------------------------------------------------*/
 void assemble_M(
 		double **M, int DoF, int nJ, int nB,
-		vec3 *xyz, double *r, double *L,
+		vec3 *xyz, float *r, double *L,
 		int *J1, int *J2,
-		double *Ax, double *J, double *Iy, double *Iz, double *p,
-		double *d, double *BMs, double *JMs, double *JMx, double *JMy,
-		double *JMz, int lump
+		float *Ax, float *J, float *Iy, float *Iz, float *p,
+		float *d, float *BMs,
+		float *JMs, float *JMx, float *JMy, float *JMz,
+		int lump
 ){
-	double   **mass,	    /* element mass matrix in global coord */
+	double  **mass,	    /* element mass matrix in global coord */
 		**dmatrix();
 	int     **ind,	  /* member-structure DoF index table     */
 		**imatrix(),
@@ -686,8 +687,8 @@ LUMPED_M  -  space frame element lumped mass matrix in global coordnates 7apr94
 ------------------------------------------------------------------------------*/
 static void lumped_M(
 	double **m, vec3 *xyz,
-	double L, int j1, int j2, double Ax, double J, double Iy, double Iz,
-	double d, double p, double BMs
+	double L, int j1, int j2, float Ax, float J, float Iy, float Iz,
+	float d, float p, float BMs
 ){
 	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,     /* coord Xformn */
 		t, ry,rz, po;	/* translational, rotational & polar inertia */
@@ -722,11 +723,11 @@ CONSISTENT_M  -  space frame consistent mass matrix in global coordnates 2oct97
 		 does not include shear deformations
 ------------------------------------------------------------------------------*/
 void consistent_M(
-		double **m, vec3 *xyz, double *r, double L,
-		int j1, int j2, double Ax, double J, double Iy, double Iz, double d,
-		double BMs, double p
+		double **m, vec3 *xyz, float *r, double L,
+		int j1, int j2, float Ax, float J, float Iy, float Iz, float d,
+		float BMs, float p
 ){
-	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,     /* coord Xformn */
+	double	t1, t2, t3, t4, t5, t6, t7, t8, t9,     /* coord Xformn */
 		t, ry, rz, po;	/* translational, rotational & polar inertia */
 	int     i, j;
 
@@ -799,7 +800,7 @@ void atma(
 		double t1, double t2, double t3,
 		double t4, double t5, double t6,
 		double t7, double t8, double t9,
-		double **m, double r1, double r2
+		double **m, float r1, float r2
 ){
 	double	**a, **ma, **dmatrix();
 	int	i,j,k;
@@ -1226,30 +1227,46 @@ int	n;
 	free_dmatrix ( XAi, 1,n,1,n );
 }
 
+/*---------------------------------------------------------------------------
+ REL_NORM -  compute the relative 2-norm between two vectors       26dec01 
+--------------------------------------------------------------------------- */
+double rel_norm( double *N, double *D, int n )
+{
+	double	nN = 0.0, nD = 0.0;
+	int	i;
+
+	for (i=1; i<=n; i++)	nN += N[i]*N[i];
+	for (i=1; i<=n; i++)	nD += D[i]*D[i];
+
+	return ( sqrt(nN) / sqrt(nD) );
+}
+
+
 /*------------------------------------------------------------------------------
 DEALLOCATE  -  release allocated memory					9sep08
 ------------------------------------------------------------------------------*/
 void deallocate( 
 	int nJ, int nB, int nL, int *nF, int *nW, int *nP, int *nT,
 	int DoF, int nM,
-	vec3 *xyz, double *r, double *L, double *Le,
+	vec3 *xyz, float *r, double *L, double *Le,
 	int *J1, int *J2, int *R,
-	double *Ax, double *Asy, double *Asz, double *J, double *Iy, double *Iz,
-	double *E, double *G, double *p,
-	double ***W, double ***P, double ***T,
+	float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz,
+	float *E, float *G, float *p,
+	float ***W, float ***P, float ***T,
+	float **Dp,
 	double **Fo_mech, double **Fo_temp, double *Fo_mech_lc, double *Fo_temp_lc,
 	double ***feF_mech, double ***feF_temp, double **feF,
 	double **Fo, double *Fo_lc, double *F_lc,
 	double **K, double **Q,
-	double *D, double *dD, double **Dp,
-	double *d, double *BMs, double *JMs, double *JMx, double *JMy, double *JMz,
+	double *D, double *dD,
+	float *d, float *BMs, float *JMs, float *JMx, float *JMy, float *JMz,
 	double **M, double *f, double **V,
 	int *q, int *m
 ){
 
 	free(xyz);
 
-	free_dvector(r,1,nJ);
+	free_vector(r,1,nJ);
 	free_dvector(L,1,nB);
 	free_dvector(Le,1,nB);
 
@@ -1259,20 +1276,21 @@ void deallocate(
 	free_ivector(R,1,DoF);
 
 // printf("..C\n");
-	free_dvector(Ax,1,nB);
-	free_dvector(Asy,1,nB);
-	free_dvector(Asz,1,nB);
-	free_dvector(J,1,nB);
-	free_dvector(Iy,1,nB);
-	free_dvector(Iz,1,nB);
-	free_dvector(E,1,nB);
-	free_dvector(G,1,nB);
-	free_dvector(p,1,nB);
+	free_vector(Ax,1,nB);
+	free_vector(Asy,1,nB);
+	free_vector(Asz,1,nB);
+	free_vector(J,1,nB);
+	free_vector(Iy,1,nB);
+	free_vector(Iz,1,nB);
+	free_vector(E,1,nB);
+	free_vector(G,1,nB);
+	free_vector(p,1,nB);
 
 // printf("..D\n");
-	free_D3dmatrix(W,1,nL,1,nB,1,4);
-	free_D3dmatrix(P,1,nL,1,nB,1,5);
-	free_D3dmatrix(T,1,nL,1,nB,1,8);
+	free_D3matrix(W,1,nL,1,nB,1,4);
+	free_D3matrix(P,1,nL,1,nB,1,5);
+	free_D3matrix(T,1,nL,1,nB,1,8);
+	free_matrix(Dp,1,nL,1,DoF);
 
 // printf("..E\n");
 	free_dmatrix(Fo_mech,1,nL,1,DoF);
@@ -1297,15 +1315,14 @@ void deallocate(
 // printf("..I\n");
 	free_dvector(D,1,DoF);
 	free_dvector(dD,1,DoF);
-	free_dmatrix(Dp,1,nL,1,DoF);
 
 // printf("..J\n");
-	free_dvector(d,1,nB);
-	free_dvector(BMs,1,nB);
-	free_dvector(JMs,1,nJ);
-	free_dvector(JMx,1,nJ);
-	free_dvector(JMy,1,nJ);
-	free_dvector(JMz,1,nJ);
+	free_vector(d,1,nB);
+	free_vector(BMs,1,nB);
+	free_vector(JMs,1,nJ);
+	free_vector(JMx,1,nJ);
+	free_vector(JMy,1,nJ);
+	free_vector(JMz,1,nJ);
 
 // printf("..K\n");
 	free_ivector(q,1,DoF);

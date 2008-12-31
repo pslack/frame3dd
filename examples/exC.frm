@@ -4,7 +4,7 @@ Example C: a tetrahedral frame - static and dynamic analysis
 48 			% number of members
  1                      % number of static load cases
 
-% joint  x       y       z       r
+%.joint  x       y       z       r
 
 1	0.0	0.0	0.0	0.0
 2	0.0	100.0	0.0	0.0
@@ -25,7 +25,7 @@ Example C: a tetrahedral frame - static and dynamic analysis
 17	500.0	100.0	0.0	0.0
 18	500.0	50.0	100.0	0.0
 
-% m j1 j2        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+%.m j1 j2        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
 
 1   1  2	10.0	8.0	6.0	50.0	100.0	200.0	29000  	1150 0
 2   2  3	10.0	7.0	5.0	50.0	100.0	200.0	29000  	1150 0
@@ -77,7 +77,7 @@ Example C: a tetrahedral frame - static and dynamic analysis
 48  16 18	20.0	8.0	5.0	50.0	100.0	200.0	29000	1150 0
 
 4                               % number of joints with reactions
-% J     x y z xx yy zz          1= fixed, 0=free
+%.J     x y z xx yy zz          1= fixed, 0=free
  1	1 1 1  0  0  0
  3	1 1 1  0  0  0
  16	1 1 1  0  0  0
@@ -94,7 +94,7 @@ exC.plt                         % plot file name
 0                               % number of loaded joints
 
 5				% number of distributed loads
-% j      wx       wy     wz
+%.j      wx       wy     wz
   5	0.0	-1.0	0.0
  14	0.0	-1.0	0.0
  23	0.0	-1.0	0.0
@@ -164,7 +164,7 @@ exC.plt                         % plot file name
 48	3e-4	0.0
 
 0                         % number of joints with extra mass or inertia
-% j      M      Ixx     Iyy     Izz -  joints and concentrated mass and inertia
+%.j      M      Ixx     Iyy     Izz -  joints and concentrated mass and inertia
 
 5                               % number of modes to animate
  1  2  3  4   5                 % modes to animate
@@ -179,10 +179,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example C: a tetrahedral frame - static and dynamic analysis  
-Tue Dec 30 15:23:11 2008
+Wed Dec 31 10:44:51 2008
 ________________________________________________________________________________
 18 JOINTS;    48 MEMBERS;    1 LOAD CASES;
-4 FIXED JOINTS;   -1077565016 PRESCRIBED DISPLACEMENTS;
+4 FIXED JOINTS;   -1078722376 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -433,12 +433,12 @@ J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
     14 1.20562e+00 1.22648e+00 1.24223e+00 3.00862e+02 3.85804e+02 4.49569e+02
     15 1.25415e+00 1.31068e+00 1.26861e+00 2.85038e+02 4.71725e+02 3.04810e+02
     16 1.33557e+04 1.33557e+04 1.33557e+04 2.05272e+02 2.21613e+02 2.11856e+02
-    17 3.37373e-01 3.34432e-01 3.38000e-01 6.98484e+01 6.22426e+01 6.73549e+01
+    17 3.37374e-01 3.34432e-01 3.38000e-01 6.98484e+01 6.22426e+01 6.73549e+01
     18 1.33557e+04 1.33557e+04 1.33557e+04 2.29207e+02 3.27128e+02 1.91296e+02
-  Use consistent mass matrix.
+  Lump masses at joints.
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
- convergence tolerance: 1.000e-08 
+ convergence tolerance: 0.000e+00 
   MODE     1:   f= 1.067941 Hz,  T= 0.936381 sec
 		X- modal participation factor =  -1.9904e-01 
 		Y- modal participation factor =  -3.7898e+00 
@@ -508,7 +508,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
     16   1.229e-10  -6.046e-10  -1.402e-10  -3.399e-04   3.614e-04   7.966e-04
     17  -1.779e-02  -1.299e-03  -1.500e-03   1.924e-04  -6.952e-04   8.811e-04
     18  -3.561e-10  -2.169e-10  -8.036e-10  -7.592e-04  -9.465e-05  -2.919e-04
-  MODE     4:   f= 2.445176 Hz,  T= 0.408968 sec
+  MODE     4:   f= 2.445176 Hz,  T= 0.408969 sec
 		X- modal participation factor =  -7.6626e-01 
 		Y- modal participation factor =  -6.3821e-02 
 		Z- modal participation factor =  -7.4995e-03 
@@ -670,4 +670,6 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
     17   2.848e-02   9.119e-03   2.141e-02  -3.587e-03   1.078e-03  -1.317e-03
     18  -1.485e-09  -5.416e-09   1.499e-08   2.088e-03   4.727e-03   3.192e-03
 M A T R I X    I T E R A T I O N S: 18
-There are 10 modes below 3.841071 Hz. ... All 10 modes were found.
+There are 536870912 modes below 3.841071 Hz. ... 536870902 modes were not found.
+ Try increasing the number of modes in 
+ order to get the missing modes below 3.841071 Hz.

@@ -28,7 +28,7 @@
 
 
 #ifndef VERSION
-# define VERSION "20081230"
+# define VERSION "20081231"
 #endif
 
 

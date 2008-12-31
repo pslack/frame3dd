@@ -245,16 +245,3 @@ void pseudo_inv(
 }
 
 
-/* ---------------------------------------------------------------------------
-REL_NORM -  compute the relative 2-norm between two vectors       26dec01 
---------------------------------------------------------------------------- */
-double rel_norm( double *N, double *D, int n )
-{
-	double	nN = 0.0, nD = 0.0;
-	int	i;
-
-	for (i=1; i<=n; i++)	nN += N[i]*N[i];
-	for (i=1; i<=n; i++)	nD += D[i]*D[i];
-
-	return  ( sqrt(nN) / sqrt(nD) );
-}

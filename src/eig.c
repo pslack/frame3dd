@@ -163,7 +163,6 @@ void subspace(
 	}
 
 /*	for (i=1; i<=n; i++)	V[i][1] = M[i][i];	// diag(M)	*/
-
 	
 	*iter = 0;
 	do { 					/* Begin sub-space iterations */
@@ -661,7 +660,7 @@ int sturm( double **K, double **M, int n, int m, double shift, double ws )
 	
 	d  = dvector(1,n);
 
-	modes = (int) ( (double)(0.5*m) > (double)(m-8.0) ? (int)(m/2.0) : m-8 );
+	modes = (int) ( (float)(0.5*m) > (float)(m-8.0) ? (int)(m/2.0) : m-8 );
 
 	ws_shift = ws + shift;			/* shift [K]	*/
 	for (i=1; i<=n; i++) for (j=i; j<=n; j++) K[i][j] -= ws_shift*M[i][j];

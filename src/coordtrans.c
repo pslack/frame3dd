@@ -31,7 +31,7 @@ void coord_trans(
 		int j1, int j2,
 		double *t1, double *t2, double *t3, double *t4, double *t5,
 		double *t6, double *t7, double *t8, double *t9,
-		double p /**< the roll angle (radians) */
+		float p			/**< the roll angle (radians) */
 ){
 	double	Cx, Cy, Cz, den,		/* direction cosines	*/
 		Cp, Sp;			/* cosine and sine of roll angle */

@@ -55,10 +55,10 @@ READ_INPUT_DATA  -  read material and geometry data, calc lengths	15dec97
 void read_input_data(
 	FILE *fp,
 	int nJ, int nB, vec3 *xyz,
-	double *r, double *L, double *Le,
+	float *r, double *L, double *Le,
 	int *J1, int *J2,
-	double *Ax, double *Asy, double *Asz,
-	double *J, double *Iy, double *Iz, double *E, double *G, double *p
+	float *Ax, float *Asy, float *Asz,
+	float *J, float *Iy, float *Iz, float *E, float *G, float *p
 ){
 
 	int	j1, j2, i, j;
@@ -70,7 +70,7 @@ void read_input_data(
 		    fprintf(stderr,"  Joint: %d  \n", j);
 		    exit(1);
 		}
-		fscanf(fp, "%lf %lf %lf %lf", &xyz[j].x, &xyz[j].y, &xyz[j].z, &r[j]);
+		fscanf(fp, "%lf %lf %lf %f", &xyz[j].x, &xyz[j].y, &xyz[j].z, &r[j]);
 		r[j] = fabs(r[j]);
 	}
 	for (i=1;i<=nB;i++) {		/* read member properties	*/
@@ -86,9 +86,9 @@ void read_input_data(
 		    fprintf(stderr,"  Member: %d \n", j);
 		    exit(1);
 		}
-		fscanf(fp, "%lf %lf %lf", &Ax[j], &Asy[j], &Asz[j] );
-		fscanf(fp, "%lf %lf %lf", &J[j],  &Iy[j],  &Iz[j] );
-		fscanf(fp, "%lf %lf %lf", &E[j], &G[j], &p[j]);
+		fscanf(fp, "%f %f %f", &Ax[j], &Asy[j], &Asz[j] );
+		fscanf(fp, "%f %f %f", &J[j],  &Iy[j],  &Iz[j] );
+		fscanf(fp, "%f %f %f", &E[j], &G[j], &p[j]);
 
 		p[j] = p[j]*PI/180.0;	/* convert from degrees to radians */
 
@@ -168,10 +168,10 @@ void read_run_data (
 	int	*geom,
 	char	*meshfile,
 	char	*plotfile,
-	double	*exagg,
+	float	*exagg,
 	int	*anlyz
 ){
-	fscanf( fp, "%d %d %s %s %lf %d",
+	fscanf( fp, "%d %d %s %s %f %d",
 			shear, geom, meshfile, plotfile, exagg, anlyz );
 
 	if (*shear != 0 && *shear != 1) {
@@ -342,23 +342,24 @@ void read_and_assemble_loads(
 		vec3 *xyz,
 		double *L, double *Le,
 		int *J1, int *J2,
-		double *Ax, double *Asy, double *Asz,
-		double *Iy, double *Iz, double *E, double *G,
-		double *p,
+		float *Ax, float *Asy, float *Asz,
+		float *Iy, float *Iz, float *E, float *G,
+		float *p,
 		int *R,
 		int shear,
 		int *nF, int *nW, int *nP, int *nT, int *nD,
 		double **Q, 
 		double **F_mech, double **F_temp,
-		double ***W, double ***P, double ***T,
-		double **Dp,
+		float ***W, float ***P, float ***T,
+		float **Dp,
 		double ***feF_mech, double ***feF_temp
 ){
+	float	hy, hz;			/* section dimensions in local coords */
+
 	double	Nx1, Vy1, Vz1, Mx1, My1, Mz1,	/* fixed end forces */
 		Nx2, Vy2, Vz2, Mx2, My2, Mz2,
 		Ksy, Ksz, 		/* shear deformatn coefficients	*/
 		a, b,				/* point load locations */
-		hy, hz,			/* section dimensions in local coords */
 		t1, t2, t3, t4, t5, t6, t7, t8, t9;	/* 3D coord Xfrm coef */
 	int	i,j,l, lc, n, j1, j2;
 
@@ -410,7 +411,7 @@ void read_and_assemble_loads(
 		    exit(1);
 		}
 		W[lc][i][1] = (double) n;
-		for (l=2; l<=4; l++)	fscanf(fp,"%lf", &W[lc][i][l] );
+		for (l=2; l<=4; l++)	fscanf(fp,"%f", &W[lc][i][l] );
 
 		if ( W[lc][i][2]==0 && W[lc][i][3]==0 && W[lc][i][4]==0 )
 		    fprintf(stderr,"   warning: All distributed loads applied to member %d  are zero\n", (int)W[i][1] );
@@ -475,7 +476,7 @@ void read_and_assemble_loads(
 		    exit(1);
 		}
 		P[lc][i][1] = (double) n;
-		for (l=2; l<=5; l++)	fscanf(fp,"%lf", &P[lc][i][l] );
+		for (l=2; l<=5; l++)	fscanf(fp,"%f", &P[lc][i][l] );
 		a = P[lc][i][5];	b = L[n] - a;
 
 		if ( a < 0 || L[n] < a || b < 0 || L[n] < b ) {
@@ -547,14 +548,14 @@ void read_and_assemble_loads(
 		    exit(1);
 		}
 		T[lc][i][1] = (double) n;
-		for (l=2; l<=8; l++)	fscanf(fp,"%lf", &T[lc][i][l] );
+		for (l=2; l<=8; l++)	fscanf(fp,"%f", &T[lc][i][l] );
 		a  = T[lc][i][2];
 		hy = T[lc][i][3];
 		hz = T[lc][i][4];
 
 		if ( hy < 0 || hz < 0 ) {
 		    fprintf(stderr,"  error in thermal load data: section dimension < 0\n");
-		    fprintf(stderr,"  Member: %d  hy: %lf  hz: %lf\n", n,hy,hz);
+		    fprintf(stderr,"  Member: %d  hy: %f  hz: %f\n", n,hy,hz);
 		    exit(1);
 		}
 
@@ -603,7 +604,7 @@ void read_and_assemble_loads(
 	  for (i=1; i <= nD[lc]; i++) {
 		fscanf(fp,"%d", &j);
 		for (l=5; l >=0; l--) {
-			fscanf(fp,"%lf", &Dp[lc][6*j-l] );
+			fscanf(fp,"%f", &Dp[lc][6*j-l] );
 			if ( R[6*j-l] == 0 && Dp[lc][6*j-l] != 0.0 ) {
 			    printf(" Initial displacements can be prescribed");
 			    printf(" only at restrained coordinates\n");
@@ -626,9 +627,9 @@ READ_MASSES  -  read member densities and extra inertial mass data	16aug01
 void read_mass_data(
 		FILE *fp,
 		int nJ, int nB, int *nI,
-		double *d, double *BMs,
-		double *JMs, double *JMx, double *JMy, double *JMz,
-		double *L, double *Ax,
+		float *d, float *BMs,
+		float *JMs, float *JMx, float *JMy, float *JMz,
+		double *L, float *Ax,
 		double *total_mass, double *struct_mass,
 		int *nM, int *Mmethod, int *lump,
 		char modefile[],
@@ -638,7 +639,6 @@ void read_mass_data(
 	int	chk, j, jnt, m, mem, nA;
 
 	*total_mass = *struct_mass = 0.0;
-
 
 	chk = fscanf ( fp, "%d", nM );
 
@@ -677,7 +677,7 @@ void read_mass_data(
 	fscanf( fp, "%lf", shift );
 	for (m=1; m <= nB; m++) {	/* read inertia data	*/
 		fscanf(fp, "%d", &mem );
-		fscanf(fp, "%lf %lf", &d[mem], &BMs[mem] );
+		fscanf(fp, "%f %f", &d[mem], &BMs[mem] );
 		*total_mass  += d[mem]*Ax[mem]*L[mem] + BMs[mem];
 		*struct_mass += d[mem]*Ax[mem]*L[mem];
 #ifdef MASSDATA_DEBUG
@@ -703,7 +703,7 @@ void read_mass_data(
 	    		fprintf(stderr,"  Perhaps you did not specify %d extra masses \n", *nI );
 	    		exit(1);
 		}
-		fscanf(fp, "%lf %lf %lf %lf",
+		fscanf(fp, "%f %f %f %f",
 			&JMs[jnt], &JMx[jnt], &JMy[jnt], &JMz[jnt] );
 		*total_mass += JMs[jnt];
 
@@ -714,7 +714,7 @@ void read_mass_data(
 	for (m=1;m<=nB;m++) {			/* chec inertia data	*/
 	    if ( d[m] < 0.0 || BMs[m] < 0.0 || d[m]+BMs[m] <= 0.0 ) {
 		fprintf(stderr,"  error: Non-positive mass or density\n");
-		fprintf(stderr,"  d[%d]= %lf  BMs[%d]= %lf\n",m,d[m],m,BMs[m]);
+		fprintf(stderr,"  d[%d]= %f  BMs[%d]= %f\n",m,d[m],m,BMs[m]);
 		exit(1);
 	    }
 	}
@@ -839,12 +839,12 @@ void write_input_data(
 	char *title, int nJ, int nB, int nL,
 	int *nD, int nR,
 	int *nF, int *nW, int *nP, int *nT,
-	vec3 *xyz, double *r,
+	vec3 *xyz, float *r,
 	int *J1, int *J2,
-	double *Ax, double *Asy, double *Asz, double *J, double *Iy, double *Iz,
-	double *E, double *G, double *p, double **F, double **Dp,
+	float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz,
+	float *E, float *G, float *p, double **F, float **Dp,
 	int *R,
-	double ***W, double ***P, double ***T,
+	float ***W, float ***P, float ***T,
 	int shear, int anlyz, int geom
 ){
 	int	i,j,n, lc;
@@ -1296,8 +1296,8 @@ void static_mesh(
 		char IO_file[], char meshfile[], char plotfile[],
 		char *title, int nJ, int nB, int nL, int lc, int DoF,
 		vec3 *xyz, double *L,
-		int *J1, int *J2, double *p, double *D,
-		double exg, int anlyz
+		int *J1, int *J2, float *p, double *D,
+		float exg, int anlyz
 ){
 	FILE	*fpmfx, *fpm;
 	double	mx, my, mz;	/* coordinates of the member labels	*/
@@ -1475,9 +1475,9 @@ void modal_mesh(
 		char plotfile[], char *title,
 		int nJ, int nB, int DoF, int nM,
 		vec3 *xyz, double *L,
-		int *J1, int *J2, double *p,
+		int *J1, int *J2, float *p,
 		double **M, double *f, double **V,
-		double exg, int anlyz
+		float exg, int anlyz
 ){
 	FILE	*fpm;
 	double mpfX, mpfY, mpfZ;	/* mode participation factors	*/
@@ -1582,9 +1582,9 @@ void animate(
 	char *title,
 	int anim[],
 	int nJ, int nB, int DoF, int nM,
-	vec3 *xyz, double *L, double *p,
+	vec3 *xyz, double *L, float *p,
 	int *J1, int *J2, double *f, double **V,
-	double exg,
+	float exg,
 	int pan
 ){
 	FILE	*fpm;
@@ -1790,9 +1790,8 @@ and beam end rotations.  Saves deflected shapes to a file.  These bent shapes
 are exact for mode-shapes, and for frames loaded at their joints.	22feb99
 ------------------------------------------------------------------------------*/
 void bent_beam(
-	FILE *fp, int j1, int j2,
-	vec3 *xyz,
-	double L, double p, double *D, double exg
+	FILE *fp, int j1, int j2, vec3 *xyz,
+	double L, float p, double *D, float exg
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, 	/* coord xfmn	*/
 		u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12,
@@ -1909,7 +1908,7 @@ void my_itoa(int n, char s[], int k){
 /*------------------------------------------------------------------------------
 DOTS  -  print a set of dots (periods)
 ------------------------------------------------------------------------------*/
-void dots(int n){
+void dots( int n ){
 	int i;
 	for (i=1; i<=n; i++)	printf(".");
 }

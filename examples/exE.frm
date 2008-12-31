@@ -4,7 +4,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 15			% number of members
 1			% number of static load cases
 
-% joint  x       y       z       r
+%.joint  x       y       z       r
 
 
    1     0       0       0       0
@@ -20,7 +20,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
   11    72      72    -120       0
   12    72      36       0       0
 
-% m     j1     j2      Ax      Asy   Asz      Jxx    Iyy    Izz    E      G     p
+%.m     j1     j2      Ax      Asy   Asz      Jxx    Iyy    Izz    E      G     p
 
   1      1      2      1100    800   800      1000    500    500   999000 11100 0
   2      2      3      1100    800   800      1000    500    500   999000 11100 0
@@ -39,7 +39,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
  15     12      8      1100    800   800      1000    500    500   999000 11100 0
   
 3                               % number of joints with reactions
-% J     x    y    z   xx   yy   zz          1= fixed, 0=free
+%.J     x    y    z   xx   yy   zz          1= fixed, 0=free
   9     1    1    1    1    1    1
  10     1    1    1    1    1    1
  11     1    1    1    1    1    1
@@ -54,7 +54,7 @@ exE.plt                         % plot file name
 
 				% Begin Static Load Case 1 of 1
 1                               % number of loaded joints
-%  J       Fx Fy   Fz   Mxx  Myy  Mzz
+%..J       Fx Fy   Fz   Mxx  Myy  Mzz
    3        0  1  -10   0    0    0
 
 0                               % number of distributed loads
@@ -89,7 +89,7 @@ exE.plt                         % plot file name
  15     7.32e-19    0
 
 1                                 % number of joints with extra mass or inertia
-% j     M       Ixx      Iyy      Izz - joints and concentrated mass and inertia
+%.j     M       Ixx      Iyy      Izz - joints and concentrated mass and inertia
  12     3.388     0        0        839.37
 
 
@@ -112,10 +112,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example E: a three dimensional structure showing lateral-torsional dynamic modes 
-Tue Dec 30 15:24:54 2008
+Wed Dec 31 10:45:38 2008
 ________________________________________________________________________________
 12 JOINTS;    15 MEMBERS;    1 LOAD CASES;
-3 FIXED JOINTS;   -1075500120 PRESCRIBED DISPLACEMENTS;
+3 FIXED JOINTS;   -1077560872 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -235,10 +235,10 @@ J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
     10 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02
     11 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02
     12 3.38800e+00 3.38800e+00 3.38800e+00 7.54219e-13 5.74915e-12 8.39370e+02
-  Use consistent mass matrix.
+  Lump masses at joints.
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
- convergence tolerance: 1.000e-05 
+ convergence tolerance: 0.000e+00 
   MODE     1:   f= 0.688737 Hz,  T= 1.451933 sec
 		X- modal participation factor =   1.8393e+00 
 		Y- modal participation factor =  -1.2912e-02 
@@ -254,7 +254,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      8   5.429e-01   8.853e-02   1.152e-02   3.215e-04   1.605e-04  -1.284e-03
      9   5.344e-25   1.052e-25   7.463e-29  -3.028e-24   1.544e-23  -1.634e-30
     10   5.344e-25  -1.134e-25  -7.572e-29   3.264e-24   1.544e-23  -1.634e-30
-    11   6.246e-25  -4.102e-27   1.101e-30   1.185e-25   1.806e-23  -2.134e-30
+    11   6.246e-25  -4.102e-27   1.026e-30   1.185e-25   1.806e-23  -7.400e-30
     12   5.429e-01  -3.811e-03  -3.596e-06   5.729e-08   1.597e-04  -1.283e-03
   MODE     2:   f= 0.702172 Hz,  T= 1.424152 sec
 		X- modal participation factor =   1.2929e-02 
@@ -271,7 +271,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      8   3.816e-03   5.426e-01  -1.099e-03  -1.945e-05  -3.152e-05   5.496e-06
      9   4.780e-27   6.065e-25   8.216e-29  -1.752e-23   1.377e-25   9.154e-33
     10   4.113e-27   6.070e-25   8.102e-29  -1.754e-23   1.192e-25   2.542e-33
-    11   3.995e-27   6.078e-25  -1.629e-28  -1.756e-23   1.155e-25   1.990e-29
+    11   3.995e-27   6.078e-25  -1.628e-28  -1.756e-23   1.156e-25   9.491e-30
     12   3.816e-03   5.433e-01   4.416e-04  -6.096e-06   1.540e-06   4.442e-06
   MODE     3:   f= 3.018204 Hz,  T= 0.331323 sec
 		X- modal participation factor =   6.8439e-02 
@@ -288,7 +288,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      8   2.020e-02  -2.477e+00   1.065e-01   2.888e-03   1.480e-03   3.440e-02
      9   2.602e-23  -4.948e-23   9.806e-28   1.432e-21   7.517e-22   8.399e-28
     10   2.602e-23   4.947e-23  -9.845e-28  -1.431e-21   7.517e-22   8.399e-28
-    11  -2.695e-23  -4.367e-27  -3.292e-30   1.261e-25  -7.766e-22   8.269e-28
+    11  -2.695e-23  -4.367e-27  -3.201e-30   1.262e-25  -7.766e-22   8.502e-28
     12   2.020e-02  -2.118e-04  -8.865e-07   3.338e-08   1.477e-03   3.449e-02
   MODE     4:   f= 13.989185 Hz,  T= 0.071484 sec
 		X- modal participation factor =   1.7774e-06 
@@ -305,7 +305,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      8   5.210e-07  -5.856e-04   1.348e-01   2.547e-03  -8.165e-03   4.490e-07
      9   1.715e-22   4.620e-23   7.700e-24  -1.279e-21   4.751e-21   5.335e-31
     10  -1.715e-22   4.622e-23   7.699e-24  -1.280e-21  -4.751e-21  -4.903e-31
-    11   3.984e-27  -2.046e-22   1.545e-23   5.666e-21   1.138e-25   1.186e-31
+    11   3.984e-27  -2.046e-22   1.545e-23   5.666e-21   1.138e-25  -1.633e-31
     12   5.246e-07  -4.416e-04   5.433e-01  -9.073e-03  -1.809e-07   4.418e-08
 M A T R I X    I T E R A T I O N S: 2
-There are 4 modes below 13.989185 Hz. ... All 4 modes were found.
+There are -2147483648 modes below 13.989185 Hz. ... All 4 modes were found.

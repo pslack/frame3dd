@@ -39,13 +39,13 @@ void assemble_K(
 	double **K,		/**< stiffness matrix		*/
 	int DoF, int nB,	/**< degrees of freedom, number of beams */
 	vec3 *xyz,		/**< XYZ locations of every joint	*/
-	double *r,		/**< rigid radius of every joint	*/
+	float *r,		/**< rigid radius of every joint	*/
 	double *L, double *Le,	/**< length of each beam element, effective */
 	int *J1, int *J2,	/**< joint connectivity			*/
-	double *Ax, double *Asy, double *Asz,	/**< section areas	*/
-	double *J, double *Iy, double *Iz,	/**< section inertias	*/
-	double *E, double *G,	/**< elastic and shear moduli		*/
-	double *p,		/**< roll angle, radians		*/
+	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
+	float *J, float *Iy, float *Iz,	/**< section inertias	*/
+	float *E, float *G,	/**< elastic and shear moduli		*/
+	float *p,		/**< roll angle, radians		*/
 	int shear,		/**< 1: include shear deformation, 0: don't */
 	int geom,		/**< 1: include goemetric stiffness, 0: don't */
 	double **Q		/**< beam element end forces for every beam */
@@ -56,7 +56,7 @@ void assemble_K(
 void apply_reactions(
 	int DoF,	/**< number of degrees of freedom		*/
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
-	double **Dp,	/**< matrix of prescribed displacements, each DoF */	
+	float **Dp,	/**< matrix of prescribed displacements, each DoF */	
 	int lc, 	/**< a load case number				*/
 	double *Fo,	/**< fixed end forces for unrestrained frame	*/
 	double *F,	/**< load vector for restrained frame		*/
@@ -82,10 +82,10 @@ void end_forces(
 	vec3 *xyz,	/** XYZ locations of each joint			*/
 	double *L, double *Le,	/**< length of each beam element, effective */
 	int *J1, int *J2,	/**< joint connectivity			*/
-	double *Ax, double *Asy, double *Asz,	/**< section areas	*/
-	double *J, double *Iy, double *Iz,	/**< section inertias	*/
-	double *E, double *G,	/**< elastic and shear moduli		*/
-	double *p,		/**< roll angle, radians		*/
+	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
+	float *J, float *Iy, float *Iz,	/**< section area inertias	*/
+	float *E, float *G,	/**< elastic and shear moduli		*/
+	float *p,		/**< roll angle, radians		*/
 	double *D,	/**< displacement vector			*/
 	int shear,	/**< 1: include shear deformation, 0: don't */
 	int geom	/**< 1: include goemetric stiffness, 0: don't */
@@ -99,7 +99,7 @@ void equilibrium(
 	int *J1, int *J2, /**< joint connectivity			*/
 	double *F,	/**< load vector				*/
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
-	double *p,	/**< roll angle, radians			*/
+	float *p,	/**< roll angle, radians			*/
 	double **Q,	/**< beam element end forces for every beam	*/
 	double **feF,	/**< fixed end forces for every beam element	*/
 	int nB,		/**< number of beam elements			*/
@@ -114,16 +114,16 @@ void assemble_M(
 	int DoF,	/**< number of degrees of freedom		*/
 	int nJ, int nB,	/**< number of joints, number of beam elements	*/
 	vec3 *xyz,	/** XYZ locations of each joint			*/
-	double *r,	/**< rigid radius of every joint		*/
+	float *r,	/**< rigid radius of every joint		*/
 	double *L,	/**< length of each beam element, effective	*/
 	int *J1, int *J2, /**< joint connectivity			*/
-	double *Ax,	/**< joint connectivity				*/
-	double *J, double *Iy, double *Iz,	/**< section inertias	*/
-	double *p,	/**< roll angle, radians			*/
-	double *d,	/**< beam element density			*/
-	double *BMs,	/**< extra beam mass				*/
-	double *JMs,	/**< joint mass					*/
-	double *JMx, double *JMy, double *JMz,	/**< joint inertias	*/
+	float *Ax,	/**< joint connectivity				*/
+	float *J, float *Iy, float *Iz,	/**< section area inertias	*/
+	float *p,	/**< roll angle, radians			*/
+	float *d,	/**< beam element density			*/
+	float *BMs,	/**< extra beam mass				*/
+	float *JMs,	/**< joint mass					*/
+	float *JMx, float *JMy, float *JMz,	/**< joint inertias	*/
 	int lump	/**< 1: lumped mass matrix, 0: consistent mass	*/
 );
 
@@ -178,24 +178,32 @@ void dyn_conden(
 void deallocate( 
 	int nJ, int nB, int nL, int *nF, int *nW, int *nP, int *nT, int DoF,
 	int modes,
-	vec3 *xyz, double *r, double *L, double *Le,
+	vec3 *xyz, float *r, double *L, double *Le,
 	int *J1, int *J2, int *R,
-	double *Ax, double *Asy, double *Asz,
-	double *J, double *Iy, double *Iz,
-	double *E, double *G,
-	double *p,
-	double ***W, double ***P, double ***T,
+	float *Ax, float *Asy, float *Asz,
+	float *J, float *Iy, float *Iz,
+	float *E, float *G,
+	float *p,
+	float ***W, float ***P, float ***T,
+	float **Dp,
 	double **Fo_mech, double **Fo_temp,
 	double *Fo_mech_lc, double *Fo_temp_lc,
 	double ***feF_mech, double ***feF_temp, double **feF,
 	double **Fo, double *Fo_lc, double *F_lc,
 	double **K, double **Q,
-	double *D, double *dD, double **Dp,
-	double *d, double *BMs,
-	double *JMs, double *JMx, double *JMy, double *JMz,
+	double *D, double *dD,
+	float *d, float *BMs,
+	float *JMs, float *JMx, float *JMy, float *JMz,
 	double **M, double *f, double **V, 
 	int *q, int *m
 );
+
+/**
+	relative norm
+	compute the relative 2-norm between two vectors N and D
+	return  ( sqrt(sum(N[i]*N[i]) / sqrt(D[i]*D[i]) )
+ */
+double rel_norm( double *N, double *D, int n );
 
 
 #endif /* FRAME_FRAME_H */

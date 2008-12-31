@@ -52,7 +52,7 @@ void subspace(
 	carry out matrix-matrix-matrix multiplication for symmetric A
 	C = X' A X     C is J by J	X is N by J	A is N by N
 */
-void xtAx(double **A, double **X, double **C, int N, int J);
+void xtAx( double **A, double **X, double **C, int N, int J );
 
 /**
 	calculate the lowest m eigen-values and eigen-vectors of the

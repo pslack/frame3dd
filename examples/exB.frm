@@ -4,7 +4,7 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
 4			% number of members			
 3			% number of static load cases
 
-% joint  x       y       z       r
+%.joint  x       y       z       r
 
 1	0.0	0.0	100.0	0.0
 2	-120.0	-90.0	0.0	0.0	
@@ -12,7 +12,7 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
 4	 120.0	 90.0	0.0	0.0	
 5	-120.0	 90.0	0.0	0.0	
 
-% m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz         E      G   p
+%.m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz         E      G   p
 
 1 1 2	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
 2 1 3	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
@@ -20,7 +20,7 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
 4 1 5	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
 
 4                               % number of joints with reactions
-% J     x y z xx yy zz          1= fixed, 0=free
+%.J     x y z xx yy zz          1= fixed, 0=free
 
   2	1 1 1 1 1 1
   3	1 1 1 1 1 1
@@ -36,7 +36,7 @@ exB.plt                         % plot file name
 
 				% Begin Static Load Case 1 of 3
 1				% number of loaded joints
-%J      Fx       Fy     Fz      Mxx     Myy     Mzz
+%.J      Fx       Fy     Fz      Mxx     Myy     Mzz
  1	10.00	-20.00	-100	0.0	0.0	0.0
 0                               % number of distributed loads
 0                               % number of internal concentrated loads
@@ -47,12 +47,12 @@ exB.plt                         % plot file name
 				% Begin Static Load Case 2 of 3
 0				% number of loaded joints
 2                               % number of distributed loads
-% M    Wx   Wy   Wz
+%.M    Wx   Wy   Wz
   2    0    0.1  0
   1    0    0    0.1
 0                               % number of internal concentrated loads
 1                               % number of members with temperature loads
-%M  alpha   hy   hz   Ty+  Ty-  Tz+  Tz-
+%.M  alpha   hy   hz   Ty+  Ty-  Tz+  Tz-
 1   1e-4    1.5  1.5  80   20   30  -10
 0                               % number of joints with support settlements
 				% End   Static Load Case 2 of 3
@@ -61,7 +61,7 @@ exB.plt                         % plot file name
 0				% number of loaded joints
 0                               % number of distributed loads
 2                               % number of internal concentrated loads
-% M    Px   Py   Pz   x    
+%.M    Px   Py   Pz   x    
   1    0    10   -90  30
   2    0   -20    20  30
 0                               % number of members with temperature loads
@@ -82,7 +82,7 @@ exB.plt                         % plot file name
 4       7.e-5   0.0
 
 0                               % number of joints with extra inertia
-% j      M      Ixx     Iyy     Izz -  joints and concentrated mass and inertia
+%.j      M      Ixx     Iyy     Izz -  joints and concentrated mass and inertia
 
 6				% number of modes to animate
  1  2  3  4 5 6 		% modes to animate
@@ -98,10 +98,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis 
-Tue Dec 30 15:22:52 2008
+Wed Dec 31 10:43:46 2008
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;
-4 FIXED JOINTS;   -1078193896 PRESCRIBED DISPLACEMENTS;
+4 FIXED JOINTS;   -1078982536 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -253,7 +253,7 @@ J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Use consistent mass matrix.
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
- convergence tolerance: 1.000e-04 
+ convergence tolerance: 0.000e+00 
   MODE     1:   f= 1.721824 Hz,  T= 0.580780 sec
 		X- modal participation factor =   3.8581e-03 
 		Y- modal participation factor =   7.4975e-02 
@@ -315,4 +315,6 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      4   4.547e-06   8.909e-07  -7.536e-06   1.418e-04  -9.237e-05   7.377e-05
      5   4.548e-06  -8.912e-07   7.548e-06  -1.421e-04  -9.270e-05   7.379e-05
 M A T R I X    I T E R A T I O N S: 2
-There are 6 modes below 4.677881 Hz. ... All 6 modes were found.
+There are 536870912 modes below 4.677880 Hz. ... 536870906 modes were not found.
+ Try increasing the number of modes in 
+ order to get the missing modes below 4.677880 Hz.

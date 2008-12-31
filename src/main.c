@@ -47,7 +47,6 @@
 
 #include "common.h" 
 #include "frame3dd.h"
-#include "ldl_dcmp.h"
 #include "nrutil.h"
 
 
@@ -63,8 +62,21 @@ int main(int argc, char *argv[]){
 
 	vec3	*xyz;		/* X,Y,Z joint coordinates (global)	*/
 
-	double *r,		/* joint size radius, for finite sizes	*/
-		**K, **Ks,	/* global stiffness matrix		*/
+	float	*r,		/* joint size radius, for finite sizes	*/
+		*Ax,*Asy, *Asz,	/* cross section areas, incl. shear	*/
+		*J,*Iy,*Iz,	/* section inertias			*/
+		*E, *G,		/* elastic modulus and shear moduli	*/
+		*p,		/* roll of each member, radians		*/
+		***W,		/* uniform distributed member loads	*/
+		***P,		/* member concentrated loads		*/
+		***T,		/* member temperature  loads		*/
+		**Dp,		/* prescribed joint displacements	*/
+		*d, *BMs,	/* member densities and extra inertia	*/
+		*JMs, 		/* mass of a joint			*/
+		*JMx,*JMy,*JMz,	/* inertia of a joint in global coord	*/
+		exagg;		/* exaggerate deformations in mesh data	*/
+
+	double	**K, **Ks,	/* global stiffness matrix		*/
 		traceK = 0.0,	/* trace of the global stiffness matrix	*/
 		**M = NULL,	/* global mass matrix			*/
 		traceM = 0.0,	/* trace of the global mass matrix	*/
@@ -79,32 +91,21 @@ int main(int argc, char *argv[]){
 		*D, *dD,	/* displacement and displ increment	*/
 		/*dDdD = 0.0,*/	/* dD' * dD				*/
 		*Fe,		/* equilibrium error in nonlinear anlys	*/
-		**Dp,		/* prescribed joint displacements	*/
-		***W,		/* uniform distributed member loads	*/
-		***P,		/* member concentrated loads		*/
-		***T,		/* member temperature  loads		*/
-		*L, *E, *G,	/* length, elastic and shear modulous	*/
-		*p,		/* roll of each member, radians		*/
+		*L, 		/* joint-to-joint length of each beam	*/
 		*Le,		/* effcve lngth, accounts for joint size*/
-		*Ax,*J,*Iy,*Iz,	/* area and inertias member coordinates	*/
-		*Asy, *Asz,	/* shear areas for shear deformations	*/
 		**Q,		/* local member joint end-forces	*/
-		*d, *BMs,	/* member densities and extra inertia	*/
-		*JMs, 		/* mass of a joint			*/
-		struct_mass,	/* mass of structural system		*/
-		total_mass,	/* total structural mass and extra mass */
-		*JMx,*JMy,*JMz,	/* inertia of a joint in global coord	*/
 		tol = 1e-5,	/* tolerance for modal convergence	*/
 		shift = 0.0,	/* shift-factor for rigid-body-modes	*/
+		struct_mass,	/* mass of structural system		*/
+		total_mass,	/* total structural mass and extra mass */
 		*f  = NULL,	/* resonant frequencies			*/
 		**V = NULL,	/* resonant mode-shapes			*/
 		error = 1.0,	/* rms equilibrium error and reactions	*/
 		Cfreq = 0.0,	/* frequency used for Guyan condensation*/
-		**Kc, **Mc,	/* condensed stiffness and mass matrices*/
-		exagg;		/* exaggerate deformations in mesh data	*/
+		**Kc, **Mc;	/* condensed stiffness and mass matrices*/
 
 	int	nJ=0,		/* number of Joints 			*/
-		nB=0,		/* number of Members			*/
+		nB=0,		/* number of Beam elements		*/
 		nL=0, lc=0,	/* number of Load cases			*/
 		DoF=0, i, j, n,	/* number of Degrees of Freedom		*/
 		nR=0,		/* number of restrained joints		*/
@@ -198,7 +199,7 @@ int main(int argc, char *argv[]){
 
 	xyz = (vec3 *)malloc(sizeof(vec3)*(1+nJ));
 
-	r   = dvector(1,nJ);	/* rigid radius around each joint	*/
+	r   =  vector(1,nJ);	/* rigid radius around each joint	*/
 	L   = dvector(1,nB);	/* length of each element		*/
 	Le  = dvector(1,nB);	/* effective length of each element	*/
 
@@ -206,19 +207,20 @@ int main(int argc, char *argv[]){
 	J2  = ivector(1,nB);	/* joint #2 of each element		*/
 	R   = ivector(1,DoF);	/* reaction force at each degree of freedom */
 
-	Ax  = dvector(1,nB);	/* cross section area of each element	*/
-	Asy = dvector(1,nB);	/* shear area in local y direction 	*/
-	Asz = dvector(1,nB);	/* shear area in local z direction	*/
-	J   = dvector(1,nB);	/* torsional moment of inertia 		*/
-	Iy  = dvector(1,nB);	/* bending moment of inertia about local y-axis	*/
-	Iz  = dvector(1,nB);	/* bending moment of inertia about local z-axis */
-	E   = dvector(1,nB);	/* Young's modulus of elasticity	*/
-	G   = dvector(1,nB);	/* shear modulus of elasticity		*/
-	p   = dvector(1,nB);	/* member rotation angle about local x axis */
+	Ax  =  vector(1,nB);	/* cross section area of each element	*/
+	Asy =  vector(1,nB);	/* shear area in local y direction 	*/
+	Asz =  vector(1,nB);	/* shear area in local z direction	*/
+	J   =  vector(1,nB);	/* torsional moment of inertia 		*/
+	Iy  =  vector(1,nB);	/* bending moment of inertia about local y-axis	*/
+	Iz  =  vector(1,nB);	/* bending moment of inertia about local z-axis */
+	E   =  vector(1,nB);	/* Young's modulus of elasticity	*/
+	G   =  vector(1,nB);	/* shear modulus of elasticity		*/
+	p   =  vector(1,nB);	/* member rotation angle about local x axis */
 
-	W   =  D3dmatrix(1,nL,1,nB,1,4); /* distributed load on each member */
-	P   =  D3dmatrix(1,nL,1,nB,1,5); /* internal point load each member */
-	T   =  D3dmatrix(1,nL,1,nB,1,8); /* internal temp change each member */
+	W   =  D3matrix(1,nL,1,nB,1,4); /* distributed load on each member */
+	P   =  D3matrix(1,nL,1,nB,1,5); /* internal point load each member */
+	T   =  D3matrix(1,nL,1,nB,1,8); /* internal temp change each member */
+	Dp  =  matrix(1,nL,1,DoF); /* prescribed displacement of each joint */
 
 	Fo_mech  = dmatrix(1,nL,1,DoF);	/* mechanical load vector	*/
 	Fo_temp  = dmatrix(1,nL,1,DoF);	/* temperature load vector	*/
@@ -238,14 +240,13 @@ int main(int argc, char *argv[]){
 
 	D   = dvector(1,DoF);	/* displacments of each joint		*/
 	dD  = dvector(1,DoF);	/* incremental displacement  of each joint */
-	Dp  = dmatrix(1,nL,1,DoF); /* prescribed displacement of each joint */
 
-	d   = dvector(1,nB);	/* mass density for each member		*/
-	BMs = dvector(1,nB);	/* lumped beam mass for each member	*/
-	JMs = dvector(1,nJ);	/* joint mass for each joint		*/
-	JMx = dvector(1,nJ);	/* joint inertia about global X axis	*/
-	JMy = dvector(1,nJ);	/* joint inertia about global Y axis	*/
-	JMz = dvector(1,nJ);	/* joint inertia about global Z axis	*/
+	d   =  vector(1,nB);	/* mass density for each member		*/
+	BMs =  vector(1,nB);	/* lumped beam mass for each member	*/
+	JMs =  vector(1,nJ);	/* joint mass for each joint		*/
+	JMx =  vector(1,nJ);	/* joint inertia about global X axis	*/
+	JMy =  vector(1,nJ);	/* joint inertia about global Y axis	*/
+	JMz =  vector(1,nJ);	/* joint inertia about global Z axis	*/
 
 	q = ivector(1,DoF); 	/* vector of condensed degrees of freedom */
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
@@ -530,9 +531,9 @@ int main(int argc, char *argv[]){
 	deallocate ( nJ, nB, nL, nF, nW, nP, nT, DoF, nM,
 			xyz, r, L, Le, J1, J2, R,
 			Ax, Asy, Asz, J, Iy, Iz, E, G, p,
-			W,P,T,  Fo_mech, Fo_temp, Fo_temp_lc, Fo_mech_lc,
+			W,P,T, Dp, Fo_mech, Fo_temp, Fo_temp_lc, Fo_mech_lc,
 			feF_mech, feF_temp, feF, Fo, Fo_lc, F_lc,
-			K, Q, D, dD, Dp,
+			K, Q, D, dD, 
 			d,BMs,JMs,JMx,JMy,JMz, M,f,V, q, m );
 
 	return(0);

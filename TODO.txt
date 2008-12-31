@@ -3,16 +3,16 @@ TODO LIST for FRAME3DD
 
 Add support for .CSV input and output.
 
+Create structs to contain frame attributes, coordinates, etc, in order to 
+migrate to a more object-oriented coding style, and simplify the passing
+of parameters to functions.
+
 Convert 'save_matrix' to output files in Matrix Market format for easier
 import into other programs.
 http://math.nist.gov/MatrixMarket/
 
 Implment end_release function in frame3dd.c into the code to 
 carry out member end release.
-
-Create structs to contain frame attributes, coordinates, etc, in order to 
-migrate to a more object-oriented coding style, and simplify the passing
-of parameters to functions.
 
 Implement import of Microstran .arc format. We can already parse these files
 (including many constructs that aren't supported by FRAME3DD)
@@ -30,8 +30,12 @@ Fix rendering of members with offsets specified in local coordinates
 COMPLETED ITEMS
 ------------------
 
+Change types values that are read from input files from double to float
+(Dec 31 2008)
+
 Added support for separate prescribed displacements for each
 load case individually.  (Dec 30 2008)
 
 Added comments to describe variables in src/*.h files.  (Dec 30 2008)
+
 

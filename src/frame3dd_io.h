@@ -46,13 +46,13 @@ void read_input_data(
 	FILE *fp,	/**< input data file pointer			*/
 	int nJ, int nB,	/**< number of joints, number of beam elements	*/
 	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
-	double *r,	/**< rigid radius of each joint			*/
+	float *r,	/**< rigid radius of each joint			*/
 	double *L, double *Le,	/**< length of each beam element, effective */
 	int *J1, int *J2, 	/**< joint connectivity			*/
-	double *Ax, double *Asy, double *Asz,	/**< section areas	*/
-	double *J, double *Iy, double *Iz,	/**< section inertias	*/
-	double *E, double *G,	/**< elastic moduli and shear moduli	*/
-	double *p		/**< roll angle of each beam (radians)	*/
+	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
+	float *J, float *Iy, float *Iz,	/**< section inertias	*/
+	float *E, float *G,	/**< elastic moduli and shear moduli	*/
+	float *p		/**< roll angle of each beam (radians)	*/
 );
 
 /** 
@@ -64,7 +64,7 @@ void read_run_data (
 	int *geom,	/**< 1: include geometric stiffness, 0: don't	*/
 	char mesh_file[],	/**< file name for mesh data output	*/
 	char plot_file[],	/**< file name for Gnuplot script	*/
-	double *exagg,		/**< factor for deformation exaggeration */
+	float *exagg,		/**< factor for deformation exaggeration */
 	int *anlyz	/* 1: perform elastic analysis, 0: don't	*/
 );
 
@@ -94,18 +94,18 @@ void read_and_assemble_loads(
 	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
 	double *L, double *Le,	/**< length of each beam element, effective */
 	int *J1, int *J2, 	/**< joint connectivity			*/
-	double *Ax, double *Asy, double *Asz,	/**< section areas	*/
-	double *Iy, double *Iz,	/**< section inertias			*/
-	double *E, double *G,	/**< elastic moduli and shear moduli	*/
-	double *p,		/**< roll angle of each beam (radians)	*/
+	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
+	float *Iy, float *Iz,	/**< section inertias			*/
+	float *E, float *G,	/**< elastic moduli and shear moduli	*/
+	float *p,		/**< roll angle of each beam (radians)	*/
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
 	int shear,	/**< 1: include shear deformations, 0: don't	*/
 	int *nF, int *nW, int *nP, int *nT, int *nD,	/**< number of loads */
 	double **Q,		/**< beam element end forces, every beam */
 	double **F_mech, 	/**< mechanical loads			*/
 	double **F_temp, 	/**< thermal loads			*/
-	double ***W, double ***P, double ***T, 	/**< loads		*/
-	double **Dp,		/**< prescribed displacements at rctns	*/
+	float ***W, float ***P, float ***T, 	/**< loads		*/
+	float **Dp,		/**< prescribed displacements at rctns	*/
 	double ***feF_mech, double ***feF_temp	/**< fixed end forces	*/
 );
 
@@ -117,10 +117,10 @@ void read_mass_data(
 	FILE *fp,	/**< input data file pointer			*/
 	int nJ, int nB,	/**< number of joints, number of beams		*/
 	int *nI,	/**< number of beams with extra inertia		*/
-	double *d, double *BMs, /**< beam density, extra beam mass	*/
-	double *JMs, double *JMx, double *JMy, double *JMz, /**< joint inertia*/
+	float *d, float *BMs, /**< beam density, extra beam mass	*/
+	float *JMs, float *JMx, float *JMy, float *JMz, /**< joint inertia*/
 	double *L,	/**< length of each beam element		*/
-	double *Ax, 	/**< cross section area of each beam element	*/
+	float *Ax, 	/**< cross section area of each beam element	*/
 	double *total_mass,	/**< total mass of structure and extra mass */
 	double *struct_mass, 	/**< mass of structural elements	*/
 	int *nM,	/**< number of modes to find			*/
@@ -156,14 +156,14 @@ void write_input_data(
 	char *title, int nJ, int nB,  int nL, 
 	int *nD, int nR, 
 	int *nF, int *nW, int *nP, int *nT,
-	vec3 *xyz, double *r,
+	vec3 *xyz, float *r,
 	int *J1, int *J2,
-	double *Ax, double *Asy, double *Asz,
-	double *J, double *Iy, double *Iz,
-	double *E, double *G, double *p,
-	double **F, double **Dp,
+	float *Ax, float *Asy, float *Asz,
+	float *J, float *Iy, float *Iz,
+	float *E, float *G, float *p,
+	double **F, float **Dp,
 	int *R,
-	double ***W, double ***P, double ***T,
+	float ***W, float ***P, float ***T,
 	int shear, int anlyz, int geom
 );
 
@@ -213,8 +213,8 @@ void static_mesh(
 	char IO_file[], char meshfile[], char plotfile[], 
 	char *title, int nJ, int nB, int nL, int lc, int DoF, 
 	vec3 *xyz, double *L, 
-	int *J1, int *J, double *p, double *D, 
-	double exg, int anlyz
+	int *J1, int *J, float *p, double *D, 
+	float exg, int anlyz
 );
 
 
@@ -227,9 +227,9 @@ void modal_mesh(
 	char plotfile[], char *title,
 	int nJ, int nB, int DoF, int nM,
 	vec3 *xyz, double *L,
-	int *J1, int *J2, double *p,
+	int *J1, int *J2, float *p,
 	double **M, double *f, double **V,
-	double exg, int anlyz
+	float exg, int anlyz
 );
 
 
@@ -244,9 +244,9 @@ void animate(
 	char *title,
 	int anim[],
 	int nJ, int nB, int DoF, int nM,
-	vec3 *xyz, double *L, double *p,
+	vec3 *xyz, double *L, float *p,
 	int *J1, int *J2, double *f, double **V,
-	double exg,
+	float exg,
 	int pan
 );
 
@@ -260,11 +260,11 @@ void animate(
 void bent_beam(
 	FILE *fp, int j1, int j2,
 	vec3 *xyz,
-	double L, double p, double *D,
-	double exg
+	double L, float p, double *D,
+	float exg
 );
 
 
 /** print a set of dots (periods) */
-void dots(int n);
+void dots( int n );
 
