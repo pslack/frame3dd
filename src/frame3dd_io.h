@@ -5,7 +5,7 @@
  ---------------------------------------------------------------------------
  http://www.duke.edu/~hpgavin/frame/
  ---------------------------------------------------------------------------
- Copyright (C) 1992-2008  Henri P. Gavin
+ Copyright (C) 1992-2009  Henri P. Gavin
  
  FRAME3DD is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ void read_run_data (
 	int *geom,	/**< 1: include geometric stiffness, 0: don't	*/
 	char mesh_file[],	/**< file name for mesh data output	*/
 	char plot_file[],	/**< file name for Gnuplot script	*/
-	float *exagg,		/**< factor for deformation exaggeration */
+	double *exagg,		/**< factor for deformation exaggeration */
 	int *anlyz	/* 1: perform elastic analysis, 0: don't	*/
 );
 
@@ -172,23 +172,35 @@ void write_input_data(
 	save joint displacements and member end forces in a text file	9sep08
 */
 void write_static_results(
-	FILE *fp, int nJ, int nB, int nL, int lc, int DoF, 
+	FILE *fp,
+	int nJ, int nB, int nL, int lc, int DoF, 
 	int *J1, int *J2, 
-	double *F, double *D, int *R, 
-	double **Q, double err, 
-	int ok 
+	double *F, double *D, int *R, double **Q,
+	double err, int ok 
+);
+
+
+/**
+	save joint displacements and member end forces in a .CSV file   31dec08
+*/
+void write_static_csv(
+	char *argv[], char *title,
+	int nJ, int nB, int nL, int lc, int DoF, 
+	int *J1, int *J2, 
+	double *F, double *D, int *R, double **Q,
+	double err, int ok 
 );
 
 
 /**
 	save joint displacements and member end forces in an m-file	9sep08
 */
-void write_static_mfile ( char *argv[],
+void write_static_mfile ( 
+	char *argv[], char *title,
 	int nJ, int nB, int nL, int lc, int DoF,
 	int *J1, int *J2,
-	double *F, double *D, int *R,
-	double **Q, double err,
-	int ok
+	double *F, double *D, int *R, double **Q,
+	double err, int ok
 );
 
 
@@ -214,7 +226,7 @@ void static_mesh(
 	char *title, int nJ, int nB, int nL, int lc, int DoF, 
 	vec3 *xyz, double *L, 
 	int *J1, int *J, float *p, double *D, 
-	float exg, int anlyz
+	double exagg, int anlyz
 );
 
 
@@ -229,7 +241,7 @@ void modal_mesh(
 	vec3 *xyz, double *L,
 	int *J1, int *J2, float *p,
 	double **M, double *f, double **V,
-	float exg, int anlyz
+	double exagg, int anlyz
 );
 
 
@@ -246,8 +258,7 @@ void animate(
 	int nJ, int nB, int DoF, int nM,
 	vec3 *xyz, double *L, float *p,
 	int *J1, int *J2, double *f, double **V,
-	float exg,
-	int pan
+	double exagg, int pan
 );
 
 
@@ -261,8 +272,19 @@ void bent_beam(
 	FILE *fp, int j1, int j2,
 	vec3 *xyz,
 	double L, float p, double *D,
-	float exg
+	double exagg
 );
+
+
+/**
+	return the file extension, including the period (.)
+                return 1 if the extension is ".csv"
+                return 2 if the extension is ".fmm"
+                return 0 otherwise
+
+*/
+int get_file_ext( char *filename, char *ext );
+
 
 
 /** print a set of dots (periods) */

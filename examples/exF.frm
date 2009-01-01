@@ -117,7 +117,7 @@ Example F: a seismically-isolated building model
 58  10  15  17671  9000  9000   4.970e7    2.48e7    2.48e7   200e2  1.2e0 0
   
 14                              % number of joints with reactions
-%.J     x       y       z      xx      yy      zz          1= fixed, 0=free
+%.J     x       y       z      xx      yy      zz          1=fixed, 0=free
 
   1	1	0	1	0	0	1
   2     1       0       0       0       0       0
@@ -275,17 +275,17 @@ exF.plt				% plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20081230               http://frame3dd.sf.net/
-GPL Copyright (C) 1992-2008, Henri P. Gavin 
+FRAME3DD version: 20090101               http://frame3dd.sf.net/
+GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example F: a seismically-isolated building model 
-Wed Dec 31 10:46:14 2008
+Thu Jan  1 09:58:00 2009
 ________________________________________________________________________________
 36 JOINTS;    58 MEMBERS;    1 LOAD CASES;
-14 FIXED JOINTS;   -1078777688 PRESCRIBED DISPLACEMENTS;
+14 FIXED JOINTS;   -1081139656 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -327,8 +327,8 @@ J O I N T   D A T A                                         R E S T R A I N T S
    34       0.000000    1500.000000    5387.000000  100.000   0  0  0  0  0  0
    35   -2000.000000   -1500.000000    5387.000000  100.000   0  0  0  0  0  0
    36   -2000.000000    1500.000000    5387.000000  100.000   0  0  0  0  0  0
-M E M B E R   D A T A							(local)
-  Member J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+B E A M   D A T A							(local)
+  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
     1     1    16 2592.0 1200.0 900.0 87160.0 10108000.0 1502000.0 199955.0 76906.0   0
     2    16    23 2592.0 1200.0 900.0 87160.0 10108000.0 1502000.0 199955.0 76906.0   0
     3    23    30 2592.0 1200.0 900.0 87160.0 10108000.0 1502000.0 199955.0 76906.0   0
@@ -393,9 +393,9 @@ M E M B E R   D A T A							(local)
 L O A D   C A S E   1   O F   1  ... 
 
   25 joints  with concentrated loads
-   0 members with uniformly distributed loads
-   0 members with concentrated point loads
-   0 members with temperature loads
+   0 elements with uniformly distributed loads
+   0 elements with concentrated point loads
+   0 elements with temperature loads
    0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
@@ -464,8 +464,8 @@ J O I N T   D I S P L A C E M E N T S					(global)
     34    0.000000    1.264634   -0.182979   -0.000003    0.0         0.0     
     35    0.000016    1.254574   -0.182441   -0.000002   -0.000000    0.000004
     36   -0.000016    1.254574   -0.182925   -0.000002    0.000000    0.000004
-M E M B E R   E N D   F O R C E S					(local)
-  Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+B E A M   E N D   F O R C E S						(local)
+  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
      1      1  29357.136c    -16.705     -0.024      0.282     12.659 -14905.308
      1     16 -29357.136c     16.705      0.024     -0.282     27.366 -13503.438
      2     16  19575.607c    -16.476     -0.066      2.690     51.999 -13318.988
@@ -600,7 +600,7 @@ R E A C T I O N S							(global)
     15       0.0       -25.028     -12.768    6610.165       0.051       0.0  
 R M S   E Q U I L I B R I U M    E R R O R: 5.583e-05
 
-B O D A L   A N A L Y S I S   R E S U L T S
+M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  2.006849e+01     Structural Mass:  4.068489e+00 
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
@@ -643,7 +643,7 @@ J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Use consistent mass matrix.
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
- convergence tolerance: 0.000e+00 
+ convergence tolerance: 1.000e-06 
   MODE     1:   f= 0.324837 Hz,  T= 3.078465 sec
 		X- modal participation factor =  -3.8562e-10 
 		Y- modal participation factor =   4.4673e+00 
@@ -1260,6 +1260,4 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
     35   9.815e-05  -2.770e-02  -1.590e-03   5.943e-06   8.974e-06  -1.112e-05
     36  -9.816e-05  -2.770e-02   1.590e-03   5.943e-06  -8.974e-06  -1.112e-05
 M A T R I X    I T E R A T I O N S: 4
-There are 1610612736 modes below 8.248348 Hz. ... 1610612721 modes were not found.
- Try increasing the number of modes in 
- order to get the missing modes below 8.248348 Hz.
+There are 15 modes below 8.248348 Hz. ... All 15 modes were found.

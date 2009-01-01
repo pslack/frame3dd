@@ -20,7 +20,7 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
 4 1 5	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
 
 4                               % number of joints with reactions
-%.J     x y z xx yy zz          1= fixed, 0=free
+%.J     x y z xx yy zz          1=fixed, 0=free
 
   2	1 1 1 1 1 1
   3	1 1 1 1 1 1
@@ -91,17 +91,17 @@ exB.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20081230               http://frame3dd.sf.net/
-GPL Copyright (C) 1992-2008, Henri P. Gavin 
+FRAME3DD version: 20090101               http://frame3dd.sf.net/
+GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis 
-Wed Dec 31 10:43:46 2008
+Thu Jan  1 09:52:06 2009
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;
-4 FIXED JOINTS;   -1078982536 PRESCRIBED DISPLACEMENTS;
+4 FIXED JOINTS;   -1080811896 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -112,8 +112,8 @@ J O I N T   D A T A                                         R E S T R A I N T S
     3     120.000000     -90.000000       0.000000    0.000   1  1  1  1  1  1
     4     120.000000      90.000000       0.000000    0.000   1  1  1  1  1  1
     5    -120.000000      90.000000       0.000000    0.000   1  1  1  1  1  1
-M E M B E R   D A T A							(local)
-  Member J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+B E A M   D A T A							(local)
+  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
     1     1     2   10.0   8.0   8.0  500.0   300.0   200.0   1000.0   700.0   0
     2     1     3   10.0   8.0   8.0  500.0   300.0   200.0   1000.0   700.0   0
     3     1     4   10.0   8.0   8.0  500.0   300.0   200.0   1000.0   700.0   0
@@ -124,9 +124,9 @@ M E M B E R   D A T A							(local)
 L O A D   C A S E   1   O F   3  ... 
 
    1 joints  with concentrated loads
-   0 members with uniformly distributed loads
-   0 members with concentrated point loads
-   0 members with temperature loads
+   0 elements with uniformly distributed loads
+   0 elements with concentrated point loads
+   0 elements with temperature loads
    0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
@@ -135,29 +135,29 @@ L O A D   C A S E   1   O F   3  ...
 L O A D   C A S E   2   O F   3  ... 
 
    0 joints  with concentrated loads
-   2 members with uniformly distributed loads
-   0 members with concentrated point loads
-   1 members with temperature loads
+   2 elements with uniformly distributed loads
+   0 elements with concentrated point loads
+   1 elements with temperature loads
    0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      1      21.378      19.188      24.141    -877.323     500.272     890.987
      2     -23.969     -17.977      -9.141     997.508    -590.411    -665.640
      3       5.408       7.211       0.000    -120.185      90.139    -225.347
- U N I F O R M   M E M B E R   L O A D S					(local)
-  Member      Wx               Wy               Wz
+ U N I F O R M   B E A M   L O A D S					(local)
+  Beam        Wx               Wy               Wz
      2       0.00000000       0.10000000       0.00000000
      1       0.00000000       0.00000000       0.10000000
- M E M B E R   T E M P E R A T U R E   C H A N G E S			(local)
-  Member    coef      hy        hz        Ty+       Ty-       Tz+       Tz-
+ B E A M   T E M P E R A T U R E   C H A N G E S			(local)
+  Beam      coef      hy        hz        Ty+       Ty-       Tz+       Tz-
      1  1.00e-04     1.500     1.500    80.000    20.000    30.000   -10.000
 
 L O A D   C A S E   3   O F   3  ... 
 
    0 joints  with concentrated loads
-   0 members with uniformly distributed loads
-   2 members with concentrated point loads
-   0 members with temperature loads
+   0 elements with uniformly distributed loads
+   2 elements with concentrated point loads
+   0 elements with temperature loads
    0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
@@ -165,7 +165,7 @@ L O A D   C A S E   3   O F   3  ...
      2       7.586       3.632     -12.371    -614.576     933.536    -102.692
      3      -0.509      -3.734       2.749     258.281     116.171     205.384
  C O N C E T R A T E D   P O I N T   L O A D S				(local)
-  Member      Px          Py          Pz          x
+  Beam        Px          Py          Pz          x
      1       0.000      10.000     -90.000      30.000
      2       0.000     -20.000      20.000      30.000
 
@@ -177,8 +177,8 @@ L O A D   C A S E   1   O F   3  ...
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.102310   -0.364028   -1.453174    0.002431    0.000646   -0.000001
-M E M B E R   E N D   F O R C E S					(local)
-  Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+B E A M   E N D   F O R C E S						(local)
+  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
      1      1     51.016c     -0.017     -0.347     -3.767     61.032      6.982
      1      2    -51.016c      0.017      0.347      3.767     59.342      7.870
      2      1     58.571c      0.023     -0.320      2.516     60.967     -4.475
@@ -200,8 +200,8 @@ L O A D   C A S E   2   O F   3  ...
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.240908    0.431063    0.341445   -0.053265    0.025373    0.057875
-M E M B E R   E N D   F O R C E S					(local)
-  Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+B E A M   E N D   F O R C E S						(local)
+  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
      1      1     -1.338t      2.379     -5.991    -18.084    687.318   -482.289
      1      2      1.338t     -2.379    -12.037     18.084  -1231.221    917.508
      2      1    -13.548t     -8.165      0.820   -155.754    -93.999   -176.537
@@ -223,8 +223,8 @@ L O A D   C A S E   3   O F   3  ...
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.305856   -0.049624   -0.698365    0.023877   -0.054045   -0.007168
-M E M B E R   E N D   F O R C E S					(local)
-  Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+B E A M   E N D   F O R C E S						(local)
+  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
      1      1     11.569c     -8.230     71.701     29.244   -736.056   -112.893
      1      2    -11.569c     -1.770     18.299    -29.244   1343.066    134.512
      2      1     34.155c     17.482    -15.382     90.958    107.887    339.081
@@ -241,7 +241,7 @@ R E A C T I O N S							(global)
      5       4.241      -4.780       6.511     -94.349     -97.043    -110.266
 R M S   E Q U I L I B R I U M    E R R O R: 4.455e-04
 
-B O D A L   A N A L Y S I S   R E S U L T S
+M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  5.047772e-01     Structural Mass:  5.047772e-01 
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
@@ -253,7 +253,7 @@ J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Use consistent mass matrix.
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
- convergence tolerance: 0.000e+00 
+ convergence tolerance: 1.000e-04 
   MODE     1:   f= 1.721824 Hz,  T= 0.580780 sec
 		X- modal participation factor =   3.8581e-03 
 		Y- modal participation factor =   7.4975e-02 
@@ -315,6 +315,4 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      4   4.547e-06   8.909e-07  -7.536e-06   1.418e-04  -9.237e-05   7.377e-05
      5   4.548e-06  -8.912e-07   7.548e-06  -1.421e-04  -9.270e-05   7.379e-05
 M A T R I X    I T E R A T I O N S: 2
-There are 536870912 modes below 4.677880 Hz. ... 536870906 modes were not found.
- Try increasing the number of modes in 
- order to get the missing modes below 4.677880 Hz.
+There are 6 modes below 4.677880 Hz. ... All 6 modes were found.

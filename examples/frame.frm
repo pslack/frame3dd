@@ -79,7 +79,7 @@ nD		         %number of joints with prescribed displacements nD<=nR
   J[nD]	Dx[nD]	Dy[nD]	Dz[nD]	Dxx[nD]	Dyy[nD]	Dzz[nD]
                                                        % end load case 2 of nL
 
-                             % repeat load case information for each load case
+% repeat load case information for each load case
 
 
 modes						       %number of desired modes

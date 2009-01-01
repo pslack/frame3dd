@@ -51,7 +51,7 @@ Example G: a building with a set-back
 24     15 13  100  60    60    500   1000  1000   10000   7000 0
 
 3                               % number of joints with reactions
-%.J     x  y  z xx yy zz          1= fixed, 0=free
+%.J     x  y  z xx yy zz          1=fixed, 0=free
   1     1  1  1  1  1  1
   2     1  1  1  1  1  1
   3     1  1  1  1  1  1
@@ -132,17 +132,17 @@ exG.plt				% plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20081230               http://frame3dd.sf.net/
-GPL Copyright (C) 1992-2008, Henri P. Gavin 
+FRAME3DD version: 20090101               http://frame3dd.sf.net/
+GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example G: a building with a set-back  
-Wed Dec 31 10:46:26 2008
+Thu Jan  1 09:58:13 2009
 ________________________________________________________________________________
 15 JOINTS;    24 MEMBERS;    1 LOAD CASES;
-3 FIXED JOINTS;   -1081875016 PRESCRIBED DISPLACEMENTS;
+3 FIXED JOINTS;   -1074152232 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -163,8 +163,8 @@ J O I N T   D A T A                                         R E S T R A I N T S
    13    -100.000000       0.000000     510.000000    0.000   0  0  0  0  0  0
    14     100.000000       0.000000     510.000000    0.000   0  0  0  0  0  0
    15       0.000000      70.000000     510.000000    0.000   0  0  0  0  0  0
-M E M B E R   D A T A							(local)
-  Member J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+B E A M   D A T A							(local)
+  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
     1     1     4  100.0  60.0  60.0  500.0  1000.0  1000.0  10000.0  7000.0   0
     2     2     5  100.0  60.0  60.0  500.0  1000.0  1000.0  10000.0  7000.0   0
     3     3     6  100.0  60.0  60.0  500.0  1000.0  1000.0  10000.0  7000.0   0
@@ -195,9 +195,9 @@ M E M B E R   D A T A							(local)
 L O A D   C A S E   1   O F   1  ... 
 
    1 joints  with concentrated loads
-  12 members with uniformly distributed loads
-   0 members with concentrated point loads
-   0 members with temperature loads
+  12 elements with uniformly distributed loads
+   0 elements with concentrated point loads
+   0 elements with temperature loads
    0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
@@ -213,8 +213,8 @@ L O A D   C A S E   1   O F   1  ...
     13       0.000       0.000    -380.198   -1681.148   10271.640       0.000
     14       0.000       0.000    -380.198   -1681.148  -10271.640       0.000
     15       0.000     200.000    -288.197    3362.296       0.000       0.000
- U N I F O R M   M E M B E R   L O A D S					(local)
-  Member      Wx               Wy               Wz
+ U N I F O R M   B E A M   L O A D S					(local)
+  Beam        Wx               Wy               Wz
     13       0.00000000       0.00000000      -2.36100006
     14       0.00000000       0.00000000      -2.36100006
     15       0.00000000       0.00000000      -2.36100006
@@ -247,8 +247,8 @@ J O I N T   D I S P L A C E M E N T S					(global)
     13    0.006767   54.937401   -0.070315   -0.100357   -0.008600    0.000303
     14   -0.006767   54.937401   -0.070315   -0.100357    0.008600   -0.000303
     15    0.0        54.973109   -0.994375   -0.057784    0.0         0.0     
-M E M B E R   E N D   F O R C E S					(local)
-  Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+B E A M   E N D   F O R C E S						(local)
+  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
      1      1    299.923c    -74.876     -6.383      2.017    165.916 -10077.469
      1      4   -299.923c     74.876      6.383     -2.017    344.548   3320.750
      2      2    299.923c    -74.876      6.383     -2.017   -165.916 -10077.469
@@ -304,7 +304,7 @@ R E A C T I O N S							(global)
      3       0.0       -50.248    3607.723   11108.944       0.0         0.0  
 R M S   E Q U I L I B R I U M    E R R O R: 2.412e-04
 
-B O D A L   A N A L Y S I S   R E S U L T S
+M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  9.919574e-02     Structural Mass:  9.919574e-02 
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
@@ -326,7 +326,7 @@ J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Use consistent mass matrix.
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
- convergence tolerance: 0.000e+00 
+ convergence tolerance: 1.000e-06 
   MODE     1:   f= 1.624893 Hz,  T= 0.615425 sec
 		X- modal participation factor =   1.0546e-13 
 		Y- modal participation factor =   2.5141e-01 
@@ -408,6 +408,4 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
     14  -7.514e-04  -4.208e+00  -4.447e-02   3.445e-02  -1.180e-02   1.670e-03
     15  -9.900e-06  -4.209e+00   8.711e-02   2.293e-02  -1.535e-08   1.558e-07
 M A T R I X    I T E R A T I O N S: 5
-There are 1610612736 modes below 5.869413 Hz. ... 1610612732 modes were not found.
- Try increasing the number of modes in 
- order to get the missing modes below 5.869413 Hz.
+There are 4 modes below 5.869413 Hz. ... All 4 modes were found.

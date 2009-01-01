@@ -39,7 +39,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
  15     12      8      1100    800   800      1000    500    500   999000 11100 0
   
 3                               % number of joints with reactions
-%.J     x    y    z   xx   yy   zz          1= fixed, 0=free
+%.J     x    y    z   xx   yy   zz          1=fixed, 0=free
   9     1    1    1    1    1    1
  10     1    1    1    1    1    1
  11     1    1    1    1    1    1
@@ -105,17 +105,17 @@ exE.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20081230               http://frame3dd.sf.net/
-GPL Copyright (C) 1992-2008, Henri P. Gavin 
+FRAME3DD version: 20090101               http://frame3dd.sf.net/
+GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example E: a three dimensional structure showing lateral-torsional dynamic modes 
-Wed Dec 31 10:45:38 2008
+Thu Jan  1 09:57:10 2009
 ________________________________________________________________________________
 12 JOINTS;    15 MEMBERS;    1 LOAD CASES;
-3 FIXED JOINTS;   -1077560872 PRESCRIBED DISPLACEMENTS;
+3 FIXED JOINTS;   -1075180568 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -133,8 +133,8 @@ J O I N T   D A T A                                         R E S T R A I N T S
    10     144.000000       0.000000    -120.000000    0.000   1  1  1  1  1  1
    11      72.000000      72.000000    -120.000000    0.000   1  1  1  1  1  1
    12      72.000000      36.000000       0.000000    0.000   0  0  0  0  0  0
-M E M B E R   D A T A							(local)
-  Member J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+B E A M   D A T A							(local)
+  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
     1     1     2 1100.0 800.0 800.0 1000.0   500.0   500.0 999000.0 11100.0   0
     2     2     3 1100.0 800.0 800.0 1000.0   500.0   500.0 999000.0 11100.0   0
     3     3     4 1100.0 800.0 800.0 1000.0   500.0   500.0 999000.0 11100.0   0
@@ -156,9 +156,9 @@ M E M B E R   D A T A							(local)
 L O A D   C A S E   1   O F   1  ... 
 
    1 joints  with concentrated loads
-   0 members with uniformly distributed loads
-   0 members with concentrated point loads
-   0 members with temperature loads
+   0 elements with uniformly distributed loads
+   0 elements with concentrated point loads
+   0 elements with temperature loads
    0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
@@ -180,8 +180,8 @@ J O I N T   D I S P L A C E M E N T S					(global)
      7   -0.011318   -0.002420    0.001300    0.000018    0.000018    0.000244
      8   -0.002526   -0.002420    0.000655    0.000018    0.000009    0.000244
     12   -0.002526    0.015165    0.000003    0.000000    0.000010    0.000244
-M E M B E R   E N D   F O R C E S					(local)
-  Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+B E A M   E N D   F O R C E S						(local)
+  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
      1      1     -0.140t      0.013     -0.224      2.770     10.831      0.069
      1      2      0.140t     -0.013      0.224     -2.770      5.291      0.837
      2      2     -0.013t     -0.092     -0.123      3.235     -2.331     -3.418
@@ -219,7 +219,7 @@ R E A C T I O N S							(global)
     11       0.275      -0.335       0.834      20.110      16.012      -0.023
 R M S   E Q U I L I B R I U M    E R R O R: 2.864e-07
 
-B O D A L   A N A L Y S I S   R E S U L T S
+M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  3.388000e+00     Structural Mass:  8.116416e-13 
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
@@ -235,10 +235,10 @@ J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
     10 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02
     11 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02 8.49534e+02
     12 3.38800e+00 3.38800e+00 3.38800e+00 7.54219e-13 5.74915e-12 8.39370e+02
-  Lump masses at joints.
+  Use consistent mass matrix.
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
- convergence tolerance: 0.000e+00 
+ convergence tolerance: 1.000e-05 
   MODE     1:   f= 0.688737 Hz,  T= 1.451933 sec
 		X- modal participation factor =   1.8393e+00 
 		Y- modal participation factor =  -1.2912e-02 
@@ -308,4 +308,4 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
     11   3.984e-27  -2.046e-22   1.545e-23   5.666e-21   1.138e-25  -1.633e-31
     12   5.246e-07  -4.416e-04   5.433e-01  -9.073e-03  -1.809e-07   4.418e-08
 M A T R I X    I T E R A T I O N S: 2
-There are -2147483648 modes below 13.989185 Hz. ... All 4 modes were found.
+There are 4 modes below 13.989185 Hz. ... All 4 modes were found.

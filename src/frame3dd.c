@@ -5,7 +5,7 @@
  ---------------------------------------------------------------------------
  http://www.duke.edu/~hpgavin/frame/
  ---------------------------------------------------------------------------
- Copyright (C) 1992-2008  Henri P. Gavin
+ Copyright (C) 1992-2009  Henri P. Gavin
  
     FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

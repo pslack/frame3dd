@@ -5,7 +5,7 @@
  ---------------------------------------------------------------------------
  http://www.duke.edu/~hpgavin/frame/
  ---------------------------------------------------------------------------
- Copyright (C) 1992-2008  Henri P. Gavin
+ Copyright (C) 1992-2009  Henri P. Gavin
  
     FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -73,8 +73,7 @@ int main(int argc, char *argv[]){
 		**Dp,		/* prescribed joint displacements	*/
 		*d, *BMs,	/* member densities and extra inertia	*/
 		*JMs, 		/* mass of a joint			*/
-		*JMx,*JMy,*JMz,	/* inertia of a joint in global coord	*/
-		exagg;		/* exaggerate deformations in mesh data	*/
+		*JMx,*JMy,*JMz;	/* inertia of a joint in global coord	*/
 
 	double	**K, **Ks,	/* global stiffness matrix		*/
 		traceK = 0.0,	/* trace of the global stiffness matrix	*/
@@ -102,7 +101,8 @@ int main(int argc, char *argv[]){
 		**V = NULL,	/* resonant mode-shapes			*/
 		error = 1.0,	/* rms equilibrium error and reactions	*/
 		Cfreq = 0.0,	/* frequency used for Guyan condensation*/
-		**Kc, **Mc;	/* condensed stiffness and mass matrices*/
+		**Kc, **Mc,	/* condensed stiffness and mass matrices*/
+		exagg;		/* exaggerate deformations in mesh data	*/
 
 	int	nJ=0,		/* number of Joints 			*/
 		nB=0,		/* number of Beam elements		*/
@@ -132,12 +132,14 @@ int main(int argc, char *argv[]){
 		Cdof=0,		/* number of condensed degrees o freedom*/
 		Cmethod=0,	/* matrix condensation method		*/
 		*q,		/* vector of DoF's to condense		*/
-		*m;		/* vector of modes to condense		*/
+		*m,		/* vector of modes to condense		*/
+		filetype=0;	/* 1 if .CSV, 2 if file is Matlab	*/
 
-	char	tm = 0;		/* flag for thermal or mechanical loads	*/
+	char	tm = 0,		/* flag for thermal or mechanical loads	*/
+		extn[16];	/* Input Output file name extension	*/
 
 	fprintf(stderr," FRAME3DD version: %s\n", VERSION);
-	fprintf(stderr," GPL Copyright (C) 1992-2008, Henri P. Gavin\n");
+	fprintf(stderr," GPL Copyright (C) 1992-2009, Henri P. Gavin\n");
 	fprintf(stderr," http://frame3dd.sf.net\n");
 	fprintf(stderr," This is free software with absolutely no warranty.\n");
 	fprintf(stderr," For details, see LICENSE.txt\n\n");
@@ -153,6 +155,8 @@ int main(int argc, char *argv[]){
 		fprintf (stderr," usage: frame infile\n");
 		exit(1);
 	}
+
+	filetype = get_file_ext( IO_file, extn );
 
 	parse_input(fp);
 	fclose(fp);
@@ -415,8 +419,13 @@ int main(int argc, char *argv[]){
 	  write_static_results ( fp, nJ,nB,nL,lc, DoF, J1,J2, Fo_lc,
 							 D,R,Q, error, ok );
 
-	  write_static_mfile ( argv, nJ,nB,nL,lc, DoF, J1,J2, Fo_lc,
-							 D,R,Q, error, ok );
+	  if ( filetype == 1 )
+	  	write_static_csv ( argv, title, 
+			nJ,nB,nL,lc, DoF, J1,J2, Fo_lc, D,R,Q, error, ok );
+
+	  if ( filetype == 2 )
+	  	write_static_mfile ( argv, title,
+			nJ,nB,nL,lc, DoF, J1,J2, Fo_lc, D,R,Q, error, ok );
 
 	  static_mesh ( IO_file, mesh_file, plot_file, title, nJ, nB, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);

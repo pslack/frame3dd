@@ -63,8 +63,13 @@ end-forces in local coordinates, reactions in global coordinates, and natural fr
 </p>
 
 <p>
- <b>Frame3DD</b> may optionally be executed from within Matlab.   
+ <b>Frame3DD</b> may optionally interface with Matlab.   
 </p>
+
+<p>
+ <b>Frame3DD</b> may optionally interface with spreadsheet programs.   
+</p>
+
 
 <p>
 <b>Frame3DD</b> is free software; you may redistribute it and/or modify it under 
@@ -93,7 +98,7 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 -->
 
 <hr>
-<h4>RELEASE DATE OF MOST RECENT VERSION:  December 30, 2008 (20081230) </h4>
+<h4>RELEASE DATE OF MOST RECENT VERSION:  January 1, 2009 (20090101) </h4>
     
 <hr>
 <h4>GETTING STARTED </h4>
@@ -138,7 +143,9 @@ To write your own Input Data file, start with an example that resembles the syst
          the Input/Output file, the Input Data at the beginning of the
          Input/Output file, and the <a href="#InputData"><b>Input Data Format</b></a>, with the <a href="#Variables"><b>Variable Definitions</b></a>
          at the end of this page.   
-Edit your Input Data file with your favorite text editor
+</p>
+<p>
+You may edit Input Data files using a plain text editor
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
  <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>,
@@ -146,9 +153,22 @@ Edit your Input Data file with your favorite text editor
  <a href="http://www.apple.com/support/mac101/work/23/">TextEdit (OS X)</a>,
  <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++ (Windows)</a>,
  <a href="http://www.textedit.org/">TextEdit (Windows)</a>,
- <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>, etc.)
-It might take a few tries to get your Input Data just right.  
-      <b>Frame3DD</b> checks the Input Data for errors prior to anlayzing the system
+ <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>, 
+etc.), 
+using the Matlab interface, 
+or using spreadsheet programs
+(excel, 
+ <a href="http://docs.google.com/">GoogleDocs</a>, 
+ <a href="http://www.openoffice.org/">OpenOffice</a>, 
+ <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).
+</p>
+<p>
+Details regarding the Matlab interface to <b>Frame3DD</b> are <a href="#Matlab">here</a>.<br>
+Details regarding the spreadsheet interface to <b>Frame3DD</b> are <a href="#CSV">here</a>.<br>
+</p>
+<p>
+It may take a few tries to get your Input Data just right.  
+<b>Frame3DD</b> checks the Input Data for errors prior to anlayzing the system
 and displays descriptive diagnostic messages when errors are found with the Input Data.  
 </p>
 
@@ -192,8 +212,13 @@ To create a PostScript file of your plot, download and save the Gnuplot script:
 </font>
 After finishing with your plots, quit Gnuplot by typing ...  <br>
           <font face="courier"> gnuplot>  quit</font>
-<li>        Edit the Input/Output files with <a href="http://thomer.com/vi/vi.html">vi</a>, <a href="http://www.gnome.org/projects/gedit/">gedit</a>, <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>, or the like. 
-
+<li>        You may edit Input/Output files using a plain text editor 
+(<a href="http://thomer.com/vi/vi.html">vi</a>,
+<a href="http://www.gnome.org/projects/gedit/">gedit</a>, 
+<a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>) 
+or a spreadsheet program
+(<a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>,
+<a href="http://www.openoffice.org/">OpenOffice</a>).<br>
 </ol>
 
 <hr>
@@ -222,11 +247,14 @@ For OS X running on a PowerPC (PPC) or Intel processor.
              A Terminal window should automatically open.
              When asked for the Input/Output file name, type ...<br>
                <font face="courier">/Users/your_name_here/Desktop/examples/exA.frm</font> -->
-<li>     Edit the Input/Output files with 
-<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a> or TextEdit (Applications > TextEdit)
-or <a href="http://macvim.org/OSX/index.php">vi</a><br>
-
-         Make sure you are in Plain Text mode  ...  [SHIFT] [APPLE] [T] ...  or ...   Format > Make Plain Text ... <br>
+<li>     You may edit Input/Output files using a plain text editor
+(<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,
+TextEdit (Applications > TextEdit), 
+<a href="http://macvim.org/OSX/index.php">vi</a>)
+or a spreadsheet program
+(<a href="http://www.openoffice.org/">OpenOffice</a>).<br>
+If you use Apple's TextEdit, 
+make sure you are in Plain Text mode  ...  [SHIFT] [APPLE] [T] ...  or ...   Format > Make Plain Text ... <br>
 </ol>
 
 <p>
@@ -293,10 +321,10 @@ For DOS and MS-Windows, the following special guidelines should be followed:
 <li>       You may need to change the line <font face="courier">/tmp/mesh_file</font> to <font face="courier">C:\tmp\mesh_file</font>
          and the line <font face="courier">/tmp/mode_file</font> to <font face="courier">C:\tmp\mode_file</font>
 <li>       Run <b>Frame3DD</b> from a MS-DOS window or Command Prompt window ...<br>
-             (Start > Programs > Accessories > Command Prompt)<br>
-             <font face="courier">...> cd C:\Documents and Settings\your_name_here\My Documents\</font><br>
-             <font face="courier">...> frame3dd example.frm</font><br>
-         where <font face="courier">example.frm</font> is the name of your Input Data file.  
+(Start > Programs > Accessories > Command Prompt)<br>
+<font face="courier">...> cd C:\Documents and Settings\your_name_here\My Documents\</font><br>
+<font face="courier">...> frame3dd example.frm</font><br>
+where <font face="courier">example.frm</font> is the name of your Input Data file.  
 
 
 <li>       The graphical output is best viewed with the
@@ -317,10 +345,10 @@ MS-Windows version of Gnuplot</a>.<br>
          where <font face="courier">example.plt</font> is the name of of the plot file specified in the Input Data. (<a href="#InputData">See below.</a>) <br>
          Hit the 'Return' key in the Terminal window to see the sequence of plots
          and animations until the <font face="courier"> gnuplot></font> prompt returns.<br>
-<li>       Edit your Input Data file using any plain text editor, i.e.,
-             (Start > Programs > Accessories > 
- <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>)
-or <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>.
+<li>       You may edit Input/Output Data files using a plain text editor
+(<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>, 
+<a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>), or a spreadsheet program
+(<a href="http://www.openoffice.org/">OpenOffice</a>, excel).<br>
 <li>       You may wish to delete all the files in the <font face="courier">C:\tmp</font> directory when you have finished
          your analyses.  <br>
 </ol>
@@ -428,16 +456,16 @@ working directory.
 A <a href="http://www.duke.edu/~hpgavin/frame3dd/Matlab/exA.m">Matlab version of Example A</a> illustrates
 how to analyze problems using the Matlab interface to <b>Frame3DD</b>.<br>
 Matlab versions of the other examples are forthcoming.
-<li> frame_3dd.m writes IOdata.frm,
-<li> The executeable frame3dd appends IOdata.frm
+<li> frame_3dd.m writes IOdata.fmm,
+<li> The executeable frame3dd appends IOdata.fmm
 with the Output Data, and writes IOdata_out.m, containing the Output Data.<br>
 An m-file containing the Output Data is written whenever the frame3dd   
-executeable is run, whether or not the analysis is initiated by frame_3dd.m.
+executeable is run on a file ending in ".fmm",
+whether or not the analysis is initiated by frame_3dd.m.
 <li> frame_3dd.m runs IOdata_out.m, containing the matrices D, R, F, L, and Ks,
 <li> frame_3dd.m returns D, R, F, L, and Ks, to the Matlab workspace, or to your Matlab function. 
 </ol>
 </p>
-
 
 <p>
 This m-function interface to <b>Frame3DD</b>
@@ -447,12 +475,85 @@ It does not (yet) implement the following features of <b>Frame3DD</b>:
   <li> Matlab functions for graphical display of the results 
   <li> point forces applied between the joints of a member
   <li> temperature loads
-  <li> multiple load cases
+  <li> multiple load cases 
   <li> modal analysis
   <li> matrix condensation
 </ul>
+Adding these features would require Matlab programming, only.
 </p>
 
+<hr>
+<a name="CSV">
+<h4>SPREADSHEET INTERFACE</h4>
+
+<p>
+Input/Output data for <b>Frame3DD</b> may be read and written using spreadsheet programs
+(excel, 
+ <a href="http://docs.google.com/">GoogleDocs</a>, 
+ <a href="http://www.openoffice.org/">OpenOffice</a>, 
+ <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).
+</p>
+<p>
+When editing Input Data files with a spreadsheet program, save in the
+.CSV format (with a ".CSV" filename extension).
+</p>
+<p>
+When run on a .CSV file,
+<b>Frame3DD</b> appends results to the Input Data .CSV file 
+as plain text and also 
+writes results of the static analyses to a spreadsheet with a filename ending in "_out.CSV".  
+</p>
+<p>
+The results spreadsheet includes an index table specifying the row numbers
+of each type of result.   <br>
+Sections of an example results spreadsheet are shown below.<br>
+<img src="img/CSV1.png" align="center" border="0"><br>
+This example has three load cases.  <br> <br>
+Displacements for load case 1 start at row 21 and end at row 25.<br>
+Beam end forces for load case 1 start at row 28 and end at row 35.<br>
+Reaction forces for load case 1 start at row 38 and end at row 42.<br><br>
+Displacements for load case 2 start at row 49 and end at row 53.<br>
+Beam end forces for load case 2 start at row 56 and end at row 63.<br>
+Reaction forces for load case 2 start at row 66 and end at row 70.<br><br>
+Displacements for load case 3 start at row 77 and end at row 81.<br>
+Beam end forces for load case 3 start at row 84 and end at row 91.<br>
+Reaction forces for load case 3 start at row 94 and end at row 98.<br><br>
+</p>
+
+<p>
+For any <b>Frame3DD</b> .CSV results file, the spreadsheet cells containing the result
+row numbers are given in the following table.<br>
+<table border="1">
+<font face="Arial, Helvetica, sans-serif" size="2">
+<tr> <th>Load Case 1</th> <th>First Row</th> <th>Last Row</th></tr>
+<tr> <td>Joint Displacements</td> <td>C-10</td><td>C-11</td></tr>
+<tr><td>Beam End Forces</td> <td>D-10</td><td>D-11</td></tr>
+<tr><td>Reaction Forces</td> <td>E-10</td><td>E-11</td></tr>
+<tr> <th>Load Case 2</th> <th>First Row</th> <th>Last Row</th></tr>
+<tr> <td>Joint Displacements</td> <td>C-12</td><td>C-13</td></tr>
+<tr><td>Beam End Forces</td> <td>D-12</td><td>D-13</td></tr>
+<tr><td>Reaction Forces</td> <td>E-12</td><td>E-13</td></tr>
+<tr> <th>Load Case 3</th> <th>First Row</th> <th>Last Row</th></tr>
+<tr> <td>Joint Displacements</td> <td>C-14</td><td>C-14</td></tr>
+<tr><td>Beam End Forces</td> <td>D-14</td><td>D-14</td></tr>
+<tr><td>Reaction Forces</td> <td>E-14</td><td>E-14</td></tr>
+<tr> <td><i>et cetera</i></td> </tr>
+</table>
+</p>
+
+<p>
+The columns of the spreadsheet results file are arranged as follows.<br>
+Displacement results are in columns A through G:<br>
+<img src="img/CSV2.png" align="center" border="0"><br><br>
+Beam end force results are in columns A through H:<br>
+<img src="img/CSV3.png" align="center" border="0"><br><br>
+Reaction results are in columns A through G:<br>
+<img src="img/CSV4.png" align="center" border="0"><br><br>
+</p>
+
+<p>
+Modal analysis results are not (yet) written in .CSV format.  
+</p>
 
 <hr>
 <h4>STRUCTURAL MODELING </h4>
@@ -882,7 +983,6 @@ Sub-space iterations are stopped when the error is less than the specified
 <h4>ENHANCEMENTS PROJECTED FOR FUTURE VERSIONS </h4>
 
 <ul>
-<li>       Support for a .CSV Input/Ouput file format
 <li>       A GUI (ideally GPL'able)<br>
 <ul>
  <li> <a href="DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).
@@ -1299,7 +1399,7 @@ and the GNU General Public License
 <a href="http://www.gnu.org/copyleft/gpl-faq.html">FAQ</a> for more details.
 </p>
 <p align="justify">
-&copy; 1992-2008 Henri P. Gavin.
+&copy; 1992-2009 Henri P. Gavin.
 Verbatim copying and distribution is permitted in any medium, provided this notice is preserved. <br><br>
 Department of Civil and Environmental Engineering<br>
 Duke University, Box 90287<br>
@@ -1316,7 +1416,7 @@ http://www.sourceforge.net/projects/frame3dd/</a>
 
 <font face="Verdana, Arial, sans-serif" size="1" width="700">
 <br>updated: May 6 2003, Nov 8 2004, Nov 22 2004, Nov 29 2004, Dec 2 2004, Dec 10 2004, Dec 6 2006, Feb 22 2007, Mar 1 2007, Jun 6 2007, Dec 20 2007,
-Mar 14 2008, Sep 9 2008, Dec 30 2008
+Mar 14 2008, Sep 9 2008, Jan 1 2009
 </font> <br>
 <a href="http://thomer.com/vi/vi.html"><img src="img/vi_logo_by_urmas_reinsalu.png" border="0"></a>
 </body>

@@ -135,17 +135,17 @@ exD.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20081230               http://frame3dd.sf.net/
-GPL Copyright (C) 1992-2008, Henri P. Gavin 
+FRAME3DD version: 20090101               http://frame3dd.sf.net/
+GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example D: dynamic properties of an un-restrained frame with a triangular section 
-Wed Dec 31 10:45:21 2008
+Thu Jan  1 09:57:00 2009
 ________________________________________________________________________________
 24 JOINTS;    30 MEMBERS;    1 LOAD CASES;
-0 FIXED JOINTS;   -1076055224 PRESCRIBED DISPLACEMENTS;
+0 FIXED JOINTS;   -1080295672 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -175,8 +175,8 @@ J O I N T   D A T A                                         R E S T R A I N T S
    22      60.000000     115.000000     210.000000    0.000   0  0  0  0  0  0
    23       0.000000     230.000000     210.000000   10.000   0  0  0  0  0  0
    24     -60.000000     115.000000     210.000000    0.000   0  0  0  0  0  0
-M E M B E R   D A T A							(local)
-  Member J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+B E A M   D A T A							(local)
+  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
     1     1     2  125.0 100.0 100.0 5000.0  2500.0  2500.0   2000.0  1000.0   0
     2     2     3  125.0 100.0 100.0 5000.0  2500.0  2500.0   2000.0  1000.0   0
     3     3     4  125.0 100.0 100.0 5000.0  2500.0  2500.0   2000.0  1000.0   0
@@ -213,9 +213,9 @@ M E M B E R   D A T A							(local)
 L O A D   C A S E   1   O F   1  ... 
 
    0 joints  with concentrated loads
-   0 members with uniformly distributed loads
-   0 members with concentrated point loads
-   0 members with temperature loads
+   0 elements with uniformly distributed loads
+   0 elements with concentrated point loads
+   0 elements with temperature loads
    0 joints  with prescribed displacements
 
 E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
@@ -225,8 +225,8 @@ L O A D   C A S E   1   O F   1  ...
 
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-M E M B E R   E N D   F O R C E S					(local)
-  Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+B E A M   E N D   F O R C E S						(local)
+  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
      1      1      0.0         0.0        0.0        0.0        0.0        0.0  
      1      2      0.0         0.0        0.0        0.0        0.0        0.0  
      2      2      0.0         0.0        0.0        0.0        0.0        0.0  
@@ -291,7 +291,7 @@ R E A C T I O N S							(global)
   Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
 R M S   E Q U I L I B R I U M    E R R O R: 0.000e+00
 
-B O D A L   A N A L Y S I S   R E S U L T S
+M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  4.420668e-01     Structural Mass:  4.420668e-01 
 J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
   Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
@@ -319,10 +319,10 @@ J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
     22 1.18166e-02 1.10835e-02 1.20909e-02 4.24484e+00 1.47017e+00 5.28264e+00
     23 1.74131e-02 1.66799e-02 1.70909e-02 6.34199e+00 3.56731e+00 5.48264e+00
     24 1.18166e-02 1.10835e-02 1.20909e-02 4.24484e+00 1.47017e+00 5.28264e+00
-  Lump masses at joints.
+  Use consistent mass matrix.
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
- convergence tolerance: 0.000e+00 
+ convergence tolerance: 5.000e-05 
   MODE     1:   f= 0.000000 Hz,  T= 2231538.375051 sec
 		X- modal participation factor =   5.6142e-02 
 		Y- modal participation factor =   6.5291e-01 
@@ -730,6 +730,4 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
     23   3.845e-03  -2.068e-02  -1.064e-01   4.048e-02  -8.363e-05  -2.248e-04
     24  -1.143e-02  -1.008e-02  -3.571e+00   5.601e-03   1.321e-02  -2.015e-05
 M A T R I X    I T E R A T I O N S: 6
-There are 536870912 modes below 7.127403 Hz. ... 536870898 modes were not found.
- Try increasing the number of modes in 
- order to get the missing modes below 7.127403 Hz.
+There are 14 modes below 7.127403 Hz. ... All 14 modes were found.

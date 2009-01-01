@@ -44,7 +44,7 @@ Example A: linear static analysis of a 2D truss with support settlement
 21 11 12 30.0	1.0	1.0	1.0	1.0	0.01	10000.0 500.0  0
 
 12				% number of joints with reactions
-%J     x y z xx yy zz		1= fixed, 0=free
+%J     x y z xx yy zz		1=fixed, 0=free
 
   1	1 1 1  1  1  0
   2	0 0 1  1  1  0
@@ -114,17 +114,17 @@ exA.plt	                        % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20081230               http://frame3dd.sf.net/
-GPL Copyright (C) 1992-2008, Henri P. Gavin 
+FRAME3DD version: 20090101               http://frame3dd.sf.net/
+GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example A: linear static analysis of a 2D truss with support settlement 
-Wed Dec 31 10:42:31 2008
+Thu Jan  1 09:51:46 2009
 ________________________________________________________________________________
 12 JOINTS;    21 MEMBERS;    2 LOAD CASES;
-12 FIXED JOINTS;   -1079908456 PRESCRIBED DISPLACEMENTS;
+12 FIXED JOINTS;   -1075018744 PRESCRIBED DISPLACEMENTS;
 For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
@@ -142,8 +142,8 @@ J O I N T   D A T A                                         R E S T R A I N T S
    10      36.000000      12.000000       0.000000    0.000   0  0  1  1  1  0
    11      48.000000      12.000000       0.000000    0.000   0  0  1  1  1  0
    12      60.000000      12.000000       0.000000    0.000   0  0  1  1  1  0
-M E M B E R   D A T A							(local)
-  Member J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+B E A M   D A T A							(local)
+  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
     1     1     2   30.0   1.0   1.0    1.0     1.0     0.0  10000.0   500.0   0
     2     2     3   30.0   1.0   1.0    1.0     1.0     0.0  10000.0   500.0   0
     3     3     4   30.0   1.0   1.0    1.0     1.0     0.0  10000.0   500.0   0
@@ -171,9 +171,9 @@ M E M B E R   D A T A							(local)
 L O A D   C A S E   1   O F   2  ... 
 
    5 joints  with concentrated loads
-   0 members with uniformly distributed loads
-   0 members with concentrated point loads
-   0 members with temperature loads
+   0 elements with uniformly distributed loads
+   0 elements with concentrated point loads
+   0 elements with temperature loads
    1 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
@@ -190,9 +190,9 @@ P R E S C R I B E D   D I S P L A C E M E N T S                        (global)
 L O A D   C A S E   2   O F   2  ... 
 
    3 joints  with concentrated loads
-   0 members with uniformly distributed loads
-   0 members with concentrated point loads
-   3 members with temperature loads
+   0 elements with uniformly distributed loads
+   0 elements with concentrated point loads
+   3 elements with temperature loads
    2 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
@@ -202,8 +202,8 @@ L O A D   C A S E   2   O F   2  ...
      6       0.000      -0.000       0.000       0.000       0.000       0.000
      9       0.000       0.000       0.000       0.000       0.000       0.000
     11      -0.000       0.000       0.000       0.000       0.000       0.000
- M E M B E R   T E M P E R A T U R E   C H A N G E S			(local)
-  Member    coef      hy        hz        Ty+       Ty-       Tz+       Tz-
+ B E A M   T E M P E R A T U R E   C H A N G E S			(local)
+  Beam      coef      hy        hz        Ty+       Ty-       Tz+       Tz-
     10  6.00e-12     1.500     1.500    10.000    10.000    10.000    10.000
     13  6.00e-12     1.500     1.500    15.000    15.000    15.000    15.000
     15  6.00e-12     1.500     1.500    17.000    17.000    17.000    17.000
@@ -232,8 +232,8 @@ J O I N T   D I S P L A C E M E N T S					(global)
     10    0.005767   -0.041661    0.0         0.0         0.0         0.000060
     11    0.002180   -0.035866    0.0         0.0         0.0         0.000798
     12    0.000051   -0.020695    0.0         0.0         0.0         0.001210
-M E M B E R   E N D   F O R C E S					(local)
-  Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+B E A M   E N D   F O R C E S						(local)
+  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
      1      1    -16.138t      0.002      0.0        0.0        0.0        0.011
      1      2     16.138t     -0.002      0.0        0.0        0.0        0.017
      2      2    -72.907t      0.003      0.0        0.0        0.0        0.013
@@ -308,8 +308,8 @@ J O I N T   D I S P L A C E M E N T S					(global)
     10    0.032929   -0.069613    0.0         0.0         0.0         0.000587
     11    0.026528   -0.054766    0.0         0.0         0.0         0.001546
     12    0.024394   -0.028450    0.0         0.0         0.0         0.001982
-M E M B E R   E N D   F O R C E S					(local)
-  Member Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+B E A M   E N D   F O R C E S						(local)
+  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
      1      1   -336.730t      0.001      0.0        0.0        0.0       -0.008
      1      2    336.730t     -0.001      0.0        0.0        0.0        0.015
      2      2   -283.384t     -0.001      0.0        0.0        0.0       -0.022
