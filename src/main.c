@@ -384,9 +384,9 @@ int main(int argc, char *argv[]){
 		end_forces ( Q, nB, xyz, L, Le,
 			J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 
-						/* convergence criteria: */
-//		error = rel_norm (dD, D, DoF ); /* displacement increment */
-		error = rel_norm ( Fe, F, DoF );	/* force balance */
+						 /* convergence criteria:  */
+//		error = rel_norm ( dD, D, DoF ); /* displacement increment */
+		error = rel_norm ( Fe, F, DoF ); /* force balance	   */
 
 		fprintf(stderr,"   NR iteration %3d ---", iter);
 	        fprintf(stderr," RMS equilibrium precision: %8.2e \n", error);
