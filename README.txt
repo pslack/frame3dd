@@ -50,7 +50,7 @@ src/         ... C source code
 
 to compile and build without scons ...
 
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
+gcc -O -Wall -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 
 ---
 

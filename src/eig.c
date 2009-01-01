@@ -34,6 +34,7 @@
 #include <stdlib.h>
 
 #include "eig.h"
+#include "ldl_dcmp.h"
 #include "common.h" 
 #include "nrutil.h"
 

@@ -34,7 +34,7 @@
 	get line into a character string. from K&R.
 	@NOTE this is different from the GNU 'getline'.
 */
-void frm_getline( FILE *fp, char *s, int lim );
+void frame3dd_getline( FILE *fp, char *s, int lim );
 
 
 /* re-write input file without comments or commas */
@@ -137,7 +137,7 @@ void read_mass_data(
 /**
 	read matrix condensation information
 */
-void read_condense(
+void read_condensation_data(
 	FILE *fp,	/**< input data file pointer			*/
 	int nJ, int nM, 	/**< number of joints, number of modes	*/
 	int *nC,	/**< number of joints with condensed DoF's	*/

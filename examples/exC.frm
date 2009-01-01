@@ -179,11 +179,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example C: a tetrahedral frame - static and dynamic analysis  
-Thu Jan  1 09:52:59 2009
+Thu Jan  1 16:06:56 2009
 ________________________________________________________________________________
 18 JOINTS;    48 MEMBERS;    1 LOAD CASES;
-4 FIXED JOINTS;   -1075063816 PRESCRIBED DISPLACEMENTS;
-For 2D problems, the Y-axis is vertical. 
+4 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S

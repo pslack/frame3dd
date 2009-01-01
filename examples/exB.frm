@@ -98,11 +98,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis 
-Thu Jan  1 09:52:06 2009
+Thu Jan  1 16:06:40 2009
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;
-4 FIXED JOINTS;   -1080811896 PRESCRIBED DISPLACEMENTS;
-For 2D problems, the Y-axis is vertical. 
+4 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S

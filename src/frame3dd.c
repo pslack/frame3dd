@@ -28,6 +28,9 @@
 
 #include "frame3dd.h"
 #include "common.h"
+#include "coordtrans.h"
+#include "eig.h"
+#include "ldl_dcmp.h"
 #include "nrutil.h"
 
 
@@ -337,8 +340,8 @@ The original external load vector, Fo is returned unchanged;
 The load vector modified for prescribed displacements Dp is returned as F
 ------------------------------------------------------------------------------*/
 void apply_reactions(
-	int DoF, int *R, float **Dp, int lc,
-	double *Fo, double *F, double **K,
+	int DoF, int *R, float *Dp, double *Fo,
+	double *F, double **K,
 	char	tm	/* 'm' means mech. loads, 't' means temp loads only */
 ){
 	int	i,j;
@@ -347,12 +350,12 @@ void apply_reactions(
 
 	for (i=1; i<=DoF; i++) {		/* modify the force vector */
 		if ( R[i] ) {
-			if (tm == 'm')	F[i] = Dp[lc][i];
+			if (tm == 'm')	F[i] = Dp[i];
 			else		F[i] = 0.0;
 		} else {
 		    for (j=1; j<=DoF; j++) {
 			if ( R[j] ) {
-				if (tm == 'm')	F[i] -= K[i][j]*Dp[lc][j];
+				if (tm == 'm')	F[i] -= K[i][j]*Dp[j];
 				else		F[i] = 0.0;
 			}
 		    }
@@ -1254,15 +1257,17 @@ void deallocate(
 	float *E, float *G, float *p,
 	float ***W, float ***P, float ***T,
 	float **Dp,
-	double **Fo_mech, double **Fo_temp, double *Fo_mech_lc, double *Fo_temp_lc,
+	double **Fo_mech, double **Fo_temp, 
 	double ***feF_mech, double ***feF_temp, double **feF,
-	double **Fo, double *Fo_lc, double *F_lc,
+	double **Fo, double *F,
 	double **K, double **Q,
 	double *D, double *dD,
 	float *d, float *BMs, float *JMs, float *JMx, float *JMy, float *JMz,
 	double **M, double *f, double **V,
 	int *q, int *m
 ){
+
+	void	free();
 
 	free(xyz);
 
@@ -1295,13 +1300,10 @@ void deallocate(
 // printf("..E\n");
 	free_dmatrix(Fo_mech,1,nL,1,DoF);
 	free_dmatrix(Fo_temp,1,nL,1,DoF);
-	free_dvector(Fo_mech_lc,1,DoF);
-	free_dvector(Fo_temp_lc,1,DoF);
 
 // printf("..F\n");
 	free_dmatrix(Fo,1,nL,1,DoF);
-	free_dvector(Fo_lc,1,DoF);
-	free_dvector(F_lc,1,DoF);
+	free_dvector(F,1,DoF);
 
 // printf("..G\n");
 	free_D3dmatrix(feF_mech,1,nL,1,nB,1,12);

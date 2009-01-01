@@ -282,11 +282,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example F: a seismically-isolated building model 
-Thu Jan  1 09:58:00 2009
+Thu Jan  1 16:08:00 2009
 ________________________________________________________________________________
 36 JOINTS;    58 MEMBERS;    1 LOAD CASES;
-14 FIXED JOINTS;   -1081139656 PRESCRIBED DISPLACEMENTS;
-For 2D problems, the Y-axis is vertical. 
+14 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S

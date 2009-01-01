@@ -29,8 +29,11 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "frame3dd_io.h"
+#include "coordtrans.h"
+#include "lu_dcmp.h"
 #include "nrutil.h"
 
 #ifndef VERSION
@@ -461,9 +464,9 @@ void read_and_assemble_loads(
 		printf("\n"); */
 	  }
 
-	  fscanf(fp,"%d", &nP[lc] );		/* concentrated point loads	*/
+	  fscanf(fp,"%d", &nP[lc] );	/* concentrated point loads	*/
 	  printf("  number of concentrated beam element point loads ");
-	  dots(9);
+	  dots(3);
 	  printf(" nP = %3d\n", nP[lc]);
 	  if ( nP[lc] < 0 || nP[lc] > nB ) {
 		fprintf(stderr,"  error: valid ranges for nP is 0 ... %d \n", nB );
@@ -535,7 +538,7 @@ void read_and_assemble_loads(
 
 	  fscanf(fp,"%d", &nT[lc] );		/* thermal loads		*/
 	  printf("  number of beams with temperature changes ");
-	  dots(8);
+	  dots(10);
 	  printf(" nT = %3d\n", nT[lc] );
 	  if ( nT[lc] < 0 || nT[lc] > nB ) {
 		fprintf(stderr,"  error: valid ranges for nT is 0 ... %d \n", nB );
@@ -745,7 +748,7 @@ void read_mass_data(
 /*------------------------------------------------------------------------------
 READ_CONDENSE   -  read matrix condensation information 	        30aug01
 ------------------------------------------------------------------------------*/
-void read_condense (
+void read_condensation_data (
 		FILE *fp,
 		int nJ, int nM,
 		int *nC, int *Cdof, int *Cmethod, int *q, int *m
@@ -869,7 +872,6 @@ void write_input_data(
 
 	fprintf(fp,"%d JOINTS;    %d MEMBERS;    %d LOAD CASES;\n",nJ,nB,nL);
 	fprintf(fp,"%d FIXED JOINTS;   ", nR);
-	fprintf(fp,"%d PRESCRIBED DISPLACEMENTS;\n", nD );
 
 	fprintf(fp,"For 2D problems, the Y-axis is vertical. \n");
 #if Zvert
@@ -1096,7 +1098,6 @@ void write_static_csv(
 ){
 
 	FILE	*fpcsv;
-	double	disp;
 	int	i,j,n;
 	char	*wa;
 	char	IOfilename[128];

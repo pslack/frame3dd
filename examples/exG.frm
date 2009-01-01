@@ -139,11 +139,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example G: a building with a set-back  
-Thu Jan  1 09:58:13 2009
+Thu Jan  1 16:08:17 2009
 ________________________________________________________________________________
 15 JOINTS;    24 MEMBERS;    1 LOAD CASES;
-3 FIXED JOINTS;   -1074152232 PRESCRIBED DISPLACEMENTS;
-For 2D problems, the Y-axis is vertical. 
+3 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S

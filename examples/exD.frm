@@ -142,11 +142,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example D: dynamic properties of an un-restrained frame with a triangular section 
-Thu Jan  1 09:57:00 2009
+Thu Jan  1 16:07:10 2009
 ________________________________________________________________________________
 24 JOINTS;    30 MEMBERS;    1 LOAD CASES;
-0 FIXED JOINTS;   -1080295672 PRESCRIBED DISPLACEMENTS;
-For 2D problems, the Y-axis is vertical. 
+0 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S

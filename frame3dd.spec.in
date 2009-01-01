@@ -64,6 +64,7 @@ rm -rf %{buildroot}
 
 * Thu Jan 1 2009 Henri Gavin <henri.gavin@duke.edu> 20090101
 - Implemented .CSV spreadsheet support
+- eliminated some unneccessary vectors  "_lc"
 - TODO.txt, website, examples, and documentation updated.
 
 * Wed Dec 31 2008 Henri Gavin <henri.gavin@duke.edu> 20081231
@@ -80,8 +81,8 @@ rm -rf %{buildroot}
 - changed "modes" variable name to "nM" ... number of dynamic modes
 - change "pos" variable name to "xyz" ... joint locations
 - removed many #include "abc.h" lines from .c source files
-  without affecting the ability to execute or to compile via  ... 
-    gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
+  without affecting the ability to execute or to compile warning-free via  ... 
+    gcc -O -Wall -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 - TODO.txt, website, examples, and documentation updated.
 
 * Fri Dec 12 2008 Henri Gavin <henri.gavin@duke.edu> 20081212

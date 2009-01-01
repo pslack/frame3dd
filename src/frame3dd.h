@@ -56,8 +56,7 @@ void assemble_K(
 void apply_reactions(
 	int DoF,	/**< number of degrees of freedom		*/
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
-	float **Dp,	/**< matrix of prescribed displacements, each DoF */	
-	int lc, 	/**< a load case number				*/
+	float *Dp,	/**< prescribed displacements, each DoF		*/	
 	double *Fo,	/**< fixed end forces for unrestrained frame	*/
 	double *F,	/**< load vector for restrained frame		*/
 	double **K,	/**< stiffness matrix				*/
@@ -187,9 +186,8 @@ void deallocate(
 	float ***W, float ***P, float ***T,
 	float **Dp,
 	double **Fo_mech, double **Fo_temp,
-	double *Fo_mech_lc, double *Fo_temp_lc,
 	double ***feF_mech, double ***feF_temp, double **feF,
-	double **Fo, double *Fo_lc, double *F_lc,
+	double **Fo, double *F_lc,
 	double **K, double **Q,
 	double *D, double *dD,
 	float *d, float *BMs,

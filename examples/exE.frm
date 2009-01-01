@@ -112,11 +112,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example E: a three dimensional structure showing lateral-torsional dynamic modes 
-Thu Jan  1 09:57:10 2009
+Thu Jan  1 16:07:27 2009
 ________________________________________________________________________________
 12 JOINTS;    15 MEMBERS;    1 LOAD CASES;
-3 FIXED JOINTS;   -1075180568 PRESCRIBED DISPLACEMENTS;
-For 2D problems, the Y-axis is vertical. 
+3 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S
