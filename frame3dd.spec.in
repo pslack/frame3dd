@@ -64,8 +64,8 @@ rm -rf %{buildroot}
 
 * Thu Jan 1 2009 Henri Gavin <henri.gavin@duke.edu> 20090101
 - Implemented .CSV spreadsheet support
-- eliminated some unneccessary vectors  "_lc"
-- TODO.txt, website, examples, and documentation updated.
+- Eliminated some unneccessary vectors  "_lc"
+- Updated TODO.txt, website, examples, and documentation. 
 
 * Wed Dec 31 2008 Henri Gavin <henri.gavin@duke.edu> 20081231
 - Moved rel_norm() from ldl_dcmp.c to frame3dd.c
@@ -76,14 +76,14 @@ rm -rf %{buildroot}
 - The Input Data file format changed in two ways as follows:
   > Reaction data are listed just after the Member data.
   > Prescribed displacements are listed separately for each load case.
-- added comments to src/*.h files
-- changed "nM" variable name to "nB" ... number of beam elements
-- changed "modes" variable name to "nM" ... number of dynamic modes
-- change "pos" variable name to "xyz" ... joint locations
-- removed many #include "abc.h" lines from .c source files
+- Added comments to src/*.h files
+- Changed "nM" variable name to "nB" ... number of beam elements
+- Changed "modes" variable name to "nM" ... number of dynamic modes
+- Changed "pos" variable name to "xyz" ... joint locations
+- Removed many #include "abc.h" lines from .c source files
   without affecting the ability to execute or to compile warning-free via  ... 
     gcc -O -Wall -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
-- TODO.txt, website, examples, and documentation updated.
+- Updated TODO.txt, website, examples, and documentation.
 
 * Fri Dec 12 2008 Henri Gavin <henri.gavin@duke.edu> 20081212
 - The file frame3dd.cln is now written to /tmp/
@@ -96,7 +96,7 @@ rm -rf %{buildroot}
 
 * Mon Dec 08 2008 Henri Gavin <henri.gavin@duke.edu> 20081208
 - An error message is now displayed if nL < 1
-- documentation updated.
+- Updated documentation.
 
 * Mon Dec 01 2008 Henri Gavin <henri.gavin@duke.edu> 20081201
 - Removed the redefine of float to double, now all floating point
@@ -104,10 +104,10 @@ rm -rf %{buildroot}
   In a future version variables that can actually be floats, such
   as variables read from input data files, will be re-defined as floats.
 - Support for vec3 is retained througout.
-- renamed frm_io.c to frame3dd_io.c
-- renamed frm_io.h to frame3dd_io.h
-- updated Sconscript with these file name changes
-- changed getline_no_comment in frame3dd_io.c to support
+- Renamed frm_io.c to frame3dd_io.c
+- Renamed frm_io.h to frame3dd_io.h
+- Updated Sconscript with these file name changes
+- Changed getline_no_comment in frame3dd_io.c to support
   data files with comma-delimited values , with anticipated support
   for .CSV files
 
