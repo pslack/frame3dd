@@ -1,25 +1,37 @@
 TODO LIST for FRAME3DD
 ----------------------
 
-Create structs to contain frame attributes, coordinates, etc, in order to 
+# Implement trapezoidally-distributed loads existing over only partial
+member lengths.  
+
+#  Consistent mass matrix including the effects of shear deformation on rotatory inertia
+
+# Dynamic time-history analysis with the HHT-alpha method
+
+# Create structs to contain frame attributes, coordinates, etc, in order to 
 migrate to a more object-oriented coding style, and simplify the passing
 of parameters to functions.
 
+# Member end joint releases
 Implment end_release function in frame3dd.c into the code to 
 carry out member end release.
 
-Implement import of Microstran .arc format. We can already parse these files
+# Implement import of Microstran .arc format. We can already parse these files
 (including many constructs that aren't supported by FRAME3DD)
 but we can not yet actually calculate using the parsed data.
 
-Fix rendering of members with offsets specified in local coordinates
+# Fix rendering of members with offsets specified in local coordinates
 (ie MOFF LO statements).
 
-Convert 'save_matrix' to output files in Matrix Market format for easier
+# Spectral modal superposition
+
+# Linearly tapered beam elements 
+
+# Convert 'save_matrix' to output files in Matrix Market format for easier
 import into other programs.
 http://math.nist.gov/MatrixMarket/
 
-Consider making use of third-party matrix routines, rather to providing them
+# Consider making use of third-party matrix routines, rather to providing them
 ourselves. Good options would be UMFPACK (for sparse matrices) or LAPACK (dense).
 There would be assumed to be some efficiency improvements as a result of this
 also, particularly if sparse matrix methods can be used.
@@ -29,14 +41,13 @@ also, particularly if sparse matrix methods can be used.
 COMPLETED ITEMS
 ------------------
 
-Add support for .CSV input and output. (Jan 1 2009)
+# Add support for .CSV input and output. (Jan 1 2009)
 
-Change types values that are read from input files from double to float
+# Change types values that are read from input files from double to float
 (Dec 31 2008)
 
-Added support for separate prescribed displacements for each
-load case individually.  (Dec 30 2008)
+# Added support for separate prescribed displacements for each load case individually.  (Dec 30 2008)
 
-Added comments to describe variables in src/*.h files.  (Dec 30 2008)
+# Added comments to describe variables in src/*.h files.  (Dec 30 2008)
 
 
