@@ -493,16 +493,21 @@ Input/Output data for <b>Frame3DD</b> may be read and written using spreadsheet 
  <a href="http://www.openoffice.org/">OpenOffice</a>, 
  <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).
 </p>
+
 <p>
-When editing Input Data files with a spreadsheet program, save in the
+Any of the  <a href="http://www.duke.edu/~hpgavin/frame3dd/#examples"><b>Frame3DD</b> example Input Data files</a> may be opened with a spreadsheet program.  
+When editing an Input Data file with a spreadsheet program, save it in 
 .CSV format (with a ".CSV" filename extension).
 </p>
+
 <p>
 When run on a .CSV file,
 <b>Frame3DD</b> appends results to the Input Data .CSV file 
 as plain text and also 
-writes results of the static analyses to a spreadsheet with a filename ending in "_out.CSV".  
+writes results of the static analyses to a spreadsheet with a filename ending in "_out.CSV".   These files may be viewed, edited, pre-processed,
+and post-processed with spreadsheet programs.  
 </p>
+
 <p>
 The results spreadsheet includes an index table specifying the row numbers
 of each type of result.   <br>
@@ -552,7 +557,7 @@ Reaction results are in columns A through G:<br>
 </p>
 
 <p>
-Modal analysis results are not (yet) written in .CSV format.  
+Modal analysis results are not (yet) written to the .CSV formatted output file. 
 </p>
 
 <hr>
@@ -876,7 +881,8 @@ A Sturm check is carried out to determine if any eigen-values were missed.
 </p>
 
 <p>
-If a dynamic analysis is not to be performed, simply set the <a href="#Variables"<i>nM</i>variable</a> (the number of desired modes) to zero (0).   
+If a dynamic analysis is not to be performed, simply set the
+<a href="#Variables"<i>nM</i> variable</a> (the number of desired modes) to zero (0).   
 If <i>nM</i> is set to zero,
 <b>Frame3DD</b> will stop reading the Input/Output file at this point.   
 If <i>nM</i> is set to zero, there is no need to provide numerical values for the quantities from <i>lump</i> to <i>m[3] ... </i>.
@@ -983,6 +989,7 @@ Sub-space iterations are stopped when the error is less than the specified
 <h4>ENHANCEMENTS PROJECTED FOR FUTURE VERSIONS </h4>
 
 <ul>
+<li>       Trapezoidally distributed loads
 <li>       A GUI (ideally GPL'able)<br>
 <ul>
  <li> <a href="DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).
@@ -997,13 +1004,12 @@ and possibly
 (Summer 2008)
 </ul>
 <li>       Consistent mass matrix including the effects of shear deformation on rotatory inertia 
-<li>       Trapezoidally distributed loads
 <li>       Dynamic time-history analysis with the HHT-alpha method
 <li>       Spectral modal superposition
 <li>       Member end joint releases
 <li>       Linearly tapered beam elements
-<li>       Membrane elements 
-<li>       Plate elements  
+<!-- <li>       Membrane elements  -->
+<!-- <li>       Plate elements   -->
 <li>       Sparse matrix storage and <a href="http://ascendwiki.cheme.cmu.edu/Survey_of_sparse_matrix_software">sparse matrix solvers</a>
 <li>       ... your recommendations ... send me an e-mail!
 </ul>
