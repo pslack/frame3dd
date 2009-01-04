@@ -1,10 +1,11 @@
 TODO LIST for FRAME3DD
 ----------------------
 
-# Implement trapezoidally-distributed loads existing over only partial
-member lengths.  
+# Implement trapezoidally-distributed loads existing over only partial member lengths.  
 
 #  Consistent mass matrix including the effects of shear deformation on rotatory inertia
+
+# Improve rigid joint offset method
 
 # Dynamic time-history analysis with the HHT-alpha method
 

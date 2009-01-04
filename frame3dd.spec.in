@@ -62,6 +62,10 @@ rm -rf %{buildroot}
 
 %changelog
 
+* Sun Jan 4 2009 Henri Gavin <henri.gavin@duke.edu> 20090104
+- Input data order reorganized: joints, reactions, members, loads
+- Updated TODO.txt, website, examples, and documentation. 
+
 * Thu Jan 1 2009 Henri Gavin <henri.gavin@duke.edu> 20090101
 - Implemented .CSV spreadsheet support
 - Eliminated some unneccessary vectors  "_lc"
