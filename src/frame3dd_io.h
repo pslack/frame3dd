@@ -41,10 +41,23 @@ void frame3dd_getline( FILE *fp, char *s, int lim );
 void parse_input(FILE *fp);
 
 
-/* read input data file			*/
-void read_input_data(
+/**
+	Read joint coordinate data
+*/
+void read_joint_data (
 	FILE *fp,	/**< input data file pointer			*/
-	int nJ, int nB,	/**< number of joints, number of beam elements	*/
+	int nJ, 	/**< number of joints				*/
+	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
+	float *r	/**< rigid radius of each joint			*/
+);
+
+/**
+	Read beam property data
+*/
+void read_beam_data (
+	FILE *fp,	/**< input data file pointer			*/
+	int nJ,		/**< number of joints				*/
+	int nB,		/**< number of joints				*/
 	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
 	float *r,	/**< rigid radius of each joint			*/
 	double *L, double *Le,	/**< length of each beam element, effective */
@@ -54,6 +67,7 @@ void read_input_data(
 	float *E, float *G,	/**< elastic moduli and shear moduli	*/
 	float *p		/**< roll angle of each beam (radians)	*/
 );
+
 
 /** 
 	Read data controlling certain aspects of the analysis

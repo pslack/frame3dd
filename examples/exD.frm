@@ -1,10 +1,6 @@
 Example D: dynamic properties of an un-restrained frame with a triangular section
 
 24			% number of joints
-30			% number of members
-1			% number of static load cases
-
-
 %.joint  x       y       z       r
 
   1     -120	0	-210	10
@@ -32,7 +28,9 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
  23	0	230	210	10
  24	-60	115	210	0
 
+0                               % number of joints with reactions
 
+30			% number of members
 %.m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz     E       G    p
 
  1  1  2  125	100	100	5000	2500	2500	2000	1000 0
@@ -66,8 +64,6 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
 29 23 24  125	100	100	5000	2500	2500	2000	1000 0
 30 24 19  125	100	100	5000	2500	2500	2000	1000 0
 
-0                               % number of joints with reactions
-
 1                               % 1: include shear deformation
 0                               % 1: include geometric stiffness
 /tmp/exD-msh                    % mesh data file name
@@ -75,6 +71,7 @@ exD.plt                         % plot file name
 20.0                            % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
 
+1			% number of static load cases
 				% Begin Static Load Case 1 of 1
 0                               % number of loaded joints
 0                               % number of distributed loads
@@ -135,14 +132,14 @@ exD.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20090101               http://frame3dd.sf.net/
+FRAME3DD version: 20090104               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example D: dynamic properties of an un-restrained frame with a triangular section 
-Thu Jan  1 16:07:10 2009
+Sun Jan  4 12:06:22 2009
 ________________________________________________________________________________
 24 JOINTS;    30 MEMBERS;    1 LOAD CASES;
 0 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 

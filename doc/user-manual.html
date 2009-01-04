@@ -98,7 +98,7 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 -->
 
 <hr>
-<h4>RELEASE DATE OF MOST RECENT VERSION:  January 1, 2009 (20090101) </h4>
+<h4>RELEASE DATE OF MOST RECENT VERSION:  January 4, 2009 (20090104) </h4>
     
 <hr>
 <h4>GETTING STARTED </h4>
@@ -1024,24 +1024,24 @@ and possibly
 <pre>
 A one-line descriptive title of your analysis MUST be the FIRST line of the file
 
+% joint data ...
 nJ                                     % number of joints
-nB                                     % number of beam elements
-nL                                     % number of static load cases, up to 127
-
   J[1]       x[1]       y[1]       z[1]     r[1]       
     :          :          :          :        :  % joint numbers and coordinates
   J[nJ]      x[nJ]      y[nJ]      z[nJ]    r[nJ]
 
-
-                                            % member numbers, loc'ns, and prop's
-M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jxx[1]  Iyy[1]  Izz[1]  E[1]  G[1]  p[1]
-  :      :      :      :       :       :       :       :       :     :     :     :
-M[nB] J1[nB] J2[nB] Ax[nB] Asy[nB] Asz[nB] Jxx[nB] Iyy[nB] Izz[nB] E[nB] G[nB] p[nB]
-
-nR                                            % number of joints with reactions 
+% reaction data ...
+nR                                     % number of joints with reactions 
   J[1]    Rx[1]   Ry[1]   Rz[1]   Rxx[1]  Ryy[1]  Rzz[1]
     :        :       :       :        :       :       :       % 0:free, 1:fixed 
  J[nR]    Rx[nR]  Ry[nR]  Rz[nR]  Rxx[nR] Ryy[nR] Rzz[nR]
+
+% beam element data ...
+nB                                     % number of beam elements
+                                       % member numbers, loc'ns, and prop's
+M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jxx[1]  Iyy[1]  Izz[1]  E[1]  G[1]  p[1]
+  :      :      :      :       :       :       :       :       :     :     :     :
+M[nB] J1[nB] J2[nB] Ax[nB] Asy[nB] Asz[nB] Jxx[nB] Iyy[nB] Izz[nB] E[nB] G[nB] p[nB]
 
 shear                               % 1: include shear deformation;   0: don't 
 geom                                % 1: include geometric stiffness; 0: don't 
@@ -1050,6 +1050,8 @@ plot_file                           % plot file name
 exagg                               % exaggerate deformations 
 anlyz                               % 1: stiffness analysis; 0: data check only 
 
+% load data ...
+nL                                     % number of static load cases, up to 127
 % begin static load case 1 ---------------------------------------------------
 nF                                                    % number of loaded joints 
   J[1]    Fx[1]   Fy[1]   Fz[1]   Mxx[1]  Myy[1]  Mzz[1]
@@ -1107,6 +1109,7 @@ nD                             % number of joints with prescribed displacements
 % repeat the static load data nL times ... up to 127 static load cases
 
 
+% dynamic analysis data ...
 nM                                             %       number of desired modes 
 Mmethod                                        % 1: Subspace Jacobi, 2: Stodola
 lump                                           % 0: consistent mass, 1: lumped 
@@ -1123,10 +1126,12 @@ nI                          % number of joints with extra joint mass or inertia
    :       :        :       :       :                      % global coordinates 
  J[nI] JMs[nI]  JMx[nI] JMy[nI] JMz[nI]
 
+% graphical animation data ...
 nA                                    % number of modes to be animated 
  anim[0] ... anim[nA] % list of modes to be animated, sorted by increasing freq. 
 pan                                         % 1: pan during animation; 0: don't
 
+% matrix condensation data ...
 Cmethod % matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
 nC                                                % number of condensed joints
  J[1]  cx[1]  cy[1]  cz[1]   cxx[1]  cyy[1] czz[1]
@@ -1245,9 +1250,9 @@ nC                                                % number of condensed joints
 <hr>
 <h4>REFERENCES </h4>
 
-This software was developed using methods presented in the following texts,
-and the texts by 
-<a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/qid=1036162662/sr=1-4/ref=sr_1_4/002-7358683-1549619?v=glance">A. Kassimali</a> and <a href="http://www.amazon.com/exec/obidos/ASIN/0486649482/qid=1003514977/sr=1-1/ref=sr_1_8_1/002-2386037-4350467">J.S. Przemieniecki</a> in particular.  
+This software was developed using methods described in the following texts.
+The two primary sources are the texts by 
+<a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/qid=1036162662/sr=1-4/ref=sr_1_4/002-7358683-1549619?v=glance">A. Kassimali</a> and <a href="http://www.amazon.com/exec/obidos/ASIN/0486649482/qid=1003514977/sr=1-1/ref=sr_1_8_1/002-2386037-4350467">J.S. Przemieniecki</a>.   
 
 <ol>
 <li> Howard G. Allen, 
@@ -1320,20 +1325,20 @@ ISBN: 0471376515
 <hr>
 <h4>SOURCE CODE</h4>
 
-The source code is written in AINSI C and is extensively commented. The source code includes functions for frame analysis, LDL' decomposition, LU decomposition, Newton-Raphson iteration, sub-space iteration, Stodola iteration, Sturm eigen-value check, static condensation, Guyan reduction, and dynamic condensation. 
+The source code is written in ANSI C and is extensively commented. The source code includes functions for frame analysis, LDL' decomposition, LU decomposition, Newton-Raphson iteration, sub-space iteration, Stodola iteration, Sturm eigen-value check, static condensation, Guyan reduction, and dynamic condensation. 
 
 <font face="courier" size="3">
 <pre>
-    file name      description                                               revision date
-    -----------    --------------------------------------------------------  -----------------
-    main.c          C source-code for main driver routines                 9 September 2008
-    frame3dd.c      C source-code for frame analysis                       9 September 2008
-    frame3dd_io.c   C source-code for input-output functions               9 September 2008
-    eig.c           C source-code for generalized eigenvalue analysis      7 November  2002
-    ldl_dcmp.c      C source-code for LDL' decomposition                  26 December  2001 
-    lu_dcmp.c       C source-code for LU decomposition                     5 May       1998
-    coordtrans.c    C source-code for coordinate transformation           14 March     2008
-    nrutil.c        C source-code for dynamic memory allocation            9 September 2008
+    file name      description                                               
+    -----------    --------------------------------------------------
+    main.c          C source-code for main driver routines
+    frame3dd.c      C source-code for frame analysis 
+    frame3dd_io.c   C source-code for input-output functions 
+    eig.c           C source-code for generalized eigenvalue analysis 
+    ldl_dcmp.c      C source-code for LDL' decomposition
+    lu_dcmp.c       C source-code for LU decomposition 
+    coordtrans.c    C source-code for coordinate transformation
+    nrutil.c        C source-code for dynamic memory allocation
 </pre>
 </font>
 <p>
@@ -1353,7 +1358,7 @@ and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
 <b>Author</b>
 <font face="courier" size="3">
 <pre>
-    Henri P. Gavin 
+    Henri P. Gavin, P.E., Ph.D. 
     Department of Civil and Environmental Engineering
     Duke University, Box 90287 
     Durham, NC  27708--0287 
@@ -1375,9 +1380,8 @@ and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
 <td width ="600">
 <font face="Verdana, Arial, sans-serif" size="1">
 <p align="justify">
-Frame3DD is
-is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License
+Frame3DD is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License
 (<a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>)
 as published by the
 <a href="http://www.fsf.org/">Free Software Foundation</a>,
@@ -1422,7 +1426,7 @@ http://www.sourceforge.net/projects/frame3dd/</a>
 
 <font face="Verdana, Arial, sans-serif" size="1" width="700">
 <br>updated: May 6 2003, Nov 8 2004, Nov 22 2004, Nov 29 2004, Dec 2 2004, Dec 10 2004, Dec 6 2006, Feb 22 2007, Mar 1 2007, Jun 6 2007, Dec 20 2007,
-Mar 14 2008, Sep 9 2008, Jan 1 2009
+Mar 14 2008, Sep 9 2008, Jan 4 2009
 </font> <br>
 <a href="http://thomer.com/vi/vi.html"><img src="img/vi_logo_by_urmas_reinsalu.png" border="0"></a>
 </body>

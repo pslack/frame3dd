@@ -8,22 +8,24 @@ ______________________________________________________________________
 
 EXAMPLE INPUT FILE:		COMMENTS:
 
-3	2	1		number of joints, members, load cases
-
 				joint data:
-1   0.0  0.0  0.0  0.0		joint no.   X-coord  Y-coord  Z-coord  radius
-2   6.0  0.0  0.0  0.0
-3   6.0  0.0  4.0  0.0
-
-				member data:
-				mem.no. joint1 joint2  Ax Ay Az  J Iy Iz  E  G p
-1 1 2 10. 9. 9. 19.22 9.61 9.61  30e3 12e3 0
-2 2 3 10. 9. 9. 19.22 9.61 9.61  30e3 12e3 0
+3				number of joints
+ 1   0.0  0.0  0.0  0.0		joint no.   X-coord  Y-coord  Z-coord  radius
+ 2   6.0  0.0  0.0  0.0
+ 3   6.0  0.0  4.0  0.0
 
 				restraint data:
 1				number of restrained joints
  1	1 1 1 1 1 1		joint no.  X Y Z  XX YY ZZ  restraints
 				( 0: free   1: fixed )
+
+
+				member data:
+2				number of beam elements
+				mem.no. joint1 joint2  Ax Ay Az  J Iy Iz  E  G p
+ 1 1 2 10. 9. 9. 19.22 9.61 9.61  30e3 12e3 0
+ 2 2 3 10. 9. 9. 19.22 9.61 9.61  30e3 12e3 0
+
 
 0				0: neglect shear deformations,  1: include 
 0				0: neglect geometric stiffness, 1: include 
@@ -36,15 +38,15 @@ frm2.ann			frame data annotation file name
 1				0: check data only, 1: perform analysis
 
 				load data:
-2				number of concentrated joint loads
- 2   0  0   0.8  0  0  0	joint no. X-load Y-load Z-load X-mom Y-mom Z-mom
- 3   0 -0.5 0    0  0  0
+1				number of static load cases
+ 2				number of concentrated joint loads
+  2   0  0   0.8  0  0  0	joint no. X-load Y-load Z-load X-mom Y-mom Z-mom
+  3   0 -0.5 0    0  0  0
 
-0				number of distributed loads
-0				number of interior point loads
-0				number of temperature loads
-0				number of prescribed displacements
+ 0				number of distributed loads
+ 0				number of interior point loads
+ 0				number of temperature loads
+ 0				number of prescribed displacements
 
 0                               number of desired vibratory modes
-
 

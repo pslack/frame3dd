@@ -1,9 +1,6 @@
 Example E: a three dimensional structure showing lateral-torsional dynamic modes
 
 12			% number of joints
-15			% number of members
-1			% number of static load cases
-
 %.joint  x       y       z       r
 
 
@@ -20,6 +17,13 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
   11    72      72    -120       0
   12    72      36       0       0
 
+3                               % number of joints with reactions
+%.J     x    y    z   xx   yy   zz          1=fixed, 0=free
+  9     1    1    1    1    1    1
+ 10     1    1    1    1    1    1
+ 11     1    1    1    1    1    1
+
+15			% number of members
 %.m     j1     j2      Ax      Asy   Asz      Jxx    Iyy    Izz    E      G     p
 
   1      1      2      1100    800   800      1000    500    500   999000 11100 0
@@ -38,11 +42,6 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
  14     12      6      1100    800   800      1000    500    500   999000 11100 0
  15     12      8      1100    800   800      1000    500    500   999000 11100 0
   
-3                               % number of joints with reactions
-%.J     x    y    z   xx   yy   zz          1=fixed, 0=free
-  9     1    1    1    1    1    1
- 10     1    1    1    1    1    1
- 11     1    1    1    1    1    1
 
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
@@ -52,6 +51,7 @@ exE.plt                         % plot file name
 1                               % 1: stiffness analysis, 0: data check only
 
 
+1			% number of static load cases
 				% Begin Static Load Case 1 of 1
 1                               % number of loaded joints
 %..J       Fx Fy   Fz   Mxx  Myy  Mzz
@@ -105,14 +105,14 @@ exE.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20090101               http://frame3dd.sf.net/
+FRAME3DD version: 20090104               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example E: a three dimensional structure showing lateral-torsional dynamic modes 
-Thu Jan  1 16:07:27 2009
+Sun Jan  4 12:06:27 2009
 ________________________________________________________________________________
 12 JOINTS;    15 MEMBERS;    1 LOAD CASES;
 3 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 

@@ -1,17 +1,19 @@
 Template for input file format for FRAME program
 
+% joint data ...
 nJ						% number of joints
-nM						% number of members
-nL						% number of static load cases
-
   J[1]	x[1]	y[1]	z[1]	r[1]	
   :	:	:	:	:		 % joint numbers and coordinates
   J[nJ]	x[nJ]	y[nJ]	z[nJ]	r[1]
+
+% beam element property data ...
+nB						% number of beam elements 
 					    % member numbers, loc'ns, and prop's
   M[1]   J1[1]  J2[1]   Ax[1]  Asy[1]  Asz[1]  Jp[1]  Iy[1]  Iz[1]   E[1]  G[1]  p[1]
   :      :      :       :       :       :       :      :      :       :     :     :
   M[nM]  J1[nM] J2[nM]  Ax[nM] Asy[nM] Asz[nM] Jp[nM] Iy[nM] Iz[nM]  E[nM] G[nM] p[nM]
 
+% reaction data ...
 nR					       % number of joints with reactions
   J[1]	Rx[1]	Ry[1]	Rz[1]	Rxx[1]	Ryy[1]	Rzz[1]
   :	:	:	:	:	:	:	       % 0:free, 1:fixed
@@ -23,6 +25,8 @@ plot_file					     % mesh annotation file name
 exagg						  % exaggerate mesh deformations
 anlyz				     % 1: stiffness analysis, 0: data check only
 
+% load data ...
+nL						% number of static load cases
 % Begin Static Load Case 1
 nF						       % number of loaded joints
   J[1]	Fx[1]	Fy[1]	Fz[1]	Mxx[1]	Myy[1]	Mzz[1]
@@ -79,6 +83,7 @@ nD		         % number of joints with prescribed displacements nD<=nR
 
 % repeat up to 128 static load cases
 
+% dynamic analysis data ...
 modes					              % number of desired modes
 Mmethod                                        % 1: Subspace Jacobi, 2: Stodola
 lump					        % 0: consistent mass, 1: lumped
@@ -95,10 +100,12 @@ nI                          % number of joints with extra joint mass or inertia
    :       :        :       :       :                      % global coordinates 
  J[nI] JMs[nI]  JMx[nI] JMy[nI] JMz[nI]
 
+% animation data ...
 nA						% number of modes to be animated
  anim[0] ... anim[nA] % list of modes to be animated, sorted by increasing freq 
 pan                                         % 1: pan during animation; 0: don't
 
+% matrix condensation data ...
 Cmethod % matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
 nC                                                % number of condensed joints
  J[1]  cx[1]  cy[1]  cz[1]   cxx[1]  cyy[1] czz[1]

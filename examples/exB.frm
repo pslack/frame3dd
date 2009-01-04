@@ -1,9 +1,6 @@
 Example B: a pyramid-shaped frame --- static and dynamic analysis
 
-5			% number of joints 
-4			% number of members			
-3			% number of static load cases
-
+5				% number of joints 
 %.joint  x       y       z       r
 
 1	0.0	0.0	100.0	0.0
@@ -12,13 +9,6 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
 4	 120.0	 90.0	0.0	0.0	
 5	-120.0	 90.0	0.0	0.0	
 
-%.m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz         E      G   p
-
-1 1 2	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
-2 1 3	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
-3 1 4	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
-4 1 5	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
-
 4                               % number of joints with reactions
 %.J     x y z xx yy zz          1=fixed, 0=free
 
@@ -26,6 +16,15 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
   3	1 1 1 1 1 1
   4	1 1 1 1 1 1
   5	1 1 1 1 1 1
+
+4				% number of members			
+%.m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz         E      G   p
+
+1 1 2	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
+2 1 3	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
+3 1 4	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
+4 1 5	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
+
  
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
@@ -34,6 +33,7 @@ exB.plt                         % plot file name
 10.0                            % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
 
+3				% number of static load cases
 				% Begin Static Load Case 1 of 3
 1				% number of loaded joints
 %.J      Fx       Fy     Fz      Mxx     Myy     Mzz
@@ -91,14 +91,14 @@ exB.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20090101               http://frame3dd.sf.net/
+FRAME3DD version: 20090104               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis 
-Thu Jan  1 16:06:40 2009
+Sun Jan  4 12:02:17 2009
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;
 4 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 

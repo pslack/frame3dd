@@ -1,9 +1,6 @@
 Example A: linear static analysis of a 2D truss with support settlement
 
 12				% number of joints 
-21				% number of members 
- 2				% number of static load cases
-
 %joint  x       y       z       r
 
  1	0.0	0.0	0.0	0.0
@@ -19,6 +16,23 @@ Example A: linear static analysis of a 2D truss with support settlement
 11	48.0	12.0	0.0	0.0
 12	60.0	12.0	0.0	0.0
 
+12				% number of joints with reactions
+%J     x y z xx yy zz		1=fixed, 0=free
+
+  1	1 1 1  1  1  0
+  2	0 0 1  1  1  0
+  3	0 0 1  1  1  0 
+  4	0 0 1  1  1  0
+  5	0 0 1  1  1  0
+  6	0 0 1  1  1  0
+  7	0 1 1  1  1  0
+  8	1 0 1  1  1  0
+  9	0 0 1  1  1  0
+ 10	0 0 1  1  1  0
+ 11	0 0 1  1  1  0
+ 12	0 0 1  1  1  0
+
+21				% number of members 
 %m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz          E     G   p
 
  1 1 2	30.0	1.0	1.0	1.0	1.0	0.01	10000.0 500.0  0
@@ -43,21 +57,6 @@ Example A: linear static analysis of a 2D truss with support settlement
 20 10 11 30.0	1.0	1.0	1.0	1.0	0.01	10000.0 500.0  0
 21 11 12 30.0	1.0	1.0	1.0	1.0	0.01	10000.0 500.0  0
 
-12				% number of joints with reactions
-%J     x y z xx yy zz		1=fixed, 0=free
-
-  1	1 1 1  1  1  0
-  2	0 0 1  1  1  0
-  3	0 0 1  1  1  0 
-  4	0 0 1  1  1  0
-  5	0 0 1  1  1  0
-  6	0 0 1  1  1  0
-  7	0 1 1  1  1  0
-  8	1 0 1  1  1  0
-  9	0 0 1  1  1  0
- 10	0 0 1  1  1  0
- 11	0 0 1  1  1  0
- 12	0 0 1  1  1  0
  
 0                               % 1: include shear deformation
 0                               % 1: include geometric stiffness
@@ -67,6 +66,7 @@ exA.plt	                        % plot file name
 1                               % 1: stiffness analysis, 0: data check only
 
 
+2				% number of static load cases
 				% Begin Static Load Case 1 of 2
 5				% number of loaded joints
 %J      Fx       Fy     Fz      Mxx     Myy     Mzz
@@ -114,14 +114,14 @@ exA.plt	                        % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20090101               http://frame3dd.sf.net/
+FRAME3DD version: 20090104               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example A: linear static analysis of a 2D truss with support settlement 
-Thu Jan  1 16:06:19 2009
+Sun Jan  4 12:01:31 2009
 ________________________________________________________________________________
 12 JOINTS;    21 MEMBERS;    2 LOAD CASES;
 12 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 

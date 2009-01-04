@@ -53,18 +53,12 @@ static void getline_no_comment(
 );
 
 /*------------------------------------------------------------------------------
-READ_INPUT_DATA  -  read material and geometry data, calc lengths	15dec97
+READ_JOINT_DATA  -  read joint location data				04jan09
 ------------------------------------------------------------------------------*/
-void read_input_data(
-	FILE *fp,
-	int nJ, int nB, vec3 *xyz,
-	float *r, double *L, double *Le,
-	int *J1, int *J2,
-	float *Ax, float *Asy, float *Asz,
-	float *J, float *Iy, float *Iz, float *E, float *G, float *p
+void read_joint_data(
+	FILE *fp, int nJ, vec3 *xyz, float *r
 ){
-
-	int	j1, j2, i, j;
+	int	i, j;
 
 	for (i=1;i<=nJ;i++) {		/* read joint coordinates	*/
 		fscanf(fp, "%d", &j );
@@ -76,6 +70,23 @@ void read_input_data(
 		fscanf(fp, "%lf %lf %lf %f", &xyz[j].x, &xyz[j].y, &xyz[j].z, &r[j]);
 		r[j] = fabs(r[j]);
 	}
+	return;
+}
+
+
+/*------------------------------------------------------------------------------
+READ_BEAM_DATA  -  read beam property data				04jan09
+------------------------------------------------------------------------------*/
+void read_beam_data(
+	FILE *fp, 
+	int nJ, int nB, vec3 *xyz, float *r, 
+	double *L, double *Le,
+	int *J1, int *J2,
+	float *Ax, float *Asy, float *Asz,
+	float *J, float *Iy, float *Iz, float *E, float *G, float *p
+){
+	int	j1, j2, i, j;
+
 	for (i=1;i<=nB;i++) {		/* read beam properties	*/
 		fscanf(fp, "%d", &j );
 		if ( j <= 0 || j > nB ) {
@@ -285,7 +296,7 @@ void read_reaction_data (
 	fscanf(fp,"%d", nR );	/* read restrained degrees of freedom */
 	printf(" number of joints with reactions ");
 	dots(20);
-	printf(" nR = %3d\n",*nR);
+	printf(" nR = %3d",*nR);
 	if ( *nR < 0 || *nR > DoF/6 ) {
 		fprintf(stderr,"  error: valid ranges for nR is 0 ... %d \n", DoF/6 );
 		exit(1);
@@ -320,13 +331,13 @@ void read_reaction_data (
 	*sumR=0;	for (i=1;i<=DoF;i++)	*sumR += R[i];
 	if ( *sumR < 4 ) {
 	    fprintf(stderr,"  warning:  Un-restrained structure\n");
-	    fprintf(stderr,"  %d imxyzed reactions.", *sumR );
+	    fprintf(stderr,"  %d imposed reactions.\n", *sumR );
 	    fprintf(stderr,"  At least 4 reactions are required to support static loads.\n");
 	    /*	exit(1); */
 	}
 	if ( *sumR >= DoF ) {
 	    fprintf(stderr,"  error in reaction data:  Fully restrained structure\n");
-	    fprintf(stderr,"  %d imxyzed reactions >= %d degrees of freedom\n",
+	    fprintf(stderr,"  %d imposed reactions >= %d degrees of freedom\n",
 								*sumR, DoF );
 	    exit(1);
 	}

@@ -1,9 +1,6 @@
 Example F: a seismically-isolated building model
 
 36		% number of joints 
-58		% number of members
-1		% number of static load cases
-
 %.joint     x       y   z         r
 
 1	 2000	-1500	0	150
@@ -50,6 +47,27 @@ Example F: a seismically-isolated building model
 36	-2000	 1500	5387	100
 
 
+14                              % number of joints with reactions
+%.J     x       y       z      xx      yy      zz          1=fixed, 0=free
+
+  1	1	0	1	0	0	1
+  2     1       0       0       0       0       0
+  3     1       0       0       0       0       0
+  4	1	0	1	0	0	1
+  5	1	0	1	0	0	1
+  7	1	0	1	0	0	1
+  8	1	0	1	0	0	1
+  9     1       0       0       0       0       0
+ 10     1       0       0       0       0       0
+ 11	1	0	1	0	0	1
+
+ 12     1       1       1       1       1       1
+ 13     1       1       1       1       1       1
+ 14     1       1       1       1       1       1
+ 15     1       1       1       1       1       1
+
+
+58		% number of members
 %.m j1  j2     Ax   Asy   Asz   Jxx         Iyy       Izz     E      G    p
 
 1    1  16   2592  1200   900  8.7160e4   10.108e6   1.502e6  199955 76906 0
@@ -116,25 +134,6 @@ Example F: a seismically-isolated building model
 57   9  14  17671  9000  9000   4.970e7    2.48e7    2.48e7   200e2  1.2e0 0
 58  10  15  17671  9000  9000   4.970e7    2.48e7    2.48e7   200e2  1.2e0 0
   
-14                              % number of joints with reactions
-%.J     x       y       z      xx      yy      zz          1=fixed, 0=free
-
-  1	1	0	1	0	0	1
-  2     1       0       0       0       0       0
-  3     1       0       0       0       0       0
-  4	1	0	1	0	0	1
-  5	1	0	1	0	0	1
-  7	1	0	1	0	0	1
-  8	1	0	1	0	0	1
-  9     1       0       0       0       0       0
- 10     1       0       0       0       0       0
- 11	1	0	1	0	0	1
-
- 12     1       1       1       1       1       1
- 13     1       1       1       1       1       1
- 14     1       1       1       1       1       1
- 15     1       1       1       1       1       1
-
 
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
@@ -144,6 +143,7 @@ exF.plt				% plot file name
 1                               % 1: stiffness analysis, 0: data check only
 
 
+1		% number of static load cases
 				% Begin Static Load Case 1 of 1
 25                              % number of loaded joints
 %..J    Fx        Fy         Fz     Mxx    Myy     Mzz
@@ -275,14 +275,14 @@ exF.plt				% plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20090101               http://frame3dd.sf.net/
+FRAME3DD version: 20090104               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example F: a seismically-isolated building model 
-Thu Jan  1 16:08:00 2009
+Sun Jan  4 12:07:25 2009
 ________________________________________________________________________________
 36 JOINTS;    58 MEMBERS;    1 LOAD CASES;
 14 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 

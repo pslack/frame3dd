@@ -170,14 +170,59 @@ int main(int argc, char *argv[]){
 	frame3dd_getline(fp, title, 256);
 	fprintf(stderr," ** %s ** \n\n", title );
 
-	fscanf(fp, "%d %d %d", &nJ, &nB, &nL );
-	printf(" number of joints ");     dots(35); printf(" nJ = %3d\n", nJ);
-	printf(" number of members ");    dots(34); printf(" nB = %3d\n", nB);
-	printf(" number of load cases "); dots(31); printf(" nL = %3d\n", nL);
+	fscanf(fp, "%d", &nJ );		/* number of joints	*/
+	printf(" number of joints "); dots(35); printf(" nJ = %3d",nJ);
+
+					/* allocate memory for joints ... */
+	xyz = (vec3 *)malloc(sizeof(vec3)*(1+nJ));	/* joint coordinates */
+	r   =  vector(1,nJ);		/* rigid radius around each joint */
+
+	read_joint_data ( fp, nJ, xyz, r );
+	printf("  ... complete\n");
+
+	DoF = 6*nJ;		/* total number of degrees of freedom	*/
+
+	R   = ivector(1,DoF);	/* reaction force at each degree of freedom */
+	read_reaction_data ( fp, DoF, nJ, &nR, R, &sumR );
+	printf("  ... complete\n");
+
+	fscanf(fp, "%d", &nB );		/* number of beam elements	*/
+	printf(" number of beam elements"); dots(29); printf(" nB = %3d",nB);
         if ( nJ > nB + 1) {
             fprintf(stderr,"warning: %d joints and %d members...", nJ, nB );
 	    fprintf(stderr," not enough members to connect all joints.\n");
         }
+
+				/* allocate memory for beams ... */
+	L   = dvector(1,nB);	/* length of each element		*/
+	Le  = dvector(1,nB);	/* effective length of each element	*/
+
+	J1  = ivector(1,nB);	/* joint #1 of each element		*/
+	J2  = ivector(1,nB);	/* joint #2 of each element		*/
+
+	Ax  =  vector(1,nB);	/* cross section area of each element	*/
+	Asy =  vector(1,nB);	/* shear area in local y direction 	*/
+	Asz =  vector(1,nB);	/* shear area in local z direction	*/
+	J   =  vector(1,nB);	/* torsional moment of inertia 		*/
+	Iy  =  vector(1,nB);	/* bending moment of inertia about y-axis */
+	Iz  =  vector(1,nB);	/* bending moment of inertia about z-axis */
+
+	E   =  vector(1,nB);	/* beam element Young's modulus		*/
+	G   =  vector(1,nB);	/* beam element shear modulus		*/
+	p   =  vector(1,nB);	/* member rotation angle about local x axis */
+
+	read_beam_data( fp, nJ, nB, xyz,r,
+			L, Le, J1, J2,
+        		Ax, Asy, Asz, J, Iy, Iz, E, G, p );
+	printf("  ... complete\n");
+
+	read_run_data (
+		fp, &shear, &geom, mesh_file, plot_file, &exagg, &anlyz
+	);
+
+	fscanf(fp, "%d", &nL );		/* number of load cases		*/
+	printf(" number of load cases "); dots(31); printf(" nL = %3d\n",nL);
+
         if ( nL < 1 ) {
             fprintf(stderr,"error: the number of load cases must be at least 1\n");
 	    exit(1);
@@ -186,36 +231,7 @@ int main(int argc, char *argv[]){
             fprintf(stderr,"error: maximum of %d load cases allowed\n", _NL_-1);
 	    exit(1);
         }
-
-	DoF = 6*nJ;		/* total number of degrees of freedom	*/
-
-				/* allocate memory ... */
-
-//	nF  = ivector(1,nL);	/* # loaded joints, each load case */
-//	nW  = ivector(1,nL);	/* # uniformly loaded members,  load case */
-//	nP  = ivector(1,nL);	/* # point loaded members, each load case */
-//	nT  = ivector(1,nL);	/* # members with temp changes, load case */
-
-	xyz = (vec3 *)malloc(sizeof(vec3)*(1+nJ));
-
-	r   =  vector(1,nJ);	/* rigid radius around each joint	*/
-	L   = dvector(1,nB);	/* length of each element		*/
-	Le  = dvector(1,nB);	/* effective length of each element	*/
-
-	J1  = ivector(1,nB);	/* joint #1 of each element		*/
-	J2  = ivector(1,nB);	/* joint #2 of each element		*/
-	R   = ivector(1,DoF);	/* reaction force at each degree of freedom */
-
-	Ax  =  vector(1,nB);	/* cross section area of each element	*/
-	Asy =  vector(1,nB);	/* shear area in local y direction 	*/
-	Asz =  vector(1,nB);	/* shear area in local z direction	*/
-	J   =  vector(1,nB);	/* torsional moment of inertia 		*/
-	Iy  =  vector(1,nB);	/* bending moment of inertia about y-axis */
-	Iz  =  vector(1,nB);	/* bending moment of inertia about z-axis */
-	E   =  vector(1,nB);	/* Young's modulus of elasticity	*/
-	G   =  vector(1,nB);	/* shear modulus of elasticity		*/
-	p   =  vector(1,nB);	/* member rotation angle about local x axis */
-
+					/* allocate memory for loads ... */
 	W   =  D3matrix(1,nL,1,nB,1,4); /* distributed load on each member */
 	P   =  D3matrix(1,nL,1,nB,1,5); /* internal point load each member */
 	T   =  D3matrix(1,nL,1,nB,1,8); /* internal temp change each member */
@@ -246,17 +262,6 @@ int main(int argc, char *argv[]){
 	q = ivector(1,DoF); 	/* vector of condensed degrees of freedom */
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
 
-	read_input_data(
-		fp, nJ, nB, xyz, r, L, Le, J1, J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p
-	);
-	printf("   input data complete\n");
-
-	read_reaction_data ( fp, DoF, nJ, &nR, R, &sumR );
-	printf("   reaction data complete\n");
-
-	read_run_data (
-		fp, &shear, &geom, mesh_file, plot_file, &exagg, &anlyz
-	);
 
 	read_and_assemble_loads (
 		fp, nJ, nB, nL, DoF, xyz, L, Le, J1, J2,
@@ -267,7 +272,8 @@ int main(int argc, char *argv[]){
 	for (i=1; i<=DoF; i++)
 		for (lc=1; lc<=nL; lc++)
 			Fo[lc][i] = Fo_temp[lc][i] + Fo_mech[lc][i];
-	printf("   load data complete\n");
+        printf("                                                     ");
+	printf(" load data ... complete\n");
 
 
 	read_mass_data (
@@ -275,11 +281,15 @@ int main(int argc, char *argv[]){
 		&total_mass, &struct_mass, &nM, &Mmethod,
 		&lump, mode_file, &tol, &shift, anim, &pan
 	);
-	printf("   mass data complete\n");
+        printf("                                                     ");
+	printf(" mass data ... complete\n");
 
 	read_condensation_data ( fp, nJ, nM, &nC, &Cdof, &Cmethod, q, m );
 
-	printf("   matrix condensation data complete\n");
+	if (nC>0) {
+        	printf("                                      ");
+		printf(" matrix condensation data ... complete\n");
+	}
 
 	fclose(fp);
 	fp = fopen(IO_file, "a");     /* output appends input */

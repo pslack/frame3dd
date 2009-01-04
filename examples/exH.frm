@@ -1,8 +1,6 @@
 Example H: a pedestrian ramp
 
 148                     % number of joints 
-295			% number of members
-1			% number of static load cases
 
 % CENTER BAY
 
@@ -169,6 +167,50 @@ Example H: a pedestrian ramp
 146	 -181	240	520	0
 147	 -181	240	560	0
 148	  181	240	580	0
+
+36                              % number of joints with reactions
+%.J     x  y  z  xx yy zz       1=fixed, 0=free
+
+ 1	1  1  1  1  1  1
+ 2	1  1  1  1  1  1
+ 3	1  1  1  1  1  1
+ 4	1  1  1  1  1  1
+ 5	1  1  1  1  1  1
+ 6	1  1  1  1  1  1
+51	1  1  1  1  1  1
+52	1  1  1  1  1  1
+53	1  1  1  1  1  1
+54	1  1  1  1  1  1
+55	1  1  1  1  1  1
+56	1  1  1  1  1  1
+101	1  1  1  1  1  1
+102	1  1  1  1  1  1
+103	1  1  1  1  1  1
+104	1  1  1  1  1  1
+105	1  1  1  1  1  1
+106	1  1  1  1  1  1
+
+ 27     1  1  1  0  0  0	% pinned to stadium
+ 77     1  1  1  0  0  0
+127     1  1  1  0  0  0
+ 23     1  1  1  0  0  0
+ 73     1  1  1  0  0  0
+123     1  1  1  0  0  0
+ 19     1  1  1  0  0  0
+ 69     1  1  1  0  0  0
+119     1  1  1  0  0  0
+ 15     1  1  1  0  0  0
+ 65     1  1  1  0  0  0
+115     1  1  1  0  0  0
+ 11     1  1  1  0  0  0
+ 61     1  1  1  0  0  0
+111     1  1  1  0  0  0
+  7     1  1  1  0  0  0
+ 57     1  1  1  0  0  0
+107     1  1  1  0  0  0
+
+
+295			% number of members
 
 % CENTER-BAY six main columns		tube 14 x 14 x 1/2
 
@@ -511,47 +553,6 @@ Example H: a pedestrian ramp
 295    48 148	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  	1151 0
 
 
-36                              % number of joints with reactions
-%.J     x  y  z  xx yy zz       1=fixed, 0=free
-
- 1	1  1  1  1  1  1
- 2	1  1  1  1  1  1
- 3	1  1  1  1  1  1
- 4	1  1  1  1  1  1
- 5	1  1  1  1  1  1
- 6	1  1  1  1  1  1
-51	1  1  1  1  1  1
-52	1  1  1  1  1  1
-53	1  1  1  1  1  1
-54	1  1  1  1  1  1
-55	1  1  1  1  1  1
-56	1  1  1  1  1  1
-101	1  1  1  1  1  1
-102	1  1  1  1  1  1
-103	1  1  1  1  1  1
-104	1  1  1  1  1  1
-105	1  1  1  1  1  1
-106	1  1  1  1  1  1
-
- 27     1  1  1  0  0  0	% pinned to stadium
- 77     1  1  1  0  0  0
-127     1  1  1  0  0  0
- 23     1  1  1  0  0  0
- 73     1  1  1  0  0  0
-123     1  1  1  0  0  0
- 19     1  1  1  0  0  0
- 69     1  1  1  0  0  0
-119     1  1  1  0  0  0
- 15     1  1  1  0  0  0
- 65     1  1  1  0  0  0
-115     1  1  1  0  0  0
- 11     1  1  1  0  0  0
- 61     1  1  1  0  0  0
-111     1  1  1  0  0  0
-  7     1  1  1  0  0  0
- 57     1  1  1  0  0  0
-107     1  1  1  0  0  0
-
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
 /tmp/exH-msh                    % mesh data file name
@@ -559,6 +560,7 @@ exH.plt                         % mesh annotation file name
 100.0                           % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
 
+1			% number of static load cases
 				% Begin Static Load Case 1 of 1
 0                               % number of loaded joints
 
@@ -1063,14 +1065,14 @@ exH.plt                         % mesh annotation file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20090101               http://frame3dd.sf.net/
+FRAME3DD version: 20090104               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example H: a pedestrian ramp 
-Thu Jan  1 16:08:31 2009
+Sun Jan  4 12:09:24 2009
 ________________________________________________________________________________
 148 JOINTS;    295 MEMBERS;    1 LOAD CASES;
 36 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 

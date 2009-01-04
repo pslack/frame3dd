@@ -1,8 +1,6 @@
 Example C: a tetrahedral frame - static and dynamic analysis 
 
 18                      % number of joints 
-48 			% number of members
- 1                      % number of static load cases
 
 %.joint  x       y       z       r
 
@@ -25,6 +23,14 @@ Example C: a tetrahedral frame - static and dynamic analysis
 17	500.0	100.0	0.0	0.0
 18	500.0	50.0	100.0	0.0
 
+4                               % number of joints with reactions
+%.J     x y z xx yy zz          1=fixed, 0=free
+ 1	1 1 1  0  0  0
+ 3	1 1 1  0  0  0
+ 16	1 1 1  0  0  0
+ 18	1 1 1  0  0  0
+
+48 			% number of members
 %.m j1 j2        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
 
 1   1  2	10.0	8.0	6.0	50.0	100.0	200.0	29000  	1150 0
@@ -76,13 +82,6 @@ Example C: a tetrahedral frame - static and dynamic analysis
 47  17 18	10.0	7.0	5.0	50.0	100.0	200.0	29000	1150 0
 48  16 18	20.0	8.0	5.0	50.0	100.0	200.0	29000	1150 0
 
-4                               % number of joints with reactions
-%.J     x y z xx yy zz          1=fixed, 0=free
- 1	1 1 1  0  0  0
- 3	1 1 1  0  0  0
- 16	1 1 1  0  0  0
- 18	1 1 1  0  0  0
-
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
 /tmp/exC-msh                    % mesh data file name
@@ -90,6 +89,7 @@ exC.plt                         % plot file name
 80.0                            % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
 
+ 1                      % number of static load cases
 				% Begin Static Load Case 1 of 1
 0                               % number of loaded joints
 
@@ -172,14 +172,14 @@ exC.plt                         % plot file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20090101               http://frame3dd.sf.net/
+FRAME3DD version: 20090104               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example C: a tetrahedral frame - static and dynamic analysis  
-Thu Jan  1 16:06:56 2009
+Sun Jan  4 12:02:54 2009
 ________________________________________________________________________________
 18 JOINTS;    48 MEMBERS;    1 LOAD CASES;
 4 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 

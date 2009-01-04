@@ -1,9 +1,6 @@
 Example J: tesseract 
 
 16			% number of joints
-32			% number of members
-1			% number of static load cases
-
 % joint    x         y         z         r
  
  1       100       100      -100         0
@@ -26,6 +23,9 @@ Example J: tesseract
 15       -70       -70        70         0         
 16        70       -70        70         0
 
+0			% number of joints with reactions
+
+32			% number of members
 % m    j1 j2   Ax  Asy   Asz   Jxx    Iyy   Izz       E      G p
 
  1      1  2  100  60    60    500   1000  1000   10000   7000 0
@@ -68,8 +68,6 @@ Example J: tesseract
 31      7 15  100  60    60    500   1000  1000   10000   7000 0
 32      8 16  100  60    60    500   1000  1000   10000   7000 0
 
-0                               % number of joints with reactions
-
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
 /tmp/exJ-msh                    % mesh data file name
@@ -77,6 +75,7 @@ exJ.plt                         % mesh annotation file name
 5.0                             % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
 
+1			% number of static load cases
 				% Begin Static Load Case 1 of 1
 0                               % number of loaded joints
 0                               % number of distributed loads
@@ -133,18 +132,17 @@ exJ.plt                         % mesh annotation file name
 
 
 ________________________________________________________________________________
-FRAME3DD version: 20090101               http://frame3dd.sf.net/
+FRAME3DD version: 20090104               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example J: tesseract  
-Thu Jan  1 11:09:21 2009
+Sun Jan  4 12:11:11 2009
 ________________________________________________________________________________
 16 JOINTS;    32 MEMBERS;    1 LOAD CASES;
-0 FIXED JOINTS;   -1075713160 PRESCRIBED DISPLACEMENTS;
-For 2D problems, the Y-axis is vertical. 
+0 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S
