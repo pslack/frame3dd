@@ -1,8 +1,14 @@
 Import('env')
 
 if env.get('HAVE_CPPUNIT'):
+	print "HAVE CPPUNIT"
 
 	test_env = env.Clone()
+	test_env.Append(
+		LIBS=env["CPPUNIT_LIBS"]
+		,LIBPATH=env["CPPUNIT_LIBPATH"]
+		,CPPPATH=env["CPPUNIT_CPPPATH"]
+	)
 
 	test_env.Append(
 		LIBS = ['microstranparser']

@@ -141,18 +141,13 @@ def CheckCppUnitConfig(context):
 	context.Message("Checking for cppunit-config... ")
 	if context.env.WhereIs(cppunit_config_command[0]):
 		res = 1	
-		context.env.ParseConfig(cppunit_config_command + ["--libs","--cflags"])
-
+		env1 = context.env.Clone()
+		env1.ParseConfig(cppunit_config_command + ["--libs","--cflags"])
+		context.env["CPPUNIT_LIBS"] = env1.get("LIBS")
+		context.env["CPPUNIT_LIBPATH"] = env1.get("LIBPATH")
+		context.env["CPPUNIT_CPPPATH"] = env1.get("CPPPATH")
 	context.Result(res)
 	return res
-
-def CheckCppUnit(context):
-	envtemp = conf.env.Copy()
-	conf.env.Parseconfig
-	
-		
-	context.Result(1)
-	return 1
 
 conf = Configure(env
 	, custom_tests = { 
