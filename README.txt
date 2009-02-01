@@ -67,7 +67,7 @@ mailto:Henri.Gavin@Duke.edu - tel: 919-660-5201 - fax: 919-660-5219
 
 Packaging of FRAME3DD for distribution on Linux and Windows,
 as well as implementation of the Microstran file parsers
-is by John Pye, 2007.
+is by John Pye, 2007-2009.
 
 John Pye
 Department of Engineering

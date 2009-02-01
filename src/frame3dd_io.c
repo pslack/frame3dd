@@ -6,17 +6,17 @@
  http://www.duke.edu/~hpgavin/frame/
  ---------------------------------------------------------------------------
  Copyright (C) 1992-2009  Henri P. Gavin
- 
+
  FRAME3DD is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  FRAME3DD is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//**
@@ -63,11 +63,12 @@ void read_joint_data(
 	for (i=1;i<=nJ;i++) {		/* read joint coordinates	*/
 		fscanf(fp, "%d", &j );
 		if ( j <= 0 || j > nJ ) {
-		    fprintf(stderr,"  error in joint coordinate data: joint number out of range  ");
-		    fprintf(stderr,"  Joint: %d  \n", j);
+		    fprintf(stderr,"\nERROR: in joint coordinate data, joint number out of range\n");
+		    fprintf(stderr,"(joint id is %d <= 0 or > %d)\n", j, nJ);
 		    exit(1);
 		}
 		fscanf(fp, "%lf %lf %lf %f", &xyz[j].x, &xyz[j].y, &xyz[j].z, &r[j]);
+		/* fprintf(stderr,"\nj = %d, pos = (%lf, %lf, %lf), r = %f", j, xyz[j].x, xyz[j].y, xyz[j].z, r[j]); */
 		r[j] = fabs(r[j]);
 	}
 	return;
@@ -78,8 +79,8 @@ void read_joint_data(
 READ_BEAM_DATA  -  read beam property data				04jan09
 ------------------------------------------------------------------------------*/
 void read_beam_data(
-	FILE *fp, 
-	int nJ, int nB, vec3 *xyz, float *r, 
+	FILE *fp,
+	int nJ, int nB, vec3 *xyz, float *r,
 	double *L, double *Le,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz,
@@ -227,17 +228,37 @@ int     lim
     return;
 }
 
+/*----------------------------------------------------------------------------
+TEMP_FILE_LOCATION
+return platform-specific temp file locations -- John Pye, 2009
+----------------------------------------------------------------------------*/
+void temp_file_location(const char *fname, char fullpath[], const int len){
+#ifdef WIN32
+	char *tmp;
+	tmp = getenv("TEMP");
+	const char sep = '\\';
+#else
+	const char *tmp = "/tmp";
+	const char sep = '/';
+#endif
+	int res;
+	res = snprintf(fullpath,len,"%s%c%s",tmp,sep,fname);
+	if(res > len){
+		fprintf(stderr,"ERROR: unable to construct temp filname: overflow\n");
+		exit(1);
+	}
+}
 
 /*-----------------------------------------------------------------------------
 PARSE_INPUT                                                             7may03
  remove comments from the input file, and write a 'clean' input file
 -----------------------------------------------------------------------------*/
-void parse_input(FILE *fp){
+void parse_input(FILE *fp, const char *tpath){
 	FILE	*fpc;		/* cleaned inout/output file pointer	*/
 	char	line[256];
 
-	if ((fpc = fopen ("/tmp/frame3dd.cln", "w")) == NULL) {
-		fprintf (stderr," error: cannot open file '/tmp/frame.cln'\n");
+	if ((fpc = fopen (tpath, "w")) == NULL) {
+		fprintf (stderr,"ERROR: cannot open file '%s'\n",tpath);
 		exit(1);
 	}
 
@@ -362,7 +383,7 @@ void read_and_assemble_loads(
 		int *R,
 		int shear,
 		int *nF, int *nW, int *nP, int *nT, int *nD,
-		double **Q, 
+		double **Q,
 		double **F_mech, double **F_temp,
 		float ***W, float ***P, float ***T,
 		float **Dp,
@@ -1117,7 +1138,7 @@ void write_static_csv(
         (void) time(&now);
 
 	i=0;
-	j=0; 
+	j=0;
 	while (i<128) {
 		IOfilename[j] = argv[1][i];
 		if ( IOfilename[j] == '+' ||
@@ -1155,8 +1176,8 @@ void write_static_csv(
 	 fprintf(fpcsv," http://www.fsf.org/copyleft/gpl.html\"\n");
 	 fprintf(fpcsv,"\" %s \"\n",title);
 	 fprintf(fpcsv,"\" %s \"\n", ctime(&now) );
- 
-	 fprintf(fpcsv,"\" .CSV formatted results of Frame3DD analysis \"\n"); 
+
+	 fprintf(fpcsv,"\" .CSV formatted results of Frame3DD analysis \"\n");
 	 fprintf(fpcsv,"\n , Load Case , Displacements , End Forces , Reactions \n");
 	 for (i = 1; i <= nL; i++) {
 	 	fprintf(fpcsv," First Row , %d , %d , %d , %d  \n",
@@ -1164,7 +1185,7 @@ void write_static_csv(
 			15+(i-1)*(nJ*2+nB*2+10) + 2*nL,
 			17+(i-1)*(nJ*2+nB*2+10) + 2*nL+ nJ,
 			19+(i-1)*(nJ*2+nB*2+10) + 2*nL+ nJ + 2*nB );
-	 	fprintf(fpcsv," Last Row , %d , %d , %d , %d  \n", 
+	 	fprintf(fpcsv," Last Row , %d , %d , %d , %d  \n",
 			i,
 			15+(i-1)*(nJ*2+nB*2+10) + 2*nL + nJ - 1,
 			17+(i-1)*(nJ*2+nB*2+10) + 2*nL + nJ + 2*nB - 1,
@@ -1249,7 +1270,7 @@ save joint displacements and beam end forces in an m-file
 this function interacts with frame_3dd.m, an m-file interface to frame3dd
 ------------------------------------------------------------------------------*/
 void write_static_mfile (
-		char *argv[], char *title, 
+		char *argv[], char *title,
 		int nJ, int nB, int nL, int lc, int DoF,
 		int *J1, int *J2,
 		double *F, double *D, int *R, double **Q,
@@ -1258,13 +1279,13 @@ void write_static_mfile (
 	FILE	*fpm;
 	int	i,j,n;
 	char	*wa;
-	char	IOfilename[128]; 
+	char	IOfilename[128];
         time_t  now;            /* modern time variable type    (DJGPP) */
 
         (void) time(&now);
 
 	i=0;
-	j=0; 
+	j=0;
 	while (i<128) {
 		IOfilename[j] = argv[1][i];
 		if ( IOfilename[j] == '+' ||
@@ -1300,7 +1321,7 @@ void write_static_mfile (
 	 fprintf(fpm," http://www.fsf.org/copyleft/gpl.html\n");
 	 fprintf(fpm,"%% %s\n",title);
 	 fprintf(fpm, "%% %s", ctime(&now) );
- 
+
 	 fprintf(fpm,"%% m-file formatted results of frame3dd analysis\n");
 	 fprintf(fpm,"%% to be read by frame_3dd.m\n");
 	}

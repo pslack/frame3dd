@@ -6,17 +6,17 @@
  http://www.duke.edu/~hpgavin/frame/
  ---------------------------------------------------------------------------
  Copyright (C) 1992-2009  Henri P. Gavin
- 
+
  FRAME3DD is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  FRAME3DD is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//**
@@ -37,8 +37,14 @@
 void frame3dd_getline( FILE *fp, char *s, int lim );
 
 
-/* re-write input file without comments or commas */
-void parse_input(FILE *fp);
+/**
+	Re-write input file without comments or commas
+	and output to file with path tpath
+
+	@param fp input file pointer
+	@param tpath output clean file path (temp file)
+*/
+void parse_input(FILE *fp, const char *tpath);
 
 
 /**
@@ -69,7 +75,7 @@ void read_beam_data (
 );
 
 
-/** 
+/**
 	Read data controlling certain aspects of the analysis
 */
 void read_run_data (
@@ -140,7 +146,7 @@ void read_mass_data(
 	int *nM,	/**< number of modes to find			*/
 	int *Mmethod, 	/**< modal analysis method			*/
 	int *lump,	/**< 1: use lumped mass matrix, 0: consistent mass */
-	char modefile[], /**< filename for mode shape data for plotting	*/	
+	char modefile[], /**< filename for mode shape data for plotting	*/
 	double *tol,	/**< convergence tolerance for mode shapes	*/
 	double *shift,	/**< frequency shift for unrestrained frames	*/
 	int *anim,	/**< list of modes to be graphically animated	*/
@@ -167,8 +173,8 @@ void read_condensation_data(
 */
 void write_input_data(
 	FILE *fp,	/**< input data file pointer			*/
-	char *title, int nJ, int nB,  int nL, 
-	int *nD, int nR, 
+	char *title, int nJ, int nB,  int nL,
+	int *nD, int nR,
 	int *nF, int *nW, int *nP, int *nT,
 	vec3 *xyz, float *r,
 	int *J1, int *J2,
@@ -187,10 +193,10 @@ void write_input_data(
 */
 void write_static_results(
 	FILE *fp,
-	int nJ, int nB, int nL, int lc, int DoF, 
-	int *J1, int *J2, 
+	int nJ, int nB, int nL, int lc, int DoF,
+	int *J1, int *J2,
 	double *F, double *D, int *R, double **Q,
-	double err, int ok 
+	double err, int ok
 );
 
 
@@ -199,17 +205,17 @@ void write_static_results(
 */
 void write_static_csv(
 	char *argv[], char *title,
-	int nJ, int nB, int nL, int lc, int DoF, 
-	int *J1, int *J2, 
+	int nJ, int nB, int nL, int lc, int DoF,
+	int *J1, int *J2,
 	double *F, double *D, int *R, double **Q,
-	double err, int ok 
+	double err, int ok
 );
 
 
 /**
 	save joint displacements and member end forces in an m-file	9sep08
 */
-void write_static_mfile ( 
+void write_static_mfile (
 	char *argv[], char *title,
 	int nJ, int nB, int nL, int lc, int DoF,
 	int *J1, int *J2,
@@ -222,24 +228,24 @@ void write_static_mfile (
 	save modal frequencies and mode shapes			16aug01
 */
 void write_modal_results(
-	FILE *fp, 
-	int nJ, int nB, int nI, int DoF, 
-	double **M, double *f, double **V, 
-	double total_mass, double struct_mass, 
-	int iter, int sumR, int nM, 
-	double shift, int lump, double tol, int ok 
+	FILE *fp,
+	int nJ, int nB, int nI, int DoF,
+	double **M, double *f, double **V,
+	double total_mass, double struct_mass,
+	int iter, int sumR, int nM,
+	double shift, int lump, double tol, int ok
 );
 
 
-/**	
+/**
 	create mesh data of deformed and undeformed mesh, use gnuplot	22feb99
 	useful gnuplot options: set noxtics noytics noztics noborder view nokey
 */
 void static_mesh(
-	char IO_file[], char meshfile[], char plotfile[], 
-	char *title, int nJ, int nB, int nL, int lc, int DoF, 
-	vec3 *xyz, double *L, 
-	int *J1, int *J, float *p, double *D, 
+	char IO_file[], char meshfile[], char plotfile[],
+	char *title, int nJ, int nB, int nL, int lc, int DoF,
+	vec3 *xyz, double *L,
+	int *J1, int *J, float *p, double *D,
 	double exagg, int anlyz
 );
 
@@ -278,7 +284,7 @@ void animate(
 
 /**
 	computes cubic deflection functions from beam end deflections
-	and beam end rotations.  Saves deflected shapes to a file. 
+	and beam end rotations.  Saves deflected shapes to a file.
 	These bent shapes are exact for mode-shapes, and for frames
 	loaded at their joints.
 */
@@ -299,6 +305,14 @@ void bent_beam(
 */
 int get_file_ext( char *filename, char *ext );
 
+/**
+	Return location for temporary 'clean' file
+
+	@param fname name of the file, excluding directory.
+	@param fullpath (returned) full path to temporary file.
+	@param len available length for string being returned.
+*/
+void temp_file_location(const char *fname, char fullpath[], const int len);
 
 
 /** print a set of dots (periods) */

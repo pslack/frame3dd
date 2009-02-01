@@ -6,7 +6,7 @@
  http://www.duke.edu/~hpgavin/frame/
  ---------------------------------------------------------------------------
  Copyright (C) 1992-2009  Henri P. Gavin
- 
+
     FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -46,7 +46,7 @@ For compilation/installation, see README.txt.
 #include <stdlib.h>
 #include <string.h>
 
-#include "common.h" 
+#include "common.h"
 #include "frame3dd.h"
 #include "frame3dd_io.h"
 #include "eig.h"
@@ -55,11 +55,13 @@ For compilation/installation, see README.txt.
 
 int main(int argc, char *argv[]){
 
-	char	IO_file[96],	/* the input/output filename		*/
+#define FILENMAX 96
+
+	char IO_file[FILENMAX],	/* the input/output filename		*/
 		title[256],	/* the title of the analysis		*/
-		mesh_file[96],	/* frame mesh data filename		*/
-		plot_file[96],	/* frame mesh plot filename		*/
-		mode_file[96];	/* mode-shape mesh data filename	*/
+		mesh_file[FILENMAX],	/* frame mesh data filename		*/
+		plot_file[FILENMAX],	/* frame mesh plot filename		*/
+		mode_file[FILENMAX];	/* mode-shape mesh data filename	*/
 
 	FILE	*fp;		/* input/output file pointer		*/
 
@@ -151,19 +153,23 @@ int main(int argc, char *argv[]){
 	} else strcpy( IO_file , argv[1] );
 
 	if ((fp = fopen (IO_file, "r")) == NULL) {	/* open input file */
-		fprintf (stderr," error: cannot open file '%s'\n", IO_file);
+		fprintf (stderr,"\nERROR: cannot open file '%s'\n", IO_file);
 		fprintf (stderr," usage: frame infile\n");
 		exit(1);
 	}
 
 	filetype = get_file_ext( IO_file, extn ); /* .CSV or .FMM or other? */
 
-	parse_input(fp);
+#define TPATHMAX 256
+	char tpath[TPATHMAX];
+	temp_file_location("frame3dd.cln",tpath,TPATHMAX);
+
+	parse_input(fp, tpath);
 	fclose(fp);
 
 	/*open clean input file*/
-	if ((fp = fopen ("/tmp/frame3dd.cln", "r")) == NULL) {
-		fprintf (stderr," error: cannot open cleaned input file \n");
+	if ((fp = fopen (tpath, "r")) == NULL) {
+		fprintf (stderr,"\nERROR: cannot open cleaned input file '%s'\n",tpath);
 		exit(1);
 	}
 
@@ -188,10 +194,10 @@ int main(int argc, char *argv[]){
 
 	fscanf(fp, "%d", &nB );		/* number of beam elements	*/
 	printf(" number of beam elements"); dots(29); printf(" nB = %3d",nB);
-        if ( nJ > nB + 1) {
-            fprintf(stderr,"warning: %d joints and %d members...", nJ, nB );
-	    fprintf(stderr," not enough members to connect all joints.\n");
-        }
+	if ( nJ > nB + 1) {
+		fprintf(stderr,"warning: %d joints and %d members...", nJ, nB );
+		fprintf(stderr," not enough members to connect all joints.\n");
+    }
 
 				/* allocate memory for beams ... */
 	L   = dvector(1,nB);	/* length of each element		*/
@@ -213,7 +219,8 @@ int main(int argc, char *argv[]){
 
 	read_beam_data( fp, nJ, nB, xyz,r,
 			L, Le, J1, J2,
-        		Ax, Asy, Asz, J, Iy, Iz, E, G, p );
+			Ax, Asy, Asz, J, Iy, Iz, E, G, p
+	);
 	printf("  ... complete\n");
 
 	read_run_data (
@@ -223,14 +230,14 @@ int main(int argc, char *argv[]){
 	fscanf(fp, "%d", &nL );		/* number of load cases		*/
 	printf(" number of load cases "); dots(31); printf(" nL = %3d\n",nL);
 
-        if ( nL < 1 ) {
-            fprintf(stderr,"error: the number of load cases must be at least 1\n");
-	    exit(1);
-        }
-        if ( nL >= _NL_ ) {
-            fprintf(stderr,"error: maximum of %d load cases allowed\n", _NL_-1);
-	    exit(1);
-        }
+	if ( nL < 1 ) {
+		fprintf(stderr,"\nERROR: the number of load cases must be at least 1\n");
+		exit(1);
+	}
+	if ( nL >= _NL_ ) {
+		fprintf(stderr,"\nERROR: maximum of %d load cases allowed\n", _NL_-1);
+		exit(1);
+	}
 					/* allocate memory for loads ... */
 	W   =  D3matrix(1,nL,1,nB,1,4); /* distributed load on each member */
 	P   =  D3matrix(1,nL,1,nB,1,5); /* internal point load each member */
@@ -263,31 +270,33 @@ int main(int argc, char *argv[]){
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
 
 
-	read_and_assemble_loads (
+	read_and_assemble_loads(
 		fp, nJ, nB, nL, DoF, xyz, L, Le, J1, J2,
 		Ax,Asy,Asz, Iy,Iz, E, G, p, R, shear,
-		nF, nW, nP, nT, nD, 
+		nF, nW, nP, nT, nD,
 		Q, Fo_mech, Fo_temp, W, P, T, Dp, feF_mech, feF_temp
 	);
-	for (i=1; i<=DoF; i++)
-		for (lc=1; lc<=nL; lc++)
+	for (i=1; i<=DoF; i++){
+		for (lc=1; lc<=nL; lc++){
 			Fo[lc][i] = Fo_temp[lc][i] + Fo_mech[lc][i];
-        printf("                                                     ");
+		}
+	}
+	printf("                                                     ");
 	printf(" load data ... complete\n");
 
 
-	read_mass_data (
+	read_mass_data(
 		fp, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax,
 		&total_mass, &struct_mass, &nM, &Mmethod,
 		&lump, mode_file, &tol, &shift, anim, &pan
 	);
-        printf("                                                     ");
+	printf("                                                     ");
 	printf(" mass data ... complete\n");
 
-	read_condensation_data ( fp, nJ, nM, &nC, &Cdof, &Cmethod, q, m );
+	read_condensation_data( fp, nJ, nM, &nC, &Cdof, &Cmethod, q, m );
 
-	if (nC>0) {
-        	printf("                                      ");
+	if(nC>0){
+        printf("                                      ");
 		printf(" matrix condensation data ... complete\n");
 	}
 
@@ -305,72 +314,73 @@ int main(int argc, char *argv[]){
 	);
 
 	if (anlyz) {				/* solve the problem	*/
+		for (lc=1; lc<=nL; lc++) {		/* begin load case loop	*/
 
-	 for (lc=1; lc<=nL; lc++) {		/* begin load case loop	*/
+			fprintf(stderr,"\n Load Case %d of %d ... \n", lc, nL );
 
-	  fprintf(stderr,"\n Load Case %d of %d ... \n", lc, nL );
+			for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
 
-	  for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
-
-	  assemble_K ( K, DoF, nB, xyz,r, L, Le, J1, J2,
-			Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
+			assemble_K ( K, DoF, nB, xyz,r, L, Le, J1, J2,
+				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
 #ifdef MATRIX_DEBUG
-	  save_dmatrix ( DoF, DoF, K, "Kf" );	     /* free stiffness matrix */
+			save_dmatrix ( DoF, DoF, K, "Kf" );	     /* free stiffness matrix */
 #endif
 
 	  /* apply temperature loads first ... */
-	  if (nT[lc] > 0) {
-		fprintf(stderr," Linear Elastic Analysis ... Temperature Loads\n");
-		apply_reactions ( DoF, R, Dp[lc], Fo_temp[lc], F, K, 't' );
-		solve_system( K, dD, F, DoF, &ok );
-		for (i=1; i<=DoF; i++)	D[i] += dD[i];
-		end_forces ( Q, nB, xyz, L, Le, J1,J2,
-			Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
-	  }
+			if (nT[lc] > 0) {
+				fprintf(stderr," Linear Elastic Analysis ... Temperature Loads\n");
+				apply_reactions ( DoF, R, Dp[lc], Fo_temp[lc], F, K, 't' );
+				solve_system( K, dD, F, DoF, &ok );
+				for (i=1; i<=DoF; i++)	D[i] += dD[i];
+				end_forces ( Q, nB, xyz, L, Le, J1,J2,
+					Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
+			}
 
-	  assemble_K ( K, DoF, nB, xyz, r, L, Le, J1, J2,
-			Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
+			assemble_K ( K, DoF, nB, xyz, r, L, Le, J1, J2,
+				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
-	  /* then add mechanical loads ... */
-	  if ( nF[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nD[lc] > 0 ) {
-		fprintf(stderr," Linear Elastic Analysis ... Mechanical Loads\n");
-		apply_reactions ( DoF, R, Dp[lc], Fo_mech[lc], F, K, 'm' );
-		solve_system( K, dD, F, DoF, &ok );
-		for (i=1; i<=DoF; i++)	D[i] += dD[i];
-		end_forces ( Q, nB, xyz, L, Le, J1,J2,
-			Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
-	  }
+			/* then add mechanical loads ... */
+			if ( nF[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nD[lc] > 0 ) {
+				fprintf(stderr," Linear Elastic Analysis ... Mechanical Loads\n");
+				apply_reactions ( DoF, R, Dp[lc], Fo_mech[lc], F, K, 'm' );
+				solve_system( K, dD, F, DoF, &ok );
+				for (i=1; i<=DoF; i++)	D[i] += dD[i];
+				end_forces ( Q, nB, xyz, L, Le, J1,J2,
+					Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
+			}
 
 #ifdef MATRIX_DEBUG
-	  save_ut_dmatrix ( DoF, K, "Ks" );	   /* static stiffness matrix */
+			save_ut_dmatrix ( DoF, K, "Ks" );	   /* static stiffness matrix */
 #endif
 
 
-	  /* Newton-Raphson iterations for geometric non-linearity */
-	  if ( geom ) {
-		Fe  = dvector( 1, DoF );	/* force equilibrium error  */
-		Ks  = dmatrix( 1, DoF, 1, DoF );
-		for (i=1;i<=DoF;i++) /* initialize Broyden secant stiffness */
-			for(j=i;j<=DoF;j++)
-				Ks[i][j]=Ks[j][i]=K[i][j];
-	        fprintf(stderr,"\n Non-Linear Elastic Analysis ...\n");
-	  }
-	  while ( geom && error > tol && iter < 10 && ok >= 0) {
+			/* Newton-Raphson iterations for geometric non-linearity */
+			if ( geom ) {
+				Fe  = dvector( 1, DoF );	/* force equilibrium error  */
+				Ks  = dmatrix( 1, DoF, 1, DoF );
+				for (i=1;i<=DoF;i++){ /* initialize Broyden secant stiffness */
+					for(j=i;j<=DoF;j++){
+						Ks[i][j]=Ks[j][i]=K[i][j];
+					}
+				}
+				fprintf(stderr,"\n Non-Linear Elastic Analysis ...\n");
+			}
 
-		++iter;
+			while ( geom && error > tol && iter < 10 && ok >= 0) {
+				++iter;
 
-		assemble_K ( K, DoF, nB, xyz, r, L, Le, J1, J2,
-			Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
+				assemble_K ( K, DoF, nB, xyz, r, L, Le, J1, J2,
+					Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
-		apply_reactions ( DoF, R, Dp[lc], Fo[lc], F, K, 'm' );
+				apply_reactions ( DoF, R, Dp[lc], Fo[lc], F, K, 'm' );
 
-		for (i=1; i<=DoF; i++) {	/* equilibrium error	*/
-			Fe[i] = F[i];
-			for (j=1; j<=DoF; j++)
-				if ( K[i][j] != 0.0 && D[j] != 0.0 )
-					Fe[i] -= K[i][j]*D[j];
-		}
+				for (i=1; i<=DoF; i++) {	/* equilibrium error	*/
+					Fe[i] = F[i];
+					for (j=1; j<=DoF; j++)
+						if ( K[i][j] != 0.0 && D[j] != 0.0 )
+							Fe[i] -= K[i][j]*D[j];
+				}
 
 		/* Broyden secant stiffness matrix update */
 /*
@@ -380,64 +390,66 @@ int main(int argc, char *argv[]){
 			for (j=1; j<=DoF; j++)
 				Ks[i][j] -= Fe[i]*dD[j] / dDdD;
 */
-		apply_reactions ( DoF, R, Dp[lc], Fe, Fe, Ks, 'm' );
-		solve_system ( K, dD, Fe, DoF, &ok );
+				apply_reactions ( DoF, R, Dp[lc], Fe, Fe, Ks, 'm' );
+				solve_system ( K, dD, Fe, DoF, &ok );
 
-		if ( ok < 0 ) {
-		 fprintf(stderr,"   The stiffness matrix is not pos-def. \n");
-		 fprintf(stderr,"   Reduce loads and re-run the analysis.\n");
-		 break;
-		}
+				if ( ok < 0 ) {
+					fprintf(stderr,"   The stiffness matrix is not pos-def. \n");
+					fprintf(stderr,"   Reduce loads and re-run the analysis.\n");
+					break;
+				}
 
-		for (i=1; i<=DoF; i++)	D[i] += dD[i];	/* increment D */
+				for (i=1; i<=DoF; i++)	D[i] += dD[i];	/* increment D */
 
-		end_forces ( Q, nB, xyz, L, Le,
-			J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
+				end_forces ( Q, nB, xyz, L, Le,
+					J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 
 						 /* convergence criteria:  */
 //		error = rel_norm ( dD, D, DoF ); /* displacement increment */
-		error = rel_norm ( Fe, F, DoF ); /* force balance	   */
+				error = rel_norm ( Fe, F, DoF ); /* force balance	   */
 
-		fprintf(stderr,"   NR iteration %3d ---", iter);
-	        fprintf(stderr," RMS equilibrium precision: %8.2e \n", error);
-	  }
-	  if ( geom ) {
-		free_dvector(Fe, 1, DoF );
-		free_dmatrix(Ks, 1, DoF, 1, DoF );
-	  }
+				fprintf(stderr,"   NR iteration %3d ---", iter);
+				fprintf(stderr," RMS equilibrium precision: %8.2e \n", error);
+			}
 
-	  for (i=1; i<=12; i++)
-		for (n=1; n<=nB; n++)
-			feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
+			if(geom){
+				free_dvector(Fe, 1, DoF );
+				free_dmatrix(Ks, 1, DoF, 1, DoF );
+			}
 
-	  equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF, nB, DoF, &error );
+			for (i=1; i<=12; i++)
+				for (n=1; n<=nB; n++)
+					feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
 
-	  write_static_results ( fp, nJ,nB,nL,lc, DoF, J1,J2, Fo[lc],
-							 D,R,Q, error, ok );
+			  equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF, nB, DoF, &error );
 
-	  if ( filetype == 1 )
-	  	write_static_csv ( argv, title, 
-			nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
+			  write_static_results ( fp, nJ,nB,nL,lc, DoF, J1,J2, Fo[lc],
+									 D,R,Q, error, ok );
 
-	  if ( filetype == 2 )
-	  	write_static_mfile ( argv, title,
-			nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
+			if(filetype == 1 ){
+				write_static_csv(argv, title,
+					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
+			}
 
-	  static_mesh ( IO_file, mesh_file, plot_file, title, nJ, nB, nL, lc,
+			if(filetype == 2){
+				write_static_mfile ( argv, title,
+					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
+			}
+
+			static_mesh ( IO_file, mesh_file, plot_file, title, nJ, nB, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
 
-	 }					/* end load case loop	*/
-
+		} /* end load case loop */
 	} else {
 	    fprintf(stderr,"  %s\n", title );
-	    fprintf(stderr,"  data check only\n");
+	    fprintf(stderr,"  DATA CHECK ONLY.\n");
 	    static_mesh ( IO_file, mesh_file, plot_file, title, nJ, nB, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
 	}
 
-	if ( nM > 0 ) {				/* modal analysis */
+	if(nM > 0){ /* modal analysis */
 
-	        fprintf(stderr,"\n Modal Analysis ...\n");
+		fprintf(stderr,"\n Modal Analysis ...\n");
 
 		nM_calc = (nM+8)<(2*nM) ? nM+8 : 2*nM;
 
@@ -445,8 +457,9 @@ int main(int argc, char *argv[]){
 		f   = dvector(1,nM_calc);
 		V   = dmatrix(1,DoF,1,nM_calc);
 
-		assemble_M ( M, DoF, nJ, nB, xyz, r, L, J1,J2, Ax, J,Iy,Iz, p,
-					d, BMs, JMs, JMx, JMy, JMz, lump );
+		assemble_M(M, DoF, nJ, nB, xyz, r, L, J1,J2, Ax, J,Iy,Iz, p,
+				d, BMs, JMs, JMx, JMy, JMz, lump
+		);
 
 #ifdef MATRIX_DEBUG
 		save_dmatrix ( DoF, DoF, M, "Mf" );	/* free mass matrix */
@@ -470,40 +483,41 @@ int main(int argc, char *argv[]){
 		save_ut_dmatrix ( DoF, K, "Kd" );	/* dynamic stff matx */
 		save_ut_dmatrix ( DoF, M, "Md" );	/* dynamic mass matx */
 
-		if (anlyz) {
-		  if ( Mmethod == 1 )
-		    subspace( K, M, DoF, nM_calc, f, V, tol,shift,&iter,&ok);
-		  if ( Mmethod == 2 )
-		    stodola ( K, M, DoF, nM_calc, f, V, tol,shift,&iter,&ok);
+		if(anlyz) {
+			if( Mmethod == 1 )
+				subspace( K, M, DoF, nM_calc, f, V, tol,shift,&iter,&ok);
+			if( Mmethod == 2 )
+				stodola ( K, M, DoF, nM_calc, f, V, tol,shift,&iter,&ok);
 
-		  for (j=1; j<=nM_calc; j++)	f[j] = sqrt(f[j])/(2.*PI);
+			for (j=1; j<=nM_calc; j++)	f[j] = sqrt(f[j])/(2.*PI);
 
-		  write_modal_results ( fp, nJ,nB,nI, DoF, M,f,V,
-				total_mass, struct_mass,
-				iter, sumR, nM, shift, lump, tol, ok );
+			write_modal_results ( fp, nJ,nB,nI, DoF, M,f,V,
+					total_mass, struct_mass,
+					iter, sumR, nM, shift, lump, tol, ok
+			);
 		}
 	}
 
 	fclose (fp);
 
-	if ( nM > 0 && anlyz ) {
-		modal_mesh ( IO_file, mesh_file, mode_file, plot_file, title,
+	if(nM > 0 && anlyz){
+		modal_mesh(IO_file, mesh_file, mode_file, plot_file, title,
 		       nJ,nB, DoF, nM, xyz, L, J1,J2, p, M,f,V,exagg,anlyz);
-		animate ( IO_file, mesh_file, mode_file, plot_file, title,anim,
+		animate(IO_file, mesh_file, mode_file, plot_file, title,anim,
 		       nJ,nB, DoF, nM, xyz, L, p, J1,J2, f,V, exagg, pan );
 	}
 
-	if ( nC > 0 ) {		/* matrix condensation of stiffness and mass */
+	if(nC > 0){		/* matrix condensation of stiffness and mass */
 
-	        fprintf(stderr,"\n Matrix Condensation ...\n");
+		fprintf(stderr,"\n Matrix Condensation ...\n");
 
-		if ( Cdof > nM && Cmethod == 3 ) {
-		 fprintf(stderr,"  Cdof > nM ... Cdof = %d  nM = %d \n",
+		if(Cdof > nM && Cmethod == 3){
+			fprintf(stderr,"  Cdof > nM ... Cdof = %d  nM = %d \n",
 				 Cdof, nM );
-		 fprintf(stderr,"  The number of condensed degrees of freedom");
-		 fprintf(stderr," may not exceed the number of computed modes");
-		 fprintf(stderr," when using dynamic condensation.\n");
-		 exit(1);
+			fprintf(stderr,"  The number of condensed degrees of freedom");
+			fprintf(stderr," may not exceed the number of computed modes");
+			fprintf(stderr," when using dynamic condensation.\n");
+			exit(1);
 		}
 
 		Kc = dmatrix(1,Cdof,1,Cdof);
@@ -512,34 +526,35 @@ int main(int argc, char *argv[]){
 		if ( m[1] > 0 && nM > 0 )	Cfreq = f[m[1]];
 
 		if ( Cmethod == 1 ) {	/* static condensation only	*/
-			condense ( K, DoF, q, Cdof, Kc);
+			condense(K, DoF, q, Cdof, Kc);
 			printf("   static condensation of K complete\n");
 		}
 		if ( Cmethod == 2 ) {
-			guyan ( M, K, DoF, q, Cdof, Mc,Kc, Cfreq );
+			guyan(M, K, DoF, q, Cdof, Mc,Kc, Cfreq );
 			printf("   Guyan condensation of K and M complete");
 			printf(" ... dynamics matched at %f Hz.\n", Cfreq );
 		}
 		if ( Cmethod == 3 && nM > 0 ) {
-			dyn_conden ( M,K, DoF, R, q, Cdof, Mc,Kc, V,f, m );
+			dyn_conden(M,K, DoF, R, q, Cdof, Mc,Kc, V,f, m );
 			printf("   dynamic condensation of K and M complete\n");
 		}
-		save_dmatrix ( Cdof, Cdof, Kc, "Kc" );
-		save_dmatrix ( Cdof, Cdof, Mc, "Mc" );
+		save_dmatrix(Cdof, Cdof, Kc, "Kc" );
+		save_dmatrix(Cdof, Cdof, Mc, "Mc" );
 
-		free_dmatrix ( Kc, 1,Cdof,1,Cdof );
-		free_dmatrix ( Mc, 1,Cdof,1,Cdof );
+		free_dmatrix(Kc, 1,Cdof,1,Cdof );
+		free_dmatrix(Mc, 1,Cdof,1,Cdof );
 	}
 
 	printf("\n");
 
-	deallocate ( nJ, nB, nL, nF, nW, nP, nT, DoF, nM,
+	deallocate(nJ, nB, nL, nF, nW, nP, nT, DoF, nM,
 			xyz, r, L, Le, J1, J2, R,
 			Ax, Asy, Asz, J, Iy, Iz, E, G, p,
-			W,P,T, Dp, Fo_mech, Fo_temp, 
+			W,P,T, Dp, Fo_mech, Fo_temp,
 			feF_mech, feF_temp, feF, Fo, F,
-			K, Q, D, dD, 
-			d,BMs,JMs,JMx,JMy,JMz, M,f,V, q, m );
+			K, Q, D, dD,
+			d,BMs,JMs,JMx,JMy,JMz, M,f,V, q, m
+	);
 
 	return(0);
 }
