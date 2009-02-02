@@ -17,13 +17,14 @@ h2 {font: bold x-large sans}
 li, td, p {font: normal medium sans}
 div.eq {font-style:italic; width:100%; text-align:center; margin-top: 6pt; margin-bottom: 6pt}
 div.note {width: 40em; border: solid 2pt gray; background-color: #FFFFEE; padding:10px; margin-top: 6pt; margin-bottom: 6pt}
+pre {background-color: #EEEEEE}
 </style>
 </head>
 
 <body>
 
 <img src="img/psoe.jpg" height="100" align="left" border="0">
-<b>A Manual and Reference for <a href="http://frame3dd.sourceforge.net/">Frame3DD: A Structural Frame Analysis Program</a></b>
+<b>User manual and reference for <a href="http://frame3dd.sourceforge.net/">Frame3DD: A Structural Frame Analysis Program</a></b>
 <br>
 <a href="http://www-cee.egr.duke.edu/">
 Department of Civil and Environmental Engineering</a><br>
@@ -84,9 +85,26 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
        frame3dd [Input/Ouput file]
 <hr>
 -->
+
+<h2>Contents</h2>
+
+<ol>
+<li><a href="#starting">Getting started</a>
+<li><a href="#iodata"/>Input Data and Output Data</a>
+<li><a href="#installrun"/>How to install and run Frame3dd</a>
+<li><a href="#FrameEd">FrameEd</a>
+<li><a href="#Matlab">Matlab interface</a>
+<li><a href="#CSV">Spreadsheet interface</a>
+<li><a href="#structuralmodelling">Structural modelling</a>
+<li><a href="#numerical">Numerical details</a>
+<li><a href="#InputData">Input Data Format</a>
+<li><a href="#Variables">Variable Definitions</a>
+<li><a href="#sourcecode">Source code</a>
+<li><a href="#enhancements">Enhancements projected for future versions</a>
+<li><a href="#references">References</a>
+</ol>
     
-<a name="starting">
-<h2>Getting started</h2>
+<a name="starting"><h2>1. Getting started</h2>
 <ol>
 <li>Read the Manual and Reference (this file).
 <li>Download or build the Frame3DD executable for your operating system (see below).
@@ -107,7 +125,7 @@ If a dynamic analysis was performed, you will enjoy an animation of selected mod
 Continue to hit the Return (or Enter) key until the last plot is displayed.  
 </ol>
 
-<h2>Input Data and Output Data</h2>
+<a name="iodata"/><h2>2. Input Data and Output Data</h2>
 
 <p>
 The <b>input data file</b> is a plain ASCII text file and must adhere to the format 
@@ -144,9 +162,9 @@ Frame3DD checks the Input Data for errors prior to anlayzing the system
 and displays descriptive diagnostic messages when errors are found with the Input Data.  
 </p>
 
-<h2>How to install and run Frame3dd</h2>
+<a name="installrun"/><h2>3. How to install and run Frame3dd</h2>
 
-<h3>Linux/Unix</h3>
+<h3>3.1 Linux/Unix</h3>
 
 For Linux and Unix we currently only provide source-code tarball; you must
 build the software yourself. The following instructions work on Ubuntu 8.10
@@ -199,7 +217,7 @@ or a spreadsheet program
 </ol>
 
 
-<h3>Windows</h3>
+<h3>3.2 Windows</h3>
 
 We provide a binary installer for Microsoft Windows. Use the following steps:
 
@@ -242,7 +260,7 @@ MS-Windows version of Gnuplot</a>.
          your analyses.  <br>
 </ol>
 
-<h3>Mac OS X</h3>
+<h3>3.3 Mac OS X</h3>
 
 <div class="note"><b>Note:</b> The following binary downloads have not been updated
 for some time and may give you problems. You may have more success trying to build
@@ -322,9 +340,8 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
 </p>
 
 
-<h2>FrameEd</h2>
+<a name="FrameEd"><h2>4. FrameEd</h2>
 
-<a name="FrameEd">
  <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).<br>
  The .zip file <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip">FrameEd.zip</a> includes: 
  <ul>
@@ -348,8 +365,7 @@ to match the first mode.
 
 <p>Source code for FrameEd is not currently available, and development on this GUI is no longer active.</p>
 
-<a name="Matlab">
-<h2>Matlab interface</h2>
+<a name="Matlab"><h2>5. Matlab interface</h2>
 
 <p>
 <b>Frame3DD</b> may optionally be executed from within Matlab on any platform,
@@ -453,8 +469,7 @@ It does not (yet) implement the following features of <b>Frame3DD</b>:
 Adding these features would require Matlab programming, only.
 </p>
 
-<a name="CSV">
-<h2>Spreadsheet interface</h2>
+<a name="CSV"><h2>6. Spreadsheet interface</h2>
 
 <p>
 Input/Output data for <b>Frame3DD</b> may be read and written using spreadsheet programs
@@ -529,7 +544,7 @@ Reaction results are in columns A through G:<br>
 Modal analysis results are not (yet) written to the .CSV formatted output file. 
 </p>
 
-<h2>Structural modelling</h2>
+<a name="structuralmodelling"/><h2>7. Structural modelling</h2>
 
 <!--
 <p>
@@ -870,10 +885,10 @@ matrix is computed using a regularization method which somewhat improves the
 conditioning of the condensed mass and stiffness matrices.  
 </p>
 
-<h2>Numerical details</h2>
+<a name="numerical"/><h2>8. Numerical details</h2>
 
 
-<p>       <b>Frame3DD</b> imposes no limit on the number of degrees of freedom.
+<p>       Frame3DD imposes no limit on the number of degrees of freedom.
        Dynamic memory allocation is accomplished by the public-domain routines
        found in Press, W.H., et al,  <i>Numerical Recipes In C</i>, (Cambridge, England: Cambridge University Press, 1991).
 </p>
@@ -954,8 +969,7 @@ Sub-space iterations are stopped when the error is less than the specified
 <li><i>fN(i-1)</i>  is the highest natural frequency computed at iteration <i>i-1</i> ,
 </ul>
 
-<a name="InputData">
-<h2>Input Data Format</h2>
+<a name="InputData"><h2>9. Input Data Format</h2>
 (Click <a href="template.frm">here</a> to download an Input Data template, template.frm)<br>
 </a>
 
@@ -1081,8 +1095,7 @@ nC                                                % number of condensed joints
 
 </pre>
 
-<a name="Variables"/>
-<h2>Variable Definitions</h2>
+<a name="Variables"/><h2>10. Variable Definitions</h2>
 
 <pre>
        a         - Coefficient of thermal expansion (1/degree)
@@ -1182,7 +1195,7 @@ nC                                                % number of condensed joints
 
 </pre>
 
-<h2>Source code</h2>
+<a name="sourcecode"/><h2>11. Source code</h2>
 
 <p>The source code is written in ANSI C and is extensively commented. The source code includes functions for frame analysis, LDL' decomposition, LU decomposition, Newton-Raphson iteration, sub-space iteration, Stodola iteration, Sturm eigen-value check, static condensation, Guyan reduction, and dynamic condensation.</p>
 
@@ -1199,20 +1212,21 @@ nC                                                % number of condensed joints
     nrutil.c        dynamic memory allocation
 </pre>
 
-<p>
-<b>Frame3DD</b> compiles with the <a href="http://gcc.gnu.org/">gcc compiler</a>,
+<p>In addition to the suggested method using <b>SCons</b> (see <a href="#installrun">above</a>), Frame3DD can also be compiled directly with the <a href="http://gcc.gnu.org/">gcc compiler</a>,
 the <a
 href="http://www.delorie.com/djgpp/"> DJGPP gcc compiler</a>,
 the <a href="http://www.cs.virginia.edu/~lcc-win32/"> LCC-win32 compiler</a>,
 and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
 </p>
 
+<p>For example, using GCC, the command is:</p>
+
 <pre>
     gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 
 </pre>
 
-<h2>Enhancements projected for future versions</h2>
+<a name="enhancements"/><h2>12. Enhancements projected for future versions</h2>
 
 <ul>
 <li>       Trapezoidally distributed loads
@@ -1240,8 +1254,7 @@ and possibly
 <li>       ... your recommendations ... send me an e-mail!
 </ul>
 
-<a name="references"/>
-<h2>References</h2>
+<a name="references"/><h2>13. References</h2>
 
 <p>This software was developed using methods described in the following texts.
 The two primary sources are the texts by
