@@ -1,7 +1,7 @@
 <html>
 <head>
 
-<title>Static and Dynamic Structural Analysis of 2D and 3D Frames</title>
+<title>FRAME3DD User Manual</title>
 
 <META NAME="Description" CONTENT=" Free software for static and dynamic analysis of 3D moment-resisting frames with elastic and geometric stiffness. Written in
  C.  Source code includes:  frame analysis, LDL' decomposition, LU decomposition, sub-space iteration, Stodola iteration, Sturm eigenvalue checking,  
@@ -11,14 +11,20 @@ Graphical output and mode shape animation via Gnuplot.">
 
 <META NAME="Keywords" CONTENT="Frame3DD, Structural Dynamics, Structural Analysis, Frame Analysis, Structural Analysis Software, Geometric Stiffness, Geometric Stiffness Matrix, Modal Analysis, Modal Analysis Software, Structural Dynamics, Structural Dynamics Software, LDL Decomposition, LDL Decomposition, LU Decomposition, Sub-space Iteration, Gnuplot, Matlab, Octave, Henri Gavin, Duke">
 
+<style>
+h1 {font: bold xx-large sans}
+h2 {font: bold x-large sans}
+li, td, p {font: normal medium sans}
+div.eq {font-style:italic; width:100%; text-align:center; margin-top: 6pt; margin-bottom: 6pt}
+div.note {width: 40em; border: solid 2pt gray; background-color: #FFFFEE; padding:10px; margin-top: 6pt; margin-bottom: 6pt}
+</style>
 </head>
 
 <body>
 
 <img src="img/psoe.jpg" height="100" align="left" border="0">
-<font face="Arial, Helvetica, sans-serif" size="3">
-<nobr><b>A Manual and Reference for <a href="http://www.duke.edu/~hpgavin/frame3dd/index.html">Frame3DD: A Structural Frame Analysis Program</a></b>
-</nobr><br>
+<b>A Manual and Reference for <a href="http://frame3dd.sourceforge.net/">Frame3DD: A Structural Frame Analysis Program</a></b>
+<br>
 <a href="http://www-cee.egr.duke.edu/">
 Department of Civil and Environmental Engineering</a><br>
 <a href="http://www.egr.duke.edu/">
@@ -27,57 +33,39 @@ Edmund T. Pratt School of Engineering</a><br>
 Duke University</a> - Box 90287,
 <a href="http://www.durham-nc.com/"> Durham</a>,
 <a href="http://www.visitnc.com/"> NC</a> 27708-0287
-</font>
 
-<p><i><font face="Verdana, Arial, Helvetica, sans-serif" size="2">
+<p><i>
 <a href="http://cee.duke.edu/ARCHIVES/people/faculty/gavin.shtml">Henri P. Gavin</a>, P.E., Ph.D., 
 - Associate Professor -
 <a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;&#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;">
 &#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;
 </a>
-- tel: 919-660-5201 - fax: 919-660-5219
-</font></i></p>
+- tel: 919-660-5201 - fax: 919-660-5219</i></p>
 
-<font face="Arial, Helvetica, sans-serif" size="2">
 <hr>
-<h4>Frame3DD</h4>
+<h1>FRAME3DD</h1>
 <!-- <h4>DESCRIPTION </h4> -->
-<p>
-     <b>Frame3DD</b> is a program for the static and dynamic structural analysis of two- and three-dimensional frames and trusses with elastic and
+<p><b>Frame3DD</b> is a program for the static and dynamic structural analysis of two- and three-dimensional frames and trusses with elastic and
 geometric stiffness.  
 </p>
 
-<p>
-     <b>Frame3DD</b> reads an Input Data file, containing joint coordinates, member geometry, material moduli, restrained joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.  
+<p>It reads an Input Data file, containing joint coordinates, member geometry, material moduli, restrained joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.  
 <!-- (The Input/Output file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
 </p>
 
-<p>
- <b>Frame3DD</b> appends the Input Data with Output Data, resulting in a single Input/Output file.  
+<p>It then appends the Input Data with Output Data, resulting in a single Input/Output file.  
 The Output Data recapitulates the input information, gives joint displacements in global coordinates, member
 end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.  
 </p>
 
-<p>
- <b>Frame3DD</b> can consider multiple static load cases in a single analysis.
-</p>
+<p>Frame3DD can consider multiple static load cases in a single analysis.</p>
+ 
+<p>Frame3DD may optionally interface with Matlab and with spreadsheet programs.</p>
 
-<p>
- <b>Frame3DD</b> may optionally interface with Matlab.   
-</p>
-
-<p>
- <b>Frame3DD</b> may optionally interface with spreadsheet programs.   
-</p>
-
-
-<p>
-<b>Frame3DD</b> is free software; you may redistribute it and/or modify it under 
-the terms of the GNU General Public License (<a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>) as published by the
+<p>Frame3DD is <b>free open-source software</b>; you may redistribute it and/or modify it under 
+the terms of the GNU General Public License (GPL) as published by the
 <a href="http://www.fsf.org/">Free Software Foundation</a>.
-<b>Frame3DD</b> is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU General Public License (<a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>) for details.
+The software is distributed in the hope that it will be useful, but without any warranty; without even the implied warranty of merchantability or fitness for a particular purpose.  See <a href="../LICENSE.txt">LICENSE.txt</a> for details.
 </p>
 <!--
 Free software for static and dynamic structural analysis of 2D 
@@ -96,122 +84,111 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
        frame3dd [Input/Ouput file]
 <hr>
 -->
-
-<hr>
-<h4>RELEASE DATE OF MOST RECENT VERSION:  January 4, 2009 (20090104) </h4>
     
-<hr>
-<h4>GETTING STARTED </h4>
+<a name="starting">
+<h2>Getting started</h2>
 <ol>
-<li>       Read the Manual and Reference (this file).
-<li>       Download and install the <b>Frame3DD</b> executable and Gnuplot for your operating system.  (See below.)
+<li>Read the Manual and Reference (this file).
+<li>Download or build the Frame3DD executable for your operating system (see below).
+<li>Obtain a copy of Gnuplot for your operating system.
 <li>       Download some of the example Input/Output files and compare them to the corresponding plots and movies.
 <li>       Open a terminal window to run the program.  <br>
-          <font face="courier">frame3dd [example Input/Output file]</font>
+          <tt>frame3dd [example Input/Output file]</tt>
 <li>     Read the computed Output Data, which is written to the end of the Input/Output file.
 <!--     Running this program will create many files.  Most of them are used 
          for graphics and should be written to the  /tmp  directory. 
 <li>      One of the files will be written to the current working directory and will be called 
          something like frA.plt   This file is used for plotting.   -->
 <li>      Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, and simply typing ...<br>
-           <font face="courier"> gnuplot>    load 'example.plt' </font> <br>
-where the <font face="courier">example.plt</font> is the 'plot_file' specified as part of the Input Data (<a href="#InputData">See below.</a>) <br>
+           <tt>gnuplot>    load 'example.plt' </tt> <br>
+where the <tt>example.plt</tt> is the 'plot_file' specified as part of the Input Data (see <a href="#InputData">below</a>) <br>
 Observe a series of plots by hitting the Return (or Enter) key between plots.<br>
 If a dynamic analysis was performed, you will enjoy an animation of selected mode shapes.<br>
 Continue to hit the Return (or Enter) key until the last plot is displayed.  
 </ol>
 
-<b>Input Data and Output Data</b>
+<h2>Input Data and Output Data</h2>
 
 <p>
-The Input Data file is a plain ASCII text file and must adhere to the format 
+The <b>input data file</b> is a plain ASCII text file and must adhere to the format 
 <a href="#InputData">described below</a>.
-Several examples are given at <a href="http://www.duke.edu/~hpgavin/frame3dd/">http://www.duke.edu/~hpgavin/frame3dd/</a>. 
-   Comments may be placed anywhere in the file and are helpful in organizing the Input Data.   
-A comment begins with one of the following four characters:
-     <font face="courier"># % ? ; </font> and continues to the end of the line.   
-All commas in the Input Data are ignored.  
-Floating point numbers must be entered as 1.234 1234 or 1.234e3.
-Arithmatic operations such as 1.234*10^3 or 6*sin(pi/2) are <b>not</b> allowed
-in the Input Data unless the <a href="#Matlab">Matlab interface</a> is used.  
-</p>
+Several examples are given at <a href="http://frame3dd.sourceforge.net/">http://frame3dd.sourceforge.net/</a>. When writing input files, note the following points:</p>
+
+<ul>
+<li>Comments may be placed anywhere in the file and are helpful in organizing the Input Data.   
+A comment begins with one of the following four characters <tt># % ? ; </tt> and continues to the end of the line.
+<li>All commas in the Input Data are ignored.
+<li>Floating point numbers must be entered as 1.234 1234 or 1.234e3.
+<li>Arithmatic operations such as 1.234*10^3 or 6*sin(pi/2) are <b>not</b> allowed
+in the Input Data (unless the <a href="#Matlab">Matlab interface</a> is used).
+</ul>
 
 
 <p>
-To write your own Input Data file, start with an example that resembles the system you would like to analyze.  Carefully compare the
-         graphical output of the example, the Output Data written at the end of
-         the Input/Output file, the Input Data at the beginning of the
-         Input/Output file, and the <a href="#InputData"><b>Input Data Format</b></a>, with the <a href="#Variables"><b>Variable Definitions</b></a>
-         at the end of this page.   
+To write your own input data file, it may be helpful to start with an example that resembles the system you would like to analyze.  Carefully compare the graphical output of the example, the Output Data written at the end of the Input/Output file, the Input Data at the beginning of the Input/Output file, and the <a href="#InputData"><b>input data format</b></a>, with the <a href="#Variables"><b>variable definitions</b></a> at the end of this page.   
 </p>
 <p>
-You may edit Input Data files using a plain text editor
-(<a href="http://thomer.com/vi/vi.html">vi</a>,
- <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
- <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>,
- <a href="http://www.barebones.com/products/textwrangler/">TextWrangler (OS X)</a>, 
- <a href="http://www.apple.com/support/mac101/work/23/">TextEdit (OS X)</a>,
- <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++ (Windows)</a>,
- <a href="http://www.textedit.org/">TextEdit (Windows)</a>,
- <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>, 
-etc.), 
-using the Matlab interface, 
+You may edit Input Data files using a <a href="http://en.wikipedia.org/wiki/Text_editor">text editor</a>, using the Matlab interface, 
 or using spreadsheet programs
-(excel, 
- <a href="http://docs.google.com/">GoogleDocs</a>, 
- <a href="http://www.openoffice.org/">OpenOffice</a>, 
+(e.g. <a href="http://www.openoffice.org/">OpenOffice</a>, Excel, 
+<a href="http://docs.google.com/">Google Docs</a> or  
  <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).
 </p>
 <p>
-Details regarding the Matlab interface to <b>Frame3DD</b> are <a href="#Matlab">here</a>.<br>
-Details regarding the spreadsheet interface to <b>Frame3DD</b> are <a href="#CSV">here</a>.<br>
+Details regarding the Matlab interface to Frame3DD are <a href="#Matlab">here</a>.<br>
+Details regarding the spreadsheet interface to Frame3DD are <a href="#CSV">here</a>.<br>
 </p>
 <p>
 It may take a few tries to get your Input Data just right.  
-<b>Frame3DD</b> checks the Input Data for errors prior to anlayzing the system
+Frame3DD checks the Input Data for errors prior to anlayzing the system
 and displays descriptive diagnostic messages when errors are found with the Input Data.  
 </p>
 
-<hr>
-<h4>HOW TO INSTALL AND RUN THE LINUX OR SUN VERSIONS </h4>
+<h2>How to install and run Frame3dd</h2>
 
-For any (?) Linux 2.6 kernel running on an Intel or AMD processor.
+<h3>Linux/Unix</h3>
+
+For Linux and Unix we currently only provide source-code tarball; you must
+build the software yourself. The following instructions work on Ubuntu 8.10
+and should work with minor changes on any other recent Linux or Unix system.
 
 <ol>
-<li>        Download the <b>Frame3DD</b> binary file and save as "frame3dd" on your Desktop,
-         or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/Linux/frame3dd">RIGHT-CLICK-HERE-FOR-LINUX</a> | <a href="http://www.duke.edu/~hpgavin/frame3dd/Sun/frame3dd">RIGHT-CLICK-HERE-FOR-SUN</a> |
-<!-- <li>        RPM's for a variety of distributions are <a href="
-http://software.opensuse.org/download/home:/jdpipe/">here</a>. -->
-<li>        Download and save an example Input/Output file, such as <font face="courier">exA.frm</font>,
-         on your Desktop, or some other directory:<br> | <a href="../examples/exA.frm">RIGHT-CLICK-HERE</a> |
-<li>        Open a terminal window and ...<br>
-            <font face="courier">...$   cd ~/Desktop</font><br>
-            <font face="courier">...$   chmod +x frame3dd</font><br>
-         Create a file called  <font face="courier">~/.bash_profile</font> containing the line:<br>
-             <font face="courier">export PATH=".:$PATH"</font><br>
-         Exit the terminal by typing ... <font face="courier">exit</font>
-<li>        Run <b>Frame3DD</b> from a terminal window  ...<br>
-            <font face="courier">...$   cd ~/Desktop</font><br>
-            <font face="courier">...$   frame3dd example.frm</font><br>
-         where <font face="courier">example.frm</font> is the name of your Input Data file. 
+<li>Ensure you have Python, SCons and GCC installed on your system. It should suffice to <tt>sudo apt-get install build-essential scons</tt>.
+<li>If you would like to build the Microstran viewer, ensure you additionally have got <tt>libsoqt-dev</tt> installed on your system.
+<li>Download the Frame3DD source-code tarball and save it in your home directory.
+<li>Using the shell, unpack the source code using the command <tt>tar jxvf frame3dd-VERSION.tar.bz2</tt>.
+<li>Enter the frame3dd-VERSION directory (VERSION as appropriate) using <tt>cd frame3dd-VERSION</tt>.
+<li>Type <tt>scons</tt> to build the software.
+<li>If you have root privileges,
+<ul>
+	<li>Run <tt>sudo scons install</tt> to install Frame3dd to /usr/local, or
+	<li>Run <tt>sudo scons install INSTALL_PREFIX=/tmp</tt> to install to /tmp (change location as desired)
+</ul>
+<li>If you do no have root privileges, you can run Frame3dd directly from the build tree:
+<ol>
+	<li>Type <tt>export LD_LIBRARY_PATH=~/frame3dd-VERSION/build</tt>
+	<li>Type <tt>export PATH=$PATH:~/frame3dd-VERSION/build</tt>
+</ol>
+<li>Copy one of the frame3dd-VERSION/examples/*.frm files, eg <tt>exA.frm</tt> into your home directory and make sure you have write-privileges for the file.
+<li>Type <tt>frame3dd exA.frm</tt> to run Frame3dd.
+<li>The output files will be in the location specified inside the ~/exA.frm file. The main report output will have been appended to the ~/exA.frm file.
+<li>       The graphical output is viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, which can be installed using <tt>sudo apt-get install gnuplot</tt>.
 
-<li>       The graphical output is viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, which is probably already installed. 
-
-         Open a terminal window and ...<br>
-         <font face="courier">     ...$  cd ~/Desktop</font><br>
-         <font face="courier">     ...$  gnuplot </font><br>
-         <font face="courier">     gnuplot>  load 'example.plt'</font><br>
-         where <font face="courier">example.plt</font> is the name of of the plot file specified in the Input Data. (<a href="#InputData">See below.</a>) <br>
+         Open a terminal window and
+<ol><li><tt>$ cd ~</tt>
+<li>         <tt>$ gnuplot </tt>
+<li>        <tt>gnuplot>  load 'example.plt'</tt>
+</ol>
+         where <tt>example.plt</tt> is the name of of the plot file specified in the Input Data. (<a href="#InputData">See below.</a>) <br>
          Hit the 'Return' key in the Terminal window to see the sequence of plots
-         and animations until the <font face="courier"> gnuplot></font> prompt returns.<br>
-To create a PostScript file of your plot, download and save the Gnuplot script:
-<a href="../save.plt"><font face="courier">save.plt</font></a>, and use the following commands:<br>
-<font face="courier">
-      gnuplot> load 'save.plt'<br>
-      gnuplot> !mv my-plot.ps another-file.ps<br>
-</font>
-After finishing with your plots, quit Gnuplot by typing ...  <br>
-          <font face="courier"> gnuplot>  quit</font>
+         and animations until the <tt>gnuplot></tt> prompt returns.<br>
+To create a PostScript file of your plot, use the Gnuplot script
+<a href="../saveplot"><tt>saveplot</tt></a> with the following commands:<br>
+<ol>
+<li><tt>gnuplot> load 'save.plt'</tt>
+<li><tt>gnuplot> !mv my-plot.ps another-file.ps</tt>
+</ol>
+After finishing with your plots, you can exit Gnuplot by typing <tt>quit</tt>.
 <li>        You may edit Input/Output files using a plain text editor 
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
 <a href="http://www.gnome.org/projects/gedit/">gedit</a>, 
@@ -221,32 +198,79 @@ or a spreadsheet program
 <a href="http://www.openoffice.org/">OpenOffice</a>).<br>
 </ol>
 
-<hr>
-<h4>HOW TO INSTALL AND RUN THE OS X VERSIONS </h4>
+
+<h3>Windows</h3>
+
+We provide a binary installer for Microsoft Windows. Use the following steps:
+
+<ol>
+<li>Download and run the <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">binary installer</a>
+<li>Use the Start menu to access README information and this documentation.
+<li>Copy one or more of the example files (eg <tt>exA.frm</tt>) from your <tt>Program Files\FRAME3DD\examples</tt> folder into your <tt>My Documents</tt> folder.
+<li>Add FRAME3DD to your path as follows:
+<ol>
+	<li>Open a 'cmd' prompt
+	<li>set PATH=%PATH%;c:\Progra~1\FRAME3DD
+	<li>Keep the command prompt open for the following
+</ol>
+<li>Change to your documents directory using <tt>cd %HOMEPATH%\My Documents</tt>
+<li>Edit the example file to ensure that it contains valid file paths for the mesh_file, mode_file and plot_file locations.
+<li>Run Frame3dd using <tt>frame3dd.exe exA.frm</tt>
+<li>Use Gnuplot to view the graphical output:
+<ol>
+<li>Download the <a href="http://downloads.sourceforge.net/gnuplot/gp424win32.zip">
+MS-Windows version of Gnuplot</a>.
+<li>Extract the ZIP file into a <b>Gnuplot</b> folder in <b>My Documents</b>.<br>
+<li>Open the folder <b>My Documents\Gnuplot\bin</b> and right click on <b>wgnuplot</b>
+       to create a shortcut to your <b>Desktop</b>.<br>
+<li>Clicking on the <b>wgnuplot</b> icon on the desktop will start Gnuplot.<br>
+<li>To load the plot into Gnuplot, first change directories to 
+       the directory in which you are running the <b>Frame3DD</b> analysis, by clicking
+       on the <b>ChDir</b> button at the top of the Gnuplot window and typing ...<br>
+         <tt>C:\Documents and Settings\your_name_here\My Documents </tt>
+<li>Display the plot of your structure by typing ...<br>
+         <tt> gnuplot>  load 'example.plt'</tt><br>
+         where <tt>example.plt</tt> is the name of of the plot file specified in the Input Data. (<a href="#InputData">See below.</a>) <br>
+<li>Hit the 'Return' key in the Terminal window to see the sequence of plots
+         and animations until the <tt> gnuplot></tt> prompt returns.<br>
+</ol>
+<li>       You may edit Input/Output Data files using a plain text editor
+(<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>, 
+<a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>), or a spreadsheet program
+(<a href="http://www.openoffice.org/">OpenOffice</a>, excel).<br>
+<li>       You may wish to delete all the files in the <tt>C:\tmp</tt> directory when you have finished
+         your analyses.  <br>
+</ol>
+
+<h3>Mac OS X</h3>
+
+<div class="note"><b>Note:</b> The following binary downloads have not been updated
+for some time and may give you problems. You may have more success trying to build
+from source following the instructions for Linux/Unix.</div>
 
 For OS X running on a PowerPC (PPC) or Intel processor. 
 
 <ol>
 <li>        Download the <b>Frame3DD</b> application and save as "frame3dd" on your Desktop,
-         or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/OSX-PPC/frame3dd">CTRL-CLICK-HERE-FOR-PPC</a> | <a href="http://www.duke.edu/~hpgavin/frame3dd/OSX-Intel/frame3dd">CTRL-CLICK-HERE-FOR-INTEL</a> |
-<li>        Download and save an example Input/Output file, such as <font face="courier">exA.frm</font>,
+         or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/OSX-PPC/frame3dd">CTRL-CLICK-HERE-FOR-PPC</a> | <a href="OSX-Intel/frame3dd">CTRL-CLICK-HERE-FOR-INTEL</a> |
+<li>        Download and save an example Input/Output file, such as <tt>exA.frm</tt>,
          on your Desktop, or some other directory:<br> | <a href="../examples/exA.frm">CTRL-CLICK-HERE</a> |
 <li>        Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
-            <font face="courier">...$   cd ~/Desktop</font><br>
-            <font face="courier">...$   chmod +x frame3dd</font><br>
+            <tt>...$   cd ~/Desktop</tt><br>
+            <tt>...$   chmod +x frame3dd</tt><br>
          Create a plain text file (using 
-<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a> or TextEdit) called  <font face="courier">~/.profile</font> containing the line:<br>
-             <font face="courier">export PATH=".:$PATH:/usr/local/bin"</font><br>
+<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a> or TextEdit) called  <tt>~/.profile</tt> containing the line:<br>
+             <tt>export PATH=".:$PATH:/usr/local/bin"</tt><br>
          Quit the Terminal application.  [APPLE] [Q]
 <li>        Run <b>Frame3DD</b> from a Terminal window:  (Applications > Utilities > Terminal) ... <br>
-            <font face="courier">...$   cd ~/Desktop</font><br>
-            <font face="courier">...$   frame3dd example.frm</font><br>
-         where <font face="courier">example.frm</font> is the name of your Input Data file.
+            <tt>...$   cd ~/Desktop</tt><br>
+            <tt>...$   frame3dd example.frm</tt><br>
+         where <tt>example.frm</tt> is the name of your Input Data file.
 <!-- <li>        Run <b>Frame3DD</b> from a Terminal window  (another way).
              Click on the <b>frame3dd</b> icon in your Desktop.
              A Terminal window should automatically open.
              When asked for the Input/Output file name, type ...<br>
-               <font face="courier">/Users/your_name_here/Desktop/examples/exA.frm</font> -->
+               <tt>/Users/your_name_here/Desktop/examples/exA.frm</tt> -->
 <li>     You may edit Input/Output files using a plain text editor
 (<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,
 TextEdit (Applications > TextEdit), 
@@ -277,82 +301,28 @@ install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href=
 to download and install Gnuplot 4.2.4 for OS X.
 <li>        Test that Gnuplot works.
          Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
-          <font face="courier">    ...$  gnuplot</font><br>
-<!--          <font face="courier"> gnuplot>  set term aqua</font><br> -->
-          <font face="courier"> gnuplot>  plot sin(x)</font><br>
-          <font face="courier"> gnuplot>  quit</font>
+          <tt>    ...$  gnuplot</tt><br>
+<!--          <tt> gnuplot>  set term aqua</tt><br> -->
+          <tt> gnuplot>  plot sin(x)</tt><br>
+          <tt> gnuplot>  quit</tt>
      
 <li>        Visualize your <b>Frame3DD</b> analysis output.
          Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
-          <font face="courier">    ...$  cd ~/Desktop</font><br>
-          <font face="courier">    ...$  gnuplot</font><br>
-<!--          <font face="courier"> gnuplot>  set term aqua</font><br> -->
-          <font face="courier"> gnuplot>  load 'example.plt'</font><br>
-         where <font face="courier">example.plt</font> is the name of of the plot file specified in the Input Data. (<a href="#InputData">See below.</a>) <br>
+          <tt>    ...$  cd ~/Desktop</tt><br>
+          <tt>    ...$  gnuplot</tt><br>
+<!--          <tt> gnuplot>  set term aqua</tt><br> -->
+          <tt> gnuplot>  load 'example.plt'</tt><br>
+         where <tt>example.plt</tt> is the name of of the plot file specified in the Input Data. (<a href="#InputData">See below.</a>) <br>
          Hit the 'Return' key in the Terminal window to see the sequence of plots
-         and animations until the <font face="courier"> gnuplot></font> prompt returns.<br>
+         and animations until the <tt> gnuplot></tt> prompt returns.<br>
          Save or print plots using [APPLE] [P].<br>
 After finishing with your plots, quit Gnuplot by typing ...  <br>
-          <font face="courier"> gnuplot>  quit</font>  
+          <tt> gnuplot>  quit</tt>  
 </ol>
 </p>
 
 
-<hr>
-<h4>HOW TO INSTALL AND RUN THE DOS AND MS-WINDOWS VERSION</h4>
-
-For DOS and MS-Windows, the following special guidelines should be followed:
-
-<ol>
-<li>        Download the <b>Frame3DD</b> executeable and save as "frame3dd.exe" on your Desktop,
-         or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/frame3dd.exe">RIGHT-CLICK-HERE</a> |
-<li>        Download and save an example Input/Output file, such as <font face="courier">exA.frm</font>,
-         on your Desktop, or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/examples/exA.frm">RIGHT-CLICK-HERE</a> |
-<li>       Create a directory called   <font face="courier">C:\tmp</font>   if it doesn't already exit.
-<li>       The plot filename (plot_file) must have eight or fewer 
-         characters before the period (.) and three or fewer characters
-         after the period.   No more than one period (.) may be included
-         in the file name. 
-       The mesh data file name (<font face="courier">mesh_file)</font> should contain no more 
-         than seven characters, and no character may be a period (.).
-       The mode shape data file name (<font face="courier">mode_file</font>) should contain no more
-         than five  characters, and no character may be a period (.).
-       The <a href="http://www.duke.edu/~hpgavin/frame3dd/index.html">example Input/Output files</a>, exA.frm ... exJ.frm, adhere to these rules.  
-<li>       You may need to change the line <font face="courier">/tmp/mesh_file</font> to <font face="courier">C:\tmp\mesh_file</font>
-         and the line <font face="courier">/tmp/mode_file</font> to <font face="courier">C:\tmp\mode_file</font>
-<li>       Run <b>Frame3DD</b> from a MS-DOS window or Command Prompt window ...<br>
-(Start > Programs > Accessories > Command Prompt)<br>
-<font face="courier">...> cd C:\Documents and Settings\your_name_here\My Documents\</font><br>
-<font face="courier">...> frame3dd example.frm</font><br>
-where <font face="courier">example.frm</font> is the name of your Input Data file.  
-
-
-<li>       The graphical output is best viewed with the
-<a href="http://downloads.sourceforge.net/gnuplot/gp424win32.zip?use_mirror=">
-MS-Windows version of Gnuplot</a>.<br>
-       The <a href="http://downloads.sourceforge.net/gnuplot/gp424dj2.zip?use_mirror=">DOS version of Gnuplot</a> works except for mode shape animation.<br>
-       Right-clicking on one of these two links will download a <font face="courier">.zip</font> file for Gnuplot.<br>
-       Click on <b>Open</b> to start WinZip, and <b>Extract</b> to create a <b>Gnuplot</b> folder in <b>My Documents</b>.<br>
-       Open the folder <b>My Documents\Gnuplot\bin</b> and right click on <b>wgnuplot</b>
-       to create a shortcut to your <b>Desktop</b>.<br>
-       Clicking on the <b>wgnuplot</b> icon on the desktop will start Gnuplot.<br>
-       To load the plot into Gnuplot, first change directories to 
-       the directory in which you are running the <b>Frame3DD</b> analysis, by clicking
-       on the <b>ChDir</b> button at the top of the Gnuplot window and typing ...<br>
-         <font face="courier">C:\Documents and Settings\your_name_here\My Documents </font><br>
-       Display the plot of your structure by typing ...<br>
-         <font face="courier"> gnuplot>  load 'example.plt'</font><br>
-         where <font face="courier">example.plt</font> is the name of of the plot file specified in the Input Data. (<a href="#InputData">See below.</a>) <br>
-         Hit the 'Return' key in the Terminal window to see the sequence of plots
-         and animations until the <font face="courier"> gnuplot></font> prompt returns.<br>
-<li>       You may edit Input/Output Data files using a plain text editor
-(<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>, 
-<a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>), or a spreadsheet program
-(<a href="http://www.openoffice.org/">OpenOffice</a>, excel).<br>
-<li>       You may wish to delete all the files in the <font face="courier">C:\tmp</font> directory when you have finished
-         your analyses.  <br>
-</ol>
-
+<h2>FrameEd</h2>
 
 <a name="FrameEd">
  <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).<br>
@@ -376,13 +346,14 @@ to match the first mode.
 </ul>
 </a>
 
-<hr>
+<p>Source code for FrameEd is not currently available, and development on this GUI is no longer active.</p>
+
 <a name="Matlab">
-<h4>MATLAB INTERFACE</h4>
+<h2>Matlab interface</h2>
 
 <p>
 <b>Frame3DD</b> may optionally be executed from within Matlab on any platform,
-via the Matlab interface function <a href="http://www.duke.edu/~hpgavin/frame3dd/Matlab/frame_3dd.m">frame_3dd.m</a> 
+via the Matlab interface function <a href="Matlab/frame_3dd.m">frame_3dd.m</a> 
 <pre>
 function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 % [D,R,F,L,Ks] = frame_3dd (XYZ,JTS,RCT,EAIJ,P,W,D)
@@ -453,7 +424,7 @@ working directory.
 <p>
 <ol>
 <li> The Matlab file for your problem first sets up the various matrices defining the problem for analysis and calls frame_3dd.m <br> 
-A <a href="http://www.duke.edu/~hpgavin/frame3dd/Matlab/exA.m">Matlab version of Example A</a> illustrates
+A <a href="Matlab/exA.m">Matlab version of Example A</a> illustrates
 how to analyze problems using the Matlab interface to <b>Frame3DD</b>.<br>
 Matlab versions of the other examples are forthcoming.
 <li> frame_3dd.m writes IOdata.fmm,
@@ -482,9 +453,8 @@ It does not (yet) implement the following features of <b>Frame3DD</b>:
 Adding these features would require Matlab programming, only.
 </p>
 
-<hr>
 <a name="CSV">
-<h4>SPREADSHEET INTERFACE</h4>
+<h2>Spreadsheet interface</h2>
 
 <p>
 Input/Output data for <b>Frame3DD</b> may be read and written using spreadsheet programs
@@ -529,7 +499,6 @@ Reaction forces for load case 3 start at row 94 and end at row 98.<br><br>
 For any <b>Frame3DD</b> .CSV results file, the spreadsheet cells containing the result
 row numbers are given in the following table.<br>
 <table border="1">
-<font face="Arial, Helvetica, sans-serif" size="2">
 <tr> <th>Load Case 1</th> <th>First Row</th> <th>Last Row</th></tr>
 <tr> <td>Joint Displacements</td> <td>C-10</td><td>C-11</td></tr>
 <tr><td>Beam End Forces</td> <td>D-10</td><td>D-11</td></tr>
@@ -560,8 +529,7 @@ Reaction results are in columns A through G:<br>
 Modal analysis results are not (yet) written to the .CSV formatted output file. 
 </p>
 
-<hr>
-<h4>STRUCTURAL MODELING </h4>
+<h2>Structural modelling</h2>
 
 <!--
 <p>
@@ -570,7 +538,7 @@ Modal analysis results are not (yet) written to the .CSV formatted output file.
 </p>
 -->
 
-<b>Units</b><br>
+<h3>Units</h3>
 
 <p>
      The Output Data is formated using floating point display, not scientific notation.  To
@@ -582,7 +550,7 @@ Modal analysis results are not (yet) written to the .CSV formatted output file.
 </p>
 
 
-<b>Cross Section Properties and Coordinate Transformation</b><br>
+<h3>Cross Section Properties and Coordinate Transformation</h3>
 
 <p>
 To analyze a structure as a "truss" with this software, specify <i>>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>
@@ -656,7 +624,7 @@ When a beam or bar element is placed into the structure
 by A. Kassimali.
 </p>
 
-<b> Cross Section Properties of some Steel Sections </b> <br>
+<h3>Cross Section Properties of some Steel Sections</h3>
 
 <ul>
 
@@ -685,9 +653,8 @@ efunda
 </ul>
 -->
 
-<b> Cross Section Properties of some Standard Wood Sections</b><br>
+<h3> Cross Section Properties of some Standard Wood Sections</h3>
 
-<font face="courier" size="3">
 <pre>
              Ax      Asy     Asz     Jxx     Iyy     Izz   
              in^2    in^2    in^2    in^4    in^4    in^4
@@ -701,18 +668,15 @@ efunda
      2x12  16.880  11.253  11.253  11.544 178.000   3.164 
      2x14  19.880  13.253  13.253  13.790 290.800   3.727
 </pre>
-</font>
 
-<b> Elastic Material Properties of Douglas Fir</b><br>
+<h3> Elastic Material Properties of Douglas Fir</h3>
 
-<font face="courier" size="3">
 <pre>
      Modulus of Elasticity (E)         1700 - 1900 ksi
      Shear Modulus         (G)          640 -  710 ksi
 </pre>
-</font>
 
-<b>Torsion</b><br>
+<h3>Torsion</h3>
 
 <p>
      Polar Moments of Inertia depend on the shape of the cross-section.  
@@ -747,7 +711,7 @@ Restraint to <a href="http://www.archoneng.com/tptasm.html">warping deformation<
 </p>
 
 
-<b> Connections</b><br>
+<h3>Connections</h3>
 
 <p>
 All connections in a <b>Frame3DD</b> analysis are moment-resisting.
@@ -757,7 +721,7 @@ low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>.
 Beams may be considered infinitely rigid within a sphere of a specified radius around a joint.
 </p>
 
-<b>Shear Deformation, Geometric Stiffness, and Buckling </b>
+<h3>Shear Deformation, Geometric Stiffness, and Buckling </h3>
 
 <p>
      The <b>Frame3DD</b> analysis will optionally include the effects of shear deformation and/or geometric stiffness.
@@ -793,7 +757,7 @@ and superposition does not hold.  The geometric stiffness matrix is a secant
 stiffness matrix.  In most cases the geometric stiffness matrix lies between the
 un-stressed stiffness matrix and the tangent stiffness matrix.  
 </p>
-<b> Loads</b><br>
+<h3> Loads</h3>
 
 <p>
 Four types of static loads may be specified.  
@@ -809,7 +773,7 @@ in the
 <a href="#InputData">Input Data</a>, and by specifying the four types of loads for each load case, as shown in <a href="../examples/exA.frm">Example A</a> and <a href="../examples/exB.frm">Example B</a>.
 </p>
 
-<b> Support Conditions and Reactions </b><br>
+<h3>Support Conditions and Reactions </h3>
 
 <p>
 Each joint has six degrees of freedom: three translations
@@ -824,14 +788,14 @@ with the desired flexibility.
 
 </p>
 
-<b> Prescribed Displacements </b><br>
+<h3>Prescribed Displacements </h3>
 
 <p>
 Static joint displacements may be prescribed only at restrained degrees of freedom.
 Prescribed displacements are specified separately for each load case.  
 </p>
 
-<b> Dynamic Modal Analysis </b><br>
+<h3> Dynamic Modal Analysis </h3>
 
 <p>
 The <b>Frame3DD</b> analysis will optionally include a dynamic analysis for natural modes of vibration. 
@@ -892,7 +856,7 @@ If <i>nM</i> is set to zero, there is no need to provide numerical values for th
 below.)
 </p>
 
-<b> Matrix Condensation </b><br>
+<h3>Matrix Condensation</h3>
 
 </p>
 Reduced order stiffness and mass matrices may be computed via a static
@@ -906,8 +870,7 @@ matrix is computed using a regularization method which somewhat improves the
 conditioning of the condensed mass and stiffness matrices.  
 </p>
 
-<hr>
-<h4>NUMERICAL DETAILS</h4>
+<h2>Numerical details</h2>
 
 
 <p>       <b>Frame3DD</b> imposes no limit on the number of degrees of freedom.
@@ -926,14 +889,17 @@ conditioning of the condensed mass and stiffness matrices.
        screen and are written to the Input/Output file.   Iterative improvements
        to the LDL' back-substitution make use of a quasi Newton-Raphson method:<br>
 
-                 <i>K dD(i) = F - K D(i)</i><br>
-                   <i>D(i+1) = D(i) + dD(i)</i><br>
+                 <div class=eq>K dD(i) = F - K D(i)</div>
+                 <div class=eq>D(i+1) = D(i) + dD(i)</div>
 
-       where,<br>   <i>D(i) </i>   is the displacement vector at iteration <i>i</i> , <br>
-                <i>K </i>     is the stiffness matrix ,  <br>
-                <i>F </i>     is the applied load vector , <br>
-                <i>dD(i) </i>  is the incremental displacement vector at iteration <i>i</i> , and <br>
-                <i>D(i+1)</i>  is the displacement vector at iteration <i>i+1</i> <br>
+       where
+<ul>
+<li>   <i>D(i) </i>   is the displacement vector at iteration <i>i</i> ,
+<li>                <i>K </i>     is the stiffness matrix ,
+<li>                <i>F </i>     is the applied load vector ,
+<li>                <i>dD(i) </i>  is the incremental displacement vector at iteration <i>i</i> , and
+<li>                <i>D(i+1)</i>  is the displacement vector at iteration <i>i+1</i>
+</ul>
 
        At each LDL' back-substitution iteration, the equilibrium error is displayed
        to the screen as the `RMS matrix error'.  This error is the root-mean-square of
@@ -944,14 +910,17 @@ conditioning of the condensed mass and stiffness matrices.
 <p>       When geometric stiffness effects are included, the solution is obtained
        iteratively, using a quasi Newton-Raphson method:<br>
 
-                <i>K(D(i)) dD(i) = F - K(D(i)) D(i)</i><br>
-                      <i>D(i+1)  =  D(i) + dD(i)</i><br>
+                <div class=eq>K(D(i)) dD(i) = F - K(D(i)) D(i)</div>
+                <div class=eq>D(i+1)  =  D(i) + dD(i)</div>
 
-       where,<br>   <i>D(i)  </i>  is the displacement vector at iteration <i>i</i>,<br>
-                <i>K(D(i))  </i>is the secant stiffness matrix at displacements <i>D(i)</i><br>
-                <i>F </i>     is the applied load vector ,<br>
-                <i>dD(i) </i>  is the incremental displacement vector at iteration <i>i</i> , and<br>
-                <i>D(i+1)</i>  is the displacement vector at iteration <i>i+1</i><br>
+       where
+<ul>
+<li>   <i>D(i)  </i>  is the displacement vector at iteration <i>i</i>,
+<li>                <i>K(D(i))  </i>is the secant stiffness matrix at displacements <i>D(i)</i>
+<li>                <i>F </i>     is the applied load vector ,
+<li>                <i>dD(i) </i>  is the incremental displacement vector at iteration <i>i</i> , and
+<li>                <i>D(i+1)</i>  is the displacement vector at iteration <i>i+1</i>
+</ul>
 
        At each Newton-Raphson iteration, the relative equilibrium error is displayed
        to the screen.   This error is the root-mean-square of (<i>F - K(D(i)) D(i)</i>)
@@ -975,52 +944,21 @@ conditioning of the condensed mass and stiffness matrices.
        obtained using a generalized Jacobi sub-space iteration procedure
        or a Stodola iteration procedure.
 Sub-space iterations are stopped when the error is less than the specified
-       convergence tolerance.  The error is defined here as <br>
+       convergence tolerance.  The error is defined here as</p>
 
-                <i>error = | fN(i) - fN(i-1) | / fN(i) </i><br>
+                <div class=eq>error = | fN(i) - fN(i-1) | / fN(i) </div>
 
-       where<br>   <i> fN(i)</i>    is the highest natural frequency computed at iteration <i>i</i> ,<br>
-                <i>fN(i-1)</i>  is the highest natural frequency computed at iteration <i>i-1</i> ,<br>
-</p>
-
-
-
-<hr>
-<h4>ENHANCEMENTS PROJECTED FOR FUTURE VERSIONS </h4>
-
+<p>where</p>
 <ul>
-<li>       Trapezoidally distributed loads
-<li>       A GUI (ideally GPL'able)<br>
-<ul>
- <li> <a href="DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).
- (<a href="#FrameEd">See above</a>.)
- <li> Work has been done on a <a href="http://www.trolltech.com/products/qt">Qt</a> GUI (Fall 2004)<br>
- <li> A Microstran-Viewer interface is in the works
-<a href="http://frame3dd.svn.sourceforge.net/viewvc/frame3dd/trunk/src/microstran/">here</a>.
-(Summer 2008)
- <li> A Google-sketchup interface is in the works <a href="http://www.steelweb.info/whatsnew.htm">here</a>
-and possibly 
-<a href="http://chakkree.blogspot.com/2008_05_01_archive.html">here</a>.
-(Summer 2008)
-</ul>
-<li>       Consistent mass matrix including the effects of shear deformation on rotatory inertia 
-<li>       Dynamic time-history analysis with the HHT-alpha method
-<li>       Spectral modal superposition
-<li>       Member end joint releases
-<li>       Linearly tapered beam elements
-<!-- <li>       Membrane elements  -->
-<!-- <li>       Plate elements   -->
-<li>       Sparse matrix storage and <a href="http://ascendwiki.cheme.cmu.edu/Survey_of_sparse_matrix_software">sparse matrix solvers</a>
-<li>       ... your recommendations ... send me an e-mail!
+<li><i> fN(i)</i>    is the highest natural frequency computed at iteration <i>i</i> ,
+<li><i>fN(i-1)</i>  is the highest natural frequency computed at iteration <i>i-1</i> ,
 </ul>
 
-<hr>
 <a name="InputData">
-<h4>INPUT DATA FORMAT </h4>
+<h2>Input Data Format</h2>
 (Click <a href="template.frm">here</a> to download an Input Data template, template.frm)<br>
 </a>
 
-<font face="courier" size="3">
 <pre>
 A one-line descriptive title of your analysis MUST be the FIRST line of the file
 
@@ -1142,13 +1080,10 @@ nC                                                % number of condensed joints
                                % if Cmethod == 1, only mode m[1] is matched.
 
 </pre>
-</font>
-<hr>
-<a name="Variables">
-<h4>VARIABLE DEFINITIONS</h4>
-</a>
 
-<font face="courier" size="3">
+<a name="Variables"/>
+<h2>Variable Definitions</h2>
+
 <pre>
        a         - Coefficient of thermal expansion (1/degree)
        anim      - List of modes to be animated, by mode number
@@ -1246,13 +1181,72 @@ nC                                                % number of condensed joints
        xP        - distance from J1 to the concentrated member load
 
 </pre>
-</font>
-<hr>
-<h4>REFERENCES </h4>
 
-This software was developed using methods described in the following texts.
-The two primary sources are the texts by 
-<a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/qid=1036162662/sr=1-4/ref=sr_1_4/002-7358683-1549619?v=glance">A. Kassimali</a> and <a href="http://www.amazon.com/exec/obidos/ASIN/0486649482/qid=1003514977/sr=1-1/ref=sr_1_8_1/002-2386037-4350467">J.S. Przemieniecki</a>.   
+<h2>Source code</h2>
+
+<p>The source code is written in ANSI C and is extensively commented. The source code includes functions for frame analysis, LDL' decomposition, LU decomposition, Newton-Raphson iteration, sub-space iteration, Stodola iteration, Sturm eigen-value check, static condensation, Guyan reduction, and dynamic condensation.</p>
+
+<pre>
+    file name       description                                               
+    -----------     -------------------------------
+    main.c          main driver routines
+    frame3dd.c      frame analysis 
+    frame3dd_io.c   input-output functions 
+    eig.c           generalized eigenvalue analysis 
+    ldl_dcmp.c      LDL' decomposition
+    lu_dcmp.c       LU decomposition 
+    coordtrans.c    coordinate transformation
+    nrutil.c        dynamic memory allocation
+</pre>
+
+<p>
+<b>Frame3DD</b> compiles with the <a href="http://gcc.gnu.org/">gcc compiler</a>,
+the <a
+href="http://www.delorie.com/djgpp/"> DJGPP gcc compiler</a>,
+the <a href="http://www.cs.virginia.edu/~lcc-win32/"> LCC-win32 compiler</a>,
+and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
+</p>
+
+<pre>
+    gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
+
+</pre>
+
+<h2>Enhancements projected for future versions</h2>
+
+<ul>
+<li>       Trapezoidally distributed loads
+<li>       A GUI (ideally GPL'able)<br>
+<ul>
+ <li> <a href="DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).
+ (<a href="#FrameEd">See above</a>.)
+ <li> Work has been done on a <a href="http://www.trolltech.com/products/qt">Qt</a> GUI (Fall 2004)<br>
+ <li> A Microstran-Viewer interface is in the works
+<a href="http://frame3dd.svn.sourceforge.net/viewvc/frame3dd/trunk/src/microstran/">here</a>.
+(Summer 2008)
+ <li> A Google-sketchup interface is in the works <a href="http://www.steelweb.info/whatsnew.htm">here</a>
+and possibly 
+<a href="http://chakkree.blogspot.com/2008_05_01_archive.html">here</a>.
+(Summer 2008)
+</ul>
+<li>       Consistent mass matrix including the effects of shear deformation on rotatory inertia 
+<li>       Dynamic time-history analysis with the HHT-alpha method
+<li>       Spectral modal superposition
+<li>       Member end joint releases
+<li>       Linearly tapered beam elements
+<!-- <li>       Membrane elements  -->
+<!-- <li>       Plate elements   -->
+<li>       Sparse matrix storage and <a href="http://ascendwiki.cheme.cmu.edu/Survey_of_sparse_matrix_software">sparse matrix solvers</a>
+<li>       ... your recommendations ... send me an e-mail!
+</ul>
+
+<a name="references"/>
+<h2>References</h2>
+
+<p>This software was developed using methods described in the following texts.
+The two primary sources are the texts by
+<a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/qid=1036162662/sr=1-4/ref=sr_1_4/002-7358683-1549619?v=glance">A. Kassimali</a> and <a href="http://www.amazon.com/exec/obidos/ASIN/0486649482/qid=1003514977/sr=1-1/ref=sr_1_8_1/002-2386037-4350467">J.S. Przemieniecki</a>. Other relevant books and articles are:
+</p>
 
 <ol>
 <li> Howard G. Allen, 
@@ -1284,22 +1278,22 @@ The two primary sources are the texts by
     Brooks/Cole, 1999.                  ISBN: 0534206700
 
 <li> Jaroslav Mackerle,
-    ``<a href="mackerle97.pdf">Finite element linear and nonlinear, static and dynamic analysis of structural
-    elements: a bibliography (1992-1995)</a>,''
+    <a href="mackerle97.pdf">Finite element linear and nonlinear, static and dynamic analysis of structural
+    elements: a bibliography (1992-1995)</a>,
     Engineering Computations, vol. 14, no. 4, pp. 347-440,  1997.
 
 <li> Jaroslav Mackerle,
-    ``<a href="mackerle00.html">Finite element linear and nonlinear, static and dynamic analysis of structural
-    elements - an addendum - A bibliography (1996-1999)</a>,''
+    <a href="mackerle00.html">Finite element linear and nonlinear, static and dynamic analysis of structural
+    elements - an addendum - A bibliography (1996-1999)</a>,
     Engineering Computations, vol. 17, no. 3, pp. 274-351,  2000.
 
 <li> William McGuire, Richard H. Gallagher, and Ronald D. Ziemian,
-<a href="http://www.amazon.com/Structural-Analysis-MASTAN2-William-McGuire/dp/0471376515/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1198185313&sr=8-1">
-Matrix Structural Analysis, 2nd ed.</a> John Wiley, 1999.
-ISBN: 0471376515
+	<a href="http://www.amazon.com/Structural-Analysis-MASTAN2-William-McGuire/dp/0471376515/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1198185313&sr=8-1">
+	Matrix Structural Analysis, 2nd ed.</a> John Wiley, 1999.
+	ISBN: 0471376515
 
 <li> W.D. Pilkey, Weize Kang and Uwe Schramm,
-    ``<a href="pilkey95.pdf">New structural matrices for a beam element with shear deformation</a>,''
+    <a href="pilkey95.pdf">New structural matrices for a beam element with shear deformation</a>,
     Finite Elements in Analysis and Design, vol. 19, pp. 25-44,  1995.
 
 <li> William H. Press, Saul A. Teukolsky, William T. Vetterling, Brian P. Flannery,
@@ -1322,112 +1316,40 @@ ISBN: 0471376515
     Prentice-Hall, 1995.                ISBN: 013137589X
 
 </ol>
+
 <hr>
-<h4>SOURCE CODE</h4>
 
-The source code is written in ANSI C and is extensively commented. The source code includes functions for frame analysis, LDL' decomposition, LU decomposition, Newton-Raphson iteration, sub-space iteration, Stodola iteration, Sturm eigen-value check, static condensation, Guyan reduction, and dynamic condensation. 
+<h2>About this document</h2>
 
-<font face="courier" size="3">
+<p>Authors:</p>
+
 <pre>
-    file name      description                                               
-    -----------    --------------------------------------------------
-    main.c          C source-code for main driver routines
-    frame3dd.c      C source-code for frame analysis 
-    frame3dd_io.c   C source-code for input-output functions 
-    eig.c           C source-code for generalized eigenvalue analysis 
-    ldl_dcmp.c      C source-code for LDL' decomposition
-    lu_dcmp.c       C source-code for LU decomposition 
-    coordtrans.c    C source-code for coordinate transformation
-    nrutil.c        C source-code for dynamic memory allocation
-</pre>
-</font>
-<p>
-<b>Frame3DD</b> compiles with the <a href="http://gcc.gnu.org/">gcc compiler</a>,
-the <a
-href="http://www.delorie.com/djgpp/"> DJGPP gcc compiler</a>,
-the <a href="http://www.cs.virginia.edu/~lcc-win32/"> LCC-win32 compiler</a>,
-and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
-</p>
-<font face="courier" size="3">
-<pre>
-    gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
-
-</pre>
-</font>
-
-<b>Author</b>
-<font face="courier" size="3">
-<pre>
-    Henri P. Gavin, P.E., Ph.D. 
-    Department of Civil and Environmental Engineering
-    Duke University, Box 90287 
-    Durham, NC  27708--0287 
-
-    <a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;&#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;">&#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;
+Henri P. Gavin, P.E., Ph.D. 
+Department of Civil and Environmental Engineering
+Duke University, Box 90287 
+Durham, NC  27708--0287
+<a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;&#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;">&#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;
 </a>
 </pre>
-</font>
 
+<pre>
+<a href="http://pye.dyndns.org">John Pye</a>
+Dept of Engineering
+Australian National University
+</pre>
 
-</font>
-
-<hr>
-<table width="700" border="0" cellspacing="2" cellpadding="2" bold >
-<tr align="left" valign="middle">
-<td>
-<a href="http://www.fsf.org/copyleft/gpl.html"><img src="img/gplv3-127x51.png" border="0"></a>
-</td>
-<td width ="600">
-<font face="Verdana, Arial, sans-serif" size="1">
-<p align="justify">
-Frame3DD is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License
-(<a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>)
-as published by the
-<a href="http://www.fsf.org/">Free Software Foundation</a>,
-either version 3 of the License, or (at your option) any later version.
+<p>
+<a href="http://sourceforge.net/projects/frame3dd/"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=221386&amp;type=2" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a>
 </p>
 
 <p align="justify">
-Simply put, the <a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>
-says that anyone who redistributes the software, with or without changes, must pass along the freedom to further copy and change it. By distributing the complete source code for Frame3DD under the terms of the GPL, we guarantee that you and all other users will have the freedom to redistribute and change Frame3DD.
-</p>
-</td>
-</tr>
-</table>
-<table width="700" border="0" cellspacing="2" cellpadding="2" bold >
-<tr align="left" valign="middle">
-<td>
-<p align="justify">
-<font face="Verdana, Arial, sans-serif" size="1" width="700">
-Frame3DD is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU General Public License
-(<a href="http://www.fsf.org/copyleft/gpl.html">GPL</a>)
-and the GNU General Public License
-<a href="http://www.gnu.org/copyleft/gpl-faq.html">FAQ</a> for more details.
-</p>
-<p align="justify">
-&copy; 1992-2009 Henri P. Gavin.
-Verbatim copying and distribution is permitted in any medium, provided this notice is preserved. <br><br>
-Department of Civil and Environmental Engineering<br>
-Duke University, Box 90287<br>
-Durham, NC 27708-0287
-</p>
-<p align="justify">
-Source code is available from
+Source code for this document as well as Frame3dd itself is available from
 <a href="http://www.sourceforge.net/projects/frame3dd/">  
 http://www.sourceforge.net/projects/frame3dd/</a>
 </p>
-</td>
-</tr>
-</table>
 
-<font face="Verdana, Arial, sans-serif" size="1" width="700">
-<br>updated: May 6 2003, Nov 8 2004, Nov 22 2004, Nov 29 2004, Dec 2 2004, Dec 10 2004, Dec 6 2006, Feb 22 2007, Mar 1 2007, Jun 6 2007, Dec 20 2007,
-Mar 14 2008, Sep 9 2008, Jan 4 2009
-</font> <br>
-<a href="http://thomer.com/vi/vi.html"><img src="img/vi_logo_by_urmas_reinsalu.png" border="0"></a>
+<p>Last update: 2 Feb 2009
+(see full <a href="http://frame3dd.svn.sourceforge.net/viewvc/frame3dd/trunk/doc/user-manual.html?view=log">revision log</a>)
+
 </body>
 </html>
