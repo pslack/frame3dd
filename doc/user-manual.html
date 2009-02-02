@@ -50,13 +50,13 @@ Duke University</a> - Box 90287,
 geometric stiffness.  
 </p>
 
-<p>It reads an Input Data file, containing joint coordinates, member geometry, material moduli, restrained joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.  
+<p>It reads a plain-text <b>input data file</b>, containing joint coordinates, member geometry, material moduli, restrained joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.  
 <!-- (The Input/Output file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
 </p>
 
-<p>It then appends the Input Data with Output Data, resulting in a single Input/Output file.  
-The Output Data recapitulates the input information, gives joint displacements in global coordinates, member
-end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.  
+<p>It then <b>appends</b> the input data with output data, resulting in a single input/output file.  
+The output data recapitulates the input information, gives joint displacements in global coordinates, member
+end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
 </p>
 
 <p>Frame3DD can consider multiple static load cases in a single analysis.</p>
@@ -108,22 +108,23 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <ol>
 <li>Read the Manual and Reference (this file).
 <li>Download or build the Frame3DD executable for your operating system (see below).
-<li>Obtain a copy of Gnuplot for your operating system.
-<li>       Download some of the example Input/Output files and compare them to the corresponding plots and movies.
-<li>       Open a terminal window to run the program.  <br>
-          <tt>frame3dd [example Input/Output file]</tt>
-<li>     Read the computed Output Data, which is written to the end of the Input/Output file.
+<li>Optionally, obtain a copy of Gnuplot for your operating system.
+<li>Copy one of the example input data files (eg <tt>exA.frm</tt>) into your home directory and make sure you have write privileges for the file.
+<li>       Open a terminal window and run the program using the command
+          <tt>frame3dd exA.frm</tt> (change the filename <tt>exA.frm</tt> as necessary).
+<li>Open the input/output file using your text editor and scroll down to the output data, which is written to the end of the input/output file after the end of the input data.
 <!--     Running this program will create many files.  Most of them are used 
          for graphics and should be written to the  /tmp  directory. 
 <li>      One of the files will be written to the current working directory and will be called 
          something like frA.plt   This file is used for plotting.   -->
-<li>      Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, and simply typing ...<br>
-           <tt>gnuplot>    load 'example.plt' </tt> <br>
-where the <tt>example.plt</tt> is the 'plot_file' specified as part of the Input Data (see <a href="#InputData">below</a>) <br>
+<li>      Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, and typing
+           <tt>load 'example.plt' </tt> at the "<tt>gnuplot&gt;</tt>"&nbsp;prompt, where the <tt>example.plt</tt> is the 'plot_file' specified as part of the Input Data (see <a href="#InputData">below</a>) <br>
 Observe a series of plots by hitting the Return (or Enter) key between plots.<br>
 If a dynamic analysis was performed, you will enjoy an animation of selected mode shapes.<br>
 Continue to hit the Return (or Enter) key until the last plot is displayed.  
 </ol>
+
+<div class=note><b>Note:</b> Running Frame3dd with certain input data files will result in many additional output files. The locations of these files can be specified inside the input data file, and should probably be a temporary file folder such as C:\WINDOWS\TEMP so that these files can be easily deleted later.</div>
 
 <a name="iodata"/><h2>2. Input Data and Output Data</h2>
 
@@ -157,9 +158,10 @@ Details regarding the Matlab interface to Frame3DD are <a href="#Matlab">here</a
 Details regarding the spreadsheet interface to Frame3DD are <a href="#CSV">here</a>.<br>
 </p>
 <p>
-It may take a few tries to get your Input Data just right.  
-Frame3DD checks the Input Data for errors prior to anlayzing the system
-and displays descriptive diagnostic messages when errors are found with the Input Data.  
+It will probably take a few tries to get your input data just right.  
+Frame3DD checks the Input Data for errors prior to analysing the system
+and, where possible, displays descriptive diagnostic messages when errors are
+found with the input data.  
 </p>
 
 <a name="installrun"/><h2>3. How to install and run Frame3dd</h2>
@@ -1361,8 +1363,12 @@ Source code for this document as well as Frame3dd itself is available from
 http://www.sourceforge.net/projects/frame3dd/</a>
 </p>
 
-<p>Last update: 2 Feb 2009
-(see full <a href="http://frame3dd.svn.sourceforge.net/viewvc/frame3dd/trunk/doc/user-manual.html?view=log">revision log</a>)
+<p>Last update: <SCRIPT LANGUAGE="JavaScript">
+<!--
+m = "Last updated " + document.lastModified;
+document.write(m);
+// -->
+</SCRIPT> (see full <a href="http://frame3dd.svn.sourceforge.net/viewvc/frame3dd/trunk/doc/user-manual.html?view=log">revision log</a>)
 
 </body>
 </html>
