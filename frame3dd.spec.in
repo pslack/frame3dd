@@ -62,6 +62,11 @@ rm -rf %{buildroot}
 
 %changelog
 
+* Mon Feb 02 2009 John Pye <john.pye@anu.edu.au> 20090202
+- Fixed problem with use of /tmp on Windows
+- Upload binaries to SF.net
+- Add comments to README-win32.txt
+
 * Thu Jan 29 2009 Henri Gavin <henri.gavin@duke.edu> 20090129
 - Completed migration of website to frame3dd.sourceforge.net
 
