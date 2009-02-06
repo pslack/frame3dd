@@ -14,9 +14,11 @@ Graphical output and mode shape animation via Gnuplot.">
 <style>
 h1 {font: bold xx-large sans-serif}
 h2 {font: bold x-large sans-serif}
-li, td, p {font: normal medium sans-serif}
+h3 {font: bold large sans-serif}
+h4 {font: bold small sans-serif}
+li, td, p {font: normal small sans-serif}
 div.eq {font-style:italic; width:100%; text-align:center; margin-top: 6pt; margin-bottom: 6pt}
-div.note {width: 40em; border: solid 2pt gray; background-color: #FFFFEE; padding:10px; margin-top: 6pt; margin-bottom: 6pt}
+div.note {width: 60em; border: solid 2pt gray; background-color: #FFFFEE; padding:10px; margin-top: 6pt; margin-bottom: 6pt; font: normal small sans-serif }
 pre {background-color: #EEEEEE}
 </style>
 </head>
@@ -24,46 +26,48 @@ pre {background-color: #EEEEEE}
 <body>
 
 <img src="img/psoe.jpg" height="100" align="left" border="0">
-<b>User manual and reference for <a href="http://frame3dd.sourceforge.net/">Frame3DD: A Structural Frame Analysis Program</a></b>
-<br>
-<a href="http://www-cee.egr.duke.edu/">
+<font face="Arial, Helvetica, sans-serif" size="3">
+<nobr><b>User manual and reference for <a href="http://frame3dd.sourceforge.net/">Frame3DD: A Structural Frame Analysis Program</a></b>
+</nobr><br>
+<a href="http://cee.duke.edu/">
 Department of Civil and Environmental Engineering</a><br>
-<a href="http://www.egr.duke.edu/">
+<a href="http://pratt.duke.edu/">
 Edmund T. Pratt School of Engineering</a><br>
 <a href="http://www.duke.edu/">
 Duke University</a> - Box 90287,
 <a href="http://www.durham-nc.com/"> Durham</a>,
 <a href="http://www.visitnc.com/"> NC</a> 27708-0287
+</font>
 
 <p><i>
+<font face="Verdana, Arial, Helvetica, sans-serif" size="2">
 <a href="http://cee.duke.edu/ARCHIVES/people/faculty/gavin.shtml">Henri P. Gavin</a>, P.E., Ph.D., 
 - Associate Professor -
 <a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;&#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;">
 &#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;
 </a>
-- tel: 919-660-5201 - fax: 919-660-5219</i></p>
+- tel: 919-660-5201 - fax: 919-660-5219</font></i></p>
 
 <hr>
 <h1>FRAME3DD</h1>
 <!-- <h4>DESCRIPTION </h4> -->
-<p><b>Frame3DD</b> is a program for the static and dynamic structural analysis of two- and three-dimensional frames and trusses with elastic and
-geometric stiffness.  
+<p><b>Frame3DD</b> is a program for the static and dynamic structural analysis of two- and three-dimensional frames and trusses with elastic and geometric stiffness.  
 </p>
 
-<p>It reads a plain-text <b>input data file</b>, containing joint coordinates, member geometry, material moduli, restrained joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.  
+<p><b>Frame3DD</b> reads a plain-text <b>input data file</b>, containing joint coordinates, member geometry, material moduli, restrained joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.  
 <!-- (The Input/Output file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
 </p>
 
-<p>It then <b>appends</b> the input data with output data, resulting in a single input/output file.  
+<p><b>Frame3DD</b> then <b>appends</b> the input data with output data, resulting in a single input/output file.  
 The output data recapitulates the input information, gives joint displacements in global coordinates, member
 end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
 </p>
 
-<p>Frame3DD can consider multiple static load cases in a single analysis.</p>
+<p><b>Frame3DD</b> can consider multiple static load cases in a single analysis.</p>
  
-<p>Frame3DD may optionally interface with Matlab and with spreadsheet programs.</p>
+<p><b>Frame3DD</b> may optionally interface with Matlab and with spreadsheet programs.</p>
 
-<p>Frame3DD is <b>free open-source software</b>; you may redistribute it and/or modify it under 
+<p><b>Frame3DD</b> is <b>free open-source software</b>; you may redistribute it and/or modify it under 
 the terms of the GNU General Public License (GPL) as published by the
 <a href="http://www.fsf.org/">Free Software Foundation</a>.
 The software is distributed in the hope that it will be useful, but without any warranty; without even the implied warranty of merchantability or fitness for a particular purpose.  See <a href="../LICENSE.txt">LICENSE.txt</a> for details.
@@ -91,7 +95,7 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <ol>
 <li><a href="#starting">Getting started</a>
 <li><a href="#iodata"/>Input Data and Output Data</a>
-<li><a href="#installrun"/>How to install and run Frame3dd</a>
+<li><a href="#installrun"/>How to install and run Frame3DD</a>
 <li><a href="#FrameEd">FrameEd</a>
 <li><a href="#Matlab">Matlab interface</a>
 <li><a href="#CSV">Spreadsheet interface</a>
@@ -111,8 +115,8 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li>Optionally, obtain a copy of Gnuplot for your operating system.
 <li>Copy one of the example input data files (eg <tt>exA.frm</tt>) into your home directory and make sure you have write privileges for the file.
 <li>       Open a terminal window and run the program using the command
-          <tt>frame3dd exA.frm</tt> (change the filename <tt>exA.frm</tt> as necessary).
-<li>Open the input/output file using your text editor and scroll down to the output data, which is written to the end of the input/output file after the end of the input data.
+	  <tt>frame3dd exA.frm</tt> (change the filename <tt>exA.frm</tt> as necessary).
+	<li>Open the input/output file using your text editor and scroll down to the output data, which is written to the end of the input/output file after the end of the input data.
 <!--     Running this program will create many files.  Most of them are used 
          for graphics and should be written to the  /tmp  directory. 
 <li>      One of the files will be written to the current working directory and will be called 
@@ -124,7 +128,9 @@ If a dynamic analysis was performed, you will enjoy an animation of selected mod
 Continue to hit the Return (or Enter) key until the last plot is displayed.  
 </ol>
 
-<div class=note><b>Note:</b> Running Frame3dd with certain input data files will result in many additional output files. The locations of these files can be specified inside the input data file, and should probably be a temporary file folder such as C:\WINDOWS\TEMP so that these files can be easily deleted later.</div>
+<div class=note>
+<b>Note:</b> Running Frame3dd with certain input data files will result in many additional output files. The locations of these files can be specified inside the input data file, and should probably be a temporary file folder such as C:\WINDOWS\TEMP so that these files can be easily deleted later.
+</div>
 
 <a name="iodata"/><h2>2. Input Data and Output Data</h2>
 
@@ -147,7 +153,17 @@ in the Input Data (unless the <a href="#Matlab">Matlab interface</a> is used).
 To write your own input data file, it may be helpful to start with an example that resembles the system you would like to analyze.  Carefully compare the graphical output of the example, the Output Data written at the end of the Input/Output file, the Input Data at the beginning of the Input/Output file, and the <a href="#InputData"><b>input data format</b></a>, with the <a href="#Variables"><b>variable definitions</b></a> at the end of this page.   
 </p>
 <p>
-You may edit Input Data files using a <a href="http://en.wikipedia.org/wiki/Text_editor">text editor</a>, using the Matlab interface, 
+You may edit Input Data files using a plain text editor 
+(<a href="http://thomer.com/vi/vi.html">vi</a>,
+ <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
+ <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>,
+ <a href="http://www.barebones.com/products/textwrangler/">TextWrangler (OS X)</a>,
+ <a href="http://www.apple.com/support/mac101/work/23/">TextEdit (OS X)</a>,
+ <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++ (Windows)</a>,
+ <a href="http://www.textedit.org/">TextEdit (Windows)</a>,
+ <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>,
+etc.),
+using the Matlab interface, 
 or using spreadsheet programs
 (e.g. <a href="http://www.openoffice.org/">OpenOffice</a>, Excel, 
 <a href="http://docs.google.com/">Google Docs</a> or  
@@ -164,13 +180,15 @@ and, where possible, displays descriptive diagnostic messages when errors are
 found with the input data.  
 </p>
 
-<a name="installrun"/><h2>3. How to install and run Frame3dd</h2>
+<a name="installrun"/><h2>3. How to install and run Frame3DD</h2>
 
 <h3>3.1 Linux/Unix</h3>
 
+<p>
 For Linux and Unix we currently only provide source-code tarball; you must
 build the software yourself. The following instructions work on Ubuntu 8.10
 and should work with minor changes on any other recent Linux or Unix system.
+</p>
 
 <ol>
 <li>Ensure you have Python, SCons and GCC installed on your system. It should suffice to <tt>sudo apt-get install build-essential scons</tt>.
@@ -219,9 +237,11 @@ or a spreadsheet program
 </ol>
 
 
-<h3>3.2 Windows</h3>
+<h3>3.2 Microsfot Windows</h3>
 
-We provide a binary installer for Microsoft Windows. Use the following steps:
+<p>
+For Microsoft Windows, we provide a binary installer for Microsoft Windows. Use the following steps:
+</p>
 
 <ol>
 <li>Download and run the <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">binary installer</a>
@@ -268,7 +288,9 @@ MS-Windows version of Gnuplot</a>.
 for some time and may give you problems. You may have more success trying to build
 from source following the instructions for Linux/Unix.</div>
 
+<p>
 For OS X running on a PowerPC (PPC) or Intel processor. 
+</p>
 
 <ol>
 <li>        Download the <b>Frame3DD</b> application and save as "frame3dd" on your Desktop,
@@ -344,15 +366,19 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
 
 <a name="FrameEd"><h2>4. FrameEd</h2>
 
+<p>
  <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).<br>
  The .zip file <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip">FrameEd.zip</a> includes: 
+</p>
  <ul>
  <li>the GUI executeable, Frame_Ed.exe
  <li>the frame analysis executeable, Frame3d.exe, for the 20020103 version
  <li>an example input file, exG.frm, for the 20020103 version
  <li>a template for the input data file, ex2002.frm, for the 20020103 version
  </ul>
+<p>
  Differences between the 2002 and the current versions of <b>Frame3DD</b> are:
+</p>
 <ul>
  <li> The 2002 version does not support comments in the Input Data.
  <li> The 2002 version does not support multiple load cases.
@@ -555,19 +581,40 @@ Modal analysis results are not (yet) written to the .CSV formatted output file.
 </p>
 -->
 
-<h3>Units</h3>
+<h3>7.1 Units</h3>
 
 <p>
      The Output Data is formated using floating point display, not scientific notation.  To
      obtain the greatest number of significant digits in the output, use units of force
-     and length such that the modulus of elasticity occupies three to five figures before 
+     and length such that the modulus of elasticity occupies three to five figures before
      the decimal point.  For example, if the frame to be analyzed is made of steel or
-     aluminum, use units of (kips (1000 pounds) and inches), or (kilo-Newtons, millimeters, 
-     and kiloTons), or (GigaNewtons, meters, and MegaTons).
+     aluminum, use units of (kips (1000 pounds) and inches), or (Newtons, millimeters,
+     and tonne), or (MegaNewtons, meters, and kilotonnes).
+
+<ul>
+<li> 1 inch = 25.4 millimeter = 0.0254 meter
+<li> 1 kip = 4 448.221 6 Newton = 0.004 448 221 6 MegaNewton
+<li> 1 kip/square inch = 6.894 757 28 Newton/square millimeter = 6.894 757 28 MegaNewton/square meter
+<li> 1 kip/cubic inch = 0.027 679 904 593 tonne/cubic millimeter = 27.679 904 593 kilotonne/cubic meter
+<li> 1 /deg.F = 1.8 /deg.C
+</ul>
 </p>
 
+<h3> 7.2 Joints, Support Conditions and Reactions </h3>
 
-<h3>Cross Section Properties and Coordinate Transformation</h3>
+<p>
+Each joint has six degrees of freedom: three translations
+in the global X, Y, and Z directions and three rotations about the
+global X, Y, and Z axes.    The support conditions of the structural
+frame are specified by fixing the degrees of freedom aligned
+with the reaction forces.   Displacements at the fixed reactions
+are either zero, or may be prescribed.  Static reaction forces are
+computed and are written in the Output Data.  
+Elastic support conditions may be specified by additional elements
+with the desired flexibility.  
+</p>
+
+<h3> 7.3 Cross Section Properties and Coordinate Transformation</h3>
 
 <p>
 To analyze a structure as a "truss" with this software, specify <i>>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>
@@ -641,7 +688,30 @@ When a beam or bar element is placed into the structure
 by A. Kassimali.
 </p>
 
-<h3>Cross Section Properties of some Steel Sections</h3>
+<h4> 7.3.1 Cross Section Properties of Square Tube and Circular Tube Sections </h4>
+
+<p>
+Square Tube (outer dimension = <i>d</i>, wall thickness = <i>t</i>):
+<ul>
+<li> <i>Ax = d<sup>2</sup> - (d-2t)<sup>2</sup></i>
+<li> <i>Asy = Asz = Ax / ( 2.05-11.15(t/d)<sup>2</sup> + 16.16(t/d)<sup>3</sup> )</i>
+<li> <i> Jxx =  d<sup>3</sup> t </i>
+<li> <i>Izz = Iyy = (1/12) ( d<sup>4</sup> - (d-2t)<sup>4</sup> )</i>
+</ul>
+</p>
+
+<p>
+Circular Tube (outer radius= <i>R<sub>o</sub></i>, inner radius = <i>R<sub>i</sub></i>):
+<ul>
+<li> <i>Ax = &pi; ( R<sub>o</sub><sup>2</sup> - R<sub>i</sub><sup>2</sup> )</i>
+<li> <i>Asy = Asz = Ax / ( 1.13+1.221(R<sub>i</sub>/R<sub>o</sub>)<sup>2</sup> - 0.71(R<sub>i</sub>/R<sub>o</sub>)<sup>3</sup> )</i>
+<li> <i>Jxx = (1/2) &pi; ( R<sub>o</sub><sup>4</sup> - R<sub>i</sub><sup>4</sup> )</i>
+<li> <i>Ixx = Iyy = (1/4) &pi; ( R<sub>o</sub><sup>4</sup> - R<sub>i</sub><sup>4</sup> )</i>
+</ul>
+</p>
+
+
+<h4> 7.3.2 Cross Section Properties of some Steel Sections</h4>
 
 <ul>
 
@@ -670,7 +740,7 @@ efunda
 </ul>
 -->
 
-<h3> Cross Section Properties of some Standard Wood Sections</h3>
+<h4> 7.3.3 Cross Section Properties of some Standard Wood Sections</h4>
 
 <pre>
              Ax      Asy     Asz     Jxx     Iyy     Izz   
@@ -686,14 +756,7 @@ efunda
      2x14  19.880  13.253  13.253  13.790 290.800   3.727
 </pre>
 
-<h3> Elastic Material Properties of Douglas Fir</h3>
-
-<pre>
-     Modulus of Elasticity (E)         1700 - 1900 ksi
-     Shear Modulus         (G)          640 -  710 ksi
-</pre>
-
-<h3>Torsion</h3>
+<h3> 7.4 Torsion</h3>
 
 <p>
      Polar Moments of Inertia depend on the shape of the cross-section.  
@@ -727,8 +790,7 @@ where
 Restraint to <a href="http://www.archoneng.com/tptasm.html">warping deformation</a> is not considered in the analysis.  
 </p>
 
-
-<h3>Connections</h3>
+<h3> 7.5 Connections</h3>
 
 <p>
 All connections in a <b>Frame3DD</b> analysis are moment-resisting.
@@ -738,7 +800,8 @@ low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>.
 Beams may be considered infinitely rigid within a sphere of a specified radius around a joint.
 </p>
 
-<h3>Shear Deformation, Geometric Stiffness, and Buckling </h3>
+
+<h3> 7.6 Shear Deformation, Geometric Stiffness, and Buckling </h3>
 
 <p>
      The <b>Frame3DD</b> analysis will optionally include the effects of shear deformation and/or geometric stiffness.
@@ -774,45 +837,73 @@ and superposition does not hold.  The geometric stiffness matrix is a secant
 stiffness matrix.  In most cases the geometric stiffness matrix lies between the
 un-stressed stiffness matrix and the tangent stiffness matrix.  
 </p>
-<h3> Loads</h3>
+
+<h3> 7.7 Approximate Properties of Structural Materials </h3>
 
 <p>
-Four types of static loads may be specified.  
+<font face="courier" size="3">
+<pre>
+                                                Thermal
+                      Young's       Shear       Expansion       Mass
+                      Modulus       Modulus     Coefficient     Density
+                      E             G           a               d
+                      N/mm^2        N/mm^2      /deg.C          T/mm^3
+
+Steel A36             200000        79300       11.7e-6         7.85e-3
+Boron  Fiber-Epoxy    106000        38000       30.0e-6         2.00e-3
+Carbon Fiber-Epoxy     83000        30000       30.0e-6         1.54e-3
+Aluminum 2024-T4       73100        28000       23.2e-6         2.78e-3
+Aluminum 6061-T6       68900        26000       23.6e-6         2.70e-3
+Kevlar Fiber-Epoxy     40000        50000       30.0e-6         1.40e-3
+Glass  Fiber-Epoxy     22000        80000       30.0e-6         1.97e-3
+Magnesium AM1000A      44800        17500       25.2e-6         1.80e-3 
+Douglas Fir            12400         4600       30.0e-6         0.50e-3
+
+</pre>
+</font>
+</p>
+
+<p>
+Note:
+</p>
+<ul>
+<li> These material properties are approximate.  
+<li> Properties of Douglas Fir vary naturally by +/- 15 percent.
+<li> Properties of Fiber-Epoxy composites depend on the volume fraction and
+   orientations of the fibers.  The values above correspond to volume
+   fractions of roughly 50 percent.  
+</ul>
+<p>
+<a href="http://www.matweb.com/search/MaterialGroupSearch.aspx">MatWeb</a>
+lists properties of other materials.
+</p>
+
+<h3> 7.8 Loads</h3>
+
+<p>
+Four types of static loads may be specified:  
+</p>
 <ul>
 <li>Concentrated static force loads and concentrated static moments may be applied to joints.
 <li>Concentrated static force loads may be applied to members between the joints.
 <li>Uniformly distributed static loads may be applied over entire members.
 <li>Thermal loads assume a linear temperature gradient through member cross sections.
 </ul>
+<p>
 Multiple static load cases are generated by specifying 
 <a href="#Variables">the variable nL</a>
 in the 
 <a href="#InputData">Input Data</a>, and by specifying the four types of loads for each load case, as shown in <a href="../examples/exA.frm">Example A</a> and <a href="../examples/exB.frm">Example B</a>.
 </p>
 
-<h3>Support Conditions and Reactions </h3>
-
-<p>
-Each joint has six degrees of freedom: three translations
-in the global X, Y, and Z directions and three rotations about the
-global X, Y, and Z axes.    The support conditions of the structural
-frame are specified by fixing the degrees of freedom aligned
-with the reaction forces.   Displacements at the fixed reactions
-are either zero, or may be prescribed.  Static reaction forces are
-computed and are written in the Output Data.  
-Elastic support conditions may be specified by additional elements
-with the desired flexibility.  
-
-</p>
-
-<h3>Prescribed Displacements </h3>
+<h3> 7.9 Prescribed Displacements </h3>
 
 <p>
 Static joint displacements may be prescribed only at restrained degrees of freedom.
 Prescribed displacements are specified separately for each load case.  
 </p>
 
-<h3> Dynamic Modal Analysis </h3>
+<h3> 7.10 Dynamic Modal Analysis </h3>
 
 <p>
 The <b>Frame3DD</b> analysis will optionally include a dynamic analysis for natural modes of vibration. 
@@ -873,9 +964,9 @@ If <i>nM</i> is set to zero, there is no need to provide numerical values for th
 below.)
 </p>
 
-<h3>Matrix Condensation</h3>
+<h3> 7.11 Matrix Condensation</h3>
 
-</p>
+<p>
 Reduced order stiffness and mass matrices may be computed via a static
 condensation, Guyan reduction, or dynamic condensation.  The condensed mass
 and stiffness matrices are saved as text files Kc and Mc.  The Guyan reduction
@@ -905,32 +996,35 @@ conditioning of the condensed mass and stiffness matrices.
 <p>       When the program is executed, various solution errors are displayed to the
        screen and are written to the Input/Output file.   Iterative improvements
        to the LDL' back-substitution make use of a quasi Newton-Raphson method:<br>
-
-                 <div class=eq>K dD(i) = F - K D(i)</div>
-                 <div class=eq>D(i+1) = D(i) + dD(i)</div>
-
-       where
+<div class=eq>K dD(i) = F - K D(i)</div>
+<div class=eq>D(i+1) = D(i) + dD(i)</div>
+<p>
+where
+</p>
 <ul>
-<li>   <i>D(i) </i>   is the displacement vector at iteration <i>i</i> ,
-<li>                <i>K </i>     is the stiffness matrix ,
-<li>                <i>F </i>     is the applied load vector ,
-<li>                <i>dD(i) </i>  is the incremental displacement vector at iteration <i>i</i> , and
-<li>                <i>D(i+1)</i>  is the displacement vector at iteration <i>i+1</i>
+<li> <i>D(i) </i>   is the displacement vector at iteration <i>i</i> ,
+<li> <i>K </i>     is the stiffness matrix ,
+<li> <i>F </i>     is the applied load vector ,
+<li> <i>dD(i) </i>  is the incremental displacement vector at iteration <i>i</i> , and
+<li> <i>D(i+1)</i>  is the displacement vector at iteration <i>i+1</i>
 </ul>
 
-       At each LDL' back-substitution iteration, the equilibrium error is displayed
-       to the screen as the `RMS matrix error'.  This error is the root-mean-square of
-       <i>dD(i)</i>.   Iterations are stopped when this error decreases by less than ten
-       percent in an iteration.  
+<p>
+At each LDL' back-substitution iteration, the equilibrium error is displayed
+to the screen as the `RMS matrix error'.  This error is the root-mean-square of
+<i>dD(i)</i>.   
+Iterations are stopped when this error decreases by less than ten percent in an iteration.  
 </p>
 
-<p>       When geometric stiffness effects are included, the solution is obtained
-       iteratively, using a quasi Newton-Raphson method:<br>
-
+<p>
+When geometric stiffness effects are included, the solution is obtained
+iteratively, using a quasi Newton-Raphson method:
+</p>
                 <div class=eq>K(D(i)) dD(i) = F - K(D(i)) D(i)</div>
                 <div class=eq>D(i+1)  =  D(i) + dD(i)</div>
-
-       where
+<p>
+where
+</p>
 <ul>
 <li>   <i>D(i)  </i>  is the displacement vector at iteration <i>i</i>,
 <li>                <i>K(D(i))  </i>is the secant stiffness matrix at displacements <i>D(i)</i>
@@ -938,33 +1032,34 @@ conditioning of the condensed mass and stiffness matrices.
 <li>                <i>dD(i) </i>  is the incremental displacement vector at iteration <i>i</i> , and
 <li>                <i>D(i+1)</i>  is the displacement vector at iteration <i>i+1</i>
 </ul>
-
-       At each Newton-Raphson iteration, the relative equilibrium error is displayed
-       to the screen.   This error is the root-mean-square of (<i>F - K(D(i)) D(i)</i>)
-       divided by the root-mean-square of <i>F</i>.   Newton-Raphson iterations stop when
-       this error is less than the convergence tolerance.  The convergence tolerance
-       is specified as the convergence tolerance for the modal-analysis. 
-       The default value is 0.00001   
+<p>
+At each Newton-Raphson iteration, the relative equilibrium error is displayed
+to the screen.   This error is the root-mean-square of (<i>F - K(D(i)) D(i)</i>)
+divided by the root-mean-square of <i>F</i>.   Newton-Raphson iterations stop when
+this error is less than the convergence tolerance.  The convergence tolerance
+is specified as the convergence tolerance for the modal-analysis. 
+The default value is 0.00001   
 </p>
 
-<p>       The accuracy of the final solution is checked using a global equilibrium check
-       and the equilibrium error is reported.  The `RMS relative equilibrium error' is
-       the root-mean-square of internal member forces and external applied loads at
-       every un-restrained degree of freedom normalized by the root-mean-square of
-       the applied loads.   This equilibrium error is typically less than one part
-       in one-billion when geometric stiffness effects are neglected.  If an analysis
-       has an RMS equilibrium error larger than 0.001, the results should not be
-       trusted.  
+<p>
+The accuracy of the final solution is checked using a global equilibrium check
+and the equilibrium error is reported.  The `RMS relative equilibrium error' is
+the root-mean-square of internal member forces and external applied loads at
+every un-restrained degree of freedom normalized by the root-mean-square of
+the applied loads.   This equilibrium error is typically less than one part
+in one-billion when geometric stiffness effects are neglected.  If an analysis
+has an RMS equilibrium error larger than 0.001, the results should not be
+trusted.  
 </p>
 
-<p>       Natural frequencies and mass-normalized mode-shapes of the lower modes may be
-       obtained using a generalized Jacobi sub-space iteration procedure
-       or a Stodola iteration procedure.
+<p>
+Natural frequencies and mass-normalized mode-shapes of the lower modes may be
+obtained using a generalized Jacobi sub-space iteration procedure
+or a Stodola iteration procedure.
 Sub-space iterations are stopped when the error is less than the specified
-       convergence tolerance.  The error is defined here as</p>
-
+convergence tolerance.  The error is defined here as:
+</p>
                 <div class=eq>error = | fN(i) - fN(i-1) | / fN(i) </div>
-
 <p>where</p>
 <ul>
 <li><i> fN(i)</i>    is the highest natural frequency computed at iteration <i>i</i> ,
@@ -972,7 +1067,9 @@ Sub-space iterations are stopped when the error is less than the specified
 </ul>
 
 <a name="InputData"><h2>9. Input Data Format</h2>
-(Click <a href="template.frm">here</a> to download an Input Data template, template.frm)<br>
+<p>
+Click <a href="template.frm">here</a> to download an Input Data template, template.frm
+</p>
 </a>
 
 <pre>
