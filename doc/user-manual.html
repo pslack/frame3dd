@@ -129,7 +129,11 @@ Continue to hit the Return (or Enter) key until the last plot is displayed.
 </ol>
 
 <div class=note>
-<b>Note:</b> Running Frame3dd with certain input data files will result in many additional output files. The locations of these files can be specified inside the input data file, and should probably be a temporary file folder such as C:\WINDOWS\TEMP so that these files can be easily deleted later.
+<b>Note:</b> Because Frame3dd uses a single file for both input and output, it is important that you have the necessary permissions to allow you to modify the input file. For some users, this will mean that you need to make your own local copy of the input file before running Frame3dd.
+</div>
+
+<div class=note>
+<b>Note:</b> Depending on the instructions contained in the Frame3dd input file, there may be many <b>additional output files</b> generated. By default, these output files will be sent to your temporary file folder. On Windows, this will be the contents of the TEMP environment variable, which you can examine by typing <tt>echo %TEMP%</tt>. On other platforms, this will be the folder <tt>/tmp</tt>.<br><br>If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <tt>FRAME3DD_OUTDIR</tt> with the path to your output directory. All new output files will then appear in the folder you have specified.
 </div>
 
 <a name="iodata"/><h2>2. Input Data and Output Data</h2>
@@ -237,14 +241,14 @@ or a spreadsheet program
 </ol>
 
 
-<h3>3.2 Microsfot Windows</h3>
+<h3>3.2 Windows</h3>
 
 <p>
-For Microsoft Windows, we provide a binary installer for Microsoft Windows. Use the following steps:
+For Microsoft Windows, we provide a binary installer for Frame3dd. Use the following steps:
 </p>
 
 <ol>
-<li>Download and run the <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">binary installer</a>
+<li><a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">Download</a> and run the binary installer.
 <li>Use the Start menu to access README information and this documentation.
 <li>Copy one or more of the example files (eg <tt>exA.frm</tt>) from your <tt>Program Files\FRAME3DD\examples</tt> folder into your <tt>My Documents</tt> folder.
 <li>Add FRAME3DD to your path as follows:

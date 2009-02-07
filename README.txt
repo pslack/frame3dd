@@ -16,6 +16,14 @@ gives joint displacements in global coordinates, member end-forces in
 local coordinates, reactions in global coordinates, and natural
 frequencies and mode shapes in global coordinates.
 
+Additional output files from FRAME3DD are directed by default to the temporary
+file folder (according to the %TEMP% env var on Windows, or /tmp on other
+platforms). You can specify an alternative location for output files by setting
+the environment variable FRAME3DD_OUTDIR.
+
+Note that you require write permissions for the input file in order that
+FRAME3DD can append its calculation results to that file.
+
 ---
 
 FRAME3DD is free software; you may redistribute it and/or modify it under 
