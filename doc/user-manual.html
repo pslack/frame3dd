@@ -96,6 +96,11 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li><a href="#starting">Getting started</a>
 <li><a href="#iodata"/>Input Data and Output Data</a>
 <li><a href="#installrun"/>How to install and run Frame3DD</a>
+<ol>
+  <li><a href="#runlinux"/>Linux/Unix</a>
+  <li><a href="#runwindows"/>Windows</a>
+  <li><a href="#runosx"/>Mac OS X</a>
+</ol>
 <li><a href="#FrameEd">FrameEd</a>
 <li><a href="#Matlab">Matlab interface</a>
 <li><a href="#CSV">Spreadsheet interface</a>
@@ -186,7 +191,7 @@ found with the input data.
 
 <a name="installrun"/><h2>3. How to install and run Frame3DD</h2>
 
-<h3>3.1 Linux/Unix</h3>
+<a name="runlinux"/><h3>3.1 Linux/Unix</h3>
 
 <p>
 For Linux and Unix we currently only provide source-code tarball; you must
@@ -241,7 +246,7 @@ or a spreadsheet program
 </ol>
 
 
-<h3>3.2 Windows</h3>
+<a name="runwindows"/><h3>3.2 Windows</h3>
 
 <p>
 For Microsoft Windows, we provide a binary installer for Frame3dd. Use the following steps:
@@ -250,13 +255,14 @@ For Microsoft Windows, we provide a binary installer for Frame3dd. Use the follo
 <ol>
 <li><a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">Download</a> and run the binary installer.
 <li>Use the Start menu to access README information and this documentation.
-<li>Copy one or more of the example files (eg <tt>exA.frm</tt>) from your <tt>Program Files\FRAME3DD\examples</tt> folder into your <tt>My Documents</tt> folder.
+<li>Copy one or more of the example files (eg <tt>exA.frm</tt>) from your <tt>Program Files\FRAME3DD\examples</tt> folder into your <tt>My Documents</tt> folder
 <li>Add FRAME3DD to your path as follows:
 <ol>
 	<li>Open a 'cmd' prompt
 	<li>set PATH=%PATH%;c:\Progra~1\FRAME3DD
 	<li>Keep the command prompt open for the following
 </ol>
+<li>Optionally, set a location for your output files using <tt>set FRAME3DD_OUTDIR=c:\path\to\output\files</tt> (using a path of your choice).
 <li>Change to your documents directory using <tt>cd %HOMEPATH%\My Documents</tt>
 <li>Edit the example file to ensure that it contains valid file paths for the mesh_file, mode_file and plot_file locations.
 <li>Run Frame3dd using <tt>frame3dd.exe exA.frm</tt>
@@ -268,12 +274,11 @@ MS-Windows version of Gnuplot</a>.
 <li>Open the folder <b>My Documents\Gnuplot\bin</b> and right click on <b>wgnuplot</b>
        to create a shortcut to your <b>Desktop</b>.<br>
 <li>Clicking on the <b>wgnuplot</b> icon on the desktop will start Gnuplot.<br>
-<li>To load the plot into Gnuplot, first change directories to 
-       the directory in which you are running the <b>Frame3DD</b> analysis, by clicking
-       on the <b>ChDir</b> button at the top of the Gnuplot window and typing ...<br>
-         <tt>C:\Documents and Settings\your_name_here\My Documents </tt>
+<li>To load the plot into Gnuplot, first change directory to to location of your output files
+	, by clicking on the <b>ChDir</b> button at the top of the Gnuplot window and typing ...<br>
+         <tt>c:\path\to\output\files</tt> (path as above)
 <li>Display the plot of your structure by typing ...<br>
-         <tt> gnuplot>  load 'example.plt'</tt><br>
+         <tt> gnuplot> load 'example.plt'</tt><br>
          where <tt>example.plt</tt> is the name of of the plot file specified in the Input Data. (<a href="#InputData">See below.</a>) <br>
 <li>Hit the 'Return' key in the Terminal window to see the sequence of plots
          and animations until the <tt> gnuplot></tt> prompt returns.<br>
@@ -282,11 +287,11 @@ MS-Windows version of Gnuplot</a>.
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>, 
 <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>), or a spreadsheet program
 (<a href="http://www.openoffice.org/">OpenOffice</a>, excel).<br>
-<li>       You may wish to delete all the files in the <tt>C:\tmp</tt> directory when you have finished
+<li>       You may wish to delete all the files in the temporary file directory and/or output file directory when you have finished
          your analyses.  <br>
 </ol>
 
-<h3>3.3 Mac OS X</h3>
+<a name="runosx"/><h3>3.3 Mac OS X</h3>
 
 <div class="note"><b>Note:</b> The following binary downloads have not been updated
 for some time and may give you problems. You may have more success trying to build
