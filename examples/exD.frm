@@ -66,7 +66,7 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
 
 1                               % 1: include shear deformation
 0                               % 1: include geometric stiffness
-/tmp/exD-msh                    % mesh data file name
+exD-msh                    % mesh data file name
 exD.plt                         % plot file name
 20.0                            % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
@@ -84,7 +84,7 @@ exD.plt                         % plot file name
 14                              % number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
 0                               % 0: consistent mass ... 1: lumped mass matrix
-/tmp/exD-m                      % mode shape data file
+exD-m                      % mode shape data file
 5e-5                            % mode shape tolerance
 1.0                             % shift value ... for unrestrained structures
 

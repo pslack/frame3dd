@@ -84,7 +84,7 @@ Example C: a tetrahedral frame - static and dynamic analysis
 
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
-/tmp/exC-msh                    % mesh data file name
+exC-msh                    % mesh data file name
 exC.plt                         % plot file name
 80.0                            % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
@@ -109,7 +109,7 @@ exC.plt                         % plot file name
 10                              % number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
 0                               % 0: consistent mass ... 1: lumped mass matrix
-/tmp/exC-m                      % mode shape data file
+exC-m                      % mode shape data file
 1e-8                            % mode shape tolerance
 5.0                             % shift value ... for unrestrained structures
 

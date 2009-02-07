@@ -59,9 +59,9 @@ int main(int argc, char *argv[]){
 
 	char IO_file[FILENMAX],	/* the input/output filename		*/
 		title[256],	/* the title of the analysis		*/
-		mesh_file[FILENMAX],	/* frame mesh data filename		*/
-		plot_file[FILENMAX],	/* frame mesh plot filename		*/
-		mode_file[FILENMAX];	/* mode-shape mesh data filename	*/
+		mesh_file[FILENMAX] = "EMPTY",	/* frame mesh data filename		*/
+		plot_file[FILENMAX] = "EMPTY2",	/* frame mesh plot filename		*/
+		mode_file[FILENMAX] = "EMPTY3";	/* mode-shape mesh data filename	*/
 
 	FILE	*fp;		/* input/output file pointer		*/
 
@@ -160,9 +160,9 @@ int main(int argc, char *argv[]){
 
 	filetype = get_file_ext( IO_file, extn ); /* .CSV or .FMM or other? */
 
-#define TPATHMAX 256
-	char tpath[TPATHMAX];
-	temp_file_location("frame3dd.cln",tpath,TPATHMAX);
+#define FRAME3DD_PATHMAX 256
+	char tpath[FRAME3DD_PATHMAX];
+	temp_file_location("frame3dd.cln",tpath,FRAME3DD_PATHMAX);
 
 	parse_input(fp, tpath);
 	fclose(fp);
@@ -223,9 +223,15 @@ int main(int argc, char *argv[]){
 	);
 	printf("  ... complete\n");
 
+	char meshpath[FRAME3DD_PATHMAX] = "EMPTY";
+	char plotpath[FRAME3DD_PATHMAX] = "EMPTY";
+
 	read_run_data (
 		fp, &shear, &geom, mesh_file, plot_file, &exagg, &anlyz
 	);
+
+	output_file_location(plot_file,plotpath,FRAME3DD_PATHMAX,NULL);
+	output_file_location(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
 
 	fscanf(fp, "%d", &nL );		/* number of load cases		*/
 	printf(" number of load cases "); dots(31); printf(" nL = %3d\n",nL);
@@ -283,7 +289,6 @@ int main(int argc, char *argv[]){
 	}
 	printf("                                                     ");
 	printf(" load data ... complete\n");
-
 
 	read_mass_data(
 		fp, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax,
@@ -436,14 +441,16 @@ int main(int argc, char *argv[]){
 					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
 
-			static_mesh ( IO_file, mesh_file, plot_file, title, nJ, nB, nL, lc,
+			output_file_location(plot_file,plotpath,FRAME3DD_PATHMAX,NULL);
+
+			static_mesh ( IO_file, meshpath, plotpath, title, nJ, nB, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
 
 		} /* end load case loop */
 	} else {
 	    fprintf(stderr,"  %s\n", title );
 	    fprintf(stderr,"  DATA CHECK ONLY.\n");
-	    static_mesh ( IO_file, mesh_file, plot_file, title, nJ, nB, nL, lc,
+	    static_mesh ( IO_file, meshpath, plotpath, title, nJ, nB, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
 	}
 
@@ -501,9 +508,12 @@ int main(int argc, char *argv[]){
 	fclose (fp);
 
 	if(nM > 0 && anlyz){
-		modal_mesh(IO_file, mesh_file, mode_file, plot_file, title,
+		char modepath[FRAME3DD_PATHMAX] = "EMPTY";
+		output_file_location(mode_file,modepath,FRAME3DD_PATHMAX,NULL);
+
+		modal_mesh(IO_file, meshpath, modepath, plotpath, title,
 		       nJ,nB, DoF, nM, xyz, L, J1,J2, p, M,f,V,exagg,anlyz);
-		animate(IO_file, mesh_file, mode_file, plot_file, title,anim,
+		animate(IO_file, meshpath, modepath, plotpath, title,anim,
 		       nJ,nB, DoF, nM, xyz, L, p, J1,J2, f,V, exagg, pan );
 	}
 

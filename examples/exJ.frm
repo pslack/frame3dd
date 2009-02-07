@@ -70,7 +70,7 @@ Example J: tesseract
 
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
-/tmp/exJ-msh                    % mesh data file name
+exJ-msh                    % mesh data file name
 exJ.plt                         % mesh annotation file name
 5.0                             % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
@@ -87,7 +87,7 @@ exJ.plt                         % mesh annotation file name
 22                              % number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
 0                               % 0: consistent mass ... 1: lumped mass matrix
-/tmp/frJ-m                      % mode shape data file
+exJ-m                      % mode shape data file
 1e-6                            % mode shape tolerance
 1.0                             % shift value ... for unrestrained structures
 

@@ -314,6 +314,27 @@ int get_file_ext( char *filename, char *ext );
 */
 void temp_file_location(const char *fname, char fullpath[], const int len);
 
+/**
+	Return location for an output file.
+	
+	If the fname starts with a path separator ('\' on Windows, else '/') then
+	it is assumed to be an absolute path, and will be returned unchanged.
+
+	If the fname doesn't start with a path separator, it is assumed to be a
+	relative path. It will be appended to the contents of FRAME3DD_OUTDIR if
+	that path is defined.
+
+	If FRAME3DD_OUTDIR is not defined, it will be appended to the contents of
+	the parameter default_outdir. If the parameter default_outdir is given a
+	NULL value, then it will be replaced by the appropriate temp file location
+	(see temp_file_location and temp_dir in frame3dd_io.c).
+
+	@param fname name of the file, excluding directory.
+	@param fullpath (returned) full path to temporary file.
+	@param len available length for string being returned.
+	@param default_outdir default output directory in case where no env var.
+*/
+void output_file_location(const char *fname, char fullpath[], const int len, const char *default_outdir);
 
 /** print a set of dots (periods) */
 void dots( int n );

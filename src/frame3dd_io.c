@@ -30,6 +30,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <assert.h>
 
 #include "frame3dd_io.h"
 #include "coordtrans.h"
@@ -228,25 +229,72 @@ int     lim
     return;
 }
 
+#ifdef WIN32
+static const char sep = '\\';
+#else
+static const char sep = '/';
+#endif
+
 /*----------------------------------------------------------------------------
 TEMP_FILE_LOCATION
-return platform-specific temp file locations -- John Pye, 2009
+return platform-specific temp file locations -- John Pye, Feb 2009
 ----------------------------------------------------------------------------*/
-void temp_file_location(const char *fname, char fullpath[], const int len){
+
+static const char *temp_dir(){
 #ifdef WIN32
 	char *tmp;
 	tmp = getenv("TEMP");
-	const char sep = '\\';
+	if(tmp==NULL){
+		fprintf(stderr,"ERROR: %%TEMP%% environment var not found. This "
+			"variable needs to be set so that FRAME3DD knows where to put its "
+			"temporary files. Set this variable, the re-run FRAME3DD.\n")
+		exit(1);
+	}
 #else
 	const char *tmp = "/tmp";
-	const char sep = '/';
 #endif
+	return tmp;
+}
+
+void temp_file_location(const char *fname, char fullpath[], const int len){
+	const char *tmp = temp_dir();
 	int res;
 	res = snprintf(fullpath,len,"%s%c%s",tmp,sep,fname);
 	if(res > len){
-		fprintf(stderr,"ERROR: unable to construct temp filname: overflow\n");
+		fprintf(stderr,"ERROR: unable to construct temp filename: overflow\n");
 		exit(1);
 	}
+}
+
+/*------------------------------------------------------------------------------
+OUTPUT_FILE_LOCATION
+return output file location using either current directory, or FRAME3DD_OUTDIR
+if specified. -- John Pye, Feb 2009.
+------------------------------------------------------------------------------*/
+void output_file_location(const char *fname, char fullpath[], const int len, const char *default_outdir){
+	assert(fname!=NULL);
+	int res;
+	if(fname[0]==sep){
+		/* absolute output path specified */
+		res = snprintf(fullpath,len,"%s",fname);
+	}else{
+		/* fprintf(stderr,"Generating output path for file '%s'\n",fname); */
+		const char *outdir;
+		outdir = getenv("FRAME3DD_OUTDIR");
+		if(outdir==NULL){
+			if(default_outdir==NULL){
+				outdir = temp_dir();
+			}else{
+				outdir = default_outdir;
+			}
+		}
+		res = snprintf(fullpath,len,"%s%c%s",outdir,sep,fname);
+	}
+	if(res > len){
+		fprintf(stderr,"ERROR: unable to construct output filename: overflow.\n");
+		exit(1);
+	}
+	/* fprintf(stderr,"Output file path generated: %s\n",fullpath); */
 }
 
 /*-----------------------------------------------------------------------------

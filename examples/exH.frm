@@ -555,7 +555,7 @@ Example H: a pedestrian ramp
 
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
-/tmp/exH-msh                    % mesh data file name
+exH-msh                    % mesh data file name
 exH.plt                         % mesh annotation file name
 100.0                           % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
@@ -747,7 +747,7 @@ exH.plt                         % mesh annotation file name
 5                               % number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
 0                               % 0: consistent mass ... 1: lumped mass matrix
-/tmp/exH-m                      % mode shape data file
+exH-m                      % mode shape data file
 1e-4                            % mode shape tolerance
 1.0                             % shift value ... for unrestrained structures
 

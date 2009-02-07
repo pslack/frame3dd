@@ -58,7 +58,7 @@ Example I: a triangular tower
 
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
-/tmp/exI-msh                    % mesh data file name
+exI-msh                    % mesh data file name
 exI.plt                         % mesh annotation file name
 2.0                             % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
@@ -94,7 +94,7 @@ exI.plt                         % mesh annotation file name
 4                               % number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
 0                               % 0: consistent mass ... 1: lumped mass matrix
-/tmp/exI-m                      % mode shape data file
+exI-m                      % mode shape data file
 1e-6                            % mode shape tolerance
 0.0                             % shift value ... for unrestrained structures
 

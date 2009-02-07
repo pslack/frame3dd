@@ -15,7 +15,7 @@ test buckling calculation
 
 0
 1
-/tmp/bckltst.msh   bckltst.ann  20
+bckltst.msh   bckltst.ann  20
 1
 
 1

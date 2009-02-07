@@ -56,7 +56,7 @@ Example G: a building with a set-back
 
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
-/tmp/exG-msh                    % mesh data file name
+exG-msh                    % mesh data file name
 exG.plt				% plot file name
 2.0                             % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
@@ -92,7 +92,7 @@ exG.plt				% plot file name
 4                               % number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
 0                               % 0: consistent mass ... 1: lumped mass matrix
-/tmp/exG-m                      % mode shape data file
+exG-m                      % mode shape data file
 1e-6                            % mode shape tolerance
 0.0                             % shift value ... for unrestrained structures
 

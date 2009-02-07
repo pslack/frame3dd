@@ -19,7 +19,7 @@ nR					       %number of joints with reactions
 
 
 shear						  %1: include shear deformation
-/tmp/mesh_file						   %mesh data file name
+mesh_file						   %mesh data file name
 ann_file					     %mesh annotation file name
 exagg						  %exaggerate mesh deformations
 anlyz				     %1: stiffness analysis, 0: data check only
@@ -84,7 +84,7 @@ nD		         %number of joints with prescribed displacements nD<=nR
 
 modes						       %number of desired modes
 lump						 %0: consistent mass, 1: lumped
-/tmp/mode_file					     %mode shape data file name
+mode_file					     %mode shape data file name
 tol						  %convergence tolerance ~ 1e-4
 shift		i   %shift-factor for rigid body modes, make 0 for pos.def. [K]
   M[1]	d[1]	BMs[1]
