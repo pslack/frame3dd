@@ -59,9 +59,9 @@ int main(int argc, char *argv[]){
 
 	char IO_file[FILENMAX],	/* the input/output filename		*/
 		title[256],	/* the title of the analysis		*/
-		mesh_file[FILENMAX] = "EMPTY",	/* frame mesh data filename		*/
-		plot_file[FILENMAX] = "EMPTY2",	/* frame mesh plot filename		*/
-		mode_file[FILENMAX] = "EMPTY3";	/* mode-shape mesh data filename	*/
+		meshpath[FRAME3DD_PATHMAX] = "EMPTY_MESH", /* mesh data path */
+		plotpath[FRAME3DD_PATHMAX] = "EMPTY_PLOT", /* plot file path */
+		modepath[FRAME3DD_PATHMAX] = "EMPTY_MODE";
 
 	FILE	*fp;		/* input/output file pointer		*/
 
@@ -160,7 +160,6 @@ int main(int argc, char *argv[]){
 
 	filetype = get_file_ext( IO_file, extn ); /* .CSV or .FMM or other? */
 
-#define FRAME3DD_PATHMAX 256
 	char tpath[FRAME3DD_PATHMAX];
 	temp_file_location("frame3dd.cln",tpath,FRAME3DD_PATHMAX);
 
@@ -223,15 +222,10 @@ int main(int argc, char *argv[]){
 	);
 	printf("  ... complete\n");
 
-	char meshpath[FRAME3DD_PATHMAX] = "EMPTY";
-	char plotpath[FRAME3DD_PATHMAX] = "EMPTY";
 
 	read_run_data (
-		fp, &shear, &geom, mesh_file, plot_file, &exagg, &anlyz
+		fp, &shear, &geom, meshpath, plotpath, &exagg, &anlyz
 	);
-
-	output_file_location(plot_file,plotpath,FRAME3DD_PATHMAX,NULL);
-	output_file_location(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
 
 	fscanf(fp, "%d", &nL );		/* number of load cases		*/
 	printf(" number of load cases "); dots(31); printf(" nL = %3d\n",nL);
@@ -293,7 +287,7 @@ int main(int argc, char *argv[]){
 	read_mass_data(
 		fp, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax,
 		&total_mass, &struct_mass, &nM, &Mmethod,
-		&lump, mode_file, &tol, &shift, anim, &pan
+		&lump, modepath, &tol, &shift, anim, &pan
 	);
 	printf("                                                     ");
 	printf(" mass data ... complete\n");
@@ -441,7 +435,7 @@ int main(int argc, char *argv[]){
 					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
 
-			output_file_location(plot_file,plotpath,FRAME3DD_PATHMAX,NULL);
+//			output_path(plot_file,plotpath,FRAME3DD_PATHMAX,NULL);
 
 			static_mesh ( IO_file, meshpath, plotpath, title, nJ, nB, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
@@ -508,8 +502,6 @@ int main(int argc, char *argv[]){
 	fclose (fp);
 
 	if(nM > 0 && anlyz){
-		char modepath[FRAME3DD_PATHMAX] = "EMPTY";
-		output_file_location(mode_file,modepath,FRAME3DD_PATHMAX,NULL);
 
 		modal_mesh(IO_file, meshpath, modepath, plotpath, title,
 		       nJ,nB, DoF, nM, xyz, L, J1,J2, p, M,f,V,exagg,anlyz);

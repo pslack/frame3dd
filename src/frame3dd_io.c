@@ -32,6 +32,7 @@
 #include <ctype.h>
 #include <assert.h>
 
+#include "common.h"
 #include "frame3dd_io.h"
 #include "coordtrans.h"
 #include "lu_dcmp.h"
@@ -179,16 +180,27 @@ void read_beam_data(
 READ_RUN_DATA  -  read information for analysis                   29dec08
 ------------------------------------------------------------------------------*/
 void read_run_data (
-	FILE	*fp,
+	FILE	*fp, filename,
 	int	*shear,
 	int	*geom,
-	char	*meshfile,
-	char	*plotfile,
+	char	*meshpath,
+	char	*plotpath,
 	double	*exagg,
 	int	*anlyz
 ){
+	int	i=0, full_len=0, len=0;
+	char	mesh_file[96] = "EMPTY_MESH";
+
+
+	while ( filename[len++] != '\0' ) /* the length of file filename */ ;
+        full_len = len;
+	while ( filename[len--] != '.' ) /* the last '.' in filename */ ;
+	++len;
+
+	for ( i=0; len < full_len; i++,len++ ) ext[i] = tolower(filename[len]);
+
 	fscanf( fp, "%d %d %s %s %lf %d",
-			shear, geom, meshfile, plotfile, exagg, anlyz );
+			shear, geom, mesh_file, plotpath, exagg, anlyz );
 
 	if (*shear != 0 && *shear != 1) {
 	    fprintf(stderr," Rember to specify shear deformations");
@@ -207,6 +219,8 @@ void read_run_data (
 	    fprintf(stderr," factor greater than zero\n");
 	    exit(1);
 	}
+
+        output_path(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
 
 	return;
 }
@@ -229,6 +243,9 @@ int     lim
     return;
 }
 
+
+/* platform-dependent path sperator character */
+
 #ifdef WIN32
 static const char sep = '\\';
 #else
@@ -247,7 +264,8 @@ static const char *temp_dir(){
 	if(tmp==NULL){
 		fprintf(stderr,"ERROR: %%TEMP%% environment var not found. This "
 			"variable needs to be set so that FRAME3DD knows where to put its "
-			"temporary files. Set this variable, the re-run FRAME3DD.\n");
+			"temporary files. Set this variable, the re-run FRAME3DD."
+                        "The Frame3DD on-line documentation provides help on this.");
 		exit(1);
 	}
 #else
@@ -267,11 +285,11 @@ void temp_file_location(const char *fname, char fullpath[], const int len){
 }
 
 /*------------------------------------------------------------------------------
-OUTPUT_FILE_LOCATION
-return output file location using either current directory, or FRAME3DD_OUTDIR
+OUTPUT_PATH
+return path for output files using either current directory, or FRAME3DD_OUTDIR
 if specified. -- John Pye, Feb 2009.
 ------------------------------------------------------------------------------*/
-void output_file_location(const char *fname, char fullpath[], const int len, const char *default_outdir){
+void output_path(const char *fname, char fullpath[], const int len, const char *default_outdir){
 	assert(fname!=NULL);
 	int res;
 	if(fname[0]==sep){
@@ -296,6 +314,7 @@ void output_file_location(const char *fname, char fullpath[], const int len, con
 	}
 	/* fprintf(stderr,"Output file path generated: %s\n",fullpath); */
 }
+
 
 /*-----------------------------------------------------------------------------
 PARSE_INPUT                                                             7may03
@@ -705,7 +724,7 @@ void read_and_assemble_loads(
 
 
 /*------------------------------------------------------------------------------
-READ_MASSES  -  read element densities and extra inertial mass data	16aug01
+READ_MASS_DATA  -  read element densities and extra inertial mass data	16aug01
 ------------------------------------------------------------------------------*/
 void read_mass_data(
 		FILE *fp,
@@ -715,11 +734,13 @@ void read_mass_data(
 		double *L, float *Ax,
 		double *total_mass, double *struct_mass,
 		int *nM, int *Mmethod, int *lump,
-		char modefile[],
+		char modepath[],
 		double *tol, double *shift, int anim[], int *pan
 ){
 /*	double	ms = 0.0; */
 	int	chk, j, jnt, m, mem, nA;
+
+	char	mode_file[96] = "EMPTY_MODE";
 
 	*total_mass = *struct_mass = 0.0;
 
@@ -755,7 +776,7 @@ void read_mass_data(
 #endif
 
 	fscanf( fp, "%d", lump );
-	fscanf( fp, "%s", modefile );
+	fscanf( fp, "%s", mode_file );
 	fscanf( fp, "%lf", tol );
 	fscanf( fp, "%lf", shift );
 	for (m=1; m <= nB; m++) {	/* read inertia data	*/
@@ -820,6 +841,9 @@ void read_mass_data(
 	for ( m = 0; m < nA; m++ )	fscanf ( fp, "%d", &anim[m] );
 
 	fscanf ( fp, "%d", pan );
+
+	output_path(mode_file,modepath,FRAME3DD_PATHMAX,NULL);
+
 
 	return;
 }
@@ -1540,7 +1564,7 @@ create mesh data of deformed and undeformed mesh, use gnuplot	22feb99
 useful gnuplot options: set noxtics noytics noztics noborder view nokey
 ------------------------------------------------------------------------------*/
 void static_mesh(
-		char IO_file[], char meshfile[], char plotfile[],
+		char IO_file[], char meshpath[], char plotpath[],
 		char *title, int nJ, int nB, int nL, int lc, int DoF,
 		vec3 *xyz, double *L,
 		int *J1, int *J2, float *p, double *D,
@@ -1552,18 +1576,18 @@ void static_mesh(
 	char	meshfl[64], str[8], D3 = '#';
 	time_t  now;            /* modern time variable type    (DJGPP) */
 
-	strcpy(meshfl,meshfile);
+	strcpy(meshfl,meshpath);
 	str[0]='f'; str[1]='\0';	strcat(meshfl,str);
 	str[0]='.'; str[1]='\0';	strcat(meshfl,str);
 	my_itoa(lc,str,3);		strcat(meshfl,str);
 
 	if ((fpmfx = fopen (meshfl, "w")) == NULL) {
-		printf (" error: cannot open meshfile: %s\n", meshfile);
+		printf (" error: cannot open meshpath: %s\n", meshpath);
 		exit(1);
 	}
 
-	if ((fpm = fopen (meshfile, "w")) == NULL) {
-		printf (" error: cannot open meshfile: %s\n", meshfile);
+	if ((fpm = fopen (meshpath, "w")) == NULL) {
+		printf (" error: cannot open meshpath: %s\n", meshpath);
 		exit(1);
 	}
 
@@ -1620,13 +1644,13 @@ void static_mesh(
 	fclose(fpm);
 
 	if (lc == 1) {
-	    if ((fpm = fopen (plotfile, "w")) == NULL) {
-		printf (" error: cannot open plot file: %s\n", plotfile);
+	    if ((fpm = fopen (plotpath, "w")) == NULL) {
+		printf (" error: cannot open plot file: %s\n", plotpath);
 		exit(1);
 	    }
 	} else {
-	    if ((fpm = fopen (plotfile, "a")) == NULL) {
-		printf (" error: cannot open plot file: %s\n", plotfile);
+	    if ((fpm = fopen (plotpath, "a")) == NULL) {
+		printf (" error: cannot open plot file: %s\n", plotpath);
 		exit(1);
 	    }
 	}
@@ -1665,7 +1689,7 @@ void static_mesh(
 		fprintf(fpm,"set label ' %d' at %12.4e, %12.4e, %12.4e\n",
 								m, mx, my, mz );
 	 }
-	 fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w lp ", meshfile);
+	 fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w lp ", meshpath);
 	 if (!anlyz) fprintf(fpm,"lw 2 lt 1 pt 6 \n");
 	 else fprintf(fpm,"lw 1 lt 5 pt 6, '%s' u 1:2 t 'load case %d of %d' w l lw 2 lt 3\n", meshfl, lc, nL );
 
@@ -1677,7 +1701,7 @@ void static_mesh(
 	 fprintf(fpm,"%c set zlabel 'z'\n", D3 );
 /*	 fprintf(fpm,"%c set nolabel\n", D3 );	*/
 	 fprintf(fpm,"%c splot '%s' u 2:3:4 t 'load case %d of %d' w lp ",
-							D3, meshfile, lc, nL );
+							D3, meshpath, lc, nL );
 	 if (!anlyz) fprintf(fpm," lw 2 lt 1 pt 6 \n");
 	 else fprintf(fpm," lw 1 lt 5 pt 6, '%s' u 1:2:3 t 'load case %d of %d' w l lw 2 lt 3\n",meshfl, lc, nL );
 
@@ -1690,7 +1714,7 @@ void static_mesh(
 	 fprintf(fpm,"  deflection exaggeration: %.1f ", exagg );
 	 fprintf(fpm,"  load case %d of %d \"\n", lc, nL );
 
-	 fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w lp ", meshfile);
+	 fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w lp ", meshpath);
 	 if (!anlyz) fprintf(fpm,"lw 2 lt 1 pt 6 \n");
 	 else fprintf(fpm,"lw 1 lt 5 pt 6, '%s' u 1:2 t 'load case %d of %d' w l lw 2 lt 3\n", meshfl, lc, nL );
 
@@ -1702,7 +1726,7 @@ void static_mesh(
 	 fprintf(fpm,"%c set zlabel 'z'\n", D3 );
 /*	 fprintf(fpm,"%c set nolabel\n", D3 );	*/
 	 fprintf(fpm,"%c splot '%s' u 2:3:4 t 'undeformed mesh' w lp ",
-								D3, meshfile );
+								D3, meshpath );
 	 if (!anlyz) fprintf(fpm," lw 2 lt 1 pt 6 \n");
 	 else fprintf(fpm," lw 1 lt 5 pt 6, '%s' u 1:2:3 t 'load case %d of %d' w l lw 2 lt 3\n",meshfl, lc, nL );
 	}
@@ -1718,8 +1742,8 @@ MODAL_MESH  -  create mesh data of the mode-shape meshes, use gnuplot	19oct98
 	 useful gnuplot options: set noxtics noytics noztics noborder view nokey
 ------------------------------------------------------------------------------*/
 void modal_mesh(
-		char IO_file[], char meshfile[], char modefile[],
-		char plotfile[], char *title,
+		char IO_file[], char meshpath[], char modepath[],
+		char plotpath[], char *title,
 		int nJ, int nB, int DoF, int nM,
 		vec3 *xyz, double *L,
 		int *J1, int *J2, float *p,
@@ -1751,7 +1775,7 @@ void modal_mesh(
 
 	for (m=1; m<=nM; m++) {
 
-		strcpy(modefl,modefile);
+		strcpy(modefl,modepath);
 		s1[0]='-'; s1[1]='\0'; my_itoa(m,s2,2);  strcat(s1,s2);  strcat(modefl,s1);
 
 		if ((fpm = fopen (modefl, "w")) == NULL) {
@@ -1789,21 +1813,21 @@ void modal_mesh(
 
 		fclose(fpm);
 
-		if ((fpm = fopen (plotfile, "a")) == NULL) {
-			printf (" error: cannot append plot file: %s\n",plotfile);
+		if ((fpm = fopen (plotpath, "a")) == NULL) {
+			printf (" error: cannot append plot file: %s\n",plotpath);
 			exit(1);
 		}
 		fprintf(fpm,"pause -1\n");
 		fprintf(fpm,"set nolabel\n");
 		fprintf(fpm,"set title '%s     mode %d     %lf Hz'\n",IO_file,m,f[m]);
-		fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w l ", meshfile );
+		fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w l ", meshpath );
 		if (!anlyz) fprintf(fpm," lw 2 lt 1 \n");
 		else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2 t 'mode-shape %d' w l lw 2 lt 3\n",
 								modefl, m );
 		fprintf(fpm,"%c pause -1\n", D3 );
 		fprintf(fpm,"%c set nokey\n", D3 );
 		fprintf(fpm,"%c splot '%s' u 2:3:4 t 'undeformed mesh' w l ",
-								D3, meshfile);
+								D3, meshpath);
 		if (!anlyz) fprintf(fpm," lw 2 lt 1 \n");
 		else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2:3 t 'mode-shape %d' w l lw 2 lt 3\n",
 								modefl, m );
@@ -1825,7 +1849,7 @@ ANIMATE -  create mesh data of animated mode-shape meshes, use gnuplot	16dec98
 	 ... requires ImageMagick and mpeg2vidcodec packages
 ------------------------------------------------------------------------------*/
 void animate(
-	char IO_file[], char meshfile[], char modefile[], char plotfile[],
+	char IO_file[], char meshpath[], char modepath[], char plotpath[],
 	char *title,
 	int anim[],
 	int nJ, int nB, int DoF, int nM,
@@ -1871,8 +1895,8 @@ void animate(
 	if ( X && Y && Z ) D3 = ' ';
 
 
-	if ((fpm = fopen (plotfile, "a")) == NULL) {
-		printf (" error: cannot append plot file: %s\n",plotfile);
+	if ((fpm = fopen (plotpath, "a")) == NULL) {
+		printf (" error: cannot append plot file: %s\n",plotpath);
 		exit(1);
 	}
 	i = 0;
@@ -1917,8 +1941,8 @@ void animate(
 	 for ( c=1; c <= CYCLES; c++ ) {
 	  for ( fr=0; fr<=frames; fr++ ) {
 
-	    strcpy(modefl,modefile);
-	    strcpy(framefl,modefile);
+	    strcpy(modefl,modepath);
+	    strcpy(framefl,modepath);
 	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
 	    strcat(framefl,s1);
 	    strcat(s1,"."); my_itoa(fr,s2,3); strcat(s1,s2); strcat(modefl,s1);
@@ -1928,7 +1952,7 @@ void animate(
 	    strcat(framefl,s1);
 
 	    if ( D3 == '#' ) {
-		fprintf(fpm,"plot '%s' u 2:3 w l lw 1 lt 5, ", meshfile );
+		fprintf(fpm,"plot '%s' u 2:3 w l lw 1 lt 5, ", meshpath );
 	 	fprintf(fpm," '%s' u 1:2 w l lw 2 lt 3 ;", modefl );
 	    } else {
 	      if (pan)
@@ -1936,7 +1960,7 @@ void animate(
 		rot_x_init + (rot_x_final-rot_x_init)*frame_number/total_frames,
 		rot_z_init + (rot_z_final-rot_z_init)*frame_number/total_frames,
 		zoom_init + (zoom_final-zoom_init)*frame_number/total_frames );
-	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshfile);
+	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshpath);
 	      fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
 	    }
 	    if ( fr==0 && c==1 )	fprintf(fpm,"  pause 1.5 \n");
@@ -1946,8 +1970,8 @@ void animate(
 	  }
 	  for ( fr = frames-1; fr > 0; fr-- ) {
 
-	    strcpy(modefl,modefile);
-	    strcpy(framefl,modefile);
+	    strcpy(modefl,modepath);
+	    strcpy(framefl,modepath);
 	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
 	    strcat(framefl,s1);
 	    strcat(s1,"."); my_itoa(fr,s2,3); strcat(s1,s2); strcat(modefl,s1);
@@ -1957,7 +1981,7 @@ void animate(
 	    strcat(framefl,s1);
 
 	    if ( D3 == '#' ) {
-	 	fprintf(fpm,"plot '%s' u 2:3 w l lw 1 lt 5, ", meshfile );
+	 	fprintf(fpm,"plot '%s' u 2:3 w l lw 1 lt 5, ", meshpath );
 		fprintf(fpm," '%s' u 1:2 w l lw 2 lt 3;", modefl );
 	    } else {
 	      if (pan)
@@ -1965,7 +1989,7 @@ void animate(
 		rot_x_init + (rot_x_final-rot_x_init)*frame_number/total_frames,
 		rot_z_init + (rot_z_final-rot_z_init)*frame_number/total_frames,
 		zoom_init + (zoom_final-zoom_init)*frame_number/total_frames );
-	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshfile);
+	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshpath);
 	      fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
 	    }
 	    fprintf(fpm,"  pause 0.05 \n");
@@ -1975,15 +1999,15 @@ void animate(
 	 }
 	 fr = 0;
 
-	 strcpy(modefl,modefile);
+	 strcpy(modefl,modepath);
 	 s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
 	 strcat(s1,".");  my_itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
 
 	 if ( D3 == '#' ) {
-	 	fprintf(fpm,"plot '%s' u 2:3 w l lw 2 lt 5, ", meshfile );
+	 	fprintf(fpm,"plot '%s' u 2:3 w l lw 2 lt 5, ", meshpath );
 		fprintf(fpm," '%s' u 1:2 w l lw 3 lt 3 \n", modefl );
 	 } else {
-		fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 2 lt 5, ",D3,meshfile);
+		fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 2 lt 5, ",D3,meshpath);
 		fprintf(fpm," '%s' u 1:2:3 w l lw 3 lt 3 \n", modefl );
 	 }
 
@@ -1997,7 +2021,7 @@ void animate(
 	while ( (m = anim[i]) != 0 ) {
 	  for ( fr=0; fr<=frames; fr++ ) {
 
-	    strcpy(modefl,modefile);
+	    strcpy(modefl,modepath);
 	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
 	    strcat(s1,"."); my_itoa(fr,s2,3); strcat(s1,s2); strcat(modefl,s1);
 

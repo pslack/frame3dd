@@ -146,7 +146,7 @@ void read_mass_data(
 	int *nM,	/**< number of modes to find			*/
 	int *Mmethod, 	/**< modal analysis method			*/
 	int *lump,	/**< 1: use lumped mass matrix, 0: consistent mass */
-	char modefile[], /**< filename for mode shape data for plotting	*/
+	char modepath[], /**< filename for mode shape data for plotting	*/
 	double *tol,	/**< convergence tolerance for mode shapes	*/
 	double *shift,	/**< frequency shift for unrestrained frames	*/
 	int *anim,	/**< list of modes to be graphically animated	*/
@@ -242,7 +242,7 @@ void write_modal_results(
 	useful gnuplot options: set noxtics noytics noztics noborder view nokey
 */
 void static_mesh(
-	char IO_file[], char meshfile[], char plotfile[],
+	char IO_file[], char meshpath[], char plotpath[],
 	char *title, int nJ, int nB, int nL, int lc, int DoF,
 	vec3 *xyz, double *L,
 	int *J1, int *J, float *p, double *D,
@@ -255,8 +255,8 @@ void static_mesh(
 	useful gnuplot options: set noxtics noytics noztics noborder view nokey
 */
 void modal_mesh(
-	char IO_file[], char meshfile[], char modefile[],
-	char plotfile[], char *title,
+	char IO_file[], char meshpath[], char modepath[],
+	char plotpath[], char *title,
 	int nJ, int nB, int DoF, int nM,
 	vec3 *xyz, double *L,
 	int *J1, int *J2, float *p,
@@ -272,7 +272,7 @@ void modal_mesh(
 	... requires ImageMagick and mpeg2vidcodec packages
 */
 void animate(
-	char IO_file[], char meshfile[], char modefile[], char plotfile[],
+	char IO_file[], char meshpath[], char modepath[], char plotpath[],
 	char *title,
 	int anim[],
 	int nJ, int nB, int DoF, int nM,
@@ -334,7 +334,7 @@ void temp_file_location(const char *fname, char fullpath[], const int len);
 	@param len available length for string being returned.
 	@param default_outdir default output directory in case where no env var.
 */
-void output_file_location(const char *fname, char fullpath[], const int len, const char *default_outdir);
+void output_path(const char *fname, char fullpath[], const int len, const char *default_outdir);
 
 /** print a set of dots (periods) */
 void dots( int n );

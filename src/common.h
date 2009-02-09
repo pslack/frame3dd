@@ -26,6 +26,7 @@
 #ifndef FRAME_COMMON_H
 #define FRAME_COMMON_H
 
+#define FRAME3DD_PATHMAX 256
 
 #ifndef VERSION
 # define VERSION "20090104"
