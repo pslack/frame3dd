@@ -224,7 +224,7 @@ int main(int argc, char *argv[]){
 
 
 	read_run_data (
-		fp, &shear, &geom, meshpath, plotpath, &exagg, &anlyz
+		fp, IO_file, &shear, &geom, meshpath, plotpath, &exagg, &anlyz
 	);
 
 	fscanf(fp, "%d", &nL );		/* number of load cases		*/
@@ -285,7 +285,7 @@ int main(int argc, char *argv[]){
 	printf(" load data ... complete\n");
 
 	read_mass_data(
-		fp, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax,
+		fp, IO_file, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax,
 		&total_mass, &struct_mass, &nM, &Mmethod,
 		&lump, modepath, &tol, &shift, anim, &pan
 	);

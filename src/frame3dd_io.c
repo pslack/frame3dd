@@ -180,7 +180,8 @@ void read_beam_data(
 READ_RUN_DATA  -  read information for analysis                   29dec08
 ------------------------------------------------------------------------------*/
 void read_run_data (
-	FILE	*fp, filename,
+	FILE	*fp, 
+	char	*IOfilename,
 	int	*shear,
 	int	*geom,
 	char	*meshpath,
@@ -188,19 +189,26 @@ void read_run_data (
 	double	*exagg,
 	int	*anlyz
 ){
-	int	i=0, full_len=0, len=0;
+	int	full_len=0, len=0;
 	char	mesh_file[96] = "EMPTY_MESH";
 
 
-	while ( filename[len++] != '\0' ) /* the length of file filename */ ;
+	while ( IOfilename[len++] != '\0' ) /* the length of IOfilename */ ;
         full_len = len;
-	while ( filename[len--] != '.' ) /* the last '.' in filename */ ;
-	++len;
+	while ( IOfilename[len--] != '.' && len > 0 ) /* the last '.' in IOfilename */ ;
+	if ( len == 0 )	len = full_len;
+	IOfilename[++len] = '\0';
 
-	for ( i=0; len < full_len; i++,len++ ) ext[i] = tolower(filename[len]);
+	strcpy(plotpath,IOfilename);
+	strcat(plotpath,".plt");
 
-	fscanf( fp, "%d %d %s %s %lf %d",
-			shear, geom, mesh_file, plotpath, exagg, anlyz );
+	strcpy(mesh_file,IOfilename);
+	strcat(mesh_file,"-msh");
+
+        output_path(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
+
+
+	fscanf( fp, "%d %d %lf %d", shear, geom,  exagg, anlyz );
 
 	if (*shear != 0 && *shear != 1) {
 	    fprintf(stderr," Rember to specify shear deformations");
@@ -220,7 +228,8 @@ void read_run_data (
 	    exit(1);
 	}
 
-        output_path(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
+printf("PLOTPATH = %s \n", plotpath);
+printf("MESHPATH = %s \n", meshpath);
 
 	return;
 }
@@ -728,6 +737,7 @@ READ_MASS_DATA  -  read element densities and extra inertial mass data	16aug01
 ------------------------------------------------------------------------------*/
 void read_mass_data(
 		FILE *fp,
+		char *IOfilename, 
 		int nJ, int nB, int *nI,
 		float *d, float *BMs,
 		float *JMs, float *JMx, float *JMy, float *JMz,
@@ -739,6 +749,7 @@ void read_mass_data(
 ){
 /*	double	ms = 0.0; */
 	int	chk, j, jnt, m, mem, nA;
+	int	full_len=0, len=0;
 
 	char	mode_file[96] = "EMPTY_MODE";
 
@@ -776,7 +787,6 @@ void read_mass_data(
 #endif
 
 	fscanf( fp, "%d", lump );
-	fscanf( fp, "%s", mode_file );
 	fscanf( fp, "%lf", tol );
 	fscanf( fp, "%lf", shift );
 	for (m=1; m <= nB; m++) {	/* read inertia data	*/
@@ -841,6 +851,15 @@ void read_mass_data(
 	for ( m = 0; m < nA; m++ )	fscanf ( fp, "%d", &anim[m] );
 
 	fscanf ( fp, "%d", pan );
+
+	while ( IOfilename[len++] != '\0' ) /* the length of IOfilename */ ;
+        full_len = len;
+	while ( IOfilename[len--] != '.' && len > 0 ) /* the last '.' in IOfilename */ ;
+	if ( len == 0 )	len = full_len;
+	IOfilename[++len] = '\0';
+
+	strcpy(mode_file,IOfilename);
+	strcat(mode_file,"-m");
 
 	output_path(mode_file,modepath,FRAME3DD_PATHMAX,NULL);
 
@@ -2187,8 +2206,9 @@ int get_file_ext( char *filename, char *ext )
 	int	i=0, full_len=0, len=0;
 
 	while ( filename[len++] != '\0' ) /* the length of file filename */ ;
-        full_len = len;
-	while ( filename[len--] != '.' ) /* the last '.' in filename */ ;
+       	full_len = len;
+	while ( filename[len--] != '.' && len > 0 ) /* the last '.' in filename */ ;
+	if ( len == 0 )	len = full_len;
 	++len;
 
 	for ( i=0; len < full_len; i++,len++ ) ext[i] = tolower(filename[len]);

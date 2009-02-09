@@ -19,10 +19,9 @@ nR					       % number of joints with reactions
   :	:	:	:	:	:	:	       % 0:free, 1:fixed
   J[nR]	Rx[nR]	Ry[nR]	Rz[nR]	Rxx[nR]	Ryy[nR]	Rzz[nR]
 
-shear						  % 1: include shear deformation
-/tmp/mesh_file						   % mesh data file name
-plot_file					     % mesh annotation file name
-exagg						  % exaggerate mesh deformations
+shear					  % 1: include shear deformation
+geom					  % 1: include geometric stiffness
+exagg					  % exaggerate mesh deformations
 anlyz				     % 1: stiffness analysis, 0: data check only
 
 % load data ...
@@ -87,7 +86,6 @@ nD		         % number of joints with prescribed displacements nD<=nR
 modes					              % number of desired modes
 Mmethod                                        % 1: Subspace Jacobi, 2: Stodola
 lump					        % 0: consistent mass, 1: lumped
-/tmp/mode_file					    % mode shape data file name
 tol		  			         % convergence tolerance ~ 1e-4
 shift		   % shift-factor for rigid body modes, make 0 for pos.def. [K]
 

@@ -28,8 +28,6 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
  
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
-exB-msh                    % mesh data file name
-exB.plt                         % plot file name
 10.0                            % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
 
@@ -72,7 +70,6 @@ exB.plt                         % plot file name
 6				% number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
 0				% 0: consistent mass ... 1: lumped mass matrix
-exB-m			% mode shape data file
 1e-4				% mode shape tolerance
 0.0				% shift value ... for unrestrained structures
 

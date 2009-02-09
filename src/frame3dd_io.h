@@ -80,11 +80,12 @@ void read_beam_data (
 */
 void read_run_data (
 	FILE *fp,	/**< input data file pointer			*/
+	char IO_file[],	/**< input output file name			*/
 	int *shear,	/**< 1: include shear deformations, 0: don't	*/
 	int *geom,	/**< 1: include geometric stiffness, 0: don't	*/
-	char mesh_file[],	/**< file name for mesh data output	*/
-	char plot_file[],	/**< file name for Gnuplot script	*/
-	double *exagg,		/**< factor for deformation exaggeration */
+	char meshpath[],/**< file name for mesh data output		*/
+	char plotpath[],/**< file name for Gnuplot script		*/
+	double *exagg,	/**< factor for deformation exaggeration	*/
 	int *anlyz	/* 1: perform elastic analysis, 0: don't	*/
 );
 
@@ -135,6 +136,7 @@ void read_and_assemble_loads(
 */
 void read_mass_data(
 	FILE *fp,	/**< input data file pointer			*/
+	char *IO_file,	/**< input output data file name 		*/
 	int nJ, int nB,	/**< number of joints, number of beams		*/
 	int *nI,	/**< number of beams with extra inertia		*/
 	float *d, float *BMs, /**< beam density, extra beam mass	*/

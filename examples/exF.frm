@@ -137,8 +137,6 @@ Example F: a seismically-isolated building model
 
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
-exF-msh                    % mesh data file name
-exF.plt				% plot file name
 2000                            % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
 
@@ -184,7 +182,6 @@ exF.plt				% plot file name
 15                              % number of desired dynamic modes of vibration
 1                               % 1: subspace Jacobi     2: Stodola
 0                               % 0: consistent mass ... 1: lumped mass matrix
-exFd                       % mode shape data file
 1.00e-6                         % mode shape tolerance
 0.0                             % shift value ... for unrestrained structures
 
