@@ -4,9 +4,9 @@
 <title>FRAME3DD User Manual</title>
 
 <META NAME="Description" CONTENT=" Free software for static and dynamic analysis of 3D moment-resisting frames with elastic and geometric stiffness. Written in
- C.  Source code includes:  frame analysis, LDL' decomposition, LU decomposition, sub-space iteration, Stodola iteration, Sturm eigenvalue checking,  
-Static Condensation, Guyan Reduction and Dynamic Condensation.  
-Matlab interface. 
+ C.  Source code includes:  frame analysis, LDL' decomposition, LU decomposition, sub-space iteration, Stodola iteration, Sturm eigenvalue checking,
+Static Condensation, Guyan Reduction and Dynamic Condensation.
+Matlab interface.
 Graphical output and mode shape animation via Gnuplot.">
 
 <META NAME="Keywords" CONTENT="Frame3DD, Structural Dynamics, Structural Analysis, Frame Analysis, Structural Analysis Software, Geometric Stiffness, Geometric Stiffness Matrix, Modal Analysis, Modal Analysis Software, Structural Dynamics, Structural Dynamics Software, LDL Decomposition, LDL Decomposition, LU Decomposition, Sub-space Iteration, Gnuplot, Matlab, Octave, Henri Gavin, Duke">
@@ -20,8 +20,8 @@ li, td, p {font: normal small sans-serif}
 div.eq {font-style:italic; width:100%; text-align:center; margin-top: 6pt; margin-bottom: 6pt}
 div.note {width: 60em; border: solid 2pt gray; background-color: #FFFFEE; padding:10px; margin-top: 6pt; margin-bottom: 6pt; font: normal small sans-serif }
 pre {background-color: #EEEEEE}
+iframe {background-color: #FFFFEE; margin-top: 5px; margin-bottom: 5px, border:0}
 </style>
-</head>
 
 <body>
 
@@ -41,7 +41,7 @@ Duke University</a> - Box 90287,
 
 <p><i>
 <font face="Verdana, Arial, Helvetica, sans-serif" size="2">
-<a href="http://cee.duke.edu/ARCHIVES/people/faculty/gavin.shtml">Henri P. Gavin</a>, P.E., Ph.D., 
+<a href="http://cee.duke.edu/ARCHIVES/people/faculty/gavin.shtml">Henri P. Gavin</a>, P.E., Ph.D.,
 - Associate Professor -
 <a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;&#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;">
 &#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;
@@ -50,30 +50,33 @@ Duke University</a> - Box 90287,
 
 <hr>
 <h1>FRAME3DD</h1>
+
+<iframe src="version.html" width="250" height="30" style="border:solid 1pt grey"></iframe>
+
 <!-- <h4>DESCRIPTION </h4> -->
-<p><b>Frame3DD</b> is a program for the static and dynamic structural analysis of two- and three-dimensional frames and trusses with elastic and geometric stiffness.  
+<p><b>Frame3DD</b> is a program for the static and dynamic structural analysis of two- and three-dimensional frames and trusses with elastic and geometric stiffness.
 </p>
 
-<p><b>Frame3DD</b> reads a plain-text <b>input data file</b>, containing joint coordinates, member geometry, material moduli, restrained joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.  
+<p><b>Frame3DD</b> reads a plain-text <b>input data file</b>, containing joint coordinates, member geometry, material moduli, restrained joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.
 <!-- (The Input/Output file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
 </p>
 
-<p><b>Frame3DD</b> then <b>appends</b> the input data with output data, resulting in a single input/output file.  
+<p><b>Frame3DD</b> then <b>appends</b> the input data with output data, resulting in a single input/output file.
 The output data recapitulates the input information, gives joint displacements in global coordinates, member
 end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
 </p>
 
 <p><b>Frame3DD</b> can consider multiple static load cases in a single analysis.</p>
- 
+
 <p><b>Frame3DD</b> may optionally interface with Matlab and with spreadsheet programs.</p>
 
-<p><b>Frame3DD</b> is <b>free open-source software</b>; you may redistribute it and/or modify it under 
+<p><b>Frame3DD</b> is <b>free open-source software</b>; you may redistribute it and/or modify it under
 the terms of the GNU General Public License (GPL) as published by the
 <a href="http://www.fsf.org/">Free Software Foundation</a>.
 The software is distributed in the hope that it will be useful, but without any warranty; without even the implied warranty of merchantability or fitness for a particular purpose.  See <a href="../LICENSE.txt">LICENSE.txt</a> for details.
 </p>
 <!--
-Free software for static and dynamic structural analysis of 2D 
+Free software for static and dynamic structural analysis of 2D
 and 3D frames and trusses with elastic and geometric stiffness.
 Computes the static deflections, reactions, internal element
 forces, natural frequencies, mode shapes and modal participation
@@ -82,7 +85,7 @@ direct stiffness and mass assembly.  Written in  C.  Source code
 includes: frame analysis, LDL' decomposition, LU decomposition,
 Newton-Raphson iteration, sub-space iteration, Stodola iteration,
 Sturm eigenvalue check, and Static Condensation, Guyan Reduction,
-Dynamic Condensation.  Graphical output and mode shape animation 
+Dynamic Condensation.  Graphical output and mode shape animation
 via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <hr>
 <h4>SYNOPSIS </h4>
@@ -112,7 +115,7 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li><a href="#enhancements">Enhancements projected for future versions</a>
 <li><a href="#references">References</a>
 </ol>
-    
+
 <a name="starting"><h2>1. Getting started</h2>
 <ol>
 <li>Read the Manual and Reference (this file).
@@ -122,15 +125,15 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li>       Open a terminal window and run the program using the command
 	  <tt>frame3dd exA.frm</tt> (change the filename <tt>exA.frm</tt> as necessary).
 	<li>Open the input/output file using your text editor and scroll down to the output data, which is written to the end of the input/output file after the end of the input data.
-<!--     Running this program will create many files.  Most of them are used 
-         for graphics and should be written to the  /tmp  directory. 
-<li>      One of the files will be written to the current working directory and will be called 
+<!--     Running this program will create many files.  Most of them are used
+         for graphics and should be written to the  /tmp  directory.
+<li>      One of the files will be written to the current working directory and will be called
          something like frA.plt   This file is used for plotting.   -->
 <li>      Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, and typing
            <tt>load 'example.plt' </tt> at the "<tt>gnuplot&gt;</tt>"&nbsp;prompt, where the <tt>example.plt</tt> is the 'plot_file' specified as part of the Input Data (see <a href="#InputData">below</a>) <br>
 Observe a series of plots by hitting the Return (or Enter) key between plots.<br>
 If a dynamic analysis was performed, you will enjoy an animation of selected mode shapes.<br>
-Continue to hit the Return (or Enter) key until the last plot is displayed.  
+Continue to hit the Return (or Enter) key until the last plot is displayed.
 </ol>
 
 <div class=note>
@@ -144,12 +147,12 @@ Continue to hit the Return (or Enter) key until the last plot is displayed.
 <a name="iodata"/><h2>2. Input Data and Output Data</h2>
 
 <p>
-The <b>input data file</b> is a plain ASCII text file and must adhere to the format 
+The <b>input data file</b> is a plain ASCII text file and must adhere to the format
 <a href="#InputData">described below</a>.
 Several examples are given at <a href="http://frame3dd.sourceforge.net/">http://frame3dd.sourceforge.net/</a>. When writing input files, note the following points:</p>
 
 <ul>
-<li>Comments may be placed anywhere in the file and are helpful in organizing the Input Data.   
+<li>Comments may be placed anywhere in the file and are helpful in organizing the Input Data.
 A comment begins with one of the following four characters <tt># % ? ; </tt> and continues to the end of the line.
 <li>All commas in the Input Data are ignored.
 <li>Floating point numbers must be entered as 1.234 1234 or 1.234e3.
@@ -159,10 +162,10 @@ in the Input Data (unless the <a href="#Matlab">Matlab interface</a> is used).
 
 
 <p>
-To write your own input data file, it may be helpful to start with an example that resembles the system you would like to analyze.  Carefully compare the graphical output of the example, the Output Data written at the end of the Input/Output file, the Input Data at the beginning of the Input/Output file, and the <a href="#InputData"><b>input data format</b></a>, with the <a href="#Variables"><b>variable definitions</b></a> at the end of this page.   
+To write your own input data file, it may be helpful to start with an example that resembles the system you would like to analyze.  Carefully compare the graphical output of the example, the Output Data written at the end of the Input/Output file, the Input Data at the beginning of the Input/Output file, and the <a href="#InputData"><b>input data format</b></a>, with the <a href="#Variables"><b>variable definitions</b></a> at the end of this page.
 </p>
 <p>
-You may edit Input Data files using a plain text editor 
+You may edit Input Data files using a plain text editor
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
  <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>,
@@ -172,10 +175,10 @@ You may edit Input Data files using a plain text editor
  <a href="http://www.textedit.org/">TextEdit (Windows)</a>,
  <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>,
 etc.),
-using the Matlab interface, 
+using the Matlab interface,
 or using spreadsheet programs
-(e.g. <a href="http://www.openoffice.org/">OpenOffice</a>, Excel, 
-<a href="http://docs.google.com/">Google Docs</a> or  
+(e.g. <a href="http://www.openoffice.org/">OpenOffice</a>, Excel,
+<a href="http://docs.google.com/">Google Docs</a> or
  <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).
 </p>
 <p>
@@ -183,10 +186,10 @@ Details regarding the Matlab interface to Frame3DD are <a href="#Matlab">here</a
 Details regarding the spreadsheet interface to Frame3DD are <a href="#CSV">here</a>.<br>
 </p>
 <p>
-It will probably take a few tries to get your input data just right.  
+It will probably take a few tries to get your input data just right.
 Frame3DD checks the Input Data for errors prior to analysing the system
 and, where possible, displays descriptive diagnostic messages when errors are
-found with the input data.  
+found with the input data.
 </p>
 
 <a name="installrun"/><h2>3. How to install and run Frame3DD</h2>
@@ -236,10 +239,10 @@ To create a PostScript file of your plot, use the Gnuplot script
 <li><tt>gnuplot> !mv my-plot.ps another-file.ps</tt>
 </ol>
 After finishing with your plots, you can exit Gnuplot by typing <tt>quit</tt>.
-<li>        You may edit Input/Output files using a plain text editor 
+<li>        You may edit Input/Output files using a plain text editor
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
-<a href="http://www.gnome.org/projects/gedit/">gedit</a>, 
-<a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>) 
+<a href="http://www.gnome.org/projects/gedit/">gedit</a>,
+<a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>)
 or a spreadsheet program
 (<a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>,
 <a href="http://www.openoffice.org/">OpenOffice</a>).<br>
@@ -284,7 +287,7 @@ MS-Windows version of Gnuplot</a>.
          and animations until the <tt> gnuplot></tt> prompt returns.<br>
 </ol>
 <li>       You may edit Input/Output Data files using a plain text editor
-(<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>, 
+(<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
 <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>), or a spreadsheet program
 (<a href="http://www.openoffice.org/">OpenOffice</a>, excel).<br>
 <li>       You may wish to delete all the files in the temporary file directory and/or output file directory when you have finished
@@ -298,7 +301,7 @@ for some time and may give you problems. You may have more success trying to bui
 from source following the instructions for Linux/Unix.</div>
 
 <p>
-For OS X running on a PowerPC (PPC) or Intel processor. 
+For OS X running on a PowerPC (PPC) or Intel processor.
 </p>
 
 <ol>
@@ -309,7 +312,7 @@ For OS X running on a PowerPC (PPC) or Intel processor.
 <li>        Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
             <tt>...$   cd ~/Desktop</tt><br>
             <tt>...$   chmod +x frame3dd</tt><br>
-         Create a plain text file (using 
+         Create a plain text file (using
 <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a> or TextEdit) called  <tt>~/.profile</tt> containing the line:<br>
              <tt>export PATH=".:$PATH:/usr/local/bin"</tt><br>
          Quit the Terminal application.  [APPLE] [Q]
@@ -324,11 +327,11 @@ For OS X running on a PowerPC (PPC) or Intel processor.
                <tt>/Users/your_name_here/Desktop/examples/exA.frm</tt> -->
 <li>     You may edit Input/Output files using a plain text editor
 (<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,
-TextEdit (Applications > TextEdit), 
+TextEdit (Applications > TextEdit),
 <a href="http://macvim.org/OSX/index.php">vi</a>)
 or a spreadsheet program
 (<a href="http://www.openoffice.org/">OpenOffice</a>).<br>
-If you use Apple's TextEdit, 
+If you use Apple's TextEdit,
 make sure you are in Plain Text mode  ...  [SHIFT] [APPLE] [T] ...  or ...   Format > Make Plain Text ... <br>
 </ol>
 
@@ -337,18 +340,18 @@ make sure you are in Plain Text mode  ...  [SHIFT] [APPLE] [T] ...  or ...   For
 http://darwinports.com/">DarwinPorts</a> and <a href="http://gnuplot.darwinports.com">Gnuplot</a> for OS X.
 </p>
 
-         
+
 <!--
 <p>
 For a version of Gnuplot for OS X-Intel, or for a version with mouse-scrolling and panning features,
-install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href="http://developer.apple.com/tools/">Apple Development Tools</a>, and then <a href="http://maba.wordpress.com/2006/08/02/scientific-plotting-on-mac-os-x-using-gnuplot-and-plot/">compile Gnuplot from sources</a>.  
+install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href="http://developer.apple.com/tools/">Apple Development Tools</a>, and then <a href="http://maba.wordpress.com/2006/08/02/scientific-plotting-on-mac-os-x-using-gnuplot-and-plot/">compile Gnuplot from sources</a>.
 </p>
 -->
 
 <ol>
 <li> First install DarwinPorts, and then install Gnuplot.
 <li>Follow the instructions |<a href="http://darwinports.com/">HERE</a>| to download and install DarwinPorts.
-<li> Follow the instructions |<a href="http://gnuplot.darwinports.com/">HERE</a>| 
+<li> Follow the instructions |<a href="http://gnuplot.darwinports.com/">HERE</a>|
 to download and install Gnuplot 4.2.4 for OS X.
 <li>        Test that Gnuplot works.
          Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
@@ -356,7 +359,7 @@ to download and install Gnuplot 4.2.4 for OS X.
 <!--          <tt> gnuplot>  set term aqua</tt><br> -->
           <tt> gnuplot>  plot sin(x)</tt><br>
           <tt> gnuplot>  quit</tt>
-     
+
 <li>        Visualize your <b>Frame3DD</b> analysis output.
          Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
           <tt>    ...$  cd ~/Desktop</tt><br>
@@ -368,7 +371,7 @@ to download and install Gnuplot 4.2.4 for OS X.
          and animations until the <tt> gnuplot></tt> prompt returns.<br>
          Save or print plots using [APPLE] [P].<br>
 After finishing with your plots, quit Gnuplot by typing ...  <br>
-          <tt> gnuplot>  quit</tt>  
+          <tt> gnuplot>  quit</tt>
 </ol>
 </p>
 
@@ -377,7 +380,7 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
 
 <p>
  <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).<br>
- The .zip file <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip">FrameEd.zip</a> includes: 
+ The .zip file <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip">FrameEd.zip</a> includes:
 </p>
  <ul>
  <li>the GUI executeable, Frame_Ed.exe
@@ -394,8 +397,8 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
  <li> The 2002 version does not support roll angles for member orientation.
  <li> The 2002 version uses the Jacobi method for modal analysis.
  <li> The 2002 version requires specification of joint masses and inertias for every joint.
- <li> The 2002 version does not support panning of the animation.  
- <li> The 2002 version uses Guyan reduction for matrix condensation, 
+ <li> The 2002 version does not support panning of the animation.
+ <li> The 2002 version uses Guyan reduction for matrix condensation,
 to match the first mode.
 </ul>
 </a>
@@ -406,12 +409,12 @@ to match the first mode.
 
 <p>
 <b>Frame3DD</b> may optionally be executed from within Matlab on any platform,
-via the Matlab interface function <a href="Matlab/frame_3dd.m">frame_3dd.m</a> 
+via the Matlab interface function <a href="Matlab/frame_3dd.m">frame_3dd.m</a>
 <pre>
 function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 % [D,R,F,L,Ks] = frame_3dd (XYZ,JTS,RCT,EAIJ,P,W,D)
 %
-% Solve a a three-dimensional frame analysis problem 
+% Solve a a three-dimensional frame analysis problem
 %
 % INPUT DATA:
 %
@@ -419,7 +422,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 %          row 1 = X-axis coordinate  for each joint
 %          row 2 = Y-axis coordinate  for each joint
 %          row 3 = Z-axis coordinate  for each joint
-%          row 4 = rigid radius       for each joint     
+%          row 4 = rigid radius       for each joint
 %
 %  JTS : a 2xB matrix indicating which 2 joints each beam element connects
 %          row 1 = the 'starting' joint  for each beam
@@ -429,7 +432,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 %        0: the joint has no reaction in that degree of freedom,
 %        1: the joint does have a reaction in that degree of freedom.
 %
-% EAIJ : a 9xB containing the section and modulus properties of each beam 
+% EAIJ : a 9xB containing the section and modulus properties of each beam
 %         row 1 = Ax  cross section area                   for each beam
 %         row 2 = Asy shear area y-direction               for each beam
 %         row 3 = Asz shear area z-direction               for each beam
@@ -439,8 +442,8 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 %         row 7 = E   elastic modulus                      for each beam
 %         row 8 = G   shear   modulus                      for each beam
 %         row 9 = p   roll angle                           for each beam
-%         
-%    P : a 6xJ matrix containing the components of the external 
+%
+%    P : a 6xJ matrix containing the components of the external
 %        forces and moments applied to each joint.
 %          row 1 = Joint Force in X-direction    for each joint
 %          row 2 = Joint Force in Y-direction    for each joint
@@ -455,10 +458,10 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 % OUTPUT DATA:
 %
 %  D : a 6xJ matrix   of the deflections and rotations of each joint
-%  R : a 6xJ matrix   of the reaction forces and moments 
-%  F : a 12xB matrix  of the end forces of each beam element 
-%  L : a 1xB vector   of the length of each beam element 
-% Ks : a 6Jx6J matrix of the structural stiffness matrix 
+%  R : a 6xJ matrix   of the reaction forces and moments
+%  F : a 12xB matrix  of the end forces of each beam element
+%  L : a 1xB vector   of the length of each beam element
+% Ks : a 6Jx6J matrix of the structural stiffness matrix
 </pre>
 </p>
 
@@ -466,8 +469,8 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 This m-function, <a href="http://www.duke.edu/~hpgavin/frame3dd/Matlab/frame_3dd.m">frame_3dd.m</a>,
 executes the system command
 (frame3dd on Linux or OS-X, frame3dd.exe on Windows)
-to compute the solution.  
-The <b>Frame3DD</b> executable 
+to compute the solution.
+The <b>Frame3DD</b> executable
 (frame3dd on Linux or OS-X, frame3dd.exe on Windows)
 must be saved to a directory within
 a path appropriate for your system, or must be copied to your current
@@ -476,30 +479,30 @@ working directory.
 
 <p>
 <ol>
-<li> The Matlab file for your problem first sets up the various matrices defining the problem for analysis and calls frame_3dd.m <br> 
+<li> The Matlab file for your problem first sets up the various matrices defining the problem for analysis and calls frame_3dd.m <br>
 A <a href="Matlab/exA.m">Matlab version of Example A</a> illustrates
 how to analyze problems using the Matlab interface to <b>Frame3DD</b>.<br>
 Matlab versions of the other examples are forthcoming.
 <li> frame_3dd.m writes IOdata.fmm,
 <li> The executeable frame3dd appends IOdata.fmm
 with the Output Data, and writes IOdata_out.m, containing the Output Data.<br>
-An m-file containing the Output Data is written whenever the frame3dd   
+An m-file containing the Output Data is written whenever the frame3dd
 executeable is run on a file ending in ".fmm",
 whether or not the analysis is initiated by frame_3dd.m.
 <li> frame_3dd.m runs IOdata_out.m, containing the matrices D, R, F, L, and Ks,
-<li> frame_3dd.m returns D, R, F, L, and Ks, to the Matlab workspace, or to your Matlab function. 
+<li> frame_3dd.m returns D, R, F, L, and Ks, to the Matlab workspace, or to your Matlab function.
 </ol>
 </p>
 
 <p>
 This m-function interface to <b>Frame3DD</b>
-is currently capable of static analyses.  
-It does not (yet) implement the following features of <b>Frame3DD</b>:  
+is currently capable of static analyses.
+It does not (yet) implement the following features of <b>Frame3DD</b>:
 <ul>
-  <li> Matlab functions for graphical display of the results 
+  <li> Matlab functions for graphical display of the results
   <li> point forces applied between the joints of a member
   <li> temperature loads
-  <li> multiple load cases 
+  <li> multiple load cases
   <li> modal analysis
   <li> matrix condensation
 </ul>
@@ -510,24 +513,24 @@ Adding these features would require Matlab programming, only.
 
 <p>
 Input/Output data for <b>Frame3DD</b> may be read and written using spreadsheet programs
-(excel, 
- <a href="http://docs.google.com/">GoogleDocs</a>, 
- <a href="http://www.openoffice.org/">OpenOffice</a>, 
+(excel,
+ <a href="http://docs.google.com/">GoogleDocs</a>,
+ <a href="http://www.openoffice.org/">OpenOffice</a>,
  <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).
 </p>
 
 <p>
-Any of the  <a href="http://www.duke.edu/~hpgavin/frame3dd/#examples"><b>Frame3DD</b> example Input Data files</a> may be opened with a spreadsheet program.  
-When editing an Input Data file with a spreadsheet program, save it in 
+Any of the  <a href="http://www.duke.edu/~hpgavin/frame3dd/#examples"><b>Frame3DD</b> example Input Data files</a> may be opened with a spreadsheet program.
+When editing an Input Data file with a spreadsheet program, save it in
 .CSV format (with a ".CSV" filename extension).
 </p>
 
 <p>
 When run on a .CSV file,
-<b>Frame3DD</b> appends results to the Input Data .CSV file 
-as plain text and also 
+<b>Frame3DD</b> appends results to the Input Data .CSV file
+as plain text and also
 writes results of the static analyses to a spreadsheet with a filename ending in "_out.CSV".   These files may be viewed, edited, pre-processed,
-and post-processed with spreadsheet programs.  
+and post-processed with spreadsheet programs.
 </p>
 
 <p>
@@ -578,14 +581,14 @@ Reaction results are in columns A through G:<br>
 </p>
 
 <p>
-Modal analysis results are not (yet) written to the .CSV formatted output file. 
+Modal analysis results are not (yet) written to the .CSV formatted output file.
 </p>
 
 <a name="structuralmodelling"/><h2>7. Structural modelling</h2>
 
 <!--
 <p>
-       For an introduction to the theory of framed structures, check 
+       For an introduction to the theory of framed structures, check
        <a href="http://www.duke.edu/~hpgavin/ce131/index.html">http://www.duke.edu/~hpgavin/ce131/</a> and <a href="http://www.duke.edu/~hpgavin/ce283/index.html">http://www.duke.edu/~hpgavin/ce283/</a>.
 </p>
 -->
@@ -618,9 +621,9 @@ global X, Y, and Z axes.    The support conditions of the structural
 frame are specified by fixing the degrees of freedom aligned
 with the reaction forces.   Displacements at the fixed reactions
 are either zero, or may be prescribed.  Static reaction forces are
-computed and are written in the Output Data.  
+computed and are written in the Output Data.
 Elastic support conditions may be specified by additional elements
-with the desired flexibility.  
+with the desired flexibility.
 </p>
 
 <h3> 7.3 Cross Section Properties and Coordinate Transformation</h3>
@@ -629,7 +632,7 @@ with the desired flexibility.
 To analyze a structure as a "truss" with this software, specify <i>>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>
 to be much smaller than they would be normally, but not zero.   If the shear forces and bending
 moments in your structural elements are extremely small, then your structural model
-represents a "truss" approximation of the actual structure.    See example A.  
+represents a "truss" approximation of the actual structure.    See example A.
 </p>
 
 <p>
@@ -640,29 +643,29 @@ represents a "truss" approximation of the actual structure.    See example A.
      perpendicular to its local <i>x</i>-axis.   The local <i>y</i>-axis and <i>z</i>-axis are aligned
      with the principle directions of the cross section.  The bending moments
      of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of inertia for
-     the cross section.   
+     the cross section.
 </p>
 
 <!--
 <p>
-     The beam cross section shapes are assumed to be symmetric about 
-     both the local <i>Y</i>-axis and the local <i>Z</i>-axis.  By 'rolling' the beam about 
+     The beam cross section shapes are assumed to be symmetric about
+     both the local <i>Y</i>-axis and the local <i>Z</i>-axis.  By 'rolling' the beam about
      the local <i>x</i>-axis, however,  transverse loads in the local <i>y</i>-direction can
      cause bending about both the <i>Z</i>-axis and the <i>Y</i>-axis and shear deformation
-     in both the <i>Y</i>-direction and <i>Z</i>-direction.  
+     in both the <i>Y</i>-direction and <i>Z</i>-direction.
 </p>
 -->
 
 <p>
 When a beam or bar element is placed into the structure
-     it is translated and rotated and optionally rolled about its local <i>x</i>-axis.   
+     it is translated and rotated and optionally rolled about its local <i>x</i>-axis.
      By allowing the member to be
      'rolled' about its local <i>x</i>-axis during the stiffness matrix assembly process,
      cross-axis bending effects are included.
      Issues related to rolling of cross sections and cross-axis bending
      are important only for three-dimensional structural systems or planar
      structures with out-of-plane deformation, such as grillages.  For planar
-     structures with deformations only in the plane, these issues do not arise. 
+     structures with deformations only in the plane, these issues do not arise.
      In addition, these issues do not arise for three-dimensional structures
      made entirely of elements for which <i>Iyy=Izz</i>, i.e., square and circular cross
      sections.
@@ -671,27 +674,27 @@ When a beam or bar element is placed into the structure
 <p>
      The default coordinate transformation process starts with the beam
      element's centroidal axis placed along the global <i>X</i>-axis, and the principle
-     axes of the cross section are aligned with the global <i>Y</i>- and <i>Z</i>-axes.  
-     To place the beam in the structure, first it is rotated about the 
+     axes of the cross section are aligned with the global <i>Y</i>- and <i>Z</i>-axes.
+     To place the beam in the structure, first it is rotated about the
      global <i>Y</i>-axis, then about the global <i>Z</i>-axis, then 'rolled' or spun
      about the local <i>x</i>-axis.   If the roll angle is zero, this process results
      in a transformation for which loads in the global <i>Z</i>-direction will cause no
      cross-axis bending.   In this code, this type of coordinate transformation is
      called "<i>Z</i>-axis is vertical" and is selected primarily for the sake of visualization
-     with Gnuplot, in which the <i>Z</i>-axis is vertical for all three-dimensional plots. 
+     with Gnuplot, in which the <i>Z</i>-axis is vertical for all three-dimensional plots.
 </p>
- 
+
 <p>
      An alternative, more customary, coordinate transformation process is also
      implemented in the software.  In the alternative coordinate transformation
      process, the beam is first rotated about the global <i>Z</i>-axis, then about the
      global <i>Y</i>-axis, then rolled about the local <i>x</i>-axis.  If the roll angle is zero,
-     this transformation results in a beam with no cross-axis bending due to 
+     this transformation results in a beam with no cross-axis bending due to
      loads are applied in the global <i>Y</i>-direction.   In the code, this type of
-     transformation is called "<i>Y</i>-axis is vertical."   Again, for planar structures, 
+     transformation is called "<i>Y</i>-axis is vertical."   Again, for planar structures,
      with no out-of-plane bending, which lie in the global <i>X-Y</i>, <i>Y-Z</i>, or <i>X-Z</i> planes,
      and for structures made entirely of bars with Iyy=Izz, the details of the
-     coordinate transformation procedure do not matter.  
+     coordinate transformation procedure do not matter.
      For a derivation of the alternative coordinate transformation method, refer
      to section 8.3 of the textbook <i>Matrix Analysis of Structures</i>
 by A. Kassimali.
@@ -740,35 +743,35 @@ Circular Tube (outer radius= <i>R<sub>o</sub></i>, inner radius = <i>R<sub>i</su
 <!--
 efunda
 <ul>
-<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsW.cfm">Steel W-section I beams</a> 
-<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsS.cfm"> Steel S-section I beams</a> 
-<li><a href="http://www.efunda.com/math/areas/RolledSteelChannels.cfm">Steel Channels</a> 
-<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsL.cfm">Steel Angles</a> 
-<li><a href="http://www.efunda.com/math/areas/AluminumIbeams.cfm">Aluminum I beams</a> 
-<li><a href="http://www.efunda.com/math/areas/AluminumChannels.cfm">Aluminum Channels</a> 
+<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsW.cfm">Steel W-section I beams</a>
+<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsS.cfm"> Steel S-section I beams</a>
+<li><a href="http://www.efunda.com/math/areas/RolledSteelChannels.cfm">Steel Channels</a>
+<li><a href="http://www.efunda.com/math/areas/RolledSteelBeamsL.cfm">Steel Angles</a>
+<li><a href="http://www.efunda.com/math/areas/AluminumIbeams.cfm">Aluminum I beams</a>
+<li><a href="http://www.efunda.com/math/areas/AluminumChannels.cfm">Aluminum Channels</a>
 </ul>
 -->
 
 <h4> 7.3.3 Cross Section Properties of some Standard Wood Sections</h4>
 
 <pre>
-             Ax      Asy     Asz     Jxx     Iyy     Izz   
+             Ax      Asy     Asz     Jxx     Iyy     Izz
              in^2    in^2    in^2    in^4    in^4    in^4
 
-     2x3    3.750   2.500   2.500   1.776   1.953   0.708 
+     2x3    3.750   2.500   2.500   1.776   1.953   0.708
      2x4    5.250   3.500   3.500   2.875   6.359   0.984
-     2x5    6.750   4.500   4.500   3.984  11.390   1.266  
-     2x6    8.250   5.500   5.500   5.099  20.800   1.547 
+     2x5    6.750   4.500   4.500   3.984  11.390   1.266
+     2x6    8.250   5.500   5.500   5.099  20.800   1.547
      2x8   10.850   7.233   7.233   7.057  47.630   2.039
-     2x10  13.880   9.253   9.253   9.299  98.930   2.602  
-     2x12  16.880  11.253  11.253  11.544 178.000   3.164 
+     2x10  13.880   9.253   9.253   9.299  98.930   2.602
+     2x12  16.880  11.253  11.253  11.544 178.000   3.164
      2x14  19.880  13.253  13.253  13.790 290.800   3.727
 </pre>
 
 <h3> 7.4 Torsion</h3>
 
 <p>
-     Polar Moments of Inertia depend on the shape of the cross-section.  
+     Polar Moments of Inertia depend on the shape of the cross-section.
          For sections with a circular cross section:   <br>
 <i>                Jxx = Iyy + Izz </i>
 
@@ -782,7 +785,7 @@ where
 <br>
 
                 <img src="img/tors.jpg" align="center" border="0"><br>
-         For more details, see page 271 of Timoshenko and Goodier (1951).  
+         For more details, see page 271 of Timoshenko and Goodier (1951).
 </p>
 
 <p>
@@ -796,16 +799,16 @@ where
 </p>
 
 <p>
-Restraint to <a href="http://www.archoneng.com/tptasm.html">warping deformation</a> is not considered in the analysis.  
+Restraint to <a href="http://www.archoneng.com/tptasm.html">warping deformation</a> is not considered in the analysis.
 </p>
 
 <h3> 7.5 Connections</h3>
 
 <p>
 All connections in a <b>Frame3DD</b> analysis are moment-resisting.
-Moment-free conditions can be modeled explicitely only at pinned reactions.  
-Internal hinges may be modeled using a short element with 
-low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>. 
+Moment-free conditions can be modeled explicitely only at pinned reactions.
+Internal hinges may be modeled using a short element with
+low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>.
 Beams may be considered infinitely rigid within a sphere of a specified radius around a joint.
 </p>
 
@@ -815,12 +818,12 @@ Beams may be considered infinitely rigid within a sphere of a specified radius a
 <p>
      The <b>Frame3DD</b> analysis will optionally include the effects of shear deformation and/or geometric stiffness.
 The geometric stiffness matrix includes the effects of axial forces
-on bending and warping-torsoinal behaviors.  
-When both shear deformations and geometric stiffness effects are included, the geometric stiffness matrix includes shear deformation effects.  
+on bending and warping-torsoinal behaviors.
+When both shear deformations and geometric stiffness effects are included, the geometric stiffness matrix includes shear deformation effects.
 If shear deformation effects are not to be included, simply set the <i>shear</i>
 variable to zero (0).  If shear deformation effects are neglected then the
 values for the shear areas <i>Asy</i> and <i>Asz</i> <b>are not</b> used in the calculations.
-Any non-zero value for <i>Asy</i> and <i>Asz</i> will do.  
+Any non-zero value for <i>Asy</i> and <i>Asz</i> will do.
 </p>
 
 <p>
@@ -829,7 +832,7 @@ effects and increase the loads until the stiffness matrix ceases to be positive-
 definite.   Additionally, you may compute the fundamental natural frequency of
 the structure and observe how the fundamental frequency decreases with increased
 loading.  In principle, the fundamental frequency is zero when the loads are at the buckling
-load.  
+load.
 </p>
 
 <p>
@@ -837,14 +840,14 @@ If geometric stiffness effects are included in the analysis and if the loads
 are close to the buckling load of the structure, then it is recommended to put
 two or three joints along each beam element.  (i.e. divide each beam element
 into three or four beam segments).   Including these extra joints is strongly
-recommended if a buckling analysis is to be performed.  
+recommended if a buckling analysis is to be performed.
 </p>
 
 <p>
 Whenever geometric stiffness effects are included, the analysis is non-linear
 and superposition does not hold.  The geometric stiffness matrix is a secant
 stiffness matrix.  In most cases the geometric stiffness matrix lies between the
-un-stressed stiffness matrix and the tangent stiffness matrix.  
+un-stressed stiffness matrix and the tangent stiffness matrix.
 </p>
 
 <h3> 7.7 Approximate Properties of Structural Materials </h3>
@@ -865,7 +868,7 @@ Aluminum 2024-T4       73100        28000       23.2e-6         2.78e-3
 Aluminum 6061-T6       68900        26000       23.6e-6         2.70e-3
 Kevlar Fiber-Epoxy     40000        50000       30.0e-6         1.40e-3
 Glass  Fiber-Epoxy     22000        80000       30.0e-6         1.97e-3
-Magnesium AM1000A      44800        17500       25.2e-6         1.80e-3 
+Magnesium AM1000A      44800        17500       25.2e-6         1.80e-3
 Douglas Fir            12400         4600       30.0e-6         0.50e-3
 
 </pre>
@@ -876,11 +879,11 @@ Douglas Fir            12400         4600       30.0e-6         0.50e-3
 Note:
 </p>
 <ul>
-<li> These material properties are approximate.  
+<li> These material properties are approximate.
 <li> Properties of Douglas Fir vary naturally by +/- 15 percent.
 <li> Properties of Fiber-Epoxy composites depend on the volume fraction and
    orientations of the fibers.  The values above correspond to volume
-   fractions of roughly 50 percent.  
+   fractions of roughly 50 percent.
 </ul>
 <p>
 <a href="http://www.matweb.com/search/MaterialGroupSearch.aspx">MatWeb</a>
@@ -890,7 +893,7 @@ lists properties of other materials.
 <h3> 7.8 Loads</h3>
 
 <p>
-Four types of static loads may be specified:  
+Four types of static loads may be specified:
 </p>
 <ul>
 <li>Concentrated static force loads and concentrated static moments may be applied to joints.
@@ -899,9 +902,9 @@ Four types of static loads may be specified:
 <li>Thermal loads assume a linear temperature gradient through member cross sections.
 </ul>
 <p>
-Multiple static load cases are generated by specifying 
+Multiple static load cases are generated by specifying
 <a href="#Variables">the variable nL</a>
-in the 
+in the
 <a href="#InputData">Input Data</a>, and by specifying the four types of loads for each load case, as shown in <a href="../examples/exA.frm">Example A</a> and <a href="../examples/exB.frm">Example B</a>.
 </p>
 
@@ -909,48 +912,48 @@ in the
 
 <p>
 Static joint displacements may be prescribed only at restrained degrees of freedom.
-Prescribed displacements are specified separately for each load case.  
+Prescribed displacements are specified separately for each load case.
 </p>
 
 <h3> 7.10 Dynamic Modal Analysis </h3>
 
 <p>
-The <b>Frame3DD</b> analysis will optionally include a dynamic analysis for natural modes of vibration. 
+The <b>Frame3DD</b> analysis will optionally include a dynamic analysis for natural modes of vibration.
 Dynamic properties may be obtained for the un-stressed or the stressed
 structure by either neglecting or including geometric stiffness effects.
-The mass may be modeled using either the consistent mass matrix or the 
+The mass may be modeled using either the consistent mass matrix or the
 lumped mass matrix.
 </p>
 
 <p>
 The natural frequencies and mode-shapes of the structural frame may be computed from the stiffness and mass matrices using either the Stodola method or
-the Jacobi method.    The solution method and the convergence tolerance for these iterative methods is specified in the Input Data.  
-The Input Data also specifies the mass density of each member, 
+the Jacobi method.    The solution method and the convergence tolerance for these iterative methods is specified in the Input Data.
+The Input Data also specifies the mass density of each member,
 additional mass carried by the member, and extra mass or inertia
-carried by the joints.   
-A specified set of modes may be animated within Gnuplot.  
+carried by the joints.
+A specified set of modes may be animated within Gnuplot.
 </p>
 
 <p>
 <b>Frame3DD</b> has the capability of computing the natural frequencies
-and mode-shapes of frames that are 
+and mode-shapes of frames that are
 fully restrained, partially restrained, or completely un-restrained.
-Partially restrained frames have up to six independent rigid body modes.  
-A completely un-restrained frame has six independent rigid body modes.  
+Partially restrained frames have up to six independent rigid body modes.
+A completely un-restrained frame has six independent rigid body modes.
 The stiffness matrix for
-partially restrained and completely unrestrained structures is not invertible. 
-Such structural configurations can not carry static loads.  
+partially restrained and completely unrestrained structures is not invertible.
+Such structural configurations can not carry static loads.
 Furthermore, the numerical methods used in computing the
 natural frequencies and mode shapes presume that the stiffness matrix
-is invertible.  
-A  numerical trick called "frequency shifting" overcomes this difficulty.  
-Presuming the mass matrix [<i>M</i>] is   
+is invertible.
+A  numerical trick called "frequency shifting" overcomes this difficulty.
+Presuming the mass matrix [<i>M</i>] is
 invertible, then given a positive scalar value <i>s</i> that
 is large enough, the matrix [[<i>K</i>] + <i>s</i>[M</i>]] is invertible,
-even if the stiffness matrix [<i>K</i>] is not invertible. 
+even if the stiffness matrix [<i>K</i>] is not invertible.
 So, for the purpose of computing the natural frequencies of frames
 with rigid-body modes, [<i>K</i>] is replaced by
-[[<i>K</i>]+s[<i>M</i>]].  
+[[<i>K</i>]+s[<i>M</i>]].
 The desired natural frequencies
 are shifted by an amount equal to the "shift" variable, <i>s</i>,
 and are shifted back, after the natural frequencies and mode shapes are found.
@@ -958,17 +961,17 @@ The mode shapes are un-changed.
 </p>
 
 <p>
-A Sturm check is carried out to determine if any eigen-values were missed.  
+A Sturm check is carried out to determine if any eigen-values were missed.
 </p>
 
 <p>
 If a dynamic analysis is not to be performed, simply set the
-<a href="#Variables"<i>nM</i> variable</a> (the number of desired modes) to zero (0).   
+<a href="#Variables"<i>nM</i> variable</a> (the number of desired modes) to zero (0).
 If <i>nM</i> is set to zero,
-<b>Frame3DD</b> will stop reading the Input/Output file at this point.   
+<b>Frame3DD</b> will stop reading the Input/Output file at this point.
 If <i>nM</i> is set to zero, there is no need to provide numerical values for the quantities from <i>lump</i> to <i>m[3] ... </i>.
-(See the 
-<a href="#InputData"><b>Input Data Format</b></a> specification and 
+(See the
+<a href="#InputData"><b>Input Data Format</b></a> specification and
 <a href="#Variables"><b>Variable Definitions</b></a>
 below.)
 </p>
@@ -984,7 +987,7 @@ frequency of the original structure exactly.  The dynamic condensation method
 is a pseudo-inverse-modal-matrix method, and the resulting condensed mass and
 stiffness matrices may be ill-conditioned.  The pseudo-inverse of the modal
 matrix is computed using a regularization method which somewhat improves the
-conditioning of the condensed mass and stiffness matrices.  
+conditioning of the condensed mass and stiffness matrices.
 </p>
 
 <a name="numerical"/><h2>8. Numerical details</h2>
@@ -1021,8 +1024,8 @@ where
 <p>
 At each LDL' back-substitution iteration, the equilibrium error is displayed
 to the screen as the `RMS matrix error'.  This error is the root-mean-square of
-<i>dD(i)</i>.   
-Iterations are stopped when this error decreases by less than ten percent in an iteration.  
+<i>dD(i)</i>.
+Iterations are stopped when this error decreases by less than ten percent in an iteration.
 </p>
 
 <p>
@@ -1046,8 +1049,8 @@ At each Newton-Raphson iteration, the relative equilibrium error is displayed
 to the screen.   This error is the root-mean-square of (<i>F - K(D(i)) D(i)</i>)
 divided by the root-mean-square of <i>F</i>.   Newton-Raphson iterations stop when
 this error is less than the convergence tolerance.  The convergence tolerance
-is specified as the convergence tolerance for the modal-analysis. 
-The default value is 0.00001   
+is specified as the convergence tolerance for the modal-analysis.
+The default value is 0.00001
 </p>
 
 <p>
@@ -1058,7 +1061,7 @@ every un-restrained degree of freedom normalized by the root-mean-square of
 the applied loads.   This equilibrium error is typically less than one part
 in one-billion when geometric stiffness effects are neglected.  If an analysis
 has an RMS equilibrium error larger than 0.001, the results should not be
-trusted.  
+trusted.
 </p>
 
 <p>
@@ -1086,14 +1089,14 @@ A one-line descriptive title of your analysis MUST be the FIRST line of the file
 
 % joint data ...
 nJ                                     % number of joints
-  J[1]       x[1]       y[1]       z[1]     r[1]       
+  J[1]       x[1]       y[1]       z[1]     r[1]
     :          :          :          :        :  % joint numbers and coordinates
   J[nJ]      x[nJ]      y[nJ]      z[nJ]    r[nJ]
 
 % reaction data ...
-nR                                     % number of joints with reactions 
+nR                                     % number of joints with reactions
   J[1]    Rx[1]   Ry[1]   Rz[1]   Rxx[1]  Ryy[1]  Rzz[1]
-    :        :       :       :        :       :       :       % 0:free, 1:fixed 
+    :        :       :       :        :       :       :       % 0:free, 1:fixed
  J[nR]    Rx[nR]  Ry[nR]  Rz[nR]  Rxx[nR] Ryy[nR] Rzz[nR]
 
 % beam element data ...
@@ -1103,17 +1106,17 @@ M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jxx[1]  Iyy[1]  Izz[1]  E[1]  G[1]  p
   :      :      :      :       :       :       :       :       :     :     :     :
 M[nB] J1[nB] J2[nB] Ax[nB] Asy[nB] Asz[nB] Jxx[nB] Iyy[nB] Izz[nB] E[nB] G[nB] p[nB]
 
-shear                               % 1: include shear deformation;   0: don't 
-geom                                % 1: include geometric stiffness; 0: don't 
+shear                               % 1: include shear deformation;   0: don't
+geom                                % 1: include geometric stiffness; 0: don't
 /tmp/mesh_file                      % mesh data file name for plotting
-plot_file                           % plot file name 
-exagg                               % exaggerate deformations 
-anlyz                               % 1: stiffness analysis; 0: data check only 
+plot_file                           % plot file name
+exagg                               % exaggerate deformations
+anlyz                               % 1: stiffness analysis; 0: data check only
 
 % load data ...
 nL                                     % number of static load cases, up to 127
 % begin static load case 1 ---------------------------------------------------
-nF                                                    % number of loaded joints 
+nF                                                    % number of loaded joints
   J[1]    Fx[1]   Fy[1]   Fz[1]   Mxx[1]  Myy[1]  Mzz[1]
     :        :       :       :        :       :       :          % nodal forces
   J[nF]   Fx[nF]  Fy[nF]  Fz[nF]  Mxx[nF] Myy[nF] Mzz[nF]
@@ -1128,10 +1131,10 @@ nP                                         % number of concentrated point loads
     :        :       :       :      :      %  and x=distance from coordinate J1
   M[nP]   Px[nP]  Py[nP]  Pz[nP]  x[nP]
 
-nT                                 % number of members with temperature changes 
-  M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % member no., 
-    :     :       :       :        :       :       :       :      % temp. coef. 
-  M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, & temps 
+nT                                 % number of members with temperature changes
+  M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % member no.,
+    :     :       :       :        :       :       :       :      % temp. coef.
+  M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, & temps
 
 nD                             % number of joints with prescribed displacements
   J[1]   Dx[1]  Dy[1]  Dz[1]  Dxx[1]  Dyy[1]  Dzz[1]
@@ -1140,7 +1143,7 @@ nD                             % number of joints with prescribed displacements
 %  end  static load case 1 --------------------------------------------------
 
 % begin static load case 2 --------------------------------------------------
-nF                                                    % number of loaded joints 
+nF                                                    % number of loaded joints
   J[1]    Fx[1]   Fy[1]   Fz[1]   Mxx[1]  Myy[1]  Mzz[1]
     :        :       :       :        :       :       :          % nodal forces
   J[nF]   Fx[nF]  Fy[nF]  Fz[nF]  Mxx[nF] Myy[nF] Mzz[nF]
@@ -1155,14 +1158,14 @@ nP                                         % number of concentrated point loads
     :        :       :       :      :      %  and x=distance from coordinate J1
   M[nP]   Px[nP]  Py[nP]  Pz[nP]  x[nP]
 
-nT                                 % number of members with temperature changes 
-  M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % member no., 
-    :     :       :       :        :       :       :       :      % temp. coef. 
-  M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, & temps 
+nT                                 % number of members with temperature changes
+  M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % member no.,
+    :     :       :       :        :       :       :       :      % temp. coef.
+  M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, & temps
 
 nD                             % number of joints with prescribed displacements
   J[1]   Dx[1]  Dy[1]  Dz[1]  Dxx[1]  Dyy[1]  Dzz[1]
-    :       :      :      :       :       :       :  % prescribed displacements 
+    :       :      :      :       :       :       :  % prescribed displacements
   J[nD]  Dx[nD] Dy[nD] Dz[nD] Dxx[nD] Dyy[nD] Dzz[nD]
 %  end  static load case 2 -------------------------------------------------
 
@@ -1170,25 +1173,25 @@ nD                             % number of joints with prescribed displacements
 
 
 % dynamic analysis data ...
-nM                                             %       number of desired modes 
+nM                                             %       number of desired modes
 Mmethod                                        % 1: Subspace Jacobi, 2: Stodola
-lump                                           % 0: consistent mass, 1: lumped 
-/tmp/mode_file                                 %     mode shape data file name 
-tol                                            %  convergence tolerance ~ 1e-4 
-shift             % shift-factor for rigid body modes, make 0 for pos.def. [K] 
+lump                                           % 0: consistent mass, 1: lumped
+/tmp/mode_file                                 %     mode shape data file name
+tol                                            %  convergence tolerance ~ 1e-4
+shift             % shift-factor for rigid body modes, make 0 for pos.def. [K]
 
  M[1]  d[1]  BMs[1]
    :     :       :                           % beam density and extra beam mass
  M[nB] d[nB] BMs[nB]
 
 nI                          % number of joints with extra joint mass or inertia
- J[1]  JMs[1]   JMx[1]  JMy[1]  JMz[1]     % joint masses and rotatory inertias 
-   :       :        :       :       :                      % global coordinates 
+ J[1]  JMs[1]   JMx[1]  JMy[1]  JMz[1]     % joint masses and rotatory inertias
+   :       :        :       :       :                      % global coordinates
  J[nI] JMs[nI]  JMx[nI] JMy[nI] JMz[nI]
 
 % graphical animation data ...
-nA                                    % number of modes to be animated 
- anim[0] ... anim[nA] % list of modes to be animated, sorted by increasing freq. 
+nA                                    % number of modes to be animated
+ anim[0] ... anim[nA] % list of modes to be animated, sorted by increasing freq.
 pan                                         % 1: pan during animation; 0: don't
 
 % matrix condensation data ...
@@ -1253,7 +1256,7 @@ nC                                                % number of condensed joints
        JMz       - extra rotatory inertia of a joint about global z coord. dir.
        Jxx       - Torsional moment of inertia of member i
        lump      - 1: use lumped mass matrix, 0: use consistent mass matrix
-       M         - Member number 
+       M         - Member number
        Mxx       - Joint Moment about the global X axis
        Myy       - Joint Moment about the global Y axis
        Mzz       - Joint Moment about the global Z axis
@@ -1263,8 +1266,8 @@ nC                                                % number of condensed joints
        mode_file - Data file for the Gnuplot-formatted mode data for plotting
        nA        - number of mode shapes to Animate must be less than 20
        nB        - number of Beam elements
-       nC        - number of joints for matrix Condensation 
-       nD        - number of joints wiht prescribed Displacements (nD <= nR) 
+       nC        - number of joints for matrix Condensation
+       nD        - number of joints wiht prescribed Displacements (nD <= nR)
        nF        - number of joints with point Forces or concentrated moments
        nI        - number of joints with extra joint mass or Inertia
        nJ        - number of Joints
@@ -1285,7 +1288,7 @@ nC                                                % number of condensed joints
        Rxx       - 1: reactoin moment about the global X axis, 0: free
        Ryy       - 1: reaction moment about the global Y axis, 0: free
        Rzz       - 1: reaction moment about the global Z axis, 0: free
-       r         - r radius of rigid sphere around joint i 
+       r         - r radius of rigid sphere around joint i
        shear     - 1: include shear deformations, 0: do not.
        shift     - shift factor for non-definite stiffness matrices
        tol       - tolerance for finding mode shapes ~ 1.e-4
@@ -1308,14 +1311,14 @@ nC                                                % number of condensed joints
 <p>The source code is written in ANSI C and is extensively commented. The source code includes functions for frame analysis, LDL' decomposition, LU decomposition, Newton-Raphson iteration, sub-space iteration, Stodola iteration, Sturm eigen-value check, static condensation, Guyan reduction, and dynamic condensation.</p>
 
 <pre>
-    file name       description                                               
+    file name       description
     -----------     -------------------------------
     main.c          main driver routines
-    frame3dd.c      frame analysis 
-    frame3dd_io.c   input-output functions 
-    eig.c           generalized eigenvalue analysis 
+    frame3dd.c      frame analysis
+    frame3dd_io.c   input-output functions
+    eig.c           generalized eigenvalue analysis
     ldl_dcmp.c      LDL' decomposition
-    lu_dcmp.c       LU decomposition 
+    lu_dcmp.c       LU decomposition
     coordtrans.c    coordinate transformation
     nrutil.c        dynamic memory allocation
 </pre>
@@ -1347,11 +1350,11 @@ and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
 <a href="http://frame3dd.svn.sourceforge.net/viewvc/frame3dd/trunk/src/microstran/">here</a>.
 (Summer 2008)
  <li> A Google-sketchup interface is in the works <a href="http://www.steelweb.info/whatsnew.htm">here</a>
-and possibly 
+and possibly
 <a href="http://chakkree.blogspot.com/2008_05_01_archive.html">here</a>.
 (Summer 2008)
 </ul>
-<li>       Consistent mass matrix including the effects of shear deformation on rotatory inertia 
+<li>       Consistent mass matrix including the effects of shear deformation on rotatory inertia
 <li>       Dynamic time-history analysis with the HHT-alpha method
 <li>       Spectral modal superposition
 <li>       Member end joint releases
@@ -1370,13 +1373,13 @@ The two primary sources are the texts by
 </p>
 
 <ol>
-<li> Howard G. Allen, 
+<li> Howard G. Allen,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0070841004/qid%3D1010096524/ref%3Dsr%5F11%5F0%5F1/103-4346676-9568602">Background to Buckling</a>,
-     McGraw-Hill, 1980.                 ASIN: 0070841004 
+     McGraw-Hill, 1980.                 ASIN: 0070841004
 
 <li> Klaus-Jurgen Bathe,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0133014584/qid=1003515087/sr=1-1/ref=sr_1_27_1/002-2386037-4350467">Finite Element Procedures</a>,
-    Prentice-Hall, 1995.                ISBN: 0133014584 
+    Prentice-Hall, 1995.                ISBN: 0133014584
 
 <li> Arthur P. Boresi, Richard J. Schmidt, and Omar M. Sidebottom,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0471551570/ref=pd_cp_nsr_b_1/002-2386037-4350467">Advanced Mechanics of Materials</a>,
@@ -1384,17 +1387,17 @@ The two primary sources are the texts by
 
 <li> Raymond W. Clough and Joseph Penzien,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0070113920/qid%3D1003514837/ref%3Dsr%5F11%5F0%5F1/002-2386037-4350467">Dynamics of Structures</a>,
-    McGraw-Hill, 1993.                  ASIN: 0070113920 
+    McGraw-Hill, 1993.                  ASIN: 0070113920
 
 <li> J. P. Den Hartog,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0486654079/qid=1003515697/sr=2-1/ref=sr_2_11_1/002-2386037-4350467">Advanced Strength of Materials</a>,
-    Dover Press, 1987.                  ISBN: 0486654079 
+    Dover Press, 1987.                  ISBN: 0486654079
 
-<li> Thomas J. R. Hughes, 
+<li> Thomas J. R. Hughes,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0486411818/ref=pd_pym_sim_1_2/002-2386037-4350467">The Finite Element Method: Linear Static and Dynamic Finite Element Analysis</a>,
-    Dover Press, 2000.                  ISBN: 0486411818 
+    Dover Press, 2000.                  ISBN: 0486411818
 
-<li> Aslam Kassimali, 
+<li> Aslam Kassimali,
     <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/qid=1036162662/sr=1-4/ref=sr_1_4/002-7358683-1549619?v=glance">Matrix Analysis of Structures</a>,
     Brooks/Cole, 1999.                  ISBN: 0534206700
 
@@ -1419,15 +1422,15 @@ The two primary sources are the texts by
 
 <li> William H. Press, Saul A. Teukolsky, William T. Vetterling, Brian P. Flannery,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0521431085/qid=1003515201/sr=1-1/ref=sr_1_10_1/002-2386037-4350467">Numerical Recipes in C: The Art of Scientific Computing</a>,
-    Cambridge University Press, 1993.   ISBN: 0521431085 
+    Cambridge University Press, 1993.   ISBN: 0521431085
 
-<li> J.S. Przemieniecki, 
+<li> J.S. Przemieniecki,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0486649482/qid=1003514977/sr=1-1/ref=sr_1_8_1/002-2386037-4350467">Theory of Matrix Structural Analysis</a>,
-    Dover Press, 1985.                  ISBN: 0486649482 
+    Dover Press, 1985.                  ISBN: 0486649482
 
 <li> Robert E. Sennett,
     <a href="http://www.amazon.com/exec/obidos/ASIN/1577661435/qid=1003515858/sr=1-2/ref=sr_1_12_2/002-2386037-4350467">Matrix Analysis of Structures</a>,
-    Waveland Press, 2000.               ISBN: 1577661435 
+    Waveland Press, 2000.               ISBN: 1577661435
 
 <li> S. Timoshenko and J.N. Goodier, Theory of Elasticity, 2nd ed.,
     McGraw Hill, 1951.
@@ -1445,9 +1448,9 @@ The two primary sources are the texts by
 <p>Authors:</p>
 
 <pre>
-Henri P. Gavin, P.E., Ph.D. 
+Henri P. Gavin, P.E., Ph.D.
 Department of Civil and Environmental Engineering
-Duke University, Box 90287 
+Duke University, Box 90287
 Durham, NC  27708--0287
 <a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;&#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;">&#072;&#101;&#110;&#114;&#105;&#046;&#071;&#097;&#118;&#105;&#110;&#064;&#068;&#117;&#107;&#101;&#046;&#101;&#100;&#117;
 </a>
@@ -1465,7 +1468,7 @@ Australian National University
 
 <p align="justify">
 Source code for this document as well as Frame3dd itself is available from
-<a href="http://www.sourceforge.net/projects/frame3dd/">  
+<a href="http://www.sourceforge.net/projects/frame3dd/">
 http://www.sourceforge.net/projects/frame3dd/</a>
 </p>
 

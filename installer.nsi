@@ -55,6 +55,7 @@ Section "FRAME3DD (required)"
 	File "README-win32.txt"
 	File "TODO.txt"
 	File "LICENSE.txt"
+	File "ChangeLog.txt"
 	
 	SetOutPath "$INSTDIR\examples"
 	File "examples\exA.frm"
@@ -69,10 +70,14 @@ Section "FRAME3DD (required)"
 	
 	SetOutPath "$INSTDIR\doc"
 	File "doc\user-manual.html"
+	File "doc\version.html"
 	SetOutPath "$INSTDIR\doc\img"
 	File "doc\img\tors.jpg"
 	File "doc\img\psoe.jpg"
-	File "doc\img\vi_logo_by_urmas_reinsalu.png"
+	File "doc\img\CSV1.png"
+	File "doc\img\CSV2.png"
+	File "doc\img\CSV3.png"
+	File "doc\img\CSV4.png"
 		
 	; Write the installation path into the registry
 	WriteRegStr HKLM SOFTWARE\FRAME3DD "Install_Dir" "$INSTDIR"
@@ -116,6 +121,7 @@ Section "Start Menu Shortcuts"
   CreateShortCut "$SMPROGRAMS\FRAME3DD\README for Windows users.lnk" "$INSTDIR\README-win32.txt" "" "$INSTDIR\README-win32.txt" 0
   CreateShortCut "$SMPROGRAMS\FRAME3DD\FRAME3DD Documentation.lnk" "$INSTDIR\doc\user-manual.html" "" "$INSTDIR\doc\user-manual.html" 0
   CreateShortCut "$SMPROGRAMS\FRAME3DD\Examples.lnk" "$INSTDIR\examples" "" "$INSTDIR\examples" 0
+  CreateShortCut "$SMPROGRAMS\FRAME3DD\ChangeLog.lnk" "$INSTDIR\ChangeLog.txt" "" "$INSTDIR\ChangeLog.txt" 0
   CreateShortCut "$SMPROGRAMS\FRAME3DD\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
   
 SectionEnd
@@ -164,6 +170,7 @@ Section "Uninstall"
 	Delete "$INSTDIR\TODO.txt"
 	Delete "$INSTDIR\README.txt"
 	Delete "$INSTDIR\README-win32.txt"
+	Delete "$INSTDIR\ChangeLog.txt"
 
 	Delete "$INSTDIR\examples\exA.frm"
 	Delete "$INSTDIR\examples\exB.frm"
@@ -179,7 +186,10 @@ Section "Uninstall"
 	Delete "$INSTDIR\doc\user-manual.html"
 	Delete "$INSTDIR\doc\img\tors.jpg"
 	Delete "$INSTDIR\doc\img\psoe.jpg"
-	Delete "$INSTDIR\doc\img\vi_logo_by_urmas_reinsalu.png"	
+	Delete "$INSTDIR\doc\img\CSV1.png"
+	Delete "$INSTDIR\doc\img\CSV2.png"
+	Delete "$INSTDIR\doc\img\CSV3.png"
+	Delete "$INSTDIR\doc\img\CSV4.png"
 	RmDir "$INSTDIR\doc\img"
 	RmDir "$INSTDIR\doc"
 	

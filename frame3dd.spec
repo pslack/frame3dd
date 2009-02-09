@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20090202
+Version:	0.20090209
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -62,29 +62,38 @@ rm -rf %{buildroot}
 
 %changelog
 
-* Mon Feb 02 2009 John Pye <john.pye@anu.edu.au> 20090202
+* Mon Feb 09 2009 John Pye <john.pye@anu.edu.au> 0.20090209
+- Added support for FRAME3DD_OUTDIR as location of output files
+- Updated documentation
+- Added datestamp to documentation (a bit kludgey)
+- More comments on use of temp directory and output files.
+- Changed example files to remove absolute /tmp paths.
+- Changelog converted to separate file.
+- Added missing documentation images to Windows installer.
+
+* Mon Feb 02 2009 John Pye <john.pye@anu.edu.au> 0.20090202
 - Fixed problem with use of /tmp on Windows
 - Upload binaries to SF.net
 - Add comments to README-win32.txt
 
-* Thu Jan 29 2009 Henri Gavin <henri.gavin@duke.edu> 20090129
+* Thu Jan 29 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090129
 - Completed migration of website to frame3dd.sourceforge.net
 
-* Sun Jan 4 2009 Henri Gavin <henri.gavin@duke.edu> 20090104
+* Sun Jan 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090104
 - Input data order reorganized: joints, reactions, members, loads
 - Updated TODO.txt, website, examples, and documentation. 
 
-* Thu Jan 1 2009 Henri Gavin <henri.gavin@duke.edu> 20090101
+* Thu Jan 1 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090101
 - Implemented .CSV spreadsheet support
 - Eliminated some unneccessary vectors  "_lc"
 - Updated TODO.txt, website, examples, and documentation. 
 
-* Wed Dec 31 2008 Henri Gavin <henri.gavin@duke.edu> 20081231
+* Wed Dec 31 2008 Henri Gavin <henri.gavin@duke.edu> 0.20081231
 - Moved rel_norm() from ldl_dcmp.c to frame3dd.c
 - User input variables are now float instead of double
   ... except for joint location variable (xyz) which is still type vec3
 
-* Tue Dec 30 2008 Henri Gavin <henri.gavin@duke.edu> 20081230
+* Tue Dec 30 2008 Henri Gavin <henri.gavin@duke.edu> 0.20081230
 - The Input Data file format changed in two ways as follows:
   > Reaction data are listed just after the Member data.
   > Prescribed displacements are listed separately for each load case.
@@ -97,20 +106,20 @@ rm -rf %{buildroot}
     gcc -O -Wall -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 - Updated TODO.txt, website, examples, and documentation.
 
-* Fri Dec 12 2008 Henri Gavin <henri.gavin@duke.edu> 20081212
+* Fri Dec 12 2008 Henri Gavin <henri.gavin@duke.edu> 0.20081212
 - The file frame3dd.cln is now written to /tmp/
 
-* Thu Dec 11 2008 Henri Gavin <henri.gavin@duke.edu> 20081211
+* Thu Dec 11 2008 Henri Gavin <henri.gavin@duke.edu> 0.20081211
 - Fixed bugs in writing Matlab m-file output.
 - Documentation updated.
 - The name of the outout m-file will not conflict with other file names.
 - Renamed itoa function to my_itoa for portability reasons.
 
-* Mon Dec 08 2008 Henri Gavin <henri.gavin@duke.edu> 20081208
+* Mon Dec 08 2008 Henri Gavin <henri.gavin@duke.edu> 0.20081208
 - An error message is now displayed if nL < 1
 - Updated documentation.
 
-* Mon Dec 01 2008 Henri Gavin <henri.gavin@duke.edu> 20081201
+* Mon Dec 01 2008 Henri Gavin <henri.gavin@duke.edu> 0.20081201
 - Removed the redefine of float to double, now all floating point
   variables are defined as doubles.
   In a future version variables that can actually be floats, such
@@ -163,4 +172,5 @@ rm -rf %{buildroot}
 
 * Fri Jan 01 1993 Henri Gavin <henri.gavin@duke.edu> 19930101
 - initiation of program at the University of Michigan
+
 

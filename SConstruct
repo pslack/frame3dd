@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-version = '0.20090202'
+version = '0.20090209'
 
 import platform
 deftools = ['default']
@@ -169,6 +169,16 @@ if conf.CheckCppUnitConfig():
 	conf.env['HAVE_CPPUNIT']=True;
 
 #-------------
+# documentation
+
+env.Append(SUBST_DICT= {
+	'@VERSION@':version
+	,'@CHANGELOG@':file("ChangeLog.txt").read()
+})
+
+env.SConscript('doc/SConscript',['env'])
+
+#-------------
 # build the program
 
 env['installdirs'] = []
@@ -199,11 +209,9 @@ env.Alias("install",env['installdirs'])
 
 #------------
 # create the RPM .spec file
-env.Append(SUBST_DICT= {
-	'@VERSION@':version
-})
 
 specfile = env.SubstInFile('frame3dd.spec.in')
+Depends(specfile,"ChangeLog.txt")
 
 #------------
 # create distribution zip-file
@@ -212,7 +220,7 @@ env['DISTTAR_FORMAT']='bz2'
 env.Append(
 	DISTTAR_EXCLUDEEXTS=['.o','.os','.so','.a','.dll','.cc','.cache','.pyc'
 		,'.cvsignore','.dblite','.log', '.gz', '.bz2', '.zip', '.patch', '.mm'
-		,'.out','.tmp','.swp']
+		,'.out','.tmp','.swp','.db']
 	,DISTTAR_EXCLUDEDIRS=['CVS','.svn','.sconf_temp', 'dist','build'
 		,'development','buildings','gui','images','tests']
 )
@@ -221,7 +229,7 @@ tar = env.DistTar("dist/frame3dd-"+version
         , [env.Dir('#')]
 )
 
-env.Depends(tar,"frame3dd.spec")
+env.Depends(tar,["frame3dd.spec","doc/version.html"])
 
 if platform.system()=="Windows":
 	env.Append(NSISDEFINES={

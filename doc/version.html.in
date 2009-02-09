@@ -1,0 +1,9 @@
+<html>
+<head><title></title>
+<style>
+body {margin: 3px; font: normal small sans-serif; background-color: #FFFFEE; overflow:hidden}
+body.div {display:table; height: 100%; vertical-align:middle; text-align:center; border:0; padding:0; margin:0}
+</style>
+</head>
+<body><div>Version @VERSION@</div></body>
+</html>

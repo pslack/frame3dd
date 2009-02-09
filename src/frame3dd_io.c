@@ -247,7 +247,7 @@ static const char *temp_dir(){
 	if(tmp==NULL){
 		fprintf(stderr,"ERROR: %%TEMP%% environment var not found. This "
 			"variable needs to be set so that FRAME3DD knows where to put its "
-			"temporary files. Set this variable, the re-run FRAME3DD.\n")
+			"temporary files. Set this variable, the re-run FRAME3DD.\n");
 		exit(1);
 	}
 #else
