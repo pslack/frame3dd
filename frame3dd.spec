@@ -26,6 +26,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 
 BuildRequires: gcc-c++
 BuildRequires: scons >= 0.96.92
+BuildRequires: SoQt-devel, Coin2-devel
 
 %description
 Free software for static and dynamic structural analysis of 2D and 3D frames 
@@ -35,14 +36,14 @@ shapes and modal participation factors of two- and three- dimensional elastic
 structures using direct stiffness and mass assembly.  Graphical output and
 mode shape animation via Gnuplot version 4.0.
 
-Requires: gnuplot
+Requires: gnuplot, SoQT, Coin2.
 
 %prep
 %setup -q
 
 %build
 rm -rf %{buildroot}
-scons %{?_smp_mflags} CXX="%{?ccache} g++" \
+scons %{?_smp_mflags} CXX="%{?ccache} g++" CC="%{?ccache} gcc" \
 	INSTALL_ROOT=%{buildroot} \
 	INSTALL_PREFIX=%{_prefix}
 
@@ -58,9 +59,14 @@ rm -rf %{buildroot}
 %defattr(-, root, root)
 %doc doc/*
 %{_bindir}
-%{_datadir}
+%{_libdir}
+%{_datadir}/%{name}
 
 %changelog
+#
+# ChangeLog is now maintained in ChangeLog.txt. Make your
+# changes there.
+#
 
 * Mon Feb 09 2009 John Pye <john.pye@anu.edu.au> 0.20090209
 - Added support for FRAME3DD_OUTDIR as location of output files
@@ -172,5 +178,6 @@ rm -rf %{buildroot}
 
 * Fri Jan 01 1993 Henri Gavin <henri.gavin@duke.edu> 19930101
 - initiation of program at the University of Michigan
+
 
 

@@ -15,9 +15,8 @@ if env.get('SOQT_LIBS'):
 		arc2iv.cpp
 	""")
 
-	env['PROGS'].append( 
-		v_env.Program("../arc2iv",srcs)
-	)
+	arc2iv = v_env.Program("../arc2iv",srcs)
+	env['PROGS'].append(arc2iv)
 
 	#env['PROGS'].append( 
 	#	v_env.Program("../iv2vrml",['iv2vrml.cpp'])
@@ -27,4 +26,6 @@ if env.get('SOQT_LIBS'):
 		v_env.Program("../forcebalance",['forcebalance.cpp','render.cpp'])
 	)
 
+	bindir=Dir(env.subst("$INSTALL_ROOT$INSTALL_BIN"))
+	env.Install(bindir,arc2iv)
 

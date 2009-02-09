@@ -39,3 +39,8 @@ dumpcases = env.Program('dumpcases',['dumpcases.c'],LIBS=["microstranparser"],LI
 
 env['PROGS'] += [microst, dumpsections, dumpforces, dumpcases, lib]
 
+libdir=Dir(env.subst("$INSTALL_ROOT$INSTALL_LIB"))
+env.Install(libdir,lib)
+
+datadir=Dir(env.subst("$INSTALL_ROOT$INSTALL_DATA"))
+env.Install(datadir,"properties.txt")
