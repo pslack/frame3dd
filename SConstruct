@@ -62,9 +62,10 @@ opts.Add(BoolOption(
 ))
 
 opts.Add("INSTALL_PREFIX","Install location prefix (usually /usr or /usr/local)","/usr/local")
-opts.Add("INSTALL_BIN","Install location for binaries","$INSTALL_PREFIX/bin")
-opts.Add("INSTALL_DATA","Install location for general data files","$INSTALL_PREFIX/share");
-opts.Add("INSTALL_FRAMEDATA","Install location FRAME's data files","$INSTALL_DATA/frame3dd");
+opts.Add("INSTALL_BIN","Install location for binaries (Linux)","$INSTALL_PREFIX/bin")
+opts.Add("INSTALL_LIB","Install location for libraries (Linux)","$INSTALL_PREFIX/lib")
+opts.Add("INSTALL_DATA","Install location for general data files (Linux)","$INSTALL_PREFIX/share");
+opts.Add("INSTALL_FRAMEDATA","Install location FRAME's data files (Linux)","$INSTALL_DATA/frame3dd");
 opts.Add("INSTALL_ROOT","Install root (for building RPMs etc)","")
 
 # NSIS TARGET FILENAME
@@ -207,8 +208,10 @@ examples = Split("""
 """)
 
 datadir=Dir(env.subst("$INSTALL_ROOT$INSTALL_FRAMEDATA"))
+libdir=Dir(env.subst("$INSTALL_ROOT$INSTALL_LIB"))
+bindir=Dir(env.subst("$INSTALL_ROOT$INSTALL_BIN"))
 env.Install(datadir,['examples/%s'%e for e in examples])
-env['installdirs']+=[datadir]
+env['installdirs']+=[datadir, libdir, bindir]
 
 env.Alias("install",env['installdirs'])
 

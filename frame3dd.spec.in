@@ -59,7 +59,7 @@ rm -rf %{buildroot}
 %defattr(-, root, root)
 %doc doc/*
 %{_bindir}
-%{_libdir}
+%{_libdir}/lib*.so*
 %{_datadir}/%{name}
 
 %changelog

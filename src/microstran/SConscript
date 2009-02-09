@@ -42,5 +42,5 @@ env['PROGS'] += [microst, dumpsections, dumpforces, dumpcases, lib]
 libdir=Dir(env.subst("$INSTALL_ROOT$INSTALL_LIB"))
 env.Install(libdir,lib)
 
-datadir=Dir(env.subst("$INSTALL_ROOT$INSTALL_DATA"))
+datadir=Dir(env.subst("$INSTALL_ROOT$INSTALL_FRAMEDATA"))
 env.Install(datadir,"properties.txt")
