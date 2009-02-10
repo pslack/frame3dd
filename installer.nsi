@@ -119,7 +119,7 @@ Section "Start Menu Shortcuts"
   CreateDirectory "$SMPROGRAMS\FRAME3DD"
   CreateShortCut "$SMPROGRAMS\FRAME3DD\FRAME3DD README.lnk" "$INSTDIR\README.txt" "" "$INSTDIR\README.txt" 0
   CreateShortCut "$SMPROGRAMS\FRAME3DD\README for Windows users.lnk" "$INSTDIR\README-win32.txt" "" "$INSTDIR\README-win32.txt" 0
-  CreateShortCut "$SMPROGRAMS\FRAME3DD\FRAME3DD Documentation.lnk" "$INSTDIR\doc\user-manual.html" "" "$INSTDIR\doc\user-manual.html" 0
+  CreateShortCut "$SMPROGRAMS\FRAME3DD\FRAME3DD User Manual.lnk" "$INSTDIR\doc\user-manual.html" "" "$INSTDIR\doc\user-manual.html" 0
   CreateShortCut "$SMPROGRAMS\FRAME3DD\Examples.lnk" "$INSTDIR\examples" "" "$INSTDIR\examples" 0
   CreateShortCut "$SMPROGRAMS\FRAME3DD\ChangeLog.lnk" "$INSTDIR\ChangeLog.txt" "" "$INSTDIR\ChangeLog.txt" 0
   CreateShortCut "$SMPROGRAMS\FRAME3DD\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0

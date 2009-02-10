@@ -19,13 +19,13 @@ program.
 In order to keep your workspace 'clean', it is recommended to run
 FRAME3DD on windows as follows:
 
-mkdir %HOMEPATH%\frame3dd
-cd %PROGRAMFILES%\FRAME3DD
-xcopy "examples\*" "%HOMEPATH%\frame3dd"
-cd %HOMEPATH%\frame3dd
-set PATH=%PATH%;%PROGRAMFILES%\FRAME3DD
-set FRAME3DD_OUTDIR=%HOMEPATH%\frame3dd
-frame3dd exA.frm
+  mkdir %HOMEPATH%\frame3dd
+  cd %PROGRAMFILES%\FRAME3DD
+  xcopy "examples\*" "%HOMEPATH%\frame3dd"
+  cd %HOMEPATH%\frame3dd
+  set PATH=%PATH%;%PROGRAMFILES%\FRAME3DD
+  set FRAME3DD_OUTDIR=%HOMEPATH%\frame3dd
+  frame3dd exA.frm
 
 After running FRAME3DD in this way, all your output files will be located 
 in the the directory
