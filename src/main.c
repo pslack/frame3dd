@@ -61,7 +61,8 @@ int main(int argc, char *argv[]){
 		title[256],		/* the title of the analysis	*/
 		meshpath[FRAME3DD_PATHMAX] = "EMPTY_MESH", /* mesh data path */
 		plotpath[FRAME3DD_PATHMAX] = "EMPTY_PLOT", /* plot file path */
-		modepath[FRAME3DD_PATHMAX] = "EMPTY_MODE"; /* mode data path */
+		modepath[FRAME3DD_PATHMAX] = "EMPTY_MODE", /* mode data path */
+		temppath[FRAME3DD_PATHMAX] = "EMPTY_TEMP"; /* temp data path */
 
 	FILE	*fp;		/* input/output file pointer		*/
 
@@ -160,15 +161,14 @@ int main(int argc, char *argv[]){
 
 	filetype = get_file_ext( IO_file, extn ); /* .CSV or .FMM or other? */
 
-	char tpath[FRAME3DD_PATHMAX];
-	temp_file_location("frame3dd.cln",tpath,FRAME3DD_PATHMAX);
+	temp_file_location("frame3dd.cln",temppath,FRAME3DD_PATHMAX);
 
-	parse_input(fp, tpath);
+	parse_input(fp, temppath);
 	fclose(fp);
 
 	/*open clean input file*/
-	if ((fp = fopen (tpath, "r")) == NULL) {
-		fprintf (stderr,"\nERROR: cannot open cleaned input file '%s'\n",tpath);
+	if ((fp = fopen (temppath, "r")) == NULL) {
+		fprintf (stderr,"\nERROR: cannot open cleaned input file '%s'\n",temppath);
 		exit(1);
 	}
 
@@ -434,8 +434,6 @@ int main(int argc, char *argv[]){
 				write_static_mfile ( argv, title,
 					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
-
-//			output_path(plot_file,plotpath,FRAME3DD_PATHMAX,NULL);
 
 			static_mesh ( IO_file, meshpath, plotpath, title, nJ, nB, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);

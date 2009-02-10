@@ -317,7 +317,7 @@ int get_file_ext( char *filename, char *ext );
 void temp_file_location(const char *fname, char fullpath[], const int len);
 
 /**
-	Return location for an output file.
+	Return path to an output file.
 	
 	If the fname starts with a path separator ('\' on Windows, else '/') then
 	it is assumed to be an absolute path, and will be returned unchanged.
