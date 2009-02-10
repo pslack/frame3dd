@@ -58,10 +58,10 @@ Duke University</a> - Box 90287,
 </p>
 
 <p><b>Frame3DD</b> reads a plain-text <b>input data file</b>, containing joint coordinates, member geometry, material moduli, restrained joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.
-<!-- (The Input/Output file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
+<!-- (The Input Data file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
 </p>
 
-<p><b>Frame3DD</b> then <b>appends</b> the input data with output data, resulting in a single input/output file.
+<p><b>Frame3DD</b> writes a plain-text <b>output data file</b> with a <tt>.out</tt> filename extension.
 The output data recapitulates the input information, gives joint displacements in global coordinates, member
 end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
 </p>
@@ -162,7 +162,8 @@ in the Input Data (unless the <a href="#Matlab">Matlab interface</a> is used).
 
 
 <p>
-To write your own input data file, it may be helpful to start with an example that resembles the system you would like to analyze.  Carefully compare the graphical output of the example, the Output Data written at the end of the Input/Output file, the Input Data at the beginning of the Input/Output file, and the <a href="#InputData"><b>input data format</b></a>, with the <a href="#Variables"><b>variable definitions</b></a> at the end of this page.
+To write your own input data file, it may be helpful to start with an example that resembles the system you would like to analyze.  Carefully compare the graphical output of the example, the Input Data file, the Output Data file,
+and the <a href="#InputData"><b>input data format</b></a>, with the <a href="#Variables"><b>variable definitions</b></a> at the end of this page.
 </p>
 <p>
 You may edit Input Data files using a plain text editor
@@ -175,8 +176,7 @@ You may edit Input Data files using a plain text editor
  <a href="http://www.textedit.org/">TextEdit (Windows)</a>,
  <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>,
 etc.),
-using the Matlab interface,
-or using spreadsheet programs
+using the Matlab interface, or using spreadsheet programs
 (e.g. <a href="http://www.openoffice.org/">OpenOffice</a>, Excel,
 <a href="http://docs.google.com/">Google Docs</a> or
  <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).
@@ -221,7 +221,8 @@ and should work with minor changes on any other recent Linux or Unix system.
 </ol>
 <li>Copy one of the frame3dd-VERSION/examples/*.frm files, eg <tt>exA.frm</tt> into your home directory and make sure you have write-privileges for the file.
 <li>Type <tt>frame3dd exA.frm</tt> to run Frame3dd.
-<li>The output files will be in the location specified inside the ~/exA.frm file. The main report output will have been appended to the ~/exA.frm file.
+<li>Data files used primarly for plotting are in temporary directories.
+The main report output will have been written to the <tt>exA.out</tt> file.
 <li>       The graphical output is viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, which can be installed using <tt>sudo apt-get install gnuplot</tt>.
 
          Open a terminal window and
@@ -239,7 +240,7 @@ To create a PostScript file of your plot, use the Gnuplot script
 <li><tt>gnuplot> !mv my-plot.ps another-file.ps</tt>
 </ol>
 After finishing with your plots, you can exit Gnuplot by typing <tt>quit</tt>.
-<li>        You may edit Input/Output files using a plain text editor
+<li>        You may edit Input Data files using a plain text editor
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
 <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
 <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>)
@@ -286,7 +287,7 @@ MS-Windows version of Gnuplot</a>.
 <li>Hit the 'Return' key in the Terminal window to see the sequence of plots
          and animations until the <tt> gnuplot></tt> prompt returns.<br>
 </ol>
-<li>       You may edit Input/Output Data files using a plain text editor
+<li>       You may edit Input Data files using a plain text editor
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
 <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>), or a spreadsheet program
 (<a href="http://www.openoffice.org/">OpenOffice</a>, excel).<br>
@@ -307,7 +308,7 @@ For OS X running on a PowerPC (PPC) or Intel processor.
 <ol>
 <li>        Download the <b>Frame3DD</b> application and save as "frame3dd" on your Desktop,
          or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/OSX-PPC/frame3dd">CTRL-CLICK-HERE-FOR-PPC</a> | <a href="OSX-Intel/frame3dd">CTRL-CLICK-HERE-FOR-INTEL</a> |
-<li>        Download and save an example Input/Output file, such as <tt>exA.frm</tt>,
+<li>        Download and save an example Input Data file, such as <tt>exA.frm</tt>,
          on your Desktop, or some other directory:<br> | <a href="../examples/exA.frm">CTRL-CLICK-HERE</a> |
 <li>        Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
             <tt>...$   cd ~/Desktop</tt><br>
@@ -325,7 +326,7 @@ For OS X running on a PowerPC (PPC) or Intel processor.
              A Terminal window should automatically open.
              When asked for the Input/Output file name, type ...<br>
                <tt>/Users/your_name_here/Desktop/examples/exA.frm</tt> -->
-<li>     You may edit Input/Output files using a plain text editor
+<li>     You may edit Input Data files using a plain text editor
 (<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,
 TextEdit (Applications > TextEdit),
 <a href="http://macvim.org/OSX/index.php">vi</a>)
@@ -466,12 +467,12 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 </p>
 
 <p>
-This m-function, <a href="http://www.duke.edu/~hpgavin/frame3dd/Matlab/frame_3dd.m">frame_3dd.m</a>,
+This m-function, <a href="Matlab/frame_3dd.m">frame_3dd.m</a>,
 executes the system command
-(frame3dd on Linux or OS-X, frame3dd.exe on Windows)
+(<tt>frame3dd</tt> on Linux or OS-X, <tt>frame3dd.exe</tt> on Windows)
 to compute the solution.
 The <b>Frame3DD</b> executable
-(frame3dd on Linux or OS-X, frame3dd.exe on Windows)
+(<tt>frame3dd</tt> on Linux or OS-X, <tt>frame3dd.exe</tt> on Windows)
 must be saved to a directory within
 a path appropriate for your system, or must be copied to your current
 working directory.
@@ -484,8 +485,8 @@ A <a href="Matlab/exA.m">Matlab version of Example A</a> illustrates
 how to analyze problems using the Matlab interface to <b>Frame3DD</b>.<br>
 Matlab versions of the other examples are forthcoming.
 <li> frame_3dd.m writes IOdata.fmm,
-<li> The executeable frame3dd appends IOdata.fmm
-with the Output Data, and writes IOdata_out.m, containing the Output Data.<br>
+<li> The executeable <tt>frame3dd</tt> writes Output Data to IOdata.out ,
+and also writes IOdata_out.m, containing the Output Data.<br>
 An m-file containing the Output Data is written whenever the frame3dd
 executeable is run on a file ending in ".fmm",
 whether or not the analysis is initiated by frame_3dd.m.
@@ -512,7 +513,7 @@ Adding these features would require Matlab programming, only.
 <a name="CSV"><h2>6. Spreadsheet interface</h2>
 
 <p>
-Input/Output data for <b>Frame3DD</b> may be read and written using spreadsheet programs
+Input Data for <b>Frame3DD</b> may be read and written using spreadsheet programs
 (excel,
  <a href="http://docs.google.com/">GoogleDocs</a>,
  <a href="http://www.openoffice.org/">OpenOffice</a>,
@@ -527,8 +528,8 @@ When editing an Input Data file with a spreadsheet program, save it in
 
 <p>
 When run on a .CSV file,
-<b>Frame3DD</b> appends results to the Input Data .CSV file
-as plain text and also
+<b>Frame3DD</b> writes results
+as plain text to an Output Data file with a <tt>.out</tt> extension and also
 writes results of the static analyses to a spreadsheet with a filename ending in "_out.CSV".   These files may be viewed, edited, pre-processed,
 and post-processed with spreadsheet programs.
 </p>
@@ -968,7 +969,7 @@ A Sturm check is carried out to determine if any eigen-values were missed.
 If a dynamic analysis is not to be performed, simply set the
 <a href="#Variables"<i>nM</i> variable</a> (the number of desired modes) to zero (0).
 If <i>nM</i> is set to zero,
-<b>Frame3DD</b> will stop reading the Input/Output file at this point.
+<b>Frame3DD</b> will stop reading the Input file at this point.
 If <i>nM</i> is set to zero, there is no need to provide numerical values for the quantities from <i>lump</i> to <i>m[3] ... </i>.
 (See the
 <a href="#InputData"><b>Input Data Format</b></a> specification and
@@ -1006,7 +1007,7 @@ conditioning of the condensed mass and stiffness matrices.
 </p>
 
 <p>       When the program is executed, various solution errors are displayed to the
-       screen and are written to the Input/Output file.   Iterative improvements
+       screen and are written to the Output data file.   Iterative improvements
        to the LDL' back-substitution make use of a quasi Newton-Raphson method:<br>
 <div class=eq>K dD(i) = F - K D(i)</div>
 <div class=eq>D(i+1) = D(i) + dD(i)</div>
