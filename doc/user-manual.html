@@ -61,10 +61,20 @@ Duke University</a> - Box 90287,
 <!-- (The Input Data file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
 </p>
 
-<p><b>Frame3DD</b> writes a plain-text <b>output data file</b> with a <tt>.out</tt> filename extension.
+<p><b>Frame3DD</b> appends results to a plain-text <b>output data file</b> with a <tt>.out</tt> filename extension.
+For example, if the input data is in a file called <tt>exA.frm</tt>,
+output data is appended to a file called <tt>exA.out</tt>.  
 The output data recapitulates the input information, gives joint displacements in global coordinates, member
 end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
 </p>
+
+<p><b>Frame3DD</b> writes a
+<a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>
+script file used for viewing deformed frames and dynamic mode shapes.   
+If the input data is in a file called <tt>exA.frm</tt>,
+the Gnuplot script is written to a file called <tt>exA.plt</tt>.  
+Graphical output may be viewed by starting Gnuplot and typing: 
+<tt> load 'exA.plt'</tt>.
 
 <p><b>Frame3DD</b> can consider multiple static load cases in a single analysis.</p>
 
@@ -118,30 +128,28 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 
 <a name="starting"><h2>1. Getting started</h2>
 <ol>
-<li>Read the Manual and Reference (this file).
+<li>Read the User Manual and Reference (this file).
 <li>Download or build the Frame3DD executable for your operating system (see below).
 <li>Optionally, obtain a copy of Gnuplot for your operating system.
-<li>Copy one of the example input data files (eg <tt>exA.frm</tt>) into your home directory and make sure you have write privileges for the file.
+<li>Copy one of the example input data files (eg <tt>exA.frm</tt>) into your home directory.   
 <li>       Open a terminal window and run the program using the command
 	  <tt>frame3dd exA.frm</tt> (change the filename <tt>exA.frm</tt> as necessary).
-	<li>Open the input/output file using your text editor and scroll down to the output data, which is written to the end of the input/output file after the end of the input data.
+	<li>Open the output data file using your text editor and view the output data. 
 <!--     Running this program will create many files.  Most of them are used
          for graphics and should be written to the  /tmp  directory.
 <li>      One of the files will be written to the current working directory and will be called
          something like frA.plt   This file is used for plotting.   -->
 <li>      Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, and typing
-           <tt>load 'example.plt' </tt> at the "<tt>gnuplot&gt;</tt>"&nbsp;prompt, where the <tt>example.plt</tt> is the 'plot_file' specified as part of the Input Data (see <a href="#InputData">below</a>) <br>
+           <tt>load 'example.plt' </tt> at the "<tt>gnuplot&gt;</tt>"&nbsp;prompt. 
 Observe a series of plots by hitting the Return (or Enter) key between plots.<br>
 If a dynamic analysis was performed, you will enjoy an animation of selected mode shapes.<br>
 Continue to hit the Return (or Enter) key until the last plot is displayed.
 </ol>
 
 <div class=note>
-<b>Note:</b> Because Frame3dd uses a single file for both input and output, it is important that you have the necessary permissions to allow you to modify the input file. For some users, this will mean that you need to make your own local copy of the input file before running Frame3dd.
-</div>
-
-<div class=note>
-<b>Note:</b> Depending on the instructions contained in the Frame3dd input file, there may be many <b>additional output files</b> generated. By default, these output files will be sent to your temporary file folder. On Windows, this will be the contents of the TEMP environment variable, which you can examine by typing <tt>echo %TEMP%</tt>. On other platforms, this will be the folder <tt>/tmp</tt>.<br><br>If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <tt>FRAME3DD_OUTDIR</tt> with the path to your output directory. All new output files will then appear in the folder you have specified.
+<b>Note:</b> Depending on the instructions contained in the Frame3dd input file, there may be many <b>additional output files</b> generated. 
+The data in these files are used for plotting purposes.   
+By default, these output files will be sent to your temporary file folder. On Windows, this will be the contents of the TEMP environment variable, which you can examine by typing <tt>echo %TEMP%</tt>. On other platforms, this will be the folder <tt>/tmp</tt>.<br><br>If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <tt>FRAME3DD_OUTDIR</tt> with the path to your output directory. All new output files will then appear in the folder you have specified.
 </div>
 
 <a name="iodata"/><h2>2. Input Data and Output Data</h2>
@@ -186,7 +194,7 @@ Details regarding the Matlab interface to Frame3DD are <a href="#Matlab">here</a
 Details regarding the spreadsheet interface to Frame3DD are <a href="#CSV">here</a>.<br>
 </p>
 <p>
-It will probably take a few tries to get your input data just right.
+It might take a few tries to get your input data just right.
 Frame3DD checks the Input Data for errors prior to analysing the system
 and, where possible, displays descriptive diagnostic messages when errors are
 found with the input data.
@@ -523,14 +531,14 @@ Input Data for <b>Frame3DD</b> may be read and written using spreadsheet program
 <p>
 Any of the  <a href="http://www.duke.edu/~hpgavin/frame3dd/#examples"><b>Frame3DD</b> example Input Data files</a> may be opened with a spreadsheet program.
 When editing an Input Data file with a spreadsheet program, save it in
-.CSV format (with a ".CSV" filename extension).
+<tt>.CSV</tt> format (with a "<tt>.CSV</tt>" filename extension).
 </p>
 
 <p>
-When run on a .CSV file,
+When run on a <tt>.CSV</tt> file,
 <b>Frame3DD</b> writes results
 as plain text to an Output Data file with a <tt>.out</tt> extension and also
-writes results of the static analyses to a spreadsheet with a filename ending in "_out.CSV".   These files may be viewed, edited, pre-processed,
+writes results of the static analyses to a spreadsheet with a filename ending in "<tt>_out.CSV</tt>".   These files may be viewed, edited, pre-processed,
 and post-processed with spreadsheet programs.
 </p>
 
@@ -629,12 +637,6 @@ with the desired flexibility.
 
 <h3> 7.3 Cross Section Properties and Coordinate Transformation</h3>
 
-<p>
-To analyze a structure as a "truss" with this software, specify <i>>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>
-to be much smaller than they would be normally, but not zero.   If the shear forces and bending
-moments in your structural elements are extremely small, then your structural model
-represents a "truss" approximation of the actual structure.    See example A.
-</p>
 
 <p>
      Cross-sectional properties of beams and bars are specified in a local
@@ -701,15 +703,22 @@ When a beam or bar element is placed into the structure
 by A. Kassimali.
 </p>
 
+<p>
+To analyze a structure as a "truss" with this software, specify <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>
+to be much smaller than they would be normally, but not zero.   If the shear forces and bending
+moments in your structural elements are extremely small, then your structural model
+represents a "truss" approximation of the actual structure.    See example A.
+</p>
+
 <h4> 7.3.1 Cross Section Properties of Square Tube and Circular Tube Sections </h4>
 
 <p>
-Square Tube (outer dimension = <i>d</i>, wall thickness = <i>t</i>):
+Square Tube (outer dimension = <i>b</i>, wall thickness = <i>t</i>):
 <ul>
-<li> <i>Ax = d<sup>2</sup> - (d-2t)<sup>2</sup></i>
-<li> <i>Asy = Asz = Ax / ( 2.05-11.15(t/d)<sup>2</sup> + 16.16(t/d)<sup>3</sup> )</i>
-<li> <i> Jxx =  d<sup>3</sup> t </i>
-<li> <i>Izz = Iyy = (1/12) ( d<sup>4</sup> - (d-2t)<sup>4</sup> )</i>
+<li> <i>Ax = b<sup>2</sup> - (b-2t)<sup>2</sup></i>
+<li> <i>Asy = Asz = Ax / ( 2.05-11.15(t/b)<sup>2</sup> + 16.16(t/b)<sup>3</sup> )</i>
+<li> <i> Jxx =  b<sup>3</sup> t </i>
+<li> <i>Izz = Iyy = (1/12) ( b<sup>4</sup> - (b-2t)<sup>4</sup> )</i>
 </ul>
 </p>
 
@@ -779,7 +788,7 @@ efunda
 <p>
 For sections with a solid rectangular cross section
 (width=<i>b</i>, depth=<i>d</i>):   <br>
-<i>Jxx =  Q d b^3    ( b < d ) </i><br></i>
+<i>Jxx =  Q d b<sup>3</sup>    ( b < d ) </i><br></i>
 where
 <i>Q = 1/3 - 0.2244 / (d/b + 0.1607); </i>
 <!-- a = 0.224435; b = 0.160705 -->
@@ -791,12 +800,12 @@ where
 
 <p>
          For open sections made up of thin plates (length=<i>b</i>, thickness=<i>t</i>):   <br>
-<i>                Jxx = Sum [  b t^3 / 3 ] </i>
+<i>                Jxx = &Sigma;<sub>i</sub> [  b<sub>i</sub> t<sub>i</sub><sup>3</sup> / 3 ] </i>
 </p>
 
 <p>
          For closed single-box sections made up of thin plates: <br>
-<i> Jxx = 4 Ax^2 / Sum [ b / t ] </i>
+<i> Jxx = 4 Ax^2 / &Sigma;<sub>i</sub> [ b<sub>i</sub> / t<sub>i</sub> ] </i>
 </p>
 
 <p>
@@ -883,8 +892,8 @@ Note:
 <li> These material properties are approximate.
 <li> Properties of Douglas Fir vary naturally by +/- 15 percent.
 <li> Properties of Fiber-Epoxy composites depend on the volume fraction and
-   orientations of the fibers.  The values above correspond to volume
-   fractions of roughly 50 percent.
+   orientations of the fibers.  <br>
+   The values above correspond to volume fractions of roughly 50 percent.
 </ul>
 <p>
 <a href="http://www.matweb.com/search/MaterialGroupSearch.aspx">MatWeb</a>
@@ -1006,9 +1015,9 @@ conditioning of the condensed mass and stiffness matrices.
        iterative improvement for enhanced speed and accuracy.
 </p>
 
-<p>       When the program is executed, various solution errors are displayed to the
-       screen and are written to the Output data file.   Iterative improvements
-       to the LDL' back-substitution make use of a quasi Newton-Raphson method:<br>
+<p> When the program is executed, various solution errors are displayed to the
+screen and are written to the Output data file.   Iterative improvements
+to the LDL' back-substitution make use of a quasi Newton-Raphson method:<br>
 <div class=eq>K dD(i) = F - K D(i)</div>
 <div class=eq>D(i+1) = D(i) + dD(i)</div>
 <p>
@@ -1081,7 +1090,7 @@ convergence tolerance.  The error is defined here as:
 
 <a name="InputData"><h2>9. Input Data Format</h2>
 <p>
-Click <a href="template.frm">here</a> to download an Input Data template, template.frm
+Click <a href="template.frm">here</a> to download an Input Data template, template.frm, or cut-and-paste the text below.
 </p>
 </a>
 
@@ -1109,8 +1118,6 @@ M[nB] J1[nB] J2[nB] Ax[nB] Asy[nB] Asz[nB] Jxx[nB] Iyy[nB] Izz[nB] E[nB] G[nB] p
 
 shear                               % 1: include shear deformation;   0: don't
 geom                                % 1: include geometric stiffness; 0: don't
-/tmp/mesh_file                      % mesh data file name for plotting
-plot_file                           % plot file name
 exagg                               % exaggerate deformations
 anlyz                               % 1: stiffness analysis; 0: data check only
 
@@ -1177,7 +1184,6 @@ nD                             % number of joints with prescribed displacements
 nM                                             %       number of desired modes
 Mmethod                                        % 1: Subspace Jacobi, 2: Stodola
 lump                                           % 0: consistent mass, 1: lumped
-/tmp/mode_file                                 %     mode shape data file name
 tol                                            %  convergence tolerance ~ 1e-4
 shift             % shift-factor for rigid body modes, make 0 for pos.def. [K]
 
@@ -1212,8 +1218,6 @@ nC                                                % number of condensed joints
 <pre>
        a         - Coefficient of thermal expansion (1/degree)
        anim      - List of modes to be animated, by mode number
-       plot_file - Plot filename for the Gnuplot-formatted data
-                   To plot, type   load 'plot_file' within Gnuplot.
        Ax        - Cross-sectional area of (prismatic) member i
                    (The x-axis is along the member length, in local coordinates)
        Asy       - Shear area in the local y-axis of (prismatic) member i
@@ -1262,9 +1266,7 @@ nC                                                % number of condensed joints
        Myy       - Joint Moment about the global Y axis
        Mzz       - Joint Moment about the global Z axis
        m         - list of modes to match in dynamic condensation
-       mesh_file - Data file for the Gnuplot-formatted mesh data for plotting
        Mmethod   - the modal analysis method 1: Subspace Jacobi, 2: Stodola
-       mode_file - Data file for the Gnuplot-formatted mode data for plotting
        nA        - number of mode shapes to Animate must be less than 20
        nB        - number of Beam elements
        nC        - number of joints for matrix Condensation

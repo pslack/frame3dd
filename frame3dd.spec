@@ -83,6 +83,8 @@ to frame3dd_io.c
 - Input and Output are now in separate files.  The Output filename is
 automatically generated from the Input file.  The Output file recapitualtes
 the input data before writing the output data.   
+- All instances of a double quote character are ignored in reading input files
+- Updated documentation.
 
 * Mon Feb 09 2009 John Pye <john.pye@anu.edu.au> 0.20090209
 - Added support for FRAME3DD_OUTDIR as location of output files
