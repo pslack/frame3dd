@@ -57,11 +57,11 @@ int main(int argc, char *argv[]){
 
 #define FILENMAX 96
 
-	char IO_file[FILENMAX],	/* the input/output filename		*/
-		title[256],	/* the title of the analysis		*/
+	char	IO_file[FILENMAX],	/* the input/output filename	*/
+		title[256],		/* the title of the analysis	*/
 		meshpath[FRAME3DD_PATHMAX] = "EMPTY_MESH", /* mesh data path */
 		plotpath[FRAME3DD_PATHMAX] = "EMPTY_PLOT", /* plot file path */
-		modepath[FRAME3DD_PATHMAX] = "EMPTY_MODE";
+		modepath[FRAME3DD_PATHMAX] = "EMPTY_MODE"; /* mode data path */
 
 	FILE	*fp;		/* input/output file pointer		*/
 

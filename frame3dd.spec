@@ -68,6 +68,12 @@ rm -rf %{buildroot}
 # changes there.
 #
 
+* Mon Feb 09 2009 Henri Gavin <john.pye@anu.edu.au> 0.20090209
+ - Removed plot file, mesh file, and mode file names from input data file
+   These file names are now automatically generated.
+   The path to these file names is also automatically generated according
+   to the OS (Win32 or Linux/Unix/OSX etc)
+
 * Mon Feb 09 2009 John Pye <john.pye@anu.edu.au> 0.20090209
 - Added support for FRAME3DD_OUTDIR as location of output files
 - Updated documentation
