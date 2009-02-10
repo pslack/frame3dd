@@ -992,8 +992,8 @@ void write_input_data(
 	for (i=1; i<=80; i++)	fprintf(fp,"_"); fprintf(fp,"\n");
 
 
-	fprintf(fp,"%d JOINTS;    %d MEMBERS;    %d LOAD CASES;\n",nJ,nB,nL);
-	fprintf(fp,"%d FIXED JOINTS;   ", nR);
+	fprintf(fp,"%d JOINTS;    %d MEMBERS;    %d LOAD CASES;  ",nJ,nB,nL);
+	fprintf(fp,"%d FIXED JOINTS;  \n", nR);
 
 	fprintf(fp,"For 2D problems, the Y-axis is vertical. \n");
 #if Zvert

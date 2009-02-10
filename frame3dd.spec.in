@@ -17,7 +17,7 @@ Release:	0%{?dist}
 License:	GPL
 Group:		Applications/Engineering
 Source:		%{name}-%{version}.tar.bz2
-URL:		http://www.duke.edu/~hpgavin/frame/index.html
+URL:		http://frame3dd.sourceforge.net/index.html
 
 Prefix:		%{_prefix}
 Packager:	John Pye

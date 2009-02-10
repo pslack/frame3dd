@@ -1,8 +1,6 @@
 TODO LIST for FRAME3DD
 ----------------------
 
-* Migrate website to sf.net
-
 * Check return values of fscanf functions and report errors to user
   for input data debugging purposes.
 
@@ -44,6 +42,10 @@ also, particularly if sparse matrix methods can be used.
 
 COMPLETED ITEMS
 ------------------
+
+* Separate Input data and Output data files (Feb 9 2009)
+
+* Migrate website to sf.net (Jan 2009)
 
 * Add support for .CSV input and output. (Jan 1 2009)
 

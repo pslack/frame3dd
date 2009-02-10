@@ -6,10 +6,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example J: tesseract  
-Mon Feb  9 22:31:13 2009
+Mon Feb  9 22:35:36 2009
 ________________________________________________________________________________
-16 JOINTS;    32 MEMBERS;    1 LOAD CASES;
-0 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 
+16 JOINTS;    32 MEMBERS;    1 LOAD CASES;  0 FIXED JOINTS;  
+For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S

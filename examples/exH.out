@@ -6,10 +6,10 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example H: a pedestrian ramp 
-Mon Feb  9 22:30:56 2009
+Mon Feb  9 22:35:20 2009
 ________________________________________________________________________________
-148 JOINTS;    295 MEMBERS;    1 LOAD CASES;
-36 FIXED JOINTS;   For 2D problems, the Y-axis is vertical. 
+148 JOINTS;    295 MEMBERS;    1 LOAD CASES;  36 FIXED JOINTS;  
+For 2D problems, the Y-axis is vertical. 
 For 3D problems, the Z-axis is vertical. 
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S
