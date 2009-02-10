@@ -57,14 +57,15 @@ int main(int argc, char *argv[]){
 
 #define FILENMAX 96
 
-	char	IO_file[FILENMAX],	/* the input/output filename	*/
+	char	IN_file[FILENMAX],	/* the input  data filename	*/
+		OUT_file[FILENMAX],	/* the output data filename	*/
 		title[256],		/* the title of the analysis	*/
 		meshpath[FRAME3DD_PATHMAX] = "EMPTY_MESH", /* mesh data path */
 		plotpath[FRAME3DD_PATHMAX] = "EMPTY_PLOT", /* plot file path */
 		modepath[FRAME3DD_PATHMAX] = "EMPTY_MODE", /* mode data path */
 		temppath[FRAME3DD_PATHMAX] = "EMPTY_TEMP"; /* temp data path */
 
-	FILE	*fp;		/* input/output file pointer		*/
+	FILE	*fp;		/* input and output file pointe		*/
 
 	vec3	*xyz;		/* X,Y,Z joint coordinates (global)	*/
 
@@ -149,19 +150,19 @@ int main(int argc, char *argv[]){
 
 	if (argc < 2) {
 		fprintf (stderr," Please enter the input/output file name: ");
-		scanf("%s", IO_file );
-		fprintf (stderr," You entered file name: %s \n", IO_file );
-	} else strcpy( IO_file , argv[1] );
+		scanf("%s", IN_file );
+		fprintf (stderr," You entered file name: %s \n", IN_file );
+	} else strcpy( IN_file , argv[1] );
 
-	if ((fp = fopen (IO_file, "r")) == NULL) {	/* open input file */
-		fprintf (stderr,"\nERROR: cannot open file '%s'\n", IO_file);
+	if ((fp = fopen (IN_file, "r")) == NULL) {	/* open input file */
+		fprintf (stderr,"\nERROR: cannot open file '%s'\n", IN_file);
 		fprintf (stderr," usage: frame infile\n");
 		exit(1);
 	}
 
-	filetype = get_file_ext( IO_file, extn ); /* .CSV or .FMM or other? */
+	filetype = get_file_ext( IN_file, extn ); /* .CSV or .FMM or other? */
 
-	temp_file_location("frame3dd.cln",temppath,FRAME3DD_PATHMAX);
+	temp_file_location("frame3dd.frm",temppath,FRAME3DD_PATHMAX);
 
 	parse_input(fp, temppath);
 	fclose(fp);
@@ -224,7 +225,8 @@ int main(int argc, char *argv[]){
 
 
 	read_run_data (
-		fp, IO_file, &shear, &geom, meshpath, plotpath, &exagg, &anlyz
+		fp, IN_file, OUT_file, &shear, &geom,
+		meshpath, plotpath, &exagg, &anlyz
 	);
 
 	fscanf(fp, "%d", &nL );		/* number of load cases		*/
@@ -285,7 +287,7 @@ int main(int argc, char *argv[]){
 	printf(" load data ... complete\n");
 
 	read_mass_data(
-		fp, IO_file, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax,
+		fp, IN_file, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax,
 		&total_mass, &struct_mass, &nM, &Mmethod,
 		&lump, modepath, &tol, &shift, anim, &pan
 	);
@@ -300,9 +302,9 @@ int main(int argc, char *argv[]){
 	}
 
 	fclose(fp);
-	fp = fopen(IO_file, "a");     /* output appends input */
+	fp = fopen(OUT_file, "a");     /* output appends input */
 	if(fp==NULL){
-		fprintf(stderr,"Unable to append to input file '%s'!\n",IO_file);
+		fprintf(stderr,"Unable to append to output file '%s'!\n",OUT_file);
 		exit(1);
 	}
 
@@ -435,14 +437,14 @@ int main(int argc, char *argv[]){
 					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
 
-			static_mesh ( IO_file, meshpath, plotpath, title, nJ, nB, nL, lc,
+			static_mesh ( IN_file, meshpath, plotpath, title, nJ, nB, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
 
 		} /* end load case loop */
 	} else {
 	    fprintf(stderr,"  %s\n", title );
 	    fprintf(stderr,"  DATA CHECK ONLY.\n");
-	    static_mesh ( IO_file, meshpath, plotpath, title, nJ, nB, nL, lc,
+	    static_mesh ( IN_file, meshpath, plotpath, title, nJ, nB, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
 	}
 
@@ -492,18 +494,18 @@ int main(int argc, char *argv[]){
 
 			write_modal_results ( fp, nJ,nB,nI, DoF, M,f,V,
 					total_mass, struct_mass,
-					iter, sumR, nM, shift, lump, tol, ok
-			);
+					iter, sumR, nM, shift, lump, tol, ok );
 		}
 	}
 
+	fprintf(fp,"\n");
 	fclose (fp);
 
 	if(nM > 0 && anlyz){
 
-		modal_mesh(IO_file, meshpath, modepath, plotpath, title,
+		modal_mesh(IN_file, meshpath, modepath, plotpath, title,
 		       nJ,nB, DoF, nM, xyz, L, J1,J2, p, M,f,V,exagg,anlyz);
-		animate(IO_file, meshpath, modepath, plotpath, title,anim,
+		animate(IN_file, meshpath, modepath, plotpath, title,anim,
 		       nJ,nB, DoF, nM, xyz, L, p, J1,J2, f,V, exagg, pan );
 	}
 

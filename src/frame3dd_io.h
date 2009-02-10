@@ -80,7 +80,8 @@ void read_beam_data (
 */
 void read_run_data (
 	FILE *fp,	/**< input data file pointer			*/
-	char IO_file[],	/**< input output file name			*/
+	char IN_file[],	 /**< input  data file name			*/
+	char OUT_file[], /**< output data file name			*/
 	int *shear,	/**< 1: include shear deformations, 0: don't	*/
 	int *geom,	/**< 1: include geometric stiffness, 0: don't	*/
 	char meshpath[],/**< file name for mesh data output		*/

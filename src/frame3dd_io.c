@@ -38,10 +38,6 @@
 #include "lu_dcmp.h"
 #include "nrutil.h"
 
-#ifndef VERSION
-# define VERSION "unknown"
-#endif
-
 /* #define MASSDATA_DEBUG */
 
 /* forward decls */
@@ -181,7 +177,8 @@ READ_RUN_DATA  -  read information for analysis                   29dec08
 ------------------------------------------------------------------------------*/
 void read_run_data (
 	FILE	*fp, 
-	char	*IOfilename,
+	char	*IN_file,	/* input data file name	*/
+	char	*OUT_file,	/* output data file name */
 	int	*shear,
 	int	*geom,
 	char	*meshpath,
@@ -193,20 +190,23 @@ void read_run_data (
 	char	mesh_file[96] = "EMPTY_MESH";
 
 
-	while ( IOfilename[len++] != '\0' ) /* the length of IOfilename */ ;
+	strcpy(OUT_file,IN_file);
+	while ( OUT_file[len++] != '\0' )
+		/* the length of the filename */ ;
         full_len = len;
-	while ( IOfilename[len--] != '.' && len > 0 ) /* the last '.' in IOfilename */ ;
+	while ( OUT_file[len--] != '.' && len > 0 )
+		/* the last '.' in filename */ ;
 	if ( len == 0 )	len = full_len;
-	IOfilename[++len] = '\0';
+	OUT_file[++len] = '\0';
 
-	strcpy(plotpath,IOfilename);
+	strcpy(plotpath,OUT_file);
 	strcat(plotpath,".plt");
 
-	strcpy(mesh_file,IOfilename);
+	strcpy(mesh_file,OUT_file);
 	strcat(mesh_file,"-msh");
-
         output_path(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
 
+	strcat(OUT_file,".out");
 
 	fscanf( fp, "%d %d %lf %d", shear, geom,  exagg, anlyz );
 
@@ -228,8 +228,9 @@ void read_run_data (
 	    exit(1);
 	}
 
-printf("PLOTPATH = %s \n", plotpath);
-printf("MESHPATH = %s \n", meshpath);
+//	printf("PLOTPATH = %s \n", plotpath);
+//	printf("MESHPATH = %s \n", meshpath);
+//	printf("OUT_FILE = %s \n", OUT_file);
 
 	return;
 }
@@ -737,7 +738,7 @@ READ_MASS_DATA  -  read element densities and extra inertial mass data	16aug01
 ------------------------------------------------------------------------------*/
 void read_mass_data(
 		FILE *fp,
-		char *IOfilename, 
+		char *IN_file, 
 		int nJ, int nB, int *nI,
 		float *d, float *BMs,
 		float *JMs, float *JMx, float *JMy, float *JMz,
@@ -852,17 +853,16 @@ void read_mass_data(
 
 	fscanf ( fp, "%d", pan );
 
-	while ( IOfilename[len++] != '\0' ) /* the length of IOfilename */ ;
+	strcpy(mode_file,IN_file);
+	while ( mode_file[len++] != '\0' ) /* the length of mode_file */ ;
         full_len = len;
-	while ( IOfilename[len--] != '.' && len > 0 ) /* the last '.' in IOfilename */ ;
+	while ( mode_file[len--] != '.' && len > 0 ) /* the last '.' in mode_file */ ;
 	if ( len == 0 )	len = full_len;
-	IOfilename[++len] = '\0';
+	mode_file[++len] = '\0';
 
-	strcpy(mode_file,IOfilename);
 	strcat(mode_file,"-m");
 
 	output_path(mode_file,modepath,FRAME3DD_PATHMAX,NULL);
-
 
 	return;
 }
@@ -978,7 +978,6 @@ void write_input_data(
 
         (void) time(&now);
 
-	fprintf(fp,"\n");
 	for (i=1; i<=80; i++)	fprintf(fp,"_");
   	fprintf(fp,"\nFRAME3DD version: %s ", VERSION );
 	fprintf(fp,"              http://frame3dd.sf.net/\n");
@@ -1223,7 +1222,7 @@ void write_static_csv(
 	FILE	*fpcsv;
 	int	i,j,n;
 	char	*wa;
-	char	IOfilename[128];
+	char	IN_file[128];
         time_t  now;            /* modern time variable type    (DJGPP) */
 
         (void) time(&now);
@@ -1231,28 +1230,28 @@ void write_static_csv(
 	i=0;
 	j=0;
 	while (i<128) {
-		IOfilename[j] = argv[1][i];
-		if ( IOfilename[j] == '+' ||
-		     IOfilename[j] == '-' ||
-		     IOfilename[j] == '*' ||
-		     IOfilename[j] == '^' ||
-                     IOfilename[j] == '.' ||
-                     IOfilename[j] == '\0') {
-			IOfilename[j] = '_';
+		IN_file[j] = argv[1][i];
+		if ( IN_file[j] == '+' ||
+		     IN_file[j] == '-' ||
+		     IN_file[j] == '*' ||
+		     IN_file[j] == '^' ||
+                     IN_file[j] == '.' ||
+                     IN_file[j] == '\0') {
+			IN_file[j] = '_';
 			break;
 		}
 		i++;
 		j++;
 	}
-	IOfilename[++j] = '\0';
-	strcat(IOfilename,"out.CSV");
+	IN_file[++j] = '\0';
+	strcat(IN_file,"out.CSV");
 
 
 	wa  = "a";
 	if (lc == 1) wa = "w";
 
-	if ((fpcsv = fopen (IOfilename, wa)) == NULL) {
-	  fprintf (stderr," error: cannot open file %s\n", IOfilename );
+	if ((fpcsv = fopen (IN_file, wa)) == NULL) {
+	  fprintf (stderr," error: cannot open file %s\n", IN_file);
 	  exit(1);
 	}
 
@@ -1370,7 +1369,7 @@ void write_static_mfile (
 	FILE	*fpm;
 	int	i,j,n;
 	char	*wa;
-	char	IOfilename[128];
+	char	IN_file[128];
         time_t  now;            /* modern time variable type    (DJGPP) */
 
         (void) time(&now);
@@ -1378,27 +1377,27 @@ void write_static_mfile (
 	i=0;
 	j=0;
 	while (i<128) {
-		IOfilename[j] = argv[1][i];
-		if ( IOfilename[j] == '+' ||
-		     IOfilename[j] == '-' ||
-		     IOfilename[j] == '*' ||
-		     IOfilename[j] == '^' ||
-                     IOfilename[j] == '.' ||
-                     IOfilename[j] == '\0') {
-			IOfilename[j] = '_';
+		IN_file[j] = argv[1][i];
+		if ( IN_file[j] == '+' ||
+		     IN_file[j] == '-' ||
+		     IN_file[j] == '*' ||
+		     IN_file[j] == '^' ||
+                     IN_file[j] == '.' ||
+                     IN_file[j] == '\0') {
+			IN_file[j] = '_';
 			break;
 		}
 		i++;
 		j++;
 	}
-	IOfilename[++j] = '\0';
-	strcat(IOfilename,"out.m");
+	IN_file[++j] = '\0';
+	strcat(IN_file,"out.m");
 
 	wa  = "a";
 	if (lc == 1) wa = "w";
 
-	if ((fpm = fopen (IOfilename, wa)) == NULL) {
-	  fprintf (stderr," error: cannot open file %s\n", IOfilename );
+	if ((fpm = fopen (IN_file, wa)) == NULL) {
+	  fprintf (stderr," error: cannot open file %s\n", IN_file );
 	  exit(1);
 	}
 
@@ -1583,7 +1582,7 @@ create mesh data of deformed and undeformed mesh, use gnuplot	22feb99
 useful gnuplot options: set noxtics noytics noztics noborder view nokey
 ------------------------------------------------------------------------------*/
 void static_mesh(
-		char IO_file[], char meshpath[], char plotpath[],
+		char IN_file[], char meshpath[], char plotpath[],
 		char *title, int nJ, int nB, int nL, int lc, int DoF,
 		vec3 *xyz, double *L,
 		int *J1, int *J2, float *p, double *D,
@@ -1682,7 +1681,7 @@ void static_mesh(
 	 fprintf(fpm,"# M E S H   A N N O T A T I O N   F I L E \n");
 
 	 fprintf(fpm,"set title \"%s\\n", title );
-	 fprintf(fpm,"analysis file: %s ", IO_file );
+	 fprintf(fpm,"analysis file: %s ", IN_file );
 	 fprintf(fpm,"  deflection exaggeration: %.1f ", exagg );
 	 fprintf(fpm,"  load case %d of %d \"\n", lc, nL );
 
@@ -1729,7 +1728,7 @@ void static_mesh(
 	 fprintf(fpm,"pause -1\n");
 
 	 fprintf(fpm,"set title \"%s\\n", title );
-	 fprintf(fpm,"analysis file: %s ", IO_file );
+	 fprintf(fpm,"analysis file: %s ", IN_file );
 	 fprintf(fpm,"  deflection exaggeration: %.1f ", exagg );
 	 fprintf(fpm,"  load case %d of %d \"\n", lc, nL );
 
@@ -1761,7 +1760,7 @@ MODAL_MESH  -  create mesh data of the mode-shape meshes, use gnuplot	19oct98
 	 useful gnuplot options: set noxtics noytics noztics noborder view nokey
 ------------------------------------------------------------------------------*/
 void modal_mesh(
-		char IO_file[], char meshpath[], char modepath[],
+		char IN_file[], char meshpath[], char modepath[],
 		char plotpath[], char *title,
 		int nJ, int nB, int DoF, int nM,
 		vec3 *xyz, double *L,
@@ -1838,7 +1837,7 @@ void modal_mesh(
 		}
 		fprintf(fpm,"pause -1\n");
 		fprintf(fpm,"set nolabel\n");
-		fprintf(fpm,"set title '%s     mode %d     %lf Hz'\n",IO_file,m,f[m]);
+		fprintf(fpm,"set title '%s     mode %d     %lf Hz'\n",IN_file,m,f[m]);
 		fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w l ", meshpath );
 		if (!anlyz) fprintf(fpm," lw 2 lt 1 \n");
 		else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2 t 'mode-shape %d' w l lw 2 lt 3\n",
@@ -1868,7 +1867,7 @@ ANIMATE -  create mesh data of animated mode-shape meshes, use gnuplot	16dec98
 	 ... requires ImageMagick and mpeg2vidcodec packages
 ------------------------------------------------------------------------------*/
 void animate(
-	char IO_file[], char meshpath[], char modepath[], char plotpath[],
+	char IN_file[], char meshpath[], char modepath[], char plotpath[],
 	char *title,
 	int anim[],
 	int nJ, int nB, int DoF, int nM,
@@ -1953,7 +1952,7 @@ void animate(
 	 }
 
 	 fprintf(fpm,"pause -1 \n");
-	 fprintf(fpm,"set title '%s     mode %d      %lf Hz'\n",IO_file,m,f[m]);
+	 fprintf(fpm,"set title '%s     mode %d      %lf Hz'\n",IN_file,m,f[m]);
 
 	 frame_number = 0;
 	 total_frames = 2*CYCLES*frames;

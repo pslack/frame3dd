@@ -68,11 +68,21 @@ rm -rf %{buildroot}
 # changes there.
 #
 
-* Mon Feb 09 2009 Henri Gavin <john.pye@anu.edu.au> 0.20090209
- - Removed plot file, mesh file, and mode file names from input data file
-   These file names are now automatically generated.
-   The path to these file names is also automatically generated according
-   to the OS (Win32 or Linux/Unix/OSX etc)
+* Mon Feb 09 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090209
+- Removed plot file, mesh file, and mode file names from input data file
+These file names are now automatically generated.
+The path to these file names is also automatically generated according
+to the OS (Win32 or Linux/Unix/OSX etc). 
+- Removed file names for the plot file, mesh file, and mode file from
+the examples. 
+- Moved calls to output_path (for the /tmp or "TEMP" path) from main.c 
+to frame3dd_io.c
+- Changed  tpath to temppath
+- Changed output_file_location to output_path
+- Changed frame3dd.cln file name to frame3dd.frm ... clean file name
+- Input and Output are now in separate files.  The Output filename is
+automatically generated from the Input file.  The Output file recapitualtes
+the input data before writing the output data.   
 
 * Mon Feb 09 2009 John Pye <john.pye@anu.edu.au> 0.20090209
 - Added support for FRAME3DD_OUTDIR as location of output files
