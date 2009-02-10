@@ -1,6 +1,6 @@
 ______________________________________________________________________
 DUKE UNIVERSITY ---- Dept. of Civil and Environmental Engineering
-CE 131 --- Theory of Structures				Fall 2008
+CE 131 --- Theory of Structures				Spring 2009
 ______________________________________________________________________
 
 	INPUT  FILE  DESCRIPTION  FOR  PROGRAM  FRAME  --  EXAMPLE 1
@@ -30,9 +30,8 @@ EXAMPLE INPUT FILE:		COMMENTS:
 0                               0: neglect geometric stiffness, 1: include
 
 				graphical output data information:
-/tmp/frm1.msh			frame data mesh file name
-frm1.ann			frame data annotation file name
 10				deflection exageration factor
+
 1				0: check data only, 1: perform analysis
 
 1                               number of static load cases
