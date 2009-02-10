@@ -65,7 +65,7 @@ int main(int argc, char *argv[]){
 		modepath[FRAME3DD_PATHMAX] = "EMPTY_MODE", /* mode data path */
 		temppath[FRAME3DD_PATHMAX] = "EMPTY_TEMP"; /* temp data path */
 
-	FILE	*fp;		/* input and output file pointe		*/
+	FILE	*fp;		/* input and output file pointer	*/
 
 	vec3	*xyz;		/* X,Y,Z joint coordinates (global)	*/
 
@@ -164,7 +164,7 @@ int main(int argc, char *argv[]){
 
 	temp_file_location("frame3dd.frm",temppath,FRAME3DD_PATHMAX);
 
-	parse_input(fp, temppath);
+	parse_input(fp, temppath);	/* strip comments from input data */
 	fclose(fp);
 
 	/*open clean input file*/
@@ -179,16 +179,16 @@ int main(int argc, char *argv[]){
 	fscanf(fp, "%d", &nJ );		/* number of joints	*/
 	printf(" number of joints "); dots(35); printf(" nJ = %3d",nJ);
 
-					/* allocate memory for joints ... */
-	xyz = (vec3 *)malloc(sizeof(vec3)*(1+nJ));	/* joint coordinates */
+					/* allocate memory for joint data ... */
 	r   =  vector(1,nJ);		/* rigid radius around each joint */
+	xyz = (vec3 *)malloc(sizeof(vec3)*(1+nJ));	/* joint coordinates */
 
 	read_joint_data ( fp, nJ, xyz, r );
 	printf("  ... complete\n");
 
 	DoF = 6*nJ;		/* total number of degrees of freedom	*/
 
-	R   = ivector(1,DoF);	/* reaction force at each degree of freedom */
+	R   = ivector(1,DoF);	/* allocate memory for reaction data ... */
 	read_reaction_data ( fp, DoF, nJ, &nR, R, &sumR );
 	printf("  ... complete\n");
 
@@ -217,17 +217,13 @@ int main(int argc, char *argv[]){
 	G   =  vector(1,nB);	/* beam element shear modulus		*/
 	p   =  vector(1,nB);	/* member rotation angle about local x axis */
 
-	read_beam_data( fp, nJ, nB, xyz,r,
-			L, Le, J1, J2,
-			Ax, Asy, Asz, J, Iy, Iz, E, G, p
-	);
+	read_beam_data( fp, nJ, nB, xyz,r, L, Le, J1, J2,
+			Ax, Asy, Asz, J, Iy, Iz, E, G, p );
 	printf("  ... complete\n");
 
 
-	read_run_data (
-		fp, IN_file, OUT_file, &shear, &geom,
-		meshpath, plotpath, &exagg, &anlyz
-	);
+	read_run_data ( fp, IN_file, OUT_file, &shear, &geom,
+			meshpath, plotpath, &exagg, &anlyz );
 
 	fscanf(fp, "%d", &nL );		/* number of load cases		*/
 	printf(" number of load cases "); dots(31); printf(" nL = %3d\n",nL);
@@ -272,12 +268,12 @@ int main(int argc, char *argv[]){
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
 
 
-	read_and_assemble_loads(
-		fp, nJ, nB, nL, DoF, xyz, L, Le, J1, J2,
-		Ax,Asy,Asz, Iy,Iz, E, G, p, R, shear,
-		nF, nW, nP, nT, nD,
-		Q, Fo_mech, Fo_temp, W, P, T, Dp, feF_mech, feF_temp
-	);
+	read_and_assemble_loads( fp, nJ, nB, nL, DoF, xyz, L, Le, J1, J2,
+				Ax,Asy,Asz, Iy,Iz, E, G, p, R, shear,
+				nF, nW, nP, nT, nD,
+				Q, Fo_mech, Fo_temp, W, P, T,
+				Dp, feF_mech, feF_temp );
+
 	for (i=1; i<=DoF; i++){
 		for (lc=1; lc<=nL; lc++){
 			Fo[lc][i] = Fo_temp[lc][i] + Fo_mech[lc][i];
@@ -286,33 +282,29 @@ int main(int argc, char *argv[]){
 	printf("                                                     ");
 	printf(" load data ... complete\n");
 
-	read_mass_data(
-		fp, IN_file, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz, L, Ax,
-		&total_mass, &struct_mass, &nM, &Mmethod,
-		&lump, modepath, &tol, &shift, anim, &pan
-	);
+	read_mass_data( fp, IN_file, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz,
+			L, Ax, &total_mass, &struct_mass, &nM, &Mmethod,
+			&lump, modepath, &tol, &shift, anim, &pan );
 	printf("                                                     ");
 	printf(" mass data ... complete\n");
 
 	read_condensation_data( fp, nJ, nM, &nC, &Cdof, &Cmethod, q, m );
 
-	if(nC>0){
-        printf("                                      ");
+	if(nC>0) {
+		printf("                                      ");
 		printf(" matrix condensation data ... complete\n");
 	}
 
 	fclose(fp);
-	fp = fopen(OUT_file, "a");     /* output appends input */
+	fp = fopen(OUT_file, "a");     /* append output to any previous output */
 	if(fp==NULL){
 		fprintf(stderr,"Unable to append to output file '%s'!\n",OUT_file);
 		exit(1);
 	}
 
-	write_input_data (
-		fp, title, nJ,nB,nL, nD,nR, nF,nW,nP,nT,
-		xyz, r, J1,J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p,
-		Fo, Dp, R, W, P, T, shear, anlyz, geom
-	);
+	write_input_data ( fp, title, nJ,nB,nL, nD,nR, nF,nW,nP,nT,
+				xyz, r, J1,J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p,
+				Fo, Dp, R, W, P, T, shear, anlyz, geom );
 
 	if (anlyz) {				/* solve the problem	*/
 		for (lc=1; lc<=nL; lc++) {		/* begin load case loop	*/
@@ -328,7 +320,7 @@ int main(int argc, char *argv[]){
 			save_dmatrix ( DoF, DoF, K, "Kf" );	     /* free stiffness matrix */
 #endif
 
-	  /* apply temperature loads first ... */
+			/* apply temperature loads first ... */
 			if (nT[lc] > 0) {
 				fprintf(stderr," Linear Elastic Analysis ... Temperature Loads\n");
 				apply_reactions ( DoF, R, Dp[lc], Fo_temp[lc], F, K, 't' );
@@ -458,9 +450,8 @@ int main(int argc, char *argv[]){
 		f   = dvector(1,nM_calc);
 		V   = dmatrix(1,DoF,1,nM_calc);
 
-		assemble_M(M, DoF, nJ, nB, xyz, r, L, J1,J2, Ax, J,Iy,Iz, p,
-				d, BMs, JMs, JMx, JMy, JMz, lump
-		);
+		assemble_M ( M, DoF, nJ, nB, xyz, r, L, J1,J2,
+				Ax, J,Iy,Iz, p, d, BMs, JMs, JMx, JMy, JMz, lump );
 
 #ifdef MATRIX_DEBUG
 		save_dmatrix ( DoF, DoF, M, "Mf" );	/* free mass matrix */
@@ -503,10 +494,10 @@ int main(int argc, char *argv[]){
 
 	if(nM > 0 && anlyz){
 
-		modal_mesh(IN_file, meshpath, modepath, plotpath, title,
-		       nJ,nB, DoF, nM, xyz, L, J1,J2, p, M,f,V,exagg,anlyz);
-		animate(IN_file, meshpath, modepath, plotpath, title,anim,
-		       nJ,nB, DoF, nM, xyz, L, p, J1,J2, f,V, exagg, pan );
+		modal_mesh ( IN_file, meshpath, modepath, plotpath, title,
+			nJ,nB, DoF, nM, xyz, L, J1,J2, p, M,f,V,exagg,anlyz);
+		animate ( IN_file, meshpath, modepath, plotpath, title,anim,
+			nJ,nB, DoF, nM, xyz, L, p, J1,J2, f,V, exagg, pan );
 	}
 
 	if(nC > 0){		/* matrix condensation of stiffness and mass */

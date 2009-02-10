@@ -31,7 +31,7 @@
 #include "microstran/vec3.h"
 
 /* maximum number of load cases */
-#define _NL_ 128
+#define _NL_ 64
 
 
 /** form the global stiffness matrix */

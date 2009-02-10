@@ -1122,7 +1122,7 @@ exagg                               % exaggerate deformations
 anlyz                               % 1: stiffness analysis; 0: data check only
 
 % load data ...
-nL                                     % number of static load cases, up to 127
+nL                                     % number of static load cases, up to 63
 % begin static load case 1 ---------------------------------------------------
 nF                                                    % number of loaded joints
   J[1]    Fx[1]   Fy[1]   Fz[1]   Mxx[1]  Myy[1]  Mzz[1]
@@ -1177,7 +1177,7 @@ nD                             % number of joints with prescribed displacements
   J[nD]  Dx[nD] Dy[nD] Dz[nD] Dxx[nD] Dyy[nD] Dzz[nD]
 %  end  static load case 2 -------------------------------------------------
 
-% repeat the static load data nL times ... up to 127 static load cases
+% repeat the static load data nL times ... up to 63 static load cases
 
 
 % dynamic analysis data ...
