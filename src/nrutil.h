@@ -96,12 +96,12 @@ void show_dvector(int n, double *A);
 void show_matrix(int m, int n, float **A);
 void show_dmatrix(int m, int n, double **A);
 
-void save_vector(int n, float *V, char file[]);
-void save_ivector(int n, int *V, char file[]);
-void save_matrix (int m, int n, float **A, char file[]);
-void save_dmatrix (int m, int n, double **A, char file[]);
-void save_ut_matrix (int n, float **A, char file[]);
-void save_ut_dmatrix (int n, double **A, char file[]);
+void save_vector(int n, float *V, char filename[]);
+void save_ivector(int n, int *V, char filename[]);
+void save_matrix (int m, int n, float **A, char filename[]);
+void save_dmatrix (int m, int n, double **A, char filename[]);
+void save_ut_matrix (int n, float **A, char filename[]);
+void save_ut_dmatrix (int n, double **A, char filename[]);
 
 
 #else /* ANSI */

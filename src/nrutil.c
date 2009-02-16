@@ -1,12 +1,7 @@
 /** @file
 	Memory allocation functions from Numerical Recipes in C, by Press,
 	Cambridge University Press, 1988
-
-	From http://www.nr.com/public-domain.html:
-	"In general, the Numerical Recipes routines are NOT in the public domain,
-	and are NOT available for use without a valid license. However, a few
-	small parts of Numerical Recipes have been put into the public domain. 
-	These can be freely copied and redistributed." 
+	http://www.nr.com/public-domain.html
 */
 
 
@@ -815,20 +810,16 @@ void show_dmatrix ( int m, int n, double **A )
 /*---------------------------------------------------------------------------
 SAVE_VECTOR  -  save a vector of dimension [1..n] to the named file 
 ----------------------------------------------------------------------------*/
-void save_vector( int n, float *V, char file[] )
+void save_vector( int n, float *V, char filename[] )
 {
 	FILE    *fp_v;
 	int     i;
 	void	exit();
 
-	if ((fp_v = fopen (file, "w")) == NULL) {
-		printf (" error: cannot open file: %s \n", file );
+	if ((fp_v = fopen (filename, "w")) == NULL) {
+		printf (" error: cannot open file: '%s' \n", filename );
 		exit(1);
 	}
-	fprintf(fp_v,"%% name: %s\n", file );
-	fprintf(fp_v,"%% type: matrix\n");
-	fprintf(fp_v,"%% rows: %d\n", n );
-	fprintf(fp_v,"%% columns: 1\n");
 	for (i=1; i <= n; i++) {
 		if (V[i] != 0)	fprintf(fp_v,"%15.6e", V[i] );
 		else		fprintf(fp_v,"    0         ");         
@@ -841,20 +832,16 @@ void save_vector( int n, float *V, char file[] )
 /*---------------------------------------------------------------------------
 SAVE_DVECTOR  -  save an integer vector of dimension [1..n] to the named file 
 ----------------------------------------------------------------------------*/
-void save_ivector( int n, int *V, char file[] )
+void save_ivector( int n, int *V, char filename[] )
 {
 	FILE    *fp_v;
 	int     i;
 	void	exit();
 
-	if ((fp_v = fopen (file, "w")) == NULL) {
-		printf (" error: cannot open file: %s \n", file );
+	if ((fp_v = fopen (filename, "w")) == NULL) {
+		printf (" error: cannot open file: '%s' \n", filename );
 		exit(1);
 	}
-	fprintf(fp_v,"%% name: %s\n", file );
-	fprintf(fp_v,"%% type: matrix\n");
-	fprintf(fp_v,"%% rows: %d\n", n );
-	fprintf(fp_v,"%% columns: 1\n");
 	for (i=1; i <= n; i++) {
 		if (V[i] != 0)	fprintf(fp_v,"%14d", V[i] );
 		else		fprintf(fp_v,"   0         ");         
@@ -867,20 +854,16 @@ void save_ivector( int n, int *V, char file[] )
 /*---------------------------------------------------------------------------
 SAVE_MATRIX  -  save a matrix of dimension [1..m][1..n] to the named file
 ----------------------------------------------------------------------------*/
-void save_matrix ( int m, int n, float **A, char file[] )
+void save_matrix ( int m, int n, float **A, char filename[] )
 {
 	FILE    *fp_m;
 	int     i,j;
 	void	exit();
 
-	if ((fp_m = fopen (file, "w")) == NULL) {
-		printf (" error: cannot open file: %s \n", file );
+	if ((fp_m = fopen (filename, "w")) == NULL) {
+		printf (" error: cannot open file: %s \n", filename );
 		exit(1);
 	}
-	fprintf(fp_m,"%% name: %s\n", file );
-	fprintf(fp_m,"%% type: matrix\n");
-	fprintf(fp_m,"%% rows: %d\n", m );
-	fprintf(fp_m,"%% columns: %d\n", n);
 	for (i=1; i <= m; i++) {
 		for (j=1; j <= n; j++) {
 			if (A[i][j] != 0) fprintf(fp_m,"%15.6e", A[i][j] );
@@ -896,20 +879,16 @@ void save_matrix ( int m, int n, float **A, char file[] )
 /*---------------------------------------------------------------------------
 SAVE_DMATRIX  - save a matrix of dimension [1..m][1..n] to the named file
 ----------------------------------------------------------------------------*/
-void save_dmatrix ( int m, int n, double **A, char file[] )
+void save_dmatrix ( int m, int n, double **A, char filename[] )
 {
 	FILE    *fp_m;
 	int     i,j;
 	void	exit();
 
-	if ((fp_m = fopen (file, "w")) == NULL) {
-		printf (" error: cannot open file: %s \n", file );
+	if ((fp_m = fopen (filename, "w")) == NULL) {
+		printf (" error: cannot open file: %s \n", filename );
 		exit(1);
 	}
-	fprintf(fp_m,"%% name: %s\n", file );
-	fprintf(fp_m,"%% type: matrix\n");
-	fprintf(fp_m,"%% rows: %d\n", m );
-	fprintf(fp_m,"%% columns: %d\n", n);
 	for (i=1; i <= m; i++) {
 		for (j=1; j <= n; j++) {
 			if (fabs(A[i][j]) > 1.e-99) fprintf(fp_m,"%21.12e", A[i][j] );
@@ -927,20 +906,16 @@ SAVE_UT_MATRIX  - 						     23apr01
  save a symmetric matrix of dimension [1..n][1..n] to the named file 
  use only upper-triangular part
 ----------------------------------------------------------------------------*/
-void save_ut_matrix ( int n, float **A, char file[] )
+void save_ut_matrix ( int n, float **A, char filename[] )
 {
 	FILE    *fp_m;
 	int     i,j;
         void	exit();
 
-	if ((fp_m = fopen (file, "w")) == NULL) {
-		printf (" error: cannot open file: %s \n", file );
+	if ((fp_m = fopen (filename, "w")) == NULL) {
+		printf (" error: cannot open file: %s \n", filename );
 		exit(1);
 	}
-	fprintf(fp_m,"%% name: %s\n", file );
-	fprintf(fp_m,"%% type: matrix\n");
-	fprintf(fp_m,"%% rows: %d\n", n );
-	fprintf(fp_m,"%% columns: %d\n", n);
 	for (i=1; i <= n; i++) {
 	  for (j=1; j <= n; j++) {
 		if ( i > j ) {
@@ -962,20 +937,16 @@ SAVE_UT_DMATRIX  - 						23apr01
   save a symetric matrix of dimension [1..n][1..n] to the named file 
   use only upper-triangular part
 ----------------------------------------------------------------------------*/
-void save_ut_dmatrix ( int n, double **A, char file[] )
+void save_ut_dmatrix ( int n, double **A, char filename[] )
 {
 	FILE    *fp_m;
 	int     i,j;
         void	exit();
 
-	if ((fp_m = fopen (file, "w")) == NULL) {
-		printf (" error: cannot open file: %s \n", file );
+	if ((fp_m = fopen (filename, "w")) == NULL) {
+		printf (" error: cannot open file: %s \n", filename );
 		exit(1);
 	}
-	fprintf(fp_m,"%% name: %s\n", file );
-	fprintf(fp_m,"%% type: matrix\n");
-	fprintf(fp_m,"%% rows: %d\n", n );
-	fprintf(fp_m,"%% columns: %d\n", n);
 	for (i=1; i <= n; i++) {
 	  for (j=1; j <= n; j++) {
 		if ( i > j ) {
