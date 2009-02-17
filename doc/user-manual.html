@@ -627,8 +627,8 @@ Each joint has six degrees of freedom: three translations
 in the global <i>X</i>, <i>Y</i>, and <i>Z</i> directions and three rotations about the
 global <i>X</i>, <i>Y</i>, and <i>Z</i> axes.
 Optionally,
-joints may be modelled as "rigid" within a sphere of radius <i>r</i>.
-The effects of finite joint sizes are modelled approximately
+joints may be modeled as "rigid" within a sphere of radius <i>r</i>.
+The effects of finite joint sizes are modeled approximately
 in the calculation of beam stiffness  
 through the use of an <i>effective beam length</i>, which is the joint-to-joint
 length of the beam less the rigid radii on each end.
@@ -637,12 +637,14 @@ finite joint sizes, and are based on joint-to-joint lengths only.
 </p>
 
 <p>
-The support conditions of the structural
-frame are specified by fixing the degrees of freedom aligned
-with the reaction forces.   Displacements at the fixed reactions
-are either zero, or may be prescribed.  Static reaction forces are
-computed and are written in the Output Data.
-Elastic support conditions may be specified by additional elements
+Support conditions are modeled by fixing the degrees of freedom aligned
+with the reaction forces. 
+By default, displacements at the fixed degrees of freedom are zero. 
+Optionally, displacements at the fixed degrees of freedom may be prescribed
+as a type of loading.
+Static reaction forces at the fixed degrees of freedom are
+computed and are appended to the Output Data file.
+Elastic support conditions may be modeled by additional elements
 with the desired flexibility.
 </p>
 
@@ -650,14 +652,13 @@ with the desired flexibility.
 
 
 <p>
-     Cross-sectional properties of beams and bars are specified in a local
-     coordinate system, in which the <i>x</i>-axis of the local coordinate system
-     is oriented along the axis of the beam or bar element.  <i>Ax</i> is the
-     cross-sectional area of the beam or bar, which is given as the area
-     perpendicular to its local <i>x</i>-axis.   The local <i>y</i>-axis and <i>z</i>-axis are aligned
-     with the principle directions of the cross section.  The bending moments
-     of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of inertia for
-     the cross section.
+Cross-sectional properties of beams and bars are specified in a local
+coordinate system, in which the <i>x</i>-axis of the local coordinate system
+is oriented along the axis of the beam or bar element.  <i>Ax</i> is the
+cross-sectional area of the beam or bar, which is given as the area
+perpendicular to its local <i>x</i>-axis.   The local <i>y</i>-axis and <i>z</i>-axis are aligned
+with the principle directions of the cross section.  The bending moments
+of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of inertia for the cross section.
 </p>
 
 <!--
