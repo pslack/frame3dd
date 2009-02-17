@@ -815,11 +815,17 @@ void save_vector( int n, float *V, char filename[] )
 	FILE    *fp_v;
 	int     i;
 	void	exit();
+	time_t	now;
 
 	if ((fp_v = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: '%s' \n", filename );
 		exit(1);
 	}
+        (void) time(&now);
+	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_v,"%% type: vector\n");
+	fprintf(fp_v,"%% rows: %d\n", 1 );
+	fprintf(fp_v,"%% columns: %d\n", n );
 	for (i=1; i <= n; i++) {
 		if (V[i] != 0)	fprintf(fp_v,"%15.6e", V[i] );
 		else		fprintf(fp_v,"    0         ");         
@@ -837,13 +843,19 @@ void save_ivector( int n, int *V, char filename[] )
 	FILE    *fp_v;
 	int     i;
 	void	exit();
+	time_t	now;
 
 	if ((fp_v = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: '%s' \n", filename );
 		exit(1);
 	}
+        (void) time(&now);
+	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_v,"%% type: vector\n");
+	fprintf(fp_v,"%% rows: %d\n", 1 );
+	fprintf(fp_v,"%% columns: %d\n", n );
 	for (i=1; i <= n; i++) {
-		if (V[i] != 0)	fprintf(fp_v,"%14d", V[i] );
+		if (V[i] != 0)	fprintf(fp_v,"%15.6e", V[i] );
 		else		fprintf(fp_v,"   0         ");         
 		fprintf(fp_v,"\n");
 	}
@@ -859,11 +871,17 @@ void save_matrix ( int m, int n, float **A, char filename[] )
 	FILE    *fp_m;
 	int     i,j;
 	void	exit();
+	time_t	now;
 
 	if ((fp_m = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: %s \n", filename );
 		exit(1);
 	}
+        (void) time(&now);
+	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_v,"%% type: matrix \n");
+	fprintf(fp_v,"%% rows: %d\n", m );
+	fprintf(fp_v,"%% columns: %d\n", n );
 	for (i=1; i <= m; i++) {
 		for (j=1; j <= n; j++) {
 			if (A[i][j] != 0) fprintf(fp_m,"%15.6e", A[i][j] );
@@ -884,11 +902,17 @@ void save_dmatrix ( int m, int n, double **A, char filename[] )
 	FILE    *fp_m;
 	int     i,j;
 	void	exit();
+	time_t	now;
 
 	if ((fp_m = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: %s \n", filename );
 		exit(1);
 	}
+        (void) time(&now);
+	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_v,"%% type: matrix \n");
+	fprintf(fp_v,"%% rows: %d\n", m );
+	fprintf(fp_v,"%% columns: %d\n", n );
 	for (i=1; i <= m; i++) {
 		for (j=1; j <= n; j++) {
 			if (fabs(A[i][j]) > 1.e-99) fprintf(fp_m,"%21.12e", A[i][j] );
@@ -911,11 +935,17 @@ void save_ut_matrix ( int n, float **A, char filename[] )
 	FILE    *fp_m;
 	int     i,j;
         void	exit();
+	time_t	now;
 
 	if ((fp_m = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: %s \n", filename );
 		exit(1);
 	}
+        (void) time(&now);
+	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_v,"%% type: matrix \n");
+	fprintf(fp_v,"%% rows: %d\n", n );
+	fprintf(fp_v,"%% columns: %d\n", n );
 	for (i=1; i <= n; i++) {
 	  for (j=1; j <= n; j++) {
 		if ( i > j ) {
@@ -942,11 +972,17 @@ void save_ut_dmatrix ( int n, double **A, char filename[] )
 	FILE    *fp_m;
 	int     i,j;
         void	exit();
+	time_t	now;
 
 	if ((fp_m = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: %s \n", filename );
 		exit(1);
 	}
+        (void) time(&now);
+	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_v,"%% type: matrix \n");
+	fprintf(fp_v,"%% rows: %d\n", n );
+	fprintf(fp_v,"%% columns: %d\n", n );
 	for (i=1; i <= n; i++) {
 	  for (j=1; j <= n; j++) {
 		if ( i > j ) {
