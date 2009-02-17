@@ -25,6 +25,28 @@
 
 #include "coordtrans.h"
 
+/* -------------------------------------------------------------------------
+COORD_TRANS - calculate the 9 elements of the block-diagonal 12-by-12
+coordinate transformation matrix, t1, t2, ..., t9.  
+
+These coordinate transformation factors are used to:
+* transform frame element end forces from the element (local) coordinate system 
+to the structral (global) coordinate system.  
+* transfrom end displacements from the structural (global) coordinate system
+to the element (local) coordinate system,
+* transform the frame element stiffness and mass matrices
+from element (local) coordinates to structral (global) coordinates.
+
+Element matrix coordinate transformations are carried out by function ATMA
+in frame3dd.c
+
+Currently coordinate transformations do not consider the effect of 
+finite joint sizes ... this needs work, and could require a substantial
+re-write of much of the code.  
+
+Currently the effect of finite joint sizes is used only in the calculation
+of the element stiffness matrices.  
+------------------------------------------------------------------------- */
 void coord_trans(
 		vec3 *xyz,
 		double L,

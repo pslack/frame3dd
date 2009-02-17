@@ -827,6 +827,8 @@ void atma(
 		a[3*i+3][3*i+3] = t9;
 	}
 
+/* effect of finite joint radius on coordinate transformation  ... */
+/* this needs work ... */
 /*
 	a[5][1] =  r1*t7; 
 	a[5][2] =  r1*t8; 
