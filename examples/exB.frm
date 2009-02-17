@@ -1,13 +1,14 @@
-Example B: a pyramid-shaped frame --- static and dynamic analysis
+Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 
 5				% number of joints 
 %.joint  x       y       z       r
+%        mm      mm      mm      mm
 
-1	0.0	0.0	100.0	0.0
-2	-120.0	-90.0	0.0	0.0	
-3	 120.0	-90.0	0.0	0.0	
-4	 120.0	 90.0	0.0	0.0	
-5	-120.0	 90.0	0.0	0.0	
+1	0.0	0.0	1000	0.0
+2	-1200	-900	0.0	0.0	
+3	 1200	-900	0.0	0.0	
+4	 1200	 900	0.0	0.0	
+5	-1200	 900	0.0	0.0	
 
 4                               % number of joints with reactions
 %.J     x y z xx yy zz          1=fixed, 0=free
@@ -19,11 +20,12 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
 
 4				% number of members			
 %.m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz         E      G   p
+%         mm^2  mm^2    mm^2    mm^4    mm^4    mm^4    N/mm^2  N/mm^2 deg.
 
-1 1 2	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
-2 1 3	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
-3 1 4	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
-4 1 5	10.	8.0	8.0	500.0	300.0	200.0	1000.0	700.0  0
+1 1 2	36.0	20.0	20.0	1000 	492 	492	200000	79300  0
+2 1 3	36.0	20.0	20.0	1000	492 	492	200000	79300  0
+3 1 4	36.0	20.0	20.0	1000	492 	492	200000	79300  0
+4 1 5	36.0	20.0	20.0	1000	492 	492	200000	79300  0
 
  
 1                               % 1: include shear deformation
@@ -35,7 +37,8 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
 				% Begin Static Load Case 1 of 3
 1				% number of loaded joints
 %.J      Fx       Fy     Fz      Mxx     Myy     Mzz
- 1	10.00	-20.00	-100	0.0	0.0	0.0
+%        N        N      N       N.mm    N.mm    N.mm
+ 1	10000	-20000	-1000	0.0	0.0	0.0
 0                               % number of distributed loads
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
@@ -46,12 +49,14 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
 0				% number of loaded joints
 2                               % number of distributed loads
 %.M    Wx   Wy   Wz
-  2    0    0.1  0
-  1    0    0    0.1
+%     N/mm N/mm N/mm
+  2    0   0.1    0
+  1    0    0    0.1 
 0                               % number of internal concentrated loads
 1                               % number of members with temperature loads
 %.M  alpha   hy   hz   Ty+  Ty-  Tz+  Tz-
-1   1e-4    1.5  1.5  80   20   30  -10
+%    /degC   mm   mm   degC degC degC degC
+1   12e-6    10   10  20   10   10  -10
 0                               % number of joints with support settlements
 				% End   Static Load Case 2 of 3
 
@@ -59,9 +64,10 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
 0				% number of loaded joints
 0                               % number of distributed loads
 2                               % number of internal concentrated loads
-%.M    Px   Py   Pz   x    
-  1    0    10   -90  30
-  2    0   -20    20  30
+%.M    Px   Py    Pz   x    
+%      N    N     N    mm
+  1    0    100  -900  30
+  2    0   -200   200  30
 0                               % number of members with temperature loads
 0                               % number of joints with support settlements
 				% End   Static Load Case 3 of 3
@@ -73,16 +79,21 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis
 1e-4				% mode shape tolerance
 0.0				% shift value ... for unrestrained structures
 
-1       7.e-5   0.0		% beam numbers, density, and extra beam mass 
-2       7.e-5   0.0
-3       7.e-5   0.0
-4       7.e-5   0.0
+%.M     density   mass     
+%       ton/mm^3  ton
+1       7.85e-9   0.0		% beam numbers, density, and extra beam mass 
+2       7.85e-9   0.0
+3       7.85e-9   0.0
+4       7.85e-9   0.0
 
-0                               % number of joints with extra inertia
-%.j      M      Ixx     Iyy     Izz -  joints and concentrated mass and inertia
+% joints and concentrated mass and inertia
+1                               % number of joints with extra inertia
+%.j      M      Ixx      Iyy      Izz 
+%        ton    ton.mm^2 ton.mm^2 ton.mm^2
+1        0.1    0        0        0
 
 6				% number of modes to animate
  1  2  3  4 5 6 		% modes to animate
-1                               % pan during animation
+2                               % pan rate during animation
 
 

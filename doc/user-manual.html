@@ -1223,7 +1223,7 @@ nI                          % number of joints with extra joint mass or inertia
 % graphical animation data ...
 nA                                    % number of modes to be animated
  anim[0] ... anim[nA] % list of modes to be animated, sorted by increasing freq.
-pan                                         % 1: pan during animation; 0: don't
+pan                                         % pan rate during animation
 
 % matrix condensation data ...
 Cmethod % matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
@@ -1302,7 +1302,7 @@ nC                                                % number of condensed joints
        nT        - number of frame elements with Temperature changes
        nW        - number of distributed loads
        p         - the roll angle of the beam element, in degrees
-       pan       - 1: pan the camera view during animation,  0: don't
+       pan       - the pan rate of the view point during animation
        Px        - concentrated point load in the local x direction
        Py        - concentrated point load in the local y direction
        Pz        - concentrated point load in the local z direction

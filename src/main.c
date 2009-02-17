@@ -80,7 +80,8 @@ int main(int argc, char *argv[]){
 		**Dp,		/* prescribed joint displacements	*/
 		*d, *BMs,	/* member densities and extra inertia	*/
 		*JMs, 		/* mass of a joint			*/
-		*JMx,*JMy,*JMz;	/* inertia of a joint in global coord	*/
+		*JMx,*JMy,*JMz,	/* inertia of a joint in global coord	*/
+		pan=1.0;	/* >0: pan during animation; 0: don't	*/
 
 	double	**K, **Ks,	/* global stiffness matrix		*/
 		traceK = 0.0,	/* trace of the global stiffness matrix	*/
@@ -133,7 +134,6 @@ int main(int argc, char *argv[]){
 		iter=0,		/* number of iterations			*/
 		ok=1,		/* number of (-ve) diag. terms of L D L' */
 		anim[20],	/* the modes to be animated		*/
-		pan=1,		/* 1: pan during animation; 0: don't	*/
 		Cdof=0,		/* number of condensed degrees o freedom*/
 		Cmethod=0,	/* matrix condensation method		*/
 		*q,		/* vector of DoF's to condense		*/

@@ -1,8 +1,8 @@
-Example E: a three dimensional structure showing lateral-torsional dynamic modes
+Example E: a three dimensional structure showing lateral-torsional dynamic modes(units: kip, in)
 
 12			% number of joints
 %.joint  x       y       z       r
-
+%        in      in      in      in
 
    1     0       0       0       0
    2    72       0       0       0
@@ -25,35 +25,37 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 
 15			% number of members
 %.m     j1     j2      Ax      Asy   Asz      Jxx    Iyy    Izz    E      G     p
+%                      in^2    in^2  in^2     in^4   in^4   in^4   ksi    ksi   deg
 
-  1      1      2      1100    800   800      1000    500    500   999000 11100 0
-  2      2      3      1100    800   800      1000    500    500   999000 11100 0
-  3      3      4      1100    800   800      1000    500    500   999000 11100 0
-  4      4      5      1100    800   800      1000    500    500   999000 11100 0
-  5      5      6      1100    800   800      1000    500    500   999000 11100 0
-  6      6      7      1100    800   800      1000    500    500   999000 11100 0
-  7      7      8      1100    800   800      1000    500    500   999000 11100 0
-  8      8      1      1100    800   800      1000    500    500   999000 11100 0
-  9      9      1      1100    800   800       001    110    110    29000 11100 0
- 10     10      3      1100    800   800       001    110    110    29000 11100 0
- 11     11      6      1100    800   800       001    110    110    29000 11100 0
- 12     12      2      1100    800   800      1000    500    500   999000 11100 0
- 13     12      4      1100    800   800      1000    500    500   999000 11100 0
- 14     12      6      1100    800   800      1000    500    500   999000 11100 0
- 15     12      8      1100    800   800      1000    500    500   999000 11100 0
+  1      1      2      1100    800   800      1000    500    500   999000 11500 0
+  2      2      3      1100    800   800      1000    500    500   999000 11500 0
+  3      3      4      1100    800   800      1000    500    500   999000 11500 0
+  4      4      5      1100    800   800      1000    500    500   999000 11500 0
+  5      5      6      1100    800   800      1000    500    500   999000 11500 0
+  6      6      7      1100    800   800      1000    500    500   999000 11500 0
+  7      7      8      1100    800   800      1000    500    500   999000 11500 0
+  8      8      1      1100    800   800      1000    500    500   999000 11500 0
+  9      9      1      1100    800   800       001    110    110    29000 11500 0
+ 10     10      3      1100    800   800       001    110    110    29000 11500 0
+ 11     11      6      1100    800   800       001    110    110    29000 11500 0
+ 12     12      2      1100    800   800      1000    500    500   999000 11500 0
+ 13     12      4      1100    800   800      1000    500    500   999000 11500 0
+ 14     12      6      1100    800   800      1000    500    500   999000 11500 0
+ 15     12      8      1100    800   800      1000    500    500   999000 11500 0
   
 
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
-20.0                            % exaggerate mesh deformations
+10.0                            % exaggerate mesh deformations
 1                               % 1: stiffness analysis, 0: data check only
 
 
 1			% number of static load cases
 				% Begin Static Load Case 1 of 1
 1                               % number of loaded joints
-%..J       Fx Fy   Fz   Mxx  Myy  Mzz
-   3        0  1  -10   0    0    0
+%..J       Fx Fy    Fz   Mxx  Myy  Mzz
+%          k  k     k    k.in k.in k.in
+   3       0  100  -100   0    0    0
 
 0                               % number of distributed loads
 0                               % number of internal concentrated loads
@@ -69,25 +71,28 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 1.0                             % shift value ... for unrestrained structures
 
 
-  1     7.32e-19    0		% bar numbers, density, and extra mass
-  2     7.32e-19    0
-  3     7.32e-19    0
-  4     7.32e-19    0
-  5     7.32e-19    0
-  6     7.32e-19    0
-  7     7.32e-19    0
-  8     7.32e-19    0
-  9     7.32e-19    0
- 10     7.32e-19    0
- 11     7.32e-19    0
- 12     7.32e-19    0
- 13     7.32e-19    0
- 14     7.32e-19    0
- 15     7.32e-19    0
+%.M     density    mass
+%       k/in^3     kip
+  1     7.324e-7    0.0		% bar numbers, density, and extra mass
+  2     7.324e-7    0.0
+  3     7.324e-7    0.0
+  4     7.324e-7    0.0
+  5     7.324e-7    0.0
+  6     7.324e-7    0.0
+  7     7.324e-7    0.0
+  8     7.324e-7    0.0
+  9     7.324e-7    0.0
+ 10     7.324e-7    0.0
+ 11     7.324e-7    0.0
+ 12     7.324e-7    0.0
+ 13     7.324e-7    0.0
+ 14     7.324e-7    0.0
+ 15     7.324e-7    0.0
 
 1                                 % number of joints with extra mass or inertia
 %.j     M       Ixx      Iyy      Izz - joints and concentrated mass and inertia
- 12     3.388     0        0        839.37
+%       kip     k.in^2   k.in^2   k.in^2
+ 12     3.388     0        0      839.37
 
 
 4                               % number of modes to animate

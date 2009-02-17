@@ -153,7 +153,7 @@ void read_mass_data(
 	double *tol,	/**< convergence tolerance for mode shapes	*/
 	double *shift,	/**< frequency shift for unrestrained frames	*/
 	int *anim,	/**< list of modes to be graphically animated	*/
-	int *pan 	/**< 1: pan viewpoint during animation, 0: don't */
+	float *pan 	/**< 1: pan viewpoint during animation, 0: don't */
 );
 
 
@@ -281,7 +281,7 @@ void animate(
 	int nJ, int nB, int DoF, int nM,
 	vec3 *xyz, double *L, float *p,
 	int *J1, int *J2, double *f, double **V,
-	double exagg, int pan
+	double exagg, float pan
 );
 
 
