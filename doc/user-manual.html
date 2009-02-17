@@ -703,6 +703,13 @@ by A. Kassimali.
 </p>
 
 <p>
+The effect of finite joint sizes is currently used only in the calculation
+of the element stiffness matrices.  
+Coordinate transformations do not currently consider the effect of 
+finite joint sizes. 
+</p>
+
+<p>
 To analyze a structure as a "truss" with this software, specify <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>
 to be much smaller than they would be normally, but not zero.   If the shear forces and bending
 moments in your structural elements are extremely small, then your structural model
@@ -819,6 +826,10 @@ Moment-free conditions can be modeled explicitely only at pinned reactions.
 Internal hinges may be modeled using a short element with
 low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>.
 Beams may be considered infinitely rigid within a sphere of a specified radius around a joint.
+The effect of finite joint sizes is currently used only in the calculation
+of the element stiffness matrices
+Coordinate transformations do not currently consider the effect of 
+finite joint sizes.  
 </p>
 
 
