@@ -625,7 +625,16 @@ Modal analysis results are not (yet) written to the .CSV formatted output file.
 <p>
 Each joint has six degrees of freedom: three translations
 in the global X, Y, and Z directions and three rotations about the
-global X, Y, and Z axes.    The support conditions of the structural
+global X, Y, and Z axes.
+Joints may be considered to be "rigid" within a sphere of radius <t>r</t>.
+The effect of finite joint sizes is currently used in the calculation
+of the element stiffness matrices.  
+Coordinate transformations do not currently consider the effect of 
+finite joint sizes. 
+</p>
+
+<p>
+The support conditions of the structural
 frame are specified by fixing the degrees of freedom aligned
 with the reaction forces.   Displacements at the fixed reactions
 are either zero, or may be prescribed.  Static reaction forces are
@@ -700,13 +709,6 @@ When a beam or bar element is placed into the structure
      For a derivation of the alternative coordinate transformation method, refer
      to section 8.3 of the textbook <i>Matrix Analysis of Structures</i>
 by A. Kassimali.
-</p>
-
-<p>
-The effect of finite joint sizes is currently used only in the calculation
-of the element stiffness matrices.  
-Coordinate transformations do not currently consider the effect of 
-finite joint sizes. 
 </p>
 
 <p>
@@ -825,8 +827,9 @@ All connections in a <b>Frame3DD</b> analysis are moment-resisting.
 Moment-free conditions can be modeled explicitely only at pinned reactions.
 Internal hinges may be modeled using a short element with
 low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>.
-Beams may be considered infinitely rigid within a sphere of a specified radius around a joint.
-The effect of finite joint sizes is currently used only in the calculation
+Beams may be considered infinitely rigid within a sphere of a specified radius,
+<t>r</t> around a joint.
+The effect of finite joint sizes is currently used in the calculation
 of the element stiffness matrices
 Coordinate transformations do not currently consider the effect of 
 finite joint sizes.  
@@ -1298,7 +1301,7 @@ nC                                                % number of condensed joints
        Rxx       - 1: reactoin moment about the global X axis, 0: free
        Ryy       - 1: reaction moment about the global Y axis, 0: free
        Rzz       - 1: reaction moment about the global Z axis, 0: free
-       r         - r radius of rigid sphere around joint i
+       r         - r radius of rigid joint sphere around joint i
        shear     - 1: include shear deformations, 0: do not.
        shift     - shift factor for non-definite stiffness matrices
        tol       - tolerance for finding mode shapes ~ 1.e-4
