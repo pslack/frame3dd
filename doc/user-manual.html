@@ -66,7 +66,9 @@ For example, if the input data is in a file called <tt>exA.frm</tt>,
 output data is appended to a file called <tt>exA.out</tt>.  
 Results from the most recent analysis of the input data file <tt>exA.frm</tt>
 are written to the <b>end</b> of the output data file <tt>exA.out</tt>.  
-The output data recapitulates the input information, gives joint displacements in global coordinates, frame element end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
+The output data 
+gives the date and time of the analysis,  
+recapitulates the input information, gives joint displacements in global coordinates, frame element end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
 </p>
 
 <p><b>Frame3DD</b> writes a
@@ -606,12 +608,17 @@ Modal analysis results are not (yet) written to the .CSV formatted output file.
 <h3>7.1 Units</h3>
 
 <p>
-     The Output Data is formated using floating point display, not scientific notation.  To
-     obtain the greatest number of significant digits in the output, use units of force
-     and length such that the modulus of elasticity occupies three to five figures before
-     the decimal point.  For example, if the frame to be analyzed is made of steel or
-     aluminum, use units of (kips (1000 pounds) and inches), or (Newtons, millimeters,
-     and tonne), or (MegaNewtons, meters, and kilotonnes).
+The Output Data is formated using floating point display, not scientific notation.  To
+obtain the greatest number of significant digits in the output, use units of force
+and length such that the modulus of elasticity occupies three to five figures before
+the decimal point.  For example, if the frame to be analyzed is made of steel or
+aluminum, use units of (kips (1000 pounds) and inches), or (Newtons, millimeters,
+and tonne), or (MegaNewtons, meters, and kilotonnes).
+</p>
+
+<p>
+It is recommended to write the units used in your analysis in the
+<i>title</i> of the analysis.  
 
 <ul>
 <li> 1 inch = 25.4 millimeter = 0.0254 meter
