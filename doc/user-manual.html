@@ -618,7 +618,8 @@ and tonne), or (MegaNewtons, meters, and kilotonnes).
 
 <p>
 It is recommended to write the units used in your analysis in the
-<i>title</i> of the analysis.  
+<i>title</i> of the analysis and throughout the input data files, 
+as is done in the example input data files.  
 
 <ul>
 <li> 1 inch = 25.4 millimeter = 0.0254 meter
@@ -982,8 +983,7 @@ natural frequencies and mode shapes presume that the stiffness matrix
 is invertible.
 A  numerical trick called "frequency shifting" overcomes this difficulty.
 Presuming the mass matrix [<i>M</i>] is
-invertible, then given a positive scalar value <i>s</i> that
-is large enough, the matrix [[<i>K</i>] + <i>s</i>[M</i>]] is invertible,
+invertible, then given a <i>sufficiently large</i> positive scalar value <i>s</i>, the matrix [[<i>K</i>] + <i>s</i>[M</i>]] is invertible,
 even if the stiffness matrix [<i>K</i>] is not invertible.
 So, for the purpose of computing the natural frequencies of frames
 with rigid-body modes, [<i>K</i>] is replaced by
