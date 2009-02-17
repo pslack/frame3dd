@@ -822,7 +822,7 @@ void save_vector( int n, float *V, char filename[] )
 		exit(1);
 	}
         (void) time(&now);
-	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_v,"%% filename: %s - %s", filename, ctime(&now));
 	fprintf(fp_v,"%% type: vector\n");
 	fprintf(fp_v,"%% rows: %d\n", 1 );
 	fprintf(fp_v,"%% columns: %d\n", n );
@@ -850,7 +850,7 @@ void save_ivector( int n, int *V, char filename[] )
 		exit(1);
 	}
         (void) time(&now);
-	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_v,"%% filename: %s - %s", filename, ctime(&now));
 	fprintf(fp_v,"%% type: vector\n");
 	fprintf(fp_v,"%% rows: %d\n", 1 );
 	fprintf(fp_v,"%% columns: %d\n", n );
@@ -878,7 +878,7 @@ void save_matrix ( int m, int n, float **A, char filename[] )
 		exit(1);
 	}
         (void) time(&now);
-	fprintf(fp_m,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_m,"%% filename: %s - %s", filename, ctime(&now));
 	fprintf(fp_m,"%% type: matrix \n");
 	fprintf(fp_m,"%% rows: %d\n", m );
 	fprintf(fp_m,"%% columns: %d\n", n );
@@ -909,7 +909,7 @@ void save_dmatrix ( int m, int n, double **A, char filename[] )
 		exit(1);
 	}
         (void) time(&now);
-	fprintf(fp_m,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_m,"%% filename: %s - %s", filename, ctime(&now));
 	fprintf(fp_m,"%% type: matrix \n");
 	fprintf(fp_m,"%% rows: %d\n", m );
 	fprintf(fp_m,"%% columns: %d\n", n );
@@ -942,7 +942,7 @@ void save_ut_matrix ( int n, float **A, char filename[] )
 		exit(1);
 	}
         (void) time(&now);
-	fprintf(fp_m,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_m,"%% filename: %s - %s", filename, ctime(&now));
 	fprintf(fp_m,"%% type: matrix \n");
 	fprintf(fp_m,"%% rows: %d\n", n );
 	fprintf(fp_m,"%% columns: %d\n", n );
@@ -979,7 +979,7 @@ void save_ut_dmatrix ( int n, double **A, char filename[] )
 		exit(1);
 	}
         (void) time(&now);
-	fprintf(fp_m,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_m,"%% filename: %s - %s\n", filename, ctime(&now));
 	fprintf(fp_m,"%% type: matrix \n");
 	fprintf(fp_m,"%% rows: %d\n", n );
 	fprintf(fp_m,"%% columns: %d\n", n );
