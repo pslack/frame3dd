@@ -878,10 +878,10 @@ void save_matrix ( int m, int n, float **A, char filename[] )
 		exit(1);
 	}
         (void) time(&now);
-	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
-	fprintf(fp_v,"%% type: matrix \n");
-	fprintf(fp_v,"%% rows: %d\n", m );
-	fprintf(fp_v,"%% columns: %d\n", n );
+	fprintf(fp_m,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_m,"%% type: matrix \n");
+	fprintf(fp_m,"%% rows: %d\n", m );
+	fprintf(fp_m,"%% columns: %d\n", n );
 	for (i=1; i <= m; i++) {
 		for (j=1; j <= n; j++) {
 			if (A[i][j] != 0) fprintf(fp_m,"%15.6e", A[i][j] );
@@ -909,10 +909,10 @@ void save_dmatrix ( int m, int n, double **A, char filename[] )
 		exit(1);
 	}
         (void) time(&now);
-	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
-	fprintf(fp_v,"%% type: matrix \n");
-	fprintf(fp_v,"%% rows: %d\n", m );
-	fprintf(fp_v,"%% columns: %d\n", n );
+	fprintf(fp_m,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_m,"%% type: matrix \n");
+	fprintf(fp_m,"%% rows: %d\n", m );
+	fprintf(fp_m,"%% columns: %d\n", n );
 	for (i=1; i <= m; i++) {
 		for (j=1; j <= n; j++) {
 			if (fabs(A[i][j]) > 1.e-99) fprintf(fp_m,"%21.12e", A[i][j] );
@@ -942,10 +942,10 @@ void save_ut_matrix ( int n, float **A, char filename[] )
 		exit(1);
 	}
         (void) time(&now);
-	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
-	fprintf(fp_v,"%% type: matrix \n");
-	fprintf(fp_v,"%% rows: %d\n", n );
-	fprintf(fp_v,"%% columns: %d\n", n );
+	fprintf(fp_m,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_m,"%% type: matrix \n");
+	fprintf(fp_m,"%% rows: %d\n", n );
+	fprintf(fp_m,"%% columns: %d\n", n );
 	for (i=1; i <= n; i++) {
 	  for (j=1; j <= n; j++) {
 		if ( i > j ) {
@@ -979,10 +979,10 @@ void save_ut_dmatrix ( int n, double **A, char filename[] )
 		exit(1);
 	}
         (void) time(&now);
-	fprintf(fp_v,"%% file %s - %s\n", filename, ctime(&now));
-	fprintf(fp_v,"%% type: matrix \n");
-	fprintf(fp_v,"%% rows: %d\n", n );
-	fprintf(fp_v,"%% columns: %d\n", n );
+	fprintf(fp_m,"%% file %s - %s\n", filename, ctime(&now));
+	fprintf(fp_m,"%% type: matrix \n");
+	fprintf(fp_m,"%% rows: %d\n", n );
+	fprintf(fp_m,"%% columns: %d\n", n );
 	for (i=1; i <= n; i++) {
 	  for (j=1; j <= n; j++) {
 		if ( i > j ) {
