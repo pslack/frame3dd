@@ -375,13 +375,13 @@ int main(int argc, char *argv[]){
 							Fe[i] -= K[i][j]*D[j];
 				}
 
-		/* Broyden secant stiffness matrix update */
+				/* Broyden secant stiffness matrix update */
 /*
-		dDdD = 0.0;
-		for (i=1; i<=DoF; i++) dDdD += dD[i]*dD[i];
-		for (i=1; i<=DoF; i++)
-			for (j=1; j<=DoF; j++)
-				Ks[i][j] -= Fe[i]*dD[j] / dDdD;
+				dDdD = 0.0;
+				for (i=1; i<=DoF; i++) dDdD += dD[i]*dD[i];
+				for (i=1; i<=DoF; i++)
+					for (j=1; j<=DoF; j++)
+						Ks[i][j] -= Fe[i]*dD[j] / dDdD;
 */
 				apply_reactions ( DoF, R, Dp[lc], Fe, Fe, Ks, 'm' );
 				solve_system ( K, dD, Fe, DoF, &ok );
@@ -398,7 +398,7 @@ int main(int argc, char *argv[]){
 					J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 
 						 /* convergence criteria:  */
-//		error = rel_norm ( dD, D, DoF ); /* displacement increment */
+//				error = rel_norm ( dD, D, DoF ); /* displacement increment */
 				error = rel_norm ( Fe, F, DoF ); /* force balance	   */
 
 				fprintf(stderr,"   NR iteration %3d ---", iter);
@@ -419,12 +419,12 @@ int main(int argc, char *argv[]){
 			  write_static_results ( fp, nJ,nB,nL,lc, DoF, J1,J2, Fo[lc],
 									 D,R,Q, error, ok );
 
-			if(filetype == 1 ){
+			if ( filetype == 1 ){
 				write_static_csv(argv, title,
 					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
 
-			if(filetype == 2){
+			if ( filetype == 2 ){
 				write_static_mfile ( argv, title,
 					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
