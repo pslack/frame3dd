@@ -1,5 +1,5 @@
-function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
-% [D,R,F,L,Ks] = frame_3dd (XYZ,JTS,RCT,EAIJ,P,W,D)
+function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
+% [D,R,F,L,Ks] = frame_3dd (XYZ,JTS,RCT,EAIJ,P,U,D)
 %
 % Solve a a three-dimensional frame analysis problem 
 %
@@ -39,7 +39,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 %          row 5 = Joint Moment about Y-axis     for each joint
 %          row 6 = Joint Moment about Z-axis     for each joint
 %
-%    W : a 3xB matrix containing the unif. dist. load on each beam element
+%    U : a 3xB matrix containing the unif. dist. load on each beam element
 %    D : a 6xJ matrix of prescribed displacements at the reaction DoF's
 %
 % OUTPUT DATA:
@@ -112,8 +112,8 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
   if any(~(size(P)==[6,J]))
      error('The dimension of P must be 6 by # of joints.')
   end
-  if any(~(size(W)==[3,B]))
-     error('The dimension of W must be 3 by # of beams.')
+  if any(~(size(U)==[3,B]))
+     error('The dimension of U must be 3 by # of beams.')
   end
   if any(EAIJ) <= 0
      error('All elements of EAIJ must be greater than zero.')
@@ -176,15 +176,19 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
   end
   fprintf(fp,'\n');
             
-  nW = sum(max(abs(W))~=0);
-  fprintf(fp,'%d\t\t%% number of members with distributed loads \n', nW);
-  fprintf(fp,'%% j\t\tWx\t\tWy\t\tWz\n');
-  idx = find(max(abs(W)));
-  for i=1:nW
+  nU = sum(max(abs(U))~=0);
+  fprintf(fp,'%d\t\t%% number of members with uniform distributed loads \n', nU);
+  fprintf(fp,'%% j\t\tUx\t\tUy\t\tUz\n');
+  idx = find(max(abs(U)));
+  for i=1:nU
       m = idx(i);
       fprintf(fp,'%d\t%e\t%e\t%e\n', ...
-		m, W(1,m), W(2,m), W(3,m) );
+		m, U(1,m), U(2,m), U(3,m) );
   end
+  fprintf(fp,'\n');
+
+  nW = 0;
+  fprintf(fp,'%d\t\t%% number of members with trapezoidal loads \n', nW);
   fprintf(fp,'\n');
 
   nP = 0;

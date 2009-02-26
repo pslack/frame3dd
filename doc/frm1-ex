@@ -39,9 +39,10 @@ EXAMPLE INPUT FILE:		COMMENTS:
 1				number of concentrated joint loads
  2   1.5   0   0   0   0   0    joint no. X-load Y-load Z-load X-mom Y-mom Z-mom
 
-1				number of distributed loads
+1				number of uniform distributed loads
  2   0   -1.2   0		member no. X-frc/lngth  Y-frc/lngth  Z-frc/lngth
 
+0				number of trapizoidal loads
 0				number of interior point loads
 0				number of temperature loads
 0				number of prescribed displacements

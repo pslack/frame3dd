@@ -1,12 +1,12 @@
 ________________________________________________________________________________
-FRAME3DD version: 20090210               http://frame3dd.sf.net/
+FRAME3DD version: 20090226               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example J: tesseract  (N  mm  ton) 
-Tue Feb 17 14:14:59 2009
+Thu Feb 26 16:56:37 2009
 ________________________________________________________________________________
 16 JOINTS;    32 MEMBERS;    1 LOAD CASES;  0 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 

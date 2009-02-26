@@ -122,13 +122,22 @@ void read_and_assemble_loads(
 	float *p,		/**< roll angle of each beam (radians)	*/
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
 	int shear,	/**< 1: include shear deformations, 0: don't	*/
-	int *nF, int *nW, int *nP, int *nT, int *nD,	/**< number of loads */
+	int *nF, 		/**< number of concentrated joint loads */
+	int *nU, 		/**< number of uniformly distributed loads */
+	int *nW,		/**< number of trapezoidaly distributed loads */
+	int *nP, 		/**< number of concentrated point loads	*/
+	int *nT, 		/**< number of temperature loads	*/
+	int *nD,		/**< number of prescribed displacements */
 	double **Q,		/**< beam element end forces, every beam */
 	double **F_mech, 	/**< mechanical loads			*/
 	double **F_temp, 	/**< thermal loads			*/
-	float ***W, float ***P, float ***T, 	/**< loads		*/
+	float ***U,		/**< uniformally distributed loads	*/
+	float ***W,		/**< trapezoidally distributed loads	*/
+	float ***P,		/**< concentrated point loads		*/
+	float ***T,	 	/**< temperature loads			*/
 	float **Dp,		/**< prescribed displacements at rctns	*/
-	double ***feF_mech, double ***feF_temp	/**< fixed end forces	*/
+	double ***feF_mech,	/**< fixed end forces for mechanical loads */
+	double ***feF_temp	/**< fixed end forces for temperature loads */
 );
 
 
@@ -178,7 +187,7 @@ void write_input_data(
 	FILE *fp,	/**< input data file pointer			*/
 	char *title, int nJ, int nB,  int nL,
 	int *nD, int nR,
-	int *nF, int *nW, int *nP, int *nT,
+	int *nF, int *nU, int *nW, int *nP, int *nT,
 	vec3 *xyz, float *r,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz,
@@ -186,7 +195,7 @@ void write_input_data(
 	float *E, float *G, float *p,
 	double **F, float **Dp,
 	int *R,
-	float ***W, float ***P, float ***T,
+	float ***U, float ***W, float ***P, float ***T,
 	int shear, int anlyz, int geom
 );
 

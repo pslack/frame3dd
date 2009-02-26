@@ -6,18 +6,18 @@ nJ						% number of joints
   :	:	:	:	:		 % joint numbers and coordinates
   J[nJ]	x[nJ]	y[nJ]	z[nJ]	r[1]
 
+% reaction data ...
+nR					       % number of joints with reactions
+  J[1]	Rx[1]	Ry[1]	Rz[1]	Rxx[1]	Ryy[1]	Rzz[1]
+    :	   :	   :	   :	    :	    :	    :	       % 0:free, 1:fixed
+  J[nR]	Rx[nR]	Ry[nR]	Rz[nR]	Rxx[nR]	Ryy[nR]	Rzz[nR]
+
 % beam element property data ...
 nB						% number of beam elements 
 					    % member numbers, loc'ns, and prop's
   M[1]   J1[1]  J2[1]   Ax[1]  Asy[1]  Asz[1]  Jp[1]  Iy[1]  Iz[1]   E[1]  G[1]  p[1]
   :      :      :       :       :       :       :      :      :       :     :     :
   M[nM]  J1[nM] J2[nM]  Ax[nM] Asy[nM] Asz[nM] Jp[nM] Iy[nM] Iz[nM]  E[nM] G[nM] p[nM]
-
-% reaction data ...
-nR					       % number of joints with reactions
-  J[1]	Rx[1]	Ry[1]	Rz[1]	Rxx[1]	Ryy[1]	Rzz[1]
-  :	:	:	:	:	:	:	       % 0:free, 1:fixed
-  J[nR]	Rx[nR]	Ry[nR]	Rz[nR]	Rxx[nR]	Ryy[nR]	Rzz[nR]
 
 shear					  % 1: include shear deformation
 geom					  % 1: include geometric stiffness
@@ -32,10 +32,19 @@ nF						       % number of loaded joints
   :	:	:	:	:	:	:		  % nodal forces
   J[nF]	Fx[nF]	Fy[nF]	Fz[nF]	Mxx[nF]	Myy[nF]	Mzz[nF]
 
-nW					   % number of uniform distributed loads
-  M[1]	Wx[1]	Wy[1]	Wz[1]
+nU					   % number of uniform distributed loads
+  M[1]	Ux[1]	Uy[1]	Uz[1]
   :	:	:	:	    % uniform member loads in member coordinates
-  M[nW]	Wx[nW]	Wy[nW]	Wz[nW]
+  M[nU]	Ux[nU]	Uy[nU]	Uz[nU]
+
+nW				     % number of trapezoidally distributed loads
+  M[1]  wxx1[1]  wxx2[1]  wx1[1]  wx2[1]  % loads in the local x-axis
+        wyx1[1]  wyx2[1]  wy1[1]  wy2[1]  % loads in the local y-axis
+        wzx1[1]  wzx2[1]  wz1[1]  wz2[1]  % loads in the local z-axis
+    :        :        :       :       :
+  M[nW] wxx1[nW] wxx2[nW] wx1[nW] wx2[nW] % x1 and x2: start and end locations
+        wyx1[nW] wyx2[nW] wy1[nW] wy2[nW] % w1 and w2: start load and end load
+        wzx1[nW] wzx2[nW] wz1[nW] wz2[nW]  
 
 nP					    % number of concentrated point loads
   M[1]	Px[1]	Py[1]	Pz[1]	x[1]	    % point loads in member coordinates 
@@ -59,10 +68,19 @@ nF						       % number of loaded joints
   :	:	:	:	:	:	:		  % nodal forces
   J[nF]	Fx[nF]	Fy[nF]	Fz[nF]	Mxx[nF]	Myy[nF]	Mzz[nF]
 
-nW					   % number of uniform distributed loads
-  M[1]	Wx[1]	Wy[1]	Wz[1]
+nU					   % number of uniform distributed loads
+  M[1]	Ux[1]	Uy[1]	Uz[1]
   :	:	:	:	    % uniform member loads in member coordinates
-  M[nW]	Wx[nW]	Wy[nW]	Wz[nW]
+  M[nU]	Ux[nU]	Uy[nU]	Uz[nU]
+
+nW				     % number of trapezoidally distributed loads
+  M[1]  xx1[1]  xx2[2]  wx1[1]  wx2[1]  % loads in the local x-axis
+        xy1[1]  xy2[2]  wy1[1]  wy2[1]  % loads in the local y-axis
+        xz1[1]  xz2[2]  wz1[1]  wz2[1]  % loads in the local z-axis
+    :       :       :       :       :
+  M[nW] xx1[nW] xx2[nW] wx1[nW] wx2[nW]  % x1 and x2: start and end locations
+        xy1[nW] xy2[nW] wy1[nW] wy2[nW]  % w1 and w2: start load and end load
+        xz1[nW] xz2[nW] wz1[nW] wz2[nW]  
 
 nP					    % number of concentrated point loads
   M[1]	Px[1]	Py[1]	Pz[1]	x[1]	    % point loads in member coordinates 

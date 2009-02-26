@@ -57,7 +57,8 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 %          k  k     k    k.in k.in k.in
    3       0  100  -100   0    0    0
 
-0                               % number of distributed loads
+0                               % number of uniform distributed loads
+0                               % number of trapezoidal distributed loads
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
 0                               % number of joints with support settlements

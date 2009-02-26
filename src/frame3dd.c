@@ -1251,13 +1251,13 @@ double rel_norm( double *N, double *D, int n )
 DEALLOCATE  -  release allocated memory					9sep08
 ------------------------------------------------------------------------------*/
 void deallocate( 
-	int nJ, int nB, int nL, int *nF, int *nW, int *nP, int *nT,
+	int nJ, int nB, int nL, int *nF, int *nU, int *nW, int *nP, int *nT,
 	int DoF, int nM,
 	vec3 *xyz, float *r, double *L, double *Le,
 	int *J1, int *J2, int *R,
 	float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz,
 	float *E, float *G, float *p,
-	float ***W, float ***P, float ***T,
+	float ***U, float ***W, float ***P, float ***T,
 	float **Dp,
 	double **Fo_mech, double **Fo_temp, 
 	double ***feF_mech, double ***feF_temp, double **feF,
@@ -1294,7 +1294,8 @@ void deallocate(
 	free_vector(p,1,nB);
 
 // printf("..D\n");
-	free_D3matrix(W,1,nL,1,nB,1,4);
+	free_D3matrix(U,1,nL,1,nB,1,4);
+	free_D3matrix(W,1,nL,1,nB,1,13);
 	free_D3matrix(P,1,nL,1,nB,1,5);
 	free_D3matrix(T,1,nL,1,nB,1,8);
 	free_matrix(Dp,1,nL,1,DoF);

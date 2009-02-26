@@ -595,7 +595,7 @@ Example H: a pedestrian ramp  (kip, in)
 				% Begin Static Load Case 1 of 1
 0                               % number of loaded joints
 
-166				% number of distributed loads
+166				% number of uniform distributed loads
 %.m   wx  wy  wz		% vertical gravity load k/in; concrete floor = 
 %             k/in 
 44    0   0   -0.100		% concrete floor = 100 lb / sq.ft.
@@ -769,6 +769,7 @@ Example H: a pedestrian ramp  (kip, in)
 295   0   0   -0.100
 
 
+0  				% number of trapezoidal distributed loads
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
 0                               % number of joints with support settlements

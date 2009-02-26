@@ -175,7 +175,8 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
   35     0         0    -9800.0     0      0       0
   36     0         0    -9800.0     0      0       0
 
-0                               % number of distributed loads
+0                               % number of uniform distributed loads
+0                               % number of trapezoidal distributed loads
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
 0                               % number of joints with support settlements

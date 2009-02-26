@@ -41,7 +41,8 @@ EXAMPLE INPUT FILE:		COMMENTS:
   2   0  0   0.8  0  0  0	joint no. X-load Y-load Z-load X-mom Y-mom Z-mom
   3   0 -0.5 0    0  0  0
 
- 0				number of distributed loads
+ 0				number of uniform distributed loads
+ 0				number of trapezoidal distributed loads
  0				number of interior point loads
  0				number of temperature loads
  0				number of prescribed displacements

@@ -74,7 +74,8 @@ int main(int argc, char *argv[]){
 		*J,*Iy,*Iz,	/* section inertias			*/
 		*E, *G,		/* elastic modulus and shear moduli	*/
 		*p,		/* roll of each member, radians		*/
-		***W,		/* uniform distributed member loads	*/
+		***U,		/* uniform distributed member loads	*/
+		***W,		/* trapizoidal distributed member loads	*/
 		***P,		/* member concentrated loads		*/
 		***T,		/* member temperature  loads		*/
 		**Dp,		/* prescribed joint displacements	*/
@@ -117,7 +118,8 @@ int main(int argc, char *argv[]){
 		nR=0,		/* number of restrained joints		*/
 		nD[_NL_],	/* number of prescribed nodal displ'nts	*/
 		nF[_NL_],	/* number of loaded joints		*/
-		nW[_NL_],	/* number of members w/ unif distr loads*/
+		nU[_NL_],	/* number of members w/ unifm dist loads*/
+		nW[_NL_],	/* number of members w/ trapz dist loads*/
 		nP[_NL_],	/* number of members w/ conc point loads*/
 		nT[_NL_],	/* number of members w/ temp. changes	*/
 		nI=0,		/* number of joints w/ extra inertia	*/
@@ -237,7 +239,8 @@ int main(int argc, char *argv[]){
 		exit(1);
 	}
 					/* allocate memory for loads ... */
-	W   =  D3matrix(1,nL,1,nB,1,4); /* distributed load on each member */
+	U   =  D3matrix(1,nL,1,nB,1,4); /* uniform load on each member */
+	W   =  D3matrix(1,nL,1,nB,1,13);/* trapezoidal load on each member */
 	P   =  D3matrix(1,nL,1,nB,1,5); /* internal point load each member */
 	T   =  D3matrix(1,nL,1,nB,1,8); /* internal temp change each member */
 	Dp  =  matrix(1,nL,1,DoF); /* prescribed displacement of each joint */
@@ -270,8 +273,8 @@ int main(int argc, char *argv[]){
 
 	read_and_assemble_loads( fp, nJ, nB, nL, DoF, xyz, L, Le, J1, J2,
 				Ax,Asy,Asz, Iy,Iz, E, G, p, R, shear,
-				nF, nW, nP, nT, nD,
-				Q, Fo_mech, Fo_temp, W, P, T,
+				nF, nU, nW, nP, nT, nD,
+				Q, Fo_mech, Fo_temp, U, W, P, T,
 				Dp, feF_mech, feF_temp );
 
 	for (i=1; i<=DoF; i++){
@@ -302,9 +305,9 @@ int main(int argc, char *argv[]){
 		exit(1);
 	}
 
-	write_input_data ( fp, title, nJ,nB,nL, nD,nR, nF,nW,nP,nT,
+	write_input_data ( fp, title, nJ,nB,nL, nD,nR, nF,nU,nW,nP,nT,
 				xyz, r, J1,J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p,
-				Fo, Dp, R, W, P, T, shear, anlyz, geom );
+				Fo, Dp, R, U, W, P, T, shear, anlyz, geom );
 
 	if (anlyz) {				/* solve the problem	*/
 		for (lc=1; lc<=nL; lc++) {		/* begin load case loop	*/
@@ -334,7 +337,7 @@ int main(int argc, char *argv[]){
 				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
 			/* then add mechanical loads ... */
-			if ( nF[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nD[lc] > 0 ) {
+			if ( nF[lc] > 0 || nU[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nD[lc] > 0 ) {
 				fprintf(stderr," Linear Elastic Analysis ... Mechanical Loads\n");
 				apply_reactions ( DoF, R, Dp[lc], Fo_mech[lc], F, K, 'm' );
 				solve_system( K, dD, F, DoF, &ok );
@@ -540,10 +543,10 @@ int main(int argc, char *argv[]){
 
 	printf("\n");
 
-	deallocate(nJ, nB, nL, nF, nW, nP, nT, DoF, nM,
+	deallocate(nJ, nB, nL, nF, nU, nW, nP, nT, DoF, nM,
 			xyz, r, L, Le, J1, J2, R,
 			Ax, Asy, Asz, J, Iy, Iz, E, G, p,
-			W,P,T, Dp, Fo_mech, Fo_temp,
+			U,W,P,T, Dp, Fo_mech, Fo_temp,
 			feF_mech, feF_temp, feF, Fo, F,
 			K, Q, D, dD,
 			d,BMs,JMs,JMx,JMy,JMz, M,f,V, q, m

@@ -934,12 +934,27 @@ lists properties of other materials.
 <h3> 7.8 Loads</h3>
 
 <p>
-Five types of static loads may be specified:
+Six types of static loads may be specified:
 </p>
 <ul>
 <li>Concentrated static force loads and concentrated static moments may be applied to joints.
 <li>Concentrated static force loads may be applied to frame elements between the joints.
-<li>Uniformly distributed static loads may be applied over entire frame elements.
+<li>Uniformly distributed static loads may be applied in the local element coordinate system over entire length of frame elements.
+Uniformly distributed loads may be applied in the local <i>x</i> direction,
+the local <i>y</i> direction, and the local <i>z</i> direction.
+<li>Trapezoidally distributed loads may be applied in the local coordinate system over a partial length of frame elements.
+Trapezoidally distributed loads may be applied in the local <i>x</i> direction,
+the local <i>y</i> direction, and the local <i>z</i> direction.
+Trapezoidally distributed loads are specified by the distances along
+the local <i>x</i> axis where the loading starts and stops, and
+by the value of the load at the starting location and the stopping location.  
+The starting location for a trapezoidal load must be greater than 0 and less
+than the stopping location of the trapezoidal load.
+The stopping location for a trapezoidal load must be greater than the
+starting value of the trapezoidal load and less
+than the length of the frame element.
+Fixed end forces computed from trapezoidal loads include the effects of
+shear deformation when shear deformation is utilized in the analysis.  
 <li>Thermal loads assume a linear temperature gradient through cross sections.
 <li>Static joint displacements may be prescribed at fixed degrees of freedom only.  
 </ul>
@@ -1153,10 +1168,19 @@ nF                                                    % number of loaded joints
     :        :       :       :        :       :       :          % nodal forces
   J[nF]   Fx[nF]  Fy[nF]  Fz[nF]  Mxx[nF] Myy[nF] Mzz[nF]
 
-nW                                        % number of uniform distributed loads
-  M[1]    Wx[1]   Wy[1]   Wz[1]
+nU                                        % number of uniform distributed loads
+  M[1]    Ux[1]   Uy[1]   Uz[1]
     :        :       :       :     % uniform distributed loads in local coordinates
-  M[nW]   Wx[nW]  Wy[nW]  Wz[nW]
+  M[nU]   Ux[nU]  Uy[nU]  Uz[nU]
+
+nW                                   % number of trapezoidally distributed loads
+  M[1]  wxx1[1]  wxx2[1]  wx1[1]  wx2[1]  % loads in the local x-axis
+        wyx1[1]  wyx2[1]  wy1[1]  wy2[1]  % loads in the local y-axis
+        wzx1[1]  wzx2[1]  wz1[1]  wz2[1]  % loads in the local z-axis
+    :        :        :       :       :
+  M[nW] wxx1[nW] wxx2[nW] wx1[nW] wx2[nW] % x1 and x2: start and end locations
+        wyx1[nW] wyx2[nW] wy1[nW] wy2[nW] % w1 and w2: start load and end load
+        wzx1[nW] wzx2[nW] wz1[nW] wz2[nW]
 
 nP                                         % number of concentrated point loads
   M[1]    Px[1]   Py[1]   Pz[1]   x[1]     %  point loads in local coordinates
@@ -1180,15 +1204,24 @@ nF                                                    % number of loaded joints
     :        :       :       :        :       :       :          % nodal forces
   J[nF]   Fx[nF]  Fy[nF]  Fz[nF]  Mxx[nF] Myy[nF] Mzz[nF]
 
-nW                                        % number of uniform distributed loads
-  M[1]    Wx[1]   Wy[1]   Wz[1]
+nU                                        % number of uniform distributed loads
+  M[1]    Ux[1]   Uy[1]   Uz[1]
     :        :       :       :     % uniform distributed loads in local coordinates
-  M[nW]   Wx[nW]  Wy[nW]  Wz[nW]
+  M[nU]   Ux[nU]  Uy[nU]  Uz[nU]
+
+nW                                   % number of trapezoidally distributed loads
+  M[1]  wxx1[1]  wxx2[1]  wx1[1]  wx2[1]  % loads in the local x-axis
+        wyx1[1]  wyx2[1]  wy1[1]  wy2[1]  % loads in the local y-axis
+        wzx1[1]  wzx2[1]  wz1[1]  wz2[1]  % loads in the local z-axis
+    :        :        :       :       :
+  M[nW] wxx1[nW] wxx2[nW] wx1[nW] wx2[nW] % x1 and x2: start and end locations
+        wyx1[nW] wyx2[nW] wy1[nW] wy2[nW] % w1 and w2: start load and end load
+        wzx1[nW] wzx2[nW] wz1[nW] wz2[nW]
 
 nP                                         % number of concentrated point loads
-  M[1]    Px[1]   Py[1]   Pz[1]   x[1]     %  point loads in local coordinates
+  M[1]    Px[1]   Py[1]   Pz[1]   xP[1]    %  point loads in local coordinates
     :        :       :       :      :      %  and x=distance from coordinate J1
-  M[nP]   Px[nP]  Py[nP]  Pz[nP]  x[nP]
+  M[nP]   Px[nP]  Py[nP]  Pz[nP]  xP[nP]
 
 nT                                 % number of beams with temperature changes
   M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % element no.,
@@ -1300,7 +1333,8 @@ nC                                                % number of condensed joints
        nP        - number of frame elements with concentrated point loads
        nR        - number of joints with Reaction forces
        nT        - number of frame elements with Temperature changes
-       nW        - number of distributed loads
+       nU        - number of uniformly distributed loads
+       nW        - number of trapezoidally distributed loads
        p         - the roll angle of the beam element, in degrees
        pan       - the pan rate of the view point during animation
        Px        - concentrated point load in the local x direction
@@ -1320,9 +1354,33 @@ nC                                                % number of condensed joints
        Ty-       - temperature change on the local -y face of the element
        Tz+       - temperature change on the local +z face of the element
        Tz-       - temperature change on the local -z face of the element
-       Wx        - uniform distributed load in the local X direction
-       Wy        - uniform distributed load in the local Y direction
-       Wz        - uniform distributed load in the local Z direction
+       Ux        - uniform distributed load in the local X direction
+       Uy        - uniform distributed load in the local Y direction
+       Uz        - uniform distributed load in the local Z direction
+       wx1       - starting value for trapezoidally-distributed loads
+                   in the local x-direction
+       wx2       - stopping value for trapezoidally-distributed loads
+                   in the local x-direction
+       wxx1      - distance along a frame element for starting 
+                   trapezoidally-distributed loads in the x-direction
+       wxx2      - distance along a frame element for stopping
+                   trapezoidally-distributed loads in the x-direction
+       wy1       - starting value for trapezoidally-distributed loads
+                   in the local y-direction
+       wy2       - stopping value for trapezoidally-distributed loads
+                   in the local y-direction
+       wyx1      - distance along a frame element for starting 
+                   trapezoidally-distributed loads in the y-direction
+       wyx2      - distance along a frame element for stopping
+                   trapezoidally-distributed loads in the y-direction
+       wz1       - starting value for trapezoidally-distributed loads
+                   in the local z-direction
+       wz2       - stopping value for trapezoidally-distributed loads
+                   in the local z-direction
+       wzx1      - distance along a frame element for starting 
+                   trapezoidally-distributed loads in the z-direction
+       wzx2      - distance along a frame element for stopping
+                   trapezoidally-distributed loads in the z-direction
        x         - x coordinate of a joint in global coordinates
        y         - y coordinate of a joint in global coordinates
        z         - y coordinate of a joint in global coordinates
@@ -1364,7 +1422,6 @@ and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
 <a name="enhancements"/><h2>12. Enhancements projected for future versions</h2>
 
 <ul>
-<li>       Trapezoidally distributed loads
 <li>       A GUI (ideally GPL'able)<br>
 <ul>
  <li> <a href="DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).

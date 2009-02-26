@@ -71,8 +71,8 @@ Example I: a triangular tower  (kip,in)
 %          k         k      k       k.in   k.in    k.in
   15       0        200      0       0       0       0
 
-12                               % number of distributed loads
-%..j      wx         wy      wz
+12                               % number of uniform distributed loads
+%..j      Ux         Uy      Uz
 %                            k/in
   13      0          0      -2.361
   14      0          0      -2.361
@@ -87,6 +87,7 @@ Example I: a triangular tower  (kip,in)
   23      0          0      -2.361
   24      0          0      -2.361
 
+0                               % number of trapezoidal distributed loads
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
 0                               % number of joints with support settlements

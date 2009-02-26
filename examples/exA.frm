@@ -76,7 +76,8 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
  5	0.0	-10.0  	0.0	0.0	0.0	0.0
  6	0.0	-30.0  	0.0	0.0	0.0	0.0
 
-0				% number of distributed loads
+0				% number of uniform loads
+0				% number of trapezoidal loads
 0				% number of internal concentrated loads
 0				% number of members with temperature loads
 
@@ -94,7 +95,8 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
  4	30.0	 0.0  	0.0	0.0	0.0	0.0
  5	20.0	 0.0  	0.0	0.0	0.0	0.0
 
-0				% number of distributed loads
+0				% number of uniform loads
+0				% number of trapezoidal loads
 0				% number of internal concentrated loads
 
 3				% number of members with temperature loads

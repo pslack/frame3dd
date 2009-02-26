@@ -459,17 +459,19 @@ void read_and_assemble_loads(
 		float *p,
 		int *R,
 		int shear,
-		int *nF, int *nW, int *nP, int *nT, int *nD,
+		int *nF, int *nU, int *nW, int *nP, int *nT, int *nD,
 		double **Q,
 		double **F_mech, double **F_temp,
-		float ***W, float ***P, float ***T,
-		float **Dp,
+		float ***U, float ***W, float ***P, float ***T, float **Dp,
 		double ***feF_mech, double ***feF_temp
 ){
 	float	hy, hz;			/* section dimensions in local coords */
 
-	double	Nx1, Vy1, Vz1, Mx1, My1, Mz1,	/* fixed end forces */
-		Nx2, Vy2, Vz2, Mx2, My2, Mz2,
+	float	x1,x2, w1,w2;
+	double	Ln, R1o, R2o, f01, f02; 
+
+	double	Nx1, Vy1, Vz1, Mx1, My1=0.0, Mz1=0.0,	/* fixed end forces */
+		Nx2, Vy2, Vz2, Mx2, My2=0.0, Mz2=0.0,
 		Ksy, Ksz, 		/* shear deformatn coefficients	*/
 		a, b,				/* point load locations */
 		t1, t2, t3, t4, t5, t6, t7, t8, t9;	/* 3D coord Xfrm coef */
@@ -508,32 +510,32 @@ void read_and_assemble_loads(
 		    fprintf(stderr,"   warning: All joint loads applied at joint %d  are zero\n", j );
 	  }
 
-	  fscanf(fp,"%d", &nW[lc] );	/* uniform distributed loads	*/
-	  printf("  number of uniform distributed loads ");
-	  dots(15);
-	  printf(" nW = %3d\n", nW[lc]);
-	  if ( nW[lc] < 0 || nW[lc] > nB ) {
-		fprintf(stderr,"  error: valid ranges for nW is 0 ... %d \n", nB );
+	  fscanf(fp,"%d", &nU[lc] );	/* uniform distributed loads	*/
+	  printf("  number of uniformly distributed loads ");
+	  dots(13);
+	  printf(" nU = %3d\n", nU[lc]);
+	  if ( nU[lc] < 0 || nU[lc] > nB ) {
+		fprintf(stderr,"  error: valid ranges for nU is 0 ... %d \n", nB );
 		exit(1);
 	  }
-	  for (i=1; i <= nW[lc]; i++) {	/* ! local element coordinates ! */
+	  for (i=1; i <= nU[lc]; i++) {	/* ! local element coordinates ! */
 		fscanf(fp,"%d", &n );
 		if ( n < 1 || n > nB ) {
 		    fprintf(stderr,"  error in uniform distributed loads: element number %d is out of range\n",n);
 		    exit(1);
 		}
-		W[lc][i][1] = (double) n;
-		for (l=2; l<=4; l++)	fscanf(fp,"%f", &W[lc][i][l] );
+		U[lc][i][1] = (double) n;
+		for (l=2; l<=4; l++)	fscanf(fp,"%f", &U[lc][i][l] );
 
-		if ( W[lc][i][2]==0 && W[lc][i][3]==0 && W[lc][i][4]==0 )
-		    fprintf(stderr,"   warning: All distributed loads applied to beam element %d  are zero\n", (int)W[i][1] );
+		if ( U[lc][i][2]==0 && U[lc][i][3]==0 && U[lc][i][4]==0 )
+		    fprintf(stderr,"   warning: All distributed loads applied to beam element %d  are zero\n", n );
 
-		Nx1 = Nx2 = W[lc][i][2]*Le[n] / 2.0;
-		Vy1 = Vy2 = W[lc][i][3]*Le[n] / 2.0;
-		Vz1 = Vz2 = W[lc][i][4]*Le[n] / 2.0;
+		Nx1 = Nx2 = U[lc][i][2]*Le[n] / 2.0;
+		Vy1 = Vy2 = U[lc][i][3]*Le[n] / 2.0;
+		Vz1 = Vz2 = U[lc][i][4]*Le[n] / 2.0;
 		Mx1 = Mx2 = 0.0;
-		My1 = -W[lc][i][4]*Le[n]*Le[n] / 12.0;	My2 = -My1;
-		Mz1 =  W[lc][i][3]*Le[n]*Le[n] / 12.0;	Mz2 = -Mz1;
+		My1 = -U[lc][i][4]*Le[n]*Le[n] / 12.0;	My2 = -My1;
+		Mz1 =  U[lc][i][3]*Le[n]*Le[n] / 12.0;	Mz2 = -Mz1;
 
 		/* debugging
 		printf("n=%d Vy=%9.2e Vz=%9.2e My=%9.2e Mz=%9.2e\n",
@@ -573,7 +575,194 @@ void read_and_assemble_loads(
 		printf("\n"); */
 	  }
 
-	  fscanf(fp,"%d", &nP[lc] );	/* concentrated point loads	*/
+	  fscanf(fp,"%d", &nW[lc] );	/* trapezoidally distributed loads */
+	  printf("  number of tapezoidally distributed loads ");
+	  dots(10);
+	  printf(" nW = %3d\n", nW[lc]);
+	  if ( nW[lc] < 0 || nW[lc] > nB ) {
+		fprintf(stderr,"  error: valid ranges for nW is 0 ... %d \n", nB );
+		exit(1);
+	  }
+	  for (i=1; i <= nW[lc]; i++) {	/* ! local element coordinates ! */
+		fscanf(fp,"%d", &n );
+		if ( n < 1 || n > nB ) {
+		    fprintf(stderr,"  error in uniform distributed loads: element number %d is out of range\n",n);
+		    exit(1);
+		}
+		W[lc][i][1] = (double) n;
+		for (l=2; l<=13; l++)	fscanf(fp,"%f", &W[lc][i][l] );
+
+		Ln = L[n];
+
+		/* error checking */
+
+		if ( W[lc][i][ 4]==0 && W[lc][i][ 5]==0 &&
+		     W[lc][i][ 7]==0 && W[lc][i][ 8]==0 &&
+		     W[lc][i][12]==0 && W[lc][i][13]==0 ) {
+		    fprintf(stderr,"   warning: All trapezoidal loads applied to beam element %d  are zero\n", n );
+		  fprintf(stderr,"     load case: %d , member %d , load %d\n ", lc, n, i );
+		}
+
+		if ( W[lc][i][ 2] < 0 ) {
+		  fprintf(stderr,"   error in x-axis trapezoidal loads, ");
+		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][2]);
+		  exit(1);
+		}
+		if ( W[lc][i][ 2] > W[lc][i][3] ) {
+		  fprintf(stderr,"   error in x-axis trapezoidal loads, ");
+		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][2], W[lc][i][3] );
+		  exit(1);
+		}
+		if ( W[lc][i][ 3] > Ln ) {
+		  fprintf(stderr,"   error in x-axis trapezoidal loads, ");
+		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][3], Ln );
+		  exit(1);
+		}
+		if ( W[lc][i][ 6] < 0 ) {
+		  fprintf(stderr,"   error in y-axis trapezoidal loads, ");
+		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][6]);
+		  exit(1);
+		}
+		if ( W[lc][i][ 6] > W[lc][i][7] ) {
+		  fprintf(stderr,"   error in y-axis trapezoidal loads, ");
+		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][6], W[lc][i][7] );
+		  exit(1);
+		}
+		if ( W[lc][i][ 7] > Ln ) {
+		  fprintf(stderr,"   error in y-axis trapezoidal loads, ");
+		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][7],Ln );
+		  exit(1);
+		}
+		if ( W[lc][i][10] < 0 ) {
+		  fprintf(stderr,"   error in z-axis trapezoidal loads, ");
+		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][10]);
+		  exit(1);
+		}
+		if ( W[lc][i][10] > W[lc][i][11] ) {
+		  fprintf(stderr,"   error in z-axis trapezoidal loads, ");
+		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][10], W[lc][i][11] );
+		  exit(1);
+		}
+		if ( W[lc][i][11] > Ln ) {
+		  fprintf(stderr,"   error in z-axis trapezoidal loads, ");
+		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][11], Ln );
+		  exit(1);
+		}
+
+		if ( shear ) {
+			Ksy = G[n]*Asy[n]*Le[n]*Le[n] / (12.0*E[n]*Iz[n]);
+			Ksz = G[n]*Asz[n]*Le[n]*Le[n] / (12.0*E[n]*Iy[n]);
+		} else	Ksy = Ksz = 0.0;
+
+		/* x-axis trapezoidal loads (along the frame element length) */
+		x1 = W[lc][i][2]; x2 = W[lc][i][3];
+		w1 = W[lc][i][4]; w2 = W[lc][i][5];
+
+		Nx1 = ( 3.0*(w1+w2)*Ln*(x1-x2) + (2.0*w2+w1)*x2*x2 + (w1-w2)*x2*x1 - (2.0*w1+w2)*x1*x1 ) / (6.0*Ln);
+		Nx2 = ( (2.0*w1+w2)*x1*x1 - (2.0*w2+w1)*x2*x2  - (w1-w2)*x1*x2 ) / ( 6.0*Ln );
+
+		/* y-axis trapezoidal loads (across the frame element length) */
+		x1 = W[lc][i][6]; x2 = W[lc][i][7];
+		w1 = W[lc][i][8]; w2 = W[lc][i][9];
+
+		R1o = ( (2.0*w1+w2)*x1*x1 - (w1+2.0*w2)*x2*x2 + 
+			 3.0*(w1+w2)*Ln*(x2-x1) - (w1-w2)*x1*x2 ) / (6.0*Ln);
+		R2o = ( (w1+2.0*w2)*x2*x2 + (w1-w2)*x1*x2 - 
+			(2.0*w1+w2)*x1*x1 ) / (6.0*Ln);
+
+		f01 = (  3.0*(w2+4.0*w1)*x1*x1*x1*x1 -  3.0*(w1+4.0*w2)*x2*x2*x2*x2
+		      - 15.0*(w2+3.0*w1)*Ln*x1*x1*x1 + 15.0*(w1+3.0*w2)*Ln*x2*x2*x2
+		      -  3.0*(w1-w2)*x1*x2*(x1*x1 + x2*x2)
+		      + 20.0*(w2+2.0*w1)*Ln*Ln*x1*x1 - 20.0*(w1+2.0*w2)*Ln*Ln*x2*x2
+		      + 15.0*(w1-w2)*Ln*x1*x2*(x1+x2)
+		      -  3.0*(w1-w2)*x1*x1*x2*x2 - 20.0*(w1-w2)*Ln*Ln*x1*x2 ) / 360.0;
+
+		f02 = (  3.0*(w2+4.0*w1)*x1*x1*x1*x1 - 3.0*(w1+4.0*w2)*x2*x2*x2*x2
+		      -  3.0*(w1-w2)*x1*x2*(x1*x1+x2*x2)
+		      - 10.0*(w2+2.0*w1)*Ln*Ln*x1*x1 + 10.0*(w1+2.0*w2)*Ln*Ln*x2*x2
+		      -  3.0*(w1-w2)*x1*x1*x2*x2 + 10.0*(w1-w2)*Ln*Ln*x1*x2 ) / 360.0;
+
+		Mz1 = ( f01 - f02 + 2.0*Ksy*(2.0*f01 + f02) ) / ( Ln*Ln*(1.0+Ksy) );
+		Mz2 = ( f02 - f01 + 2.0*Ksy*(2.0*f02 + f01) ) / ( Ln*Ln*(1.0+Ksy) );
+
+		Vy1 = -R1o + My1/Ln + My2/Ln;
+		Vy2 = -R2o - My1/Ln - My2/Ln;
+
+		/* z-axis trapezoidal loads (across the frame element length) */
+		x1 = W[lc][i][10]; x2 = W[lc][i][11];
+		w1 = W[lc][i][12]; w2 = W[lc][i][13];
+
+		R1o = ( (2.0*w1+w2)*x1*x1 - (w1+2.0*w2)*x2*x2 + 
+			 3.0*(w1+w2)*Ln*(x2-x1) - (w1-w2)*x1*x2 ) / (6.0*Ln);
+		R2o = ( (w1+2.0*w2)*x2*x2 + (w1-w2)*x1*x2 -
+			(2.0*w1+w2)*x1*x1 ) / (6.0*Ln);
+
+		f01 = (  3.0*(w2+4.0*w1)*x1*x1*x1*x1 -  3.0*(w1+4.0*w2)*x2*x2*x2*x2
+		      - 15.0*(w2+3.0*w1)*Ln*x1*x1*x1 + 15.0*(w1+3.0*w2)*Ln*x2*x2*x2
+		      -  3.0*(w1-w2)*x1*x2*(x1*x1 + x2*x2)
+		      + 20.0*(w2+2.0*w1)*Ln*Ln*x1*x1 - 20.0*(w1+2.0*w2)*Ln*Ln*x2*x2
+		      + 15.0*(w1-w2)*Ln*x1*x2*(x1+x2)
+		      -  3.0*(w1-w2)*x1*x1*x2*x2 - 20.0*(w1-w2)*Ln*Ln*x1*x2 ) / 360.0;
+
+		f02 = (  3.0*(w2+4.0*w1)*x1*x1*x1*x1 - 3.0*(w1+4.0*w2)*x2*x2*x2*x2
+		      -  3.0*(w1-w2)*x1*x2*(x1*x1+x2*x2)
+		      - 10.0*(w2+2.0*w1)*Ln*Ln*x1*x1 + 10.0*(w1+2.0*w2)*Ln*Ln*x2*x2
+		      -  3.0*(w1-w2)*x1*x1*x2*x2 + 10.0*(w1-w2)*Ln*Ln*x1*x2 ) / 360.0;
+
+		My1 = ( f01 - f02 + 2.0*Ksz*(2.0*f01 + f02) ) / ( Ln*Ln*(1.0+Ksz) );
+		My2 = ( f02 - f01 + 2.0*Ksz*(2.0*f02 + f01) ) / ( Ln*Ln*(1.0+Ksz) );
+
+		Vz1 = -R1o + My1/Ln + My2/Ln;
+		Vz2 = -R1o - My1/Ln - My2/Ln;
+
+		/* debugging
+		printf("n=%d Vy=%9.2e Vz=%9.2e My=%9.2e Mz=%9.2e\n",
+						n, Vy1,Vz1, My1,Mz1 );	*/
+
+		j1 = J1[n];	j2 = J2[n];
+
+		coord_trans ( xyz, Ln, j1, j2,
+			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
+
+		/* debugging
+		printf("t1=%5.2f t2=%5.2f t3=%5.2f \n", t1, t2, t3 );
+                printf("t4=%5.2f t5=%5.2f t6=%5.2f \n", t4, t5, t6 );
+                printf("t7=%5.2f t8=%5.2f t9=%5.2f \n", t7, t8, t9 ); */
+
+		/* {F} = [T]'{Q} */
+		feF_mech[lc][n][1]  += ( Nx1*t1 + Vy1*t4 + Vz1*t7 );
+		feF_mech[lc][n][2]  += ( Nx1*t2 + Vy1*t5 + Vz1*t8 );
+		feF_mech[lc][n][3]  += ( Nx1*t3 + Vy1*t6 + Vz1*t9 );
+		feF_mech[lc][n][4]  += ( Mx1*t1 + My1*t4 + Mz1*t7 );
+		feF_mech[lc][n][5]  += ( Mx1*t2 + My1*t5 + Mz1*t8 );
+		feF_mech[lc][n][6]  += ( Mx1*t3 + My1*t6 + Mz1*t9 );
+
+		feF_mech[lc][n][7]  += ( Nx2*t1 + Vy2*t4 + Vz2*t7 );
+		feF_mech[lc][n][8]  += ( Nx2*t2 + Vy2*t5 + Vz2*t8 );
+		feF_mech[lc][n][9]  += ( Nx2*t3 + Vy2*t6 + Vz2*t9 );
+		feF_mech[lc][n][10] += ( Mx2*t1 + My2*t4 + Mz2*t7 );
+		feF_mech[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
+		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
+
+		/* debugging
+		printf("n=%d ", n);
+		for (l=1;l<=12;l++) {
+			if (feF_mech[lc][n][l] != 0)
+			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
+		}
+		printf("\n"); */
+	  }				/* end trapezoidally distributed loads */
+
+	  fscanf(fp,"%d", &nP[lc] );	/* element point loads	*/
 	  printf("  number of concentrated beam element point loads ");
 	  dots(3);
 	  printf(" nP = %3d\n", nP[lc]);
@@ -599,34 +788,35 @@ void read_and_assemble_loads(
 		}
 
 		if ( shear ) {
-			Ksy = G[n]*Asy[n]*Le[n]*Le[n] / (12.*E[n]*Iz[n]);
-			Ksz = G[n]*Asz[n]*Le[n]*Le[n] / (12.*E[n]*Iy[n]);
+			Ksy = G[n]*Asy[n]*Le[n]*Le[n] / (12.0*E[n]*Iz[n]);
+			Ksz = G[n]*Asz[n]*Le[n]*Le[n] / (12.0*E[n]*Iy[n]);
 		} else	Ksy = Ksz = 0.0;
 
+		Ln = L[n];
 
-		Nx1 = P[lc][i][2]*a/L[n];
-		Nx2 = P[lc][i][2]*b/L[n];
-		Vy1 = (1./(1.+Ksz))*P[lc][i][3]*b*b*(3.*a + b) / ( L[n]*L[n]*L[n] )+
-			(Ksz/(1.+Ksz)) * P[lc][i][3]*b/L[n];
-		Vy2 = (1./(1.+Ksz))*P[lc][i][3]*a*a*(3.*b + a) / ( L[n]*L[n]*L[n] )+
-			(Ksz/(1.+Ksz)) * P[lc][i][3]*a/L[n];
-		Vz1 = (1./(1.+Ksy))*P[lc][i][4]*b*b*(3.*a + b) / ( L[n]*L[n]*L[n] )+
-			(Ksy/(1.+Ksy)) * P[lc][i][4]*b/L[n];
-		Vz2 = (1./(1.+Ksy))*P[lc][i][4]*a*a*(3.*b + a) / ( L[n]*L[n]*L[n] )+
-			(Ksy/(1.+Ksy)) * P[lc][i][4]*a/L[n];
+		Nx1 = P[lc][i][2]*a/Ln;
+		Nx2 = P[lc][i][2]*b/Ln;
+		Vy1 = (1./(1.+Ksz))*P[lc][i][3]*b*b*(3.*a + b) / ( Ln*Ln*Ln ) +
+			(Ksz/(1.+Ksz)) * P[lc][i][3]*b/Ln;
+		Vy2 = (1./(1.+Ksz))*P[lc][i][3]*a*a*(3.*b + a) / ( Ln*Ln*Ln ) +
+			(Ksz/(1.+Ksz)) * P[lc][i][3]*a/Ln;
+		Vz1 = (1./(1.+Ksy))*P[lc][i][4]*b*b*(3.*a + b) / ( Ln*Ln*Ln ) +
+			(Ksy/(1.+Ksy)) * P[lc][i][4]*b/Ln;
+		Vz2 = (1./(1.+Ksy))*P[lc][i][4]*a*a*(3.*b + a) / ( Ln*Ln*Ln ) +
+			(Ksy/(1.+Ksy)) * P[lc][i][4]*a/Ln;
 		Mx1 = Mx2 = 0.0;
-		My1 = -(1./(1.+Ksy)) * P[lc][i][4]*a*b*b / ( L[n]*L[n] ) -
-			(Ksy/(1.+Ksy))* P[lc][i][4]*a*b / (2.*L[n]);
-		My2 =  (1./(1.+Ksy)) * P[lc][i][4]*a*a*b / ( L[n]*L[n] ) +
-			(Ksy/(1.+Ksy))* P[lc][i][4]*a*b / (2.*L[n]);
-		Mz1 =  (1./(1.+Ksz)) * P[lc][i][3]*a*b*b / ( L[n]*L[n] ) +
-			(Ksz/(1.+Ksz))* P[lc][i][3]*a*b / (2.*L[n]);
-		Mz2 = -(1./(1.+Ksz)) * P[lc][i][3]*a*a*b / ( L[n]*L[n] ) -
-			(Ksz/(1.+Ksz))* P[lc][i][3]*a*b / (2.*L[n]);
+		My1 = -(1./(1.+Ksy)) * P[lc][i][4]*a*b*b / ( Ln*Ln ) -
+			(Ksy/(1.+Ksy))* P[lc][i][4]*a*b / (2.*Ln);
+		My2 =  (1./(1.+Ksy)) * P[lc][i][4]*a*a*b / ( Ln*Ln ) +
+			(Ksy/(1.+Ksy))* P[lc][i][4]*a*b / (2.*Ln);
+		Mz1 =  (1./(1.+Ksz)) * P[lc][i][3]*a*b*b / ( Ln*Ln ) +
+			(Ksz/(1.+Ksz))* P[lc][i][3]*a*b / (2.*Ln);
+		Mz2 = -(1./(1.+Ksz)) * P[lc][i][3]*a*a*b / ( Ln*Ln ) -
+			(Ksz/(1.+Ksz))* P[lc][i][3]*a*b / (2.*Ln);
 
 		j1 = J1[n];	j2 = J2[n];
 
-		coord_trans ( xyz, L[n], j1, j2,
+		coord_trans ( xyz, Ln, j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		/* {F} = [T]'{Q} */
@@ -643,7 +833,7 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][10] += ( Mx2*t1 + My2*t4 + Mz2*t7 );
 		feF_mech[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
 		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
-	  }
+	  }					/* end element point loads	*/
 
 	  fscanf(fp,"%d", &nT[lc] );		/* thermal loads		*/
 	  printf("  number of beams with temperature changes ");
@@ -699,7 +889,7 @@ void read_and_assemble_loads(
 		feF_temp[lc][n][10] += ( Mx2*t1 + My2*t4 + Mz2*t7 );
 		feF_temp[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
 		feF_temp[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
-	  }
+	  }				/* end thermal loads	*/
 
 	  for (n=1; n<=nB; n++) {
 	     j1 = J1[n];	j2 = J2[n];
@@ -964,13 +1154,13 @@ void write_input_data(
 	FILE *fp,
 	char *title, int nJ, int nB, int nL,
 	int *nD, int nR,
-	int *nF, int *nW, int *nP, int *nT,
+	int *nF, int *nU, int *nW, int *nP, int *nT,
 	vec3 *xyz, float *r,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz,
 	float *E, float *G, float *p, double **F, float **Dp,
 	int *R,
-	float ***W, float ***P, float ***T,
+	float ***U, float ***W, float ***P, float ***T,
 	int shear, int anlyz, int geom
 ){
 	int	i,j,n, lc;
@@ -1032,11 +1222,11 @@ void write_input_data(
 
 	  fprintf(fp,"\nL O A D   C A S E   %d   O F   %d  ... \n\n", lc,nL);
 	  fprintf(fp," %3d joints  with concentrated loads\n", nF[lc] );
-	  fprintf(fp," %3d elements with uniformly distributed loads\n", nW[lc]);
+	  fprintf(fp," %3d elements with uniformly distributed loads\n", nU[lc]);
 	  fprintf(fp," %3d elements with concentrated point loads\n", nP[lc] );
 	  fprintf(fp," %3d elements with temperature loads\n", nT[lc] );
 	  fprintf(fp," %3d joints  with prescribed displacements\n", nD[lc] );
-	  if ( nF[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nT[lc] > 0 ) {
+	  if ( nF[lc] > 0 || nU[lc] > 0 || nP[lc] > 0 || nT[lc] > 0 ) {
 	    fprintf(fp," J O I N T   L O A D S");
 	    fprintf(fp,"  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)\n");
 	    fprintf(fp,"  Joint       Fx          Fy          Fz");
@@ -1052,13 +1242,13 @@ void write_input_data(
 	    }
 	  }
 
-	  if ( nW[lc] > 0 ) {
+	  if ( nU[lc] > 0 ) {
 	    fprintf(fp," U N I F O R M   B E A M   L O A D S");
 	    fprintf(fp,"\t\t\t\t\t(local)\n");
-	    fprintf(fp,"  Beam        Wx               Wy               Wz\n");
-	    for (n=1; n<=nW[lc]; n++) {
-		fprintf(fp, " %5d", (int) (W[lc][n][1]) );
-		for (i=2; i<=4; i++) fprintf(fp, " %16.8f", W[lc][n][i] );
+	    fprintf(fp,"  Beam        Ux               Uy               Uz\n");
+	    for (n=1; n<=nU[lc]; n++) {
+		fprintf(fp, " %5d", (int) (U[lc][n][1]) );
+		for (i=2; i<=4; i++) fprintf(fp, " %16.8f", U[lc][n][i] );
 		fprintf(fp, "\n");
 	    }
 	  }

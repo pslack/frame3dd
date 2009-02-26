@@ -1,12 +1,12 @@
 ________________________________________________________________________________
-FRAME3DD version: 20090210               http://frame3dd.sf.net/
+FRAME3DD version: 20090226               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example H: a pedestrian ramp  (kip  in) 
-Tue Feb 17 14:14:39 2009
+Thu Feb 26 16:56:05 2009
 ________________________________________________________________________________
 148 JOINTS;    295 MEMBERS;    1 LOAD CASES;  36 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -584,7 +584,7 @@ L O A D   C A S E   1   O F   1  ...
    147       2.000       0.000     -48.100     480.000      12.033       0.000
    148       2.000       0.000     -48.100     480.000     -12.033       0.000
  U N I F O R M   B E A M   L O A D S					(local)
-  Beam        Wx               Wy               Wz
+  Beam        Ux               Uy               Uz
     44       0.00000000       0.00000000      -0.10000000
     45       0.00000000       0.00000000      -0.10000000
     46       0.00000000       0.00000000      -0.10000000

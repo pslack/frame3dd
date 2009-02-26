@@ -175,7 +175,7 @@ void dyn_conden(
 	release allocated memory
 */
 void deallocate( 
-	int nJ, int nB, int nL, int *nF, int *nW, int *nP, int *nT, int DoF,
+	int nJ, int nB, int nL, int *nF, int *nU, int *nW, int *nP, int *nT, int DoF,
 	int modes,
 	vec3 *xyz, float *r, double *L, double *Le,
 	int *J1, int *J2, int *R,
@@ -183,7 +183,7 @@ void deallocate(
 	float *J, float *Iy, float *Iz,
 	float *E, float *G,
 	float *p,
-	float ***W, float ***P, float ***T,
+	float ***U, float ***W, float ***P, float ***T,
 	float **Dp,
 	double **Fo_mech, double **Fo_temp,
 	double ***feF_mech, double ***feF_temp, double **feF,

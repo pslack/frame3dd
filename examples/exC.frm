@@ -93,8 +93,8 @@ Example C: a tetrahedral frame - static and dynamic analysis
 				% Begin Static Load Case 1 of 1
 0                               % number of loaded joints
 
-5				% number of distributed loads
-%.j      wx       wy     wz
+5				% number of uniform loads
+%.j      Ux       Uy     Uz
 %       k/in     k/in   k/in
   5	0.0	-10.0	0.0
  14	0.0	-10.0	0.0
@@ -102,6 +102,7 @@ Example C: a tetrahedral frame - static and dynamic analysis
  32	0.0	-10.0	0.0
  41	0.0	-10.0	0.0
 
+0                               % number of trapezoidal loads
 0                               % number of internal concentrated loads
 0                               % number of members with temperature loads
 0                               % number of joints with support settlements
