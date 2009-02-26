@@ -718,15 +718,15 @@ void read_and_assemble_loads(
 		      - 10.0*(w2+2.0*w1)*Ln*Ln*x1*x1 + 10.0*(w1+2.0*w2)*Ln*Ln*x2*x2
 		      -  3.0*(w1-w2)*x1*x1*x2*x2 + 10.0*(w1-w2)*Ln*Ln*x1*x2 ) / 360.0;
 
-		My1 = ( f01 - f02 + 2.0*Ksz*(2.0*f01 + f02) ) / ( Ln*Ln*(1.0+Ksz) );
-		My2 = ( f02 - f01 + 2.0*Ksz*(2.0*f02 + f01) ) / ( Ln*Ln*(1.0+Ksz) );
+		My1 = -( f01 - f02 + 2.0*Ksz*(2.0*f01 + f02) ) / ( Ln*Ln*(1.0+Ksz) );
+		My2 = -( f02 - f01 + 2.0*Ksz*(2.0*f02 + f01) ) / ( Ln*Ln*(1.0+Ksz) );
 
-		Vz1 = -R1o + My1/Ln + My2/Ln;
-		Vz2 = -R1o - My1/Ln - My2/Ln;
+		Vz1 =  R1o - My1/Ln - My2/Ln;
+		Vz2 =  R1o + My1/Ln + My2/Ln;
 
 		/* debugging */
-		printf("n=%d Vy=%9.2e Vz=%9.2e My=%9.2e Mz=%9.2e\n",
-						n, Vy1,Vz1, My1,Mz1 );	/**/
+		printf("n=%d Vy1=%9.2e Vy2=%9.2e Vz1=%9.2e Vz2=%9.2e My1=%9.2e My2=%9.2e Mz1=%9.2e Mz2=%9.2e\n",
+						n, Vy1,Vy2,Vz1,Vz2, My1,My2,Mz1,Mz2 );	/**/
 
 		j1 = J1[n];	j2 = J2[n];
 
@@ -754,6 +754,8 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 
 		/* debugging*/
+		for (l=1;l<=13;l++) printf(" %9.2e ", W[lc][i][l] );
+		printf("\n"); /**/
 		printf("n=%d ", n);
 		for (l=1;l<=12;l++) {
 			if (feF_mech[lc][n][l] != 0)
