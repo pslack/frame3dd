@@ -179,7 +179,7 @@ int main(int argc, char *argv[]){
 	fprintf(stderr," ** %s ** \n\n", title );
 
 	fscanf(fp, "%d", &nJ );		/* number of joints	*/
-	printf(" number of joints "); dots(35); printf(" nJ = %3d",nJ);
+	printf(" number of joints "); dots(35); printf(" nJ = %3d ",nJ);
 
 					/* allocate memory for joint data ... */
 	r   =  vector(1,nJ);		/* rigid radius around each joint */
@@ -195,7 +195,7 @@ int main(int argc, char *argv[]){
 	printf("  ... complete\n");
 
 	fscanf(fp, "%d", &nB );		/* number of beam elements	*/
-	printf(" number of beam elements"); dots(29); printf(" nB = %3d",nB);
+	printf(" number of beam elements"); dots(29); printf(" nB = %3d ",nB);
 	if ( nJ > nB + 1) {
 		fprintf(stderr,"warning: %d joints and %d members...", nJ, nB );
 		fprintf(stderr," not enough members to connect all joints.\n");
@@ -228,7 +228,7 @@ int main(int argc, char *argv[]){
 			meshpath, plotpath, &exagg, &anlyz );
 
 	fscanf(fp, "%d", &nL );		/* number of load cases		*/
-	printf(" number of load cases "); dots(31); printf(" nL = %3d\n",nL);
+	printf(" number of load cases "); dots(31); printf(" nL = %3d \n",nL);
 
 	if ( nL < 1 ) {
 		fprintf(stderr,"\nERROR: the number of load cases must be at least 1\n");

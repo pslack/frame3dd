@@ -537,9 +537,9 @@ void read_and_assemble_loads(
 		My1 = -U[lc][i][4]*Le[n]*Le[n] / 12.0;	My2 = -My1;
 		Mz1 =  U[lc][i][3]*Le[n]*Le[n] / 12.0;	Mz2 = -Mz1;
 
-		/* debugging
+		/* debugging */
 		printf("n=%d Vy=%9.2e Vz=%9.2e My=%9.2e Mz=%9.2e\n",
-						n, Vy1,Vz1, My1,Mz1 );	*/
+						n, Vy1,Vz1, My1,Mz1 );	/**/
 
 		j1 = J1[n];	j2 = J2[n];
 
@@ -566,13 +566,13 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
 		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 
-		/* debugging
+		/* debugging */
 		printf("n=%d ", n);
 		for (l=1;l<=12;l++) {
 			if (feF_mech[lc][n][l] != 0)
 			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
 		}
-		printf("\n"); */
+		printf("\n"); /**/
 	  }
 
 	  fscanf(fp,"%d", &nW[lc] );	/* trapezoidally distributed loads */
@@ -724,9 +724,9 @@ void read_and_assemble_loads(
 		Vz1 = -R1o + My1/Ln + My2/Ln;
 		Vz2 = -R1o - My1/Ln - My2/Ln;
 
-		/* debugging
+		/* debugging */
 		printf("n=%d Vy=%9.2e Vz=%9.2e My=%9.2e Mz=%9.2e\n",
-						n, Vy1,Vz1, My1,Mz1 );	*/
+						n, Vy1,Vz1, My1,Mz1 );	/**/
 
 		j1 = J1[n];	j2 = J2[n];
 
@@ -753,13 +753,13 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
 		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 
-		/* debugging
+		/* debugging*/
 		printf("n=%d ", n);
 		for (l=1;l<=12;l++) {
 			if (feF_mech[lc][n][l] != 0)
 			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
 		}
-		printf("\n"); */
+		printf("\n"); /**/
 	  }				/* end trapezoidally distributed loads */
 
 	  fscanf(fp,"%d", &nP[lc] );	/* element point loads	*/
