@@ -664,15 +664,15 @@ void read_and_assemble_loads(
 		} else	Ksy = Ksz = 0.0;
 
 		/* x-axis trapezoidal loads (along the frame element length) */
-		x1 = W[lc][i][2]; x2 = W[lc][i][3];
-		w1 = W[lc][i][4]; w2 = W[lc][i][5];
+		x1 =  W[lc][i][2]; x2 =  W[lc][i][3];
+		w1 =  W[lc][i][4]; w2 =  W[lc][i][5];
 
-		Nx1 = ( 3.0*(w1+w2)*Ln*(x1-x2) + (2.0*w2+w1)*x2*x2 + (w1-w2)*x2*x1 - (2.0*w1+w2)*x1*x1 ) / (6.0*Ln);
-		Nx2 = ( (2.0*w1+w2)*x1*x1 - (2.0*w2+w1)*x2*x2  - (w1-w2)*x1*x2 ) / ( 6.0*Ln );
+		Nx1 = ( 3.0*(w1+w2)*Ln*(x2-x1) - (2.0*w2+w1)*x2*x2 + (w2-w1)*x2*x1 + (2.0*w1+w2)*x1*x1 ) / (6.0*Ln);
+		Nx2 = ( -(2.0*w1+w2)*x1*x1 + (2.0*w2+w1)*x2*x2  - (w1-w2)*x1*x2 ) / ( 6.0*Ln );
 
 		/* y-axis trapezoidal loads (across the frame element length) */
-		x1 = W[lc][i][6]; x2 = W[lc][i][7];
-		w1 = W[lc][i][8]; w2 = W[lc][i][9];
+		x1 =  W[lc][i][6];  x2 = W[lc][i][7];
+		w1 =  W[lc][i][8]; w2 =  W[lc][i][9];
 
 		R1o = ( (2.0*w1+w2)*x1*x1 - (w1+2.0*w2)*x2*x2 + 
 			 3.0*(w1+w2)*Ln*(x2-x1) - (w1-w2)*x1*x2 ) / (6.0*Ln);
@@ -691,15 +691,15 @@ void read_and_assemble_loads(
 		      - 10.0*(w2+2.0*w1)*Ln*Ln*x1*x1 + 10.0*(w1+2.0*w2)*Ln*Ln*x2*x2
 		      -  3.0*(w1-w2)*x1*x1*x2*x2 + 10.0*(w1-w2)*Ln*Ln*x1*x2 ) / 360.0;
 
-		Mz1 = ( f01 - f02 + 2.0*Ksy*(2.0*f01 + f02) ) / ( Ln*Ln*(1.0+Ksy) );
-		Mz2 = ( f02 - f01 + 2.0*Ksy*(2.0*f02 + f01) ) / ( Ln*Ln*(1.0+Ksy) );
+		Mz1 = ( f02 - f01 - 2.0*Ksy*(2.0*f01 + f02) ) / ( Ln*Ln*(1.0+Ksy) );
+		Mz2 = ( f01 - f02 - 2.0*Ksy*(2.0*f02 + f01) ) / ( Ln*Ln*(1.0+Ksy) );
 
-		Vy1 = -R1o + My1/Ln + My2/Ln;
-		Vy2 = -R2o - My1/Ln - My2/Ln;
+		Vy1 =  R1o + Mz1/Ln + Mz2/Ln;
+		Vy2 =  R2o - Mz1/Ln - Mz2/Ln;
 
 		/* z-axis trapezoidal loads (across the frame element length) */
-		x1 = W[lc][i][10]; x2 = W[lc][i][11];
-		w1 = W[lc][i][12]; w2 = W[lc][i][13];
+		x1 =  W[lc][i][10]; x2 =  W[lc][i][11];
+		w1 =  W[lc][i][12]; w2 =  W[lc][i][13];
 
 		R1o = ( (2.0*w1+w2)*x1*x1 - (w1+2.0*w2)*x2*x2 + 
 			 3.0*(w1+w2)*Ln*(x2-x1) - (w1-w2)*x1*x2 ) / (6.0*Ln);
@@ -718,15 +718,15 @@ void read_and_assemble_loads(
 		      - 10.0*(w2+2.0*w1)*Ln*Ln*x1*x1 + 10.0*(w1+2.0*w2)*Ln*Ln*x2*x2
 		      -  3.0*(w1-w2)*x1*x1*x2*x2 + 10.0*(w1-w2)*Ln*Ln*x1*x2 ) / 360.0;
 
-		My1 = -( f01 - f02 + 2.0*Ksz*(2.0*f01 + f02) ) / ( Ln*Ln*(1.0+Ksz) );
-		My2 = -( f02 - f01 + 2.0*Ksz*(2.0*f02 + f01) ) / ( Ln*Ln*(1.0+Ksz) );
+		My1 = ( f01 - f02 + 2.0*Ksz*(2.0*f01 + f02) ) / ( Ln*Ln*(1.0+Ksz) );
+		My2 = ( f02 - f01 + 2.0*Ksz*(2.0*f02 + f01) ) / ( Ln*Ln*(1.0+Ksz) );
 
 		Vz1 =  R1o - My1/Ln - My2/Ln;
-		Vz2 =  R1o + My1/Ln + My2/Ln;
+		Vz2 =  R2o + My1/Ln + My2/Ln;
 
 		/* debugging */
-		printf("n=%d Vy1=%9.2e Vy2=%9.2e Vz1=%9.2e Vz2=%9.2e My1=%9.2e My2=%9.2e Mz1=%9.2e Mz2=%9.2e\n",
-						n, Vy1,Vy2,Vz1,Vz2, My1,My2,Mz1,Mz2 );	/**/
+		printf("n=%d\n Nx1=%9.3f\n Nx2=%9.3f\n Vy1=%9.3f\n Vy2=%9.3f\n Vz1=%9.3f\n Vz2=%9.3f\n My1=%9.3f\n My2=%9.3f\n Mz1=%9.3f\n Mz2=%9.3f\n",
+				n, Nx1,Nx2,Vy1,Vy2,Vz1,Vz2, My1,My2,Mz1,Mz2 );	/**/
 
 		j1 = J1[n];	j2 = J2[n];
 
@@ -759,7 +759,7 @@ void read_and_assemble_loads(
 		printf("n=%d ", n);
 		for (l=1;l<=12;l++) {
 			if (feF_mech[lc][n][l] != 0)
-			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
+			   printf(" feF %d = %9.3f ", l, feF_mech[lc][n][l] );
 		}
 		printf("\n"); /**/
 	  }				/* end trapezoidally distributed loads */
@@ -1225,10 +1225,11 @@ void write_input_data(
 	  fprintf(fp,"\nL O A D   C A S E   %d   O F   %d  ... \n\n", lc,nL);
 	  fprintf(fp," %3d joints  with concentrated loads\n", nF[lc] );
 	  fprintf(fp," %3d elements with uniformly distributed loads\n", nU[lc]);
+	  fprintf(fp," %3d elements with trapezoidally distributed loads\n", nW[lc]);
 	  fprintf(fp," %3d elements with concentrated point loads\n", nP[lc] );
 	  fprintf(fp," %3d elements with temperature loads\n", nT[lc] );
 	  fprintf(fp," %3d joints  with prescribed displacements\n", nD[lc] );
-	  if ( nF[lc] > 0 || nU[lc] > 0 || nP[lc] > 0 || nT[lc] > 0 ) {
+	  if ( nF[lc] > 0 || nU[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nT[lc] > 0 ) {
 	    fprintf(fp," J O I N T   L O A D S");
 	    fprintf(fp,"  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)\n");
 	    fprintf(fp,"  Joint       Fx          Fy          Fz");
@@ -1252,6 +1253,23 @@ void write_input_data(
 		fprintf(fp, " %5d", (int) (U[lc][n][1]) );
 		for (i=2; i<=4; i++) fprintf(fp, " %16.8f", U[lc][n][i] );
 		fprintf(fp, "\n");
+	    }
+	  }
+
+	  if ( nW[lc] > 0 ) {
+	    fprintf(fp," T R A P E Z O I D A L   B E A M   L O A D S");
+	    fprintf(fp,"\t\t\t\t\t(local)\n");
+	    fprintf(fp,"  Beam        x1               x2               W1               W2\n");
+	    for (n=1; n<=nW[lc]; n++) {
+	        fprintf(fp, " %5d", (int) (W[lc][n][1]) );
+		for (i=2; i<=5; i++) fprintf(fp, " %16.8f", W[lc][n][i] );
+		fprintf(fp, "  (x)\n");
+	        fprintf(fp, " %5d", (int) (W[lc][n][1]) );
+		for (i=6; i<=9; i++) fprintf(fp, " %16.8f", W[lc][n][i] );
+		fprintf(fp, "  (y)\n");
+	        fprintf(fp, " %5d", (int) (W[lc][n][1]) );
+		for (i=10; i<=13; i++) fprintf(fp, " %16.8f", W[lc][n][i] );
+		fprintf(fp, "  (z)\n");
 	    }
 	  }
 
