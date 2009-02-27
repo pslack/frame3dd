@@ -659,8 +659,8 @@ void read_and_assemble_loads(
 		}
 
 		if ( shear ) {
-			Ksy = G[n]*Asy[n]*Le[n]*Le[n] / (12.0*E[n]*Iz[n]);
-			Ksz = G[n]*Asz[n]*Le[n]*Le[n] / (12.0*E[n]*Iy[n]);
+			Ksy = (12.0*E[n]*Iz[n]) / (G[n]*Asy[n]*Le[n]*Le[n]);
+			Ksz = (12.0*E[n]*Iy[n]) / (G[n]*Asz[n]*Le[n]*Le[n]);
 		} else	Ksy = Ksz = 0.0;
 
 		/* x-axis trapezoidal loads (along the frame element length) */
@@ -691,8 +691,8 @@ void read_and_assemble_loads(
 		      - 10.0*(w2+2.0*w1)*Ln*Ln*x1*x1 + 10.0*(w1+2.0*w2)*Ln*Ln*x2*x2
 		      -  3.0*(w1-w2)*x1*x1*x2*x2 + 10.0*(w1-w2)*Ln*Ln*x1*x2 ) / 360.0;
 
-		Mz1 = ( f02 - f01 - 2.0*Ksy*(2.0*f01 + f02) ) / ( Ln*Ln*(1.0+Ksy) );
-		Mz2 = ( f01 - f02 - 2.0*Ksy*(2.0*f02 + f01) ) / ( Ln*Ln*(1.0+Ksy) );
+		Mz1 = -( 4.0*f01 + 2.0*f02 + Ksy*(f01 - f02) ) / ( Ln*Ln*(1.0+Ksy) );
+		Mz2 = -( 2.0*f01 + 4.0*f02 - Ksy*(f01 - f02) ) / ( Ln*Ln*(1.0+Ksy) );
 
 		Vy1 =  R1o + Mz1/Ln + Mz2/Ln;
 		Vy2 =  R2o - Mz1/Ln - Mz2/Ln;
@@ -718,8 +718,8 @@ void read_and_assemble_loads(
 		      - 10.0*(w2+2.0*w1)*Ln*Ln*x1*x1 + 10.0*(w1+2.0*w2)*Ln*Ln*x2*x2
 		      -  3.0*(w1-w2)*x1*x1*x2*x2 + 10.0*(w1-w2)*Ln*Ln*x1*x2 ) / 360.0;
 
-		My1 = ( f01 - f02 + 2.0*Ksz*(2.0*f01 + f02) ) / ( Ln*Ln*(1.0+Ksz) );
-		My2 = ( f02 - f01 + 2.0*Ksz*(2.0*f02 + f01) ) / ( Ln*Ln*(1.0+Ksz) );
+		My1 = ( 4.0*f01 + 2.0*f02 + Ksz*(f01 - f02) ) / ( Ln*Ln*(1.0+Ksz) );
+		My2 = ( 2.0*f01 + 4.0*f02 - Ksz*(f01 - f02) ) / ( Ln*Ln*(1.0+Ksz) );
 
 		Vz1 =  R1o - My1/Ln - My2/Ln;
 		Vz2 =  R2o + My1/Ln + My2/Ln;
