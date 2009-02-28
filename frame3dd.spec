@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20090226
+Version:	0.20090227
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -68,7 +68,7 @@ rm -rf %{buildroot}
 # changes there.
 #
 
-* Thu Feb 26 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090226
+* Thu Feb 27 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090227
 - Implement trapezoidally-distributed loads over partial distances along frame elements
 
 * Tue Feb 10 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090210

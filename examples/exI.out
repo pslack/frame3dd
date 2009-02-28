@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example I: a triangular tower  (kip in) 
-Thu Feb 26 16:56:33 2009
+Fri Feb 27 19:34:28 2009
 ________________________________________________________________________________
 15 JOINTS;    24 MEMBERS;    1 LOAD CASES;  3 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -62,6 +62,7 @@ L O A D   C A S E   1   O F   1  ...
 
    1 joints  with concentrated loads
   12 elements with uniformly distributed loads
+   0 elements with trapezoidally distributed loads
    0 elements with concentrated point loads
    0 elements with temperature loads
    0 joints  with prescribed displacements

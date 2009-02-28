@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example F: a seismically-isolated building model (units: N  mm  ton) 
-Thu Feb 26 16:55:56 2009
+Fri Feb 27 19:33:51 2009
 ________________________________________________________________________________
 36 JOINTS;    58 MEMBERS;    1 LOAD CASES;  14 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -117,6 +117,7 @@ L O A D   C A S E   1   O F   1  ...
 
   25 joints  with concentrated loads
    0 elements with uniformly distributed loads
+   0 elements with trapezoidally distributed loads
    0 elements with concentrated point loads
    0 elements with temperature loads
    0 joints  with prescribed displacements

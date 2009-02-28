@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example H: a pedestrian ramp  (kip  in) 
-Thu Feb 26 16:56:05 2009
+Fri Feb 27 19:34:00 2009
 ________________________________________________________________________________
 148 JOINTS;    295 MEMBERS;    1 LOAD CASES;  36 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -466,6 +466,7 @@ L O A D   C A S E   1   O F   1  ...
 
    0 joints  with concentrated loads
  166 elements with uniformly distributed loads
+   0 elements with trapezoidally distributed loads
    0 elements with concentrated point loads
    0 elements with temperature loads
    0 joints  with prescribed displacements

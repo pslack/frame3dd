@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis (N mm ton) 
-Thu Feb 26 16:55:34 2009
+Fri Feb 27 19:33:38 2009
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;  4 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -32,6 +32,7 @@ L O A D   C A S E   1   O F   3  ...
 
    1 joints  with concentrated loads
    0 elements with uniformly distributed loads
+   0 elements with trapezoidally distributed loads
    0 elements with concentrated point loads
    0 elements with temperature loads
    0 joints  with prescribed displacements
@@ -43,6 +44,7 @@ L O A D   C A S E   2   O F   3  ...
 
    0 joints  with concentrated loads
    2 elements with uniformly distributed loads
+   0 elements with trapezoidally distributed loads
    0 elements with concentrated point loads
    1 elements with temperature loads
    0 joints  with prescribed displacements
@@ -63,14 +65,15 @@ L O A D   C A S E   3   O F   3  ...
 
    0 joints  with concentrated loads
    0 elements with uniformly distributed loads
+   0 elements with trapezoidally distributed loads
    2 elements with concentrated point loads
    0 elements with temperature loads
    0 joints  with prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
-     1     421.013      -6.909    -572.745    4232.409  -12492.181   -1227.578
-     2       7.643       3.653     -12.459   -7309.026   11108.740   -1227.034
-     3      -0.520      -3.769       2.769    3078.491    1377.911    2454.069
+     1     427.783      -7.020    -581.955    8321.175  -24560.394   -2413.493
+     2       0.379       0.181      -0.618    -244.932     372.263     -41.119
+     3      -0.026      -0.187       0.137     103.163      46.175      82.238
  C O N C E T R A T E D   P O I N T   L O A D S				(local)
   Beam        Px          Py          Pz          x
      1       0.000     100.000    -900.000      30.000
@@ -132,24 +135,24 @@ L O A D   C A S E   3   O F   3  ...
 
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1    0.058439   -0.002649   -0.116487    0.008853   -0.017885   -0.001929
+     1    0.058393   -0.003559   -0.118345    0.017408   -0.035195   -0.003792
 B E A M   E N D   F O R C E S						(local)
   Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
-     1      1    107.986c    -98.260    881.659    180.596  -9483.837  -1388.469
-     1      2   -107.986c     -1.740     18.341   -180.596  15561.665   1529.481
-     2      1    418.703c    197.827   -195.410    699.027   1902.020   3929.134
-     2      3   -418.703c      2.173     -4.590   -699.027  -4147.822  -1833.311
-     3      1    408.141c     -0.508      2.768    -86.464  -2348.224   -441.426
-     3      4   -408.141c      0.508     -2.768     86.464  -2612.421   -490.291
-     4      1     97.424c     -1.979     -1.563   -604.894   1774.373  -2244.027
-     4      5    -97.424c      1.979      1.563    604.894   1055.667  -1326.383
+     1      1    114.039c    -99.771    892.671    355.700 -18716.643  -2735.188
+     1      2   -114.039c     -0.229      7.329   -355.700   4942.840    152.491
+     2      1    424.512c    202.099   -197.364   1375.119   3752.003   7699.035
+     2      3   -424.512c     -2.099     -2.636  -1375.119  -2473.767   2098.247
+     3      1    410.319c     -1.002      5.433   -170.634  -4609.393   -860.315
+     3      4   -410.319c      1.002     -5.433    170.634  -5154.459   -961.192
+     4      1     99.846c     -3.882     -3.057  -1190.053   3462.722  -4395.453
+     4      5    -99.846c      3.882      3.057   1190.053   2060.638  -2606.803
 R E A C T I O N S							(global)
   Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
-     2      62.697      49.198      75.160    8778.489  -12868.215    1372.782
-     3    -279.439     212.296     228.435   -3767.544   -2359.119   -1137.656
-     4    -273.208    -204.271     224.093    1407.435   -2209.950    -455.908
-     5      62.968     -49.700      55.342    -447.446    -983.999   -1439.152
-R M S   E Q U I L I B R I U M    E R R O R: 2.498e-01
+     2      72.519      54.676      69.355    3134.802   -3827.448     324.187
+     3    -285.001     211.128     233.284   -1468.476   -1990.852    2508.626
+     4    -276.137    -205.851     223.084    2779.717   -4358.285    -894.410
+     5      62.776     -51.935      57.928    -871.735   -1921.997   -2829.114
+R M S   E Q U I L I B R I U M    E R R O R: 2.544e-01
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  1.020379e-01     Structural Mass:  2.037858e-03 

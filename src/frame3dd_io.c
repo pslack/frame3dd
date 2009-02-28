@@ -537,9 +537,9 @@ void read_and_assemble_loads(
 		My1 = -U[lc][i][4]*Le[n]*Le[n] / 12.0;	My2 = -My1;
 		Mz1 =  U[lc][i][3]*Le[n]*Le[n] / 12.0;	Mz2 = -Mz1;
 
-		/* debugging */
+		/* debugging 
 		printf("n=%d Vy=%9.2e Vz=%9.2e My=%9.2e Mz=%9.2e\n",
-						n, Vy1,Vz1, My1,Mz1 );	/**/
+						n, Vy1,Vz1, My1,Mz1 );	*/
 
 		j1 = J1[n];	j2 = J2[n];
 
@@ -566,13 +566,13 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
 		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 
-		/* debugging */
+		/* debugging 
 		printf("n=%d ", n);
 		for (l=1;l<=12;l++) {
 			if (feF_mech[lc][n][l] != 0)
 			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
 		}
-		printf("\n"); /**/
+		printf("\n"); */
 	  }
 
 	  fscanf(fp,"%d", &nW[lc] );	/* trapezoidally distributed loads */
@@ -724,9 +724,9 @@ void read_and_assemble_loads(
 		Vz1 =  R1o - My1/Ln - My2/Ln;
 		Vz2 =  R2o + My1/Ln + My2/Ln;
 
-		/* debugging */
+		/* debugging 
 		printf("n=%d\n Nx1=%9.3f\n Nx2=%9.3f\n Vy1=%9.3f\n Vy2=%9.3f\n Vz1=%9.3f\n Vz2=%9.3f\n My1=%9.3f\n My2=%9.3f\n Mz1=%9.3f\n Mz2=%9.3f\n",
-				n, Nx1,Nx2,Vy1,Vy2,Vz1,Vz2, My1,My2,Mz1,Mz2 );	/**/
+				n, Nx1,Nx2,Vy1,Vy2,Vz1,Vz2, My1,My2,Mz1,Mz2 );	*/
 
 		j1 = J1[n];	j2 = J2[n];
 
@@ -753,15 +753,15 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
 		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 
-		/* debugging*/
+		/* debugging
 		for (l=1;l<=13;l++) printf(" %9.2e ", W[lc][i][l] );
-		printf("\n"); /**/
+		printf("\n"); 
 		printf("n=%d ", n);
 		for (l=1;l<=12;l++) {
 			if (feF_mech[lc][n][l] != 0)
 			   printf(" feF %d = %9.3f ", l, feF_mech[lc][n][l] );
 		}
-		printf("\n"); /**/
+		printf("\n"); */
 	  }				/* end trapezoidally distributed loads */
 
 	  fscanf(fp,"%d", &nP[lc] );	/* element point loads	*/
@@ -790,31 +790,36 @@ void read_and_assemble_loads(
 		}
 
 		if ( shear ) {
-			Ksy = G[n]*Asy[n]*Le[n]*Le[n] / (12.0*E[n]*Iz[n]);
-			Ksz = G[n]*Asz[n]*Le[n]*Le[n] / (12.0*E[n]*Iy[n]);
+			Ksy = (12.0*E[n]*Iz[n]) / (G[n]*Asy[n]*Le[n]*Le[n]);
+			Ksz = (12.0*E[n]*Iy[n]) / (G[n]*Asz[n]*Le[n]*Le[n]);
 		} else	Ksy = Ksz = 0.0;
 
 		Ln = L[n];
 
 		Nx1 = P[lc][i][2]*a/Ln;
 		Nx2 = P[lc][i][2]*b/Ln;
-		Vy1 = (1./(1.+Ksz))*P[lc][i][3]*b*b*(3.*a + b) / ( Ln*Ln*Ln ) +
+
+		Vy1 = (1./(1.+Ksz))    * P[lc][i][3]*b*b*(3.*a + b) / ( Ln*Ln*Ln ) +
 			(Ksz/(1.+Ksz)) * P[lc][i][3]*b/Ln;
-		Vy2 = (1./(1.+Ksz))*P[lc][i][3]*a*a*(3.*b + a) / ( Ln*Ln*Ln ) +
+		Vy2 = (1./(1.+Ksz))    * P[lc][i][3]*a*a*(3.*b + a) / ( Ln*Ln*Ln ) +
 			(Ksz/(1.+Ksz)) * P[lc][i][3]*a/Ln;
-		Vz1 = (1./(1.+Ksy))*P[lc][i][4]*b*b*(3.*a + b) / ( Ln*Ln*Ln ) +
+
+		Vz1 = (1./(1.+Ksy))    * P[lc][i][4]*b*b*(3.*a + b) / ( Ln*Ln*Ln ) +
 			(Ksy/(1.+Ksy)) * P[lc][i][4]*b/Ln;
-		Vz2 = (1./(1.+Ksy))*P[lc][i][4]*a*a*(3.*b + a) / ( Ln*Ln*Ln ) +
+		Vz2 = (1./(1.+Ksy))    * P[lc][i][4]*a*a*(3.*b + a) / ( Ln*Ln*Ln ) +
 			(Ksy/(1.+Ksy)) * P[lc][i][4]*a/Ln;
+
 		Mx1 = Mx2 = 0.0;
-		My1 = -(1./(1.+Ksy)) * P[lc][i][4]*a*b*b / ( Ln*Ln ) -
-			(Ksy/(1.+Ksy))* P[lc][i][4]*a*b / (2.*Ln);
-		My2 =  (1./(1.+Ksy)) * P[lc][i][4]*a*a*b / ( Ln*Ln ) +
-			(Ksy/(1.+Ksy))* P[lc][i][4]*a*b / (2.*Ln);
-		Mz1 =  (1./(1.+Ksz)) * P[lc][i][3]*a*b*b / ( Ln*Ln ) +
-			(Ksz/(1.+Ksz))* P[lc][i][3]*a*b / (2.*Ln);
-		Mz2 = -(1./(1.+Ksz)) * P[lc][i][3]*a*a*b / ( Ln*Ln ) -
-			(Ksz/(1.+Ksz))* P[lc][i][3]*a*b / (2.*Ln);
+
+		My1 = -(1./(1.+Ksy))  * P[lc][i][4]*a*b*b / ( Ln*Ln ) -
+			(Ksy/(1.+Ksy))* P[lc][i][4]*a*b   / (2.*Ln);
+		My2 =  (1./(1.+Ksy))  * P[lc][i][4]*a*a*b / ( Ln*Ln ) +
+			(Ksy/(1.+Ksy))* P[lc][i][4]*a*b   / (2.*Ln);
+
+		Mz1 =  (1./(1.+Ksz))  * P[lc][i][3]*a*b*b / ( Ln*Ln ) +
+			(Ksz/(1.+Ksz))* P[lc][i][3]*a*b   / (2.*Ln);
+		Mz2 = -(1./(1.+Ksz))  * P[lc][i][3]*a*a*b / ( Ln*Ln ) -
+			(Ksz/(1.+Ksz))* P[lc][i][3]*a*b   / (2.*Ln);
 
 		j1 = J1[n];	j2 = J2[n];
 
@@ -1258,7 +1263,7 @@ void write_input_data(
 
 	  if ( nW[lc] > 0 ) {
 	    fprintf(fp," T R A P E Z O I D A L   B E A M   L O A D S");
-	    fprintf(fp,"\t\t\t\t\t(local)\n");
+	    fprintf(fp,"\t\t\t\t(local)\n");
 	    fprintf(fp,"  Beam        x1               x2               W1               W2\n");
 	    for (n=1; n<=nW[lc]; n++) {
 	        fprintf(fp, " %5d", (int) (W[lc][n][1]) );
