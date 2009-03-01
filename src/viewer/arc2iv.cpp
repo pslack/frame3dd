@@ -29,6 +29,7 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #include <sstream>
 #include <set>
