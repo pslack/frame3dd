@@ -10,11 +10,14 @@ geometry, material moduli, restrained joints, prescribed displacements,
 load information, and optionally, mass information if a modal analysis
 is to be carried out.
 
-FRAME3DD appends the Input Data with Output Data, resulting in a single
-Input/Output file. The Output Data recapitulates the input information,
-gives joint displacements in global coordinates, member end-forces in
-local coordinates, reactions in global coordinates, and natural
-frequencies and mode shapes in global coordinates.
+FRAME3DD appends results to an Output Data File, The Output Data 
+recapitulates the input information, gives joint displacements in global 
+coordinates, member end-forces in local coordinates, reactions in 
+global coordinates, and natural frequencies and mode shapes in global 
+coordinates.
+
+For usage information, see the User Manual, included with both the source
+code and binary installer packages.
 
 Additional output files from FRAME3DD are directed by default to the temporary
 file folder (according to the %TEMP% env var on Windows, or /tmp on other
@@ -51,7 +54,7 @@ SConstruct   ... optionally used for compiling and building distribution
 frame3dd.spec... build specification for scons, includes changelog
 save.plt     ... Gnuplot macro for saving Gnuplot plots as PostScript
 
-doc/         ... documentation 
+doc/         ... documentation (in HTML format)
 examples/    ... examples of FRAME input/output files
 scons/       ... used by scons to build distribution
 src/         ... C source code 
