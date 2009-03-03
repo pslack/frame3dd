@@ -42,7 +42,7 @@ if env.get('VERSION'):
 		CPPDEFINES=['VERSION=\\"%s\\"' % env['VERSION']]
 	)
 
-frame3dd = prog_env.Program('frame3dd',objs + ['main.c'], LIBS=['m'])
+frame3dd = prog_env.Program('frame3dd',objs + ['main.c'], LIBS=['m','argtable2'])
 
 env['PROGS'].append(frame3dd)
 

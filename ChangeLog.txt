@@ -1,5 +1,28 @@
 
-* Mon Mar 2 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090227
+* Tue Mar 3 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090303
+- Implement command line parsing using argtable2 package
+
+Usage: frame3dd [-chqv] [-e <value>] [-f <value>] [-g On|Off] [-l On|Off]
+[-m J|S] [-p <value>] [-s On|Off] [-t <value>] <input> -o <output>
+
+-c, --check            data check only - the output data reviews the input
+-e, --exagg=<value>    level of deformation exaggeration for Gnuplot output
+-f, --shift=<value>    modal frequency shift for unrestrained structures
+-g, --geom=On|Off      On: include geometric stiffness; Off: neglect
+-h, --help             print this help message and exit
+-l, --lump=On|Off      On: lumped mass matrix; Off: consistent mass matrix
+-m, --modal=J|S        Modal analysis method: Jacobi or Stodola
+-p, --pan=<value>      pan rate for mode shape animation
+-q, --quiet            suppress screen output except for warning messages
+-s, --shear=On|Off     On: include shear deformation; Off: neglect
+-t, --tol=<value>      convergence tolerance for modal analysis
+-v, --version          display program version and exit
+<input>                the  input data file name --- described in the manual
+-o <output>            the output data file name
+
+
+
+* Mon Mar 2 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090302
 - Usage change from ... frame3dd InputData.frm ... to ... frame3dd
 InputData.frm OutputData.out
 - output information regarding number of loading types is now more clear

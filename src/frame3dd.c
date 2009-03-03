@@ -75,11 +75,11 @@ static void consistent_M(
 );
 
 static void invAB(
-	double **A, double **B, int n, int m, double **AiB, int *ok
+	double **A, double **B, int n, int m, double **AiB, int *ok, int verbose
 );
 
 static void xtaiy(
-	double **X, double **A, double **Y, int n, int m, double **Ac
+	double **X, double **A, double **Y, int n, int m, double **Ac, int verbose
 );
 
 /* carry out the coordinate transformation */
@@ -376,9 +376,10 @@ void apply_reactions(
 /*----------------------------------------------------------------------------
 SOLVE_SYSTEM  -  solve {F} =   [K]{D} via L D L' decomposition        27dec01
 ----------------------------------------------------------------------------*/
-void solve_system( K, D, F, DoF, ok )
+void solve_system( K, D, F, DoF, ok, verbose )
 double	**K, *D, *F; 
 int	DoF, *ok;
+int	verbose;
 {
 	double	*diag,		/* diagonal vector of the L D L' decomp. */
 		error=1.0;	/* error in the solution		*/
@@ -392,13 +393,13 @@ int	DoF, *ok;
 		/* exit(1); */
 	} else {				/* back substitute for D */
 		ldl_dcmp( K, DoF, diag, F, D, 0, 1, ok ); /* LDL'  back-sub */
-	        fprintf(stderr,"    LDL' RMS matrix precision:");
+		if ( verbose ) printf("    LDL' RMS matrix precision:");
 		error = *ok = 1;
 		do {					/* improve solution */
 			ldl_mprove ( K, DoF, diag, F, D, &error, ok );
-			fprintf(stderr,"%9.2e", error );
+			if ( verbose ) printf("%9.2e", error );
 		} while ( *ok );
-	        fprintf(stderr,"\n");
+	        if ( verbose ) printf("\n");
 	}
 
 	free_dvector( diag, 1, DoF );
@@ -545,7 +546,8 @@ EQUILIBRIUM  -  perform an equilibrium check, F returned as reactions   18sep02
 void equilibrium(	
 		vec3 *xyz,
 		double *L, int *J1, int *J2, double *F, int *R, float *p,
-		double **Q, double **feF, int nB, int DoF, double *err
+		double **Q, double **feF, int nB, int DoF, double *err,
+		int verbose
 ){
 	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
 		f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12,
@@ -613,7 +615,8 @@ void equilibrium(
 	}
 
 	*err = sqrt ( *err / (double) DoF ) / den;
-	fprintf(stderr,"  RMS relative equilibrium precision: %9.3e\n", *err );
+	if ( verbose )
+		printf("  RMS relative equilibrium precision: %9.3e\n", *err );
 }
 
 /*------------------------------------------------------------------------------
@@ -877,7 +880,7 @@ void atma(
 CONDENSE - static condensation of stiffness matrix from NxN to nxn    30aug01
 ------------------------------------------------------------------------------*/
 void condense(
-		double **A, int N, int *q, int n, double **Ac
+		double **A, int N, int *q, int n, double **Ac, int verbose
 ){
 	double	**Arr, **Arq;
 	int	i,j,k, ri,rj,qi,qj, ok, 
@@ -916,7 +919,7 @@ void condense(
 		}
 	}
 
-	xtaiy( Arq, Arr, Arq, N-n, n, Ac );
+	xtaiy( Arq, Arr, Arq, N-n, n, Ac, verbose );
 
 	for (i=1; i<=n; i++) {
 		for (j=i; j<=n; j++) { /* use only upper triangle of A */
@@ -941,7 +944,8 @@ GUYAN  -   generalized Guyan reduction of mass and stiffness matrices    6jun07
 void guyan(
 		double **M, double **K, int N,
 		int *q, int n,
-		double **Mc, double **Kc, double w2 
+		double **Mc, double **Kc, double w2, 
+		int verbose
 ){
 	double	**Drr, **Drq, **invDrrDrq, **T;
 	int	i,j,k, ri,rj,qj, ok, 
@@ -989,7 +993,7 @@ void guyan(
 		}
 	}
 
-	invAB(Drr, Drq, N-n, n, invDrrDrq, &ok);	/* inv(Drr) * Drq	*/
+	invAB(Drr, Drq, N-n, n, invDrrDrq, &ok, verbose); /* inv(Drr) * Drq */
 
 	/* coordinate transformation matrix	*/	
 	for (i=1; i<=n; i++) {
@@ -1018,7 +1022,8 @@ WARNING: Kc and Mc may be ill-conditioned, and xyzsibly non-positive def.
 -----------------------------------------------------------------------------*/
 void dyn_conden(
 		double **M, double **K, int N, int *R, int *p, int n,
-		double **Mc, double **Kc, double **V, double *f, int *m
+		double **Mc, double **Kc, double **V, double *f, int *m,
+		int verbose
 ){
 	double	**P, **invP,
 		traceM = 0, traceMc = 0, 
@@ -1032,7 +1037,7 @@ void dyn_conden(
 		for (j=1; j<=n; j++)
 			P[i][j] = V[p[i]][m[j]];
 
-	pseudo_inv ( P, invP, n, n, 1e-9 );
+	pseudo_inv ( P, invP, n, n, 1e-9, verbose );
 
 	for (i=1; i<=N; i++) if ( !R[i] ) traceM += M[i][i];
 
@@ -1076,10 +1081,10 @@ INVAB  -  calculate product inv(A) * B
 void invAB(
 	double **A, double **B,
 	int n, int m, double **AiB,
-	int *ok
+	int *ok, int verbose
 ){
 	double	*diag, *b, *x, error;
-	int	i,j,k, disp=1;
+	int	i,j,k;
 
 	diag = dvector(1,n);
 	x    = dvector(1,n);
@@ -1098,14 +1103,13 @@ void invAB(
 		for (k=1; k<=n; k++)  b[k] = B[k][j];
 		ldl_dcmp( A, n, diag, b, x, 0, 1, ok ); /*  L D L'  bksbtn */
 
-		if (disp)
-		 fprintf(stderr,"    LDL' RMS matrix precision:");
+		if ( verbose ) printf("    LDL' RMS matrix precision:");
 		error = *ok = 1;
 		do {					/*improve the solution*/
 			ldl_mprove ( A, n, diag, b, x, &error, ok );
-			if (disp) fprintf(stderr,"%9.2e", error );
+			if ( verbose ) printf("%9.2e", error );
 		} while ( *ok );
-		if (disp) fprintf(stderr,"\n");
+		if ( verbose ) printf("\n");
 
 		for (i=1; i<=n; i++)	AiB[i][j] = x[i];
 	}
@@ -1121,10 +1125,10 @@ XTAIY  -  calculate quadratic form with inverse matrix   X' * inv(A) * Y
           A is n by n    X is n by m     Y is n by m                    15sep01
 ------------------------------------------------------------------------------*/
 void xtaiy(
-	double **X, double **A, double **Y, int n, int m, double **Ac
+	double **X, double **A, double **Y, int n, int m, double **Ac, int verbose
 ){
 	double	*diag, *x, *y, error;
-	int	i,j,k, ok, disp=0;
+	int	i,j,k, ok;
 
 	diag = dvector(1,n);
 	x    = dvector(1,n);
@@ -1139,14 +1143,13 @@ void xtaiy(
 		for (k=1; k<=n; k++)  y[k] = Y[k][j];
 		ldl_dcmp( A, n, diag, y, x, 0, 1, &ok ); /*  L D L'  bksbtn */
 
-		if (disp)
-		 fprintf(stderr,"    LDL' RMS matrix precision:");
+		if ( verbose ) printf("    LDL' RMS matrix precision:");
 		error = ok = 1;
 		do {					/*improve the solution*/
 			ldl_mprove ( A, n, diag, y, x, &error, &ok );
-			if (disp) fprintf(stderr,"%9.2e", error );
+			if ( verbose ) printf("%9.2e", error );
 		} while ( ok );
-		if (disp) fprintf(stderr,"\n");
+		if ( verbose ) printf("\n");
 
 		for (i=1; i<=m; i++) {
 			Ac[i][j] = 0.0;
@@ -1164,12 +1167,13 @@ void xtaiy(
 AIXAI  -  calculate quadratic form with inverse matrix    inv(A) * X * inv(A)  
           A is n by n    X is n by n                                    15sep01
 ------------------------------------------------------------------------------*/
-void aixai ( A, X, n )
+void aixai ( A, X, n, verbose )
 double	**A, **X;
 int	n;
+int	verbose;
 {
 	double	*diag, *b, *x, **Ai, **XAi, Aij, error;
-	int	i,j,k, ok, disp=0;
+	int	i,j,k, ok; 
 
 	diag = dvector(1,n);
 	x    = dvector(1,n);
@@ -1190,14 +1194,13 @@ int	n;
 		b[j] = 1.0;
 		ldl_dcmp( A, n, diag, b, x, 0, 1, &ok ); /*  L D L'  bksbtn */
 
-		if (disp)
-		 fprintf(stderr,"    LDL' RMS matrix precision:");
+		if ( verbose ) printf("    LDL' RMS matrix precision:");
 		error = ok = 1;
 		do {					/*improve the solution*/
 			ldl_mprove ( A, n, diag, b, x, &error, &ok );
-			if (disp) fprintf(stderr,"%9.2e", error );
+			if ( verbose ) printf("%9.2e", error );
 		} while ( ok );
-		if (disp) fprintf(stderr,"\n");
+		if ( verbose ) printf("\n");
 
 		for (k=1; k<=n; k++)  Ai[j][k] = x[k];	/* save inv(A) */
 	}

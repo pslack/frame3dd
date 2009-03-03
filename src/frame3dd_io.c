@@ -383,17 +383,22 @@ void getline_no_comment(
 READ_REACTION_DATA - Read fixed joint displacement boundary conditions 29dec09
 ------------------------------------------------------------------------------*/
 void read_reaction_data (
-	FILE *fp, int DoF, int nJ, int *nR, int *R, int *sumR
+	FILE *fp, int DoF, int nJ, int *nR, int *R, int *sumR, int verbose
 ){
 	int	i,j,l;
 
 	for (i=1; i<=DoF; i++)	R[i] = 0;
 
 	fscanf(fp,"%d", nR );	/* read restrained degrees of freedom */
-	printf(" number of joints with reactions ");
-	dots(20);
-	printf(" nR = %3d ", *nR );
+	if ( verbose ) {
+		printf(" number of joints with reactions ");
+		dots(stdout,20);
+		printf(" nR = %3d ", *nR );
+	}
 	if ( *nR < 0 || *nR > DoF/6 ) {
+		fprintf(stderr," number of joints with reactions ");
+		dots(stderr,20);
+		fprintf(stderr," nR = %3d ", *nR );
 		fprintf(stderr,"  error: valid ranges for nR is 0 ... %d \n", DoF/6 );
 		exit(1);
 	}
@@ -461,7 +466,8 @@ void read_and_assemble_loads(
 		double **Q,
 		double **F_mech, double **F_temp,
 		float ***U, float ***W, float ***P, float ***T, float **Dp,
-		double ***feF_mech, double ***feF_temp
+		double ***feF_mech, double ***feF_temp, 
+		int verbose
 ){
 	float	hy, hz;			/* section dimensions in local coords */
 
@@ -489,12 +495,14 @@ void read_and_assemble_loads(
 
 	for (lc = 1; lc <= nL; lc++) {		/* begin load-case loop */
 
-	  printf(" load case %d of %d: \n", lc, nL );
+	  if ( verbose ) printf(" load case %d of %d: \n", lc, nL );
 
 	  fscanf(fp,"%d", &nF[lc] );		/* joint point loads		*/
-	  printf("  number of loaded joints ");
-	  dots(27);
-	  printf(" nF = %3d\n", nF[lc]);
+	  if ( verbose ) {
+		printf("  number of loaded joints ");
+	  	dots(stdout,27);
+		printf(" nF = %3d\n", nF[lc]);
+	  }
 	  for (i=1; i <= nF[lc]; i++) {	/* ! global structural coordinates ! */
 		fscanf(fp,"%d", &j);
 		if ( j < 1 || j > nJ ) {
@@ -509,10 +517,15 @@ void read_and_assemble_loads(
 	  }
 
 	  fscanf(fp,"%d", &nU[lc] );	/* uniform distributed loads	*/
-	  printf("  number of uniformly distributed loads ");
-	  dots(13);
-	  printf(" nU = %3d\n", nU[lc]);
+	  if ( verbose ) {
+		printf("  number of uniformly distributed loads ");
+	  	dots(stdout,13);
+	  	printf(" nU = %3d\n", nU[lc]);
+	  }
 	  if ( nU[lc] < 0 || nU[lc] > nB ) {
+		fprintf(stderr,"  number of uniformly distributed loads ");
+	  	dots(stderr,13);
+	  	fprintf(stderr," nU = %3d\n", nU[lc]);
 		fprintf(stderr,"  error: valid ranges for nU is 0 ... %d \n", nB );
 		exit(1);
 	  }
@@ -574,9 +587,11 @@ void read_and_assemble_loads(
 	  }
 
 	  fscanf(fp,"%d", &nW[lc] );	/* trapezoidally distributed loads */
-	  printf("  number of tapezoidally distributed loads ");
-	  dots(10);
-	  printf(" nW = %3d\n", nW[lc]);
+	  if ( verbose ) {
+		printf("  number of tapezoidally distributed loads ");
+	  	dots(stdout,10);
+	  	printf(" nW = %3d\n", nW[lc]);
+	  }
 	  if ( nW[lc] < 0 || nW[lc] > nB ) {
 		fprintf(stderr,"  error: valid ranges for nW is 0 ... %d \n", nB );
 		exit(1);
@@ -763,10 +778,15 @@ void read_and_assemble_loads(
 	  }				/* end trapezoidally distributed loads */
 
 	  fscanf(fp,"%d", &nP[lc] );	/* element point loads	*/
-	  printf("  number of concentrated beam element point loads ");
-	  dots(3);
-	  printf(" nP = %3d\n", nP[lc]);
+	  if ( verbose ) {
+	  	printf("  number of concentrated beam element point loads ");
+	  	dots(stdout,3);
+	  	printf(" nP = %3d\n", nP[lc]);
+	  }
 	  if ( nP[lc] < 0 || nP[lc] > nB ) {
+	  	fprintf(stderr,"  number of concentrated beam element point loads ");
+	  	dots(stderr,3);
+	  	fprintf(stderr," nP = %3d\n", nP[lc]);
 		fprintf(stderr,"  error: valid ranges for nP is 0 ... %d \n", nB );
 		exit(1);
 	  }
@@ -841,10 +861,15 @@ void read_and_assemble_loads(
 	  }					/* end element point loads	*/
 
 	  fscanf(fp,"%d", &nT[lc] );		/* thermal loads		*/
-	  printf("  number of temperature changes ");
-	  dots(21);
-	  printf(" nT = %3d\n", nT[lc] );
+	  if ( verbose ) {
+	  	printf("  number of temperature changes ");
+	  	dots(stdout,21);
+	  	printf(" nT = %3d\n", nT[lc] );
+	  }
 	  if ( nT[lc] < 0 || nT[lc] > nB ) {
+	  	fprintf(stderr,"  number of temperature changes ");
+	  	dots(stderr,21);
+	  	fprintf(stderr," nT = %3d\n", nT[lc] );
 		fprintf(stderr,"  error: valid ranges for nT is 0 ... %d \n", nB );
 		exit(1);
 	  }
@@ -905,9 +930,11 @@ void read_and_assemble_loads(
 	  }
 
 	  fscanf(fp,"%d", &nD[lc] );	/* read prescribed displacements */
-	  printf("  number of prescribed displacements ");
-	  dots(16);
-	  printf(" nD = %3d\n", nD[lc] );
+	  if ( verbose ) {
+	  	printf("  number of prescribed displacements ");
+	  	dots(stdout,16);
+	  	printf(" nD = %3d\n", nD[lc] );
+	  }
 	  for (i=1; i <= nD[lc]; i++) {
 		fscanf(fp,"%d", &j);
 		for (l=5; l >=0; l--) {
@@ -941,7 +968,8 @@ void read_mass_data(
 		double *total_mass, double *struct_mass,
 		int *nM, int *Mmethod, int *lump,
 		char modepath[],
-		double *tol, double *shift, int anim[], float *pan
+		double *tol, double *shift, int anim[], float *pan,
+		int verbose
 ){
 /*	double	ms = 0.0; */
 	int	chk, j, jnt, m, mem, nA;
@@ -953,9 +981,11 @@ void read_mass_data(
 
 	chk = fscanf ( fp, "%d", nM );
 
-	printf(" number of dynamic modes ");
-	dots(28);
-	printf(" nM = %3d\n", *nM);
+	if ( verbose ) {
+		printf(" number of dynamic modes ");
+		dots(stdout,28);
+		printf(" nM = %3d\n", *nM);
+	}
 
 	if ( *nM < 1 || chk != 1 ) {
 		*nM = 0;
@@ -964,11 +994,13 @@ void read_mass_data(
 
 	fscanf( fp, "%d", Mmethod );
 
-	printf(" modal analysis method ");
-	dots(30);
-	printf(" %3d ",*Mmethod);
-	if ( *Mmethod == 1 ) printf(" (Subspace-Jacobi)\n");
-	if ( *Mmethod == 2 ) printf(" (Stodola)\n");
+	if ( verbose ) {
+		printf(" modal analysis method ");
+		dots(stdout,30);
+		printf(" %3d ",*Mmethod);
+		if ( *Mmethod == 1 ) printf(" (Subspace-Jacobi)\n");
+		if ( *Mmethod == 2 ) printf(" (Stodola)\n");
+	}
 
 
 #ifdef MASSDATA_DEBUG
@@ -1001,10 +1033,12 @@ void read_mass_data(
 #endif
 
 	/* number of joints with extra inertias */
-	fscanf(fp,"%d", nI );
-	printf(" number of joints with extra lumped inertia ");
-        dots(9);
-        printf(" nI = %3d\n",*nI);
+	if ( verbose ) {
+		fscanf(fp,"%d", nI );
+		printf(" number of joints with extra lumped inertia ");
+        	dots(stdout,9);
+        	printf(" nI = %3d\n",*nI);
+	}
 	for (j=1; j <= *nI; j++) {
 		fscanf(fp, "%d", &jnt );
 		if ( jnt < 1 || jnt > nJ ) {
@@ -1031,18 +1065,22 @@ void read_mass_data(
 /*	for (m=1;m<=nB;m++) ms += BMs[m]; // consistent mass doesn't agree  */
 /*	if ( ms > 0.0 )	    *lump = 1;    // with concentrated masses, BMs  */
 
-	printf(" structural mass ");
-	dots(36);
-	printf("  %12.4e\n",*struct_mass);
-	printf(" total mass ");
-	dots(41);
-	printf("  %12.4e\n",*total_mass);
+	if ( verbose ) {
+		printf(" structural mass ");
+		dots(stdout,36);
+		printf("  %12.4e\n",*struct_mass);
+		printf(" total mass ");
+		dots(stdout,41);
+		printf("  %12.4e\n",*total_mass);
+	}
 	fscanf ( fp, "%d", &nA );
-	printf(" number of modes to be animated ");
-	dots(21);
-	printf(" nA = %3d\n",nA);
+	if ( verbose ) {
+		printf(" number of modes to be animated ");
+		dots(stdout,21);
+		printf(" nA = %3d\n",nA);
+	}
 	if (nA > 20)
-	  printf(" nA = %d, only 20 or fewer modes may be animated\n", nA );
+	  fprintf(stderr," nA = %d, only 20 or fewer modes may be animated\n", nA );
 	for ( m = 0; m < 20; m++ )	anim[m] = 0;
 	for ( m = 0; m < nA; m++ )	fscanf ( fp, "%d", &anim[m] );
 
@@ -1069,7 +1107,7 @@ READ_CONDENSE   -  read matrix condensation information 	        30aug01
 void read_condensation_data (
 		FILE *fp,
 		int nJ, int nM,
-		int *nC, int *Cdof, int *Cmethod, int *q, int *m
+		int *nC, int *Cdof, int *Cmethod, int *q, int *m, int verbose
 ){
 	int	i,j,k,  chk, **qm;
 
@@ -1086,21 +1124,25 @@ void read_condensation_data (
 	}
 
 	if ( *Cmethod > 3 ) *Cmethod = 1;	/* default */
-	printf(" condensation method ");
-	dots(32);
-	printf(" %d ", *Cmethod );
-	if ( *Cmethod == 1 )	printf(" (static only) \n");
-	if ( *Cmethod == 2 )	printf(" (Guyan) \n");
-	if ( *Cmethod == 3 )	printf(" (dynamic) \n");
+	if ( verbose ) {
+		printf(" condensation method ");
+		dots(stdout,32);
+		printf(" %d ", *Cmethod );
+		if ( *Cmethod == 1 )	printf(" (static only) \n");
+		if ( *Cmethod == 2 )	printf(" (Guyan) \n");
+		if ( *Cmethod == 3 )	printf(" (dynamic) \n");
+	}
 
 	if ( (chk = fscanf ( fp, "%d", nC )) != 1 )  {
 		*Cmethod = *nC = *Cdof = 0;
 		return;
 	}
 
-	printf(" number of joints with condensed DoF's ");
-	dots(14);
-	printf(" nC = %3d\n", *nC );
+	if ( verbose ) {
+		printf(" number of joints with condensed DoF's ");
+		dots(stdout,14);
+		printf(" nC = %3d\n", *nC );
+	}
 
 	if ( (*nC) > nJ ) {
 	  fprintf(stderr," error in matrix condensation data: \n");
@@ -2439,8 +2481,8 @@ int get_file_ext( char *filename, char *ext )
 /*------------------------------------------------------------------------------
 DOTS  -  print a set of dots (periods)
 ------------------------------------------------------------------------------*/
-void dots( int n ){
+void dots ( FILE *fp, int n ) {
 	int i;
-	for (i=1; i<=n; i++)	printf(".");
+	for (i=1; i<=n; i++)	fprintf(fp,".");
 }
 

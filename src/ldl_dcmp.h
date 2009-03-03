@@ -74,7 +74,8 @@ void pseudo_inv(
 	double **A,	/**< an n-by-m matrix				*/
 	double **Ai,	/**< the pseudo-inverse of A			*/
 	int n, int m,	/**< matrix dimensions				*/
-	double beta	/**< regularization factor			*/
+	double beta,	/**< regularization factor			*/
+	int verbose	/**< 1: copious output to screen; 0: none	*/
 );
 
 #endif /* FRAME_LDL_DCMP_H */

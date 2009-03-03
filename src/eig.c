@@ -54,7 +54,7 @@ void mat_mult2 ( double **A, double **B, double **C, int I, int J, int K);
 
 void eigsort ( double *e, double **v, int n, int m);
 
-int sturm ( double **K, double **M, int n, int m, double shift, double ws );
+int sturm ( double **K, double **M, int n, int m, double shift, double ws, int verbose );
 
 /*-----------------------------------------------------------------------------
 SUBSPACE - Find the lowest m eigen-values, w, and eigen-vectors, V, of the 
@@ -74,14 +74,15 @@ void subspace(
 	double *w, double **V,
 	double tol, double shift,
 	int *iter,	/**< sub-space iterations		*/
-	int *ok		/**< Sturm check result			*/
+	int *ok,	/**< Sturm check result			*/
+	int verbose
 ){
 	double	**Kb, **Mb, **Xb, **Qb, *d, *u, *v, km, km_old,
 		error=1.0, w_old = 0.0;
 
 	int	i=0, j=0, k=0,
 		modes,
-		disp = 0,	/* display improvements to K X = M V	*/
+		disp = 0,	/* display convergence info.	*/
 		*idx;
 	
 	if ( m > n ) {
@@ -173,13 +174,13 @@ void subspace(
 			ldl_dcmp ( K, n, u, v, d, 0, 1, ok ); /* LDL bk-sub */
 
                                         /* improve the solution iteratively */
-			if (disp) fprintf(stderr,"  RMS matrix error:");
+			if ( disp ) printf("  RMS matrix error:");
 			error = *ok = 1;
 			do {
 				ldl_mprove ( K, n, u, v, d, &error, ok );
-				if (disp) fprintf(stderr,"%9.2e", error );
+				if ( disp ) printf("%9.2e", error );
 			} while ( *ok );
-			if (disp) fprintf(stderr,"\n");
+			if ( disp ) printf("\n");
 
 			for (i=1; i<=n; i++)	Xb[i][k] = d[i];
 		}
@@ -201,7 +202,7 @@ void subspace(
 		error = fabs( w[modes] - w_old ) / w[modes];
 
 		(*iter)++;
-		if (disp) fprintf(stderr," iter = %d  w[%d] = %f error = %e\n",
+		if ( disp ) printf(" iter = %d  w[%d] = %f error = %e\n",
 						*iter, modes, w[modes], error );
 		w_old = w[modes];
 
@@ -219,13 +220,14 @@ void subspace(
 	    else		w[k] = shift - w[k];
 	}
 
-	printf(" %4d sub-space iterations,   error: %.4e \n", *iter, error );
-	for ( k=1; k<=m; k++ ) {
-		printf("  mode: %2d\tDoF: %5d\t %9.4lf Hz\n",
+	if ( verbose ) {
+		printf(" %4d sub-space iterations,   error: %.4e \n", *iter, error );
+		for ( k=1; k<=m; k++ ) 
+			printf("  mode: %2d\tDoF: %5d\t %9.4lf Hz\n",
 				k, idx[k], sqrt(w[k])/(2.0*PI) );
 	}
 
-	*ok = sturm ( K, M, n, m, shift, w[modes]+tol ); 
+	*ok = sturm ( K, M, n, m, shift, w[modes]+tol, verbose ); 
 
 	for (i=1;i<=n;i++) for (j=i;j<=n;j++) K[i][j] -= shift*M[i][j];
 
@@ -365,7 +367,8 @@ with shifting. 								15oct98
 void stodola (
 	double **K, double **M, /* stiffness and mass matrices */
 	int n, int m, /* DoF and number of required modes	*/
-	double *w, double **V, double tol, double shift, int *iter, int *ok
+	double *w, double **V, double tol, double shift, int *iter, int *ok, 
+	int verbose
 ){
 	double	**D,		/* the dynamics matrix, D = K^(-1) M	*/
 		d_min = 0.0,	/* minimum value of D[i][i]		*/
@@ -499,7 +502,7 @@ void stodola (
 
 	eigsort ( w, V, n, m );
 
-	*ok = sturm ( K, M, n, m, shift, w[modes]+tol );
+	*ok = sturm ( K, M, n, m, shift, w[modes]+tol, verbose );
 
 #ifdef EIG_DEBUG
 	save_dmatrix ( n, m, V, "V" );	/* save mode shape matrix */
@@ -654,8 +657,10 @@ STURM  -  Determine the number of eigenvalues, w, of the general eigen-problem
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  30 Aug 2001
  Bathe, Finite Element Procecures in Engineering Analysis, Prentice Hall, 1982
 -----------------------------------------------------------------------------*/
-int sturm( double **K, double **M, int n, int m, double shift, double ws )
-{
+int sturm(
+	double **K, double **M, int n, int m,
+	double shift, double ws, int verbose
+){
 	double	ws_shift, *d;
 	int	ok=0, i,j, modes;
 	
@@ -668,14 +673,15 @@ int sturm( double **K, double **M, int n, int m, double shift, double ws )
 
 	ldl_dcmp ( K, n, d, d, d, 1, 0, &ok );
 
-	fprintf(stderr,"  There are %d modes below %f Hz.",
-						-ok, sqrt(ws)/(2.0*PI) );
+	if ( verbose )
+	 printf("  There are %d modes below %f Hz.", -ok, sqrt(ws)/(2.0*PI) );
+
 	if ( -ok > modes ) {
 		fprintf(stderr," ... %d modes were not found.\n", -ok-modes );
 		fprintf(stderr," Try increasing the number of modes in \n");
 		fprintf(stderr," order to get the missing modes below %f Hz.\n",
 							sqrt(ws)/(2.0*PI) );
-	} else  fprintf(stderr," ... all %d modes were found.\n", modes );
+	} else if ( verbose )  printf(" ... all %d modes were found.\n",modes);
 
 	for (i=1; i<=n; i++) for (j=i; j<=n; j++) K[i][j] += ws_shift*M[i][j];
 

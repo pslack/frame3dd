@@ -70,7 +70,8 @@ void solve_system(
 	double *D,	/**< displacement vector to be solved		*/
 	double *F,	/**< load vector				*/
 	int DoF,	/**< number of degrees of freedom		*/
-	int *ok		/**< indicates positive definite stiffness matrix */
+	int *ok,	/**< indicates positive definite stiffness matrix */
+	int verbose	/**< 1: copious screen output; 0: none		*/
 );
 
 
@@ -103,7 +104,8 @@ void equilibrium(
 	double **feF,	/**< fixed end forces for every beam element	*/
 	int nB,		/**< number of beam elements			*/
 	int DoF,	/**< number of degrees of freedom		*/
-	double *err	/**< root mean squared equilibrium error	*/
+	double *err,	/**< root mean squared equilibrium error	*/
+	int verbose	/**< 1: copious screen output; 0: none		*/
 );
 
 
@@ -133,7 +135,8 @@ void condense(
 	int N,		/**< the dimension of the matrix		*/
 	int *q,		/**< list of matrix indices to retain		*/
 	int n,		/**< the dimension of the condensed matrix	*/
-	double **Ac	/**< the condensed matrix			*/
+	double **Ac,	/**< the condensed matrix			*/
+	int verbose	/**< 1: copious screen output; 0: none		*/
 );
 
 
@@ -149,7 +152,8 @@ void guyan(
 	int *q,			/**< list of degrees of freedom to retain */
 	int n,			/**< dimension of the condensed matrices */
 	double **Mc, double **Kc,	/**< the condensed matrices	*/
-	double w2 		/**< matched value of frequency squared	*/
+	double w2,		/**< matched value of frequency squared	*/
+	int verbose	/**< 1: copious screen output; 0: none		*/
 );
 
 
@@ -167,7 +171,8 @@ void dyn_conden(
 	int n,		/**< the dimension of the condensed matrix	*/
 	double **Mc, double **Kc,	/**< the condensed matrices	*/
 	double **V, double *f,	/**< mode shapes and natural frequencies*/
-	int *m		/**< list of modes to match in the condensed model */
+	int *m,		/**< list of modes to match in the condensed model */
+	int verbose	/**< 1: copious screen output; 0: none		*/
 );
 
 

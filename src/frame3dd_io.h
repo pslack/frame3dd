@@ -99,7 +99,8 @@ void read_reaction_data(
 	int nJ,		/**< number of joints				*/
 	int *nR,	/**< number of joints with reactions		*/
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
-	int *sumR 	/**< sum of vector R				*/
+	int *sumR,	/**< sum of vector R				*/
+	int verbose	/**< 1: copious screen output; 0: none		*/
 );
 
 
@@ -136,7 +137,8 @@ void read_and_assemble_loads(
 	float ***T,	 	/**< temperature loads			*/
 	float **Dp,		/**< prescribed displacements at rctns	*/
 	double ***feF_mech,	/**< fixed end forces for mechanical loads */
-	double ***feF_temp	/**< fixed end forces for temperature loads */
+	double ***feF_temp,	/**< fixed end forces for temperature loads */
+	int verbose		/**< 1: copious output to screen, 0: none */
 );
 
 
@@ -161,7 +163,8 @@ void read_mass_data(
 	double *tol,	/**< convergence tolerance for mode shapes	*/
 	double *shift,	/**< frequency shift for unrestrained frames	*/
 	int *anim,	/**< list of modes to be graphically animated	*/
-	float *pan 	/**< 1: pan viewpoint during animation, 0: don't */
+	float *pan,	/**< 1: pan viewpoint during animation, 0: don't */
+	int verbose	/**< 1: copious output to screen, 0: none	*/
 );
 
 
@@ -175,7 +178,8 @@ void read_condensation_data(
 	int *Cdof,	/**< list of DoF's retained in condensed model	*/
 	int *Cmethod,	/**< matrix conden'n method, static, Guyan, dynamic*/
 	int *q,		/**< list of retained degrees of freedom	*/
-	int *m		/**< list of retained modes in dynamic condensation */
+	int *m,		/**< list of retained modes in dynamic condensation */
+	int verbose	/**< 1: copious output to screen, 0: none	*/
 );
 
 
@@ -348,5 +352,5 @@ void temp_file_location(const char *fname, char fullpath[], const int len);
 void output_path(const char *fname, char fullpath[], const int len, const char *default_outdir);
 
 /** print a set of dots (periods) */
-void dots( int n );
+void dots ( FILE *fp, int n );
 

@@ -44,7 +44,8 @@ void subspace(
 	double tol,		/**< covergence tolerence		*/
 	double shift,		/**< frequency shift for unrestrained frames */
 	int *iter,		/**< number of sub-space iterations	*/
-	int *ok			/**< Sturm check result			*/
+	int *ok,		/**< Sturm check result			*/
+	int verbose		/**< 1: copious screen output, 0: none	*/
 );
 
 
@@ -69,7 +70,8 @@ void stodola(
 	double tol,		/**< covergence tolerence		*/
 	double shift,		/**< frequency shift for unrestrained frames */
 	int *iter,		/**< number of sub-space iterations	*/
-	int *ok			/**< Sturm check result			*/
+	int *ok,		/**< Sturm check result			*/
+	int verbose		/**< 1: copious screen output, 0: none	*/
 );
 
 #endif /* FRAME_EIG_H */

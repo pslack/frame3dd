@@ -45,6 +45,7 @@ For compilation/installation, see README.txt.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <argtable2.h>	/* parsing of command-line arguments	*/
 
 #include "common.h"
 #include "frame3dd.h"
@@ -52,10 +53,36 @@ For compilation/installation, see README.txt.
 #include "eig.h"
 #include "nrutil.h"
 
-
-int main(int argc, char *argv[]){
+int main ( int argc, char *argv[] ) {
 
 #define FILENMAX 96
+
+	/* command-line options are parsed using the argtable package	*/
+	/* command-line options overide values in the input data file	*/
+
+	struct arg_lit *check       = arg_lit0("c","check",            "data check only - the output data reviews the input");
+	struct arg_dbl *exagg_arg   = arg_dbl0("e","exagg", "<value>", "level of deformation exaggeration for Gnuplot output");
+	struct arg_dbl *shift_arg   = arg_dbl0("f","shift", "<value>", "modal frequency shift for unrestrained structures");
+	struct arg_str *geom_arg    = arg_str0("g","geom",  "On|Off",  "On: include geometric stiffness; Off: neglect");
+	struct arg_lit *help        = arg_lit0("h","help",             "print this help message and exit");
+	struct arg_str *lump_arg    = arg_str0("l","lump", "On|Off",   "On: lumped mass matrix; Off: consistent mass matrix");
+	struct arg_str *Mmethod_arg = arg_str0("m","modal", "J|S",      "Modal analysis method: Jacobi or Stodola");
+	struct arg_dbl *pan_arg     = arg_dbl0("p","pan", "<value>",   "pan rate for mode shape animation");
+	struct arg_lit *quiet_arg   = arg_lit0("q","quiet",            "suppress screen output except for warning messages");
+	struct arg_str *shear_arg   = arg_str0("s","shear", "On|Off",  "On: include shear deformation; Off: neglect");
+	struct arg_dbl *tol_arg     = arg_dbl0("t","tol", "<value>",   "convergence tolerance for modal analysis");
+	struct arg_lit *version     = arg_lit0("v","version",          "display program version and exit");
+
+	struct arg_file *infile     = arg_file1(NULL, NULL, "<input>", "the  input data file name --- described in the manual");
+	struct arg_file *outfile    = arg_file1("o",NULL,"<output>",   "the output data file name");
+
+	struct arg_end  *end        = arg_end(99);
+	
+	void *argtable[] = {check,exagg_arg,shift_arg,geom_arg,help,lump_arg,Mmethod_arg,pan_arg,quiet_arg,shear_arg,tol_arg,version,infile,outfile,end};
+
+	const char *progname = "frame3dd";
+	int nerrors;
+	int exitcode=0;
 
 	char	IN_file[FILENMAX],	/* the input  data filename	*/
 		OUT_file[FILENMAX],	/* the output data filename	*/
@@ -140,41 +167,108 @@ int main(int argc, char *argv[]){
 		Cmethod=0,	/* matrix condensation method		*/
 		*q,		/* vector of DoF's to condense		*/
 		*m,		/* vector of modes to condense		*/
-		filetype=0;	/* 1 if .CSV, 2 if file is Matlab	*/
+		filetype=0,	/* 1 if .CSV, 2 if file is Matlab	*/
+		verbose=1;	/* 1: copious screen output, 0: none	*/
 
 	char	extn[16];	/* Input Output file name extension	*/
 
-	fprintf(stderr," FRAME3DD version: %s\n", VERSION);
-	fprintf(stderr," GPL Copyright (C) 1992-2009, Henri P. Gavin\n");
-	fprintf(stderr," http://frame3dd.sf.net\n");
-	fprintf(stderr," This is free software with absolutely no warranty.\n");
-	fprintf(stderr," For details, see LICENSE.txt\n\n");
+	/* parse the command line using the argtable package ... */
+
+	/* verify that the argtable[] entries were allocated sucessfully */
+	if ( arg_nullcheck(argtable) != 0 ) {
+	/* NULL entries were detected, some allocations must have failed */
+		fprintf(stderr,"%s: insufficient memory to parse the command line\n",progname);
+		exitcode=1;
+		goto exit;
+        }
+
+	/* Parse the command line as defined by argtable[] */
+	nerrors = arg_parse ( argc, argv, argtable );
+
+	 if (help->count > 0) {
+		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
+		fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
+		fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
+       		fprintf(stderr,"  Usage: %s", progname);
+		arg_print_syntax  (stderr,argtable,"\n\n");
+		arg_print_glossary(stderr,argtable,"  %-22s %s\n");
+		fprintf(stderr,"\n");
+		exitcode=0;
+		goto exit;
+	}
+
+	/* special case: '--version' takes precedence error reporting */
+	if (version->count > 0) {
+		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
+		fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
+		exitcode=0;
+		goto exit;
+	}
+
+	/* If the parser returned any errors then display them and exit */
+	if (argc > 3 && nerrors > 0) {
+		/* Display the error details contained in the arg_end struct.*/
+		arg_print_errors(stdout,end,progname);
+		fprintf(stderr,"Try '%s --help' for more information.\n",progname);
+		exitcode=1;
+		goto exit;
+	}
+
+	verbose = !quiet_arg->count;
+
+	/* end of command-line parsing using the argtable package	*/
+
+	if ( verbose ) {
+		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
+		fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
+		fprintf(stderr," http://frame3dd.sf.net\n");
+		fprintf(stderr," GPL Copyright (C) 1992-2009, Henri P. Gavin\n");
+		fprintf(stderr," This is free software with absolutely no warranty.\n");
+		fprintf(stderr," For details, see LICENSE.txt\n\n");
+	}
 
 	/* set up file names for the the input data and the output data*/ 
 
-	if (argc < 2) {
+	switch ( argc ) {
+	 case 1: {
 		fprintf (stderr," Please enter the  input data file name: ");
 		scanf("%s", IN_file );
-		fprintf (stderr," You entered  input data file name: %s \n",
-								IN_file );
 		fprintf (stderr," Please enter the output data file name: ");
 		scanf("%s", OUT_file );
-		fprintf (stderr," You entered output data file name: %s \n",
-								OUT_file );
-	} else strcpy( IN_file , argv[1] );
-	if (argc == 3) {
+		break;
+	 }
+	 case 2: {
+		strcpy(  IN_file , argv[1] );
+		strcpy( OUT_file , IN_file );
+        	strcat( OUT_file , ".out" );
+		break;
+	 }
+	 case 3: {
+		strcpy(  IN_file , argv[1] );
 		strcpy( OUT_file , argv[2] );
-	} else if (argc == 2) {
-		strcpy( OUT_file, IN_file );
-        	strcat( OUT_file, ".out" );
+		break;
+	 }
+	 case 4: {
+		strcpy(  IN_file , argv[1] );
+		strcpy( OUT_file , argv[3] );
+		break;
+	 }
+	 default: {
+		strcpy(  IN_file,  infile->filename[0] );
+		strcpy( OUT_file, outfile->filename[0] );
+	 }
 	}
 
 	/* open the input data file */
 
 	if ((fp = fopen (IN_file, "r")) == NULL) {
 		fprintf (stderr,"\nERROR: cannot open file '%s'\n", IN_file);
-		fprintf (stderr," usage: frame InputData.frm OutputData.out\n");
-		exit(1);
+       		fprintf(stderr,"  Usage: %s", progname);
+		arg_print_syntax  (stderr,argtable,"\n\n");
+		arg_print_glossary(stderr,argtable,"  %-22s %s\n");
+		fprintf(stderr,"\n");
+		exitcode=1;
+		goto exit;
 	}
 
 	filetype = get_file_ext( IN_file, extn ); /* .CSV or .FMM or other? */
@@ -191,26 +285,30 @@ int main(int argc, char *argv[]){
 	}
 
 	frame3dd_getline(fp, title, 256);
-	fprintf(stderr," ** %s ** \n\n", title );
+	if (verbose ) fprintf(stderr," ** %s ** \n\n", title );
 
 	fscanf(fp, "%d", &nJ );		/* number of joints	*/
-	printf(" number of joints "); dots(35); printf(" nJ = %3d ",nJ);
+	if ( verbose ) {
+	 printf(" number of joints "); dots(stdout,35); printf(" nJ = %3d ",nJ);
+	}
 
 					/* allocate memory for joint data ... */
 	r   =  vector(1,nJ);		/* rigid radius around each joint */
 	xyz = (vec3 *)malloc(sizeof(vec3)*(1+nJ));	/* joint coordinates */
 
 	read_joint_data ( fp, nJ, xyz, r );
-	printf(" ... complete\n");
+	if ( verbose )	printf(" ... complete\n");
 
 	DoF = 6*nJ;		/* total number of degrees of freedom	*/
 
 	R   = ivector(1,DoF);	/* allocate memory for reaction data ... */
-	read_reaction_data ( fp, DoF, nJ, &nR, R, &sumR );
-	printf(" ... complete\n");
+	read_reaction_data ( fp, DoF, nJ, &nR, R, &sumR, verbose );
+	if ( verbose )	printf(" ... complete\n");
 
 	fscanf(fp, "%d", &nB );		/* number of beam elements	*/
-	printf(" number of beam elements"); dots(29); printf(" nB = %3d ",nB);
+	if ( verbose ) {
+	 printf(" number of beam elements"); dots(stdout,29); printf(" nB = %3d ",nB);
+	}
 	if ( nJ > nB + 1) {
 		fprintf(stderr,"warning: %d joints and %d members...", nJ, nB );
 		fprintf(stderr," not enough members to connect all joints.\n");
@@ -236,14 +334,17 @@ int main(int argc, char *argv[]){
 
 	read_beam_data( fp, nJ, nB, xyz,r, L, Le, J1, J2,
 			Ax, Asy, Asz, J, Iy, Iz, E, G, p );
-	printf(" ... complete\n");
+	if ( verbose) 	printf(" ... complete\n");
 
 
 	read_run_data ( fp, OUT_file, &shear, &geom,
 			meshpath, plotpath, &exagg, &anlyz );
 
 	fscanf(fp, "%d", &nL );		/* number of load cases		*/
-	printf(" number of load cases "); dots(31); printf(" nL = %3d \n",nL);
+	if ( verbose ) {
+		printf(" number of load cases ");
+		dots(stdout,31); printf(" nL = %3d \n",nL);
+	}
 
 	if ( nL < 1 ) {
 		fprintf(stderr,"\nERROR: the number of load cases must be at least 1\n");
@@ -290,25 +391,29 @@ int main(int argc, char *argv[]){
 				Ax,Asy,Asz, Iy,Iz, E, G, p, R, shear,
 				nF, nU, nW, nP, nT, nD,
 				Q, Fo_mech, Fo_temp, U, W, P, T,
-				Dp, feF_mech, feF_temp );
+				Dp, feF_mech, feF_temp, verbose );
 
 	for (i=1; i<=DoF; i++){
 		for (lc=1; lc<=nL; lc++){
 			Fo[lc][i] = Fo_temp[lc][i] + Fo_mech[lc][i];
 		}
 	}
-	printf("                                                     ");
-	printf(" load data ... complete\n");
+	if ( verbose ) {
+		printf("                                                     ");
+		printf(" load data ... complete\n");
+	}
 
 	read_mass_data( fp, IN_file, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz,
 			L, Ax, &total_mass, &struct_mass, &nM, &Mmethod,
-			&lump, modepath, &tol, &shift, anim, &pan );
-	printf("                                                     ");
-	printf(" mass data ... complete\n");
+			&lump, modepath, &tol, &shift, anim, &pan, verbose );
+	if ( verbose ) {
+		printf("                                                     ");
+		printf(" mass data ... complete\n");
+	}
 
-	read_condensation_data( fp, nJ, nM, &nC, &Cdof, &Cmethod, q, m );
+	read_condensation_data( fp, nJ,nM, &nC, &Cdof, &Cmethod, q,m, verbose );
 
-	if(nC>0) {
+	if( nC>0 && verbose ) {
 		printf("                                      ");
 		printf(" matrix condensation data ... complete\n");
 	}
@@ -328,10 +433,11 @@ int main(int argc, char *argv[]){
 				xyz, r, J1,J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p,
 				Fo, Dp, R, U, W, P, T, shear, anlyz, geom );
 
-	if (anlyz) {			/* solve the problem	*/
+	if ( anlyz ) {			/* solve the problem	*/
 		for (lc=1; lc<=nL; lc++) {	/* begin load case loop	*/
 
-			fprintf(stderr,"\n Load Case %d of %d ... \n", lc, nL );
+			if ( verbose )
+				printf("\n Load Case %d of %d ... \n", lc,nL );
 
 			for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
 
@@ -344,9 +450,10 @@ int main(int argc, char *argv[]){
 
 			/* apply temperature loads first ... */
 			if (nT[lc] > 0) {
-				fprintf(stderr," Linear Elastic Analysis ... Temperature Loads\n");
+				if ( verbose )
+					printf(" Linear Elastic Analysis ... Temperature Loads\n");
 				apply_reactions ( DoF, R, Dp[lc], Fo_temp[lc], F, K, 't' );
-				solve_system( K, dD, F, DoF, &ok );
+				solve_system( K, dD, F, DoF, &ok, verbose );
 				for (i=1; i<=DoF; i++)	D[i] += dD[i];
 				end_forces ( Q, nB, xyz, L, Le, J1,J2,
 					Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
@@ -357,9 +464,10 @@ int main(int argc, char *argv[]){
 
 			/* then add mechanical loads ... */
 			if ( nF[lc] > 0 || nU[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nD[lc] > 0 ) {
-				fprintf(stderr," Linear Elastic Analysis ... Mechanical Loads\n");
+				if ( verbose )
+					printf(" Linear Elastic Analysis ... Mechanical Loads\n");
 				apply_reactions ( DoF, R, Dp[lc], Fo_mech[lc], F, K, 'm' );
-				solve_system( K, dD, F, DoF, &ok );
+				solve_system( K, dD, F, DoF, &ok, verbose );
 				for (i=1; i<=DoF; i++)	D[i] += dD[i];
 				end_forces ( Q, nB, xyz, L, Le, J1,J2,
 					Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
@@ -379,7 +487,8 @@ int main(int argc, char *argv[]){
 						Ks[i][j]=Ks[j][i]=K[i][j];
 					}
 				}
-				fprintf(stderr,"\n Non-Linear Elastic Analysis ...\n");
+				if ( verbose )
+					printf("\n Non-Linear Elastic Analysis ...\n");
 			}
 
 			while ( geom && error > tol && iter < 10 && ok >= 0) {
@@ -406,7 +515,7 @@ int main(int argc, char *argv[]){
 						Ks[i][j] -= Fe[i]*dD[j] / dDdD;
 */
 				apply_reactions ( DoF, R, Dp[lc], Fe, Fe, Ks, 'm' );
-				solve_system ( K, dD, Fe, DoF, &ok );
+				solve_system ( K, dD, Fe, DoF, &ok, verbose );
 
 				if ( ok < 0 ) {
 					fprintf(stderr,"   The stiffness matrix is not pos-def. \n");
@@ -423,8 +532,10 @@ int main(int argc, char *argv[]){
 //				error = rel_norm ( dD, D, DoF ); /* displacement increment */
 				error = rel_norm ( Fe, F, DoF ); /* force balance	   */
 
-				fprintf(stderr,"   NR iteration %3d ---", iter);
-				fprintf(stderr," RMS equilibrium precision: %8.2e \n", error);
+				if ( verbose ) { 
+					printf("   NR iteration %3d ---", iter);
+					printf(" RMS equilibrium precision: %8.2e \n", error);
+				}
 			}
 
 			if(geom){
@@ -436,7 +547,7 @@ int main(int argc, char *argv[]){
 				for (n=1; n<=nB; n++)
 					feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
 
-			  equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF, nB, DoF, &error );
+			  equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF, nB, DoF, &error, verbose );
 
 			  write_static_results ( fp, nJ,nB,nL,lc, DoF, J1,J2, Fo[lc],
 									 D,R,Q, error, ok );
@@ -456,15 +567,18 @@ int main(int argc, char *argv[]){
 
 		} /* end load case loop */
 	} else {
-	    fprintf(stderr,"  %s\n", title );
-	    fprintf(stderr,"  DATA CHECK ONLY.\n");
-	    static_mesh ( IN_file, meshpath, plotpath, title, nJ, nB, nL, lc,
+	
+		if ( verbose ) {
+			printf("\n * %s *\n", title );
+			printf("  DATA CHECK ONLY.\n");
+		}
+		static_mesh ( IN_file, meshpath, plotpath, title, nJ, nB, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
 	}
 
 	if(nM > 0){ /* modal analysis */
 
-		fprintf(stderr,"\n Modal Analysis ...\n");
+		if ( verbose ) printf("\n Modal Analysis ...\n");
 
 		nM_calc = (nM+8)<(2*nM) ? nM+8 : 2*nM;
 
@@ -499,9 +613,9 @@ int main(int argc, char *argv[]){
 
 		if(anlyz) {
 			if( Mmethod == 1 )
-				subspace( K, M, DoF, nM_calc, f, V, tol,shift,&iter,&ok);
+				subspace( K, M, DoF, nM_calc, f, V, tol,shift,&iter,&ok, verbose );
 			if( Mmethod == 2 )
-				stodola ( K, M, DoF, nM_calc, f, V, tol,shift,&iter,&ok);
+				stodola ( K, M, DoF, nM_calc, f, V, tol,shift,&iter,&ok, verbose );
 
 			for (j=1; j<=nM_calc; j++)	f[j] = sqrt(f[j])/(2.*PI);
 
@@ -524,7 +638,7 @@ int main(int argc, char *argv[]){
 
 	if(nC > 0){		/* matrix condensation of stiffness and mass */
 
-		fprintf(stderr,"\n Matrix Condensation ...\n");
+		if ( verbose ) printf("\n Matrix Condensation ...\n");
 
 		if(Cdof > nM && Cmethod == 3){
 			fprintf(stderr,"  Cdof > nM ... Cdof = %d  nM = %d \n",
@@ -541,17 +655,21 @@ int main(int argc, char *argv[]){
 		if ( m[1] > 0 && nM > 0 )	Cfreq = f[m[1]];
 
 		if ( Cmethod == 1 ) {	/* static condensation only	*/
-			condense(K, DoF, q, Cdof, Kc);
-			printf("   static condensation of K complete\n");
+			condense(K, DoF, q, Cdof, Kc, verbose );
+			if ( verbose )
+				printf("   static condensation of K complete\n");
 		}
 		if ( Cmethod == 2 ) {
-			guyan(M, K, DoF, q, Cdof, Mc,Kc, Cfreq );
-			printf("   Guyan condensation of K and M complete");
-			printf(" ... dynamics matched at %f Hz.\n", Cfreq );
+			guyan(M, K, DoF, q, Cdof, Mc,Kc, Cfreq, verbose );
+			if ( verbose ) {
+				printf("   Guyan condensation of K and M complete");
+				printf(" ... dynamics matched at %f Hz.\n", Cfreq );
+			}
 		}
 		if ( Cmethod == 3 && nM > 0 ) {
-			dyn_conden(M,K, DoF, R, q, Cdof, Mc,Kc, V,f, m );
-			printf("   dynamic condensation of K and M complete\n");
+			dyn_conden(M,K, DoF, R, q, Cdof, Mc,Kc, V,f, m, verbose );
+			if ( verbose ) 
+				printf("   dynamic condensation of K and M complete\n");
 		}
 		save_dmatrix(Cdof, Cdof, Kc, "Kc" );
 		save_dmatrix(Cdof, Cdof, Mc, "Mc" );
@@ -560,8 +678,9 @@ int main(int argc, char *argv[]){
 		free_dmatrix(Mc, 1,Cdof,1,Cdof );
 	}
 
-	printf("\n");
+	if ( verbose ) printf("\n");
 
+	/* deallocate memory used for each frame analysis variable */
 	deallocate(nJ, nB, nL, nF, nU, nW, nP, nT, DoF, nM,
 			xyz, r, L, Le, J1, J2, R,
 			Ax, Asy, Asz, J, Iy, Iz, E, G, p,
@@ -571,5 +690,9 @@ int main(int argc, char *argv[]){
 			d,BMs,JMs,JMx,JMy,JMz, M,f,V, q, m
 	);
 
-	return(0);
+	exit:
+	/* deallocate memory used for each non-null entry in argtable[] */
+	arg_freetable(argtable,sizeof(argtable)/sizeof(argtable[0]));
+
+	return exitcode;
 }

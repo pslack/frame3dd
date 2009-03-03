@@ -168,11 +168,11 @@ PSEUDO_INV - calculate the pseudo-inverse of A ,
              A is m by n      Ai is m by n                              8oct01
 -----------------------------------------------------------------------------*/
 void pseudo_inv(
-		double **A, double **Ai, int n, int m, double beta
+		double **A, double **Ai, int n, int m, double beta, int verbose
 ){
 	double	*diag, *b, *x, **AtA, **AtAi, tmp, tr_AtA=0.0,
 		*dvector(), **dmatrix(), error;
-	int     i,j,k, ok, disp=0;
+	int     i,j,k, ok; 
 	void	ldl_dcmp(), ldl_mprove(), free_dvector(), free_dmatrix();
 
         diag = dvector(1,n);
@@ -211,14 +211,14 @@ void pseudo_inv(
 		b[j] = 1.0;
 		ldl_dcmp( AtA, n, diag, b, x, 0, 1, &ok ); /* L D L' bksbtn */
 
-		if (disp)
-		 fprintf(stderr,"  RMS matrix error:"); /*improve the solution*/
+		if ( verbose )
+		 printf("  RMS matrix error:"); /*improve the solution*/
 		error = 1.0; ok = 1;
 		do {
 			ldl_mprove ( AtA, n, diag, b, x, &error, &ok );
-			if (disp) fprintf(stderr,"%9.2e", error );
+			if ( verbose ) printf("%9.2e", error );
 		} while ( ok );
-		if (disp) fprintf(stderr,"\n");
+		if ( verbose ) printf("\n");
 
 		for (k=1; k<=n; k++)  AtAi[k][j] = x[k];  /* save inv(AtA) */
         }

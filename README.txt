@@ -44,6 +44,11 @@ svn co https://frame3dd.svn.sourceforge.net/svnroot/frame3dd frame3dd
 
 ---
 
+To complile frame3dd you will need the argtable2 package, which 
+may be obtained from http://argtable.sourceforge.net/
+
+---
+
 Included in this distribution:
 
 LICENSE.txt  ... GNU GPL license
@@ -61,7 +66,7 @@ src/         ... C source code
 
 to compile and build without scons ...
 
-gcc -O -Wall -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
+gcc -O -Wall -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm -largtable2
 
 ---
 

@@ -41,6 +41,8 @@ also, particularly if sparse matrix methods can be used.
 COMPLETED ITEMS
 ------------------
 
+* Implement command line parsing using the argtable2 package (Mar 3 2009)
+
 * Implement trapezoidally-distributed loads existing over only partial member lengths (Feb 26 2009)  
 
 * Separate Input data and Output data files (Feb 9 2009)
@@ -56,4 +58,4 @@ COMPLETED ITEMS
 
 * Added comments to describe variables in src/*.h files.  (Dec 30 2008)
 
-
+----------------------------------------------------------------------------
