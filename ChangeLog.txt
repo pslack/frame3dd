@@ -1,4 +1,12 @@
 
+* Mon Mar 2 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090227
+- Usage change from ... frame3dd InputData.frm ... to ... frame3dd
+InputData.frm OutputData.out
+- output information regarding number of loading types is now more clear
+- updated examples B and E with trapezoidal loads
+- updated documentation and README
+- updated Matlab frame_3dd.m
+
 * Thu Feb 27 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090227
 - Implement trapezoidally-distributed loads over partial distances along frame elements
 

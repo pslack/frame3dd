@@ -771,8 +771,8 @@ Example H: a pedestrian ramp  (kip, in)
 
 0  				% number of trapezoidal distributed loads
 0                               % number of internal concentrated loads
-0                               % number of members with temperature loads
-0                               % number of joints with support settlements
+0                               % number of temperature loads
+0                               % number of support settlements
 				% End   Static Load Case 1 of 1
 
 

@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis (N mm ton) 
-Fri Feb 27 19:33:38 2009
+Mon Mar  2 20:12:55 2009
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;  4 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -30,45 +30,55 @@ B E A M   D A T A							(local)
 
 L O A D   C A S E   1   O F   3  ... 
 
-   1 joints  with concentrated loads
-   0 elements with uniformly distributed loads
-   0 elements with trapezoidally distributed loads
-   0 elements with concentrated point loads
-   0 elements with temperature loads
-   0 joints  with prescribed displacements
+   1 concentrated loads
+   0 uniformly distributed loads
+   0 trapezoidally distributed loads
+   0 concentrated point loads
+   0 temperature loads
+   0 prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      1   10000.000  -20000.000   -1000.000       0.000       0.000       0.000
 
 L O A D   C A S E   2   O F   3  ... 
 
-   0 joints  with concentrated loads
-   2 elements with uniformly distributed loads
-   0 elements with trapezoidally distributed loads
-   0 elements with concentrated point loads
-   1 elements with temperature loads
-   0 joints  with prescribed displacements
+   0 concentrated loads
+   2 uniformly distributed loads
+   2 trapezoidally distributed loads
+   0 concentrated point loads
+   1 temperature loads
+   0 prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
-     1     445.418     365.612     434.446   -6172.448   14149.075   23517.181
+     1     442.742     363.216     438.099   -3140.315   14423.888   24204.213
      2    -471.335    -353.501    -284.446   18190.952  -23162.953    -982.485
      3      54.083      72.111       0.000  -12018.504    9013.878  -22534.696
+     4       2.142       1.606       3.892   -1385.829    1847.773       0.000
+     5      -2.190       1.447       3.930   -1345.801   -1877.794     -75.053
  U N I F O R M   B E A M   L O A D S					(local)
   Beam        Ux               Uy               Uz
      2       0.00000000       0.10000000       0.00000000
      1       0.00000000       0.00000000       0.10000000
+ T R A P E Z O I D A L   B E A M   L O A D S				(local)
+  Beam        x1               x2               W1               W2
+     3      20.00000000      80.00000000       0.01000000       0.05000000  (x)
+     3       0.00000000       0.00000000       0.00000000       0.00000000  (y)
+     3      80.00000000     830.00000000      -0.05000000       0.07000000  (z)
+     4       0.00000000       0.00000000       0.00000000       0.00000000  (x)
+     4      68.00000000     330.00000000       0.05000000       0.00000000  (y)
+     4      80.00000000     830.00000000      -0.05000000       0.07000000  (z)
  B E A M   T E M P E R A T U R E   C H A N G E S			(local)
   Beam      coef      hy        hz        Ty+       Ty-       Tz+       Tz-
      1  1.20e-05    10.000    10.000    20.000    10.000    10.000   -10.000
 
 L O A D   C A S E   3   O F   3  ... 
 
-   0 joints  with concentrated loads
-   0 elements with uniformly distributed loads
-   0 elements with trapezoidally distributed loads
-   2 elements with concentrated point loads
-   0 elements with temperature loads
-   0 joints  with prescribed displacements
+   0 concentrated loads
+   0 uniformly distributed loads
+   0 trapezoidally distributed loads
+   2 concentrated point loads
+   0 temperature loads
+   0 prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      1     427.783      -7.020    -581.955    8321.175  -24560.394   -2413.493
@@ -112,47 +122,47 @@ L O A D   C A S E   2   O F   3  ...
 
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1    0.063936    0.092880    0.088144   -0.006536    0.018655    0.030490
+     1    0.063577    0.091772    0.088920   -0.001908    0.019001    0.031677
 B E A M   E N D   F O R C E S						(local)
   Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
-     1      1     97.567c      5.200    -85.671   -962.243  22834.712   6544.655
-     1      2    -97.567c     -5.200    -94.606    962.243 -30881.061   2849.517
-     2      1   -210.490t    -86.805     -2.206  -1344.993   2944.003 -22688.583
-     2      3    210.490t    -93.472      2.206   1344.993   1047.064  28674.746
-     3      1    159.888c      4.753     -3.109   -525.658   3367.758   5164.068
-     3      4   -159.888c     -4.753      3.109    525.658   2215.817   3411.171
-     4      1   -180.055t      6.846      2.221   -142.908  -2893.021   8995.815
-     4      5    180.055t     -6.846     -2.221    142.908  -1096.696   3366.726
+     1      1     99.014c      4.918    -86.264  -1134.333  23716.498   6123.558
+     1      2    -99.014c     -4.918    -94.013   1134.333 -30692.705   2761.716
+     2      1   -210.954t    -86.211     -2.825  -1246.063   3766.511 -21899.764
+     2      3    210.954t    -94.066      2.825   1246.063   1341.101  28956.321
+     3      1    153.260c      5.292     -5.479   -411.520   5769.355   5769.202
+     3      4   -155.072c     -5.292     -2.021    411.520   -395.617   3776.605
+     4      1   -183.029t      0.273      0.058   -299.789   -869.835   7945.663
+     4      5    183.029t     -6.823     -7.558    299.789  -3704.202   3357.694
 R E A C T I O N S							(global)
   Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
-     2     103.807      84.355     -24.597  -20433.647   23276.092    1837.185
-     3      85.006    -180.595    -114.924   14248.229   -9377.342   23112.763
-     4    -102.196     -82.589      91.277     534.150    3170.384    2546.683
-     5    -114.759      94.627    -101.724    -931.127    2069.215    2722.014
-R M S   E Q U I L I B R I U M    E R R O R: 8.226e-06
+     2     104.676      84.655     -23.301  -20396.220   23068.716    1668.672
+     3      85.233    -181.508    -114.666   14483.752   -9186.438   23401.923
+     4    -100.943     -82.323      84.337    2187.201    1145.880    2914.056
+     5    -114.384      94.317    -107.815     532.959    4230.533    2627.477
+R M S   E Q U I L I B R I U M    E R R O R: 9.189e-06
 
 L O A D   C A S E   3   O F   3  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1    0.058393   -0.003559   -0.118345    0.017408   -0.035195   -0.003792
+     1    0.058396   -0.003556   -0.118349    0.017361   -0.035109   -0.003760
 B E A M   E N D   F O R C E S						(local)
   Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
-     1      1    114.039c    -99.771    892.671    355.700 -18716.643  -2735.188
-     1      2   -114.039c     -0.229      7.329   -355.700   4942.840    152.491
-     2      1    424.512c    202.099   -197.364   1375.119   3752.003   7699.035
-     2      3   -424.512c     -2.099     -2.636  -1375.119  -2473.767   2098.247
-     3      1    410.319c     -1.002      5.433   -170.634  -4609.393   -860.315
-     3      4   -410.319c      1.002     -5.433    170.634  -5154.459   -961.192
-     4      1     99.846c     -3.882     -3.057  -1190.053   3462.722  -4395.453
-     4      5    -99.846c      3.882      3.057   1190.053   2060.638  -2606.803
+     1      1    114.037c    -99.768    892.688    354.398 -18735.149  -2731.547
+     1      2   -114.037c     -0.232      7.312   -354.398   4931.576    154.703
+     2      1    424.522c    202.096   -197.370   1371.064   3756.773   7696.365
+     2      3   -424.522c     -2.096     -2.630  -1371.064  -2468.301   2095.208
+     3      1    410.342c     -0.997      5.419   -170.907  -4597.570   -856.129
+     3      4   -410.342c      0.997     -5.419    170.907  -5141.521   -956.563
+     4      1     99.856c     -3.869     -3.050  -1187.574   3454.778  -4380.559
+     4      5    -99.856c      3.869      3.050   1187.574   2055.967  -2598.024
 R E A C T I O N S							(global)
   Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
-     2      72.519      54.676      69.355    3134.802   -3827.448     324.187
-     3    -285.001     211.128     233.284   -1468.476   -1990.852    2508.626
-     4    -276.137    -205.851     223.084    2779.717   -4358.285    -894.410
-     5      62.776     -51.935      57.928    -871.735   -1921.997   -2829.114
-R M S   E Q U I L I B R I U M    E R R O R: 2.544e-01
+     2      72.523      54.683      69.340    3126.196   -3819.824     325.305
+     3    -285.003     211.133     233.294   -1463.846   -1987.492    2503.848
+     4    -276.143    -205.861     223.108    2774.191   -4346.259    -890.711
+     5      62.793     -51.932      57.928    -871.178   -1916.576   -2820.434
+R M S   E Q U I L I B R I U M    E R R O R: 2.562e-01
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  1.020379e-01     Structural Mass:  2.037858e-03 
@@ -167,66 +177,66 @@ J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
  convergence tolerance: 1.000e-04 
-  MODE     1:   f= 19.147297 Hz,  T= 0.052227 sec
-		X- modal participation factor =  -2.3575e-02 
-		Y- modal participation factor =  -1.8908e-02 
-		Z- modal participation factor =  -1.9499e-05 
+  MODE     1:   f= 19.171537 Hz,  T= 0.052161 sec
+		X- modal participation factor =  -2.3591e-02 
+		Y- modal participation factor =  -1.8938e-02 
+		Z- modal participation factor =  -1.6837e-05 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -2.496e-02  -3.939e-02  -1.930e-04  -8.758e-02   1.235e-01   1.067e-02
-     2  -1.312e-07  -1.157e-07   2.612e-07   8.095e-05  -1.026e-04  -4.793e-06
-     3  -1.311e-07  -8.620e-08  -7.983e-08   3.301e-06  -5.236e-05   5.113e-05
-     4  -1.533e-07  -8.623e-08  -2.611e-07   7.414e-05  -1.077e-04  -7.957e-06
-     5  -1.532e-07  -1.157e-07   7.983e-08   1.010e-05  -5.746e-05  -6.388e-05
-  MODE     2:   f= 19.860266 Hz,  T= 0.050352 sec
-		X- modal participation factor =   5.5950e-04 
-		Y- modal participation factor =   3.8236e-03 
-		Z- modal participation factor =   2.5772e-06 
+     1  -2.506e-02  -3.959e-02  -1.667e-04  -8.764e-02   1.236e-01   9.801e-03
+     2  -1.322e-07  -1.146e-07   2.614e-07   8.074e-05  -1.029e-04  -4.284e-06
+     3  -1.322e-07  -8.752e-08  -7.986e-08   3.598e-06  -5.260e-05   5.170e-05
+     4  -1.525e-07  -8.754e-08  -2.614e-07   7.449e-05  -1.076e-04  -7.429e-06
+     5  -1.525e-07  -1.146e-07   7.985e-08   9.847e-06  -5.729e-05  -6.341e-05
+  MODE     2:   f= 19.882301 Hz,  T= 0.050296 sec
+		X- modal participation factor =   5.7937e-04 
+		Y- modal participation factor =   3.3739e-03 
+		Z- modal participation factor =   2.0285e-06 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1   5.461e-04   9.003e-03   2.551e-05   1.709e-02  -2.958e-03   1.504e-01
-     2   1.713e-07  -2.023e-07  -2.344e-08   4.183e-05   4.604e-05  -9.159e-05
-     3   1.713e-07   2.447e-07  -1.465e-08  -5.953e-05   3.548e-05  -1.033e-04
-     4  -1.640e-07   2.447e-07   2.344e-08  -6.135e-05  -3.135e-05  -1.018e-04
-     5  -1.640e-07  -2.023e-07   1.465e-08   4.365e-05  -4.191e-05  -9.006e-05
-  MODE     3:   f= 20.944227 Hz,  T= 0.047746 sec
-		X- modal participation factor =  -1.5061e-02 
-		Y- modal participation factor =   3.3581e-02 
-		Z- modal participation factor =   1.5880e-05 
+     1   5.839e-04   7.963e-03   2.008e-05   1.507e-02  -3.052e-03   1.506e-01
+     2   1.716e-07  -2.051e-07  -2.133e-08   4.291e-05   4.553e-05  -9.244e-05
+     3   1.716e-07   2.425e-07  -1.226e-08  -5.852e-05   3.622e-05  -1.028e-04
+     4  -1.641e-07   2.425e-07   2.133e-08  -6.040e-05  -3.196e-05  -1.012e-04
+     5  -1.641e-07  -2.051e-07   1.226e-08   4.479e-05  -4.127e-05  -9.086e-05
+  MODE     3:   f= 20.960557 Hz,  T= 0.047709 sec
+		X- modal participation factor =  -1.5054e-02 
+		Y- modal participation factor =   3.3653e-02 
+		Z- modal participation factor =   1.4419e-05 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -2.053e-02   9.169e-02   1.572e-04   1.426e-01   7.613e-02  -1.147e-02
-     2  -1.193e-07   2.161e-07  -5.092e-08  -6.044e-05  -1.342e-05   8.465e-05
-     3  -1.194e-07   1.782e-07  -3.028e-07  -1.040e-04  -1.114e-04  -2.456e-05
-     4  -9.082e-08   1.781e-07   5.091e-08  -5.167e-05  -6.847e-06  -6.822e-05
-     5  -9.093e-08   2.161e-07   3.028e-07  -1.128e-04  -1.049e-04   4.097e-05
-  MODE     4:   f= 31.715422 Hz,  T= 0.031530 sec
-		X- modal participation factor =   1.9391e-04 
+     1  -2.056e-02   9.208e-02   1.427e-04   1.428e-01   7.607e-02  -9.873e-03
+     2  -1.172e-07   2.136e-07  -5.123e-08  -5.993e-05  -1.284e-05   8.352e-05
+     3  -1.173e-07   1.810e-07  -3.028e-07  -1.047e-04  -1.109e-04  -2.578e-05
+     4  -9.267e-08   1.810e-07   5.122e-08  -5.239e-05  -7.187e-06  -6.938e-05
+     5  -9.277e-08   2.136e-07   3.028e-07  -1.122e-04  -1.053e-04   3.990e-05
+  MODE     4:   f= 31.715527 Hz,  T= 0.031530 sec
+		X- modal participation factor =   1.9388e-04 
 		Y- modal participation factor =   3.1610e-01 
-		Z- modal participation factor =  -6.4406e-06 
+		Z- modal participation factor =  -5.7233e-06 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1   7.978e-04   3.154e+00  -6.379e-05  -1.487e-02  -6.603e-04   3.733e-05
-     2   6.376e-09  -2.701e-09   4.383e-08   9.304e-06  -1.067e-05  -1.572e-06
-     3  -1.899e-09  -2.417e-09   4.888e-08   1.029e-05   1.310e-05   5.636e-07
-     4   6.158e-09  -2.415e-09  -4.381e-08   9.234e-06  -1.071e-05   1.448e-06
-     5  -2.115e-09  -2.704e-09  -4.888e-08   1.036e-05   1.305e-05  -6.879e-07
-  MODE     5:   f= 35.159690 Hz,  T= 0.028442 sec
-		X- modal participation factor =  -1.2967e-06 
-		Y- modal participation factor =   3.5196e-06 
+     1   7.977e-04   3.154e+00  -5.669e-05  -1.489e-02  -6.602e-04   3.113e-05
+     2   6.345e-09  -2.732e-09   4.379e-08   9.305e-06  -1.067e-05  -1.575e-06
+     3  -1.913e-09  -2.496e-09   4.883e-08   1.030e-05   1.308e-05   5.897e-07
+     4   6.163e-09  -2.494e-09  -4.377e-08   9.245e-06  -1.070e-05   1.472e-06
+     5  -2.093e-09  -2.735e-09  -4.884e-08   1.035e-05   1.304e-05  -6.931e-07
+  MODE     5:   f= 35.159709 Hz,  T= 0.028442 sec
+		X- modal participation factor =  -1.0615e-06 
+		Y- modal participation factor =   3.1257e-06 
 		Z- modal participation factor =   3.1831e-01 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -6.452e-06   5.679e-05   3.151e+00  -1.290e-05   3.754e-06   9.002e-09
-     2   5.663e-09   4.208e-09   5.670e-08   1.127e-05  -1.502e-05  -1.086e-08
-     3  -5.688e-09   4.206e-09   5.661e-08   1.125e-05   1.498e-05   1.652e-08
-     4  -5.688e-09  -4.304e-09   5.652e-08  -1.121e-05   1.496e-05   1.069e-08
-     5   5.660e-09  -4.304e-09   5.655e-08  -1.122e-05  -1.498e-05  -1.655e-08
-  MODE     6:   f= 42.250363 Hz,  T= 0.023668 sec
+     1  -5.277e-06   5.042e-05   3.151e+00  -1.145e-05   3.076e-06   6.701e-09
+     2   5.654e-09   4.205e-09   5.657e-08   1.124e-05  -1.498e-05  -9.839e-09
+     3  -5.673e-09   4.203e-09   5.649e-08   1.123e-05   1.495e-05   1.438e-08
+     4  -5.673e-09  -4.290e-09   5.641e-08  -1.119e-05   1.493e-05   9.674e-09
+     5   5.650e-09  -4.290e-09   5.643e-08  -1.120e-05  -1.494e-05  -1.440e-08
+  MODE     6:   f= 42.250405 Hz,  T= 0.023668 sec
 		X- modal participation factor =   3.1723e-01 
-		Y- modal participation factor =  -1.1225e-05 
-		Z- modal participation factor =   6.1715e-07 
+		Y- modal participation factor =  -1.1208e-05 
+		Z- modal participation factor =   5.0957e-07 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1   3.155e+00  -5.139e-04   5.942e-06   2.352e-04   8.574e-03  -1.620e-05
-     2   3.622e-08   8.958e-09   6.686e-08   1.182e-05  -9.396e-06  -5.723e-06
-     3   3.614e-08  -6.242e-09  -6.919e-08  -1.293e-05  -1.006e-05  -6.458e-06
-     4   3.631e-08   8.719e-09  -6.673e-08   1.185e-05  -9.341e-06   5.807e-06
-     5   3.631e-08  -6.014e-09   6.919e-08  -1.299e-05  -1.002e-05   6.556e-06
+     1   3.155e+00  -5.131e-04   4.878e-06   2.348e-04   8.578e-03  -1.435e-05
+     2   3.613e-08   8.924e-09   6.675e-08   1.181e-05  -9.389e-06  -5.712e-06
+     3   3.605e-08  -6.218e-09  -6.907e-08  -1.291e-05  -1.005e-05  -6.443e-06
+     4   3.620e-08   8.711e-09  -6.662e-08   1.183e-05  -9.339e-06   5.784e-06
+     5   3.620e-08  -6.016e-09   6.907e-08  -1.296e-05  -1.002e-05   6.531e-06
 M A T R I X    I T E R A T I O N S: 2
-There are 6 modes below 42.250363 Hz. ... All 6 modes were found.
+There are 6 modes below 42.250405 Hz. ... All 6 modes were found.
 

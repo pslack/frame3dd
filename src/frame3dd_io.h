@@ -80,7 +80,6 @@ void read_beam_data (
 */
 void read_run_data (
 	FILE *fp,	/**< input data file pointer			*/
-	char IN_file[],	 /**< input  data file name			*/
 	char OUT_file[], /**< output data file name			*/
 	int *shear,	/**< 1: include shear deformations, 0: don't	*/
 	int *geom,	/**< 1: include geometric stiffness, 0: don't	*/
@@ -216,7 +215,7 @@ void write_static_results(
 	save joint displacements and member end forces in a .CSV file   31dec08
 */
 void write_static_csv(
-	char *argv[], char *title,
+	char *OUT_file, char *title,
 	int nJ, int nB, int nL, int lc, int DoF,
 	int *J1, int *J2,
 	double *F, double *D, int *R, double **Q,
@@ -228,7 +227,7 @@ void write_static_csv(
 	save joint displacements and member end forces in an m-file	9sep08
 */
 void write_static_mfile (
-	char *argv[], char *title,
+	char *OUT_file, char *title,
 	int nJ, int nB, int nL, int lc, int DoF,
 	int *J1, int *J2,
 	double *F, double *D, int *R, double **Q,

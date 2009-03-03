@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example A: linear static analysis of a 2D truss with support settlement (kips in)  
-Fri Feb 27 19:33:31 2009
+Mon Mar  2 20:12:50 2009
 ________________________________________________________________________________
 12 JOINTS;    21 MEMBERS;    2 LOAD CASES;  12 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -54,12 +54,12 @@ B E A M   D A T A							(local)
 
 L O A D   C A S E   1   O F   2  ... 
 
-   5 joints  with concentrated loads
-   0 elements with uniformly distributed loads
-   0 elements with trapezoidally distributed loads
-   0 elements with concentrated point loads
-   0 elements with temperature loads
-   1 joints  with prescribed displacements
+   5 concentrated loads
+   0 uniformly distributed loads
+   0 trapezoidally distributed loads
+   0 concentrated point loads
+   0 temperature loads
+   1 prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      2       0.000     -20.000       0.000       0.000       0.000       0.000
@@ -74,12 +74,12 @@ P R E S C R I B E D   D I S P L A C E M E N T S                        (global)
 
 L O A D   C A S E   2   O F   2  ... 
 
-   3 joints  with concentrated loads
-   0 elements with uniformly distributed loads
-   0 elements with trapezoidally distributed loads
-   0 elements with concentrated point loads
-   3 elements with temperature loads
-   2 joints  with prescribed displacements
+   3 concentrated loads
+   0 uniformly distributed loads
+   0 trapezoidally distributed loads
+   0 concentrated point loads
+   3 temperature loads
+   2 prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      3      20.000      -0.000       0.000       0.000       0.000       0.000

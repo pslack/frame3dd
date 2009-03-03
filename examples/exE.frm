@@ -1,4 +1,4 @@
-Example E: a three dimensional structure showing lateral-torsional dynamic modes(units: kip, in)
+Example E: a three dimensional structure showing lateral-torsional dynamic modes (units: kip, in)
 
 12			% number of joints
 %.joint  x       y       z       r
@@ -58,10 +58,22 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
    3       0  100  -100   0    0    0
 
 0                               % number of uniform distributed loads
-0                               % number of trapezoidal distributed loads
+3                               % number of trapezoidal distributed loads
+% M     x1       x2        w1      w2
+%       in       in       k/in    k/in
+  9      0        0        0       0      % location and loading - local x-axis
+         0        0        0       0      % location and loading - local y-axis
+         0      120       0.00    0.10    % location and loading - local z-axis
+  10     0        0        0       0      % location and loading - local x-axis
+         0        0        0       0      % location and loading - local y-axis
+         0      120       0.00    0.20    % location and loading - local z-axis
+  11     0        0        0       0      % location and loading - local x-axis
+         0        0        0       0      % location and loading - local y-axis
+         0      120       0.00    0.30    % location and loading - local z-axis
+
 0                               % number of internal concentrated loads
-0                               % number of members with temperature loads
-0                               % number of joints with support settlements
+0                               % number of temperature loads
+0                               % number of support settlements
 				% End   Static Load Case 1 of 1
 
 

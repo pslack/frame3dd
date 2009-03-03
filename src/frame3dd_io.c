@@ -177,7 +177,6 @@ READ_RUN_DATA  -  read information for analysis                   29dec08
 ------------------------------------------------------------------------------*/
 void read_run_data (
 	FILE	*fp, 
-	char	*IN_file,	/* input data file name	*/
 	char	*OUT_file,	/* output data file name */
 	int	*shear,
 	int	*geom,
@@ -187,26 +186,24 @@ void read_run_data (
 	int	*anlyz
 ){
 	int	full_len=0, len=0;
+	char	base_file[96] = "EMPTY_BASE";
 	char	mesh_file[96] = "EMPTY_MESH";
 
-
-	strcpy(OUT_file,IN_file);
-	while ( OUT_file[len++] != '\0' )
-		/* the length of the filename */ ;
+	strcpy(base_file,OUT_file);	
+	while ( base_file[len++] != '\0' )
+		/* the length of the base_file */ ;
         full_len = len;
-	while ( OUT_file[len--] != '.' && len > 0 )
-		/* the last '.' in filename */ ;
+	while ( base_file[len--] != '.' && len > 0 )
+		/* find the last '.' in base_file */ ;
 	if ( len == 0 )	len = full_len;
-	OUT_file[++len] = '\0';
+	base_file[++len] = '\0';
 
-	strcpy(plotpath,OUT_file);
+	strcpy(plotpath,base_file);
 	strcat(plotpath,".plt");
 
-	strcpy(mesh_file,OUT_file);
+	strcpy(mesh_file,base_file);
 	strcat(mesh_file,"-msh");
         output_path(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
-
-	strcat(OUT_file,".out");
 
 	fscanf( fp, "%d %d %lf %d", shear, geom,  exagg, anlyz );
 
@@ -228,9 +225,10 @@ void read_run_data (
 	    exit(1);
 	}
 
+//	printf("OUT_FILE = %s \n", OUT_file);
+//	printf("BASE_FILE = %s \n", base_file);
 //	printf("PLOTPATH = %s \n", plotpath);
 //	printf("MESHPATH = %s \n", meshpath);
-//	printf("OUT_FILE = %s \n", OUT_file);
 
 	return;
 }
@@ -394,7 +392,7 @@ void read_reaction_data (
 	fscanf(fp,"%d", nR );	/* read restrained degrees of freedom */
 	printf(" number of joints with reactions ");
 	dots(20);
-	printf(" nR = %3d",*nR);
+	printf(" nR = %3d ", *nR );
 	if ( *nR < 0 || *nR > DoF/6 ) {
 		fprintf(stderr,"  error: valid ranges for nR is 0 ... %d \n", DoF/6 );
 		exit(1);
@@ -843,8 +841,8 @@ void read_and_assemble_loads(
 	  }					/* end element point loads	*/
 
 	  fscanf(fp,"%d", &nT[lc] );		/* thermal loads		*/
-	  printf("  number of beams with temperature changes ");
-	  dots(10);
+	  printf("  number of temperature changes ");
+	  dots(21);
 	  printf(" nT = %3d\n", nT[lc] );
 	  if ( nT[lc] < 0 || nT[lc] > nB ) {
 		fprintf(stderr,"  error: valid ranges for nT is 0 ... %d \n", nB );
@@ -907,8 +905,8 @@ void read_and_assemble_loads(
 	  }
 
 	  fscanf(fp,"%d", &nD[lc] );	/* read prescribed displacements */
-	  printf("  number of joints with prescribed displacements ");
-	  dots(4);
+	  printf("  number of prescribed displacements ");
+	  dots(16);
 	  printf(" nD = %3d\n", nD[lc] );
 	  for (i=1; i <= nD[lc]; i++) {
 		fscanf(fp,"%d", &j);
@@ -935,7 +933,7 @@ READ_MASS_DATA  -  read element densities and extra inertial mass data	16aug01
 ------------------------------------------------------------------------------*/
 void read_mass_data(
 		FILE *fp,
-		char *IN_file, 
+		char *OUT_file, 
 		int nJ, int nB, int *nI,
 		float *d, float *BMs,
 		float *JMs, float *JMx, float *JMy, float *JMz,
@@ -1050,7 +1048,7 @@ void read_mass_data(
 
 	fscanf ( fp, "%f", pan );
 
-	strcpy(mode_file,IN_file);
+	strcpy(mode_file,OUT_file);
 	while ( mode_file[len++] != '\0' ) /* the length of mode_file */ ;
         full_len = len;
 	while ( mode_file[len--] != '.' && len > 0 ) /* the last '.' in mode_file */ ;
@@ -1228,12 +1226,12 @@ void write_input_data(
 	for (lc = 1; lc <= nL; lc++) {		/* start load case loop */
 
 	  fprintf(fp,"\nL O A D   C A S E   %d   O F   %d  ... \n\n", lc,nL);
-	  fprintf(fp," %3d joints  with concentrated loads\n", nF[lc] );
-	  fprintf(fp," %3d elements with uniformly distributed loads\n", nU[lc]);
-	  fprintf(fp," %3d elements with trapezoidally distributed loads\n", nW[lc]);
-	  fprintf(fp," %3d elements with concentrated point loads\n", nP[lc] );
-	  fprintf(fp," %3d elements with temperature loads\n", nT[lc] );
-	  fprintf(fp," %3d joints  with prescribed displacements\n", nD[lc] );
+	  fprintf(fp," %3d concentrated loads\n", nF[lc] );
+	  fprintf(fp," %3d uniformly distributed loads\n", nU[lc]);
+	  fprintf(fp," %3d trapezoidally distributed loads\n", nW[lc]);
+	  fprintf(fp," %3d concentrated point loads\n", nP[lc] );
+	  fprintf(fp," %3d temperature loads\n", nT[lc] );
+	  fprintf(fp," %3d prescribed displacements\n", nD[lc] );
 	  if ( nF[lc] > 0 || nU[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nT[lc] > 0 ) {
 	    fprintf(fp," J O I N T   L O A D S");
 	    fprintf(fp,"  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)\n");
@@ -1426,7 +1424,7 @@ void write_static_results (
 WRITE_STATIC_CSV -  save joint displacements and beam end forces	31dec08
 ------------------------------------------------------------------------------*/
 void write_static_csv(
-		char *argv[],
+		char *OUT_file,
 		char *title,
 		int nJ, int nB, int nL, int lc, int DoF,
 		int *J1, int *J2,
@@ -1437,7 +1435,7 @@ void write_static_csv(
 	FILE	*fpcsv;
 	int	i,j,n;
 	char	*wa;
-	char	IN_file[128];
+	char	CSV_file[128];
         time_t  now;            /* modern time variable type    (DJGPP) */
 
         (void) time(&now);
@@ -1445,28 +1443,28 @@ void write_static_csv(
 	i=0;
 	j=0;
 	while (i<128) {
-		IN_file[j] = argv[1][i];
-		if ( IN_file[j] == '+' ||
-		     IN_file[j] == '-' ||
-		     IN_file[j] == '*' ||
-		     IN_file[j] == '^' ||
-                     IN_file[j] == '.' ||
-                     IN_file[j] == '\0') {
-			IN_file[j] = '_';
+		CSV_file[j] = OUT_file[i];
+		if ( CSV_file[j] == '+' ||
+		     CSV_file[j] == '-' ||
+		     CSV_file[j] == '*' ||
+		     CSV_file[j] == '^' ||
+                     CSV_file[j] == '.' ||
+                     CSV_file[j] == '\0') {
+			CSV_file[j] = '_';
 			break;
 		}
 		i++;
 		j++;
 	}
-	IN_file[++j] = '\0';
-	strcat(IN_file,"out.CSV");
+	CSV_file[++j] = '\0';
+	strcat(CSV_file,"out.CSV");
 
 
 	wa  = "a";
 	if (lc == 1) wa = "w";
 
-	if ((fpcsv = fopen (IN_file, wa)) == NULL) {
-	  fprintf (stderr," error: cannot open file %s\n", IN_file);
+	if ((fpcsv = fopen (CSV_file, wa)) == NULL) {
+	  fprintf (stderr," error: cannot open CSV file %s\n", CSV_file);
 	  exit(1);
 	}
 
@@ -1575,7 +1573,7 @@ save joint displacements and beam end forces in an m-file
 this function interacts with frame_3dd.m, an m-file interface to frame3dd
 ------------------------------------------------------------------------------*/
 void write_static_mfile (
-		char *argv[], char *title,
+		char *OUT_file, char *title,
 		int nJ, int nB, int nL, int lc, int DoF,
 		int *J1, int *J2,
 		double *F, double *D, int *R, double **Q,
@@ -1584,7 +1582,7 @@ void write_static_mfile (
 	FILE	*fpm;
 	int	i,j,n;
 	char	*wa;
-	char	IN_file[128];
+	char	M_file[128];
         time_t  now;            /* modern time variable type    (DJGPP) */
 
         (void) time(&now);
@@ -1592,27 +1590,27 @@ void write_static_mfile (
 	i=0;
 	j=0;
 	while (i<128) {
-		IN_file[j] = argv[1][i];
-		if ( IN_file[j] == '+' ||
-		     IN_file[j] == '-' ||
-		     IN_file[j] == '*' ||
-		     IN_file[j] == '^' ||
-                     IN_file[j] == '.' ||
-                     IN_file[j] == '\0') {
-			IN_file[j] = '_';
+		M_file[j] = OUT_file[i];
+		if ( M_file[j] == '+' ||
+		     M_file[j] == '-' ||
+		     M_file[j] == '*' ||
+		     M_file[j] == '^' ||
+                     M_file[j] == '.' ||
+                     M_file[j] == '\0') {
+			M_file[j] = '_';
 			break;
 		}
 		i++;
 		j++;
 	}
-	IN_file[++j] = '\0';
-	strcat(IN_file,"out.m");
+	M_file[++j] = '\0';
+	strcat(M_file,"out.m");
 
 	wa  = "a";
 	if (lc == 1) wa = "w";
 
-	if ((fpm = fopen (IN_file, wa)) == NULL) {
-	  fprintf (stderr," error: cannot open file %s\n", IN_file );
+	if ((fpm = fopen (M_file, wa)) == NULL) {
+	  fprintf (stderr," error: cannot open file %s\n", M_file );
 	  exit(1);
 	}
 

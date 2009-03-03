@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example D: dynamic properties of an un-restrained frame with a triangular section 
-Fri Feb 27 19:33:45 2009
+Mon Mar  2 20:13:12 2009
 ________________________________________________________________________________
 24 JOINTS;    30 MEMBERS;    1 LOAD CASES;  0 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -75,12 +75,12 @@ B E A M   D A T A							(local)
 
 L O A D   C A S E   1   O F   1  ... 
 
-   0 joints  with concentrated loads
-   0 elements with uniformly distributed loads
-   0 elements with trapezoidally distributed loads
-   0 elements with concentrated point loads
-   0 elements with temperature loads
-   0 joints  with prescribed displacements
+   0 concentrated loads
+   0 uniformly distributed loads
+   0 trapezoidally distributed loads
+   0 concentrated point loads
+   0 temperature loads
+   0 prescribed displacements
 
 E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 

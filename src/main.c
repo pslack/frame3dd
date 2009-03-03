@@ -150,15 +150,30 @@ int main(int argc, char *argv[]){
 	fprintf(stderr," This is free software with absolutely no warranty.\n");
 	fprintf(stderr," For details, see LICENSE.txt\n\n");
 
-	if (argc < 2) {
-		fprintf (stderr," Please enter the input/output file name: ");
-		scanf("%s", IN_file );
-		fprintf (stderr," You entered file name: %s \n", IN_file );
-	} else strcpy( IN_file , argv[1] );
+	/* set up file names for the the input data and the output data*/ 
 
-	if ((fp = fopen (IN_file, "r")) == NULL) {	/* open input file */
+	if (argc < 2) {
+		fprintf (stderr," Please enter the  input data file name: ");
+		scanf("%s", IN_file );
+		fprintf (stderr," You entered  input data file name: %s \n",
+								IN_file );
+		fprintf (stderr," Please enter the output data file name: ");
+		scanf("%s", OUT_file );
+		fprintf (stderr," You entered output data file name: %s \n",
+								OUT_file );
+	} else strcpy( IN_file , argv[1] );
+	if (argc == 3) {
+		strcpy( OUT_file , argv[2] );
+	} else if (argc == 2) {
+		strcpy( OUT_file, IN_file );
+        	strcat( OUT_file, ".out" );
+	}
+
+	/* open the input data file */
+
+	if ((fp = fopen (IN_file, "r")) == NULL) {
 		fprintf (stderr,"\nERROR: cannot open file '%s'\n", IN_file);
-		fprintf (stderr," usage: frame infile\n");
+		fprintf (stderr," usage: frame InputData.frm OutputData.out\n");
 		exit(1);
 	}
 
@@ -169,7 +184,7 @@ int main(int argc, char *argv[]){
 	parse_input(fp, temppath);	/* strip comments from input data */
 	fclose(fp);
 
-	/*open clean input file*/
+	/*open the clean input file*/
 	if ((fp = fopen (temppath, "r")) == NULL) {
 		fprintf (stderr,"\nERROR: cannot open cleaned input file '%s'\n",temppath);
 		exit(1);
@@ -186,13 +201,13 @@ int main(int argc, char *argv[]){
 	xyz = (vec3 *)malloc(sizeof(vec3)*(1+nJ));	/* joint coordinates */
 
 	read_joint_data ( fp, nJ, xyz, r );
-	printf("  ... complete\n");
+	printf(" ... complete\n");
 
 	DoF = 6*nJ;		/* total number of degrees of freedom	*/
 
 	R   = ivector(1,DoF);	/* allocate memory for reaction data ... */
 	read_reaction_data ( fp, DoF, nJ, &nR, R, &sumR );
-	printf("  ... complete\n");
+	printf(" ... complete\n");
 
 	fscanf(fp, "%d", &nB );		/* number of beam elements	*/
 	printf(" number of beam elements"); dots(29); printf(" nB = %3d ",nB);
@@ -221,10 +236,10 @@ int main(int argc, char *argv[]){
 
 	read_beam_data( fp, nJ, nB, xyz,r, L, Le, J1, J2,
 			Ax, Asy, Asz, J, Iy, Iz, E, G, p );
-	printf("  ... complete\n");
+	printf(" ... complete\n");
 
 
-	read_run_data ( fp, IN_file, OUT_file, &shear, &geom,
+	read_run_data ( fp, OUT_file, &shear, &geom,
 			meshpath, plotpath, &exagg, &anlyz );
 
 	fscanf(fp, "%d", &nL );		/* number of load cases		*/
@@ -299,9 +314,13 @@ int main(int argc, char *argv[]){
 	}
 
 	fclose(fp);
-	fp = fopen(OUT_file, "a");     /* append output to any previous output */
+
+	/* open the output data file for appending */
+
+	fp = fopen(OUT_file, "a");
 	if(fp==NULL){
-		fprintf(stderr,"Unable to append to output file '%s'!\n",OUT_file);
+		fprintf(stderr,"Unable to append to output file '%s'!\n",
+								OUT_file);
 		exit(1);
 	}
 
@@ -309,8 +328,8 @@ int main(int argc, char *argv[]){
 				xyz, r, J1,J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p,
 				Fo, Dp, R, U, W, P, T, shear, anlyz, geom );
 
-	if (anlyz) {				/* solve the problem	*/
-		for (lc=1; lc<=nL; lc++) {		/* begin load case loop	*/
+	if (anlyz) {			/* solve the problem	*/
+		for (lc=1; lc<=nL; lc++) {	/* begin load case loop	*/
 
 			fprintf(stderr,"\n Load Case %d of %d ... \n", lc, nL );
 
@@ -320,7 +339,7 @@ int main(int argc, char *argv[]){
 				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
 #ifdef MATRIX_DEBUG
-			save_dmatrix ( DoF, DoF, K, "Kf" );	     /* free stiffness matrix */
+			save_dmatrix ( DoF, DoF, K, "Kf" ); /* free stiffness matrix */
 #endif
 
 			/* apply temperature loads first ... */
@@ -423,12 +442,12 @@ int main(int argc, char *argv[]){
 									 D,R,Q, error, ok );
 
 			if ( filetype == 1 ){
-				write_static_csv(argv, title,
+				write_static_csv(OUT_file, title,
 					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
 
 			if ( filetype == 2 ){
-				write_static_mfile ( argv, title,
+				write_static_mfile (OUT_file, title,
 					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
 

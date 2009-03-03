@@ -77,8 +77,8 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
 0                               % number of uniform loads
 0                               % number of trapezoidal loads
 0                               % number of internal concentrated loads
-0                               % number of members with temperature loads
-0                               % number of joints with support settlements
+0                               % number of temperature loads
+0                               % number of support settlements
 				% End   Static Load Case 1 of 1
 
 

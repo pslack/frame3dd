@@ -42,8 +42,8 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 0                               % number of uniform loads
 0                               % number of trapezoidal loads
 0                               % number of internal concentrated loads
-0                               % number of members with temperature loads
-0                               % number of joints with support settlements
+0                               % number of temperature loads
+0                               % number of support settlements
 				% End   Static Load Case 1 of 3
 
 				% Begin Static Load Case 2 of 3
@@ -53,13 +53,23 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 %     N/mm N/mm N/mm
   2    0   0.1    0
   1    0    0    0.1 
-0                               % number of trapezoidal loads
+2                               % number of trapezoidally distributed loads
+% M     x1       x2        w1      w2
+%       mm       mm       N/mm    N/mm
+  3     20       80       0.01    0.05    % location and loading - local x-axis
+         0        0        0       0      % location and loading - local y-axis
+        80      830      -0.05    0.07    % location and loading - local z-axis
+
+  4      0        0        0       0      % location and loading - local x-axis
+        68      330       0.05    0.00    % location and loading - local y-axis
+        80      830      -0.05    0.07    % location and loading - local z-axis
+       
 0                               % number of internal concentrated loads
-1                               % number of members with temperature loads
+1                               % number of temperature loads
 %.M  alpha   hy   hz   Ty+  Ty-  Tz+  Tz-
 %    /degC   mm   mm   degC degC degC degC
 1   12e-6    10   10  20   10   10  -10
-0                               % number of joints with support settlements
+0                               % number of support settlements
 				% End   Static Load Case 2 of 3
 
 				% Begin Static Load Case 3 of 3
@@ -71,8 +81,8 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 %      N    N     N    mm
   1    0    100  -900  30
   2    0   -200   200  30
-0                               % number of members with temperature loads
-0                               % number of joints with support settlements
+0                               % number of temperature loads
+0                               % number of support settlements
 				% End   Static Load Case 3 of 3
 
 

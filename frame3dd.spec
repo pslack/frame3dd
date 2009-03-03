@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20090227
+Version:	0.20090302
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -67,6 +67,14 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+
+* Mon Mar 2 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090227
+- Usage change from ... frame3dd InputData.frm ... to ... frame3dd
+InputData.frm OutputData.out
+- output information regarding number of loading types is now more clear
+- updated examples B and E with trapezoidal loads
+- updated documentation and README
+- updated Matlab frame_3dd.m
 
 * Thu Feb 27 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090227
 - Implement trapezoidally-distributed loads over partial distances along frame elements

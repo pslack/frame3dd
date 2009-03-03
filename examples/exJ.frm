@@ -81,8 +81,8 @@ Example J: tesseract  (N, mm, ton)
 0                               % number of uniform distributed loads
 0                               % number of trapezoidal distributed loads
 0                               % number of internal concentrated loads
-0                               % number of members with temperature loads
-0                               % number of joints with support settlements
+0                               % number of temperature loads
+0                               % number of support settlements
 				% End   Static Load Case 1 of 1
 
 22                              % number of desired dynamic modes of vibration

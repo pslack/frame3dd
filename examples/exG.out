@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example G: a building with a set-back  (in kip) 
-Fri Feb 27 19:33:56 2009
+Mon Mar  2 20:13:24 2009
 ________________________________________________________________________________
 15 JOINTS;    24 MEMBERS;    1 LOAD CASES;  3 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -60,12 +60,12 @@ B E A M   D A T A							(local)
 
 L O A D   C A S E   1   O F   1  ... 
 
-   1 joints  with concentrated loads
-  12 elements with uniformly distributed loads
-   0 elements with trapezoidally distributed loads
-   0 elements with concentrated point loads
-   0 elements with temperature loads
-   0 joints  with prescribed displacements
+   1 concentrated loads
+  12 uniformly distributed loads
+   0 trapezoidally distributed loads
+   0 concentrated point loads
+   0 temperature loads
+   0 prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      4       0.000       0.000    -380.198   -1681.148   10271.640       0.000

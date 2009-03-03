@@ -38,13 +38,13 @@ nU					   % number of uniform distributed loads
   M[nU]	Ux[nU]	Uy[nU]	Uz[nU]
 
 nW				     % number of trapezoidally distributed loads
-  M[1]  wxx1[1]  wxx2[1]  wx1[1]  wx2[1]  % loads in the local x-axis
-        wyx1[1]  wyx2[1]  wy1[1]  wy2[1]  % loads in the local y-axis
-        wzx1[1]  wzx2[1]  wz1[1]  wz2[1]  % loads in the local z-axis
+  M[1]  xx1[1]  xx2[2]  wx1[1]  wx2[1]  % locations and loads - local x-axis
+        xy1[1]  xy2[2]  wy1[1]  wy2[1]  % locations and loads - local y-axis
+        xz1[1]  xz2[2]  wz1[1]  wz2[1]  % locations and loads - local z-axis
     :        :        :       :       :
   M[nW] wxx1[nW] wxx2[nW] wx1[nW] wx2[nW] % x1 and x2: start and end locations
         wyx1[nW] wyx2[nW] wy1[nW] wy2[nW] % w1 and w2: start load and end load
-        wzx1[nW] wzx2[nW] wz1[nW] wz2[nW]  
+        wzx1[nW] wzx2[nW] wz1[nW] wz2[nW] % 0 < x1 < x2 < L
 
 nP					    % number of concentrated point loads
   M[1]	Px[1]	Py[1]	Pz[1]	x[1]	    % point loads in member coordinates 
@@ -56,7 +56,7 @@ nT					 % number of members temperature changes
   :	:	:	:	:	:	:	:	% temp. coef.
   M[nT]	a[nT]	hy[nT]	hz[nT]	Ty+[nT]	Ty-[nT]	Tz+[nT]	Tz-[nT] % sizes, & temps
 
-nD		         % number of joints with prescribed displacements nD<=nR
+nD		                     % number of prescribed displacements nD<=nR
   J[1]	Dx[1]	Dy[1]	Dz[3]	Dxx[1]	Dyy[1]	Dzz[1]
   :	:	:	:	:	:	:     % prescribed displacements
   J[nD]	Dx[nD]	Dy[nD]	Dz[nD]	Dxx[nD]	Dyy[nD]	Dzz[nD]
@@ -74,25 +74,25 @@ nU					   % number of uniform distributed loads
   M[nU]	Ux[nU]	Uy[nU]	Uz[nU]
 
 nW				     % number of trapezoidally distributed loads
-  M[1]  xx1[1]  xx2[2]  wx1[1]  wx2[1]  % loads in the local x-axis
-        xy1[1]  xy2[2]  wy1[1]  wy2[1]  % loads in the local y-axis
-        xz1[1]  xz2[2]  wz1[1]  wz2[1]  % loads in the local z-axis
+  M[1]  xx1[1]  xx2[2]  wx1[1]  wx2[1]  % locations and loads - local x-axis
+        xy1[1]  xy2[2]  wy1[1]  wy2[1]  % locations and loads - local y-axis
+        xz1[1]  xz2[2]  wz1[1]  wz2[1]  % locations and loads - local z-axis
     :       :       :       :       :
   M[nW] xx1[nW] xx2[nW] wx1[nW] wx2[nW]  % x1 and x2: start and end locations
         xy1[nW] xy2[nW] wy1[nW] wy2[nW]  % w1 and w2: start load and end load
-        xz1[nW] xz2[nW] wz1[nW] wz2[nW]  
+        xz1[nW] xz2[nW] wz1[nW] wz2[nW] % 0 < x1 < x2 < L
 
 nP					    % number of concentrated point loads
   M[1]	Px[1]	Py[1]	Pz[1]	x[1]	    % point loads in member coordinates 
   :	:	:	:	:	    % and x=distance from coordinate J1 
   M[nP]	Px[nP]	Py[nP]	Pz[nP]	x[nP]
 
-nT					 % number of members temperature changes
+nT			         		 % number of temperature changes
   M[1]	a[1]	hy[1]	hz[1]	Ty+[1]	Ty-[1]	Tz+[1]	Tz-[1]	% member no.,   
   :	:	:	:	:	:	:	:	% temp. coef.
   M[nT]	a[nT]	hy[nT]	hz[nT]	Ty+[nT]	Ty-[nT]	Tz+[nT]	Tz-[nT] % sizes, & temps
 
-nD		         % number of joints with prescribed displacements nD<=nR
+nD		                     % number of prescribed displacements nD<=nR
   J[1]	Dx[1]	Dy[1]	Dz[3]	Dxx[1]	Dyy[1]	Dzz[1]
   :	:	:	:	:	:	:     % prescribed displacements
   J[nD]	Dx[nD]	Dy[nD]	Dz[nD]	Dxx[nD]	Dyy[nD]	Dzz[nD]

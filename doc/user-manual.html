@@ -57,24 +57,25 @@ Duke University</a> - Box 90287,
 <p><b>Frame3DD</b> is a program for the static and dynamic structural analysis of two- and three-dimensional frames and trusses with elastic and geometric stiffness.
 </p>
 
+<p><b>Frame3DD</b> is executed from within a terminal (or "command prompt") as follows. <br>
+<tt> frame3dd  InputData  OutputData</tt>.
+</p>
+
 <p><b>Frame3DD</b> reads a plain-text <b>input data file</b>, containing joint coordinates, frame element geometry, material moduli, fixed joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.
 <!-- (The Input Data file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
 </p>
 
-<p><b>Frame3DD</b> appends results to a plain-text <b>output data file</b> with a <tt>.out</tt> filename extension.
-For example, if the input data is in a file called <tt>exA.frm</tt>,
-output data is appended to a file called <tt>exA.out</tt>.  
-Results from the most recent analysis of the input data file <tt>exA.frm</tt>
-are written to the <b>end</b> of the output data file <tt>exA.out</tt>.  
-The output data 
-gives the date and time of the analysis,  
+<p><b>Frame3DD</b> appends results to a plain-text <b>output data file</b>.  
+Results from the most recent analysis 
+are written to the <b>end</b> of the output data file.   
+Each section of the output data gives the date and time of the analysis,  
 recapitulates the input information, gives joint displacements in global coordinates, frame element end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
 </p>
 
 <p><b>Frame3DD</b> writes a
 <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>
 script file used for viewing deformed frames and dynamic mode shapes.   
-If the input data is in a file called <tt>exA.frm</tt>,
+If the output data is written to a file called <tt>exA.out</tt>,
 the Gnuplot script is written to a file called <tt>exA.plt</tt>.  
 Graphical output may be viewed by starting Gnuplot and typing: 
 <tt> load 'exA.plt'</tt>.
@@ -102,7 +103,7 @@ Dynamic Condensation.  Graphical output and mode shape animation
 via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <hr>
 <h4>SYNOPSIS </h4>
-       frame3dd [Input/Ouput file]
+       frame3dd [Input Data File] [Output Data File]
 <hr>
 -->
 
@@ -136,14 +137,14 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li>Optionally, obtain a copy of Gnuplot for your operating system.
 <li>Copy one of the example input data files (eg <tt>exA.frm</tt>) into your home directory.   
 <li>       Open a terminal window and run the program using the command
-	  <tt>frame3dd exA.frm</tt> (change the filename <tt>exA.frm</tt> as necessary).
+	  <tt>frame3dd exA.frm exA.out</tt> (change the filenames <tt>exA.frm</tt> and <tt>exA.out</tt> as necessary).
 	<li>Open the output data file using your text editor and view the output data. 
 <!--     Running this program will create many files.  Most of them are used
          for graphics and should be written to the  /tmp  directory.
 <li>      One of the files will be written to the current working directory and will be called
          something like frA.plt   This file is used for plotting.   -->
 <li>      Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, and typing
-           <tt>load 'example.plt' </tt> at the "<tt>gnuplot&gt;</tt>"&nbsp;prompt. 
+           <tt>load 'exA.plt'</tt> at the "<tt>gnuplot&gt;</tt>"&nbsp;prompt. 
 Observe a series of plots by hitting the Return (or Enter) key between plots.<br>
 If a dynamic analysis was performed, you will enjoy an animation of selected mode shapes.<br>
 Continue to hit the Return (or Enter) key until the last plot is displayed.
@@ -330,7 +331,7 @@ For OS X running on a PowerPC (PPC) or Intel processor.
          Quit the Terminal application.  [APPLE] [Q]
 <li>        Run <b>Frame3DD</b> from a Terminal window:  (Applications > Utilities > Terminal) ... <br>
             <tt>...$   cd ~/Desktop</tt><br>
-            <tt>...$   frame3dd example.frm</tt><br>
+            <tt>...$   frame3dd example.frm example.out</tt><br>
          where <tt>example.frm</tt> is the name of your Input Data file.
 <!-- <li>        Run <b>Frame3DD</b> from a Terminal window  (another way).
              Click on the <b>frame3dd</b> icon in your Desktop.
@@ -540,9 +541,9 @@ When editing an Input Data file with a spreadsheet program, save it in
 <p>
 When run on a <tt>.CSV</tt> file,
 <b>Frame3DD</b> writes results
-as plain text to an Output Data file with a <tt>.out</tt> extension and also
-writes results of the static analyses to a spreadsheet with a filename ending in "<tt>_out.CSV</tt>".   These files may be viewed, edited, pre-processed,
-and post-processed with spreadsheet programs.
+as plain text to the named Output Data file and also
+writes results of the static analyses to a spreadsheet with a filename ending in "<tt>.CSV</tt>".   
+These files may be viewed, edited, pre-processed, and post-processed with a spreadsheet program.
 </p>
 
 <p>
@@ -962,7 +963,9 @@ shear deformation when shear deformation is utilized in the analysis.
 Multiple static load cases are generated by specifying
 <a href="#Variables">the variable nL</a>
 in the
-<a href="#InputData">Input Data</a>, and by specifying the five types of loads for each load case, as shown in <a href="../examples/exA.frm">Example A</a> and <a href="../examples/exB.frm">Example B</a>.
+<a href="#InputData">Input Data</a>, and by specifying the six types of loads for each load case,
+as shown in <a href="../examples/exA.frm">Example A</a> and
+<a href="../examples/exB.frm">Example B</a>.
 </p>
 
 <h3> 7.9 Dynamic Modal Analysis </h3>
@@ -1174,13 +1177,13 @@ nU                                        % number of uniform distributed loads
   M[nU]   Ux[nU]  Uy[nU]  Uz[nU]
 
 nW                                   % number of trapezoidally distributed loads
-  M[1]  wxx1[1]  wxx2[1]  wx1[1]  wx2[1]  % loads in the local x-axis
-        wyx1[1]  wyx2[1]  wy1[1]  wy2[1]  % loads in the local y-axis
-        wzx1[1]  wzx2[1]  wz1[1]  wz2[1]  % loads in the local z-axis
-    :        :        :       :       :
-  M[nW] wxx1[nW] wxx2[nW] wx1[nW] wx2[nW] % x1 and x2: start and end locations
-        wyx1[nW] wyx2[nW] wy1[nW] wy2[nW] % w1 and w2: start load and end load
-        wzx1[nW] wzx2[nW] wz1[nW] wz2[nW]
+  M[1]  xx1[1]  xx2[2]  wx1[1]  wx2[1]   % locations and loads - local x-axis
+        xy1[1]  xy2[2]  wy1[1]  wy2[1]   % locations and loads - local y-axis
+        xz1[1]  xz2[2]  wz1[1]  wz2[1]   % locations and loads - local z-axis
+    :       :       :       :       :
+  M[nW] xx1[nW] xx2[nW] wx1[nW] wx2[nW]  % x1 and x2: start and end locations
+        xy1[nW] xy2[nW] wy1[nW] wy2[nW]  % w1 and w2: start load and end load
+        xz1[nW] xz2[nW] wz1[nW] wz2[nW]  % 0 < x1 < x2 < L
 
 nP                                         % number of concentrated point loads
   M[1]    Px[1]   Py[1]   Pz[1]   x[1]     %  point loads in local coordinates
@@ -1210,13 +1213,13 @@ nU                                        % number of uniform distributed loads
   M[nU]   Ux[nU]  Uy[nU]  Uz[nU]
 
 nW                                   % number of trapezoidally distributed loads
-  M[1]  wxx1[1]  wxx2[1]  wx1[1]  wx2[1]  % loads in the local x-axis
-        wyx1[1]  wyx2[1]  wy1[1]  wy2[1]  % loads in the local y-axis
-        wzx1[1]  wzx2[1]  wz1[1]  wz2[1]  % loads in the local z-axis
-    :        :        :       :       :
-  M[nW] wxx1[nW] wxx2[nW] wx1[nW] wx2[nW] % x1 and x2: start and end locations
-        wyx1[nW] wyx2[nW] wy1[nW] wy2[nW] % w1 and w2: start load and end load
-        wzx1[nW] wzx2[nW] wz1[nW] wz2[nW]
+  M[1]  xx1[1]  xx2[2]  wx1[1]  wx2[1]   % locations and loads - local x-axis
+        xy1[1]  xy2[2]  wy1[1]  wy2[1]   % locations and loads - local y-axis
+        xz1[1]  xz2[2]  wz1[1]  wz2[1]   % locations and loads - local z-axis
+    :       :       :       :       :
+  M[nW] xx1[nW] xx2[nW] wx1[nW] wx2[nW]  % x1 and x2: start and end locations
+        xy1[nW] xy2[nW] wy1[nW] wy2[nW]  % w1 and w2: start load and end load
+        xz1[nW] xz2[nW] wz1[nW] wz2[nW]  % 0 < x1 < x2 < L
 
 nP                                         % number of concentrated point loads
   M[1]    Px[1]   Py[1]   Pz[1]   xP[1]    %  point loads in local coordinates
@@ -1361,25 +1364,25 @@ nC                                                % number of condensed joints
                    in the local x-direction
        wx2       - stopping value for trapezoidally-distributed loads
                    in the local x-direction
-       wxx1      - distance along a frame element for starting 
-                   trapezoidally-distributed loads in the x-direction
-       wxx2      - distance along a frame element for stopping
-                   trapezoidally-distributed loads in the x-direction
        wy1       - starting value for trapezoidally-distributed loads
                    in the local y-direction
        wy2       - stopping value for trapezoidally-distributed loads
                    in the local y-direction
-       wyx1      - distance along a frame element for starting 
-                   trapezoidally-distributed loads in the y-direction
-       wyx2      - distance along a frame element for stopping
-                   trapezoidally-distributed loads in the y-direction
        wz1       - starting value for trapezoidally-distributed loads
                    in the local z-direction
        wz2       - stopping value for trapezoidally-distributed loads
                    in the local z-direction
-       wzx1      - distance along a frame element for starting 
+       xx1       - distance along a frame element for starting 
+                   trapezoidally-distributed loads in the x-direction
+       xx2       - distance along a frame element for stopping
+                   trapezoidally-distributed loads in the x-direction
+       xy1       - distance along a frame element for starting 
+                   trapezoidally-distributed loads in the y-direction
+       xy2       - distance along a frame element for stopping
+                   trapezoidally-distributed loads in the y-direction
+       xz1       - distance along a frame element for starting 
                    trapezoidally-distributed loads in the z-direction
-       wzx2      - distance along a frame element for stopping
+       xz2       - distance along a frame element for stopping
                    trapezoidally-distributed loads in the z-direction
        x         - x coordinate of a joint in global coordinates
        y         - y coordinate of a joint in global coordinates

@@ -9,6 +9,7 @@ See 'README.txt' for general information.
 
 NOTE: FRAME3DD is a *command line* program. It processes an input text file
 and adds output data at the end of that file.
+It is best to run FRAME3DD from within a Command Prompt window.
 
 NOTE: FRAME3DD input files, such as those in the 'examples' directory
 currently include places where the file-paths for certain output files
