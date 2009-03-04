@@ -1,12 +1,12 @@
 ________________________________________________________________________________
-FRAME3DD version: 20090226               http://frame3dd.sf.net/
+FRAME3DD version: 20090304               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis (N mm ton) 
-Mon Mar  2 20:12:55 2009
+Wed Mar  4 01:19:55 2009
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;  4 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -38,7 +38,7 @@ L O A D   C A S E   1   O F   3  ...
    0 prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
-     1   10000.000  -20000.000   -1000.000       0.000       0.000       0.000
+     1    1000.000   -2000.000    -100.000       0.000       0.000       0.000
 
 L O A D   C A S E   2   O F   3  ... 
 
@@ -91,32 +91,29 @@ L O A D   C A S E   3   O F   3  ...
 
 E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 
-  * The Stiffness Matrix is not positive-definite *
-    Check that all six rigid-body translations are restrained
-    If geometric stiffness is included, reduce the loads.
 
 L O A D   C A S E   1   O F   3  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
   Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1    1.412722   -5.022766   -0.203415    0.003587    0.000814    0.0     
+     1    0.141274   -0.502291   -0.020345    0.000375    0.000082    0.000010
 B E A M   E N D   F O R C E S						(local)
   Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
-     1      1   6709.597c    -19.839     -2.999   -122.908  -1664.749    217.535
-     1      2  -6709.597c     19.839      2.999    122.908   1197.638  -3334.410
-     2      1  14220.933c     27.734    -16.250     87.158  -6329.528   -295.286
-     2      3 -14220.933c    -27.734     16.250    -87.158   5343.370   5204.723
-     3      1  -5808.312t    -18.372     -3.794    122.908  -1497.817   -701.813
-     3      4   5808.312t     18.372      3.794   -122.908   1285.802  -4156.014
-     4      1 -13319.647t     26.749    -18.134    -87.158  -5852.461    280.185
-     4      5  13319.647t    -26.749     18.134     87.158   5673.330   5710.880
+     1      1    670.989c     -0.141     -0.040    -13.038     -0.944     45.136
+     1      2   -670.989c      0.141      0.040     13.038     13.781     27.947
+     2      1   1422.135c      0.242     -0.170      8.945    -44.361    -30.696
+     2      3  -1422.135c     -0.242      0.170     -8.945     48.270     16.142
+     3      1   -580.847t     -0.238     -0.033     12.564    -27.910    -44.302
+     3      4    580.847t      0.238      0.033    -12.564     17.279   -101.632
+     4      1  -1331.993t      0.304     -0.177     -9.418    -79.088     29.228
+     4      5   1331.993t     -0.304      0.177      9.418     69.227     95.995
 R E A C T I O N S							(global)
   Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
-     2    4476.750    3332.764    3724.311    2116.449      90.289   -2842.574
-     3   -9475.454    7071.923    7901.875    5457.655    2585.971    4378.938
-     4    3856.907    2915.645   -3218.715   -2697.567    -415.923   -3389.836
-     5   -8858.091    6677.004   -7373.322   -5996.275   -2594.457    4703.393
-R M S   E Q U I L I B R I U M    E R R O R: 4.176e-02
+     2     446.704     334.852     372.231     -12.812     -26.836      16.021
+     3    -946.700     709.722     789.000      30.171      37.709      18.392
+     4     386.507     290.178    -322.168     -63.831     -26.274     -77.593
+     5    -886.524     665.273    -738.709     -90.404     -18.731      74.648
+R M S   E Q U I L I B R I U M    E R R O R: 1.583e-04
 
 L O A D   C A S E   2   O F   3  ... 
 
