@@ -143,17 +143,18 @@ int main ( int argc, char *argv[] ) {
 		debug=0,	/* 1: debugging screen output, 0: none	*/
 		verbose=1;	/* 1: copious screen output, 0: none	*/
 
-	int	shear_flag,	/* over-ride input file value		*/
-		geom_flag,	/* over-ride input file value		*/
-		anlyz_flag,	/* over-ride input file value		*/
-		lump_flag,	/* over-ride input file value		*/
-		modal_flag;	/* over-ride input file value		*/
+	int	shear_flag=-1,	/*   over-ride input file value		*/
+		geom_flag=-1,	/*   over-ride input file value		*/
+		anlyz_flag=-1,	/*   over-ride input file value		*/
+		lump_flag=-1,	/*   over-ride input file value		*/
+		modal_flag=-1,	/*   over-ride input file value		*/
+		condense_flag=-1; /* over-ride input file value		*/
 
-	double	exagg_flag,	/* over-ride input file value		*/
-		tol_flag,	/* over-ride input file value		*/
-		shift_flag;	/* over-ride input file value		*/
+	double	exagg_flag=-1.0,/*   over-ride input file value		*/
+		tol_flag=-1.0,	/*   over-ride input file value		*/
+		shift_flag=-1.0;/*   over-ride input file value		*/
 
-	float	pan_flag;	/* over-ride input file value		*/
+	float	pan_flag=-1.0;	/*   over-ride input file value		*/
 
 	char	extn[16];	/* Input Output file name extension	*/
 
@@ -161,7 +162,7 @@ int main ( int argc, char *argv[] ) {
 	parse_options ( argc, argv, IN_file, OUT_file, 
 			&shear_flag, &geom_flag, &anlyz_flag, &exagg_flag, 
 			&lump_flag, &modal_flag, &tol_flag, &shift_flag, 
-			&pan_flag, &verbose, &debug);
+			&pan_flag, &condense_flag, &verbose, &debug);
 
 	if ( verbose ) {
 		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
@@ -325,7 +326,8 @@ int main ( int argc, char *argv[] ) {
 		printf(" mass data ... complete\n");
 	}
 
-	read_condensation_data( fp, nJ,nM, &nC, &Cdof, &Cmethod, q,m, verbose );
+	read_condensation_data( fp, nJ,nM, &nC, &Cdof, 
+			&Cmethod, condense_flag, q,m, verbose );
 
 	if( nC>0 && verbose ) {
 		printf("                                      ");

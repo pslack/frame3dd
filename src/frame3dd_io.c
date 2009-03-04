@@ -67,6 +67,7 @@ void parse_options (
 	double *tol_flag, 
 	double *shift_flag,
 	float *pan_flag,
+	int *condense_flag,
 	int *verbose,
 	int *debug
 ){
@@ -78,7 +79,7 @@ void parse_options (
 	/* default values */
 
 	*shear_flag = *geom_flag  = *anlyz_flag = *lump_flag = *modal_flag = -1;
-	*exagg_flag = *tol_flag = *shift_flag = *pan_flag  = -1.0;
+	*exagg_flag = *tol_flag = *shift_flag = *pan_flag = *condense_flag = -1.0;
 	*debug = 0; *verbose = 1;
 
 	/* set up file names for the the input data and the output data */
@@ -93,72 +94,77 @@ printf("input file: %s\n", IN_file);
 		return;
 	 }
 	 case 3: {
-		strcpy(  IN_file , argv[1] );
-		strcpy( OUT_file , argv[2] );
-		return;
+		if ( argv[1][0] != '-' ) {
+			strcpy(  IN_file , argv[1] );
+			strcpy( OUT_file , argv[2] );
+			return;
+		}
 	 }
 	}
 
-	while ((option=getopt(argc,argv, "cde:f:g:hl:m:p:qs:t:vi:o:")) != -1) {
+	while ((option=getopt(argc,argv, "i:o:hvqcds:g:e:l:m:t:f:p:r:")) != -1){
 		switch ( option ) {
-			case 'i':
+			case 'i':		/* input data file name */
 				strcpy(IN_file,optarg);
 				break;
-			case 'o':
+			case 'o':		/* output data file name */
 				strcpy(OUT_file,optarg);
 				break;
-			case 'h':
+			case 'h':		/* help	*/
 				h_flag = 1;
 				display_help();
 				exit(0);
-			case 'v':
+			case 'v':		/*version */
 				v_flag = 1;
 				display_version();
 				exit(0);
-			case 'q':
+			case 'q':		/* quiet */
 				*verbose = 0;
 				break;
-			case 'c':
+			case 'c':		/* data check only */
 				*anlyz_flag = 0;
 				break;
-			case 'd':
+			case 'd':		/* debug */
 				*debug = 0;
 				break;
-			case 's':
+			case 's':		/* shear deformation */
 				if (strcmp(optarg,"On")==0)
 					*shear_flag = 1;
 				else
 					*shear_flag = 0;
 				break;
-			case 'g':
+			case 'g':		/* geometric stiffness */
 				if (strcmp(optarg,"On")==0)
 					*geom_flag = 1;
 				else
 					*geom_flag = 0;
 				break;
-			case 'e':
+			case 'e':		/* exaggeration factor */
 				*exagg_flag = atof(optarg);
 				break;
-			case 'l':
+			case 'l':		/* lumped or consistent mass */
 				if (strcmp(optarg,"On")==0)
 					*lump_flag = 1;
 				else
 					*lump_flag = 0;
 				break;
-			case 'm':
+			case 'm':		/* modal analysis method */
 				if (strcmp(optarg,"J")==0)
 					*modal_flag = 1;
 				else
 					*modal_flag = 2;
 				break;
-			case 't':
+			case 't':		/* modal analysis tolerence */
 				*tol_flag = atof(optarg);
 				break;
-			case 'f':
+			case 'f':		/* modal analysis freq. shift */
 				*shift_flag = atof(optarg);
 				break;
-			case 'p':
+			case 'p':		/* pan rate	*/
 				*pan_flag = atof(optarg);
+				break;
+			case 'r':		/* matrix condensation method */
+				*condense_flag = atoi(optarg);
 				break;
 			case '?':
 				printf("  Unknown option: -%c\n\n", option );
@@ -190,14 +196,21 @@ void display_help()
  fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
 /* fprintf(stderr,"  Usage: frame3dd -i<input> -o<output> [-hvcq] [-s<On|Off>] [-g<On|Off>] [-e<value>] [-l<On|Off>] [-f<value>] [-m J|S] [-t<value>] [-p<value>] \n");
  */
- fprintf(stderr,"  Usage: frame3dd -i <input> -o <output> [OPTIONS] \n\n");
+ fprintf(stderr,"  FRAME3DD may be run with interactive prompting for file names by typing ...\n");
+ fprintf(stderr,"       frame3dd \n\n");
+ fprintf(stderr,"  FRAME3DD may be run without command-line options by typing ...\n");
+ fprintf(stderr,"       frame3dd <InFile> <OutFile> \n\n");
 
- fprintf(stderr," ... where [OPTIONS] over-rides values in the input file and includes\n");
+
+ fprintf(stderr,"  FRAME3DD may be run with command-line options by typing ...\n");
+ fprintf(stderr,"       frame3dd -i <InFile> -o <OutFile> [OPTIONS] \n\n");
+
+ fprintf(stderr," ... where [OPTIONS] over-rides values in the input data file and includes\n");
  fprintf(stderr,"     one or more of the following:\n\n");
 
  fprintf(stderr," ------------------------------------------------------------------------\n");
- fprintf(stderr,"  -i <input>    the  input data file name --- described in the manual\n");
- fprintf(stderr,"  -o <output>   the output data file name\n");
+ fprintf(stderr,"  -i  <InFile>  the  input data file name --- described in the manual\n");
+ fprintf(stderr,"  -o <OutFile>  the output data file name\n");
  fprintf(stderr,"  -h            print this help message and exit\n");
  fprintf(stderr,"  -v            display program version and exit\n");
  fprintf(stderr,"  -c            data check only - the output data reviews the input data\n");
@@ -207,9 +220,10 @@ void display_help()
  fprintf(stderr,"  -e <value>    level of deformation exaggeration for Gnuplot output\n");
  fprintf(stderr,"  -l  On|Off    On: lumped mass matrix or Off: consistent mass matrix\n");
  fprintf(stderr,"  -f <value>    modal frequency shift for unrestrained structures\n");
- fprintf(stderr,"  -m   J|S      odal analysis method: J=Jacobi-Subspace or S=Stodola\n");
+ fprintf(stderr,"  -m   J|S      modal analysis method: J=Jacobi-Subspace or S=Stodola\n");
  fprintf(stderr,"  -t <value>    convergence tolerance for modal analysis\n");
  fprintf(stderr,"  -p <value>    pan rate for mode shape animation\n");
+ fprintf(stderr,"  -r <value>    matrix condensation method: 0, 1, 2, or 3 \n");
  fprintf(stderr," ------------------------------------------------------------------------\n");
 
 }
@@ -1326,7 +1340,8 @@ READ_CONDENSE   -  read matrix condensation information 	        30aug01
 void read_condensation_data (
 		FILE *fp,
 		int nJ, int nM,
-		int *nC, int *Cdof, int *Cmethod, int *q, int *m, int verbose
+		int *nC, int *Cdof,
+		int *Cmethod, int condense_flag, int *q, int *m, int verbose
 ){
 	int	i,j,k,  chk, **qm;
 
@@ -1336,6 +1351,8 @@ void read_condensation_data (
 		*Cmethod = *nC = *Cdof = 0;
 		return;
 	}
+
+	if ( condense_flag != -1 )	*Cmethod = condense_flag;
 
 	if ( *Cmethod <= 0 )  {
 		*Cmethod = *nC = *Cdof = 0;

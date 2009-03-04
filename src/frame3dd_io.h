@@ -47,6 +47,7 @@ void parse_options (
 	double *tol_flag,
 	double *shift_flag,
 	float *pan_flag,
+	int *condense_flag,
 	int *verbose,
 	int *debug
 );
@@ -225,6 +226,7 @@ void read_condensation_data(
 	int *nC,	/**< number of joints with condensed DoF's	*/
 	int *Cdof,	/**< list of DoF's retained in condensed model	*/
 	int *Cmethod,	/**< matrix conden'n method, static, Guyan, dynamic*/
+	int condense_flag, /** command-line over-ride			*/
 	int *q,		/**< list of retained degrees of freedom	*/
 	int *m,		/**< list of retained modes in dynamic condensation */
 	int verbose	/**< 1: copious output to screen, 0: none	*/
