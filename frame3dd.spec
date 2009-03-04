@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20090302
+Version:	0.20090304
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -67,6 +67,40 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+
+* Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304
+- Implement command line parsing using the getopt function
+... using getopt for ease of portability.
+
+Usage: frame3dd -i <input> -o <output> [OPTIONS] 
+
+... where [OPTIONS] over-rides values in the input file and includes
+one or more of the following:
+
+------------------------------------------------------------------------
+-i <input>    the  input data file name --- described in the manual
+-o <output>   the output data file name
+-h            print this help message and exit
+-v            display program version and exit
+-c            data check only - the output data reviews the input data
+-q            suppress screen output except for warning messages
+-s On|Off     On: include shear deformation or Off: neglect ...
+-g  On|Off    On: include geometric stiffness or Off: neglect ...
+-e <value>    level of deformation exaggeration for Gnuplot output
+-l On|Off     On: lumped mass matrix or Off: consistent mass matrix
+-f <value>    modal frequency shift for unrestrained structures
+-m  J|S       Modal analysis method: J=Jacobi Subspace or S=Stodola
+-t <value>    convergence tolerance for modal analysis
+-p <value>    pan rate for mode shape animation
+------------------------------------------------------------------------
+
+- Added functions to frame3dd_io.c:
+parse_options() --- calls getopt
+display_help() 
+display_usage()
+display_version()
+
+- Updated documentation with command-line syntax ... doc/user-manual.html
 
 * Tue Mar 3 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090303
 - Implement command line parsing using argtable2 package

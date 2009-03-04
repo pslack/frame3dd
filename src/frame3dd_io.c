@@ -50,12 +50,208 @@ static void getline_no_comment(
 	int lim      /**< the longest anticipated line length  */
 );
 
+
+/*------------------------------------------------------------------------------
+PARSE_OPTIONS -  parse command line options				04mar09
+command line options over-ride values in the input data file	 	
+------------------------------------------------------------------------------*/
+void parse_options (
+	int argc, char *argv[], 
+	char IN_file[], char OUT_file[], 
+	int *shear_flag,
+	int *geom_flag,
+	int *anlyz_flag,
+	double *exagg_flag,
+	int *lump_flag,
+	int *modal_flag,
+	double *tol_flag, 
+	double *shift_flag,
+	float *pan_flag,
+	int *verbose,
+	int *debug
+){
+
+	char	option;
+
+	int	h_flag = 0, v_flag = 0;
+
+	/* default values */
+
+	*shear_flag = *geom_flag  = *anlyz_flag = *lump_flag = *modal_flag = -1;
+	*exagg_flag = *tol_flag = *shift_flag = *pan_flag  = -1.0;
+	*debug = 0; *verbose = 1;
+
+	/* set up file names for the the input data and the output data */
+
+	switch ( argc ) {
+	 case 1: {
+		fprintf (stderr," Please enter the  input data file name: ");
+		scanf("%s", IN_file );
+printf("input file: %s\n", IN_file);
+		fprintf (stderr," Please enter the output data file name: ");
+		scanf("%s", OUT_file );
+		return;
+	 }
+	 case 3: {
+		strcpy(  IN_file , argv[1] );
+		strcpy( OUT_file , argv[2] );
+		return;
+	 }
+	}
+
+	while ((option=getopt(argc,argv, "cde:f:g:hl:m:p:qs:t:vi:o:")) != -1) {
+		switch ( option ) {
+			case 'i':
+				strcpy(IN_file,optarg);
+				break;
+			case 'o':
+				strcpy(OUT_file,optarg);
+				break;
+			case 'h':
+				h_flag = 1;
+				display_help();
+				exit(0);
+			case 'v':
+				v_flag = 1;
+				display_version();
+				exit(0);
+			case 'q':
+				*verbose = 0;
+				break;
+			case 'c':
+				*anlyz_flag = 0;
+				break;
+			case 'd':
+				*debug = 0;
+				break;
+			case 's':
+				if (strcmp(optarg,"On")==0)
+					*shear_flag = 1;
+				else
+					*shear_flag = 0;
+				break;
+			case 'g':
+				if (strcmp(optarg,"On")==0)
+					*geom_flag = 1;
+				else
+					*geom_flag = 0;
+				break;
+			case 'e':
+				*exagg_flag = atof(optarg);
+				break;
+			case 'l':
+				if (strcmp(optarg,"On")==0)
+					*lump_flag = 1;
+				else
+					*lump_flag = 0;
+				break;
+			case 'm':
+				if (strcmp(optarg,"J")==0)
+					*modal_flag = 1;
+				else
+					*modal_flag = 2;
+				break;
+			case 't':
+				*tol_flag = atof(optarg);
+				break;
+			case 'f':
+				*shift_flag = atof(optarg);
+				break;
+			case 'p':
+				*pan_flag = atof(optarg);
+				break;
+			case '?':
+				printf("  Unknown option: -%c\n\n", option );
+				display_help();
+				exit(1);
+		}
+	}
+
+	if ( strcmp(IN_file,"\0") == 0 ) {
+		fprintf (stderr," Please enter the  input data file name: ");
+		scanf("%s", IN_file );
+		fprintf (stderr," Please enter the output data file name: ");
+		scanf("%s", OUT_file );
+	}
+	if ( strcmp(IN_file,"\0") != 0 && strcmp(OUT_file,"\0") == 0 ) {
+		strcpy( OUT_file, IN_file );
+		strcat( OUT_file, ".out" );
+	}
+}
+
+
+/*------------------------------------------------------------------------------
+DISPLAY_HELP -  display help information to stderr			04mar09
+------------------------------------------------------------------------------*/
+void display_help()
+{
+ fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
+ fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
+ fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
+/* fprintf(stderr,"  Usage: frame3dd -i<input> -o<output> [-hvcq] [-s<On|Off>] [-g<On|Off>] [-e<value>] [-l<On|Off>] [-f<value>] [-m J|S] [-t<value>] [-p<value>] \n");
+ */
+ fprintf(stderr,"  Usage: frame3dd -i <input> -o <output> [OPTIONS] \n\n");
+
+ fprintf(stderr," ... where [OPTIONS] over-rides values in the input file and includes\n");
+ fprintf(stderr,"     one or more of the following:\n\n");
+
+ fprintf(stderr," ------------------------------------------------------------------------\n");
+ fprintf(stderr,"  -i <input>    the  input data file name --- described in the manual\n");
+ fprintf(stderr,"  -o <output>   the output data file name\n");
+ fprintf(stderr,"  -h            print this help message and exit\n");
+ fprintf(stderr,"  -v            display program version and exit\n");
+ fprintf(stderr,"  -c            data check only - the output data reviews the input data\n");
+ fprintf(stderr,"  -q            suppress screen output except for warning messages\n");
+ fprintf(stderr,"  -s  On|Off    On: include shear deformation or Off: neglect ...\n");
+ fprintf(stderr,"  -g  On|Off    On: include geometric stiffness or Off: neglect ...\n");
+ fprintf(stderr,"  -e <value>    level of deformation exaggeration for Gnuplot output\n");
+ fprintf(stderr,"  -l  On|Off    On: lumped mass matrix or Off: consistent mass matrix\n");
+ fprintf(stderr,"  -f <value>    modal frequency shift for unrestrained structures\n");
+ fprintf(stderr,"  -m   J|S      odal analysis method: J=Jacobi-Subspace or S=Stodola\n");
+ fprintf(stderr,"  -t <value>    convergence tolerance for modal analysis\n");
+ fprintf(stderr,"  -p <value>    pan rate for mode shape animation\n");
+ fprintf(stderr," ------------------------------------------------------------------------\n");
+
+}
+
+
+/*------------------------------------------------------------------------------
+DISPLAY_USAGE -  display usage information to stderr			04mar09
+------------------------------------------------------------------------------*/
+void display_usage()
+{
+ fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
+ fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
+ fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
+/* fprintf(stderr,"  Usage: frame3dd -i<input> -o<output> [-hvcq] [-s<On|Off>] [-g<On|Off>] [-e<value>] [-l<On|Off>] [-f<value>] [-m J|S] [-t<value>] [-p<value>] \n");
+ */
+ fprintf(stderr,"  Usage: frame3dd -i <input> -o <output> [OPTIONS] \n\n");
+
+ fprintf(stderr,"  Try ... frame3dd -h  ... for help information\n\n");
+
+}
+
+/*------------------------------------------------------------------------------
+DISPLAY_VERSION -  display version information to stderr		04mar09
+------------------------------------------------------------------------------*/
+void display_version()
+{
+ fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
+ fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
+ fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
+
+ fprintf(stderr,"  Usage: frame3dd -i <input> -o <output> [OPTIONS] \n\n");
+
+ fprintf(stderr,"  Try ... frame3dd -h  ... for help information\n");
+}
+
+
+
 /*------------------------------------------------------------------------------
 READ_JOINT_DATA  -  read joint location data				04jan09
 ------------------------------------------------------------------------------*/
-void read_joint_data(
-	FILE *fp, int nJ, vec3 *xyz, float *r
-){
+void read_joint_data( FILE *fp, int nJ, vec3 *xyz, float *r )
+{
 	int	i, j;
 
 	for (i=1;i<=nJ;i++) {		/* read joint coordinates	*/
@@ -179,11 +375,16 @@ void read_run_data (
 	FILE	*fp, 
 	char	*OUT_file,	/* output data file name */
 	int	*shear,
+	int	shear_flag,
 	int	*geom,
+	int	geom_flag,
 	char	*meshpath,
 	char	*plotpath,
 	double	*exagg,
-	int	*anlyz
+	double	exagg_flag,
+	int	*anlyz,
+	int	anlyz_flag,
+	int	debug
 ){
 	int	full_len=0, len=0;
 	char	base_file[96] = "EMPTY_BASE";
@@ -225,10 +426,18 @@ void read_run_data (
 	    exit(1);
 	}
 
-//	printf("OUT_FILE = %s \n", OUT_file);
-//	printf("BASE_FILE = %s \n", base_file);
-//	printf("PLOTPATH = %s \n", plotpath);
-//	printf("MESHPATH = %s \n", meshpath);
+	/* over-ride values from input data file with command-line options */
+	if ( shear_flag != -1   )	*shear = shear_flag;
+	if ( geom_flag  != -1   )	*geom = geom_flag;
+	if ( exagg_flag != -1.0 )	*exagg = exagg_flag;
+	if ( anlyz_flag != -1.0 )	*anlyz = anlyz_flag;
+
+	if ( debug) {
+		printf("OUT_FILE = %s \n", OUT_file);
+		printf("BASE_FILE = %s \n", base_file);
+		printf("PLOTPATH = %s \n", plotpath);
+		printf("MESHPATH = %s \n", meshpath);
+	}
 
 	return;
 }
@@ -966,10 +1175,12 @@ void read_mass_data(
 		float *JMs, float *JMx, float *JMy, float *JMz,
 		double *L, float *Ax,
 		double *total_mass, double *struct_mass,
-		int *nM, int *Mmethod, int *lump,
+		int *nM, int *Mmethod, int modal_flag, 
+		int *lump, int lump_flag, 
+		double *tol, double tol_flag, double *shift, double shift_flag,
 		char modepath[],
-		double *tol, double *shift, int anim[], float *pan,
-		int verbose
+		int anim[], float *pan, float pan_flag,
+		int verbose, int debug
 ){
 /*	double	ms = 0.0; */
 	int	chk, j, jnt, m, mem, nA;
@@ -993,6 +1204,7 @@ void read_mass_data(
 	}
 
 	fscanf( fp, "%d", Mmethod );
+	if ( modal_flag != -1 )	*Mmethod = modal_flag;
 
 	if ( verbose ) {
 		printf(" modal analysis method ");
@@ -1017,6 +1229,12 @@ void read_mass_data(
 	fscanf( fp, "%d", lump );
 	fscanf( fp, "%lf", tol );
 	fscanf( fp, "%lf", shift );
+
+	if (  lump_flag != -1   )	*lump = lump_flag;
+	if (  tol_flag  != -1.0 )	*tol  = tol_flag;
+	if ( shift_flag != -1.0 )	*shift = shift_flag;
+
+
 	for (m=1; m <= nB; m++) {	/* read inertia data	*/
 		fscanf(fp, "%d", &mem );
 		fscanf(fp, "%f %f", &d[mem], &BMs[mem] );
@@ -1085,6 +1303,7 @@ void read_mass_data(
 	for ( m = 0; m < nA; m++ )	fscanf ( fp, "%d", &anim[m] );
 
 	fscanf ( fp, "%f", pan );
+	if ( pan_flag != -1.0 )	*pan = pan_flag;
 
 	strcpy(mode_file,OUT_file);
 	while ( mode_file[len++] != '\0' ) /* the length of mode_file */ ;

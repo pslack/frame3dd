@@ -50,7 +50,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %  L : a 1xB vector   of the length of each beam element 
 % Ks : a 6Jx6J matrix of the structural stiffness matrix 
 %
-% http://www.duke.edu/~hpgavin/frame3dd/
+% http://frame3dd.sourceforge.net/
 
 % NOTE:
 % This m-function, frame_3dd.m, executes the system command, frame3dd, 
@@ -230,7 +230,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
       L(b) = sqrt((x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2);
   end
 
-  system(['frame3dd ' IOfilename '.FMM' IOfilename '.OUT']); 	% run the frame3dd analysis
+  system(['frame3dd -i ' IOfilename '.FMM -o ' IOfilename '.OUT']); 	% run the frame3dd analysis
 
   run(Mfilename);				% load the results
 

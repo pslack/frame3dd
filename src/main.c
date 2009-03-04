@@ -45,7 +45,6 @@ For compilation/installation, see README.txt.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <argtable2.h>	/* parsing of command-line arguments	*/
 
 #include "common.h"
 #include "frame3dd.h"
@@ -56,33 +55,6 @@ For compilation/installation, see README.txt.
 int main ( int argc, char *argv[] ) {
 
 #define FILENMAX 96
-
-	/* command-line options are parsed using the argtable package	*/
-	/* command-line options overide values in the input data file	*/
-
-	struct arg_lit *check       = arg_lit0("c","check",            "data check only - the output data reviews the input");
-	struct arg_dbl *exagg_arg   = arg_dbl0("e","exagg", "<value>", "level of deformation exaggeration for Gnuplot output");
-	struct arg_dbl *shift_arg   = arg_dbl0("f","shift", "<value>", "modal frequency shift for unrestrained structures");
-	struct arg_str *geom_arg    = arg_str0("g","geom",  "On|Off",  "On: include geometric stiffness; Off: neglect");
-	struct arg_lit *help        = arg_lit0("h","help",             "print this help message and exit");
-	struct arg_str *lump_arg    = arg_str0("l","lump", "On|Off",   "On: lumped mass matrix; Off: consistent mass matrix");
-	struct arg_str *Mmethod_arg = arg_str0("m","modal", "J|S",      "Modal analysis method: Jacobi or Stodola");
-	struct arg_dbl *pan_arg     = arg_dbl0("p","pan", "<value>",   "pan rate for mode shape animation");
-	struct arg_lit *quiet_arg   = arg_lit0("q","quiet",            "suppress screen output except for warning messages");
-	struct arg_str *shear_arg   = arg_str0("s","shear", "On|Off",  "On: include shear deformation; Off: neglect");
-	struct arg_dbl *tol_arg     = arg_dbl0("t","tol", "<value>",   "convergence tolerance for modal analysis");
-	struct arg_lit *version     = arg_lit0("v","version",          "display program version and exit");
-
-	struct arg_file *infile     = arg_file1(NULL, NULL, "<input>", "the  input data file name --- described in the manual");
-	struct arg_file *outfile    = arg_file1("o",NULL,"<output>",   "the output data file name");
-
-	struct arg_end  *end        = arg_end(99);
-	
-	void *argtable[] = {check,exagg_arg,shift_arg,geom_arg,help,lump_arg,Mmethod_arg,pan_arg,quiet_arg,shear_arg,tol_arg,version,infile,outfile,end};
-
-	const char *progname = "frame3dd";
-	int nerrors;
-	int exitcode=0;
 
 	char	IN_file[FILENMAX],	/* the input  data filename	*/
 		OUT_file[FILENMAX],	/* the output data filename	*/
@@ -168,55 +140,28 @@ int main ( int argc, char *argv[] ) {
 		*q,		/* vector of DoF's to condense		*/
 		*m,		/* vector of modes to condense		*/
 		filetype=0,	/* 1 if .CSV, 2 if file is Matlab	*/
+		debug=0,	/* 1: debugging screen output, 0: none	*/
 		verbose=1;	/* 1: copious screen output, 0: none	*/
+
+	int	shear_flag,	/* over-ride input file value		*/
+		geom_flag,	/* over-ride input file value		*/
+		anlyz_flag,	/* over-ride input file value		*/
+		lump_flag,	/* over-ride input file value		*/
+		modal_flag;	/* over-ride input file value		*/
+
+	double	exagg_flag,	/* over-ride input file value		*/
+		tol_flag,	/* over-ride input file value		*/
+		shift_flag;	/* over-ride input file value		*/
+
+	float	pan_flag;	/* over-ride input file value		*/
 
 	char	extn[16];	/* Input Output file name extension	*/
 
-	/* parse the command line using the argtable package ... */
 
-	/* verify that the argtable[] entries were allocated sucessfully */
-	if ( arg_nullcheck(argtable) != 0 ) {
-	/* NULL entries were detected, some allocations must have failed */
-		fprintf(stderr,"%s: insufficient memory to parse the command line\n",progname);
-		exitcode=1;
-		goto exit;
-        }
-
-	/* Parse the command line as defined by argtable[] */
-	nerrors = arg_parse ( argc, argv, argtable );
-
-	 if (help->count > 0) {
-		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
-		fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
-		fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
-       		fprintf(stderr,"  Usage: %s", progname);
-		arg_print_syntax  (stderr,argtable,"\n\n");
-		arg_print_glossary(stderr,argtable,"  %-22s %s\n");
-		fprintf(stderr,"\n");
-		exitcode=0;
-		goto exit;
-	}
-
-	/* special case: '--version' takes precedence error reporting */
-	if (version->count > 0) {
-		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
-		fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
-		exitcode=0;
-		goto exit;
-	}
-
-	/* If the parser returned any errors then display them and exit */
-	if (argc > 3 && nerrors > 0) {
-		/* Display the error details contained in the arg_end struct.*/
-		arg_print_errors(stdout,end,progname);
-		fprintf(stderr,"Try '%s --help' for more information.\n",progname);
-		exitcode=1;
-		goto exit;
-	}
-
-	verbose = !quiet_arg->count;
-
-	/* end of command-line parsing using the argtable package	*/
+	parse_options ( argc, argv, IN_file, OUT_file, 
+			&shear_flag, &geom_flag, &anlyz_flag, &exagg_flag, 
+			&lump_flag, &modal_flag, &tol_flag, &shift_flag, 
+			&pan_flag, &verbose, &debug);
 
 	if ( verbose ) {
 		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
@@ -227,48 +172,12 @@ int main ( int argc, char *argv[] ) {
 		fprintf(stderr," For details, see LICENSE.txt\n\n");
 	}
 
-	/* set up file names for the the input data and the output data*/ 
-
-	switch ( argc ) {
-	 case 1: {
-		fprintf (stderr," Please enter the  input data file name: ");
-		scanf("%s", IN_file );
-		fprintf (stderr," Please enter the output data file name: ");
-		scanf("%s", OUT_file );
-		break;
-	 }
-	 case 2: {
-		strcpy(  IN_file , argv[1] );
-		strcpy( OUT_file , IN_file );
-        	strcat( OUT_file , ".out" );
-		break;
-	 }
-	 case 3: {
-		strcpy(  IN_file , argv[1] );
-		strcpy( OUT_file , argv[2] );
-		break;
-	 }
-	 case 4: {
-		strcpy(  IN_file , argv[1] );
-		strcpy( OUT_file , argv[3] );
-		break;
-	 }
-	 default: {
-		strcpy(  IN_file,  infile->filename[0] );
-		strcpy( OUT_file, outfile->filename[0] );
-	 }
-	}
-
 	/* open the input data file */
 
 	if ((fp = fopen (IN_file, "r")) == NULL) {
-		fprintf (stderr,"\nERROR: cannot open file '%s'\n", IN_file);
-       		fprintf(stderr,"  Usage: %s", progname);
-		arg_print_syntax  (stderr,argtable,"\n\n");
-		arg_print_glossary(stderr,argtable,"  %-22s %s\n");
-		fprintf(stderr,"\n");
-		exitcode=1;
-		goto exit;
+		fprintf (stderr,"\nERROR: cannot open file '%s'\n\n", IN_file);
+		display_help();
+		exit(1);
 	}
 
 	filetype = get_file_ext( IN_file, extn ); /* .CSV or .FMM or other? */
@@ -278,7 +187,7 @@ int main ( int argc, char *argv[] ) {
 	parse_input(fp, temppath);	/* strip comments from input data */
 	fclose(fp);
 
-	/*open the clean input file*/
+	/* open the clean input file */
 	if ((fp = fopen (temppath, "r")) == NULL) {
 		fprintf (stderr,"\nERROR: cannot open cleaned input file '%s'\n",temppath);
 		exit(1);
@@ -312,7 +221,7 @@ int main ( int argc, char *argv[] ) {
 	if ( nJ > nB + 1) {
 		fprintf(stderr,"warning: %d joints and %d members...", nJ, nB );
 		fprintf(stderr," not enough members to connect all joints.\n");
-    }
+    	}
 
 				/* allocate memory for beams ... */
 	L   = dvector(1,nB);	/* length of each element		*/
@@ -337,8 +246,9 @@ int main ( int argc, char *argv[] ) {
 	if ( verbose) 	printf(" ... complete\n");
 
 
-	read_run_data ( fp, OUT_file, &shear, &geom,
-			meshpath, plotpath, &exagg, &anlyz );
+	read_run_data ( fp, OUT_file, &shear, shear_flag, &geom, geom_flag,
+			meshpath, plotpath,
+			&exagg, exagg_flag, &anlyz, anlyz_flag, debug );
 
 	fscanf(fp, "%d", &nL );		/* number of load cases		*/
 	if ( verbose ) {
@@ -404,8 +314,12 @@ int main ( int argc, char *argv[] ) {
 	}
 
 	read_mass_data( fp, IN_file, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz,
-			L, Ax, &total_mass, &struct_mass, &nM, &Mmethod,
-			&lump, modepath, &tol, &shift, anim, &pan, verbose );
+			L, Ax, &total_mass, &struct_mass, &nM,
+			&Mmethod, modal_flag, 
+			&lump, lump_flag, &tol, tol_flag, &shift, shift_flag,
+			modepath,
+			anim, &pan, pan_flag, 
+			verbose, debug );
 	if ( verbose ) {
 		printf("                                                     ");
 		printf(" mass data ... complete\n");
@@ -681,7 +595,7 @@ int main ( int argc, char *argv[] ) {
 	if ( verbose ) printf("\n");
 
 	/* deallocate memory used for each frame analysis variable */
-	deallocate(nJ, nB, nL, nF, nU, nW, nP, nT, DoF, nM,
+	deallocate ( nJ, nB, nL, nF, nU, nW, nP, nT, DoF, nM,
 			xyz, r, L, Le, J1, J2, R,
 			Ax, Asy, Asz, J, Iy, Iz, E, G, p,
 			U,W,P,T, Dp, Fo_mech, Fo_temp,
@@ -690,9 +604,5 @@ int main ( int argc, char *argv[] ) {
 			d,BMs,JMs,JMx,JMy,JMz, M,f,V, q, m
 	);
 
-	exit:
-	/* deallocate memory used for each non-null entry in argtable[] */
-	arg_freetable(argtable,sizeof(argtable)/sizeof(argtable[0]));
-
-	return exitcode;
+	return(0);
 }

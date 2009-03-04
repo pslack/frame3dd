@@ -29,8 +29,45 @@
 #include "microstran/vec3.h"
 
 #include <stdio.h>
+#include <unistd.h>	/* getopt for parsing command-line options	*/
 
 /**
+ PARSE_OPTIONS -  parse command line options			     04mar09
+ command line options over-ride values in the input data file	    
+*/
+void parse_options (
+	int argc, char *argv[],
+	char IN_file[], char OUT_file[],
+	int *shear_flag,
+	int *geom_flag,
+	int *anlyz_flag,
+	double *exagg_flag,
+	int *lump_flag,
+	int *modal_flag,
+	double *tol_flag,
+	double *shift_flag,
+	float *pan_flag,
+	int *verbose,
+	int *debug
+);
+
+/**
+ DISPLAY_HELP -  display help information to stderr		      04mar09
+*/
+void display_help();
+
+/**
+ DISPLAY_USAGE -  display usage information to stderr		    04mar09
+*/
+void display_usage();
+
+/**
+ DISPLAY_VERSION -  display version information to stderr                04mar09
+*/
+void display_version();
+
+/**
+FRAME3DD_GETLINE
 	get line into a character string. from K&R.
 	@NOTE this is different from the GNU 'getline'.
 */
@@ -82,11 +119,16 @@ void read_run_data (
 	FILE *fp,	/**< input data file pointer			*/
 	char OUT_file[], /**< output data file name			*/
 	int *shear,	/**< 1: include shear deformations, 0: don't	*/
+	int shear_flag,	/**< command-line over-ride			*/
 	int *geom,	/**< 1: include geometric stiffness, 0: don't	*/
+	int geom_flag,	/**< command-line over-ride			*/
 	char meshpath[],/**< file name for mesh data output		*/
 	char plotpath[],/**< file name for Gnuplot script		*/
 	double *exagg,	/**< factor for deformation exaggeration	*/
-	int *anlyz	/* 1: perform elastic analysis, 0: don't	*/
+	double exagg_flag, /**< command-line over-ride			*/
+	int *anlyz,	/* 1: perform elastic analysis, 0: don't	*/
+	int anlyz_flag,	/**< command-line over-ride			*/
+	int debug	/**< print debugging information		*/
 );
 
 
@@ -147,7 +189,7 @@ void read_and_assemble_loads(
 */
 void read_mass_data(
 	FILE *fp,	/**< input data file pointer			*/
-	char *IO_file,	/**< input output data file name 		*/
+	char *OUT_file,	/**< input output data file name 		*/
 	int nJ, int nB,	/**< number of joints, number of beams		*/
 	int *nI,	/**< number of beams with extra inertia		*/
 	float *d, float *BMs, /**< beam density, extra beam mass	*/
@@ -158,13 +200,19 @@ void read_mass_data(
 	double *struct_mass, 	/**< mass of structural elements	*/
 	int *nM,	/**< number of modes to find			*/
 	int *Mmethod, 	/**< modal analysis method			*/
+	int modal_flag, /**< command-line over-ride			*/
 	int *lump,	/**< 1: use lumped mass matrix, 0: consistent mass */
-	char modepath[], /**< filename for mode shape data for plotting	*/
+	int lump_flag,	/**< command-line over-ride			*/
 	double *tol,	/**< convergence tolerance for mode shapes	*/
+	double tol_flag, /**< command-line over-ride			*/
 	double *shift,	/**< frequency shift for unrestrained frames	*/
+	double shift_flag, /**< command-line over-ride			*/
+	char modepath[], /**< filename for mode shape data for plotting	*/
 	int *anim,	/**< list of modes to be graphically animated	*/
 	float *pan,	/**< 1: pan viewpoint during animation, 0: don't */
-	int verbose	/**< 1: copious output to screen, 0: none	*/
+	float pan_flag, /**< command-line over-ride			*/
+	int verbose,	/**< 1: copious output to screen, 0: none	*/
+	int debug	/**< 1: debugging output to screen, 0: none	*/
 );
 
 
@@ -257,7 +305,7 @@ void write_modal_results(
 	useful gnuplot options: set noxtics noytics noztics noborder view nokey
 */
 void static_mesh(
-	char IO_file[], char meshpath[], char plotpath[],
+	char OUT_file[], char meshpath[], char plotpath[],
 	char *title, int nJ, int nB, int nL, int lc, int DoF,
 	vec3 *xyz, double *L,
 	int *J1, int *J, float *p, double *D,
@@ -270,7 +318,7 @@ void static_mesh(
 	useful gnuplot options: set noxtics noytics noztics noborder view nokey
 */
 void modal_mesh(
-	char IO_file[], char meshpath[], char modepath[],
+	char OUT_file[], char meshpath[], char modepath[],
 	char plotpath[], char *title,
 	int nJ, int nB, int DoF, int nM,
 	vec3 *xyz, double *L,
@@ -287,7 +335,7 @@ void modal_mesh(
 	... requires ImageMagick and mpeg2vidcodec packages
 */
 void animate(
-	char IO_file[], char meshpath[], char modepath[], char plotpath[],
+	char OUT_file[], char meshpath[], char modepath[], char plotpath[],
 	char *title,
 	int anim[],
 	int nJ, int nB, int DoF, int nM,

@@ -41,6 +41,9 @@ also, particularly if sparse matrix methods can be used.
 COMPLETED ITEMS
 ------------------
 
+* Implement command line parsing using the getopt function (Mar 4 2009)
+  ... for reasons of ease-of-portability
+
 * Implement command line parsing using the argtable2 package (Mar 3 2009)
 
 * Implement trapezoidally-distributed loads existing over only partial member lengths (Feb 26 2009)  
