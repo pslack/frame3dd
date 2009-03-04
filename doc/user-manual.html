@@ -19,8 +19,8 @@ h4 {font: bold small sans-serif}
 li, td, p {font: normal small sans-serif}
 div.eq {font-style:italic; width:100%; text-align:center; margin-top: 6pt; margin-bottom: 6pt}
 div.note {width: 60em; border: solid 2pt gray; background-color: #FFFFEE; padding:10px; margin-top: 6pt; margin-bottom: 6pt; font: normal small sans-serif }
-pre {background-color: #EEEEEE}
-iframe {background-color: #FFFFEE; margin-top: 5px; margin-bottom: 5px, border:0}
+pre {background-color: #FFF4C4}
+iframe {background-color: #000000; margin-top: 5px; margin-bottom: 5px, border:0}
 </style>
 
 <body>
@@ -64,8 +64,10 @@ or
 "<a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">command prompt</a>"
 <a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">
 <img src="img/WindowsCommandIcon.jpg" border="0" width="25"></a>
-as follows: <br>
-<tt> frame3dd  -i InputData  -o OutputData</tt>
+as follows: 
+<pre>
+          frame3dd   InputDataFile   OutputDataFile
+</pre>
 </p>
 
 <p><b>Frame3DD</b> reads a plain-text <b>input data file</b>, containing joint coordinates, frame element geometry, material moduli, fixed joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.
@@ -110,7 +112,7 @@ Dynamic Condensation.  Graphical output and mode shape animation
 via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <hr>
 <h4>SYNOPSIS </h4>
-       frame3dd -i <Input Data File> -o <Output Data File>
+       frame3dd  <Input Data File>  <Output Data File>
 <hr>
 -->
 
@@ -145,7 +147,7 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li>Optionally, obtain a copy of Gnuplot for your operating system.
 <li>Copy one of the example input data files (eg <tt>exA.frm</tt>) into your home directory.   
 <li>       Open a terminal window and run the program using the command
-	  <tt>frame3dd -i exA.frm -o exA.out</tt> (change the filenames <tt>exA.frm</tt> and <tt>exA.out</tt> as necessary).
+	  <tt>frame3dd  exA.frm  exA.out</tt> (change the filenames <tt>exA.frm</tt> and <tt>exA.out</tt> as necessary).
 	<li>Open the output data file using your text editor and view the output data. 
 <!--     Running this program will create many files.  Most of them are used
          for graphics and should be written to the  /tmp  directory.
@@ -240,7 +242,7 @@ and should work with minor changes on any other recent Linux or Unix system.
 	<li>Type <tt>export PATH=$PATH:~/frame3dd-VERSION/build</tt>
 </ol>
 <li>Copy one of the frame3dd-VERSION/examples/*.frm files, eg <tt>exA.frm</tt> into your home directory and make sure you have write-privileges for the file.
-<li>Type <tt>frame3dd -i exA.frm -o exA.out</tt> to run Frame3dd.
+<li>Type <tt>frame3dd  exA.frm  exA.out</tt> to run Frame3dd.
 <li>Data files used primarly for plotting are in temporary directories.
 The main report output will have been written to the <tt>exA.out</tt> file.
 <li>       The graphical output is viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, which can be installed using <tt>sudo apt-get install gnuplot</tt>.
@@ -289,7 +291,7 @@ For Microsoft Windows, we provide a binary installer for Frame3dd. Use the follo
 <li>Optionally, set a location for your output files using <tt>set FRAME3DD_OUTDIR=c:\path\to\output\files</tt> (using a path of your choice).
 <li>Change to your documents directory using <tt>cd %HOMEPATH%\My Documents</tt>
 <li>Edit the example file to ensure that it contains valid file paths for the mesh_file, mode_file and plot_file locations.
-<li>Run Frame3dd using <tt>frame3dd.exe -i exA.frm -o exA.out</tt>
+<li>Run Frame3dd using <tt>frame3dd.exe  exA.frm  exA.out</tt>
 <li>Use Gnuplot to view the graphical output:
 <ol>
 <li>Download the <a href="http://downloads.sourceforge.net/gnuplot/gp424win32.zip">
@@ -339,7 +341,7 @@ For OS X running on a PowerPC (PPC) or Intel processor.
          Quit the Terminal application.  [APPLE] [Q]
 <li>        Run <b>Frame3DD</b> from a Terminal window:  (Applications > Utilities > Terminal) ... <br>
             <tt>...$   cd ~/Desktop</tt><br>
-            <tt>...$   frame3dd -i example.frm -o example.out</tt><br>
+            <tt>...$   frame3dd  example.frm  example.out</tt><br>
          where <tt>example.frm</tt> is the name of your Input Data file.
 <!-- <li>        Run <b>Frame3DD</b> from a Terminal window  (another way).
              Click on the <b>frame3dd</b> icon in your Desktop.
@@ -1400,16 +1402,38 @@ nC                                                % number of condensed joints
 </pre>
 
 <a name="commandline"/><h2>11. Command-line options</h2>
+
+<p>
+<ul>
+<li>
+<b>Frame3DD</b> is executed from within a
+<a href="LinuxTerminal.pdf">terminal</a>
+<a href="LinuxTerminal.pdf"><img src="img/Terminal.jpg" border="0" width="25"></a>
+or
+"<a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">command prompt</a>"
+<a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">
+<img src="img/WindowsCommandIcon.jpg" border="0" width="25"></a>.
+<li> FRAME3DD may be run with interactive prompting for file names by typing ...<br>
 <pre>
+       frame3dd 
+</pre>
+<li> FRAME3DD may be run without command-line options by typing ...<br>
+<pre>
+       frame3dd  InFile   OutFile  
+</pre>
+<li> FRAME3DD may be run with command-line options by typing ...<br>
+<pre>
+       frame3dd -i InFile -o OutFile [OPTIONS] 
+</pre>
 
-  Usage: frame3dd -i InputDataFile  -o OutputDataFile  [OPTIONS] 
-
- ... where [OPTIONS] over-rides values in the input file and includes
+ ... where <tt>[OPTIONS]</tt> over-rides values in the input data file and includes
      one or more of the following:
+</p>
 
+<pre>
  ------------------------------------------------------------------------
-  -i  InputFile the  input data file name --- described in the manual
-  -o OutputFile the output data file name
+  -i   InFile   the  input data file name --- described in the manual
+  -o  OutFile   the output data file name
   -h            print this help message and exit
   -v            display program version and exit
   -c            data check only - the output data reviews the input data
@@ -1422,9 +1446,39 @@ nC                                                % number of condensed joints
   -m   J|S      modal analysis method: J=Jacobi-Subspace or S=Stodola
   -t  value     convergence tolerance for modal analysis
   -p  value     pan rate for mode shape animation
+  -r  value     matrix condensation method: 0, 1, 2, or 3 
  ------------------------------------------------------------------------
-
 </pre>
+
+<li> Examples:<br>
+
+  Display help information and exit:
+<pre>
+           frame3dd -h
+</pre>
+
+  Supress screen output:
+<pre>
+           frame3dd -i InFile -o OutFile -q
+</pre>
+
+  Include shear deformation, over-riding the Input Data File value:
+<pre>
+           frame3dd -i InFile -o OutFile -sOn
+</pre>
+
+  Include geometric stiffness and set deformed mesh exaggeration value, over-riding Input Data File values:
+<pre>
+           frame3dd -i InFile -o OutFile -e100 -gOn
+</pre>
+
+  Use consistent mass matrix, set deformed mesh exaggeration value, and
+set the animation pan rate, over-riding Input Data File values:
+<pre>
+           frame3dd -i InFile -o OutFile -lOff -e100 -p3.4
+</pre>
+</ul>
+
 
 <a name="sourcecode"/><h2>12. Source code</h2>
 
