@@ -508,7 +508,8 @@ static const char *temp_dir(){
 void temp_file_location(const char *fname, char fullpath[], const int len){
 	const char *tmp = temp_dir();
 	int res;
-	res = snprintf(fullpath,len,"%s%c%s",tmp,sep,fname);
+//	res = snprintf(fullpath,len,"%s%c%s",tmp,sep,fname);
+	res = sprintf(fullpath,"%s%c%s",tmp,sep,fname);
 	if(res > len){
 		fprintf(stderr,"ERROR: unable to construct temp filename: overflow\n");
 		exit(1);
@@ -525,7 +526,8 @@ void output_path(const char *fname, char fullpath[], const int len, const char *
 	int res;
 	if(fname[0]==sep){
 		/* absolute output path specified */
-		res = snprintf(fullpath,len,"%s",fname);
+//		res = snprintf(fullpath,len,"%s",fname);
+		res = sprintf(fullpath,"%s",fname);
 	}else{
 		/* fprintf(stderr,"Generating output path for file '%s'\n",fname); */
 		const char *outdir;
@@ -537,7 +539,8 @@ void output_path(const char *fname, char fullpath[], const int len, const char *
 				outdir = default_outdir;
 			}
 		}
-		res = snprintf(fullpath,len,"%s%c%s",outdir,sep,fname);
+//		res = snprintf(fullpath,len,"%s%c%s",outdir,sep,fname);
+		res = sprintf(fullpath,"%s%c%s",outdir,sep,fname);
 	}
 	if(res > len){
 		fprintf(stderr,"ERROR: unable to construct output filename: overflow.\n");

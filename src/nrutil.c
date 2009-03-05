@@ -13,6 +13,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 #define NR_END 1
 #define FREE_ARG char*
 

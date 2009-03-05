@@ -384,6 +384,8 @@ int	verbose;
 	double	*diag,		/* diagonal vector of the L D L' decomp. */
 		error=1.0;	/* error in the solution		*/
 
+//	verbose = 0;		/* suppress verbose output		*/
+
 	diag = dvector ( 1, DoF );
 
 	ldl_dcmp( K, DoF, diag, F, D, 1, 0, ok );	/*  L D L'  decomp */

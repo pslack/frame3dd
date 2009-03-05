@@ -79,8 +79,8 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 2                               % number of internal concentrated loads
 %.M    Px   Py    Pz   x    
 %      N    N     N    mm
-  1    0    100  -900  30
-  2    0   -200   200  30
+  1    0    10  -90  600
+  2    0   -20   20  800
 0                               % number of temperature loads
 0                               % number of support settlements
 				% End   Static Load Case 3 of 3
