@@ -837,7 +837,7 @@ void save_vector( int n, float *V, char filename[] )
 }
 
 /*---------------------------------------------------------------------------
-SAVE_DVECTOR  -  save an integer vector of dimension [1..n] to the named file 
+SAVE_IVECTOR  -  save an integer vector of dimension [1..n] to the named file 
 ----------------------------------------------------------------------------*/
 void save_ivector( int n, int *V, char filename[] )
 {
@@ -856,7 +856,7 @@ void save_ivector( int n, int *V, char filename[] )
 	fprintf(fp_v,"%% rows: %d\n", 1 );
 	fprintf(fp_v,"%% columns: %d\n", n );
 	for (i=1; i <= n; i++) {
-		if (V[i] != 0)	fprintf(fp_v,"%15.6e", V[i] );
+		if (V[i] != 0)	fprintf(fp_v,"%15d", V[i] );
 		else		fprintf(fp_v,"   0         ");         
 		fprintf(fp_v,"\n");
 	}

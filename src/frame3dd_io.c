@@ -86,9 +86,11 @@ void parse_options (
 
 	switch ( argc ) {
 	 case 1: {
+ 		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
+		fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
+		fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
 		fprintf (stderr," Please enter the  input data file name: ");
 		scanf("%s", IN_file );
-printf("input file: %s\n", IN_file);
 		fprintf (stderr," Please enter the output data file name: ");
 		scanf("%s", OUT_file );
 		return;

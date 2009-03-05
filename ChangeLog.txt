@@ -1,5 +1,9 @@
 
 * Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304 
+- Fixed fprintf format character in save_ivector()
+- Re-ran examples
+
+* Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304 
 - Fixed bug in multi-load case nonlinear analysis in main.c line 410
 ... Iteration termination criteria must be reset at the start of each iteration.
 - Change snprintf to sprintf in frame3dd_io.c for DJGPP compatability

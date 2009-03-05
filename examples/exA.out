@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example A: linear static analysis of a 2D truss with support settlement (kips in)  
-Wed Mar  4 01:19:46 2009
+Wed Mar  4 20:08:53 2009
 ________________________________________________________________________________
 12 JOINTS;    21 MEMBERS;    2 LOAD CASES;  12 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 

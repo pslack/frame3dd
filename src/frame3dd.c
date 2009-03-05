@@ -384,7 +384,7 @@ int	verbose;
 	double	*diag,		/* diagonal vector of the L D L' decomp. */
 		error=1.0;	/* error in the solution		*/
 
-//	verbose = 0;		/* suppress verbose output		*/
+	verbose = 0;		/* suppress verbose output		*/
 
 	diag = dvector ( 1, DoF );
 
