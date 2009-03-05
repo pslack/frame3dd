@@ -589,7 +589,7 @@ Example H: a pedestrian ramp  (kip, in)
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
 100.0                           % exaggerate mesh deformations
-1                               % 1: stiffness analysis, 0: data check only
+
 
 1			% number of static load cases
 				% Begin Static Load Case 1 of 1

@@ -404,3 +404,7 @@ void output_path(const char *fname, char fullpath[], const int len, const char *
 /** print a set of dots (periods) */
 void dots ( FILE *fp, int n );
 
+
+/** EVALUATE -  displays a randomly-generated evaluation message.  */ 
+void evaluate (  float error );
+

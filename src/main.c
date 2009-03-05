@@ -95,10 +95,10 @@ int main ( int argc, char *argv[] ) {
 		**feF,		/* a general set of fixed end forces	*/
 		*D, *dD,	/* displacement and displ increment	*/
 		/*dDdD = 0.0,*/	/* dD' * dD				*/
-		*Fe,		/* equilibrium error in nonlinear anlys	*/
-		*L, 		/* joint-to-joint length of each beam	*/
-		*Le,		/* effcve lngth, accounts for joint size*/
-		**Q,		/* local member joint end-forces	*/
+		*Fe = NULL,	/* equilibrium error in nonlinear anlys	*/
+		*L  = NULL,	/* joint-to-joint length of each beam	*/
+		*Le = NULL,	/* effcve lngth, accounts for joint size*/
+		**Q = NULL,	/* local member joint end-forces	*/
 		tol = 1.0e-5,	/* tolerance for modal convergence	*/
 		shift = 0.0,	/* shift-factor for rigid-body-modes	*/
 		struct_mass,	/* mass of structural system		*/
@@ -143,20 +143,20 @@ int main ( int argc, char *argv[] ) {
 		debug=0,	/* 1: debugging screen output, 0: none	*/
 		verbose=1;	/* 1: copious screen output, 0: none	*/
 
-	int	shear_flag=-1,	/*   over-ride input file value		*/
-		geom_flag=-1,	/*   over-ride input file value		*/
-		anlyz_flag=-1,	/*   over-ride input file value		*/
-		lump_flag=-1,	/*   over-ride input file value		*/
-		modal_flag=-1,	/*   over-ride input file value		*/
+	int	shear_flag= -1,	/*   over-ride input file value		*/
+		geom_flag = -1,	/*   over-ride input file value		*/
+		anlyz_flag= -1,	/*   over-ride input file value		*/
+		lump_flag = -1,	/*   over-ride input file value		*/
+		modal_flag= -1,	/*   over-ride input file value		*/
 		condense_flag=-1; /* over-ride input file value		*/
 
-	double	exagg_flag=-1.0,/*   over-ride input file value		*/
-		tol_flag=-1.0,	/*   over-ride input file value		*/
-		shift_flag=-1.0;/*   over-ride input file value		*/
+	double	exagg_flag=-1.0, /*  over-ride input file value		*/
+		tol_flag  =-1.0, /*  over-ride input file value		*/
+		shift_flag=-1.0; /*  over-ride input file value		*/
 
-	float	pan_flag=-1.0;	/*   over-ride input file value		*/
+	float	pan_flag = -1.0; /*  over-ride input file value		*/
 
-	char	extn[16];	/* Input Output file name extension	*/
+	char	extn[16];	/* Input Data file name extension	*/
 
 
 	parse_options ( argc, argv, IN_file, OUT_file, 
@@ -350,6 +350,7 @@ int main ( int argc, char *argv[] ) {
 				Fo, Dp, R, U, W, P, T, shear, anlyz, geom );
 
 	if ( anlyz ) {			/* solve the problem	*/
+		srand(time(NULL));
 		for (lc=1; lc<=nL; lc++) {	/* begin load case loop	*/
 
 			if ( verbose )
@@ -464,9 +465,15 @@ int main ( int argc, char *argv[] ) {
 				for (n=1; n<=nB; n++)
 					feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
 
-			  equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF, nB, DoF, &error, verbose );
+			equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF, nB, DoF, &error, verbose );
 
-			  write_static_results ( fp, nJ,nB,nL,lc, DoF, J1,J2, Fo[lc],
+			if ( verbose ) {
+				printf("  RMS relative equilibrium precision: %9.3e", error );
+				evaluate ( error );
+			}
+
+
+			write_static_results ( fp, nJ,nB,nL,lc, DoF, J1,J2, Fo[lc],
 									 D,R,Q, error, ok );
 
 			if ( filetype == 1 ){
@@ -595,8 +602,6 @@ int main ( int argc, char *argv[] ) {
 		free_dmatrix(Mc, 1,Cdof,1,Cdof );
 	}
 
-	if ( verbose ) printf("\n");
-
 	/* deallocate memory used for each frame analysis variable */
 	deallocate ( nJ, nB, nL, nF, nU, nW, nP, nT, DoF, nM,
 			xyz, r, L, Le, J1, J2, R,
@@ -606,6 +611,8 @@ int main ( int argc, char *argv[] ) {
 			K, Q, D, dD,
 			d,BMs,JMs,JMx,JMy,JMz, M,f,V, q, m
 	);
+
+	if ( verbose ) printf("\n");
 
 	return(0);
 }

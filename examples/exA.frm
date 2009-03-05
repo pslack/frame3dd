@@ -62,7 +62,6 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
 0                               % 1: include shear deformation
 0                               % 1: include geometric stiffness
 10.0                            % exaggerate mesh deformations
-1                               % 1: stiffness analysis, 0: data check only
 
 
 2				% number of static load cases

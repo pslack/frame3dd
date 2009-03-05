@@ -47,7 +47,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
 10.0                            % exaggerate mesh deformations
-1                               % 1: stiffness analysis, 0: data check only
+
 
 
 1			% number of static load cases

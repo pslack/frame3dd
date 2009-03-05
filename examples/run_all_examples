@@ -1,0 +1,10 @@
+frame3dd -i exA.frm -o exA.out -q
+frame3dd -i exB.frm -o exB.out -q
+frame3dd -i exC.frm -o exC.out -q
+frame3dd -i exD.frm -o exD.out -q
+frame3dd -i exE.frm -o exE.out -q
+frame3dd -i exF.frm -o exF.out -q
+frame3dd -i exG.frm -o exG.out -q
+frame3dd -i exH.frm -o exH.out -q
+frame3dd -i exI.frm -o exI.out -q
+frame3dd -i exJ.frm -o exJ.out -q

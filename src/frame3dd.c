@@ -553,15 +553,12 @@ void equilibrium(
 ){
 	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
 		f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12,
-		den = 0.0;			/* normalizes the error	*/
+		num = 0.0, den = 0.0;	/* RMS relative equilibrium error */
 	int	j,m, j1, j2;
 
-	for(j=1; j<=DoF; j++){
-		if(R[j] == 0)den += ( F[j]*F[j] );
-	}
-
-	den = sqrt ( den / (double) DoF );
-	if(den <= 0)den = 1;
+	den = 0.0;
+	for (j=1; j<=DoF; j++) if (R[j] == 0) den += ( F[j]*F[j] );
+	if ( den <= 0 ) den = 1.0;
 
 	for (m=1; m <= nB; m++) {	/* loop over all members */
 
@@ -611,14 +608,11 @@ void equilibrium(
 		Q[m][12] -= ( f10*t7 + f11*t8 + f12*t9 );
 	}
 
-	*err = 0.0;
-	for(j=1; j<=DoF; j++){
-		if(R[j] == 0)*err += ( F[j]*F[j] );
-	}
+	num = 0.0;
+	for ( j=1; j<=DoF; j++ ) if (R[j] ==0) num += ( F[j]*F[j] );
+	*err = sqrt ( num ) / sqrt ( den );
 
-	*err = sqrt ( *err / (double) DoF ) / den;
-	if ( verbose )
-		printf("  RMS relative equilibrium precision: %9.3e\n", *err );
+
 }
 
 /*------------------------------------------------------------------------------
@@ -1245,8 +1239,8 @@ double rel_norm( double *N, double *D, int n )
 	double	nN = 0.0, nD = 0.0;
 	int	i;
 
-	for (i=1; i<=n; i++)	nN += N[i]*N[i];
-	for (i=1; i<=n; i++)	nD += D[i]*D[i];
+	for (i=1; i<=n; i++)	nN += ( N[i]*N[i] );
+	for (i=1; i<=n; i++)	nD += ( D[i]*D[i] );
 
 	return ( sqrt(nN) / sqrt(nD) );
 }

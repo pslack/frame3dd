@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis (N mm ton) 
-Wed Mar  4 20:08:58 2009
+Thu Mar  5 17:27:02 2009
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;  4 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 

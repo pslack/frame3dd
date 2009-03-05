@@ -130,46 +130,94 @@ void parse_options (
 				*debug = 0;
 				break;
 			case 's':		/* shear deformation */
-				if (strcmp(optarg,"On")==0)
-					*shear_flag = 1;
-				else
+				if (strcmp(optarg,"Off")==0)
 					*shear_flag = 0;
+				else if (strcmp(optarg,"On")==0)
+					*shear_flag = 1;
+				else {
+					printf(" frame3dd command-line error"); 
+					printf(": argument to -s option"); 
+					printf(" should be either On or Off\n");
+					exit(1);
+				}
 				break;
 			case 'g':		/* geometric stiffness */
-				if (strcmp(optarg,"On")==0)
-					*geom_flag = 1;
-				else
+				if (strcmp(optarg,"Off")==0)
 					*geom_flag = 0;
+				else if (strcmp(optarg,"On")==0)
+					*geom_flag = 1;
+				else {
+					printf(" frame3dd command-line error"); 
+					printf(": argument to -g option"); 
+					printf(" should be either On or Off\n");
+					exit(1);
+				}
 				break;
 			case 'e':		/* exaggeration factor */
 				*exagg_flag = atof(optarg);
 				break;
 			case 'l':		/* lumped or consistent mass */
-				if (strcmp(optarg,"On")==0)
-					*lump_flag = 1;
-				else
+				if (strcmp(optarg,"Off")==0)
 					*lump_flag = 0;
+				else if (strcmp(optarg,"On")==0)
+					*lump_flag = 1;
+				else {
+					printf(" frame3dd command-line error"); 
+					printf(": argument to -l option"); 
+					printf(" should be either On or Off\n");
+					exit(1);
+				}
 				break;
 			case 'm':		/* modal analysis method */
 				if (strcmp(optarg,"J")==0)
 					*modal_flag = 1;
-				else
+				else if (strcmp(optarg,"S")==0)
 					*modal_flag = 2;
+				else {
+					printf(" frame3dd command-line error"); 
+					printf(": argument to -m option"); 
+					printf(" should be either J or S\n\n");
+					exit(1);
+				}
 				break;
 			case 't':		/* modal analysis tolerence */
 				*tol_flag = atof(optarg);
+				if (*tol_flag == 0.0) {
+					printf(" frame3dd command-line error"); 
+					printf(": argument to -t option"); 
+					printf(" should be a number.\n\n");
+					exit(1);
+				}
 				break;
 			case 'f':		/* modal analysis freq. shift */
 				*shift_flag = atof(optarg);
+				if (*shift_flag == 0.0) {
+					printf(" frame3dd command-line error"); 
+					printf(": argument to -f option"); 
+					printf(" should be a number.\n\n");
+					exit(1);
+				}
 				break;
 			case 'p':		/* pan rate	*/
 				*pan_flag = atof(optarg);
+				if (*pan_flag == 0.0) {
+					printf(" frame3dd command-line error"); 
+					printf(": argument to -p option"); 
+					printf(" should be a number.\n");
+					exit(1);
+				}
 				break;
 			case 'r':		/* matrix condensation method */
 				*condense_flag = atoi(optarg);
+				if (*condense_flag < 0 || *condense_flag > 3) {
+					printf(" frame3dd command-line error"); 
+					printf(": argument to -r option"); 
+					printf(" should be 0, 1, or 2.\n\n");
+					exit(1);
+				}
 				break;
 			case '?':
-				printf("  Unknown option: -%c\n\n", option );
+				printf("  Missing argument or Unknown option: -%c\n\n", option );
 				display_help();
 				exit(1);
 		}
@@ -367,7 +415,9 @@ void read_beam_data(
 		   fprintf(stderr,
 			" beam element %d  J1= %d J2= %d L= %e\n", i, j1,j2, L[i] );
 		   fprintf(stderr,
-			" Perhaps beam number %d has not been specified. \n", i );
+			"  Perhaps beam number %d has not been specified.\n",i);
+		   fprintf(stderr,
+			"  or perhaps the Input Data file is missing expected data.\n");
 		   exit(1);
 		}
 		if ( Le[i] <= 0.0 ) {
@@ -422,7 +472,7 @@ void read_run_data (
 	strcat(mesh_file,"-msh");
         output_path(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
 
-	fscanf( fp, "%d %d %lf %d", shear, geom,  exagg, anlyz );
+	fscanf( fp, "%d %d %lf", shear, geom,  exagg );
 
 	if (*shear != 0 && *shear != 1) {
 	    fprintf(stderr," Rember to specify shear deformations");
@@ -737,6 +787,8 @@ void read_and_assemble_loads(
 		    fprintf(stderr,"  error in joint load data: joint number out of range  ");
 		    fprintf(stderr,"  Joint: %d  \n", j);
 		    fprintf(stderr,"  Perhaps you did not specify %d joint loads \n", nF[lc] );
+		   fprintf(stderr,
+			"  or perhaps the Input Data file is missing expected data.\n");
 		    exit(1);
 		}
 		for (l=5; l>=0; l--)	fscanf(fp,"%lf", &F_mech[lc][6*j-l] );
@@ -1086,9 +1138,9 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][10] += ( Mx2*t1 + My2*t4 + Mz2*t7 );
 		feF_mech[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
 		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
-	  }					/* end element point loads	*/
+	  }					/* end element point loads */
 
-	  fscanf(fp,"%d", &nT[lc] );		/* thermal loads		*/
+	  fscanf(fp,"%d", &nT[lc] );		/* thermal loads	*/
 	  if ( verbose ) {
 	  	printf("  number of temperature changes ");
 	  	dots(stdout,21);
@@ -1270,8 +1322,8 @@ void read_mass_data(
 #endif
 
 	/* number of joints with extra inertias */
+	fscanf(fp,"%d", nI );
 	if ( verbose ) {
-		fscanf(fp,"%d", nI );
 		printf(" number of joints with extra lumped inertia ");
         	dots(stdout,9);
         	printf(" nI = %3d\n",*nI);
@@ -1282,6 +1334,8 @@ void read_mass_data(
 	    		fprintf(stderr,"  error in joint load data: joint number out of range  ");
 	    		fprintf(stderr,"  Joint: %d  \n", j);
 	    		fprintf(stderr,"  Perhaps you did not specify %d extra masses \n", *nI );
+			fprintf(stderr,
+			"  or perhaps the Input Data file is missing expected data.\n");
 	    		exit(1);
 		}
 		fscanf(fp, "%f %f %f %f",
@@ -2727,3 +2781,81 @@ void dots ( FILE *fp, int n ) {
 	for (i=1; i<=n; i++)	fprintf(fp,".");
 }
 
+
+/*------------------------------------------------------------------------------
+EVALUATE -  displays a randomly-generated goodbye message.  
+------------------------------------------------------------------------------*/
+void evaluate ( float error ) {
+	int r;
+
+	r = rand() % 10;
+
+	if ( error < 1e-5 ) {
+
+	    switch ( r ) {
+		case 0: printf(" ...  awesome!  \n"); break; 
+		case 1: printf(" ...  excellent!  \n"); break; 
+		case 2: printf(" ...  woo-hoo!  \n"); break; 
+		case 3: printf(" ...  yipee!  \n"); break; 
+		case 4: printf(" ...  hoo-ray!  \n"); break; 
+		case 5: printf(" ...  outstanding!  \n"); break; 
+		case 6: printf(" ...  job well done!  \n"); break; 
+		case 7: printf(" ...  priceless!  \n"); break; 
+		case 8: printf(" ...  very nice!  \n"); break; 
+		case 9: printf(" ...  very good!  \n"); break; 
+	    }
+	    return;
+	}
+	
+	if ( error < 1e-3 ) {
+
+	    switch ( r ) {
+		case 0: printf(" ...  certainly acceptable!  \n"); break; 
+		case 1: printf(" ...  bling!  \n"); break; 
+		case 2: printf(" ...  that will certainly do!  \n"); break; 
+		case 3: printf(" ...  not at all shabby!  \n"); break; 
+		case 4: printf(" ...  quite reasonable!  \n"); break; 
+		case 5: printf(" ...  and there's nothing wrong with that!  \n"); break; 
+		case 6: printf(" ...  up to snuff!  \n"); break; 
+		case 7: printf(" ...  bully!  \n"); break; 
+		case 8: printf(" ...  nice!  \n"); break; 
+		case 9: printf(" ...  good!  \n"); break; 
+	    }
+	    return;
+	}
+
+	if ( error < 1e-2 ) {
+
+	    switch ( r ) {
+		case 0: printf(" ...  adequate.  \n"); break; 
+		case 1: printf(" ...  passable.  \n"); break; 
+		case 2: printf(" ...  all right.  \n"); break; 
+		case 3: printf(" ...  ok.  \n"); break; 
+		case 4: printf(" ...  not bad.  \n"); break; 
+		case 5: printf(" ...  fine.  \n"); break; 
+		case 6: printf(" ...  fair. \n"); break; 
+		case 7: printf(" ...  respectable.  \n"); break; 
+		case 8: printf(" ...  tolerable.  \n"); break; 
+		case 9: printf(" ...  just ok.  \n"); break; 
+	    }
+	    return;
+	}
+
+	if ( error > 1e-2 ) {
+
+	    switch ( r ) {
+		case 0: printf(" ...  abominable.  \n"); break; 
+		case 1: printf(" ...  cruddy.  \n"); break; 
+		case 2: printf(" ...  atrocious.  \n"); break; 
+		case 3: printf(" ...  not ok.  \n"); break; 
+		case 4: printf(" ...  garbage.  \n"); break; 
+		case 5: printf(" ...  crappy.  \n"); break; 
+		case 6: printf(" ...  oh noooo. \n"); break; 
+		case 7: printf(" ...  abominable.  \n"); break; 
+		case 8: printf(" ...  bummer.  \n"); break; 
+		case 9: printf(" ...  awful.  \n"); break; 
+	    }
+	    return;
+	}
+
+}

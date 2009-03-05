@@ -61,7 +61,7 @@ Example I: a triangular tower  (kip,in)
 1                               % 1: include shear deformation
 1                               % 1: include geometric stiffness
 2.0                             % exaggerate mesh deformations
-1                               % 1: stiffness analysis, 0: data check only
+
 
 
 1			% number of static load cases

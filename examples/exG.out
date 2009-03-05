@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example G: a building with a set-back  (in kip) 
-Wed Mar  4 20:09:25 2009
+Thu Mar  5 17:27:07 2009
 ________________________________________________________________________________
 15 JOINTS;    24 MEMBERS;    1 LOAD CASES;  3 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 

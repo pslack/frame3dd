@@ -22,7 +22,6 @@ nB						% number of beam elements
 shear					  % 1: include shear deformation
 geom					  % 1: include geometric stiffness
 exagg					  % exaggerate mesh deformations
-anlyz				     % 1: stiffness analysis, 0: data check only
 
 % load data ...
 nL						% number of static load cases
@@ -101,11 +100,11 @@ nD		                     % number of prescribed displacements nD<=nR
 % repeat up to 128 static load cases
 
 % dynamic analysis data ...
-modes					              % number of desired modes
-Mmethod                                        % 1: Subspace Jacobi, 2: Stodola
-lump					        % 0: consistent mass, 1: lumped
-tol		  			         % convergence tolerance ~ 1e-4
-shift		   % shift-factor for rigid body modes, make 0 for pos.def. [K]
+nM      %       number of desired modes
+Mmethod % 1: Subspace-Jacobi iteration, 2: Stodola method
+lump    % 0: consistent mass matrix, 1: lumped mass matrix
+tol     %  frequency convergence tolerance  approx 1e-4
+shift   % frequency shift-factor for rigid body modes, make 0 for pos.def. [K]
 
  M[1]  d[1]  BMs[1]
    :     :       :                           % beam density and extra beam mass

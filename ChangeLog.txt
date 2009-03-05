@@ -1,4 +1,13 @@
 
+* Thu Mar 5 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090305 
+- Remove "anlyz" from input data file format because the "-c"
+command line option is now an easier and better way to specify
+"data check only". Updated code, examples and documentation.
+- Fixed bug related to "-q" flag and verbose output on line 1274 of frame3dd_io.c
+- Added checks related to incorrect command-line arguments.
+- Added an evaluation/interpretation of RMS relative equilibrium precision
+within the code and updated the documentation.
+
 * Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304 
 - Fixed fprintf format character in save_ivector()
 - Re-ran examples
