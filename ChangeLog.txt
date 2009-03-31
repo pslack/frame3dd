@@ -1,4 +1,13 @@
 
+* Tue Mar 31 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090331
+- Fixed bug in the Matlab interface function frame_3dd.m ... 
+... no long printing the depricated anlyz variable value
+- Frame3DD now writes the stiffness matrix to a file named "Ks" 
+for each analysis. Line 460 of main.c ... after Newton-Raphson iterations 
+for geometric nonlinear analysis, if such an analysis is to be performed.  
+... for compatability with Matlab interface function frame_3dd.m
+- re-ran example files
+
 * Thu Mar 5 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090305 
 - Remove "anlyz" from input data file format because the "-c"
 command line option is now an easier and better way to specify

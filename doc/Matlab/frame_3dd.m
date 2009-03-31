@@ -44,11 +44,11 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %
 % OUTPUT DATA:
 %
-%  D : a 6xJ matrix   of the deflections and rotations of each joint
-%  R : a 6xJ matrix   of the reaction forces and moments 
-%  F : a 12xB matrix  of the end forces of each beam element 
-%  L : a 1xB vector   of the length of each beam element 
-% Ks : a 6Jx6J matrix of the structural stiffness matrix 
+%    D : a 6xJ matrix   of the deflections and rotations of each joint
+%    R : a 6xJ matrix   of the reaction forces and moments 
+%    F : a 12xB matrix  of the end forces of each beam element 
+%    L : a 1xB vector   of the length of each beam element 
+%   Ks : a 6Jx6J matrix of the structural stiffness matrix 
 %
 % http://frame3dd.sourceforge.net/
 
@@ -83,13 +83,12 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %    You should have received a copy of the GNU General Public License
 %    along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 
-% H.P. Gavin, Dept. Civil & Environ. Eng'g, Duke Univ., September 2008
+% H.P. Gavin, Dept. Civil & Environ. Eng'g, Duke Univ., March 31, 2009
 % *** Please email extensions and enhancements of this function to me. ***
 
   shear = 0;		     % 1: include shear deformation effects, 0: don't
   geom  = 0;		     % 1: include geometric stiffness effects, 0: don't
   exagg = 10;		     % exaggeration factor for Gnuplot output
-  anlyz = 1;		     % 1: run a frame3dd analysis, 0: data check only
   IOfilename = 'IOdata';     % name of the Input-Output data file, a text file 
   Mfilename  = 'IOdata_out'; % name of the Matlab results data file, a text file 
 
@@ -122,7 +121,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 % open the frame3dd Input-Output Data file
   fp = fopen([IOfilename '.FMM'],'w');
 
-  fprintf(fp,'frame analysis\n\n');
+  fprintf(fp,'frame analysis via Matlab interface\n\n');
 
   fprintf(fp,'%% joint data ...\n');
   fprintf(fp,'%d\t\t%% number of joints  \n', J);
@@ -159,7 +158,6 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
   fprintf(fp,'%d\t\t%% 1: include shear deformation, 0: do not\n', shear );
   fprintf(fp,'%d\t\t%% 1: include geometric stiffness, 0: do not\n', geom );
   fprintf(fp,'%e\t%% exxagerate deformations in plotting \n', exagg );
-  fprintf(fp,'%d\t\t%% 1: frame3dd analysis, 0: data check only\n', anlyz);
   fprintf(fp,'\n');
 
   fprintf(fp,'%% static load data ...\n');

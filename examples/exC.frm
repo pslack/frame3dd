@@ -85,7 +85,7 @@ Example C: a tetrahedral frame - static and dynamic analysis
 48  16 18	20.0	8.0	5.0	50.0	100.0	200.0	29000	11500 0
 
 1                               % 1: include shear deformation
-1                               % 1: include geometric stiffness
+0                               % 1: include geometric stiffness
 2.0                             % exaggerate mesh deformations
 
 

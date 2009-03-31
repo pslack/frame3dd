@@ -390,11 +390,6 @@ int main ( int argc, char *argv[] ) {
 					Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 			}
 
-#ifdef MATRIX_DEBUG
-			save_ut_dmatrix ( DoF, K, "Ks" );	   /* static stiffness matrix */
-#endif
-
-
 			/* Newton-Raphson iterations for geometric non-linearity */
 			if ( geom ) {
 				Fe  = dvector( 1, DoF );	/* force equilibrium error  */
@@ -408,6 +403,7 @@ int main ( int argc, char *argv[] ) {
 					printf("\n Non-Linear Elastic Analysis ...\n");
 			}
 
+			/* Newton Raphson iteration for geometric nonlinearity */
 			ok = 0; iter = 0; error = 1.0;	/* re-initialize */
 			while ( geom && error > tol && iter < 10 && ok >= 0) {
 				++iter;
@@ -439,7 +435,7 @@ int main ( int argc, char *argv[] ) {
 					fprintf(stderr,"   The stiffness matrix is not pos-def. \n");
 					fprintf(stderr,"   Reduce loads and re-run the analysis.\n");
 					break;
-				}
+				}			/* end Newton Raphson iterations */
 
 				for (i=1; i<=DoF; i++)	D[i] += dD[i];	/* increment D */
 
@@ -460,6 +456,8 @@ int main ( int argc, char *argv[] ) {
 				free_dvector(Fe, 1, DoF );
 				free_dmatrix(Ks, 1, DoF, 1, DoF );
 			}
+
+			save_ut_dmatrix ( DoF, K, "Ks" ); /* static stiffness matrix */
 
 			for (i=1; i<=12; i++)
 				for (n=1; n<=nB; n++)

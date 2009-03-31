@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20090305
+Version:	0.20090331
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -68,15 +68,23 @@ rm -rf %{buildroot}
 # changes there.
 #
 
+* Tue Mar 31 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090331
+- Fixed bug in the Matlab interface function frame_3dd.m ... 
+... no long printing the depricated anlyz variable value
+- Frame3DD now writes the stiffness matrix to a file named "Ks" 
+for each analysis. Line 460 of main.c ... after Newton-Raphson iterations 
+for geometric nonlinear analysis, if such an analysis is to be performed.  
+... for compatability with Matlab interface function frame_3dd.m
+- re-ran example files
+
 * Thu Mar 5 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090305 
 - Remove "anlyz" from input data file format because the "-c"
 command line option is now an easier and better way to specify
 "data check only". Updated code, examples and documentation.
-- Fixed bug related to "-q" flag and verbose output on line 1274
-of frame3dd_io.c
+- Fixed bug related to "-q" flag and verbose output on line 1274 of frame3dd_io.c
 - Added checks related to incorrect command-line arguments.
-- Added an evaluation/interpretation of RMS relative equilibrium precision within
-the code.
+- Added an evaluation/interpretation of RMS relative equilibrium precision
+within the code and updated the documentation.
 
 * Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304 
 - Fixed fprintf format character in save_ivector()
