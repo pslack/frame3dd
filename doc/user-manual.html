@@ -290,7 +290,6 @@ For Microsoft Windows, we provide a binary installer for Frame3dd. Use the follo
 </ol>
 <li>Optionally, set a location for your output files using <tt>set FRAME3DD_OUTDIR=c:\path\to\output\files</tt> (using a path of your choice).
 <li>Change to your documents directory using <tt>cd %HOMEPATH%\My Documents</tt>
-<li>Edit the example file to ensure that it contains valid file paths for the mesh_file, mode_file and plot_file locations.
 <li>Run Frame3dd using <tt>frame3dd.exe  exA.frm  exA.out</tt>
 <li>Use Gnuplot to view the graphical output:
 <ol>
@@ -305,8 +304,8 @@ MS-Windows version of Gnuplot</a>.
          <tt>c:\path\to\output\files</tt> (path as above)
 <li>Display the plot of your structure by typing ...<br>
          <tt> gnuplot> load 'example.plt'</tt><br>
-         where <tt>example.plt</tt> is the name of of the plot file specified in the Input Data. (<a href="#InputData">See below.</a>) <br>
-<li>Hit the 'Return' key in the Terminal window to see the sequence of plots
+         where <tt>example.plt</tt> is the name of of the plot file created when frame3dd is run.  <br>
+<li>Hit the 'Return' key in the Gnuplot terminal window to see the sequence of plots
          and animations until the <tt> gnuplot></tt> prompt returns.<br>
 </ol>
 <li>       You may edit Input Data files using a plain text editor
