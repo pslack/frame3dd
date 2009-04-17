@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-version = '0.20090331'
+version = '0.20090417'
 
 import platform
 deftools = ['default']
@@ -242,6 +242,7 @@ env.Depends(tar,["frame3dd.spec","doc/version.html"])
 if platform.system()=="Windows":
 	env.Append(NSISDEFINES={
 		'OUTFILE':"#dist/"+env['WIN_INSTALLER_NAME']
+		,'VERSION':version
 	})
 	
 	installer = env.Installer('installer.nsi')

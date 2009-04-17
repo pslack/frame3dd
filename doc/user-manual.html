@@ -57,16 +57,9 @@ Duke University</a> - Box 90287,
 <p><b>Frame3DD</b> is a program for the static and dynamic structural analysis of two- and three-dimensional frames and trusses with elastic and geometric stiffness.
 </p>
 
-<p><b>Frame3DD</b> is executed from within a
-<a href="LinuxTerminal.pdf">terminal</a>
-<a href="LinuxTerminal.pdf"><img src="img/Terminal.jpg" border="0" width="25"></a>
-or
-"<a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">command prompt window</a>"
-<a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">
-<img src="img/WindowsCommandIcon.jpg" border="0" width="25"></a>
-as follows: 
+<p><b>Frame3DD</b> is executed from the <a href="http://en.wikipedia.org/wiki/Windows_command_line">command prompt</a> (Windows) or <a href="http://en.wikipedia.org/wiki/Unix_shell">shell</a> (Linux) or <a href="http://www.macdevcenter.com/pub/a/mac/2001/12/14/terminal_one.html">terminal</a> (Mac), as follows, with filenames changed as required:
 <pre>
-          frame3dd   InputDataFile   OutputDataFile
+  frame3dd inputfile.frm outputfile.txt
 </pre>
 </p>
 
@@ -74,19 +67,19 @@ as follows:
 <!-- (The Input Data file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
 </p>
 
-<p><b>Frame3DD</b> appends results to a plain-text <b>output data file</b>.  
-Results from the most recent analysis 
-are written to the <b>end</b> of the output data file.   
-Each section of the output data gives the date and time of the analysis,  
+<p><b>Frame3DD</b> appends results to a plain-text <b>output data file</b>.
+Results from the most recent analysis
+are written to the <b>end</b> of the output data file.
+Each section of the output data gives the date and time of the analysis,
 recapitulates the input information, gives joint displacements in global coordinates, frame element end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
 </p>
 
 <p><b>Frame3DD</b> writes a
 <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>
-script file used for viewing deformed frames and dynamic mode shapes.   
+script file used for viewing deformed frames and dynamic mode shapes.
 If the output data is written to a file called <tt>exA.out</tt>,
-the Gnuplot script is written to a file called <tt>exA.plt</tt>.  
-Graphical output may be viewed by starting Gnuplot and typing: 
+the Gnuplot script is written to a file called <tt>exA.plt</tt>.
+Graphical output may be viewed by starting Gnuplot and typing:
 <tt> load 'exA.plt'</tt>.
 
 <p><b>Frame3DD</b> can consider multiple static load cases in a single analysis.</p>
@@ -145,24 +138,24 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li>Read the User Manual and Reference (this file).
 <li>Download or build the Frame3DD executable for your operating system (see below).
 <li>Optionally, obtain a copy of Gnuplot for your operating system.
-<li>Copy one of the example input data files (eg <tt>exA.frm</tt>) into your home directory.   
+<li>Copy one of the example input data files (eg <tt>exA.frm</tt>) into your home directory.
 <li>       Open a terminal window and run the program using the command
 	  <tt>frame3dd  exA.frm  exA.out</tt> (change the filenames <tt>exA.frm</tt> and <tt>exA.out</tt> as necessary).
-	<li>Open the output data file using your text editor and view the output data. 
+	<li>Open the output data file using your text editor and view the output data.
 <!--     Running this program will create many files.  Most of them are used
          for graphics and should be written to the  /tmp  directory.
 <li>      One of the files will be written to the current working directory and will be called
          something like frA.plt   This file is used for plotting.   -->
 <li>      Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, and typing
-           <tt>load 'exA.plt'</tt> at the "<tt>gnuplot&gt;</tt>"&nbsp;prompt. 
+           <tt>load 'exA.plt'</tt> at the "<tt>gnuplot&gt;</tt>"&nbsp;prompt.
 Observe a series of plots by hitting the Return (or Enter) key between plots.<br>
 If a dynamic analysis was performed, you will enjoy an animation of selected mode shapes.<br>
 Continue to hit the Return (or Enter) key until the last plot is displayed.
 </ol>
 
 <div class=note>
-<b>Note:</b> Depending on the instructions contained in the Frame3dd input file, there may be many <b>additional output files</b> generated. 
-The data in these files are used for plotting purposes.   
+<b>Note:</b> Depending on the instructions contained in the Frame3dd input file, there may be many <b>additional output files</b> generated.
+The data in these files are used for plotting purposes.
 By default, these output files will be sent to your temporary file folder. On Windows, this will be the contents of the TEMP environment variable, which you can examine by typing <tt>echo %TEMP%</tt>. On other platforms, this will be the folder <tt>/tmp</tt>.<br><br>If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <tt>FRAME3DD_OUTDIR</tt> with the path to your output directory. All new output files will then appear in the folder you have specified.
 </div>
 
@@ -522,7 +515,7 @@ is currently capable of static analyses.
 It does not (yet) implement the following features of <b>Frame3DD</b>:
 <ul>
   <li> Matlab functions for graphical display of the results
-  <li> point forces applied between the joints of a frame element 
+  <li> point forces applied between the joints of a frame element
   <li> temperature loads
   <li> multiple load cases
   <li> modal analysis
@@ -551,7 +544,7 @@ When editing an Input Data file with a spreadsheet program, save it in
 When run on a <tt>.CSV</tt> file,
 <b>Frame3DD</b> writes results
 as plain text to the named Output Data file and also
-writes results of the static analyses to a spreadsheet with a filename ending in "<tt>.CSV</tt>".   
+writes results of the static analyses to a spreadsheet with a filename ending in "<tt>.CSV</tt>".
 These files may be viewed, edited, pre-processed, and post-processed with a spreadsheet program.
 </p>
 
@@ -628,8 +621,8 @@ and tonne), or (MegaNewtons, meters, and kilotonnes).
 
 <p>
 It is recommended to write the units used in your analysis in the
-<i>title</i> of the analysis and throughout the input data files, 
-as is done in the example input data files.  
+<i>title</i> of the analysis and throughout the input data files,
+as is done in the example input data files.
 
 <ul>
 <li> 1 inch = 25.4 millimeter = 0.0254 meter
@@ -644,22 +637,22 @@ as is done in the example input data files.
 
 <p>
 Joint positions are specified by locations in a three-dimensional
-cartesian coordinate system.  
+cartesian coordinate system.
 Each joint has six degrees of freedom: three translations
 in the global <i>X</i>, <i>Y</i>, and <i>Z</i> directions and three rotations about the
 global <i>X</i>, <i>Y</i>, and <i>Z</i> axes.
 Optionally,
 joints may be modeled as "rigid" within a sphere of radius <i>r</i>.
 The effects of finite joint sizes are modeled approximately
-in the calculation of beam stiffness  
+in the calculation of beam stiffness
 through the use of an <i>effective beam length</i>, which is the joint-to-joint
 length of the beam less the rigid radii on each end.
 </p>
 
 <p>
-Support conditions are modeled by fixing the degrees of freedom 
-colocated with reaction forces. 
-By default, displacements at the fixed degrees of freedom are zero. 
+Support conditions are modeled by fixing the degrees of freedom
+colocated with reaction forces.
+By default, displacements at the fixed degrees of freedom are zero.
 Optionally, displacements at the fixed degrees of freedom may be prescribed
 as a type of loading.
 Elastic support conditions may be modeled by additional elements
@@ -706,8 +699,8 @@ made entirely of elements for which <i>Iyy=Izz</i>, i.e., square and circular cr
 </p>
 
 <p>
-Coordinate transformations do not currently consider the effect of 
-finite joint sizes, and are based on joint-to-joint lengths of beam elements. 
+Coordinate transformations do not currently consider the effect of
+finite joint sizes, and are based on joint-to-joint lengths of beam elements.
 </p>
 
 <p>
@@ -858,7 +851,7 @@ low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>.
 Beams may be considered infinitely rigid within a sphere of a specified radius,
 <i>r</i> around a joint.
 The effects of finite joint sizes are modeled approximately
-in the calculation of beam stiffness  
+in the calculation of beam stiffness
 through the use of an <i>effective beam length</i>, which is the joint-to-joint
 length of the beam less the rigid radii on each end.
 </p>
@@ -958,16 +951,16 @@ Trapezoidally distributed loads may be applied in the local <i>x</i> direction,
 the local <i>y</i> direction, and the local <i>z</i> direction.
 Trapezoidally distributed loads are specified by the distances along
 the local <i>x</i> axis where the loading starts and stops, and
-by the value of the load at the starting location and the stopping location.  
+by the value of the load at the starting location and the stopping location.
 The starting location for a trapezoidal load must be greater than 0 and less
 than the stopping location of the trapezoidal load.
 The stopping location for a trapezoidal load must be greater than the
 starting value of the trapezoidal load and less
 than the length of the frame element.
 Fixed end forces computed from trapezoidal loads include the effects of
-shear deformation when shear deformation is utilized in the analysis.  
+shear deformation when shear deformation is utilized in the analysis.
 <li>Thermal loads assume a linear temperature gradient through cross sections.
-<li>Static joint displacements may be prescribed at fixed degrees of freedom only.  
+<li>Static joint displacements may be prescribed at fixed degrees of freedom only.
 </ul>
 <p>
 Multiple static load cases are generated by specifying
@@ -1136,13 +1129,13 @@ trusted.
 If the RMS relative equilibrium error is not adequately small
 and geometric stiffness effects <i>are not</i> included in the analyis,
 try including the effects of geometric stiffness by changing
-the geometric stiffness variable <i>geom</i> 
+the geometric stiffness variable <i>geom</i>
 in the Input Data file to <i>1</i> or by using the
 <a href="#commandline"><i>-gOn</i> command line option</a>.
 Conversely, if the RMS relative equilibrium error is not adequately small
 and geometric stiffness effects <i>are</i> included in the analyis,
 try neglecting the effects of geometric stiffness by changing
-the geometric stiffness variable <i>geom</i> 
+the geometric stiffness variable <i>geom</i>
 in the Input Data file to <i>0</i> or by using the
 <a href="#commandline"><i>-gOff</i> command line option</a>.
 </p>
@@ -1328,7 +1321,7 @@ nC                                                % number of condensed joints
        Dyy       - Prescribed rotation in the global Y direction
        Dzz       - Prescribed rotation in the global Z direction
        d         - mass density of a beam element
-       E         - Modulus of elasticity of a beam element 
+       E         - Modulus of elasticity of a beam element
        exagg     - Factor for exaggeration of the deformations in the plot
        Fx        - Joint load in the global X direction
        Fy        - Joint load in the global Y direction
@@ -1340,8 +1333,8 @@ nC                                                % number of condensed joints
        Iyy       - Moment of inertia for bending about the local y axis
        Izz       - Moment of inertia for bending about the local z axis
        J         - Joint number
-       J1        - Joint 1 of a frame element 
-       J2        - Joint 2 of a frame element 
+       J1        - Joint 1 of a frame element
+       J2        - Joint 2 of a frame element
        JMs       - extra mass of a joint for translational motion
        JMx       - extra rotatory inertia of a joint about global x coord. dir.
        JMy       - extra rotatory inertia of a joint about global y coord. dir.
@@ -1402,15 +1395,15 @@ nC                                                % number of condensed joints
                    in the local z-direction
        wz2       - stopping value for trapezoidally-distributed loads
                    in the local z-direction
-       xx1       - distance along a frame element for starting 
+       xx1       - distance along a frame element for starting
                    trapezoidally-distributed loads in the x-direction
        xx2       - distance along a frame element for stopping
                    trapezoidally-distributed loads in the x-direction
-       xy1       - distance along a frame element for starting 
+       xy1       - distance along a frame element for starting
                    trapezoidally-distributed loads in the y-direction
        xy2       - distance along a frame element for stopping
                    trapezoidally-distributed loads in the y-direction
-       xz1       - distance along a frame element for starting 
+       xz1       - distance along a frame element for starting
                    trapezoidally-distributed loads in the z-direction
        xz2       - distance along a frame element for stopping
                    trapezoidally-distributed loads in the z-direction
@@ -1435,15 +1428,15 @@ or
 <img src="img/WindowsCommandIcon.jpg" border="0" width="25"></a>.
 <li> FRAME3DD may be run with interactive prompting for file names by typing ...<br>
 <pre>
-       frame3dd 
+       frame3dd
 </pre>
 <li> FRAME3DD may be run without command-line options by typing ...<br>
 <pre>
-       frame3dd  InFile   OutFile  
+       frame3dd  InFile   OutFile
 </pre>
 <li> FRAME3DD may be run with command-line options by typing ...<br>
 <pre>
-       frame3dd -i InFile -o OutFile [OPTIONS] 
+       frame3dd -i InFile -o OutFile [OPTIONS]
 </pre>
 
  ... where <tt>[OPTIONS]</tt> over-rides values in the input data file and includes
@@ -1466,7 +1459,7 @@ or
   -m   J|S      modal analysis method: J=Jacobi-Subspace or S=Stodola
   -t  value     convergence tolerance for modal analysis
   -p  value     pan rate for mode shape animation
-  -r  value     matrix condensation method: 0, 1, 2, or 3 
+  -r  value     matrix condensation method: 0, 1, 2, or 3
  ------------------------------------------------------------------------
 </pre>
 

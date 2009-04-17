@@ -5,8 +5,13 @@
 
 ;--------------------------------
 
+; The version of this installer
+!ifndef VERSION
+!define VERSION "UNKNOWN_VERSION"
+!endif
+
 ; The name of the installer
-Name "FRAME3DD"
+Name "FRAME3DD ${VERSION}"
 
 !include LogicLib.nsh
 !include nsis\registerExtension.nsh
