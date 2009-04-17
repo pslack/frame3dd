@@ -1,28 +1,31 @@
+* Fri Apr 17 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090417
+- Re-ran examples with April 17 2009 build
+ 
 * Fri Apr 17 2009 John Pye <john.pye@anu.edu.au> 0.20090417
 - Removed LinuxCommand PDF link in documentation.
 - Removed little cmd prompt icons from documentation.
 - New release on SF.net before new work on data structures commences.
 - Reformatted changelog to PC format (may cause probs with RPM?)
 - Removed wordy usage output from changelog (doesn't fit RPM formatting
-  requirements).
+requirements).
 
 * Tue Mar 31 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090331
 - Fixed bug in the Matlab interface function frame_3dd.m ... 
-  ...no long printing the depricated anlyz variable value
+...no long printing the depricated anlyz variable value
 - Frame3DD now writes the stiffness matrix to a file named "Ks" 
-  for each analysis. Line 460 of main.c ... after Newton-Raphson iterations 
-  for geometric nonlinear analysis, if such an analysis is to be performed.  
-  ...for compatability with Matlab interface function frame_3dd.m
+for each analysis. Line 460 of main.c ... after Newton-Raphson iterations 
+for geometric nonlinear analysis, if such an analysis is to be performed.  
+...for compatability with Matlab interface function frame_3dd.m
 - re-ran example files
 
 * Thu Mar 5 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090305 
 - Remove "anlyz" from input data file format because the "-c"
-  command line option is now an easier and better way to specify
-  "data check only". Updated code, examples and documentation.
+command line option is now an easier and better way to specify
+"data check only". Updated code, examples and documentation.
 - Fixed bug related to "-q" flag and verbose output on line 1274 of frame3dd_io.c
 - Added checks related to incorrect command-line arguments.
 - Added an evaluation/interpretation of RMS relative equilibrium precision
-  within the code and updated the documentation.
+within the code and updated the documentation.
 
 * Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304 
 - Fixed fprintf format character in save_ivector()
@@ -30,7 +33,7 @@
 
 * Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304 
 - Fixed bug in multi-load case nonlinear analysis in main.c line 410
-  ... Iteration termination criteria must be reset at the start of each iteration.
+... Iteration termination criteria must be reset at the start of each iteration.
 - Change snprintf to sprintf in frame3dd_io.c for DJGPP compatability
 - Added #include <time.h> in nrutil.c for DJGPP compatability
 
@@ -42,12 +45,12 @@
 
 * Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304
 - Implement command line parsing using the getopt function
-  ... using getopt for ease of portability.
+... using getopt for ease of portability.
 - Added functions to frame3dd_io.c:
-  parse_options() --- calls getopt
-  display_help() 
-  display_usage()
-  display_version()
+parse_options() --- calls getopt
+display_help() 
+display_usage()
+display_version()
 - Updated documentation with command-line syntax ... doc/user-manual.html
 
 * Tue Mar 3 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090303
@@ -55,7 +58,7 @@
 
 * Mon Mar 2 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090302
 - Usage change from "frame3dd InputData.frm" to "frame3dd
-  InputData.frm OutputData.out"
+InputData.frm OutputData.out"
 - output information regarding number of loading types is now more clear
 - updated examples B and E with trapezoidal loads
 - updated documentation and README
