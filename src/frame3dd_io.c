@@ -52,8 +52,9 @@ static void getline_no_comment(
 
 
 /*------------------------------------------------------------------------------
-PARSE_OPTIONS -  parse command line options				04mar09
+PARSE_OPTIONS -  parse command line options		
 command line options over-ride values in the input data file	 	
+04 Mar 2009
 ------------------------------------------------------------------------------*/
 void parse_options (
 	int argc, char *argv[], 
@@ -237,7 +238,8 @@ void parse_options (
 
 
 /*------------------------------------------------------------------------------
-DISPLAY_HELP -  display help information to stderr			04mar09
+DISPLAY_HELP -  display help information to stderr	
+04 Mar 2009
 ------------------------------------------------------------------------------*/
 void display_help()
 {
@@ -280,7 +282,8 @@ void display_help()
 
 
 /*------------------------------------------------------------------------------
-DISPLAY_USAGE -  display usage information to stderr			04mar09
+DISPLAY_USAGE -  display usage information to stderr	
+04 Mar 2009
 ------------------------------------------------------------------------------*/
 void display_usage()
 {
@@ -296,7 +299,8 @@ void display_usage()
 }
 
 /*------------------------------------------------------------------------------
-DISPLAY_VERSION -  display version information to stderr		04mar09
+DISPLAY_VERSION -  display version information to stderr
+04 Mar 2009
 ------------------------------------------------------------------------------*/
 void display_version()
 {
@@ -312,7 +316,8 @@ void display_version()
 
 
 /*------------------------------------------------------------------------------
-READ_JOINT_DATA  -  read joint location data				04jan09
+READ_JOINT_DATA  -  read joint location data		
+04 Jan 2009
 ------------------------------------------------------------------------------*/
 void read_joint_data( FILE *fp, int nJ, vec3 *xyz, float *r )
 {
@@ -334,7 +339,8 @@ void read_joint_data( FILE *fp, int nJ, vec3 *xyz, float *r )
 
 
 /*------------------------------------------------------------------------------
-READ_BEAM_DATA  -  read beam property data				04jan09
+READ_BEAM_DATA  -  read beam property data		
+04 Jan 2009
 ------------------------------------------------------------------------------*/
 void read_beam_data(
 	FILE *fp,
@@ -435,7 +441,8 @@ void read_beam_data(
 
 
 /*------------------------------------------------------------------------------
-READ_RUN_DATA  -  read information for analysis                   29dec08
+READ_RUN_DATA  -  read information for analysis                  
+29 Dec 2008
 ------------------------------------------------------------------------------*/
 void read_run_data (
 	FILE	*fp, 
@@ -510,7 +517,7 @@ void read_run_data (
 
 
 /*-----------------------------------------------------------------------------
-FRAME3DD_GETLINE -  get line into a character string. from K&R         3feb94
+FRAME3DD_GETLINE -  get line into a character string. from K&R        03feb94
 -----------------------------------------------------------------------------*/
 void frame3dd_getline (
 FILE	*fp,
@@ -537,7 +544,8 @@ static const char sep = '/';
 
 /*----------------------------------------------------------------------------
 TEMP_FILE_LOCATION
-return platform-specific temp file locations -- John Pye, Feb 2009
+return platform-specific temp file locations -- 
+John Pye, Feb 2009
 ----------------------------------------------------------------------------*/
 
 static const char *temp_dir(){
@@ -571,7 +579,8 @@ void temp_file_location(const char *fname, char fullpath[], const int len){
 /*------------------------------------------------------------------------------
 OUTPUT_PATH
 return path for output files using either current directory, or FRAME3DD_OUTDIR
-if specified. -- John Pye, Feb 2009.
+if specified. -- 
+John Pye, Feb 2009.
 ------------------------------------------------------------------------------*/
 void output_path(const char *fname, char fullpath[], const int len, const char *default_outdir){
 	assert(fname!=NULL);
@@ -626,10 +635,11 @@ void parse_input(FILE *fp, const char *tpath){
 
 
 /*-----------------------------------------------------------------------------
-GETLINE_NO_COMMENT                                                      9feb09
+GETLINE_NO_COMMENT                                                
  get a line into a character string. from K&R
  get the line only up to one of the following characters:  \n  %  #  ;  ? 
  ignore all comma (,) characters, ignore all double quote (") characters
+09 Feb 2009
 -----------------------------------------------------------------------------*/
 void getline_no_comment(
 	FILE *fp,   /**< pointer to the file from which to read */
@@ -658,7 +668,8 @@ void getline_no_comment(
 
 
 /*------------------------------------------------------------------------------
-READ_REACTION_DATA - Read fixed joint displacement boundary conditions 29dec09
+READ_REACTION_DATA - Read fixed joint displacement boundary conditions
+29 Dec 2009
 ------------------------------------------------------------------------------*/
 void read_reaction_data (
 	FILE *fp, int DoF, int nJ, int *nR, int *R, int *sumR, int verbose
@@ -727,7 +738,8 @@ void read_reaction_data (
 
 /*------------------------------------------------------------------------------
 READ_AND_ASSEMBLE_LOADS  -
-read load information data, assemble un-restrained load vectors	9sep08
+read load information data, assemble un-restrained load vectors
+09 Sep 2008
 ------------------------------------------------------------------------------*/
 void read_and_assemble_loads(
 		FILE *fp,
@@ -1490,7 +1502,7 @@ void read_condensation_data (
 
 
 /*------------------------------------------------------------------------------
-WRITE_INPUT_DATA  -  save input data					7nov02
+WRITE_INPUT_DATA  -  save input data					07nov02
 ------------------------------------------------------------------------------*/
 void write_input_data(
 	FILE *fp,
@@ -1667,7 +1679,8 @@ void write_input_data(
 
 
 /*------------------------------------------------------------------------------
-WRITE_STATIC_RESULTS -  save joint displacements and beam end forces	9sep08
+WRITE_STATIC_RESULTS -  save joint displacements and beam end forces
+09 Sep 2008
 ------------------------------------------------------------------------------*/
 void write_static_results (
 		FILE *fp,
@@ -1758,7 +1771,8 @@ void write_static_results (
 
 
 /*------------------------------------------------------------------------------
-WRITE_STATIC_CSV -  save joint displacements and beam end forces	31dec08
+WRITE_STATIC_CSV -  save joint displacements and beam end forces
+31 Dec 2008
 ------------------------------------------------------------------------------*/
 void write_static_csv(
 		char *OUT_file,
@@ -1905,9 +1919,10 @@ void write_static_csv(
 }
 
 /*------------------------------------------------------------------------------
-WRITE_STATIC_MFILE -  	9sep08
+WRITE_STATIC_MFILE -  						
 save joint displacements and beam end forces in an m-file
 this function interacts with frame_3dd.m, an m-file interface to frame3dd
+09 Sep 2008
 ------------------------------------------------------------------------------*/
 void write_static_mfile (
 		char *OUT_file, char *title,
@@ -2040,7 +2055,8 @@ void write_static_mfile (
 
 
 /*------------------------------------------------------------------------------
-WRITE_MODAL_RESULTS -  save modal frequencies and mode shapes		16aug01
+WRITE_MODAL_RESULTS -  save modal frequencies and mode shapes	
+16 Aug 2001
 ------------------------------------------------------------------------------*/
 void write_modal_results(
 		FILE *fp,
@@ -2128,7 +2144,7 @@ void write_modal_results(
 
 /*------------------------------------------------------------------------------
 STATIC_MESH  -
-create mesh data of deformed and undeformed mesh, use gnuplot	22feb99
+create mesh data of deformed and undeformed mesh, use gnuplot	22 Feb 1999
 useful gnuplot options: set noxtics noytics noztics noborder view nokey
 ------------------------------------------------------------------------------*/
 void static_mesh(
@@ -2606,7 +2622,7 @@ void animate(
 
 	    ex = exagg*cos( PI*fr/frames );
 
-	    for (j=1; j<=DoF; j++)	v[j] = V[j][m];
+	    for (j=1; j<=DoF; j++)	v[j] = V[j][m];		/* mode "m" */
 
 	    fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
 
@@ -2626,7 +2642,8 @@ void animate(
 /*------------------------------------------------------------------------------
 BENT_BEAM  -  computes cubic deflection functions from beam end deflections
 and beam end rotations.  Saves deflected shapes to a file.  These bent shapes
-are exact for mode-shapes, and for frames loaded at their joints.	22feb99
+are exact for mode-shapes, and for frames loaded at their joints.
+15 May 2009
 ------------------------------------------------------------------------------*/
 void bent_beam(
 	FILE *fp, int j1, int j2, vec3 *xyz,
@@ -2643,7 +2660,7 @@ void bent_beam(
 	b = dvector(1,4);
 
 	coord_trans ( xyz, L, j1, j2,
-				&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p );
+			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p );
 
 	i1 = 6*(j1-1);	i2 = 6*(j2-1);
 
@@ -2653,24 +2670,28 @@ void bent_beam(
 	u2  = exagg*(t4*D[i1+1] + t5*D[i1+2] + t6*D[i1+3]);
 	u3  = exagg*(t7*D[i1+1] + t8*D[i1+2] + t9*D[i1+3]);
 
-	u4  = t1*D[i1+4] + t2*D[i1+5] + t3*D[i1+6];
-	u5  = t4*D[i1+4] + t5*D[i1+5] + t6*D[i1+6];
-	u6  = t7*D[i1+4] + t8*D[i1+5] + t9*D[i1+6];
+	u4  = exagg*(t1*D[i1+4] + t2*D[i1+5] + t3*D[i1+6]);
+	u5  = exagg*(t4*D[i1+4] + t5*D[i1+5] + t6*D[i1+6]);
+	u6  = exagg*(t7*D[i1+4] + t8*D[i1+5] + t9*D[i1+6]);
 
 	u7  = exagg*(t1*D[i2+1] + t2*D[i2+2] + t3*D[i2+3]);
 	u8  = exagg*(t4*D[i2+1] + t5*D[i2+2] + t6*D[i2+3]);
 	u9  = exagg*(t7*D[i2+1] + t8*D[i2+2] + t9*D[i2+3]);
 
-	u10 = t1*D[i2+4] + t2*D[i2+5] + t3*D[i2+6];
-	u11 = t4*D[i2+4] + t5*D[i2+5] + t6*D[i2+6];
-	u12 = t7*D[i2+4] + t8*D[i2+5] + t9*D[i2+6];
+	u10 = exagg*(t1*D[i2+4] + t2*D[i2+5] + t3*D[i2+6]);
+	u11 = exagg*(t4*D[i2+4] + t5*D[i2+5] + t6*D[i2+6]);
+	u12 = exagg*(t7*D[i2+4] + t8*D[i2+5] + t9*D[i2+6]);
 
 		/* curve-fitting problem for a cubic polynomial */
 
 	a[1] = u2;		b[1] = u3;
 	a[2] = u8;   		b[2] = u9;
+	a[3] = u6;		b[3] = -u5;
+	a[4] = u12;		b[4] = -u11;
+/*
 	a[3] = exagg*tan(u6);	b[3] = exagg*tan(-u5);
 	a[4] = exagg*tan(u12);	b[4] = exagg*tan(-u11);
+*/
 
 	u7 += L;
 	A[1][1] = 1.0;   A[1][2] = u1;   A[1][3] = u1*u1;   A[1][4] = u1*u1*u1;
@@ -2682,13 +2703,13 @@ void bent_beam(
 	lu_dcmp ( A, 4, a, 1, 1, &pd );		/* solve for cubic coef's */
 
 	if (!pd) {
-	 printf(" j1 = %d  j2 = %d  L = %e  u7 = %e \n", j1, j2, L, u7 );
+	 fprintf(stderr," j1 = %d  j2 = %d  L = %e  u7 = %e \n", j1,j2,L,u7);
 	 exit(1);
 	}
 
 	lu_dcmp ( A, 4, b, 0, 1, &pd );		/* solve for cubic coef's */
 
-	for ( s = u1; s <= 1.01*L+u7; s += (L+u7-u1) / 10.0 ) {
+	for ( s = u1; s <= 1.01*(L+u7); s += (L+u7-u1) / 10.0 ) {
 
 			/* deformed shape in local coordinates */
 		v = a[1] + a[2]*s + a[3]*s*s + a[4]*s*s*s;

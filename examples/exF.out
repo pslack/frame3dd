@@ -1,12 +1,12 @@
 ________________________________________________________________________________
-FRAME3DD version: 20090417               http://frame3dd.sf.net/
+FRAME3DD version: 20090515               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example F: a seismically-isolated building model (units: N  mm  ton) 
-Fri Apr 17 01:09:45 2009
+Fri May 15 16:35:13 2009
 ________________________________________________________________________________
 36 JOINTS;    58 MEMBERS;    1 LOAD CASES;  14 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -369,7 +369,7 @@ N A T U R A L   F R E Q U E N C I E S   &
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
  convergence tolerance: 1.000e-06 
   MODE     1:   f= 0.324840 Hz,  T= 3.078438 sec
-		X- modal participation factor =  -3.9058e-10 
+		X- modal participation factor =  -3.9057e-10 
 		Y- modal participation factor =   4.4673e+00 
 		Z- modal participation factor =  -8.1277e-08 
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
@@ -378,9 +378,9 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      3   7.973e-39   2.203e-01   2.444e-06  -3.058e-08   8.981e-12   4.408e-24
      4  -1.233e-39   2.203e-01  -1.335e-23  -3.656e-08   3.603e-11  -5.863e-15
      5   0.000e+00   2.204e-01  -5.574e-25  -3.019e-08  -3.201e-15   3.439e-15
-     6   9.897e-16   2.204e-01  -7.631e-10   5.306e-09   5.190e-16  -4.531e-22
-     7   1.533e-28   2.204e-01   4.620e-23  -3.019e-08   4.239e-15   3.439e-15
-     8   0.000e+00   2.203e-01  -4.952e-29  -3.721e-08   3.535e-11   9.302e-15
+     6   9.887e-16   2.204e-01  -7.631e-10   5.306e-09   5.190e-16  -4.547e-22
+     7   1.531e-28   2.204e-01   4.620e-23  -3.019e-08   4.239e-15   3.439e-15
+     8   0.000e+00   2.203e-01  -4.957e-29  -3.721e-08   3.535e-11   9.302e-15
      9   0.000e+00   2.203e-01  -2.652e-06  -3.119e-08   1.003e-11   5.620e-25
     10  -1.265e-38   2.203e-01   2.652e-06  -3.119e-08  -1.003e-11  -6.995e-24
     11   1.957e-39   2.203e-01  -1.421e-23  -3.721e-08  -3.535e-11   9.302e-15

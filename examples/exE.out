@@ -1,12 +1,12 @@
 ________________________________________________________________________________
-FRAME3DD version: 20090417               http://frame3dd.sf.net/
+FRAME3DD version: 20090515               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example E: a three dimensional structure showing lateral-torsional dynamic modes (units: kip  in) 
-Fri Apr 17 01:09:45 2009
+Fri May 15 16:30:20 2009
 ________________________________________________________________________________
 12 JOINTS;    15 MEMBERS;    1 LOAD CASES;  3 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -198,7 +198,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      8  -3.101e-02   1.331e+00  -5.524e-02  -1.499e-03  -7.680e-04  -1.845e-02
      9  -4.076e-12   7.555e-12  -1.740e-16  -2.186e-10  -1.178e-10  -1.277e-16
     10  -4.076e-12  -7.519e-12   1.818e-16   2.175e-10  -1.178e-10  -1.277e-16
-    11   3.972e-12   1.851e-14  -7.741e-18  -5.347e-13   1.145e-10  -1.277e-16
+    11   3.972e-12   1.851e-14  -7.740e-18  -5.347e-13   1.145e-10  -1.277e-16
     12  -3.101e-02   3.158e-03   6.083e-06  -1.804e-07  -7.664e-04  -1.846e-02
   MODE     4:   f= 9.477547 Hz,  T= 0.105513 sec
 		X- modal participation factor =   3.3055e-02 

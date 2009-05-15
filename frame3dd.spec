@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20090417
+Version:	0.20090515
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -67,6 +67,14 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Fri May 15 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090515
+- Fixed bug in post-processor for deformed beam shapes
+This bug fix is in lines 2668 - 2694 (function bent_beam) in frame3dd_io.c
+- re-ran example files
+
+* Fri Apr 17 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090417
+- Re-ran examples with April 17 2009 build
+ 
 * Fri Apr 17 2009 John Pye <john.pye@anu.edu.au> 0.20090417
 - Removed LinuxCommand PDF link in documentation.
 - Removed little cmd prompt icons from documentation.
@@ -91,7 +99,7 @@ command line option is now an easier and better way to specify
 - Fixed bug related to "-q" flag and verbose output on line 1274 of frame3dd_io.c
 - Added checks related to incorrect command-line arguments.
 - Added an evaluation/interpretation of RMS relative equilibrium precision
-  within the code and updated the documentation.
+within the code and updated the documentation.
 
 * Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304 
 - Fixed fprintf format character in save_ivector()
@@ -99,7 +107,7 @@ command line option is now an easier and better way to specify
 
 * Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304 
 - Fixed bug in multi-load case nonlinear analysis in main.c line 410
-  ... Iteration termination criteria must be reset at the start of each iteration.
+... Iteration termination criteria must be reset at the start of each iteration.
 - Change snprintf to sprintf in frame3dd_io.c for DJGPP compatability
 - Added #include <time.h> in nrutil.c for DJGPP compatability
 
@@ -111,12 +119,12 @@ command line option is now an easier and better way to specify
 
 * Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304
 - Implement command line parsing using the getopt function
-  ... using getopt for ease of portability.
+... using getopt for ease of portability.
 - Added functions to frame3dd_io.c:
-  parse_options() --- calls getopt
-  display_help() 
-  display_usage()
-  display_version()
+parse_options() --- calls getopt
+display_help() 
+display_usage()
+display_version()
 - Updated documentation with command-line syntax ... doc/user-manual.html
 
 * Tue Mar 3 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090303
@@ -124,7 +132,7 @@ command line option is now an easier and better way to specify
 
 * Mon Mar 2 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090302
 - Usage change from "frame3dd InputData.frm" to "frame3dd
-  InputData.frm OutputData.out"
+InputData.frm OutputData.out"
 - output information regarding number of loading types is now more clear
 - updated examples B and E with trapezoidal loads
 - updated documentation and README

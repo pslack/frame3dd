@@ -1,12 +1,12 @@
 ________________________________________________________________________________
-FRAME3DD version: 20090417               http://frame3dd.sf.net/
+FRAME3DD version: 20090515               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example C: a tetrahedral frame - static and dynamic analysis  
-Fri Apr 17 01:09:44 2009
+Fri May 15 16:30:18 2009
 ________________________________________________________________________________
 18 JOINTS;    48 MEMBERS;    1 LOAD CASES;  4 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
@@ -238,7 +238,7 @@ R E A C T I O N S							(global)
      3     277.588     -60.754     -77.526       0.0         0.0         0.0  
     16   -2356.423    2544.001     131.983       0.0         0.0         0.0  
     18     241.854       7.943     -28.094       0.0         0.0         0.0  
-R M S   E Q U I L I B R I U M    E R R O R: 1.354e-15
+R M S   E Q U I L I B R I U M    E R R O R: 1.326e-15
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  5.528365e-02     Structural Mass:  5.528365e-02 
