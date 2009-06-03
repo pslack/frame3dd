@@ -1,11 +1,11 @@
 rm *.out
-frame3dd -i exA.frm -o exA.out 
-frame3dd -i exB.frm -o exB.out 
-frame3dd -i exC.frm -o exC.out 
-frame3dd -i exD.frm -o exD.out 
-frame3dd -i exE.frm -o exE.out 
-frame3dd -i exF.frm -o exF.out 
-frame3dd -i exG.frm -o exG.out 
-frame3dd -i exH.frm -o exH.out 
-frame3dd -i exI.frm -o exI.out 
-frame3dd -i exJ.frm -o exJ.out 
+frame3dd -i exA.3dd -o exA.out 
+frame3dd -i exB.3dd -o exB.out 
+frame3dd -i exC.3dd -o exC.out 
+frame3dd -i exD.3dd -o exD.out 
+frame3dd -i exE.3dd -o exE.out 
+frame3dd -i exF.3dd -o exF.out 
+frame3dd -i exG.3dd -o exG.out 
+frame3dd -i exH.3dd -o exH.out 
+frame3dd -i exI.3dd -o exI.out 
+frame3dd -i exJ.3dd -o exJ.out 

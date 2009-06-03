@@ -59,7 +59,7 @@ Duke University</a> - Box 90287,
 
 <p><b>Frame3DD</b> is executed from the <a href="http://en.wikipedia.org/wiki/Windows_command_line">command prompt</a> (Windows) or <a href="http://en.wikipedia.org/wiki/Unix_shell">shell</a> (Linux) or <a href="http://www.macdevcenter.com/pub/a/mac/2001/12/14/terminal_one.html">terminal</a> (Mac), as follows, with filenames changed as required:
 <pre>
-  frame3dd inputfile.frm outputfile.txt
+  frame3dd inputfile.3dd outputfile.txt
 </pre>
 </p>
 
@@ -138,9 +138,9 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li>Read the User Manual and Reference (this file).
 <li>Download or build the Frame3DD executable for your operating system (see below).
 <li>Optionally, obtain a copy of Gnuplot for your operating system.
-<li>Copy one of the example input data files (eg <tt>exA.frm</tt>) into your home directory.
+<li>Copy one of the example input data files (eg <tt>exA.3dd</tt>) into your home directory.
 <li>       Open a terminal window and run the program using the command
-	  <tt>frame3dd  exA.frm  exA.out</tt> (change the filenames <tt>exA.frm</tt> and <tt>exA.out</tt> as necessary).
+	  <tt>frame3dd  exA.3dd  exA.out</tt> (change the filenames <tt>exA.3dd</tt> and <tt>exA.out</tt> as necessary).
 	<li>Open the output data file using your text editor and view the output data.
 <!--     Running this program will create many files.  Most of them are used
          for graphics and should be written to the  /tmp  directory.
@@ -234,8 +234,8 @@ and should work with minor changes on any other recent Linux or Unix system.
 	<li>Type <tt>export LD_LIBRARY_PATH=~/frame3dd-VERSION/build</tt>
 	<li>Type <tt>export PATH=$PATH:~/frame3dd-VERSION/build</tt>
 </ol>
-<li>Copy one of the frame3dd-VERSION/examples/*.frm files, eg <tt>exA.frm</tt> into your home directory and make sure you have write-privileges for the file.
-<li>Type <tt>frame3dd  exA.frm  exA.out</tt> to run Frame3dd.
+<li>Copy one of the frame3dd-VERSION/examples/*.3dd files, eg <tt>exA.3dd</tt> into your home directory and make sure you have write-privileges for the file.
+<li>Type <tt>frame3dd  exA.3dd  exA.out</tt> to run Frame3dd.
 <li>Data files used primarly for plotting are in temporary directories.
 The main report output will have been written to the <tt>exA.out</tt> file.
 <li>       The graphical output is viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, which can be installed using <tt>sudo apt-get install gnuplot</tt>.
@@ -274,7 +274,7 @@ For Microsoft Windows, we provide a binary installer for Frame3dd. Use the follo
 <ol>
 <li><a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">Download</a> and run the binary installer.
 <li>Use the Start menu to access README information and this documentation.
-<li>Copy one or more of the example files (eg <tt>exA.frm</tt>) from your <tt>Program Files\FRAME3DD\examples</tt> folder into your <tt>My Documents</tt> folder
+<li>Copy one or more of the example files (eg <tt>exA.3dd</tt>) from your <tt>Program Files\FRAME3DD\examples</tt> folder into your <tt>My Documents</tt> folder
 <li>Add FRAME3DD to your path as follows:
 <ol>
 	<li>Open a 'cmd' prompt
@@ -283,7 +283,7 @@ For Microsoft Windows, we provide a binary installer for Frame3dd. Use the follo
 </ol>
 <li>Optionally, set a location for your output files using <tt>set FRAME3DD_OUTDIR=c:\path\to\output\files</tt> (using a path of your choice).
 <li>Change to your documents directory using <tt>cd %HOMEPATH%\My Documents</tt>
-<li>Run Frame3dd using <tt>frame3dd.exe  exA.frm  exA.out</tt>
+<li>Run Frame3dd using <tt>frame3dd.exe  exA.3dd  exA.out</tt>
 <li>Use Gnuplot to view the graphical output:
 <ol>
 <li>Download the <a href="http://downloads.sourceforge.net/gnuplot/gp424win32.zip">
@@ -322,8 +322,8 @@ For OS X running on a PowerPC (PPC) or Intel processor.
 <ol>
 <li>        Download the <b>Frame3DD</b> application and save as "frame3dd" on your Desktop,
          or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/OSX-PPC/frame3dd">CTRL-CLICK-HERE-FOR-PPC</a> | <a href="OSX-Intel/frame3dd">CTRL-CLICK-HERE-FOR-INTEL</a> |
-<li>        Download and save an example Input Data file, such as <tt>exA.frm</tt>,
-         on your Desktop, or some other directory:<br> | <a href="../examples/exA.frm">CTRL-CLICK-HERE</a> |
+<li>        Download and save an example Input Data file, such as <tt>exA.3dd</tt>,
+         on your Desktop, or some other directory:<br> | <a href="../examples/exA.3dd">CTRL-CLICK-HERE</a> |
 <li>        Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
             <tt>...$   cd ~/Desktop</tt><br>
             <tt>...$   chmod +x frame3dd</tt><br>
@@ -333,13 +333,13 @@ For OS X running on a PowerPC (PPC) or Intel processor.
          Quit the Terminal application.  [APPLE] [Q]
 <li>        Run <b>Frame3DD</b> from a Terminal window:  (Applications > Utilities > Terminal) ... <br>
             <tt>...$   cd ~/Desktop</tt><br>
-            <tt>...$   frame3dd  example.frm  example.out</tt><br>
-         where <tt>example.frm</tt> is the name of your Input Data file.
+            <tt>...$   frame3dd  example.3dd  example.out</tt><br>
+         where <tt>example.3dd</tt> is the name of your Input Data file.
 <!-- <li>        Run <b>Frame3DD</b> from a Terminal window  (another way).
              Click on the <b>frame3dd</b> icon in your Desktop.
              A Terminal window should automatically open.
              When asked for the Input/Output file name, type ...<br>
-               <tt>/Users/your_name_here/Desktop/examples/exA.frm</tt> -->
+               <tt>/Users/your_name_here/Desktop/examples/exA.3dd</tt> -->
 <li>     You may edit Input Data files using a plain text editor
 (<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,
 TextEdit (Applications > TextEdit),
@@ -400,8 +400,8 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
  <ul>
  <li>the GUI executeable, Frame_Ed.exe
  <li>the frame analysis executeable, Frame3d.exe, for the 20020103 version
- <li>an example input file, exG.frm, for the 20020103 version
- <li>a template for the input data file, ex2002.frm, for the 20020103 version
+ <li>an example input file, exG.3dd, for the 20020103 version
+ <li>a template for the input data file, ex2002.3dd, for the 20020103 version
  </ul>
 <p>
  Differences between the 2002 and the current versions of <b>Frame3DD</b> are:
@@ -967,8 +967,8 @@ Multiple static load cases are generated by specifying
 <a href="#Variables">the variable nL</a>
 in the
 <a href="#InputData">Input Data</a>, and by specifying the six types of loads for each load case,
-as shown in <a href="../examples/exA.frm">Example A</a> and
-<a href="../examples/exB.frm">Example B</a>.
+as shown in <a href="../examples/exA.3dd">Example A</a> and
+<a href="../examples/exB.3dd">Example B</a>.
 </p>
 
 <h3> 7.9 Dynamic Modal Analysis </h3>
@@ -1156,7 +1156,7 @@ frequency convergence tolerance.  The frequency convergence error is defined her
 
 <a name="InputData"><h2>9. Input Data Format</h2>
 <p>
-Click <a href="template.frm">here</a> to download an Input Data template, template.frm, or cut-and-paste the text below.
+Click <a href="template.3dd">here</a> to download an Input Data template, template.3dd, or cut-and-paste the text below.
 </p>
 </a>
 

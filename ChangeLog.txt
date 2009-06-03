@@ -1,3 +1,7 @@
+* Wed Jun 3 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090515
+- Changed all .frm file extensions to .3dd file extensions
+- Entered frame3dd (.3dd) file extensions on filext.com
+
 * Fri May 15 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090515
 - Fixed bug in post-processor for deformed beam shapes
 This bug fix occurs in lines 2668 - 2694 (function bent_beam) in frame3dd_io.c

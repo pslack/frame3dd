@@ -1,0 +1,61 @@
+TrapTest - test the implementation of trapezoidally distributed loads
+
+% joint data ...
+2						% number of joints
+%.joint x       y       z       r
+  1     0       0       0       0
+  2  1000       0       0       0
+
+% reaction data ...
+1					       % number of joints with reactions
+% J[1]	Rx[1]	Ry[1]	Rz[1]	Rxx[1]	Ryy[1]	Rzz[1]
+    1     1     1       1       1       1       1  % 0:free, 1:fixed
+
+% beam element property data ...
+1						% number of beam elements 
+					    % member numbers, loc'ns, and prop's
+% M[1] J1[1]J2[1] Ax[1]  Asy[1]  Asz[1]  Jp[1]  Iy[1]  Iz[1]   E[1]  G[1]  p[1]
+   1    1    2    622.22  310.3  310.3   4.5e5  2.27e5 2.27e5  29000  11500   0
+
+
+1					% 1: include shear deformation
+0					  % 1: include geometric stiffness
+10					  % exaggerate mesh deformations
+1				     % 1: stiffness analysis, 0: data check only
+
+% load data ...
+2						% number of static load cases
+% Begin Static Load Case 1
+0						       % number of loaded joints
+
+1					   % number of uniform distributed loads
+%  M[1]	Ux[1]	Uy[1]	Uz[1]
+   1    1       1       1
+
+0				     % number of trapezoidally distributed loads
+0					    % number of concentrated point loads
+0					 % number of members temperature changes
+0		         % number of joints with prescribed displacements nD<=nR
+% End Static Load Case 1
+
+% Begin Static Load Case 2
+0						       % number of loaded joints
+
+0					   % number of uniform distributed loads
+
+1				     % number of trapezoidally distributed loads
+% M[1]  xx1[1]  xx2[2]  wx1[1]  wx2[1]  % loads in the local x-axis
+%       xy1[1]  xy2[2]  wy1[1]  wy2[1]  % loads in the local y-axis
+%       xz1[1]  xz2[2]  wz1[1]  wz2[1]  % loads in the local z-axis
+   1    500    1000    1.8     1.0
+        500    1000    1.8     1.0
+        500    1000    1.8     1.0
+
+0					    % number of concentrated point loads
+0					 % number of members temperature changes
+0		         % number of joints with prescribed displacements nD<=nR
+% End Static Load Case 2
+
+% dynamic analysis data ...
+0					              % number of desired modes
+

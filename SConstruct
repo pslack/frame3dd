@@ -203,8 +203,8 @@ env.SConscript('build/test/SConscript',['env'])
 # install example files
 
 examples = Split("""
-	exA.frm  exC.frm  exE.frm  exG.frm  exI.frm
-	exB.frm  exD.frm  exF.frm  exH.frm  
+	exA.3dd  exC.3dd  exE.3dd  exG.3dd  exI.3dd
+	exB.3dd  exD.3dd  exF.3dd  exH.3dd  
 """)
 
 datadir=Dir(env.subst("$INSTALL_ROOT$INSTALL_FRAMEDATA"))

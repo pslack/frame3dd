@@ -183,7 +183,7 @@ int main ( int argc, char *argv[] ) {
 
 	filetype = get_file_ext( IN_file, extn ); /* .CSV or .FMM or other? */
 
-	temp_file_location("frame3dd.frm",temppath,FRAME3DD_PATHMAX);
+	temp_file_location("frame3dd.3dd",temppath,FRAME3DD_PATHMAX);
 
 	parse_input(fp, temppath);	/* strip comments from input data */
 	fclose(fp);

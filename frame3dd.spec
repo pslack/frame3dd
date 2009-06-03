@@ -67,10 +67,14 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Wed Jun 3 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090515
+- Changed all .frm file extensions to .3dd file extensions
+- Entered frame3dd (.3dd) file extensions on filext.com
+
 * Fri May 15 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090515
 - Fixed bug in post-processor for deformed beam shapes
-This bug fix is in lines 2668 - 2694 (function bent_beam) in frame3dd_io.c
-- re-ran example files
+This bug fix occurs in lines 2668 - 2694 (function bent_beam) in frame3dd_io.c
+- Re-ran example with May 15 2009 build
 
 * Fri Apr 17 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090417
 - Re-ran examples with April 17 2009 build
