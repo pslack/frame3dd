@@ -26,7 +26,7 @@ FRAME3DD on windows as follows:
   cd %HOMEPATH%\frame3dd
   set PATH=%PATH%;%PROGRAMFILES%\FRAME3DD
   set FRAME3DD_OUTDIR=%HOMEPATH%\frame3dd
-  frame3dd exA.frm
+  frame3dd exA.3dd
 
 After running FRAME3DD in this way, all your output files will be located 
 in the the directory
