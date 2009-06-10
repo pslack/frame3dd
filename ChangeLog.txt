@@ -1,3 +1,7 @@
+* Wed Jun 10 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090515
+- Small website tweaks ... font sizes, tabular layout,
+- Trying to promote frame3dd.sourceforge.net in Google searches for '3d Frame'
+
 * Wed Jun 3 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090515
 - Changed all .frm file extensions to .3dd file extensions
 - Registered frame3dd (.3dd) file extensions on filext.com
