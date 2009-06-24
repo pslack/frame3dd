@@ -1,6 +1,6 @@
 Import('env')
 
-if env.get('SOQT_LIBS'):
+if env.get('HAVE_SOQT'):
 	v_env = env.Clone()
 
 	v_env.AppendUnique(

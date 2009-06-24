@@ -84,6 +84,10 @@ int main(int argc, char **argv){
 
 	fprintf(stderr,"Loading model...\n");
 	p = parseCreateFile(modelfile);
+	if(!p){
+		fprintf(stderr,"\nERROR: Failed to load model file '%s'\n", modelfile);
+		return 1;
+	}
 	model *m;
 	if(parseModelMicrostran(p,&m)){
 		fprintf(stderr,"\nParsed OK\n%d nodes, %d members, %d section properties, %d materials read.\n"

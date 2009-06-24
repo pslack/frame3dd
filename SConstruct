@@ -1,3 +1,4 @@
+#!/usr/bin/python SCons
 """	FRAME: Static and dynamic structural analysis of 2D & 3D frames and trusses
 	Copyright (C) 1992-2007  Henri P. Gavin
 
@@ -15,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-version = '0.20090515'
+version = '0.20090624'
 
 import platform
 deftools = ['default']
@@ -155,12 +156,50 @@ def CheckCppUnitConfig(context):
 	context.Result(res)
 	return res
 
+#--------
+# SOQT
+
+soqt_test_code = """
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
+#include <Inventor/nodes/SoCube.h>
+
+int main(int argc, char **argv){
+	QWidget * mainwin = SoQt::init(argv[0]);
+	SoCube * cube = new SoCube;
+   return 0;
+}
+"""
+	
+def CheckSoQt(context):
+	context.Message("Checking for SoQt... ")
+	if not context.env.get("SOQT_LIBS"):		
+		context.Result(False)
+		return False
+	old_env = context.env.Clone()
+	context.env.Append(
+		CPPPATH = env.get('SOQT_CPPPATH')
+		, LIBS = env.get('SOQT_LIBS')
+		, LIBPATH = env.get('SOQT_LIBPATH')
+		, CPPDEFINES = env.get('SOQT_CPPDEFINES')
+	)
+	res = context.TryLink(soqt_test_code,".cpp")
+	context.Result(res)
+	for i in ['LIBS','CPPPATH','LIBPATH','CPPDEFINES']:
+		if old_env.get(i) is not None:
+			context.env[i] = old_env[i]
+		else:
+			del context.env[i]
+	return res
+
+#-------------------------------------------------------------------------------
 conf = Configure(env
 	, custom_tests = { 
 		'CheckGcc' : CheckGcc
 		, 'CheckGccVisibility' : CheckGccVisibility
 		, 'CheckCppUnitConfig' : CheckCppUnitConfig
-	} 
+		, 'CheckSoQt' : CheckSoQt
+	}
 )
 
 if conf.CheckGcc():
@@ -173,6 +212,8 @@ if conf.CheckGcc():
 
 if conf.CheckCppUnitConfig():
 	conf.env['HAVE_CPPUNIT']=True;
+
+env['HAVE_SOQT'] = conf.CheckSoQt()
 
 #-------------
 # documentation
@@ -254,5 +295,4 @@ if platform.system()=="Windows":
 
 env.Default(env['PROGS'] + specfile)
 
-
-# vim: set syntax=python
+# vim: set syntax=python :

@@ -143,7 +143,7 @@ int main(int argc, char **argv){
 	p = parseCreateFileName(filename);
 
 	if(!parseModelMicrostran(p,&M)){
-		fprintf(stderr,"Failed to parse microstran model!\n");
+		fprintf(stderr,"Failed to parse microstran model '%s'!\n", filename);
 		exit(3);
 	}
 

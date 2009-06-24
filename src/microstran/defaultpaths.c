@@ -17,7 +17,7 @@ const char *get_default_data_path(){
 	static char value[MAXLEN];
 	res = RegOpenKeyEx(FRAME3DD_REGKEY_ROOT, FRAME3DD_REGKEY_MAIN, 0L, KEY_QUERY_VALUE, &key);
 	if(res==ERROR_SUCCESS){
-		res = RegQueryValueEx(key, "DATA_DIR", NULL, &datatype, value, &len);
+		res = RegQueryValueEx(key, "Install_Dir", NULL, &datatype, value, &len);
 		if(res==ERROR_SUCCESS){
 			RegCloseKey(key);
 			return value;

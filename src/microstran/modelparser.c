@@ -474,6 +474,9 @@ cbool parseModelMicrostran(parse *p, model **a){
 	unsigned version, type, vert;
 	unit_stmt unit;
 	model *a1 = NULL;
+
+	if(!p)return fail;
+
 #define ASSIGN(Z) 1
 	return (
 		parseNumericLine(p,"VERS",&version) //&& assign(fprintf(stderr,"VERS %d\n",version))
