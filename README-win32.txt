@@ -36,6 +36,33 @@ c:\Documents and Setttings\yourname\frame3dd
 (providing you have edited the input files so that they do not specify
 absolute paths).
 
+NOTES ON THE VIEWER PROGRAM
+---------------------------
+
+This installer includes a viewer for Microstran .ARC files. For this
+viewer to run correctly, you must do a bit of work.
+
+1. Install QT 4.3.3.
+2. Install Coin3D 2.5.0
+3. Install SoQT 1.3
+
+The above installers are accessible via the following web page:
+http://ascendwiki.cheme.cmu.edu/Binary_installers_for_Coin3d_and_SoQt_on_MinGW
+
+4. Get the mingwm10.dll DLL file from the following archive, and copy it into
+your c:\Program Files\FRAME3DD folder.
+
+http://sourceforge.net/project/downloading.php?group_id=2435&filename=mingwrt-3.15.2-mingw32-dll.tar.gz
+
+5. Set your PATH to contain the DLL folders for the packages in steps 1 
+   to 3. Depending on where you installed everything, this could be:
+   
+   c:\QT\4.3.3\bin;c:\Program Files\Coin3D-2.5.0\bin;c:\Program Files\SoQt-1.4.1
+   
+After performing these steps, you should be able to double-click on an ARC 
+file and it should display in a viewer window.
+
 -- 
 John Pye
-Feb 2009.
+http://pye.dyndns.org/ (<-- contact details here)
+Jun 2009.
