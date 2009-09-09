@@ -446,24 +446,24 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 %          row 3 = Z-axis coordinate  for each joint
 %          row 4 = rigid radius       for each joint
 %
-%  JTS : a 2xB matrix indicating which 2 joints each beam element connects
-%          row 1 = the 'starting' joint  for each beam
-%          row 2 = the 'ending'   joint  for each beam
+%  JTS : a 2xB matrix indicating which 2 joints each frame element connects
+%          row 1 = the 'starting' joint  for each frame element
+%          row 2 = the 'ending'   joint  for each frame element
 %
 %  RCT : a 6xJ matrix indicated which joints have reactions
 %        0: the joint has no reaction in that degree of freedom,
 %        1: the joint does have a reaction in that degree of freedom.
 %
-% EAIJ : a 9xB containing the section and modulus properties of each beam
-%         row 1 = Ax  cross section area                   for each beam
-%         row 2 = Asy shear area y-direction               for each beam
-%         row 3 = Asz shear area z-direction               for each beam
-%         row 4 = Jxx torsional moment of inertia - x axis for each beam
-%         row 5 = Iyy bending moment of inertia - y axis   for each beam
-%         row 6 = Izz bending moment of inertia - z axis   for each beam
-%         row 7 = E   elastic modulus                      for each beam
-%         row 8 = G   shear   modulus                      for each beam
-%         row 9 = p   roll angle                           for each beam
+% EAIJ : a 9xB containing the section and modulus properties of each frame el.
+%         row 1 = Ax  cross section area                   for each frame el.
+%         row 2 = Asy shear area y-direction               for each frame el.
+%         row 3 = Asz shear area z-direction               for each frame el.
+%         row 4 = Jxx torsional moment of inertia - x axis for each frame el.
+%         row 5 = Iyy bending moment of inertia - y axis   for each frame el.
+%         row 6 = Izz bending moment of inertia - z axis   for each frame el.
+%         row 7 = E   elastic modulus                      for each frame el.
+%         row 8 = G   shear   modulus                      for each frame el. 
+%         row 9 = p   roll angle                           for each frame el.
 %
 %    P : a 6xJ matrix containing the components of the external
 %        forces and moments applied to each joint.
@@ -474,15 +474,15 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 %          row 5 = Joint Moment about Y-axis     for each joint
 %          row 6 = Joint Moment about Z-axis     for each joint
 %
-%    W : a 3xB matrix containing the unif. dist. load on each beam element
+%    W : a 3xB matrix containing the unif. dist. load on each frame element
 %    D : a 6xJ matrix of prescribed displacements at the reaction DoF's
 %
 % OUTPUT DATA:
 %
 %    D : a 6xJ matrix   of the deflections and rotations of each joint
 %    R : a 6xJ matrix   of the reaction forces and moments
-%    F : a 12xB matrix  of the end forces of each beam element
-%    L : a 1xB vector   of the length of each beam element
+%    F : a 12xB matrix  of the end forces of each frame element
+%    L : a 1xB vector   of the length of each frame element
 %   Ks : a 6Jx6J matrix of the structural stiffness matrix
 </pre>
 </p>
@@ -651,9 +651,9 @@ global <i>X</i>, <i>Y</i>, and <i>Z</i> axes.
 Optionally,
 joints may be modeled as "rigid" within a sphere of radius <i>r</i>.
 The effects of finite joint sizes are modeled approximately
-in the calculation of beam stiffness
+in the calculation of the frame element stiffness
 through the use of an <i>effective beam length</i>, which is the joint-to-joint
-length of the beam less the rigid radii on each end.
+length of the frame element less the rigid radii on each end.
 </p>
 
 <p>
@@ -672,10 +672,10 @@ computed and are appended to the Output Data file.
 
 
 <p>
-Cross-sectional properties of beams and bars are specified in a local
+Cross-sectional properties of frame elements are specified in a local
 coordinate system, in which the <i>x</i>-axis of the local coordinate system
-is oriented along the axis of the beam or bar element.  <i>Ax</i> is the
-cross-sectional area of the beam or bar, which is given as the area
+is oriented along the axis of the frame element.  <i>Ax</i> is the
+cross-sectional area of the frame element, which is given as the area
 perpendicular to its local <i>x</i>-axis.   The local <i>y</i>-axis and <i>z</i>-axis are aligned
 with the principle directions of the cross section.  The bending moments
 of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of inertia for the cross section.
@@ -683,8 +683,8 @@ of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of iner
 
 <!--
 <p>
-     The beam cross section shapes are assumed to be symmetric about
-     both the local <i>Y</i>-axis and the local <i>Z</i>-axis.  By 'rolling' the beam about
+     The frame element cross section shapes are assumed to be symmetric about
+     both the local <i>Y</i>-axis and the local <i>Z</i>-axis.  By 'rolling' the frame element about
      the local <i>x</i>-axis, however,  transverse loads in the local <i>y</i>-direction can
      cause bending about both the <i>Z</i>-axis and the <i>Y</i>-axis and shear deformation
      in both the <i>Y</i>-direction and <i>Z</i>-direction.
@@ -692,7 +692,7 @@ of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of iner
 -->
 
 <p>
-When a beam or bar element is placed into the structure
+When a frame element is placed into the structure
 it is translated and rotated and optionally rolled about its local <i>x</i>-axis.
 By allowing the frame element to be
 'rolled' about its local <i>x</i>-axis during the stiffness matrix assembly process,
@@ -707,14 +707,14 @@ made entirely of elements for which <i>Iyy=Izz</i>, i.e., square and circular cr
 
 <p>
 Coordinate transformations do not currently consider the effect of
-finite joint sizes, and are based on joint-to-joint lengths of beam elements.
+finite joint sizes, and are based on joint-to-joint lengths of frame elements.
 </p>
 
 <p>
-     The default coordinate transformation process starts with the beam
+     The default coordinate transformation process starts with the frame 
      element's centroidal axis placed along the global <i>X</i>-axis, and the principle
-     axes of the cross section are aligned with the global <i>Y</i>- and <i>Z</i>-axes.
-     To place the beam in the structure, first it is rotated about the
+     axes of the cross section (the local <i>x</i> and <i>y</i> axes) are aligned with the global <i>Y</i>- and <i>Z</i>-axes.
+     To place the frame element in the structure, first it is rotated about the
      global <i>Y</i>-axis, then about the global <i>Z</i>-axis, then 'rolled' or spun
      about the local <i>x</i>-axis.   If the roll angle is zero, this process results
      in a transformation for which loads in the global <i>Z</i>-direction will cause no
@@ -724,18 +724,24 @@ finite joint sizes, and are based on joint-to-joint lengths of beam elements.
 </p>
 
 <p>
-     An alternative, more customary, coordinate transformation process is also
-     implemented in the software.  In the alternative coordinate transformation
-     process, the beam is first rotated about the global <i>Z</i>-axis, then about the
-     global <i>Y</i>-axis, then rolled about the local <i>x</i>-axis.  If the roll angle is zero,
-     this transformation results in a beam with no cross-axis bending due to
-     loads are applied in the global <i>Y</i>-direction.   In the code, this type of
-     transformation is called "<i>Y</i>-axis is vertical."   Again, for planar structures,
-     with no out-of-plane bending, which lie in the global <i>X-Y</i>, <i>Y-Z</i>, or <i>X-Z</i> planes,
-     and for structures made entirely of bars with Iyy=Izz, the details of the
-     coordinate transformation procedure do not matter.
-     For a derivation of the alternative coordinate transformation method, refer
-     to section 8.3 of the textbook <i>Matrix Analysis of Structures</i>
+Another, more customary, coordinate transformation process is also
+implemented in the software.  
+In the alternative coordinate transformation process, the frame element
+is first rotated about the global <i>Z</i>-axis, then about the
+global <i>Y</i>-axis, then rolled about the local <i>x</i>-axis.  
+If the roll angle is zero,
+this transformation results in a frame element with no cross-axis bending due to
+loads are applied in the global <i>Y</i>-direction.   In the code, this type of
+transformation is called "<i>Y</i>-axis is vertical."   
+</p>
+
+<p>
+Again, for planar structures,
+with no out-of-plane bending, which lie in the global <i>X-Y</i>, <i>Y-Z</i>, or <i>X-Z</i> planes,
+and for structures made entirely of bars with Iyy=Izz, the details of the
+coordinate transformation procedure do not matter.
+For a derivation of the alternative coordinate transformation method, refer
+to section 8.3 of the textbook <i>Matrix Analysis of Structures</i>
 by A. Kassimali.
 </p>
 
@@ -858,9 +864,9 @@ low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>.
 Beams may be considered infinitely rigid within a sphere of a specified radius,
 <i>r</i> around a joint.
 The effects of finite joint sizes are modeled approximately
-in the calculation of beam stiffness
+in the calculation of frame element stiffness
 through the use of an <i>effective beam length</i>, which is the joint-to-joint
-length of the beam less the rigid radii on each end.
+length of the frame element less the rigid radii on each end.
 </p>
 
 
@@ -889,8 +895,8 @@ load.
 <p>
 If geometric stiffness effects are included in the analysis and if the loads
 are close to the buckling load of the structure, then it is recommended to put
-two or three joints along each beam element.  (i.e. divide each beam element
-into three or four beam segments).   Including these extra joints is strongly
+two or three joints along each frame element.  (i.e. divide each frame element
+into three or four segments).   Including these extra joints is strongly
 recommended if a buckling analysis is to be performed.
 </p>
 
@@ -1058,22 +1064,56 @@ matrix is computed using a regularization method which somewhat improves the
 conditioning of the condensed mass and stiffness matrices.
 </p>
 
+<h3> 7.11 End Force Sign Convention</h3>
+
+<p>
+The frame element end forces listed in the Output data file adhere to a
+sign convention determined by the local coordinate system of the frame element.
+The local coordinate system of the frame element has its origin at joint 1 of the frame element.   
+The local <i>x</i> axis lies along the element, from joint 1 to joint 2.  
+The local <i>y</i> and <i>z</i> axes are aligned with the principle axes of the beam element.   
+The frame element end forces are designated as
+<i>Nx</i>, <i>Vy</i>, <i>Vz</i> for the axial force and end shears 
+in the local <i>y</i> and <i>z</i> directions; and 
+<i>Tx</i>, <i>My</i>, <i>Mz</i> for the torsional moment and bending moments
+about the local <i>y</i> and <i>z</i> axes.  
+The sign convention for frame element end forces is shown in the figure below.
+The double-headed arrows adhere to the "right hand rule."
+<img src="img/sign_convention.png" align="center" width="800" border="0"><br>
+</p>
+
+<p>
+The mathematical signs of the member end forces are 
+relative to the local <i>x-y-z</i> axes of the frame element
+and designate the direction of the force along those axes.  
+A positive <i>Nx</i> at joint 1
+of the member is compressive, while a negative <i>Nx</i> at joint 2 is also
+compressive.  The opposite is true for tension.
+The Output data lists a "t" or a "c" along with the axial forces (<i>Nx</i>)
+in order to help clarify whether the end force is putting the frame element
+into <b>t</b>ension or <b>c</b>ompression.  
+A frame element with positive <i>My</i> at joint 1 and a negative <i>My</i> at joint 2
+has positive curvature in the <i>x-z</i> plane.  
+A frame element with negative <i>Mz</i> at joint 1 and a positive <i>Mz</i> at joint 2
+has positive curvature in the <i>x-y</i> plane.  
+</p>
+
 <a name="numerical"/><h2>8. Numerical details</h2>
 
-
-<p>       Frame3DD imposes no limit on the number of degrees of freedom.
-       Dynamic memory allocation is accomplished by the public-domain routines
-       found in Press, W.H., et al,  <i>Numerical Recipes In C</i>, (Cambridge, England: Cambridge University Press, 1991).
+<p>
+Frame3DD imposes no limit on the number of degrees of freedom.
+Dynamic memory allocation is accomplished by the public-domain routines
+found in Press, W.H., et al,  <i>Numerical Recipes In C</i>, (Cambridge, England: Cambridge University Press, 1991).
 </p>
 
-
-
-<p>       Solutions of the matrix equation, <i>K d = f</i>, make use of LDL'
-       decomposition/back-substitution with sparse-matrix short-cuts and
-       iterative improvement for enhanced speed and accuracy.
+<p>
+Solutions of the matrix equation, <i>K d = f</i>, make use of LDL'
+decomposition/back-substitution with sparse-matrix short-cuts and
+iterative improvement for enhanced speed and accuracy.
 </p>
 
-<p> When the program is executed, various solution errors are displayed to the
+<p>
+When the program is executed, various solution errors are displayed to the
 screen and are written to the Output data file.   Iterative improvements
 to the LDL' back-substitution make use of a quasi Newton-Raphson method:<br>
 <div class=eq>K dD(i) = F - K D(i)</div>
@@ -1182,9 +1222,9 @@ nR                                     % number of joints with reactions
     :        :       :       :        :       :       :       % 0:free, 1:fixed
  J[nR]    Rx[nR]  Ry[nR]  Rz[nR]  Rxx[nR] Ryy[nR] Rzz[nR]
 
-% beam element data ...
-nB                                     % number of beam elements
-                                       % beam element numbers, loc'ns, and prop's
+% frame element data ...
+nB                                     % number of frame elements
+                                       % frame element numbers, loc'ns, and prop's
 M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jxx[1]  Iyy[1]  Izz[1]  E[1]  G[1]  p[1]
   :      :      :      :       :       :       :       :       :     :     :     :
 M[nB] J1[nB] J2[nB] Ax[nB] Asy[nB] Asz[nB] Jxx[nB] Iyy[nB] Izz[nB] E[nB] G[nB] p[nB]
@@ -1221,7 +1261,7 @@ nP                                         % number of concentrated point loads
     :        :       :       :      :      %  and x=distance from coordinate J1
   M[nP]   Px[nP]  Py[nP]  Pz[nP]  x[nP]
 
-nT                                 % number of beams with temperature changes
+nT                         % number of frame elements with temperature changes
   M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % element no.,
     :     :       :       :        :       :       :       :      % temp. coef.
   M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, & temps
@@ -1257,7 +1297,7 @@ nP                                         % number of concentrated point loads
     :        :       :       :      :      %  and x=distance from coordinate J1
   M[nP]   Px[nP]  Py[nP]  Pz[nP]  xP[nP]
 
-nT                                 % number of beams with temperature changes
+nT                          % number of frame elements with temperature changes
   M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % element no.,
     :     :       :       :        :       :       :       :      % temp. coef.
   M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, & temps
@@ -1279,7 +1319,7 @@ tol     %  frequency convergence tolerance  approx 1e-4
 shift   % frequency shift-factor for rigid body modes, make 0 for pos.def. [K]
 
  M[1]  d[1]  BMs[1]
-   :     :       :                           % beam density and extra beam mass
+   :     :       :         % frame element density and extra frame element mass
  M[nB] d[nB] BMs[nB]
 
 nI                          % number of joints with extra joint mass or inertia
@@ -1313,7 +1353,7 @@ nC                                                % number of condensed joints
                    (The x-axis is along the element length, in local coordinates)
        Asy       - Shear area in the local y-axis of a prismatic frame element
        Asz       - Shear area in the local z-axis of a prismatic frame element
-       BMs       - extra mass on a beam, not including self mass
+       BMs       - extra mass on a frame element, not including self mass
        Cmethod   -  matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
        cx        - 1: retain X d.o.f. in condensed system at joint J;  0: don't
        cy        - 1: retain Y d.o.f. in condensed system at joint J;  0: don't
@@ -1327,8 +1367,8 @@ nC                                                % number of condensed joints
        Dxx       - Prescribed rotation in the global X direction
        Dyy       - Prescribed rotation in the global Y direction
        Dzz       - Prescribed rotation in the global Z direction
-       d         - mass density of a beam element
-       E         - Modulus of elasticity of a beam element
+       d         - mass density of a frame element
+       E         - Modulus of elasticity of a frame element
        exagg     - Factor for exaggeration of the deformations in the plot
        Fx        - Joint load in the global X direction
        Fy        - Joint load in the global Y direction
@@ -1368,7 +1408,7 @@ nC                                                % number of condensed joints
        nT        - number of frame elements with Temperature changes
        nU        - number of uniformly distributed loads
        nW        - number of trapezoidally distributed loads
-       p         - the roll angle of the beam element, in degrees
+       p         - the roll angle of the frame element, in degrees
        pan       - the pan rate of the view point during animation
        Px        - concentrated point load in the local x direction
        Py        - concentrated point load in the local y direction
@@ -1551,7 +1591,7 @@ and possibly
 <li>       Dynamic time-history analysis with the HHT-alpha method
 <li>       Spectral modal superposition
 <li>       Member end joint releases
-<li>       Linearly tapered beam elements
+<li>       Linearly tapered frame elements
 <!-- <li>       Membrane elements  -->
 <!-- <li>       Plate elements   -->
 <li>       Sparse matrix storage and <a href="http://ascendwiki.cheme.cmu.edu/Survey_of_sparse_matrix_software">sparse matrix solvers</a>

@@ -11,24 +11,24 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %          row 3 = Z-axis coordinate  for each joint
 %          row 4 = rigid radius       for each joint     
 %
-%  JTS : a 2xB matrix indicating which 2 joints each beam element connects
-%          row 1 = the 'starting' joint  for each beam
-%          row 2 = the 'ending'   joint  for each beam
+%  JTS : a 2xB matrix indicating which 2 joints each frame element connects
+%          row 1 = the 'starting' joint  for each frame element 
+%          row 2 = the 'ending'   joint  for each frame element
 %
 %  RCT : a 6xJ matrix indicated which joints have reactions
 %        0: the joint has no reaction in that degree of freedom,
 %        1: the joint does have a reaction in that degree of freedom.
 %
-% EAIJ : a 9xB containing the section and modulus properties of each beam 
-%         row 1 = Ax  cross section area                   for each beam
-%         row 2 = Asy shear area y-direction               for each beam
-%         row 3 = Asz shear area z-direction               for each beam
-%         row 4 = Jxx torsional moment of inertia - x axis for each beam
-%         row 5 = Iyy bending moment of inertia - y axis   for each beam
-%         row 6 = Izz bending moment of inertia - z axis   for each beam
-%         row 7 = E   elastic modulus                      for each beam
-%         row 8 = G   shear   modulus                      for each beam
-%         row 9 = p   roll angle                           for each beam
+% EAIJ : a 9xB containing the section and modulus properties of each frame el.
+%         row 1 = Ax  cross section area                   for each frame el.
+%         row 2 = Asy shear area y-direction               for each frame el.
+%         row 3 = Asz shear area z-direction               for each frame el. 
+%         row 4 = Jxx torsional moment of inertia - x axis for each frame el.
+%         row 5 = Iyy bending moment of inertia - y axis   for each frame el.
+%         row 6 = Izz bending moment of inertia - z axis   for each frame el.
+%         row 7 = E   elastic modulus                      for each frame el.
+%         row 8 = G   shear   modulus                      for each frame el.
+%         row 9 = p   roll angle                           for each frame el.
 %         
 %    P : a 6xJ matrix containing the components of the external 
 %        forces and moments applied to each joint.
@@ -39,15 +39,15 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %          row 5 = Joint Moment about Y-axis     for each joint
 %          row 6 = Joint Moment about Z-axis     for each joint
 %
-%    U : a 3xB matrix containing the unif. dist. load on each beam element
+%    U : a 3xB matrix containing the unif. dist. load on each frame element
 %    D : a 6xJ matrix of prescribed displacements at the reaction DoF's
 %
 % OUTPUT DATA:
 %
 %    D : a 6xJ matrix   of the deflections and rotations of each joint
 %    R : a 6xJ matrix   of the reaction forces and moments 
-%    F : a 12xB matrix  of the end forces of each beam element 
-%    L : a 1xB vector   of the length of each beam element 
+%    F : a 12xB matrix  of the end forces of each frame element 
+%    L : a 1xB vector   of the length of each frame element 
 %   Ks : a 6Jx6J matrix of the structural stiffness matrix 
 %
 % http://frame3dd.sourceforge.net/
@@ -98,7 +98,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
   end
 
   [x,J] = size(XYZ);                    % number of joints
-  [x,B] = size(JTS);                    % number of beam elements
+  [x,B] = size(JTS);                    % number of frame elements
 
   % --- error checking
 
@@ -106,13 +106,13 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
      error('The dimension of RCT must be 6 by # of joints.')
   end
   if any(~(size(EAIJ)==[9,B]))
-     error('The dimension of EAIJ must be 9 by # of beams.')
+     error('The dimension of EAIJ must be 9 by # of frame elements.')
   end
   if any(~(size(P)==[6,J]))
      error('The dimension of P must be 6 by # of joints.')
   end
   if any(~(size(U)==[3,B]))
-     error('The dimension of U must be 3 by # of beams.')
+     error('The dimension of U must be 3 by # of frame elements.')
   end
   if any(EAIJ) <= 0
      error('All elements of EAIJ must be greater than zero.')
@@ -143,8 +143,8 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
   end
   fprintf(fp,'\n');
 
-  fprintf(fp,'%% beam section property data ...\n');
-  fprintf(fp,'%d\t\t%% number of beam elements\n', B);
+  fprintf(fp,'%% frame element section property data ...\n');
+  fprintf(fp,'%d\t\t%% number of frame elements\n', B);
   fprintf(fp,'%% m\tj1\tj2\t\tAx\t\tAsy\t\tAsz\t\tJxx\t\tIyy\t\tIzz\t\tE\t\tG\t\tp\n');
   for b=1:B
       fprintf(fp,'%d\t%d\t%d\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n', ...
@@ -216,7 +216,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
  
   fclose(fp);			% close the frame3dd input file
 
-  % compute lengths of each beam element
+  % compute lengths of each frame element
   L = zeros(1,B);
   for b=1:B
       j1 = JTS(1,b);                          % joint 1 of bar b

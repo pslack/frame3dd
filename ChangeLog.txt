@@ -1,3 +1,6 @@
+* Tue Sep 08 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090908
+- Update user-manual.html with notes on end force sign convention
+
 * Wed Jun 24 2009 John Pye <john.pye@anu.edu.au> 0.20090624
 - SoQT detection for SCons script.
 - Fix error with runtime location of 'properties.txt' script.
