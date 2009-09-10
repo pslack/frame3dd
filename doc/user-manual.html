@@ -562,13 +562,13 @@ Sections of an example results spreadsheet are shown below.<br>
 <img src="img/CSV1.png" align="center" border="0"><br>
 This example has three load cases.  <br> <br>
 Displacements for load case 1 start at row 21 and end at row 25.<br>
-Beam end forces for load case 1 start at row 28 and end at row 35.<br>
+Frame element end forces for load case 1 start at row 28 and end at row 35.<br>
 Reaction forces for load case 1 start at row 38 and end at row 42.<br><br>
 Displacements for load case 2 start at row 49 and end at row 53.<br>
-Beam end forces for load case 2 start at row 56 and end at row 63.<br>
+Frame element end forces for load case 2 start at row 56 and end at row 63.<br>
 Reaction forces for load case 2 start at row 66 and end at row 70.<br><br>
 Displacements for load case 3 start at row 77 and end at row 81.<br>
-Beam end forces for load case 3 start at row 84 and end at row 91.<br>
+Frame element end forces for load case 3 start at row 84 and end at row 91.<br>
 Reaction forces for load case 3 start at row 94 and end at row 98.<br><br>
 </p>
 
@@ -578,15 +578,15 @@ row numbers are given in the following table.<br>
 <table border="1">
 <tr> <th>Load Case 1</th> <th>First Row</th> <th>Last Row</th></tr>
 <tr> <td>Joint Displacements</td> <td>C-10</td><td>C-11</td></tr>
-<tr><td>Beam End Forces</td> <td>D-10</td><td>D-11</td></tr>
+<tr><td>Frame Element End Forces</td> <td>D-10</td><td>D-11</td></tr>
 <tr><td>Reaction Forces</td> <td>E-10</td><td>E-11</td></tr>
 <tr> <th>Load Case 2</th> <th>First Row</th> <th>Last Row</th></tr>
 <tr> <td>Joint Displacements</td> <td>C-12</td><td>C-13</td></tr>
-<tr><td>Beam End Forces</td> <td>D-12</td><td>D-13</td></tr>
+<tr><td>Frame Element End Forces</td> <td>D-12</td><td>D-13</td></tr>
 <tr><td>Reaction Forces</td> <td>E-12</td><td>E-13</td></tr>
 <tr> <th>Load Case 3</th> <th>First Row</th> <th>Last Row</th></tr>
 <tr> <td>Joint Displacements</td> <td>C-14</td><td>C-14</td></tr>
-<tr><td>Beam End Forces</td> <td>D-14</td><td>D-14</td></tr>
+<tr><td>Frame Element End Forces</td> <td>D-14</td><td>D-14</td></tr>
 <tr><td>Reaction Forces</td> <td>E-14</td><td>E-14</td></tr>
 <tr> <td><i>et cetera</i></td> </tr>
 </table>
@@ -596,7 +596,7 @@ row numbers are given in the following table.<br>
 The columns of the spreadsheet results file are arranged as follows.<br>
 Displacement results are in columns A through G:<br>
 <img src="img/CSV2.png" align="center" border="0"><br><br>
-Beam end force results are in columns A through H:<br>
+Frame element end force results are in columns A through H:<br>
 <img src="img/CSV3.png" align="center" border="0"><br><br>
 Reaction results are in columns A through G:<br>
 <img src="img/CSV4.png" align="center" border="0"><br><br>
@@ -654,6 +654,14 @@ The effects of finite joint sizes are modeled approximately
 in the calculation of the frame element stiffness
 through the use of an <i>effective beam length</i>, which is the joint-to-joint
 length of the frame element less the rigid radii on each end.
+All joints are fully moment resisting.   
+Semi-rigid connections may be modeled through the use of short frame elements
+at the ends of longer members.  
+</p>
+
+<p>
+For two-dimensional (planar) structures the global <i>X</i> direction is horizontal and the global <i>Y</i> direction is vertical.
+For three-dimensional (planar) structures the global <i>X</i> and <i>Y</i> directions are horizontal and the global <i>Z</i> direction is vertical.
 </p>
 
 <p>
@@ -707,13 +715,15 @@ made entirely of elements for which <i>Iyy=Izz</i>, i.e., square and circular cr
 
 <p>
 Coordinate transformations do not currently consider the effect of
-finite joint sizes, and are based on joint-to-joint lengths of frame elements.
+finite joint sizes, and are based on joint-to-joint lengths of each
+frame element.
 </p>
 
 <p>
      The default coordinate transformation process starts with the frame 
      element's centroidal axis placed along the global <i>X</i>-axis, and the principle
-     axes of the cross section (the local <i>x</i> and <i>y</i> axes) are aligned with the global <i>Y</i>- and <i>Z</i>-axes.
+     axes of the cross section (the local <i>x</i> and <i>y</i> axes) are aligned with the global <i>Y</i>- and <i>Z</i>-axes
+and must coincide with the principle axes of the cross section.
      To place the frame element in the structure, first it is rotated about the
      global <i>Y</i>-axis, then about the global <i>Z</i>-axis, then 'rolled' or spun
      about the local <i>x</i>-axis.   If the roll angle is zero, this process results
@@ -861,7 +871,11 @@ All connections in a <b>Frame3DD</b> analysis are moment-resisting.
 Moment-free conditions can be modeled explicitely only at pinned reactions.
 Internal hinges may be modeled using a short element with
 low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>.
-Beams may be considered infinitely rigid within a sphere of a specified radius,
+Many connections are most realistically modeled as having some flexibility.
+Such semi-rigid connections may be modeled through the inclusion of short
+frame elements with appropriate section and material properties to model
+the behavior of the connection.   
+Frame elements may be considered infinitely rigid within a sphere of a specified radius,
 <i>r</i> around a joint.
 The effects of finite joint sizes are modeled approximately
 in the calculation of frame element stiffness
@@ -955,7 +969,9 @@ Six types of static loads may be specified:
 </p>
 <ul>
 <li>Concentrated static force loads and concentrated static moments may be applied to joints.
+These loads are specified in the structure's global coordinate system.  
 <li>Concentrated static force loads may be applied to frame elements between the joints.
+These loads are specified in the frame element's local coordinate system.  
 <li>Uniformly distributed static loads may be applied in the local element coordinate system over entire length of frame elements.
 Uniformly distributed loads may be applied in the local <i>x</i> direction,
 the local <i>y</i> direction, and the local <i>z</i> direction.
@@ -974,6 +990,7 @@ Fixed end forces computed from trapezoidal loads include the effects of
 shear deformation when shear deformation is utilized in the analysis.
 <li>Thermal loads assume a linear temperature gradient through cross sections.
 <li>Static joint displacements may be prescribed at fixed degrees of freedom only.
+Static joint displacements are specified in the structure's global coordinate system.  
 </ul>
 <p>
 Multiple static load cases are generated by specifying
