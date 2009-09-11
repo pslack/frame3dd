@@ -665,6 +665,13 @@ For three-dimensional structures the global <i>X</i> and <i>Y</i> directions are
 </p>
 
 <p>
+Joint numbers should be assigned in a systematic way, moving from
+one end of the structural system to the opposite end.  
+Ideally a frame element
+will connect every pair of joints with sequential numbers.
+</p>
+
+<p>
 Support conditions are modeled by fixing the degrees of freedom
 colocated with reaction forces.
 By default, displacements at the fixed degrees of freedom are zero.
@@ -676,8 +683,40 @@ Static reaction forces at the fixed degrees of freedom are
 computed and are appended to the Output Data file.
 </p>
 
-<h3> 7.3 Cross Section Properties and Coordinate Transformation</h3>
+<h3>7.3 Frame Element Cross Section Properties and Coordinate Transformation</h3>
 
+<p>
+Frame elements connect pairs of joints.  Each frame element has a 
+"starting joint" (element joint 1, J1)
+and an "ending joint" (element joint 2, J2),
+as described in the <a href="#InputData">Input data format</a>.
+In principle either joint of the frame element could be joint J1 
+and either joint could be J2.  
+The assignment of J1 and J2 to the frame element should not affect the results. 
+However, to avoid confusion in certain cases, the following guidelines are recommended: <br>
+<ul>
+<li>In general joint J1 of the frame element should have more negative
+coordinates than joint J2 of the element.   </li>
+</ul>
+</p>
+<p>
+More specifically, 
+specifying element joint 1 location as (<i>x1, y1, z1</i>) and 
+element joint 2 location as (<i>x2, y2, z2</i>), 
+<ul>
+<li>If <i>x1 &#8800; x2</i> then <i>x1</i> should be less then <i>x2</i>.
+Joint J2 should be toward the more positive side of the <i>X</i> axis.  
+ 
+<li>If <i>x1=x2</i> and <i>y1 &#8800; y2</i> then <i>y1</i> should be less then <i>y2</i>. 
+Joint J2 should be toward the more positive side of the <i>Y</i> axis.  
+<li> If <i>x1=x2</i> and <i>y1=y2</i> and <i>z1 &#8800; z2</i> then <i>z1</i> should be less then <i>z2</i>.
+Joint J2 should be toward the more positive side of the <i>Z</i> axis.  
+</ul>
+</p>
+<p>
+The figure below attempts to illustrate the application of these guidelines.
+</p>
+<img src="img/j1j2.png" align="center" border="0"><br>
 
 <p>
 Cross-sectional properties of frame elements are specified in a local
@@ -701,10 +740,10 @@ of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of iner
 
 <p>
 When a frame element is placed into the structure
-it is translated and rotated and optionally rolled about its local <i>x</i>-axis.
-By allowing the frame element to be
-'rolled' about its local <i>x</i>-axis during the stiffness matrix assembly process,
-cross-axis bending effects are included.
+it is translated and rotated and optionally rolled about
+its local <i>x</i>-axis.  By allowing the frame element to be
+'rolled' about its local <i>x</i>-axis during the stiffness matrix
+assembly process, cross-axis bending effects are included.
 Issues related to rolling of cross sections and cross-axis bending
 are important for three-dimensional structural systems or planar
 structures with out-of-plane deformation, such as grillages.  For planar
