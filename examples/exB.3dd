@@ -38,7 +38,7 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 1				% number of loaded joints
 %.J      Fx       Fy     Fz      Mxx     Myy     Mzz
 %        N        N      N       N.mm    N.mm    N.mm
- 1	1000 	-2000 	-100 	0.0	0.0	0.0
+ 1	1000 	-2000 	-1000 	0.0	0.0	0.0
 0                               % number of uniform loads
 0                               % number of trapezoidal loads
 0                               % number of internal concentrated loads
