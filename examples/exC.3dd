@@ -1,4 +1,4 @@
-Example C: a tetrahedral frame - static and dynamic analysis 
+Example C: a tetrahedral frame - static and dynamic analysis (in, kip)
 
 18                      % number of joints 
 
@@ -85,7 +85,7 @@ Example C: a tetrahedral frame - static and dynamic analysis
 48  16 18	20.0	8.0	5.0	50.0	100.0	200.0	29000	11500 0
 
 1                               % 1: include shear deformation
-0                               % 1: include geometric stiffness
+1                               % 1: include geometric stiffness
 2.0                             % exaggerate mesh deformations
 
 
@@ -96,11 +96,11 @@ Example C: a tetrahedral frame - static and dynamic analysis
 5				% number of uniform loads
 %.j      Ux       Uy     Uz
 %       k/in     k/in   k/in
-  5	0.0	-10.0	0.0
- 14	0.0	-10.0	0.0
- 23	0.0	-10.0	0.0
- 32	0.0	-10.0	0.0
- 41	0.0	-10.0	0.0
+  5	0.0	-1.1	0.0
+ 14	0.0	-1.1	0.0
+ 23	0.0	-1.1	0.0
+ 32	0.0	-1.1	0.0
+ 41	0.0	-1.1	0.0
 
 0                               % number of trapezoidal loads
 0                               % number of internal concentrated loads

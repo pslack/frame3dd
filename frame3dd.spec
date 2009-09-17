@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20090624
+Version:	0.20090917
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -67,6 +67,18 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Thu Sep 17 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090917
+- A warning is displayed to the screen indicating the level of average axial strain in an element whenever this strain exceeds 0.001 (0.1%) in magnitude.   Most structural materials yield at strain levels between 0.08% and 0.15%.  
+- Loads in examples that are over-stressed were reduced.   
+- Example files re-run.
+- Update the user-manual.html reflecting these changes.
+
+* Wed Sep 09 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090909
+- Minor edit to user-manual.html 
+
+* Tue Sep 08 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090908
+- Update user-manual.html with notes on end force sign convention
+
 * Wed Jun 24 2009 John Pye <john.pye@anu.edu.au> 0.20090624
 - SoQT detection for SCons script.
 - Fix error with runtime location of 'properties.txt' script.

@@ -55,7 +55,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 1                               % number of loaded joints
 %..J       Fx Fy    Fz   Mxx  Myy  Mzz
 %          k  k     k    k.in k.in k.in
-   3       0  100  -100   0    0    0
+   3       0  500  -500   0    0    0
 
 0                               % number of uniform distributed loads
 3                               % number of trapezoidal distributed loads
@@ -63,13 +63,13 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 %       in       in       k/in    k/in
   9      0        0        0       0      % location and loading - local x-axis
          0        0        0       0      % location and loading - local y-axis
-         0      120       0.00    0.10    % location and loading - local z-axis
+         0      120       0.00    0.20    % location and loading - local z-axis
   10     0        0        0       0      % location and loading - local x-axis
          0        0        0       0      % location and loading - local y-axis
-         0      120       0.00    0.20    % location and loading - local z-axis
+         0      120       0.00    0.30    % location and loading - local z-axis
   11     0        0        0       0      % location and loading - local x-axis
          0        0        0       0      % location and loading - local y-axis
-         0      120       0.00    0.30    % location and loading - local z-axis
+         0      120       0.00    0.40    % location and loading - local z-axis
 
 0                               % number of internal concentrated loads
 0                               % number of temperature loads

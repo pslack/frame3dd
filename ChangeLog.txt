@@ -1,3 +1,9 @@
+* Thu Sep 17 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090917
+- A warning is displayed to the screen indicating the level of average axial strain in an element whenever this strain exceeds 0.001 (0.1%) in magnitude.   Most structural materials yield at strain levels between 0.08% and 0.15%.  
+- Loads in examples that are over-stressed were reduced.   
+- Example files re-run.
+- Update the user-manual.html reflecting these changes.
+
 * Wed Sep 09 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090909
 - Minor edit to user-manual.html 
 

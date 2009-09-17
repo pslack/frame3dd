@@ -1558,7 +1558,7 @@ void write_input_data(
 		i, xyz[i].x, xyz[i].y, xyz[i].z, r[i],
 			R[j+1], R[j+2], R[j+3], R[j+4], R[j+5], R[j+6] );
 	}
-	fprintf(fp,"B E A M   D A T A\t\t\t\t\t\t\t(local)\n");
+	fprintf(fp,"F R A M E   E L E M E N T   D A T A\t\t\t\t\t(local)\n");
 	fprintf(fp,"  Beam   J1    J2     Ax   Asy   Asz    ");
 	fprintf(fp,"Jxx     Iyy     Izz       E       G roll\n");
 	for (i=1; i<= nB; i++) {
@@ -1598,8 +1598,8 @@ void write_input_data(
 	  }
 
 	  if ( nU[lc] > 0 ) {
-	    fprintf(fp," U N I F O R M   B E A M   L O A D S");
-	    fprintf(fp,"\t\t\t\t\t(local)\n");
+	    fprintf(fp," U N I F O R M   L O A D S");
+	    fprintf(fp,"\t\t\t\t\t\t(local)\n");
 	    fprintf(fp,"  Beam        Ux               Uy               Uz\n");
 	    for (n=1; n<=nU[lc]; n++) {
 		fprintf(fp, " %5d", (int) (U[lc][n][1]) );
@@ -1609,8 +1609,8 @@ void write_input_data(
 	  }
 
 	  if ( nW[lc] > 0 ) {
-	    fprintf(fp," T R A P E Z O I D A L   B E A M   L O A D S");
-	    fprintf(fp,"\t\t\t\t(local)\n");
+	    fprintf(fp," T R A P E Z O I D A L   L O A D S");
+	    fprintf(fp,"\t\t\t\t\t(local)\n");
 	    fprintf(fp,"  Beam        x1               x2               W1               W2\n");
 	    for (n=1; n<=nW[lc]; n++) {
 	        fprintf(fp, " %5d", (int) (W[lc][n][1]) );
@@ -1637,8 +1637,8 @@ void write_input_data(
 	  }
 
 	  if ( nT[lc] > 0 ) {
-	    fprintf(fp," B E A M   T E M P E R A T U R E   C H A N G E S");
-	    fprintf(fp,"\t\t\t(local)\n");
+	    fprintf(fp," T E M P E R A T U R E   C H A N G E S");
+	    fprintf(fp,"\t\t\t\t\t(local)\n");
 	    fprintf(fp,"  Beam      coef      hy        hz");
 	    fprintf(fp,"        Ty+       Ty-       Tz+       Tz-\n");
 	    for (n=1; n<=nT[lc]; n++) {
@@ -1650,7 +1650,7 @@ void write_input_data(
 	  }
 
 	  if ( nD[lc] > 0 ) {
-	    fprintf(fp,"\nP R E S C R I B E D   D I S P L A C E M E N T S");
+	    fprintf(fp,"\n P R E S C R I B E D   D I S P L A C E M E N T S");
 	    fprintf(fp,"                        (global)\n");
 	    fprintf(fp,"  Joint       Dx          Dy          Dz");
 	    fprintf(fp,"          Dxx         Dyy         Dzz\n");
@@ -1718,8 +1718,8 @@ void write_static_results (
 		fprintf(fp,"\n");
 	    }
 	}
-	fprintf(fp,"B E A M   E N D   F O R C E S");
-	fprintf(fp,"\t\t\t\t\t\t(local)\n");
+	fprintf(fp,"F R A M E   E L E M E N T   E N D   F O R C E S");
+	fprintf(fp,"\t\t\t\t(local)\n");
 	fprintf(fp,"  Beam   Joint      Nx          Vy         Vz");
 	fprintf(fp,"         Txx        Myy        Mzz\n");
 	for (n=1; n<= nB; n++) {
@@ -1872,7 +1872,7 @@ void write_static_csv(
 		}
 		fprintf(fpcsv,"\n");
 	}
-	fprintf(fpcsv,"\"B E A M   E N D   F O R C E S");
+	fprintf(fpcsv,"\"F R A M E   E L E M E N T   E N D   F O R C E S");
 	fprintf(fpcsv,"  (local)\"\n");
 	fprintf(fpcsv,"Beam  , Joint ,    Nx     ,    Vy   ,     Vz");
 	fprintf(fpcsv,"   ,     Txx   ,    Myy  ,     Mzz\n");
@@ -2005,8 +2005,8 @@ void write_static_mfile (
 		else		fprintf(fpm," ]'; \n\n");
 	}
 
-	fprintf(fpm,"%% B E A M   E N D   F O R C E S");
-	fprintf(fpm,"\t\t\t\t(local)\n");
+	fprintf(fpm,"%% F R A M E   E L E M E N T   E N D   F O R C E S");
+	fprintf(fpm,"\t\t(local)\n");
 	fprintf(fpm,"%%\tNx_1\t\tVy_1\t\tVz_1\t\tTxx_1\t\tMyy_1\t\tMzz_1\t");
 	fprintf(fpm,"  \tNx_2\t\tVy_2\t\tVz_2\t\tTxx_2\t\tMyy_2\t\tMzz_2\n");
         fprintf(fpm,"F%d=[",lc);

@@ -59,7 +59,7 @@ static void member_force(
 	double *s, int M, vec3 *xyz, double L, double Le,
 	int j1, int j2, float Ax, float Asy, float Asz, float J,
 	float Iy, float Iz, float E, float G, float p, double *D,
-	int shear, int geom
+	int shear, int geom, double *axial_strain
 );
 
 static void lumped_M(
@@ -419,19 +419,22 @@ void end_forces(
 	float *J, float *Iy, float *Iz, float *E, float *G, float *p,
 	double *D, int shear, int geom
 ){
-	double	*s;
+	double	*s, axial_strain;
 	int	i,j;
 
 	s = dvector(1,12);
 
-	for(i=1; i <= nB; i++){
-     	member_force ( s, i, xyz, L[i], Le[i], J1[i], J2[i],
-				Ax[i], Asy[i], Asz[i], J[i], Iy[i], Iz[i],
-					E[i], G[i], p[i], D, shear, geom );
+	for(i=1; i <= nB; i++) {
 
-		for(j=1; j<=12; j++){
-			Q[i][j] = s[j];
-		}
+     		member_force ( s, i, xyz, L[i], Le[i], J1[i], J2[i],
+			Ax[i], Asy[i], Asz[i], J[i], Iy[i], Iz[i],
+			E[i], G[i], p[i], D, shear, geom, &axial_strain );
+
+		for(j=1; j<=12; j++)	Q[i][j] = s[j];
+
+		if ( fabs(axial_strain > 0.001) )
+		 fprintf(stderr," Warning! Frame element %2d has an average axial strain of %6.3f\n", i, axial_strain ); 
+
 	}
 
 	free_dvector(s,1,12);
@@ -445,14 +448,15 @@ void member_force(
 		double *s, int M, vec3 *xyz, double L, double Le,
 		int j1, int j2, float Ax, float Asy, float Asz, float J,
 		float Iy, float Iz, float E, float G, float p, double *D,
-		int shear, int geom
+		int shear, int geom, double *axial_strain
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord Xformn	*/
 		d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12,
 		x1, y1, z1, x2, y2, z2,	/* joint coordinates	*/
-		Ls,			/* stretched length of element */
+		/* Ls, */		/* stretched length of element */
+		delta=0.0,		/* stretch in the frame element */
 		Ksy, Ksz, Dsy, Dsz,	/* shear deformation coeff's	*/
-		T;		/* normal force for geometric stiffness */
+		T = 0.0;		/* axial force for geometric stiffness */
 
 	coord_trans ( xyz, L, j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p );
@@ -477,20 +481,34 @@ void member_force(
 		Dsy = Dsz = 1.0;
 	}
 
-	if ( geom ) {
-		Ls    = pow((x2+d7-x1-d1),2.0) + 
-			pow((y2+d8-y1-d2),2.0) + 
-			pow((z2+d9-z1-d3),2.0);
-		Ls = sqrt(Ls) + Le - L;
-		T  = Ax*E*log(Ls/Le);	/* true strain	*/
-		T  =  (Ax*E/Le)*( (d7-d1)*t1 + (d8-d2)*t2 + (d9-d3)*t3 ); 
-	}
-	else        T =  0.0;
+
+	/* infinitessimal strain ... */
+	delta = (d7-d1)*t1 + (d8-d2)*t2 + (d9-d3)*t3; 
+
+	/* finite strain ... (not consistent with formulation) */
+/*
+ *	delta += ( pow(((d7-d1)*t4 + (d8-d2)*t5 + (d9-d3)*t6),2.0) + 
+ *		   pow(((d7-d1)*t7 + (d8-d2)*t8 + (d9-d3)*t9),2.0) )/(2.0*L);
+ */
+
+	/* true strain ... (not appropriate for structural materials) */
+/*
+ *	Ls    = pow((x2+d7-x1-d1),2.0) + 
+ *		pow((y2+d8-y1-d2),2.0) + 
+ *		pow((z2+d9-z1-d3),2.0);
+ *	Ls = sqrt(Ls) + Le - L;
+ */	/* end of true strain calculation */
+
+	*axial_strain = delta / Le;
+
+	if ( geom )	T = Ax*E/Le * delta;
+		/*	T  = Ax*E*log(Ls/Le); */	/* true strain */
 
 	if ( geom )
 		s[1] = -T;
 	else
 		s[1]  =  -(Ax*E/Le)*( (d7-d1)*t1 + (d8-d2)*t2 + (d9-d3)*t3 );
+
 	s[2]  = -( 12.*E*Iz/(Le*Le*Le*(1.+Ksy)) + 
 		   T/L*(1.2+2.0*Ksy+Ksy*Ksy)/Dsy ) *
 				( (d7-d1)*t4 + (d8-d2)*t5 + (d9-d3)*t6 )
@@ -612,8 +630,8 @@ void equilibrium(
 	for ( j=1; j<=DoF; j++ ) if (R[j] ==0) num += ( F[j]*F[j] );
 	*err = sqrt ( num ) / sqrt ( den );
 
-
 }
+
 
 /*------------------------------------------------------------------------------
 ASSEMBLE_M  -  assemble global mass matrix from element mass & inertia  24nov98

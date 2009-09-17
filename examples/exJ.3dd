@@ -71,7 +71,7 @@ Example J: tesseract  (N, mm, ton)
 32      8 16  100  60    60    500   1000  1000   9990    3800 0
 
 1                               % 1: include shear deformation
-1                               % 1: include geometric stiffness
+0                               % 1: include geometric stiffness
 1.0                             % exaggerate mesh deformations
 
 

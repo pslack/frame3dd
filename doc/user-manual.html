@@ -797,8 +797,10 @@ by A. Kassimali.
 <p>
 To analyze a structure as a "truss" with this software, specify <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>
 to be much smaller than they would be normally, but not zero.   If the shear forces and bending
-moments in your structural elements are extremely small, then your structural model
-represents a "truss" approximation of the actual structure.    See example A.
+moments in your structural elements are small, then your structural model
+represents a "truss" approximation of the actual structure.    
+In general, shear deformation effects and geometric stiffness effects should <b>not</b> be incorporated if  <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i> are made very small.  
+See example A.
 </p>
 
 <h4> 7.3.1 Cross Section Properties of Square Tube and Circular Tube Sections </h4>
@@ -1040,6 +1042,16 @@ as shown in <a href="../examples/exA.3dd">Example A</a> and
 <a href="../examples/exB.3dd">Example B</a>.
 </p>
 
+<p>
+Whenever the average axail strain in a frame element (<i>Nx/Ax</i>) exceeds 0.001 (0.1%) in magnitude, a warning message is displayed indicating the strain level and the element in question.    Most structural materials yield at strains between
+0.1% and 0.2%.   When this warning message is displayed the structure is likely in an overloaded condition and the loads should be reduced.
+Note that this check for overloaded elements provides an approximate check
+on the stresses in the structure.   A more complete check would compute
+the composite bending and axial strain at the ends of each element.    
+Such a check requires additional cross section information
+(the section modulus or the section dimensions and the bending moment of inertia).  
+</p>
+
 <h3> 7.9 Dynamic Modal Analysis </h3>
 
 <p>
@@ -1086,8 +1098,8 @@ If natural frequencies are computed as "nan" (not a number)
 try increasing the value of the frequency shift variable
 either in the Input Data file or using the
 <a href="#commandline"><i>-f</i> command line option</a>.
-
-
+Structural models that are partially restrained or unrestrained should not 
+include geometric stiffness effects.   
 </p>
 
 <p>

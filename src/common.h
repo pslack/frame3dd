@@ -29,16 +29,15 @@
 #define FRAME3DD_PATHMAX 256
 
 #ifndef VERSION
-# define VERSION "20090515"
+# define VERSION "20090917"
 #endif
-
 
 #ifndef PI
 #define PI 3.14159265358979323846
 #endif
 
-// Zvert=0: Y axis is vertical... rotate about Z-axis, then rotate about Y-axis
 // Zvert=1: Z axis is vertical... rotate about Y-axis, then rotate about Z-axis
+// Zvert=0: Y axis is vertical... rotate about Z-axis, then rotate about Y-axis
 #define Zvert 1	
 
 #endif /* FRAME_COMMON_H */

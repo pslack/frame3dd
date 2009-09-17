@@ -170,7 +170,7 @@ int main ( int argc, char *argv[] ) {
 		fprintf(stderr," http://frame3dd.sf.net\n");
 		fprintf(stderr," GPL Copyright (C) 1992-2009, Henri P. Gavin\n");
 		fprintf(stderr," This is free software with absolutely no warranty.\n");
-		fprintf(stderr," For details, see LICENSE.txt\n\n");
+		fprintf(stderr," For details, see the GPL license file, LICENSE.txt\n\n");
 	}
 
 	/* open the input data file */
@@ -217,7 +217,7 @@ int main ( int argc, char *argv[] ) {
 
 	fscanf(fp, "%d", &nB );		/* number of beam elements	*/
 	if ( verbose ) {
-	 printf(" number of beam elements"); dots(stdout,29); printf(" nB = %3d ",nB);
+	 printf(" number of frame elements"); dots(stdout,28); printf(" nB = %3d ",nB);
 	}
 	if ( nJ > nB + 1) {
 		fprintf(stderr,"warning: %d joints and %d members...", nJ, nB );
@@ -452,7 +452,7 @@ int main ( int argc, char *argv[] ) {
 				}
 			}
 
-			if(geom){
+			if ( geom ) {
 				free_dvector(Fe, 1, DoF );
 				free_dmatrix(Ks, 1, DoF, 1, DoF );
 			}
