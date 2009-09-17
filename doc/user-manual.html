@@ -128,10 +128,10 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
   <li><a href="#runosx"/>Mac OS X</a>
 </ol>
 <li><a href="#FrameEd">FrameEd</a>
-<li><a href="#Matlab">Matlab interface</a>
-<li><a href="#CSV">Spreadsheet interface</a>
-<li><a href="#structuralmodelling">Structural modelling</a>
-<li><a href="#numerical">Numerical details</a>
+<li><a href="#Matlab">Matlab Interface</a>
+<li><a href="#CSV">Spreadsheet Interface</a>
+<li><a href="#structuralmodelling">Structural Modelling</a>
+<li><a href="#numerical">Numerical Details</a>
 <li><a href="#InputData">Input Data Format</a>
 <li><a href="#Variables">Variable Definitions</a>
 <li><a href="#commandline">Command-line options</a>
@@ -427,7 +427,7 @@ to match the first mode.
 
 <p>Source code for FrameEd is not currently available, and development on this GUI is no longer active.</p>
 
-<a name="Matlab"><h2>5. Matlab interface</h2>
+<a name="Matlab"><h2>5. Matlab Interface</h2>
 
 <p>
 <b>Frame3DD</b> may optionally be executed from within Matlab on any platform,
@@ -531,7 +531,7 @@ It does not (yet) implement the following features of <b>Frame3DD</b>:
 Adding these features would require Matlab programming, only.
 </p>
 
-<a name="CSV"><h2>6. Spreadsheet interface</h2>
+<a name="CSV"><h2>6. Spreadsheet Interface</h2>
 
 <p>
 Input Data for <b>Frame3DD</b> may be read and written using spreadsheet programs
@@ -606,7 +606,7 @@ Reaction results are in columns A through G:<br>
 Modal analysis results are not (yet) written to the .CSV formatted output file.
 </p>
 
-<a name="structuralmodelling"/><h2>7. Structural modelling</h2>
+<a name="structuralmodelling"/><h2>7. Structural Modelling</h2>
 
 <!--
 <p>
@@ -1043,7 +1043,7 @@ as shown in <a href="../examples/exA.3dd">Example A</a> and
 </p>
 
 <p>
-Whenever the average axail strain in a frame element (<i>Nx/(EAx)</i>) exceeds 0.001 (0.1%) in magnitude, a warning message is displayed indicating the strain level and the element in question.    Most structural materials yield at strains between
+Whenever the average axial strain in a frame element (<i>Nx/(EAx)</i>) exceeds 0.001 (0.1%) in magnitude, a warning message is displayed indicating the strain level and the element in question.    Most structural materials yield at strains between
 0.1% and 0.2%.   When this warning message is displayed the structure is likely in an overloaded condition and the loads should be reduced.
 Note that this check for overloaded elements provides an approximate check
 on the stresses in the structure.   A more complete check would compute
@@ -1166,7 +1166,7 @@ A frame element with negative <i>Mz</i> at joint 1 and a positive <i>Mz</i> at j
 has positive curvature in the <i>x-y</i> plane.  
 </p>
 
-<a name="numerical"/><h2>8. Numerical details</h2>
+<a name="numerical"/><h2>8. Numerical Details</h2>
 
 <p>
 Frame3DD imposes no limit on the number of degrees of freedom.
