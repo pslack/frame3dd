@@ -1,12 +1,12 @@
 ________________________________________________________________________________
-FRAME3DD version: 20090515               http://frame3dd.sf.net/
+FRAME3DD version: 20090917               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis (N mm ton) 
-Thu Sep 17 10:15:03 2009
+Thu Sep 17 10:42:59 2009
 ________________________________________________________________________________
 5 JOINTS;    4 MEMBERS;    3 LOAD CASES;  4 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
