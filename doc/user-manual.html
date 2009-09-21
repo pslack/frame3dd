@@ -1009,13 +1009,13 @@ lists properties of other materials.
 Six types of static loads may be specified:
 </p>
 <ul>
-<li>Concentrated static force loads and concentrated static moments may be applied to joints.
+<li>Concentrated static force loads and concentrated static moments may be applied to joints.</li>
 These loads are specified in the structure's global coordinate system.  
 <li>Concentrated static force loads may be applied to frame elements between the joints.
-These loads are specified in the frame element's local coordinate system.  
+These loads are specified in the frame element's local coordinate system.  </li>
 <li>Uniformly distributed static loads may be applied in the local element coordinate system over entire length of frame elements.
 Uniformly distributed loads may be applied in the local <i>x</i> direction,
-the local <i>y</i> direction, and the local <i>z</i> direction.
+the local <i>y</i> direction, and the local <i>z</i> direction.</li>
 <li>Trapezoidally distributed loads may be applied in the local coordinate system over a partial length of frame elements.
 Trapezoidally distributed loads may be applied in the local <i>x</i> direction,
 the local <i>y</i> direction, and the local <i>z</i> direction.
@@ -1028,8 +1028,8 @@ The stopping location for a trapezoidal load must be greater than the
 starting value of the trapezoidal load and less
 than the length of the frame element.
 Fixed end forces computed from trapezoidal loads include the effects of
-shear deformation when shear deformation is utilized in the analysis.
-<li>Thermal loads assume a linear temperature gradient through cross sections.
+shear deformation when shear deformation is utilized in the analysis.</li>
+<li>Thermal loads assume a linear temperature gradient through cross sections.</li>
 <li>Static joint displacements may be prescribed at fixed degrees of freedom only.
 Static joint displacements are specified in the structure's global coordinate system.  
 </ul>
@@ -1043,13 +1043,19 @@ as shown in <a href="../examples/exA.3dd">Example A</a> and
 </p>
 
 <p>
+More than one load of the same type on the same element or joint may be specified.   
+For example, one or more trapezoidally distributed loads may be applied to
+the same frame element in the same load case.   
+</p>
+
+<p>
 Whenever the average axial strain in a frame element (<i>Nx/(EAx)</i>) exceeds 0.001 (0.1%) in magnitude, a warning message is displayed indicating the strain level and the element in question.    Most structural materials yield at strains between
 0.1% and 0.2%.   When this warning message is displayed the structure is likely in an overloaded condition and the loads should be reduced.
-Note that this check for overloaded elements provides an approximate check
-on the stresses in the structure.   A more complete check would compute
-the composite bending and axial strain at the ends of each element.    
-Such a check requires additional cross section information
-(the section modulus or the section dimensions and the bending moment of inertia).  
+Note that this check for overloaded elements provides an approximate stress check.
+A more complete stress check would compute
+the composite bending and axial stresses strains at the ends of each element.   
+Such a check requires additional cross section information: 
+the section modulus or the section dimensions and the bending moment of inertia.  
 </p>
 
 <h3> 7.9 Dynamic Modal Analysis </h3>
