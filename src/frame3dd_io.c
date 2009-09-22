@@ -54,7 +54,7 @@ static void getline_no_comment(
 /*------------------------------------------------------------------------------
 PARSE_OPTIONS -  parse command line options		
 command line options over-ride values in the input data file	 	
-04 Mar 2009
+04 Mar 2009, 22 Sep 2009
 ------------------------------------------------------------------------------*/
 void parse_options (
 	int argc, char *argv[], 
@@ -68,6 +68,7 @@ void parse_options (
 	double *tol_flag, 
 	double *shift_flag,
 	float *pan_flag,
+	int *write_matrix,
 	int *condense_flag,
 	int *verbose,
 	int *debug
@@ -79,6 +80,7 @@ void parse_options (
 
 	*shear_flag = *geom_flag  = *anlyz_flag = *lump_flag = *modal_flag = -1;
 	*exagg_flag = *tol_flag = *shift_flag = *pan_flag = *condense_flag = -1.0;
+	*write_matrix = 0;
 	*debug = 0; *verbose = 1;
 
 	/* set up file names for the the input data and the output data */
@@ -103,7 +105,7 @@ void parse_options (
 	 }
 	}
 
-	while ((option=getopt(argc,argv, "i:o:hvaqcds:g:e:l:m:t:f:p:r:")) != -1){
+	while ((option=getopt(argc,argv, "i:o:hvaqcdws:g:e:l:m:t:f:p:r:")) != -1){
 		switch ( option ) {
 			case 'i':		/* input data file name */
 				strcpy(IN_file,optarg);
@@ -128,6 +130,9 @@ void parse_options (
 				break;
 			case 'd':		/* debug */
 				*debug = 0;
+				break;
+			case 'w':		/* write stiffness and mass */
+				*write_matrix = 1;
 				break;
 			case 's':		/* shear deformation */
 				if (strcmp(optarg,"Off")==0)
@@ -238,7 +243,7 @@ void parse_options (
 
 /*------------------------------------------------------------------------------
 DISPLAY_HELP -  display help information to stderr	
-04 Mar 2009
+04 Mar 2009, 22 Sep 2009
 ------------------------------------------------------------------------------*/
 void display_help()
 {
@@ -266,7 +271,9 @@ void display_help()
  fprintf(stderr,"  -v            display program version, website, brief help info and exit\n");
  fprintf(stderr,"  -a            display program version, website and exit\n");
  fprintf(stderr,"  -c            data check only - the output data reviews the input data\n");
+ fprintf(stderr,"  -w            write stiffness and mass matrices to files named Ks Kd Md\n");
  fprintf(stderr,"  -q            suppress screen output except for warning messages\n");
+ fprintf(stderr,"  -w            write mass and stiffness matrices to files\n");
  fprintf(stderr,"  -s  On|Off    On: include shear deformation or Off: neglect ...\n");
  fprintf(stderr,"  -g  On|Off    On: include geometric stiffness or Off: neglect ...\n");
  fprintf(stderr,"  -e <value>    level of deformation exaggeration for Gnuplot output\n");

@@ -1,12 +1,12 @@
 ________________________________________________________________________________
-FRAME3DD version: 20090917               http://frame3dd.sf.net/
+FRAME3DD version: 20090922               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
 FRAME3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example A: linear static analysis of a 2D truss with support settlement (kips in)  
-Thu Sep 17 10:42:59 2009
+Tue Sep 22 13:29:01 2009
 ________________________________________________________________________________
 12 JOINTS;    21 MEMBERS;    2 LOAD CASES;  12 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 

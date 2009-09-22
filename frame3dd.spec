@@ -72,6 +72,8 @@ rm -rf %{buildroot}
 - This option should be helpful to those running Frame3DD in the background,
 and wishing to acknowledge Frame3DD in the "about" information of their 
 software.  
+- Added flag '-w' to enable writing of mass and stiffness matrices.
+- Updates suggested by Barry Sanford 
 - Updated user-manual.html accordingly.
 
 * Thu Sep 17 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090917

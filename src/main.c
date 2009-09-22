@@ -83,7 +83,7 @@ int main ( int argc, char *argv[] ) {
 		*JMx,*JMy,*JMz,	/* inertia of a joint in global coord	*/
 		pan=1.0;	/* >0: pan during animation; 0: don't	*/
 
-	double	**K, **Ks,	/* global stiffness matrix		*/
+	double	**K, **Ks=NULL,	/* global stiffness matrix		*/
 		traceK = 0.0,	/* trace of the global stiffness matrix	*/
 		**M = NULL,	/* global mass matrix			*/
 		traceM = 0.0,	/* trace of the global mass matrix	*/
@@ -148,6 +148,7 @@ int main ( int argc, char *argv[] ) {
 		anlyz_flag= -1,	/*   over-ride input file value		*/
 		lump_flag = -1,	/*   over-ride input file value		*/
 		modal_flag= -1,	/*   over-ride input file value		*/
+		write_matrix=-1,/*   write stiffness and mass matrix	*/
 		condense_flag=-1; /* over-ride input file value		*/
 
 	double	exagg_flag=-1.0, /*  over-ride input file value		*/
@@ -162,7 +163,7 @@ int main ( int argc, char *argv[] ) {
 	parse_options ( argc, argv, IN_file, OUT_file, 
 			&shear_flag, &geom_flag, &anlyz_flag, &exagg_flag, 
 			&lump_flag, &modal_flag, &tol_flag, &shift_flag, 
-			&pan_flag, &condense_flag, &verbose, &debug);
+			&pan_flag, &write_matrix, &condense_flag, &verbose, &debug);
 
 	if ( verbose ) {
 		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
@@ -457,7 +458,8 @@ int main ( int argc, char *argv[] ) {
 				free_dmatrix(Ks, 1, DoF, 1, DoF );
 			}
 
-			save_ut_dmatrix ( DoF, K, "Ks" ); /* static stiffness matrix */
+			if ( write_matrix ) /* write static stiffness matrix */
+				save_ut_dmatrix ( DoF, K, "Ks" );
 
 			for (i=1; i<=12; i++)
 				for (n=1; n<=nB; n++)
@@ -530,8 +532,10 @@ int main ( int argc, char *argv[] ) {
 		    }
 		}
 
-		save_ut_dmatrix ( DoF, K, "Kd" );	/* dynamic stff matx */
-		save_ut_dmatrix ( DoF, M, "Md" );	/* dynamic mass matx */
+		if ( write_matrix ) {
+			save_ut_dmatrix ( DoF, K, "Kd" );/* dynamic stff matx */
+			save_ut_dmatrix ( DoF, M, "Md" );/* dynamic mass matx */
+		}
 
 		if(anlyz) {
 			if( Mmethod == 1 )

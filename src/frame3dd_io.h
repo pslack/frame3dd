@@ -47,6 +47,7 @@ void parse_options (
 	double *tol_flag,
 	double *shift_flag,
 	float *pan_flag,
+	int *write_matrix,
 	int *condense_flag,
 	int *verbose,
 	int *debug
