@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20090917
+Version:	0.20090922
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -67,6 +67,13 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Tue Sep 22 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090922
+- Added flag option '-a' to display "about" information. 
+- This option should be helpful to those running Frame3DD in the background,
+and wishing to acknowledge Frame3DD in the "about" information of their 
+software.  
+- Updated user-manual.html accordingly.
+
 * Thu Sep 17 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090917
 - A warning is displayed to the screen indicating the level of average axial strain in an element whenever this strain exceeds 0.001 (0.1%) in magnitude.   Most structural materials yield at strain levels between 0.08% and 0.15%.  
 - Loads in examples that are over-stressed were reduced.   

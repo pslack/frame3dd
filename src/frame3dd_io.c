@@ -75,8 +75,6 @@ void parse_options (
 
 	char	option;
 
-	int	h_flag = 0, v_flag = 0;
-
 	/* default values */
 
 	*shear_flag = *geom_flag  = *anlyz_flag = *lump_flag = *modal_flag = -1;
@@ -105,7 +103,7 @@ void parse_options (
 	 }
 	}
 
-	while ((option=getopt(argc,argv, "i:o:hvqcds:g:e:l:m:t:f:p:r:")) != -1){
+	while ((option=getopt(argc,argv, "i:o:hvaqcds:g:e:l:m:t:f:p:r:")) != -1){
 		switch ( option ) {
 			case 'i':		/* input data file name */
 				strcpy(IN_file,optarg);
@@ -114,12 +112,13 @@ void parse_options (
 				strcpy(OUT_file,optarg);
 				break;
 			case 'h':		/* help	*/
-				h_flag = 1;
 				display_help();
 				exit(0);
 			case 'v':		/*version */
-				v_flag = 1;
 				display_version();
+				exit(0);
+			case 'a':		/*version */
+				display_version_about();
 				exit(0);
 			case 'q':		/* quiet */
 				*verbose = 0;
@@ -260,11 +259,12 @@ void display_help()
  fprintf(stderr," ... where [OPTIONS] over-rides values in the input data file and includes\n");
  fprintf(stderr,"     one or more of the following:\n\n");
 
- fprintf(stderr," ------------------------------------------------------------------------\n");
+ fprintf(stderr," -------------------------------------------------------------------------\n");
  fprintf(stderr,"  -i  <InFile>  the  input data file name --- described in the manual\n");
  fprintf(stderr,"  -o <OutFile>  the output data file name\n");
  fprintf(stderr,"  -h            print this help message and exit\n");
- fprintf(stderr,"  -v            display program version and exit\n");
+ fprintf(stderr,"  -v            display program version, website, brief help info and exit\n");
+ fprintf(stderr,"  -a            display program version, website and exit\n");
  fprintf(stderr,"  -c            data check only - the output data reviews the input data\n");
  fprintf(stderr,"  -q            suppress screen output except for warning messages\n");
  fprintf(stderr,"  -s  On|Off    On: include shear deformation or Off: neglect ...\n");
@@ -276,7 +276,7 @@ void display_help()
  fprintf(stderr,"  -t <value>    convergence tolerance for modal analysis\n");
  fprintf(stderr,"  -p <value>    pan rate for mode shape animation\n");
  fprintf(stderr,"  -r <value>    matrix condensation method: 0, 1, 2, or 3 \n");
- fprintf(stderr," ------------------------------------------------------------------------\n");
+ fprintf(stderr," -------------------------------------------------------------------------\n");
 
 }
 
@@ -299,7 +299,7 @@ void display_usage()
 }
 
 /*------------------------------------------------------------------------------
-DISPLAY_VERSION -  display version information to stderr
+DISPLAY_VERSION_HELP -  display version, website, and brief help info. to stderr
 04 Mar 2009
 ------------------------------------------------------------------------------*/
 void display_version()
@@ -313,6 +313,19 @@ void display_version()
  fprintf(stderr,"  Try ... frame3dd -h  ... for help information\n");
 }
 
+
+/*------------------------------------------------------------------------------
+DISPLAY_VERSION_ABOUT-  display version and website to stderr for 
+running as a background process 
+22 Sep 2009
+Contributed by Barry Sanford, barry.sanford@trimjoist.com
+------------------------------------------------------------------------------*/
+void display_version_about()
+{
+ fprintf(stderr," FRAME3DD version: %s\n", VERSION);
+ fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness\n");
+ fprintf(stderr," http://frame3dd.sourceforge.net\n");
+}
 
 
 /*------------------------------------------------------------------------------

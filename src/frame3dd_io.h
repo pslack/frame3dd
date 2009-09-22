@@ -53,19 +53,28 @@ void parse_options (
 );
 
 /**
- DISPLAY_HELP -  display help information to stderr		      04mar09
+ DISPLAY_HELP -  display help information to stderr
+04mar09
 */
 void display_help();
 
 /**
- DISPLAY_USAGE -  display usage information to stderr		    04mar09
+ DISPLAY_USAGE -  display usage information to stderr
+04mar09
 */
 void display_usage();
 
 /**
- DISPLAY_VERSION -  display version information to stderr                04mar09
+ DISPLAY_VERSION -  display version, website, and some help info to stderr 
+04mar09
 */
 void display_version();
+
+/**
+ DISPLAY_VERSION_BACKGROUND -  display version and website to stderr
+22sep09
+*/
+void display_version_about();
 
 /**
 FRAME3DD_GETLINE
