@@ -75,15 +75,15 @@ Duke University</a> - Box 90287,
 
 <p><b>Frame3DD</b> appends results to a plain-text <b>output data file</b>.
 Results from the most recent analysis
-are written to the <b>end</b> of the output data file.
-Each section of the output data gives the date and time of the analysis,
+are written to the <b>end</b> of the Output Data file.
+Each section of the Output Data gives the date and time of the analysis,
 recapitulates the input information, gives joint displacements in global coordinates, frame element end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
 </p>
 
 <p><b>Frame3DD</b> writes a
 <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>
 script file used for viewing deformed frames and dynamic mode shapes.
-If the output data is written to a file called <tt>exA.out</tt>,
+If the Output Data is written to a file called <tt>exA.out</tt>,
 the Gnuplot script is written to a file called <tt>exA.plt</tt>.
 Graphical output may be viewed by starting Gnuplot and typing:
 <tt> load 'exA.plt'</tt>.
@@ -145,10 +145,10 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li>Read the User Manual and Reference (this file).
 <li>Download or build the Frame3DD executable for your operating system (see below).
 <li>Optionally, obtain a copy of Gnuplot for your operating system.
-<li>Copy one of the example input data files (eg <tt>exA.3dd</tt>) into your home directory.
+<li>Copy one of the example Input Data files (eg <tt>exA.3dd</tt>) into your home directory.
 <li>       Open a terminal window and run the program using the command
 	  <tt>frame3dd  exA.3dd  exA.out</tt> (change the filenames <tt>exA.3dd</tt> and <tt>exA.out</tt> as necessary).
-	<li>Open the output data file using your text editor and view the output data.
+	<li>Open the Output Data file using your text editor and view the output data.
 <!--     Running this program will create many files.  Most of them are used
          for graphics and should be written to the  /tmp  directory.
 <li>      One of the files will be written to the current working directory and will be called
@@ -184,7 +184,7 @@ in the Input Data (unless the <a href="#Matlab">Matlab interface</a> is used).
 
 
 <p>
-To write your own input data file, it may be helpful to start with an example that resembles the system you would like to analyze.  Carefully compare the graphical output of the example, the Input Data file, the Output Data file,
+To write your own Input Data file, it may be helpful to start with an example that resembles the system you would like to analyze.  Carefully compare the graphical output of the example, the Input Data file, the Output Data file,
 and the <a href="#InputData"><b>input data format</b></a>, with the <a href="#Variables"><b>variable definitions</b></a> at the end of this page.
 </p>
 <p>
@@ -208,7 +208,7 @@ Details regarding the Matlab interface to Frame3DD are <a href="#Matlab">here</a
 Details regarding the spreadsheet interface to Frame3DD are <a href="#CSV">here</a>.<br>
 </p>
 <p>
-It might take a few tries to get your input data just right.
+It might take a few tries to get your Input Data just right.
 Frame3DD checks the Input Data for errors prior to analysing the system
 and, where possible, displays descriptive diagnostic messages when errors are
 found with the input data.
@@ -410,7 +410,7 @@ After finishing with your plots, quit Gnuplot by typing ...  <br>
  <li>the GUI executeable, Frame_Ed.exe
  <li>the frame analysis executeable, Frame3d.exe, for the 20020103 version
  <li>an example input file, exG.3dd, for the 20020103 version
- <li>a template for the input data file, ex2002.3dd, for the 20020103 version
+ <li>a template for the Input Data file, ex2002.3dd, for the 20020103 version
  </ul>
 <p>
  Differences between the 2002 and the current versions of <b>Frame3DD</b> are:
@@ -630,8 +630,8 @@ and tonne), or (MegaNewtons, meters, and kilotonnes).
 
 <p>
 It is recommended to write the units used in your analysis in the
-<i>title</i> of the analysis and throughout the input data files,
-as is done in the example input data files.
+<i>title</i> of the analysis and throughout the Input Data files,
+as is done in the example Input Data files.
 
 <ul>
 <li> 1 inch = 25.4 millimeter = 0.0254 meter
@@ -1659,7 +1659,7 @@ or
        frame3dd -i InFile -o OutFile [OPTIONS]
 </pre>
 
- ... where <tt>[OPTIONS]</tt> over-rides values in the input data file and includes
+ ... where <tt>[OPTIONS]</tt> over-rides values in the Input Data file and includes
      one or more of the following:
 </p>
 
