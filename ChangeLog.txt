@@ -1,3 +1,7 @@
+* Mon Oct 19 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091019
+- Reorganization of the descriptions of section properties and coordinate
+transformation in the user manual.
+
 * Sun Oct 18 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091018
 - Expanded description of section properties and "roll angle" in the
 user manual.
