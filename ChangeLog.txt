@@ -1,4 +1,5 @@
 * Mon Oct 19 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091019
+- User manual correction to Jxx formulae for square tube and rectangular tube sections.
 - Reorganization of the descriptions of section properties and coordinate
 transformation in the user manual.
 
