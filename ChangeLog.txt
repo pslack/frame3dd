@@ -1,3 +1,7 @@
+* Sun Oct 18 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091018
+- Expanded description of section properties and "roll angle" in the
+user manual.
+
 * Tue Sep 22 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090922
 - Added flag option '-a' to display "about" information. 
 - This option should be helpful to those running Frame3DD in the background,
