@@ -726,7 +726,23 @@ coordinate system, in which the <i>x</i>-axis of the local coordinate system
 is oriented along the axis of the frame element.  <i>Ax</i> is the
 cross-sectional area of the frame element, which is given as the area
 perpendicular to its local <i>x</i>-axis.   The local <i>y</i>-axis and <i>z</i>-axis are aligned
-with the principle directions of the cross section.  The bending moments
+with the principle directions of the cross section.  
+</p>
+
+<p>
+Shear strains in frame elements are distributed in a relatively complicated manner over the cross section.   
+The shear area values,  <i>Asy</i> and <i>Asz</i>, fully account for the non-uniform distribution of shear strain in the cross section.     
+Shear areas are effective cross-sectional areas corresponding to a uniform distribution of shear strain over the cross section.   
+For slender frame elements
+(in which the span-to-depth ratio is greater than 10)
+shear deformations contribute only slightly to the overall structural deformation.
+For stocky frame elements
+(in which the span-to-depth ratio is less than 2)
+shear deformations contribute significantly to the overall structural deformation.
+</p>
+
+<p>
+The bending moments
 of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of inertia for the cross section.
 </p>
 
@@ -743,35 +759,21 @@ of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of iner
 <p>
 When a frame element is placed into the structure
 it is translated and rotated and optionally rolled about
-its local <i>x</i>-axis.  By allowing the frame element to be
-'rolled' about its local <i>x</i>-axis during the stiffness matrix
-assembly process, cross-axis bending effects are included.
-Issues related to rolling of cross sections and cross-axis bending
-are important for three-dimensional structural systems or planar
-structures with out-of-plane deformation, such as grillages.  For planar
-structures with deformations only in the plane, these issues do not arise.
-In addition, these issues do not arise for three-dimensional structures
-made entirely of elements for which <i>Iyy=Izz</i>, i.e., square and circular cross sections.
+its local <i>x</i>-axis.  
 </p>
 
 <p>
-Coordinate transformations do not currently consider the effect of
-finite joint sizes, and are based on joint-to-joint lengths of each
-frame element.
-</p>
-
-<p>
-     The default coordinate transformation process starts with the frame 
-     element's centroidal axis placed along the global <i>X</i>-axis, and the principle
-     axes of the cross section (the local <i>x</i> and <i>y</i> axes) are aligned with the global <i>Y</i>- and <i>Z</i>-axes
+The default coordinate transformation process starts with the frame 
+element's centroidal axis placed along the global <i>X</i>-axis, and the principle
+axes of the cross section (the local <i>x</i> and <i>y</i> axes) are aligned with the global <i>Y</i>- and <i>Z</i>-axes
 and must coincide with the principle axes of the cross section.
-     To place the frame element in the structure, first it is rotated about the
-     global <i>Y</i>-axis, then about the global <i>Z</i>-axis, then 'rolled' or spun
-     about the local <i>x</i>-axis.   If the roll angle is zero, this process results
-     in a transformation for which loads in the global <i>Z</i>-direction will cause no
-     cross-axis bending.   In this code, this type of coordinate transformation is
-     called "<i>Z</i>-axis is vertical" and is selected primarily for the sake of visualization
-     with Gnuplot, in which the <i>Z</i>-axis is vertical for all three-dimensional plots.
+To place the frame element in the structure, first it is rotated about the
+global <i>Y</i>-axis, then about the global <i>Z</i>-axis, then 'rolled' or spun
+about the local <i>x</i>-axis.   If the roll angle, <i>p</i>, is zero, this process results
+in a transformation for which loads in the global <i>Z</i>-direction will cause no
+cross-axis bending.   In this code, this type of coordinate transformation is
+called "<i>Z</i>-axis is vertical" and is selected primarily for the sake of visualization
+with Gnuplot, in which the <i>Z</i>-axis is vertical for all three-dimensional plots.
 </p>
 
 <p>
@@ -787,6 +789,28 @@ transformation is called "<i>Y</i>-axis is vertical."
 </p>
 
 <p>
+By allowing the frame element to be
+'rolled' about its local <i>x</i>-axis during the stiffness matrix
+assembly process, cross-axis bending effects may be included.
+Issues related to rolling of cross sections and cross-axis bending
+are important for three-dimensional structural systems or planar
+structures with out-of-plane deformation, such as grillages.  For planar
+structures with deformations only in the plane, these issues do not arise.
+In addition, these issues do not arise for three-dimensional structures
+made entirely of elements for which <i>Iyy=Izz</i>, i.e., square and circular cross sections.
+To reiterate, in 2D frames,
+the roll angle <i>p</i> does not matter,
+and can be set to 0 (zero) for all frame elements.  
+For frame elements with doubly-symmetric sections (e.g., circular or square)
+the roll angle <i>p</i> does not matter, and can be set to 0 (zero).   
+For 3D frames made of non-circular or non-square sections and all
+frame elements are aligned with the global X, Y, or Z axes then 
+the roll angle <i>p</i> 
+might matter but <i>p</i> would probably be either "0" or "90 degrees."
+</p>
+
+
+<p>
 Again, for planar structures,
 with no out-of-plane bending, which lie in the global <i>X-Y</i>, <i>Y-Z</i>, or <i>X-Z</i> planes,
 and for structures made entirely of bars with Iyy=Izz, the details of the
@@ -797,35 +821,68 @@ by A. Kassimali.
 </p>
 
 <p>
+Coordinate transformations do not currently consider the effect of
+finite joint sizes, and are based on joint-to-joint lengths of each
+frame element.
+</p>
+
+<p>
 To analyze a structure as a "truss" with this software, specify <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>
 to be much smaller than they would be normally, but not zero.   If the shear forces and bending
-moments in your structural elements are small, then your structural model
+moments in the structural elements are small, then the structural model
 represents a "truss" approximation of the actual structure.    
-In general, shear deformation effects and geometric stiffness effects should <b>not</b> be incorporated if  <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i> are made very small.  
+Shear deformation effects and geometric stiffness effects should <b>not</b> be incorporated if  <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i> are made very small.  
 See example A.
 </p>
 
-<h4> 7.3.1 Cross Section Properties of Square Tube and Circular Tube Sections </h4>
+<h4> 7.3.1 Cross Section Properties of Circular Tube, Square Tube and Rectangular Tube Sections </h4>
 
-<p>
-Square Tube (outer dimension = <i>b</i>, wall thickness = <i>t</i>):
-<ul>
-<li> <i>Ax = b<sup>2</sup> - (b-2t)<sup>2</sup></i>
-<li> <i>Asy = Asz = Ax / ( 2.05-11.15(t/b)<sup>2</sup> + 16.16(t/b)<sup>3</sup> )</i>
-<li> <i> Jxx =  b<sup>3</sup> t </i>
-<li> <i>Izz = Iyy = (1/12) ( b<sup>4</sup> - (b-2t)<sup>4</sup> )</i>
-</ul>
-</p>
+<img src="img/Tsections.png" align="center" border="0"><br>
 
 <p>
 Circular Tube (outer radius= <i>R<sub>o</sub></i>, inner radius = <i>R<sub>i</sub></i>):
 <ul>
 <li> <i>Ax = &pi; ( R<sub>o</sub><sup>2</sup> - R<sub>i</sub><sup>2</sup> )</i>
-<li> <i>Asy = Asz = Ax / ( 1.13+1.221(R<sub>i</sub>/R<sub>o</sub>)<sup>2</sup> - 0.71(R<sub>i</sub>/R<sub>o</sub>)<sup>3</sup> )</i>
+<li> <i>Asy = Asz = Ax / ( 1.124235 + 0.055610(R<sub>i</sub>/R<sub>o</sub>) + 1.097134(R<sub>i</sub>/R<sub>o</sub>)<sup>2</sup> - 0.630057(R<sub>i</sub>/R<sub>o</sub>)<sup>3</sup> )</i>
 <li> <i>Jxx = (1/2) &pi; ( R<sub>o</sub><sup>4</sup> - R<sub>i</sub><sup>4</sup> )</i>
 <li> <i>Ixx = Iyy = (1/4) &pi; ( R<sub>o</sub><sup>4</sup> - R<sub>i</sub><sup>4</sup> )</i>
 </ul>
 </p>
+
+
+<p>
+Square Tube (outer dimension = <i>b</i>, wall thickness = <i>t</i>):
+<ul>
+<li> <i> Ax = b<sup>2</sup> - (b-2t)<sup>2</sup></i>
+<li> <i> Asy = Asz = Ax / ( 2.08334 - 0.70154(t/b) - 8.00313(t/b)<sup>2</sup> + 12.22572(t/b)<sup>3</sup> )</i>
+<li> <i> Jxx =  b<sup>3</sup> t </i>
+<li> <i> Izz = Iyy = (1/12) ( b<sup>4</sup> - (b-2t)<sup>4</sup> )</i>
+</ul>
+</p>
+
+
+<p>
+Rectangular Tube (outer dimension = <i>b</i> x <i>d</i>, wall thickness = <i>t</i>):
+<ul>
+<li> <i> Ax = (b)(d) -  (b-2t)(d-2t)</i>
+<li> <i> Asy = Ax / ( 1.114691 + 0.552486(t/d) - 1.234540(t/d)<sup>2</sup> + 1.576674(t/d)<sup>3</sup> + 1.053296(d/b) - 0.081960(d/b)<sup>2</sup> - 2.192489(t/b) + 0.027438(t/b)<sup>2</sup> )</i> ... <b>(b > d)</b>
+<li> <i> Asy = Ax / ( 1.158912 - 2.291419(t/b) + 1.223522(t/b)<sup>2</sup> + 7.370911(t/b)<sup>3</sup> + 0.964439(d/b) + 0.004778(d/b)<sup>2</sup> + 0.718828(td/b<sup>2</sup>) - 5.417298(t<sup>2</sup>d/b<sup>3</sup>) )</i> ... <b>(d > b)</b>
+<li> <i> Asz = Ax / ( 1.158912 - 2.291419(t/d) + 1.223522(t/d)<sup>2</sup> + 7.370911(t/d)<sup>3</sup> + 0.964439(b/d) + 0.004778(b/d)<sup>2</sup> + 0.718828(tb/d<sup>2</sup>) - 5.417298(t<sup>2</sup>b/d<sup>3</sup>) )</i> ... <b>(b > d)</b>
+<li> <i> Asz = Ax / ( 1.114691 + 0.552486(t/b) - 1.234540(t/b)<sup>2</sup> + 1.576674(t/b)<sup>3</sup> + 1.053296(b/d) - 0.081960(b/d)<sup>2</sup> - 2.192489(t/d) + 0.027438(t/d)<sup>2</sup> )</i> ... <b>(d > b)</b>
+<li> <i> Jxx =  2 t (Ax)<sup>2</sup> / (b+d) </i>
+<li> <i> Iyy = (1/12) ( bd<sup>3</sup> - (b-2t)(d-2t)<sup>3</sup> )</i>
+<li> <i> Izz = (1/12) ( b<sup>3</sup>d - (b-2t)<sup>3</sup>(d-2t) )</i>
+</ul>
+</p>
+
+<!-- 
+Asy coefficients
+ 1.114691 0.552486 -1.234540 1.576674 1.053296 -0.081960 -2.192489 0.027438
+
+Asz coefficients
+ 1.158912 -2.291419 1.223522 7.370911 0.964439 0.004778 0.718828 -5.417298
+
+-->
 
 
 <h4> 7.3.2 Cross Section Properties of some Steel Sections</h4>
@@ -842,6 +899,22 @@ Circular Tube (outer radius= <i>R<sub>o</sub></i>, inner radius = <i>R<sub>i</su
 <li><a href="http://www.engineersedge.com/I_beams_aluminum.htm">Aluminum I beam</a>
 <li><a href="http://www.engineersedge.com/channel_aluminum.htm">Aluminum Channels</a>
 </ul>
+
+<p>
+I sections (depth = <i>d</i>, width = <i>b</i>, flange thickness = <i>t</i>, web thickness = <i>w</i>):
+</p>
+
+<img src="img/Isection.png" align="center" border="0"><br>
+
+<ul>
+<li> <i> Ax = bd  - (d-2t)(b-w)</i>
+<li> <i> Asy = 1.64 b t </i>
+<li> <i> Asz = d w </i>
+<li> <i> Jxx = (1/3) ( 2 b t<sup>3</sup> + d w<sup>3</sup> ) </i>
+<li> <i> Iyy = (1/12) ( bd<sup>3</sup> - (b-w)(d-2t)<sup>3</sup> )</i>
+<li> <i> Izz = (1/12) ( 2 t b<sup>3</sup> + (d-2t)w<sup>3</sup> ) </i>
+</ul>
+</p>
 
 <!-- <li><a href="http://www.aisc.org/Content/NavigationMenu/ePubs/ePubs_Home/AISC_SHAPES_DATABASE/AISC_SHAPES_DATABASE.htm">AISC Shapes Database</a>-->
 
@@ -900,7 +973,7 @@ where
 
 <p>
          For closed single-box sections made up of thin plates: <br>
-<i> Jxx = 4 Ax<sup>2</sup> / &Sigma;<sub>i</sub> [ b<sub>i</sub> / t<sub>i</sub> ] </i>
+<i> Jxx = 4 (Ax)<sup>2</sup> / &Sigma;<sub>i</sub> [ b<sub>i</sub> / t<sub>i</sub> ] </i>
 </p>
 
 <p>
