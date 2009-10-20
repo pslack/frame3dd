@@ -67,6 +67,9 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Tue Oct 20 2009 John Pye <john.pye@anu.edu.au> 0.20091020
+- Adding packaging for Debian, planning new release.
+
 * Mon Oct 19 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091019
 - User manual correction to Jxx formulae for square tube and rectangular tube sections.
 - Reorganization of the descriptions of section properties and coordinate

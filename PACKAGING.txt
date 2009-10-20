@@ -1,0 +1,80 @@
+
+Information for packaging FRAME3DD
+==================================
+
+Source tarball 
+--------------
+
+To build the source tarball from subversion:
+
+  scons dist
+
+
+RPM package
+-----------
+
+To build an RPM:
+
+  scons dist
+  rpmbuild -ta dist/frame3dd-*.tar.bz2
+
+(Some values in ~/.rpmmacros may need to be set first)
+
+Last tested with Fedora 9.
+
+
+.DEB package
+------------
+
+To build a Debian package (e.g. suitable for Ubuntu), first get hold of the
+'dtar' tool:
+
+http://ascendwiki.cheme.cmu.edu/Building_a_Debian_package_from_a_source_tarball
+
+Then, assuming you installed dtar somewhere on your path,
+
+  cd ~/frame3dd
+  scons dist
+  dtar dist/frame3dd-0.20091020.tar.bz2 dist/debian.tar.gz
+
+You should then have a .deb file in your ~/frame3dd directory. You can check
+its contents using dpkg --contents *.deb. You can then install the package
+using dpkg -i *.deb.
+
+Note that this package includes the microstran parser and rendering/viewer
+program, and as such, the package has numerous dependencies. We plan to 
+separate this viewer into a subpackage, to allow the dependencies to be
+minimised, but this has not been done just yet.
+
+
+Windows installer
+-----------------
+
+To build a Windows installer (from MinGW/MSYS console):
+
+  scons installer
+
+You will need to have NSIS installed on your system. This is the program that
+actually generates the installer -- SCons just 'oversees' the process.
+
+
+Mac OS X package
+----------------
+
+Mac OS X package are not yet implemented. Hopefully coming soon. For now, use
+the source tarball and build for yourself. SCons should first be installed using
+'easy_install' using standard Mac Python (not Fink/MacPorts).
+
+
+Releasing the files
+-------------------
+
+To upload files to Sourceforge.net for distribution:
+
+  https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download
+
+
+-- 
+John Pye
+20 Oct 2009
+
