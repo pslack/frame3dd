@@ -1,0 +1,19 @@
+Source: frame3dd
+Section: contrib/science
+Priority: extra
+Maintainer: John Pye <john@curioussymbols.com>
+Build-Depends: scons, gcc
+Standards-Version: 3.7.2
+
+Package: frame3dd
+Architecture: any
+Depends: ${shlibs:Depends}
+Description:Structural analysis of frames and trusses
+ Free software for static and dynamic structural analysis of 2D and 3D frames 
+ and trusses with elastic and geometric stiffness. Computes the static
+ deflections, reactions, internal element forces, natural frequencies, mode
+ shapes and modal participation factors of two- and three- dimensional elastic
+ structures using direct stiffness and mass assembly.  Graphical output and
+ mode shape animation via Gnuplot version 4.0
+
+# vim: sw=4:et:ai

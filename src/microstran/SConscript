@@ -39,6 +39,9 @@ dumpcases = env.Program('dumpcases',['dumpcases.c'],LIBS=["microstranparser"],LI
 
 env['PROGS'] += [microst, dumpsections, dumpforces, dumpcases, lib]
 
+incdir=Dir(env.subst("$INSTALL_ROOT$INSTALL_INCLUDE/microstran"))
+env.Install(incdir,libenv.Glob("*.h"))
+
 libdir=Dir(env.subst("$INSTALL_ROOT$INSTALL_LIB"))
 env.Install(libdir,lib)
 

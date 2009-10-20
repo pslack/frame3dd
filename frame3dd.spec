@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20090922
+Version:	0.20091020
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -67,6 +67,15 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Mon Oct 19 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091019
+- User manual correction to Jxx formulae for square tube and rectangular tube sections.
+- Reorganization of the descriptions of section properties and coordinate
+transformation in the user manual.
+
+* Sun Oct 18 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091018
+- Expanded description of section properties and "roll angle" in the
+user manual.
+
 * Tue Sep 22 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090922
 - Added flag option '-a' to display "about" information. 
 - This option should be helpful to those running Frame3DD in the background,

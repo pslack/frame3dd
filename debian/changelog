@@ -1,0 +1,7 @@
+frame3dd (0.20091020) jaunty; urgency=low
+
+  * First packaging of frame3dd as .deb
+  * See also ChangeLog.txt file included within package.
+
+ -- John Pye (Aug 08) <john@curioussymbols.com>  Tue, 20 Oct 2009 11:05:00 +1100
+

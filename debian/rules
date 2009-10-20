@@ -1,0 +1,80 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+CFLAGS = -Wall -g
+
+SCONS_OPTIONS = CC="gcc" \
+	CXX="g++" \
+	INSTALL_PREFIX=/usr
+
+SCONS= scons $(SCONS_OPTIONS)
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
+
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+	INSTALL_PROGRAM += -s
+endif
+
+# shared library versions, option 1
+major=1
+
+INSTALLROOT=$(CURDIR)/debian/tmp
+DATADIR=$(INSTALLROOT)/usr/share
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	cd $(CURDIR) && $(SCONS) INSTALL_PREFIX=/usr
+	touch build-stamp
+
+clean:
+	dh_testdir
+	rm -f build-stamp
+	dh_clean 
+	$(SCONS) -c
+	rm -rf .scon*
+	rm scons/*.pyc
+
+install: build
+	dh_testdir
+#	dh_testroot
+	dh_clean -k 
+	dh_installdirs
+	mkdir -p $(INSTALLROOT)/usr
+	cd $(CURDIR) && $(SCONS) INSTALL_PREFIX=/usr INSTALL_ROOT=$(INSTALLROOT) install
+#
+	dh_install --sourcedir=$(INSTALLROOT)
+#	dh_desktop
+	dh_installman
+
+# Build architecture-independent files here.
+binary-indep:
+	dh_testdir
+	dh_testroot
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs ChangeLog.txt
+	dh_installdocs
+	dh_installexamples
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure
+

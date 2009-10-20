@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-version = '0.20090922'
+version = '0.20091020'
 
 import platform
 deftools = ['default']
@@ -31,55 +31,57 @@ env = Environment(
 	,toolpath=['scons']
 )
 
-opts = Options(['options.cache'])
+vars = Variables(['options.cache'])
 
-opts.Add(
+vars.Add(
 	"CC"
 	,"C compiler"
 	,"gcc"
 )
-opts.Add(
+vars.Add(
 	"CXX"
 	,"C++ compiler"
 	,"g++"
 )
 
-opts.Add(BoolOption(
+vars.Add(BoolVariable(
 	"DEBUG"
 	,"Whether to add debugger symbols to the binary"
 	,1
 ))
 
-opts.Add(BoolOption(
+vars.Add(BoolVariable(
 	"HAVE_ITOA"
 	,"Do you standard C libraries include the function 'itoa'?"
 	,default_itoa
 ))
 
-opts.Add(BoolOption(
+vars.Add(BoolVariable(
 	"WITH_GCCVISIBILITY"
 	,"Set true if you want to use the GCC 'visibility' feature."
 	,True
 ))
 
-opts.Add("INSTALL_PREFIX","Install location prefix (usually /usr or /usr/local)","/usr/local")
-opts.Add("INSTALL_BIN","Install location for binaries (Linux)","$INSTALL_PREFIX/bin")
-opts.Add("INSTALL_LIB","Install location for libraries (Linux)","$INSTALL_PREFIX/lib")
-opts.Add("INSTALL_DATA","Install location for general data files (Linux)","$INSTALL_PREFIX/share");
-opts.Add("INSTALL_FRAMEDATA","Install location FRAME's data files (Linux)","$INSTALL_DATA/frame3dd");
-opts.Add("INSTALL_ROOT","Install root (for building RPMs etc)","")
+vars.Add("INSTALL_PREFIX","Install location prefix (usually /usr or /usr/local)","/usr/local")
+vars.Add("INSTALL_BIN","Install location for binaries (Linux)","$INSTALL_PREFIX/bin")
+vars.Add("INSTALL_LIB","Install location for libraries (Linux)","$INSTALL_PREFIX/lib")
+vars.Add("INSTALL_INCLUDE","Install location for header files (Linux)","$INSTALL_PREFIX/include")
+vars.Add("INSTALL_DATA","Install location for general data files (Linux)","$INSTALL_PREFIX/share");
+vars.Add("INSTALL_DOC","Install location for documentation files (Linux)","$INSTALL_DATA/doc/frame3dd");
+vars.Add("INSTALL_FRAMEDATA","Install location FRAME's data files (Linux)","$INSTALL_DATA/frame3dd");
+vars.Add("INSTALL_ROOT","Install root (for building RPMs etc)","")
 
 # NSIS TARGET FILENAME
 
-opts.Add(
+vars.Add(
 	'WIN_INSTALLER_NAME'
 	,'Windows Installer name'
 	,'frame3dd-%s.exe' % version
 )
 
-opts.Update(env)
-opts.Save('options.cache',env)
-Help(opts.GenerateHelpText(env))
+vars.Update(env)
+vars.Save('options.cache',env)
+Help(vars.GenerateHelpText(env))
 
 env['CCFLAGS']=['-O', '-Wall']
 env['VERSION'] = version
@@ -248,11 +250,27 @@ examples = Split("""
 	exB.3dd  exD.3dd  exF.3dd  exH.3dd  
 """)
 
-datadir=Dir(env.subst("$INSTALL_ROOT$INSTALL_FRAMEDATA"))
+exampledir=Dir(env.subst("$INSTALL_ROOT$INSTALL_FRAMEDATA/examples"))
 libdir=Dir(env.subst("$INSTALL_ROOT$INSTALL_LIB"))
 bindir=Dir(env.subst("$INSTALL_ROOT$INSTALL_BIN"))
-env.Install(datadir,['examples/%s'%e for e in examples])
-env['installdirs']+=[datadir, libdir, bindir]
+incdir=Dir(env.subst("$INSTALL_ROOT$INSTALL_INCLUDE"))
+env.Install(exampledir,['examples/%s'%e for e in examples])
+env.Install(exampledir,['test/truss.arc','test/bent-cantilever.arc'])
+
+#------------
+# install documentation
+
+docdir = Dir(env.subst("$INSTALL_ROOT$INSTALL_DOC"))
+env.Install(docdir,['doc/user-manual.html','doc/version.html'])
+docimgdir = Dir(env.subst("$INSTALL_ROOT$INSTALL_DOC/img"))
+env.Install(docimgdir,Glob("doc/img/*.jpg"))
+env.Install(docimgdir,Glob("doc/img/*.png"))
+
+#------------
+# register the 'install' target
+
+datadir=Dir(env.subst("$INSTALL_ROOT$INSTALL_FRAMEDATA"))
+env['installdirs']+=[datadir, libdir, bindir, incdir, docdir, docimgdir]
 
 env.Alias("install",env['installdirs'])
 
@@ -290,6 +308,22 @@ if platform.system()=="Windows":
 	Depends(installer,env['PROGS'])
 	env.Alias('installer',installer)
 
+#-------------
+# debian.tar.gz for Debian packaging (Ubuntu,...)
+
+import glob
+deb_files = glob.glob('debian/*.install')
+deb_files += glob.glob('debian/*.docs')
+deb_files += glob.glob('debian/*.dirs')
+deb_files += glob.glob('debian/*.man')
+deb_files += glob.glob('debian/*.manpages')
+deb_files += ['debian/%s' % s for s in ['rules','control','changelog','compat','copyright','dirs']]
+
+deb_tar = env.Tar(
+	'dist/debian.tar.gz'
+	,deb_files
+	,TARFLAGS = ['cz']
+)
 
 #-------
 
