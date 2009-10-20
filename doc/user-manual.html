@@ -825,11 +825,11 @@ Circular Tube (outer radius= <i>R<sub>o</sub></i>, inner radius = <i>R<sub>i</su
 <p>
 Square Tube (outer dimension = <i>b</i> x <i>b</i>, wall thickness = <i>t</i>):
 <ul>
-<li> <i> Ax = b<sup>2</sup> - (b-2t)<sup>2</sup></i>
+<li> <i> Ax = b<sup>2</sup> - (b - 2t)<sup>2</sup></i>
 <li> <i> Asy = Asz = Ax / ( 2.08334 - 0.70154(t/b) - 8.00313(t/b)<sup>2</sup> + 12.22572(t/b)<sup>3</sup> )</i> &plusmn; 0.5%
 <li> <i> Asy = Asz = Ax / ( 2.1186 - 1.9900(t/b) )</i> &plusmn; 2%
 <li> <i> Jxx =  (b - t)<sup>3</sup> t </i>
-<li> <i> Izz = Iyy = (1/12) ( b<sup>4</sup> - (b-2t)<sup>4</sup> )</i>
+<li> <i> Izz = Iyy = (1/12) ( b<sup>4</sup> - (b - 2t)<sup>4</sup> )</i>
 </ul>
 </p>
 
@@ -837,14 +837,14 @@ Square Tube (outer dimension = <i>b</i> x <i>b</i>, wall thickness = <i>t</i>):
 <p>
 Rectangular Tube (outer dimension = <i>a</i> x <i>b</i>, wall thickness = <i>t</i>):
 <ul>
-<li> <i> Ax = ab -  (a-2t)(b-2t)</i>
+<li> <i> Ax = ab -  (a - 2t)(b - 2t)</i>
 <li> <i> Asy = Ax / ( 1.14766  + 0.28187(t/b) + 0.96199(b/a) - 2.17742(t/a) )</i> &plusmn; 1% ... <b>(a > b)</b>
 <li> <i> Asy = Ax / ( 1.10498 - 1.98518(t/a) + 8.74762(t/a)<sup>3</sup> + 0.99548(b/a) + 0.69146(tb/a<sup>2</sup>) - 5.36255(t<sup>2</sup>b/a<sup>3</sup>) )</i> &plusmn; 1% ... <b>(b > a)</b>
 <li> <i> Asz = Ax / ( 1.10498 - 1.98518(t/b) + 8.74762(t/b)<sup>3</sup> + 0.99548(a/b) + 0.69146(ta/b<sup>2</sup>) - 5.36255(t<sup>2</sup>a/b<sup>3</sup>) )</i> &plusmn; 1% ... <b>(a > b)</b>
 <li> <i> Asz = Ax / ( 1.14766  + 0.28187(t/a) + 0.96199(a/b) - 2.17742(t/b) )</i> &plusmn; 1% ... <b>(b > a)</b>
-<li> <i> Jxx =  2 t (a - t)<sup>2</sup>(b - t)<sup>2</sup> / (a+b) </i>
-<li> <i> Iyy = (1/12) ( ab<sup>3</sup> - (a-2t)(b-2t)<sup>3</sup> )</i>
-<li> <i> Izz = (1/12) ( a<sup>3</sup>b - (a-2t)<sup>3</sup>(b-2t) )</i>
+<li> <i> Jxx =  2 t (a - t)<sup>2</sup>(b - t)<sup>2</sup> / (a + b - 2t) </i>
+<li> <i> Iyy = (1/12) ( ab<sup>3</sup> - (a - 2t)(b - 2t)<sup>3</sup> )</i>
+<li> <i> Izz = (1/12) ( a<sup>3</sup>b - (a - 2t)<sup>3</sup>(b - 2t) )</i>
 </ul>
 </p>
 
