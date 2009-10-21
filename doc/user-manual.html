@@ -245,142 +245,72 @@ The date stamp at the beginning of the manual corresponds to the corresponding r
 <a name="runlinux"/><h3>3.1 Linux/Unix</h3>
 
 <p>
-For Linux you may install Frame3DD from the Linux .ZIP archive, or you may
-compile Frame3DD the source code.   For other variations of Unix you must
-compile from the source.  
+For Linux/Unix
+you may install Frame3DD from a .ZIP archive 
+or you may compile from the source code.
+The following installation instructions are to install to the <b>Desktop</b> but other directories may be substituted, if desired.  
 </p>
 
-<h4>3.1.1 Installing from the .ZIP archive</h4>
+<h4>3.1.1 Installing from the .ZIP archive for Linux</h4>
 
 <ol>
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
-Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it in your home directory.
-<li> Unzip the archive to create a <b>Frame3DD</b> directory.
+Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it in your <b>Desktop</b>.
+<li> Open a Terminal window (right-click on an open part of the Desktop to select 'Open Terminal')
+and unzip the archive to create a <b>Frame3DD</b> directory.
 <pre>
+               cd ~/Desktop
                unzip Frame3DD_VERSION_linux.zip
 </pre>
-<li> If you have root priviliges, copy the program to <b>/usr/local/bin/</b>
+If you have root priviliges, copy Frame3DD/frame3dd.exe to /usr/local/bin, or if you do not have root priviliges, put the Frame3DD directory in your path.
+Open a Terminal window 
+and add FRAME3DD to your path, change to the directory of example files and run an example. You may cut-and-paste the following three lines into the Terminal window. 
 <pre>
-               sudo cp Frame3DD/frame3dd /usr/local/bin
-</pre>
-or if you do not have root priviliges, put the <b>Frame3DD</b>
-directory in your path.
-<pre>
-               export PATH=$PATH:~/Frame3DD/
-</pre>
-Change to the directory of example files and try to run an example.
-<pre>
-               cd Frame3DD/examples/
+               export PATH=$PATH:~/Desktop/Frame3DD/
+               cd ~/Desktop/Frame3DD/examples/
                frame3dd exA.3dd exA.out
 </pre>
 <li>
-The main report output will have been written to the <tt>exA.out</tt> file.
-Data files used primarly for plotting are stored in the <b>/tmp/</b> directory.
-<li> Graphical output may be viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, 
-which can be installed (if need be) by using 
-<pre>
-               sudo apt-get install gnuplot
-</pre>
-Open a terminal window and
-<pre>
-               gnuplot
-     gnuplot>  load 'exA.plt'
-</pre>
-Hit the 'Return' key in the Terminal window to see the sequence of plots
-and animations until the <tt>gnuplot></tt> prompt returns.<br>
-To create a PostScript file of your plot, use the Gnuplot script
-<a href="saveplot"><tt>saveplot</tt></a> with the following commands:<br>
-<pre>
-     gnuplot>  load 'saveplot'
-     gnuplot>  !mv my-plot.ps another-file.ps
-</pre>
-After finishing with your plots, you can exit Gnuplot by typing 
-<pre>
-     gnuplot>  quit
-</pre>
-<li> You may edit Input Data files using a plain text editor
+The results of your Frame3DD analysis will have been written to the <tt>exA.out</tt> file.
+Data files used primarly for plotting are stored in the <b>/tmp</b> directory.
+<li>       You may edit Input Data files using a plain text editor
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
-<a href="http://www.gnome.org/projects/gedit/">gedit</a>,
-<a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>)
+ <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
+ <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>),
 or a spreadsheet program
-(<a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>,
-<a href="http://www.openoffice.org/">OpenOffice</a>).<br>
+(<a href="http://www.openoffice.org/">OpenOffice</a>,
+ <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).
 </ol>
-</ol>
-
-<h4>3.1.2 Compiling from source for Linux/Unix</h4>
 
 <p>
-<!--
-For Linux and Unix we currently only provide source-code tarball; you must
-build the software yourself.
--->
-The following instructions work on Ubuntu 8.10 - 9.10
-and should work with minor changes on any other recent Linux or Unix system.
-</p>
+Graphical output may be viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, 
 
 <ol>
-<li>Ensure you have Python, SCons and GCC installed on your system. It should suffice to 
-<pre>
-               sudo apt-get install build-essential scons
-</pre>
-<li>If you would like to build the Microstran viewer, ensure you additionally have got <tt>libsoqt-dev</tt> installed on your system.
-<li>
-<!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
-<li><a href="https://sourceforge.net/projects/frame3dd/files/">
-Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it in your home directory.
-<li> Unzip the archive to create a <b>Frame3DD</b> directory.
-<pre>
-               unzip Frame3DD_VERSION_linux.zip
-</pre>
-<li> If you have root priviliges, copy the program to <b>/usr/local/bin/</b>
-<pre>
-               sudo cp Frame3DD/frame3dd /usr/local/bin
-</pre>
-or if you do not have root priviliges, put the <b>Frame3DD</b>
-directory in your path.
-<pre>
-               export PATH=$PATH:~/Frame3DD/
-</pre>
-Change to the directory of example files and try to run an example.
-<pre>
-               cd Frame3DD/examples/
-               frame3dd exA.3dd exA.out
-</pre>
-<li>
-The main report output will have been written to the <tt>exA.out</tt> file.
-Data files used primarly for plotting are stored in the <b>/tmp/</b> directory.
-<li> Graphical output may be viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, 
-which can be installed (if need be) by using 
+<li> Gnuplot is usually pre-installed on Linux systems, if it is not,
+you may install it only if you have root priviliges using the command:
 <pre>
                sudo apt-get install gnuplot
 </pre>
-Open a terminal window and
+
+<li> To view the plots of your Frame3Dd analysis, open a Terminal window and
 <pre>
                gnuplot
      gnuplot>  load 'exA.plt'
 </pre>
 Hit the 'Return' key in the Terminal window to see the sequence of plots
-and animations until the <tt>gnuplot></tt> prompt returns.<br>
+and animations until the <tt>gnuplot></tt> prompt returns.
+or hit <b>CTRL-C</b> to stop the plots at the current plot.  
 To create a PostScript file of your plot, use the Gnuplot script
-<a href="saveplot"><tt>saveplot</tt></a> with the following commands:<br>
+<a href="../examples/saveplot"><tt>saveplot</tt></a> with the following commands:<br>
 <pre>
      gnuplot>  load 'saveplot'
-     gnuplot>  !mv my-plot.ps another-file.ps
+     gnuplot>  !cp my-plot.ps PlotFileA.ps
 </pre>
 After finishing with your plots, you can exit Gnuplot by typing 
 <pre>
      gnuplot>  quit
 </pre>
-<li> You may edit Input Data files using a plain text editor
-(<a href="http://thomer.com/vi/vi.html">vi</a>,
-<a href="http://www.gnome.org/projects/gedit/">gedit</a>,
-<a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>)
-or a spreadsheet program
-(<a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>,
-<a href="http://www.openoffice.org/">OpenOffice</a>).<br>
-</ol>
 </ol>
 
 <h4>3.1.2 Compiling from source for Linux/Unix</h4>
@@ -441,30 +371,35 @@ and run one of the examples
 For Microsoft Windows, 
 you may install Frame3DD from a .ZIP archive, you may use a binary installer
 (which may sometimes be out of date) or you may compile from the source code.
+The following installation instructions are to install to the <b>Desktop</b> but other directories may be substituted, if desired.  
 </p>
 
-<h4> 3.2.1 Installing from the .ZIP archive</h4>
+<h4> 3.2.1 Installing from the .ZIP archive for Windows</h4>
 
 <ol>
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
-Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and un-zip it to your <b>My Documents</b> directory.
-<li> Read <b>README-win32.txt</b>
+Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it to your <b>Desktop</b>.
+<!-- <li> Read <b>README-win32.txt</b> -->
 <li> If you have administrator priviliges, copy <b>Frame3DD/frame3dd.exe</b> to <b>Program Files</b>, 
 or if you do not have root priviliges, put the <b>Frame3DD</b> directory in your path.
-Open a 'cmd' prompt and add FRAME3DD to your path,  
-change to the directory of example files and try to run an example.
+Open a 'Command Prompt' window (Start -> All Programs -> Accessories -> Command Prompt) and add FRAME3DD to your path,  
+change to the directory of example files, and run an example.
+You may cut-and-paste the following five lines into the Command Prompt window.
 <pre>
-               set PATH=%PATH%;c:\some\directories\FRAME3DD
-               set FRAME3DD_OUTDIR=c:\path\to\graphicoutput\files
-               cd Frame3DD/examples/
+               set PATH=%PATH%;c:\Documents and Settings\UserName\Desktop\Frame3DD
+               mkdir c:\temp
+               set FRAME3DD_OUTDIR=c:\temp
+               chdir Desktop\Frame3DD\examples
                frame3dd exA.3dd exA.out
 </pre>
+<li>The results of your Frame3DD analysis will have been written to the <tt>exA.out</tt> file.
+Data files used primarly for plotting are stored in the <b>c:/temp</b> folder.
 <li>       You may edit Input Data files using a plain text editor
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
 <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>), or a spreadsheet program
 (<a href="http://www.openoffice.org/">OpenOffice</a>, excel).
-<li>       You may wish to delete all the files in the temporary file directory and/or output file directory when you have finished your analyses. 
+<!-- <li> You may wish to delete all the files in the temporary file directory (c:\temp) after you have finished your analyses.  -->
 </ol>
 
 <p>
@@ -474,21 +409,31 @@ Use Gnuplot to view the graphical output.
 <ol>
 <li>Download the <a href="http://downloads.sourceforge.net/gnuplot/gp424win32.zip">
 MS-Windows version of Gnuplot</a>.
-<li>Extract the ZIP file into a <b>Gnuplot</b> folder in <b>My Documents</b>.<br>
-<li>Open the folder <b>My Documents\Gnuplot\bin</b> and right click on <b>wgnuplot</b>
-       to create a shortcut to your <b>Desktop</b>.<br>
-<li>Clicking on the <b>wgnuplot</b> icon on the desktop will start Gnuplot.<br>
-<li>To load the plot into Gnuplot, first change directory to to location of your output files
-	, by clicking on the <b>ChDir</b> button at the top of the Gnuplot window and typing ...
-<pre>
-               c:\path\to\output\files
-</pre> (path as above)
-<li>Display the plot of your structure by typing ...
+and save it to your <b>Desktop</b>.
+<li> Navigate to <b>Desktop -> Gnuplot -> bin</b> and 
+right click on <b>wgnuplot</b> to create a shortcut to your <b>Desktop</b>.
+<li>Clicking on the <b>wgnuplot</b> icon on the Desktop will start Gnuplot.
+<li>To load the plot into Gnuplot, first change directory to to location of your output files, by clicking on the <b>ChDir</b> button at the top of the Gnuplot window and navigating to <b>Desktop -> Frame3DD -> examples</b>.
+<li>Display the plots of your structure by typing ...
 <pre>
       gnuplot>  load 'example.plt'
 </pre>
-where <tt>example.plt</tt> is the name of of the plot file created when frame3dd is run.  
-<li>Hit the 'Return' key in the Gnuplot terminal window to see the sequence of plots and animations until the <tt> gnuplot></tt> prompt returns.<br>
+where <tt>example</tt> is the name of of the Output Data file 
+specified when running Frame3DD.   For example, after running Frame3DD
+with the command 
+<pre>
+               frame3dd myframe.3dd TestOutputA.out
+</pre>
+you can plot the results with the gnuplot command
+<pre>
+     gnuplot>  load 'TestOutputA.plt'
+</pre>
+<li>Click <b>OK</b> to see the next plot or <b>Cancel</b> to stop with the current plot.  
+<li> To save a plot as a PostScript file in the Frame3DD/examples folder,
+<pre>
+     gnuplot>  load 'saveplot'
+     gnuplot>  !copy my-plot.ps PlotFileA.ps
+</pre>
 </ol>
 
 
@@ -501,13 +446,15 @@ Download</a> and run the binary installer (frame3dd-VERSION.exe).
 <li>Use the Start menu to access README information and this documentation.
 <li>Copy one or more of the example files (eg <tt>exA.3dd</tt>) from your <b>Program Files\FRAME3DD\examples</b> folder into your <b>My Documents</b> folder
 <li>
-Open a 'cmd' prompt and add FRAME3DD to your path as follows:
+Open a 'Command Prompt' window (Start -> All Programs -> Accessories -> Command Prompt) in order to add FRAME3DD to your path,  
+to change to the directory of example files and try to run an example:
 <pre>
-               set PATH=%PATH%;c:\Progra~1\FRAME3DD
+               set PATH=%PATH%;c:\Program Files\FRAME3DD
 </pre>
 Optionally, set a location for your output files using a path of your choice:
 <pre>
-                set FRAME3DD_OUTDIR=c:\path\to\output\files
+                mkdir c:\temp
+                set FRAME3DD_OUTDIR=c:\temp
 </pre>
 Keep the command prompt window open for the following:
 <li>Change to your documents directory 
@@ -527,7 +474,7 @@ Keep the command prompt window open for the following:
 <li> Install a GCC compatible compiler, such as the 
 <a href="http://www.delorie.com/djgpp/"> DJGPP gcc compiler</a>,
 the <a href="http://www.cs.virginia.edu/~lcc-win32/"> LCC-win32 compiler</a>,
-and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
+or the <a href="http://www.mingw.org/"> MinGW compiler</a>.
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD source-code tarball (frame3dd-VERSION.tar.bz2)
@@ -553,7 +500,7 @@ For OS X running on an Intel processor,
 you may install Frame3DD from a .ZIP archive, or you may compile from the source code.
 </p>
   
-<h4> 3.3.1 Installing from the .ZIP archive</h4>
+<h4> 3.3.1 Installing from the .ZIP archive for OS X</h4>
 
 <ol>
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
