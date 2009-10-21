@@ -216,11 +216,88 @@ found with the Input Data.
 
 <a name="installrun"/><h2>3. How to install and run Frame3DD</h2>
 
-<a name="runlinux"/><h3>3.1 Linux/Unix</h3>
+<p>
+Compiled executeables are updated with some regularity.  
+Frame3DD installation packages are available for download for Linux/Unix,
+for OS X, and for Windows operating systems as .ZIP archives.
+These installation .ZIP archives include:
+<ul>
+<li> A copy of the GPL the license (LICENSE.txt)
+<li> The executable code (frame3dd for Linux, frame3ddosx for OS X, and frame3dd.exe for Windows) 
+<li> This manual, (doc/user-manual.html) 
+<li> Some general information (README.txt)
+<li> Some Windows-specific information (README-win32.txt)
+<li> The Matlab interface code (doc/Matlab/)
+<li> A summary of recent updates to the program (ChangeLog.txt)
+<li> A set of example Input Data Files (examples/)
+</ul>
+</p>
 
 <p>
+A separate Windows installer includes a Microstran viewer module for Frame3DD.
+</p>
+   
+<p>
+The date stamp at the beginning of the manual corresponds to the corresponding release date of the code.
+</p>
+
+
+<a name="runlinux"/><h3>3.1 Linux/Unix</h3>
+
+<h4>3.1.1 Installing from the .ZIP archive</h4>
+
+<ol>
+<li><a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
+>Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it in your home directory.
+<li> Unzip the archive to create a Frame3DD directory.
+<pre>
+               unzip Frame3DD_VERSION_linux.zip
+</pre>
+<li>Copy the executable to a directory in your path, or to the examples directory, change to the examples directory and run an example program ...
+<pre>
+               cd Frame3DD
+               cp frame3dd examples/.
+               cd examples
+               frame3dd exA.frm exA.out
+</pre>
+<li>
+The main report output will have been written to the <tt>exA.out</tt> file.
+Data files used primarly for plotting are stored in the /tmp/ directory.
+<li> Graphical output may be viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, 
+which can be installed using <tt>sudo apt-get install gnuplot</tt>.
+
+         Open a terminal window and
+<pre>
+               gnuplot
+     gnuplot>  load 'exA.plt'
+</pre>
+Hit the 'Return' key in the Terminal window to see the sequence of plots
+and animations until the <tt>gnuplot></tt> prompt returns.<br>
+To create a PostScript file of your plot, use the Gnuplot script
+<a href="saveplot"><tt>saveplot</tt></a> with the following commands:<br>
+<pre>
+     gnuplot>  load 'saveplot'
+     gnuplot>  !mv my-plot.ps another-file.ps
+</pre>
+After finishing with your plots, you can exit Gnuplot by typing <tt>quit</tt>.
+<li>        You may edit Input Data files using a plain text editor
+(<a href="http://thomer.com/vi/vi.html">vi</a>,
+<a href="http://www.gnome.org/projects/gedit/">gedit</a>,
+<a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>)
+or a spreadsheet program
+(<a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>,
+<a href="http://www.openoffice.org/">OpenOffice</a>).<br>
+</ol>
+</ol>
+
+<h4>3.1.2 Compiling from source for Linux/Unix</h4>
+
+<p>
+<!--
 For Linux and Unix we currently only provide source-code tarball; you must
-build the software yourself. The following instructions work on Ubuntu 8.10
+build the software yourself.
+-->
+The following instructions work on Ubuntu 8.10 - 9.10
 and should work with minor changes on any other recent Linux or Unix system.
 </p>
 
@@ -234,44 +311,18 @@ and should work with minor changes on any other recent Linux or Unix system.
 <li>Enter the frame3dd-VERSION directory (VERSION as appropriate) using <tt>cd frame3dd-VERSION</tt>.
 <li>Type <tt>scons</tt> to build the software.
 <li>If you have root privileges,
-<ul>
+<ol>
 	<li>Run <tt>sudo scons install</tt> to install Frame3dd to /usr/local, or
 	<li>Run <tt>sudo scons install INSTALL_PREFIX=/tmp</tt> to install to /tmp (change location as desired)
-</ul>
+</ol>
 <li>If you do not have root privileges, you can run Frame3dd directly from the build tree:
 <ol>
 	<li>Type <tt>export LD_LIBRARY_PATH=~/frame3dd-VERSION/build</tt>
 	<li>Type <tt>export PATH=$PATH:~/frame3dd-VERSION/build</tt>
 </ol>
-<li>Copy one of the frame3dd-VERSION/examples/*.3dd files, eg <tt>exA.3dd</tt> into your home directory and make sure you have write-privileges for the file.
-<li>Type <tt>frame3dd  exA.3dd  exA.out</tt> to run Frame3dd.
-<li>Data files used primarly for plotting are in temporary directories.
-The main report output will have been written to the <tt>exA.out</tt> file.
-<li>       The graphical output is viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, which can be installed using <tt>sudo apt-get install gnuplot</tt>.
 
-         Open a terminal window and
-<ol><li><tt>$ cd ~</tt>
-<li>         <tt>$ gnuplot </tt>
-<li>        <tt>gnuplot>  load 'example.plt'</tt>
-</ol>
-         where <tt>example.plt</tt> is the name of of the plot file specified in the Input Data. (<a href="#InputData">See below.</a>) <br>
-         Hit the 'Return' key in the Terminal window to see the sequence of plots
-         and animations until the <tt>gnuplot></tt> prompt returns.<br>
-To create a PostScript file of your plot, use the Gnuplot script
-<a href="../saveplot"><tt>saveplot</tt></a> with the following commands:<br>
-<ol>
-<li><tt>gnuplot> load 'save.plt'</tt>
-<li><tt>gnuplot> !mv my-plot.ps another-file.ps</tt>
-</ol>
-After finishing with your plots, you can exit Gnuplot by typing <tt>quit</tt>.
-<li>        You may edit Input Data files using a plain text editor
-(<a href="http://thomer.com/vi/vi.html">vi</a>,
-<a href="http://www.gnome.org/projects/gedit/">gedit</a>,
-<a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>)
-or a spreadsheet program
-(<a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>,
-<a href="http://www.openoffice.org/">OpenOffice</a>).<br>
-</ol>
+<li>Copy one of the frame3dd-VERSION/examples/*.3dd files, eg <tt>exA.3dd</tt> into your home directory and make sure you have write-privileges for the file.
+</li>
 
 
 <a name="runwindows"/><h3>3.2 Windows</h3>

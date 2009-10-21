@@ -14,10 +14,10 @@ mkdir dist/Frame3DD/src
 mkdir dist/Frame3DD/src/microstran
 
 # copy documentation
-echo "copying documentation ... "
+echo "copying source code ... "
 cp --preserve=mode,timestamps src/*.c               dist/Frame3DD/src/.
 cp --preserve=mode,timestamps src/*.h               dist/Frame3DD/src/.
-cp --preserve=mode,timestamps src/microstran/vec3.* dist/Frame3DD/src/microstran/.
+cp --preserve=mode,timestamps src/microstran/vec3.h dist/Frame3DD/src/microstran/.
 cp --preserve=mode,timestamps src/microstran/config.h dist/Frame3DD/src/microstran/.
 
 # copy ChangeLog, license, and README files

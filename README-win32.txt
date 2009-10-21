@@ -39,7 +39,7 @@ absolute paths).
 NOTES ON THE VIEWER PROGRAM
 ---------------------------
 
-This installer includes a viewer for Microstran .ARC files. For this
+The Windows installer includes a viewer for Microstran .ARC files. For this
 viewer to run correctly, you must do a bit of work.
 
 1. Install QT 4.3.3.
