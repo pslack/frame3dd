@@ -66,6 +66,18 @@ rm Frame3DD_$(date +%Y%m%d).zip
 
 echo "Frame3DD .zip archive complete"
 
+# Uploading distribution files to sourceforge.net ...
+#
+#scp Frame3DD_20091020_linux.zip hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091020/.
+#
+#scp Frame3DD_20091020_win32.zip hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091020/.
+#
+#scp Frame3DD_20091020_osx.zip hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091020/.
+#
+#scp Frame3DD_20091020_src.zip hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091020/.
+#
+#scp frame3dd-0.20091020.tar.bz2  hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091020/.
+
 # ----------------------------------------------------------- dist_bin.sh
 # Henri P. Gavin
 # October 20 2009

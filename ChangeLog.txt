@@ -1,3 +1,10 @@
+* Wed Oct 21 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091021
+- Adding .ZIP packaging for Linux, Windows, and OSX
+- Adding installation instructions to user-manual.html for new .zip packaging
+- Adding packaging shell scripts for binary and source .zip packaging
+- The previous .bz2 source packaging and .exe Windows installer are still
+intact
+
 * Tue Oct 20 2009 John Pye <john.pye@anu.edu.au> 0.20091020
 - Adding packaging for Debian, planning new release.
 
