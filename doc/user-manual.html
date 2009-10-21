@@ -189,7 +189,7 @@ To write your own Input Data file, it may be helpful to start with an example th
 and the <a href="#InputData"><b>Input Data format</b></a>, with the <a href="#Variables"><b>variable definitions</b></a> at the end of this page.
 </p>
 <p>
-You may edit Input Data files using a plain text editor
+You may edit Input Data files using a good plain text editor
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
  <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>,
@@ -263,9 +263,8 @@ and unzip the archive to create a <b>Frame3DD</b> directory.
                cd ~/Desktop
                unzip Frame3DD_VERSION_linux.zip
 </pre>
-If you have root priviliges, copy Frame3DD/frame3dd.exe to /usr/local/bin, or if you do not have root priviliges, put the Frame3DD directory in your path.
-Open a Terminal window 
-and add Frame3DD to your path, change to the directory of example files and run an example. You may cut-and-paste the following three lines into the Terminal window. 
+If you have root priviliges, copy <b>Frame3DD/frame3dd</b> to <b>/usr/local/bin/</b>. If you do not have root priviliges, put the Frame3DD directory in your path.
+Then change to the directory of example files and run an example. You may do this by cutting-and-pasting the following three lines into the Terminal window. 
 <pre>
                export PATH=$PATH:~/Desktop/Frame3DD/
                cd ~/Desktop/Frame3DD/examples/
@@ -274,7 +273,7 @@ and add Frame3DD to your path, change to the directory of example files and run 
 <li>
 The results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
 Data files used primarly for plotting are stored in the <b>/tmp</b> directory.
-<li>       You may view Output Data files and edit Input Data files using a plain text editor
+<li>       You may view Output Data files and edit Input Data files using a good plain text editor
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
  <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>),
@@ -305,16 +304,15 @@ If it is not, you may install it only if you have root priviliges using a comman
 </pre>
 where <tt>TestOutputA.out</tt> is the name of of the Output Data file 
 specified when running Frame3DD. 
-Hit the 'Return' key in the Terminal window to see the sequence of plots
+<li>Hit the 'Return' key in the Terminal window to see the sequence of plots
 and animations until the <tt>gnuplot></tt> prompt returns.
-or hit <b>CTRL-C</b> to stop the plots at the current plot.  
-To create a PostScript file of your plot, use the Gnuplot script
-<a href="../examples/saveplot"><tt>saveplot</tt></a> with the following commands:<br>
+Or hit <b>CTRL-C</b> to stop the plots at the current plot.  
+<li> To save the current plot as a PostScript file in the Frame3DD/examples folder,
 <pre>
      gnuplot>  load 'saveplot'
      gnuplot>  !cp my-plot.ps PlotFileA.ps
 </pre>
-After finishing with your plots, you can exit Gnuplot by typing 
+<li>After finishing with your plots, you can exit Gnuplot by typing 
 <pre>
      gnuplot>  quit
 </pre>
@@ -349,7 +347,7 @@ and build the code
                cd frame3dd-VERSION
                scons
 </pre>
-<li>If you have root privileges, install frame3dd to /usr/local/bin/ ...
+<li>If you have root privileges, install <b>build/frame3dd</b> to <b>/usr/local/bin/</b> ...
 <pre>
                sudo scons install
 </pre>
@@ -388,8 +386,8 @@ The following installation instructions are to install to the <b>Desktop</b> but
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it to your <b>Desktop</b>.
 <!-- <li> Read <b>README-win32.txt</b> -->
-<li> If you have administrator priviliges, copy <b>Frame3DD/frame3dd.exe</b> to <b>Program Files</b>, 
-or if you do not have root priviliges, put the <b>Frame3DD</b> directory in your path.
+<li> If you have administrator priviliges, copy <b>Frame3DD/frame3dd.exe</b> to <b>Program Files</b>. 
+If you do not have root priviliges, put the <b>Frame3DD</b> directory in your path.
 Open a 'Command Prompt' window (Start -> All Programs -> Accessories -> Command Prompt) and add Frame3DD to your path,  
 change to the directory of example files, and run an example.
 You may cut-and-paste the following five lines into the Command Prompt window.
@@ -402,7 +400,7 @@ You may cut-and-paste the following five lines into the Command Prompt window.
 </pre>
 <li>The results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
 Data files used primarly for plotting are stored in the <b>c:/temp</b> folder.
-<li>       You may view Output Data files and edit Input Data files using a plain text editor
+<li>       You may view Output Data files and edit Input Data files using a good plain text editor
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
 <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>), or a spreadsheet program
 (<a href="http://www.openoffice.org/">OpenOffice</a>, excel).   
@@ -432,9 +430,9 @@ right click on <b>wgnuplot</b> to create a shortcut to your <b>Desktop</b>.
 where <tt>TestOutputA.out</tt> is the name of of the Output Data file 
 specified when running Frame3DD. 
 <li>Click <b>OK</b> to see the next plot or <b>Cancel</b> to stop with the current plot.  
-<li> To save a plot as a PostScript file in the Frame3DD/examples folder,
+<li> To save the current plot as a PostScript file in the Frame3DD/examples folder,
 <pre>
-     gnuplot>  load 'saveplot'
+     gnuplot>  load 'saveplot_w32'
      gnuplot>  !copy my-plot.ps PlotFileA.ps
 </pre>
 </ol>
@@ -500,7 +498,9 @@ from source following the instructions for Linux/Unix.</div>
 
 <p>
 For OS X running on an Intel processor,
-you may install Frame3DD from a .ZIP archive, or you may compile from the source code.
+you may install Frame3DD from a .ZIP archive 
+or you may compile from the source code.
+The following installation instructions are to install to the <b>Desktop</b> but other directories may be substituted, if desired.  
 </p>
   
 <h4> 3.3.1 Installing from the .ZIP archive for OS X</h4>
@@ -508,28 +508,25 @@ you may install Frame3DD from a .ZIP archive, or you may compile from the source
 <ol>
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
-Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_osx.zip) and save it in your home directory.
-<li> Unzip the archive to create a <b>Frame3DD</b> directory.
+Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_osx.zip) and save it in your <b>Desktop</b>.
+<li> Open a Terminal and unzip the archive to create a <b>Frame3DD</b> directory.
 <pre>
+               cd ~/Desktop
                unzip Frame3DD_VERSION_osx.zip
 </pre>
-<li> If you have root priviliges, copy the program to <b>/usr/local/bin/</b>
-<pre>
-               sudo cp Frame3DD/frame3dd /usr/local/bin
-</pre>
-or if you do not have root priviliges, put the <b>Frame3DD</b>
+<li> If you have root priviliges, copy <b>Frame3DD/frame3ddosx</b> program to <b>/usr/local/bin/</b>
+If you do not have root priviliges, put the <b>Frame3DD</b>
 directory in your path.
+Then change to the directory of example files and try to run an example.
+You may do this by cutting-and-pasting the following three lines into the Terminal window. 
 <pre>
                export PATH=$PATH:~/Frame3DD/
-</pre>
-Change to the directory of example files and try to run an example.
-<pre>
                cd Frame3DD/examples/
-               frame3dd exA.3dd exA.out
+               frame3ddosx exA.3dd exA.out
 </pre>
 <li>
-The main report output will have been appended to the end of the <tt>exA.out</tt> Output Data file.
-Data files used primarly for plotting are stored in the <b>/tmp/</b> directory.
+The results of your Frame3DD analysis will have been appended to the end of the 
+</tt>exA.out</tt> Output Data file. Data files used primarly for plotting are stored in the <b>/tmp</b> directory. 
 
 <!-- 
 <ol>
@@ -555,7 +552,7 @@ Data files used primarly for plotting are stored in the <b>/tmp/</b> directory.
              When asked for the Input/Output file name, type ...<br>
                <tt>/Users/your_name_here/Desktop/examples/exA.3dd</tt> -->
 
-<li>     You may view Output Data files and edit Input Data files using a plain text editor
+<li>     You may view Output Data files and edit Input Data files using a good plain text editor
 (<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,
 TextEdit (Applications > TextEdit),
 <a href="http://macvim.org/OSX/index.php">vi</a>)
@@ -563,6 +560,11 @@ or a spreadsheet program
 (<a href="http://www.openoffice.org/">OpenOffice</a>).<br>
 If you use Apple's TextEdit,
 make sure you are in Plain Text mode  ...  [SHIFT] [APPLE] [T] ...  or ...   Format > Make Plain Text ... <br>
+<li>
+Run your own Frame3DD analyses within the Terminal window using a command like ...
+<pre>
+               frame3ddosx MyFrame.3dd TestOutputA.out
+</pre>
 </ol>
 
 <p>
