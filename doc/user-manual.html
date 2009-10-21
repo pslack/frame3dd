@@ -75,7 +75,7 @@ Duke University</a> - Box 90287,
 
 <p><b>Frame3DD</b> appends results to a plain-text <b>Output Data file</b>.
 Results from the most recent analysis
-are written to the <b>end</b> of the Output Data file.
+are appended to the <b>end</b> of the Output Data file.
 Each section of the Output Data gives the date and time of the analysis,
 recapitulates the input information, gives joint displacements in global coordinates, frame element end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
 </p>
@@ -83,8 +83,8 @@ recapitulates the input information, gives joint displacements in global coordin
 <p><b>Frame3DD</b> writes a
 <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>
 script file used for viewing deformed frames and dynamic mode shapes.
-If the Output Data is written to a file called <tt>exA.out</tt>,
-the Gnuplot script is written to a file called <tt>exA.plt</tt>.
+If the Output Data is written to a file called <tt>TestOutputA.out</tt>,
+the Gnuplot script is written to a file called <tt>TestOutputA.plt</tt>.
 Graphical output may be viewed by starting Gnuplot and typing:
 <tt> load 'exA.plt'</tt>.
 
@@ -265,39 +265,46 @@ and unzip the archive to create a <b>Frame3DD</b> directory.
 </pre>
 If you have root priviliges, copy Frame3DD/frame3dd.exe to /usr/local/bin, or if you do not have root priviliges, put the Frame3DD directory in your path.
 Open a Terminal window 
-and add FRAME3DD to your path, change to the directory of example files and run an example. You may cut-and-paste the following three lines into the Terminal window. 
+and add Frame3DD to your path, change to the directory of example files and run an example. You may cut-and-paste the following three lines into the Terminal window. 
 <pre>
                export PATH=$PATH:~/Desktop/Frame3DD/
                cd ~/Desktop/Frame3DD/examples/
                frame3dd exA.3dd exA.out
 </pre>
 <li>
-The results of your Frame3DD analysis will have been written to the <tt>exA.out</tt> file.
+The results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
 Data files used primarly for plotting are stored in the <b>/tmp</b> directory.
-<li>       You may edit Input Data files using a plain text editor
+<li>       You may view Output Data files and edit Input Data files using a plain text editor
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
  <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>),
 or a spreadsheet program
 (<a href="http://www.openoffice.org/">OpenOffice</a>,
  <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).
+<li>Run your own Frame3DD analyses within the Terminal window using a command like ...
+<pre>
+               frame3dd MyFrame.3dd TestOutputA.out
+</pre>
+<!-- <li> You may wish to delete all the files in the temporary file directory (c:\temp) after you have finished your analyses.  -->
 </ol>
 
 <p>
 Graphical output may be viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, 
 
 <ol>
-<li> Gnuplot is usually pre-installed on Linux systems, if it is not,
-you may install it only if you have root priviliges using the command:
-<pre>
-               sudo apt-get install gnuplot
-</pre>
+<li> Gnuplot is usually pre-installed on Linux systems.
+If it is not, you may install it only if you have root priviliges using a command like ... <tt> sudo apt-get install gnuplot </tt> ... or by using the package manager GUI installed on your system.
 
-<li> To view the plots of your Frame3Dd analysis, open a Terminal window and
+<li>Start Gnuplot in the Terminal with the command:
 <pre>
                gnuplot
-     gnuplot>  load 'exA.plt'
 </pre>
+<li>Display the plots of your structure using Gnuplot with a command like ...
+<pre>
+      gnuplot>  load 'TestOutputA.plt'
+</pre>
+where <tt>TestOutputA.out</tt> is the name of of the Output Data file 
+specified when running Frame3DD. 
 Hit the 'Return' key in the Terminal window to see the sequence of plots
 and animations until the <tt>gnuplot></tt> prompt returns.
 or hit <b>CTRL-C</b> to stop the plots at the current plot.  
@@ -383,7 +390,7 @@ Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it 
 <!-- <li> Read <b>README-win32.txt</b> -->
 <li> If you have administrator priviliges, copy <b>Frame3DD/frame3dd.exe</b> to <b>Program Files</b>, 
 or if you do not have root priviliges, put the <b>Frame3DD</b> directory in your path.
-Open a 'Command Prompt' window (Start -> All Programs -> Accessories -> Command Prompt) and add FRAME3DD to your path,  
+Open a 'Command Prompt' window (Start -> All Programs -> Accessories -> Command Prompt) and add Frame3DD to your path,  
 change to the directory of example files, and run an example.
 You may cut-and-paste the following five lines into the Command Prompt window.
 <pre>
@@ -393,12 +400,16 @@ You may cut-and-paste the following five lines into the Command Prompt window.
                chdir Desktop\Frame3DD\examples
                frame3dd exA.3dd exA.out
 </pre>
-<li>The results of your Frame3DD analysis will have been written to the <tt>exA.out</tt> file.
+<li>The results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
 Data files used primarly for plotting are stored in the <b>c:/temp</b> folder.
-<li>       You may edit Input Data files using a plain text editor
+<li>       You may view Output Data files and edit Input Data files using a plain text editor
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
 <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>), or a spreadsheet program
-(<a href="http://www.openoffice.org/">OpenOffice</a>, excel).
+(<a href="http://www.openoffice.org/">OpenOffice</a>, excel).   
+<li>Run your own Frame3DD analyses within the Terminal window using a command like ...
+<pre>
+               frame3dd MyFrame.3dd TestOutputA.out
+</pre>
 <!-- <li> You may wish to delete all the files in the temporary file directory (c:\temp) after you have finished your analyses.  -->
 </ol>
 
@@ -414,20 +425,12 @@ and save it to your <b>Desktop</b>.
 right click on <b>wgnuplot</b> to create a shortcut to your <b>Desktop</b>.
 <li>Clicking on the <b>wgnuplot</b> icon on the Desktop will start Gnuplot.
 <li>To load the plot into Gnuplot, first change directory to to location of your output files, by clicking on the <b>ChDir</b> button at the top of the Gnuplot window and navigating to <b>Desktop -> Frame3DD -> examples</b>.
-<li>Display the plots of your structure by typing ...
+<li>Display the plots of your structure using Gnuplot with a command like ...
 <pre>
-      gnuplot>  load 'example.plt'
+      gnuplot>  load 'TestOutputA.plt'
 </pre>
-where <tt>example</tt> is the name of of the Output Data file 
-specified when running Frame3DD.   For example, after running Frame3DD
-with the command 
-<pre>
-               frame3dd myframe.3dd TestOutputA.out
-</pre>
-you can plot the results with the gnuplot command
-<pre>
-     gnuplot>  load 'TestOutputA.plt'
-</pre>
+where <tt>TestOutputA.out</tt> is the name of of the Output Data file 
+specified when running Frame3DD. 
 <li>Click <b>OK</b> to see the next plot or <b>Cancel</b> to stop with the current plot.  
 <li> To save a plot as a PostScript file in the Frame3DD/examples folder,
 <pre>
@@ -525,7 +528,7 @@ Change to the directory of example files and try to run an example.
                frame3dd exA.3dd exA.out
 </pre>
 <li>
-The main report output will have been written to the <tt>exA.out</tt> file.
+The main report output will have been appended to the end of the <tt>exA.out</tt> Output Data file.
 Data files used primarly for plotting are stored in the <b>/tmp/</b> directory.
 
 <!-- 
@@ -552,7 +555,7 @@ Data files used primarly for plotting are stored in the <b>/tmp/</b> directory.
              When asked for the Input/Output file name, type ...<br>
                <tt>/Users/your_name_here/Desktop/examples/exA.3dd</tt> -->
 
-<li>     You may edit Input Data files using a plain text editor
+<li>     You may view Output Data files and edit Input Data files using a plain text editor
 (<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,
 TextEdit (Applications > TextEdit),
 <a href="http://macvim.org/OSX/index.php">vi</a>)
