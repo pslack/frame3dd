@@ -59,9 +59,9 @@ Duke University</a> - Box 90287,
 
 <!-- 3D frames , 3D frames , 3D frames , 3D frames , 3D frames , 3D frames  -->
 
-<p><b>Frame3DD</b> is executed from the <a href="http://en.wikipedia.org/wiki/Windows_command_line">command prompt</a> (Windows) or <a href="http://en.wikipedia.org/wiki/Unix_shell">shell</a> (Linux) or <a href="http://www.macdevcenter.com/pub/a/mac/2001/12/14/terminal_one.html">terminal</a> (Mac), as follows, with filenames changed as required:
+<p><b>Frame3DD</b> is executed from the <a href="http://en.wikipedia.org/wiki/Windows_command_line">command prompt</a> (Windows) or <a href="http://en.wikipedia.org/wiki/Unix_shell">shell</a> (Linux) or <a href="http://www.macdevcenter.com/pub/a/mac/2001/12/14/terminal_one.html">terminal</a> (OS X), as follows, with filenames changed as required:
 <pre>
-  frame3dd inputfile.3dd outputfile.txt
+               frame3dd inputfile.3dd outputfile.txt
 </pre>
 </p>
 
@@ -127,9 +127,9 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
   <li><a href="#runwindows"/>Windows</a>
   <li><a href="#runosx"/>Mac OS X</a>
 </ol>
-<li><a href="#FrameEd">FrameEd</a>
 <li><a href="#Matlab">Matlab Interface</a>
 <li><a href="#CSV">Spreadsheet Interface</a>
+<li><a href="#FrameEd">FrameEd</a>
 <li><a href="#structuralmodeling">Structural Modeling</a>
 <li><a href="#numerical">Numerical Details</a>
 <li><a href="#InputData">Input Data Format</a>
@@ -159,13 +159,6 @@ Observe a series of plots by hitting the Return (or Enter) key between plots.<br
 If a dynamic analysis was performed, you will enjoy an animation of selected mode shapes.<br>
 Continue to hit the Return (or Enter) key until the last plot is displayed.
 </ol>
-
-<div class=note>
-<b>Note:</b> Depending on the instructions contained in the Frame3dd input file,<b>additional output files</b> are generated.
-The data in these files are used for plotting purposes.
-By default, these output files will be sent to your temporary file folder. 
-On Windows, this will be the contents of the TEMP environment variable, which you can examine by typing <tt>echo %TEMP%</tt>. On other platforms, this will be the folder <tt>/tmp</tt>.<br><br>If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <tt>FRAME3DD_OUTDIR</tt> with the path to your output directory. All new output files will then appear in the folder you have specified.
-</div>
 
 <a name="iodata"/><h2>2. Input Data and Output Data</h2>
 
@@ -214,6 +207,16 @@ Frame3DD checks the Input Data for errors prior to analysing the system
 and, where possible, displays descriptive diagnostic messages when errors are
 found with the Input Data.
 </p>
+
+<div class=note>
+<b>Note:</b> Frame3DD generates several <b>additional output files</b> used in plotting deformed frames.  
+By default, these output files are sent to your temporary file folder. 
+On Windows, the location of this folder is the contents of the TEMP environment variable, which you can examine by typing 
+<pre>
+               echo %TEMP%
+</pre>
+On other platforms, this will be the folder <tt>/tmp</tt>.<br><br>If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <tt>FRAME3DD_OUTDIR</tt> with the path to your output directory. All new output files will then appear in the folder you have specified.
+</div>
 
 <a name="installrun"/><h2>3. How to install and run Frame3DD</h2>
 
@@ -413,7 +416,7 @@ cut-and-paste the following five lines into the Command Prompt window.
                chdir %HOMEPATH%\Desktop\Frame3DD\examples
                frame3dd  exA.3dd  exA.out
 </pre>
-You will need to run the first four of the commands above each time you
+You will need to run the first three of the commands above each time you
 open a new Command Prompt window to run Frame3DD.  
 <li>Some run-time information will be displayed on the Command Prompt window and
 the results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
@@ -652,40 +655,14 @@ and build the code
 </ol>
 
 
-<a name="FrameEd"><h2>4. FrameEd</h2>
-
-<p>
- <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).<br>
- The .zip file <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip">FrameEd.zip</a> includes:
-</p>
- <ul>
- <li>the GUI executeable, Frame_Ed.exe
- <li>the frame analysis executeable, Frame3d.exe, for the 20020103 version
- <li>an example input file, exG.3dd, for the 20020103 version
- <li>a template for the Input Data file, ex2002.3dd, for the 20020103 version
- </ul>
-<p>
- Differences between the 2002 and the current versions of <b>Frame3DD</b> are:
-</p>
-<ul>
- <li> The 2002 version does not support comments in the Input Data.
- <li> The 2002 version does not support multiple load cases.
- <li> The 2002 version does not support roll angles for frame element orientation.
- <li> The 2002 version uses the Jacobi method for modal analysis.
- <li> The 2002 version requires specification of joint masses and inertias for every joint.
- <li> The 2002 version does not support panning of the animation.
- <li> The 2002 version uses Guyan reduction for matrix condensation,
-to match the first mode.
-</ul>
-</a>
 
 <p>Source code for FrameEd is not currently available, and development on this GUI is no longer active.</p>
 
-<a name="Matlab"><h2>5. Matlab Interface</h2>
+<a name="Matlab"><h2>4. Matlab Interface</h2>
 
 <p>
 <b>Frame3DD</b> may optionally be executed from within Matlab on any platform,
-via the Matlab interface function <a href="Matlab/frame_3dd.m">frame_3dd.m</a>
+via the Matlab interface function <a href="../matlab/frame_3dd.m">frame_3dd.m</a>
 <pre>
 function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 % [D,R,F,L,Ks] = frame_3dd (XYZ,JTS,RCT,EAIJ,P,W,D)
@@ -742,7 +719,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 </p>
 
 <p>
-This m-function, <a href="Matlab/frame_3dd.m">frame_3dd.m</a>,
+This m-function, <a href="../matlab/frame_3dd.m">frame_3dd.m</a>,
 executes the system command
 (<tt>frame3dd</tt> on Linux or OS-X, <tt>frame3dd.exe</tt> on Windows)
 to compute the solution.
@@ -785,7 +762,7 @@ It does not (yet) implement the following features of <b>Frame3DD</b>:
 Adding these features would require Matlab programming, only.
 </p>
 
-<a name="CSV"><h2>6. Spreadsheet Interface</h2>
+<a name="CSV"><h2>5. Spreadsheet Interface</h2>
 
 <p>
 Input Data for <b>Frame3DD</b> may be read and written using spreadsheet programs
@@ -859,6 +836,33 @@ Reaction results are in columns A through G:<br>
 <p>
 Modal analysis results are not (yet) written to the .CSV formatted output file.
 </p>
+
+<a name="FrameEd"><h2>6. FrameEd</h2>
+
+<p>
+<b>Frame_Ed</b> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).<br>
+ The .zip file <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip">FrameEd.zip</a> includes:
+</p>
+ <ul>
+ <li>the GUI executeable, Frame_Ed.exe
+ <li>the frame analysis executeable, Frame3d.exe, for the 20020103 version
+ <li>an example input file, exG.3dd, for the 20020103 version
+ <li>a template for the Input Data file, ex2002.3dd, for the 20020103 version
+ </ul>
+<p>
+ Differences between the 2002 and the current versions of <b>Frame3DD</b> are:
+</p>
+<ul>
+ <li> The 2002 version does not support comments in the Input Data.
+ <li> The 2002 version does not support multiple load cases.
+ <li> The 2002 version does not support roll angles for frame element orientation.
+ <li> The 2002 version uses the Jacobi method for modal analysis.
+ <li> The 2002 version requires specification of joint masses and inertias for every joint.
+ <li> The 2002 version does not support panning of the animation.
+ <li> The 2002 version uses Guyan reduction for matrix condensation,
+to match the first mode.
+</ul>
+</a>
 
 <a name="structuralmodeling"/><h2>7. Structural Modeling</h2>
 
@@ -1995,7 +1999,7 @@ and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
 <ul>
 <li>       A GUI (ideally GPL'able)<br>
 <ul>
- <li> <a href="DOS/FrameEd.zip"><b>Frame_Ed</b></a> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).
+ <li> <b>FrameEd</b> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).
  (<a href="#FrameEd">See above</a>.)
  <li> Work has been done on a <a href="http://www.trolltech.com/products/qt">Qt</a> GUI (Fall 2004)<br>
  <li> A Microstran-Viewer interface is in the works
