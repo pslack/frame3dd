@@ -263,14 +263,17 @@ and unzip the archive to create a <b>Frame3DD</b> directory.
                cd ~/Desktop
                unzip Frame3DD_VERSION_linux.zip
 </pre>
-If you have root priviliges, copy <b>Frame3DD/frame3dd</b> to <b>/usr/local/bin/</b>. If you do not have root priviliges, put the <b>Frame3DD</b> directory in your path.
+If the .ZIP archive was automatically unzipped, skip the second of the above two commands.
+<li>If you have root priviliges, copy <b>Frame3DD/frame3dd</b> to <b>/usr/local/bin/</b>. If you do not have root priviliges, put the <b>Frame3DD</b> directory in your path.
 Then change to the directory of example files and run an example. You may do this by cutting-and-pasting the following four lines into the Terminal window. 
 <pre>
-               /bin/bash
-               export PATH=$PATH:$HOME/Desktop/Frame3DD/
-               cd  ~/Desktop/Frame3DD/examples/
-               frame3dd  exA.3dd  exA.out
+               /bin/bash                                   # change to bash shell
+               export PATH=$PATH:$HOME/Desktop/Frame3DD/   # add to the path
+               cd  ~/Desktop/Frame3DD/examples/            # change to the examples directory
+               frame3dd  exA.3dd  exA.out                  # run the program
 </pre>
+You will need to run the first two of the commands above each time you
+open a new Terminal window to run Frame3DD.  
 <li>
 Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
@@ -410,6 +413,8 @@ cut-and-paste the following five lines into the Command Prompt window.
                chdir %HOMEPATH%\Desktop\Frame3DD\examples
                frame3dd  exA.3dd  exA.out
 </pre>
+You will need to run the first four of the commands above each time you
+open a new Command Prompt window to run Frame3DD.  
 <li>Some run-time information will be displayed on the Command Prompt window and
 the results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
 Data files used primarly for plotting are stored in the <b>c:/temp</b> folder.
@@ -527,16 +532,19 @@ Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_osx.zip) and save it in
                cd ~/Desktop
                unzip Frame3DD_VERSION_osx.zip
 </pre>
+If the .ZIP archive was automatically unzipped, skip the second of the above two commands.
 <li> If you have root priviliges, copy <b>Frame3DD/frame3ddosx</b> program to <b>/usr/local/bin/</b>
 If you do not have root priviliges, put the <b>Frame3DD</b>
 directory in your path.
 Then change to the directory of example files and run an example.
 You may do this by cutting-and-pasting the following three lines into the Terminal window. 
 <pre>
-               export PATH=$PATH:$HOME/Desktop/Frame3DD/
-               cd  ~/Desktop/Frame3DD/examples/
-               frame3ddosx  exA.3dd  exA.out
+               export PATH=$PATH:$HOME/Desktop/Frame3DD/         # add to the path
+               cd  ~/Desktop/Frame3DD/examples/                  # change to the examples directory
+               frame3ddosx  exA.3dd  exA.out                     # run the program
 </pre>
+You will need to run the first of the three commands above each time you
+open a new Terminal window to run Frame3DD.  
 <li>Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the 
 <tt>exA.out</tt> Output Data file. Data files used primarly for plotting are stored in the <b>/tmp</b> directory. 
@@ -609,8 +617,8 @@ to download and install Gnuplot 4.2.5 for OS X.
 <li>        Visualize your <b>Frame3DD</b> analysis output.
          Open a Terminal window (Applications > Utilities > Terminal) and ...
 <pre>
-               cd ~/Desktop
                gnuplot
+     gnuplot>  cd '~/Desktop/Frame3DD/examples'
      gnuplot>  load 'MyResultsA.plt'
 </pre>
 where <tt>MyResultsA.out</tt> is the name of of the Output Data file specified 
