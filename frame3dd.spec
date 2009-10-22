@@ -67,6 +67,13 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Wed Oct 21 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091021
+- Adding .ZIP packaging for Linux, Windows, and OSX
+- Adding installation instructions to user-manual.html for new .zip packaging
+- Adding packaging shell scripts for binary and source .zip packaging
+- The previous .bz2 source packaging and .exe Windows installer are still
+intact
+
 * Tue Oct 20 2009 John Pye <john.pye@anu.edu.au> 0.20091020
 - Adding packaging for Debian, planning new release.
 
@@ -155,12 +162,12 @@ software.
 
 * Wed Mar 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090304
 - Implement command line parsing using the getopt function
-  ... using getopt for ease of portability.
+. ... using getopt for ease of portability.
 - Added functions to frame3dd_io.c:
-    parse_options() --- calls getopt
-    display_help() 
-    display_usage()
-    display_version()
+.   parse_options() --- calls getopt
+.   display_help() 
+.   display_usage()
+.   display_version()
 - Updated documentation with command-line syntax ... doc/user-manual.html
 
 * Tue Mar 3 2009 Henri Gavin <henri.gavin@duke.edu> 0.20090303

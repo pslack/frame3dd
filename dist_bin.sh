@@ -19,7 +19,6 @@ mkdir dist/Frame3DD/examples
 echo "copying documentation ... "
 cp --preserve=mode,timestamps doc/*.html            dist/Frame3DD/doc/.
 cp --preserve=mode,timestamps doc/template.3dd      dist/Frame3DD/doc/.
-cp --preserve=mode,timestamps doc/saveplot          dist/Frame3DD/doc/.
 cp --preserve=mode,timestamps doc/img/*.png         dist/Frame3DD/doc/img/.
 cp --preserve=mode,timestamps doc/img/*.jpg         dist/Frame3DD/doc/img/.
 cp --preserve=mode,timestamps doc/img/*.gif         dist/Frame3DD/doc/img/.
@@ -36,6 +35,8 @@ cp --preserve=mode,timestamps README-win32.txt      dist/Frame3DD/.
 echo "copying example files ... "
 cp --preserve=mode,timestamps examples/ex*.3dd      dist/Frame3DD/examples/.
 cp --preserve=mode,timestamps examples/ex*.out      dist/Frame3DD/examples/.
+cp --preserve=mode,timestamps examples/saveplot     dist/Frame3DD/examples/.
+cp --preserve=mode,timestamps examples/saveplot_w32 dist/Frame3DD/examples/.
 
 # copy executables
 echo "copying executables ... "
@@ -79,5 +80,5 @@ echo "Frame3DD .zip archive complete"
 #scp frame3dd-0.20091020.tar.bz2  hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091020/.
 
 # ----------------------------------------------------------- dist_bin.sh
-# Henri P. Gavin
-# October 20 2009
+# Henri P. Gavin  2009.10.20
+# updated: 2009.10.22
