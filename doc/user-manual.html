@@ -112,7 +112,7 @@ Dynamic Condensation.  Graphical output and mode shape animation
 via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <hr>
 <h4>SYNOPSIS </h4>
-       frame3dd  <Input Data File>  <Output Data File>
+       frame3dd  <Input Data file>  <Output Data file>
 <hr>
 -->
 
@@ -235,7 +235,7 @@ These installation .ZIP archives include:
 <li> Some Windows-specific information (README-win32.txt)
 <li> The Matlab interface code (matlab/)
 <li> A summary of recent updates to the program (ChangeLog.txt)
-<li> A set of example Input Data Files (examples/)
+<li> A set of example Input Data files (examples/)
 </ul>
 </p>
 
@@ -1982,18 +1982,18 @@ or
            frame3dd -i InFile -o OutFile -q
 </pre>
 
-  Include shear deformation, over-riding the Input Data File value:
+  Include shear deformation, over-riding the Input Data file value:
 <pre>
            frame3dd -i InFile -o OutFile -sOn
 </pre>
 
-  Include geometric stiffness and set deformed mesh exaggeration value, over-riding Input Data File values:
+  Include geometric stiffness and set deformed mesh exaggeration value, over-riding Input Data file values:
 <pre>
            frame3dd -i InFile -o OutFile -e100 -gOn
 </pre>
 
   Use consistent mass matrix, set deformed mesh exaggeration value, and
-set the animation pan rate, over-riding Input Data File values:
+set the animation pan rate, over-riding Input Data file values:
 <pre>
            frame3dd -i InFile -o OutFile -lOff -e100 -p3.4
 </pre>
