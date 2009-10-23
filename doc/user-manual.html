@@ -217,7 +217,9 @@ On Windows, the location of this folder is the contents of the TEMP environment 
 <pre>
                echo %TEMP%
 </pre>
-On other platforms, this will be the folder <tt>/tmp</tt>.<br><br>If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <tt>FRAME3DD_OUTDIR</tt> with the path to your output directory. All new output files will then appear in the folder you have specified.
+On other platforms, this is the <tt>/tmp</tt> directory.
+<br><br>
+If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <tt>FRAME3DD_OUTDIR</tt> with the path to your output directory. All new output files will then appear in the folder you have specified.
 </div>
 
 <a name="installrun"/><h2>3. How to install and run Frame3DD</h2>
@@ -262,22 +264,59 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it in your <b>Desktop</b>.
-<li> If the .ZIP archive was not automatically unzipped, open a Terminal window (right-click on an open part of the Desktop to select 'Open Terminal')
+<li> If the .ZIP archive was not automatically unzipped, open a Terminal window (right-click on an open part of the Desktop to select <b>Open Terminal</b>)
 and unzip the archive to create a <b>Frame3DD</b> directory.
 <pre>
                cd ~/Desktop
                unzip Frame3DD_VERSION_linux.zip
 </pre>
-<li>If you have root priviliges, copy <b>Frame3DD/frame3dd</b> to <b>/usr/local/bin/</b>. 
+<li>
+If you have a file <tt>~/.bashrc</tt>: <br>
+Open a terminal (right-click on an open part of the Desktop and select <b>Open Terminal</b>).  Open your <tt>~/.bashrc</tt> file using 
+a plain text editor
+(<a href="http://www.jerrywang.net/vi/">vi</a>,
+ <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
+ <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>).
+Start the editor like this  ...
 <pre>
-               sudo  cp  ~/Desktop/Frame3DD/frame3dd  /usr/local/bin/.
+               gedit  ~/.bashrc
 </pre>
-Otherwise, if you do not have root priviliges, put the <b>Frame3DD</b> directory in your path.
+... and cut-and paste the following six lines into the beginning of <tt>~/.bashrc</tt> ...
 <pre>
-               /bin/bash                                   # change to bash shell
-               export PATH=$PATH:$HOME/Desktop/Frame3DD/   # add to the path
+               # for Frame3DD ... http://frame3dd.sourceforge.net/
+               export PATH=$PATH:$HOME/Desktop/Frame3DD/         # add to the path
+               if [ ! -d /tmp/frame3dd_temp_$USER ]; then
+                   mkdir /tmp/frame3dd_temp_$USER                # create a Frame3DD output directory
+                   echo "creating /tmp/frame3dd_temp_$USER for Frame3DD"
+               fi
+               export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER   # specify the Frame3DD output directory
 </pre>
-If <b>frame3dd</b> is not saved to <b>/usr/local/bin/</b> you will need to run these two commands each time you open a new Terminal window to run Frame3DD.  
+... save, and exit the editor.   
+
+<br><br>
+
+If you have a file <tt>~/.cshrc</tt>: <br>
+Open a terminal (right-click on an open part of the Desktop and select <b>Open Terminal</b>).  Open your <tt>~/.cshrc</tt> file using 
+a plain text editor
+(<a href="http://www.jerrywang.net/vi/">vi</a>,
+ <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
+ <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>).
+Start the editor like this  ...
+<pre>
+               gedit  ~/.cshrc
+</pre>
+... and cut-and paste the following six lines into the beginning of <tt>~/.cshrc</tt> ...
+<pre>
+                # for Frame3DD ... http://frame3dd.sourceforge.net/
+                set path = ( $path $home/Desktop/Frame3DD )      # add to path
+                if ( ! -d /tmp/frame3dd_temp_$user ) then
+                    mkdir /tmp/frame3dd_temp_$user               # create a Frame3DD output directory
+                    echo "creating /tmp/frame3dd_temp_$user for Frame3DD"
+                endif
+                setenv FRAME3DD_OUTDIR /tmp/frame3dd_temp_$user  # specify the Frame3DD output directory
+</pre>
+... save, and exit the editor.   
+
 <li> Change to the directory of example files and run an example. 
 <pre>
                cd  ~/Desktop/Frame3DD/examples/            # change to the examples directory
@@ -285,7 +324,7 @@ If <b>frame3dd</b> is not saved to <b>/usr/local/bin/</b> you will need to run t
 </pre>
 Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
-Data files used primarly for plotting are stored in the <b>/tmp</b> directory.
+Data files used primarly for plotting are stored in the <b>/tmp/frame3dd_temp_$USER</b> directory.
 <li>       You may view Output Data files and edit Input Data files using a good plain text editor
 <!-- (<a href="http://thomer.com/vi/vi.html">vi</a>, -->
 (<a href="http://www.jerrywang.net/vi/">vi</a>,
@@ -424,12 +463,12 @@ open a 'Command Prompt' window and
 cut-and-paste the following lines into the Command Prompt window.
 <pre>
                set PATH=%PATH%;%HOMEPATH%\Desktop\Frame3DD
-               mkdir c:\temp
-               set FRAME3DD_OUTDIR=c:\temp
+               mkdir %TEMP%\frame3dd_temp_%USERNAME%
+               set FRAME3DD_OUTDIR=%TEMP%\frame3dd_temp_%USERNAME%
 </pre>
 If <b>frame3dd.exe</b> is not saved to <b>Program Files</b> you will need to run these three commands each time you
 open a new Command Prompt window to run Frame3DD.  
-(The second and third lines may not be necessary.)   
+The second and third commands are optional.   
 <li>Change to the directory of example files, and run an example.
 <pre>
                chdir %HOMEPATH%\Desktop\Frame3DD\examples
@@ -555,16 +594,20 @@ and unzip the archive to create a <b>Frame3DD</b> directory.
                cd ~/Desktop
                unzip Frame3DD_VERSION_osx.zip
 </pre>
-<li> If you have administrator priviliges, copy <b>Frame3DD/frame3dd</b> to <b>/usr/local/bin/</b>.
+<li>
+Open your <tt>~/.bashrc</tt> file using TextEdit
+and cut-and paste the following six lines into the beginning of <tt>~/.bashrc</tt> ...
 <pre>
-               sudo  cp  ~/Desktop/Frame3DD/frame3dd  /usr/local/bin/.
-</pre>
-Otherwise, if you do not have administrator priviliges, put the <b>Frame3DD</b>
-directory in your path.
-<pre>
+               # for Frame3DD ... http://frame3dd.sourceforge.net/
                export PATH=$PATH:$HOME/Desktop/Frame3DD/         # add to the path
+               if [ ! -d /tmp/frame3dd_temp_$USER ]; then
+                   mkdir /tmp/frame3dd_temp_$USER                # create a Frame3DD output directory
+                   echo "creating /tmp/frame3dd_temp_$USER for Frame3DD"
+               fi
+               export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER   # specify the Frame3DD output directory
 </pre>
-If <b>frame3dd</b> is not saved to <b>/usr/local/bin/</b> you will need to run this command each time you open a new Terminal window to run Frame3DD.  
+... save, and exit the editor.   
+
 <li>Change to the directory of example files and run an example.
 <pre>
                cd  ~/Desktop/Frame3DD/examples/                  # change to the examples directory
@@ -572,7 +615,7 @@ If <b>frame3dd</b> is not saved to <b>/usr/local/bin/</b> you will need to run t
 </pre>
 Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the 
-<tt>exA.out</tt> Output Data file. Data files used primarly for plotting are stored in the <b>/tmp</b> directory. 
+<tt>exA.out</tt> Output Data file. Data files used primarly for plotting are stored in the <b>/tmp/frame3dd_temp_$USER</b> directory. 
 
 <!-- 
 <ol>
