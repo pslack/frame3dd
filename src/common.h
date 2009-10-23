@@ -29,7 +29,7 @@
 #define FRAME3DD_PATHMAX 256
 
 #ifndef VERSION
-# define VERSION "20090922"
+# define VERSION "20091022"
 #endif
 
 #ifndef PI

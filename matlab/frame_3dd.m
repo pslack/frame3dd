@@ -40,7 +40,17 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %          row 6 = Joint Moment about Z-axis     for each joint
 %
 %    U : a 3xB matrix containing the unif. dist. load on each frame element
+%          row 1 = uniform distributed load along the local element x axis
+%          row 2 = uniform distributed load in    the local element y axis
+%          row 3 = uniform distributed load in    the local element z axis
+%
 %    D : a 6xJ matrix of prescribed displacements at the reaction DoF's
+%          row 1 = prescribed joint displ. in the X-direction for each joint
+%          row 2 = prescribed joint displ. in the Y-direction for each joint
+%          row 3 = prescribed joint displ. in the Z-direction for each joint
+%          row 4 = prescribed joint rot'n  about the X-axis   for each joint
+%          row 5 = prescribed joint rot'n  about the Y-axis   for each joint
+%          row 6 = prescribed joint rot'n  about the Z-axis   for each joint
 %
 % OUTPUT DATA:
 %

@@ -1,3 +1,6 @@
+* Thu Oct 22 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091021
+- Updated and improved .ZIP installation instructions. 
+
 * Wed Oct 21 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091021
 - Adding .ZIP packaging for Linux, Windows, and OSX
 - Adding installation instructions to user-manual.html for new .zip packaging

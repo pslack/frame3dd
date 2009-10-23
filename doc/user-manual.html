@@ -86,7 +86,7 @@ script file used for viewing deformed frames and dynamic mode shapes.
 If the Output Data is written to a file called <tt>MyResultsA.out</tt>,
 the Gnuplot script is written to a file called <tt>MyResultsA.plt</tt>.
 Graphical output may be viewed by starting Gnuplot and typing:
-<tt> load 'exA.plt'</tt>.
+<tt> load 'MyResultsA.plt'</tt>.
 
 <p><b>Frame3DD</b> can consider multiple static load cases in a single analysis.</p>
 
@@ -145,17 +145,18 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li>Read the User Manual and Reference (this file).
 <li>Download or build the Frame3DD executable for your operating system (see below).
 <li>Optionally, obtain a copy of Gnuplot for your operating system.
-<li>Copy one of the example Input Data files (eg <tt>exA.3dd</tt>) into your home directory.
-<li>       Open a terminal window and run the program using the command
-	  <tt>frame3dd  exA.3dd  exA.out</tt> (change the filenames <tt>exA.3dd</tt> and <tt>exA.out</tt> as necessary).
-	<li>Open the Output Data file using your text editor and view the Output Data.
+<li>  Open a terminal window, go to the Frame3DD/examples directory, and run the program on one of the examples using a command like ...
+	  <tt>frame3dd  exA.3dd  exA.out</tt> 
+<li>Open the Output Data file using your text editor and view the Output Data.
 <!--     Running this program will create many files.  Most of them are used
          for graphics and should be written to the  /tmp  directory.
 <li>      One of the files will be written to the current working directory and will be called
          something like frA.plt   This file is used for plotting.   -->
 <li>      Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, and typing
-           <tt>load 'exA.plt'</tt> at the "<tt>gnuplot&gt;</tt>"&nbsp;prompt.
-Observe a series of plots by hitting the Return (or Enter) key between plots.<br>
+           <tt>load 'exA.plt'</tt> at the <tt>gnuplot></tt> prompt.
+<br>
+Observe a series of plots by hitting the Return (or Enter) key between plots.
+<br>
 If a dynamic analysis was performed, you will enjoy an animation of selected mode shapes.<br>
 Continue to hit the Return (or Enter) key until the last plot is displayed.
 </ol>
@@ -169,6 +170,7 @@ Several examples are given at <a href="http://frame3dd.sourceforge.net/">http://
 
 <ul>
 <li>Comments may be placed anywhere in the file and are helpful in organizing the Input Data.
+<br>
 A comment begins with one of the following four characters <tt># % ? ; </tt> and continues to the end of the line.
 <li>All commas in the Input Data are ignored.
 <li>Floating point numbers must be entered as 1.234 1234 or 1.234e3.
@@ -193,9 +195,9 @@ You may edit Input Data files using a good plain text editor
  <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>,
 etc.),
 using the Matlab interface, or using spreadsheet programs
-(e.g. <a href="http://www.openoffice.org/">OpenOffice</a>, Excel,
-<a href="http://docs.google.com/">Google Docs</a> or
- <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).
+(e.g. <a href="http://docs.google.com/">GoogleDocs</a>,
+ <a href="http://www.openoffice.org/">OpenOffice</a>, 
+ <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>, or Excel).
 </p>
 <p>
 Details regarding the Matlab interface to Frame3DD are <a href="#Matlab">here</a>.<br>
@@ -227,7 +229,7 @@ for OS X, and for Windows operating systems as .ZIP archives.
 These installation .ZIP archives include:
 <ul>
 <li> A copy of the GPL the license (LICENSE.txt)
-<li> The executable code (frame3dd for Linux, frame3ddosx for OS X, and frame3dd.exe for Windows) 
+<li> The executable program (frame3dd) for the selected operating system (Linux, OS X, or Windows)
 <li> This manual, (doc/user-manual.html) 
 <li> Some general information (README.txt)
 <li> Some Windows-specific information (README-win32.txt)
@@ -260,24 +262,27 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it in your <b>Desktop</b>.
-<li> Open a Terminal window (right-click on an open part of the Desktop to select 'Open Terminal')
+<li> If the .ZIP archive was not automatically unzipped, open a Terminal window (right-click on an open part of the Desktop to select 'Open Terminal')
 and unzip the archive to create a <b>Frame3DD</b> directory.
 <pre>
                cd ~/Desktop
                unzip Frame3DD_VERSION_linux.zip
 </pre>
-If the .ZIP archive was automatically unzipped, skip the second of the above two commands.
-<li>If you have root priviliges, copy <b>Frame3DD/frame3dd</b> to <b>/usr/local/bin/</b>. If you do not have root priviliges, put the <b>Frame3DD</b> directory in your path.
-Then change to the directory of example files and run an example. You may do this by cutting-and-pasting the following four lines into the Terminal window. 
+<li>If you have root priviliges, copy <b>Frame3DD/frame3dd</b> to <b>/usr/local/bin/</b>. 
+<pre>
+               sudo  cp  ~/Desktop/Frame3DD/frame3dd  /usr/local/bin/.
+</pre>
+Otherwise, if you do not have root priviliges, put the <b>Frame3DD</b> directory in your path.
 <pre>
                /bin/bash                                   # change to bash shell
                export PATH=$PATH:$HOME/Desktop/Frame3DD/   # add to the path
+</pre>
+If <b>frame3dd</b> is not saved to <b>/usr/local/bin/</b> you will need to run these two commands each time you open a new Terminal window to run Frame3DD.  
+<li> Change to the directory of example files and run an example. 
+<pre>
                cd  ~/Desktop/Frame3DD/examples/            # change to the examples directory
                frame3dd  exA.3dd  exA.out                  # run the program
 </pre>
-You will need to run the first two of the commands above each time you
-open a new Terminal window to run Frame3DD.  
-<li>
 Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
 Data files used primarly for plotting are stored in the <b>/tmp</b> directory.
@@ -287,7 +292,8 @@ Data files used primarly for plotting are stored in the <b>/tmp</b> directory.
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
  <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>),
 or a spreadsheet program
-(<a href="http://www.openoffice.org/">OpenOffice</a>,
+(e.g., <a href="http://docs.google.com/">GoogleDocs</a>,
+ <a href="http://www.openoffice.org/">OpenOffice</a>,
  <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).  For example, 
 to read or edit the Input Data file, type
 <pre>
@@ -403,28 +409,40 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it to your <b>Desktop</b>.
 <!-- <li> Read <b>README-win32.txt</b> -->
+<li> If the .ZIP archive was not automatically unzipped, 
+open a 'Command Prompt' window
+(Start > All Programs > Accessories > Command Prompt) and
+and unzip the archive to create a <b>Frame3DD</b> directory.
+<pre>
+               cd %HOMEPATH%\Desktop
+               unzip Frame3DD_VERSION_win32.zip
+</pre>
 <li> If you have administrator priviliges, copy <b>Frame3DD/frame3dd.exe</b> to the <b>Program Files</b> folder. 
-If you do not have root priviliges, put the <b>Frame3DD</b> directory in your path.
-Then change to the directory of example files, and run an example.
-To do all this, you may 
-open a 'Command Prompt' window (Start > All Programs > Accessories > Command Prompt) and
-cut-and-paste the following five lines into the Command Prompt window.
+If you do not have administrator priviliges, put the <b>Frame3DD</b> directory in your path.
+To do this, you may 
+open a 'Command Prompt' window and
+cut-and-paste the following lines into the Command Prompt window.
 <pre>
                set PATH=%PATH%;%HOMEPATH%\Desktop\Frame3DD
                mkdir c:\temp
                set FRAME3DD_OUTDIR=c:\temp
+</pre>
+If <b>frame3dd.exe</b> is not saved to <b>Program Files</b> you will need to run these three commands each time you
+open a new Command Prompt window to run Frame3DD.  
+(The second and third lines may not be necessary.)   
+<li>Change to the directory of example files, and run an example.
+<pre>
                chdir %HOMEPATH%\Desktop\Frame3DD\examples
                frame3dd  exA.3dd  exA.out
 </pre>
-You will need to run the first three of the commands above each time you
-open a new Command Prompt window to run Frame3DD.  
-<li>Some run-time information will be displayed on the Command Prompt window and
+Some run-time information will be displayed on the Command Prompt window and
 the results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
 Data files used primarly for plotting are stored in the <b>c:/temp</b> folder.
 <li>       You may view Output Data files and edit Input Data files using a good plain text editor
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
 <a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>), or a spreadsheet program
-(<a href="http://www.openoffice.org/">OpenOffice</a>, excel).   
+(e.g., <a href="http://docs.google.com/">GoogleDocs</a>,
+<a href="http://www.openoffice.org/">OpenOffice</a>, Excel).   
 <li>Run your own Frame3DD analyses within the Command Prompt window using a command like ...
 <pre>
                frame3dd  MyFrame.3dd  MyResultsA.out
@@ -530,25 +548,29 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_osx.zip) and save it in your <b>Desktop</b>.
-<li> Open a Terminal and unzip the archive to create a <b>Frame3DD</b> directory.
+<li> If the .ZIP archive was not automatically unzipped, open a Terminal 
+(Applications > Utilities > Terminal)
+and unzip the archive to create a <b>Frame3DD</b> directory.
 <pre>
                cd ~/Desktop
                unzip Frame3DD_VERSION_osx.zip
 </pre>
-If the .ZIP archive was automatically unzipped, skip the second of the above two commands.
-<li> If you have root priviliges, copy <b>Frame3DD/frame3ddosx</b> program to <b>/usr/local/bin/</b>
-If you do not have root priviliges, put the <b>Frame3DD</b>
+<li> If you have administrator priviliges, copy <b>Frame3DD/frame3dd</b> to <b>/usr/local/bin/</b>.
+<pre>
+               sudo  cp  ~/Desktop/Frame3DD/frame3dd  /usr/local/bin/.
+</pre>
+Otherwise, if you do not have administrator priviliges, put the <b>Frame3DD</b>
 directory in your path.
-Then change to the directory of example files and run an example.
-You may do this by cutting-and-pasting the following three lines into the Terminal window. 
 <pre>
                export PATH=$PATH:$HOME/Desktop/Frame3DD/         # add to the path
-               cd  ~/Desktop/Frame3DD/examples/                  # change to the examples directory
-               frame3ddosx  exA.3dd  exA.out                     # run the program
 </pre>
-You will need to run the first of the three commands above each time you
-open a new Terminal window to run Frame3DD.  
-<li>Some run-time information will be displayed on the Terminal and
+If <b>frame3dd</b> is not saved to <b>/usr/local/bin/</b> you will need to run this command each time you open a new Terminal window to run Frame3DD.  
+<li>Change to the directory of example files and run an example.
+<pre>
+               cd  ~/Desktop/Frame3DD/examples/                  # change to the examples directory
+               frame3dd  exA.3dd  exA.out                        # run the program
+</pre>
+Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the 
 <tt>exA.out</tt> Output Data file. Data files used primarly for plotting are stored in the <b>/tmp</b> directory. 
 
@@ -581,13 +603,14 @@ the results of your Frame3DD analysis will have been appended to the end of the
 TextEdit (Applications > TextEdit),
 <a href="http://macvim.org/OSX/index.php">vi</a>)
 or a spreadsheet program
-(<a href="http://www.openoffice.org/">OpenOffice</a>).<br>
+(e.g., <a href="http://docs.google.com/">GoogleDocs</a>,
+<a href="http://www.openoffice.org/">OpenOffice</a>).
 If you use Apple's TextEdit,
 make sure you are in Plain Text mode  ...  [SHIFT] [APPLE] [T] ...  or ...   Format > Make Plain Text ... <br>
 <li>
 Run your own Frame3DD analyses within the Terminal window using a command like ...
 <pre>
-               frame3ddosx  MyFrame.3dd  MyResultsA.out
+               frame3dd  MyFrame.3dd  MyResultsA.out
 </pre>
 </ol>
 
@@ -605,10 +628,12 @@ install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href=
 -->
 
 <ol>
-<li> First install DarwinPorts, and then install Gnuplot.
-<li>Follow the instructions |<a href="http://darwinports.com/">HERE</a>| to download and install DarwinPorts.
-<li> Follow the instructions |<a href="http://gnuplot.darwinports.com/">HERE</a>|
-to download and install Gnuplot 4.2.5 for OS X.
+<li> From you Mac's Administrator account, first install DarwinPorts, and then install Gnuplot.<br>
+Follow the instructions |<a href="http://darwinports.com/">HERE</a>| to download and install DarwinPorts.<br>
+Follow the instructions |<a href="http://gnuplot.darwinports.com/">HERE</a>|
+to download and install Gnuplot 4.2.5 for OS X.<br>
+If this is your first DarwinPorts package installation, it will take several minutes to complete.
+<!--
 <li>        Test that Gnuplot works.
          Open a Terminal window (Applications > Utilities > Terminal) and 
 <pre>
@@ -616,7 +641,7 @@ to download and install Gnuplot 4.2.5 for OS X.
      gnuplot>  plot sin(x)
      gnuplot>  quit
 </pre>
-
+-->
 <li>        Visualize your <b>Frame3DD</b> analysis output.
          Open a Terminal window (Applications > Utilities > Terminal) and ...
 <pre>
@@ -625,7 +650,7 @@ to download and install Gnuplot 4.2.5 for OS X.
      gnuplot>  load 'MyResultsA.plt'
 </pre>
 where <tt>MyResultsA.out</tt> is the name of of the Output Data file specified 
-when running frame3ddosx.
+when running frame3dd.
 <li>Hit the 'Return' key in the Terminal window to see the sequence of plots
 and animations until the <tt> gnuplot></tt> prompt returns.
 <li>Save or print plots using [APPLE] [P].<br>
@@ -655,17 +680,14 @@ and build the code
 </ol>
 
 
-
-<p>Source code for FrameEd is not currently available, and development on this GUI is no longer active.</p>
-
 <a name="Matlab"><h2>4. Matlab Interface</h2>
 
 <p>
 <b>Frame3DD</b> may optionally be executed from within Matlab on any platform,
 via the Matlab interface function <a href="../matlab/frame_3dd.m">frame_3dd.m</a>
 <pre>
-function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
-% [D,R,F,L,Ks] = frame_3dd (XYZ,JTS,RCT,EAIJ,P,W,D)
+function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
+% [D,R,F,L,Ks] = frame_3dd (XYZ,JTS,RCT,EAIJ,P,U,D)
 %
 % Solve a a three-dimensional frame analysis problem
 %
@@ -705,8 +727,18 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 %          row 5 = Joint Moment about Y-axis     for each joint
 %          row 6 = Joint Moment about Z-axis     for each joint
 %
-%    W : a 3xB matrix containing the unif. dist. load on each frame element
+%    U : a 3xB matrix containing the unif. dist. load on each frame element
+%          row 1 = uniform distributed load along the local element x axis
+%          row 2 = uniform distributed load in    the local element y axis
+%          row 3 = uniform distributed load in    the local element z axis
+%
 %    D : a 6xJ matrix of prescribed displacements at the reaction DoF's
+%          row 1 = prescribed joint displ. in the X-direction for each joint
+%          row 2 = prescribed joint displ. in the Y-direction for each joint
+%          row 3 = prescribed joint displ. in the Z-direction for each joint
+%          row 4 = prescribed joint rot'n  about the X-axis   for each joint
+%          row 5 = prescribed joint rot'n  about the Y-axis   for each joint
+%          row 6 = prescribed joint rot'n  about the Z-axis   for each joint
 %
 % OUTPUT DATA:
 %
@@ -721,19 +753,18 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,W,D)
 <p>
 This m-function, <a href="../matlab/frame_3dd.m">frame_3dd.m</a>,
 executes the system command
-(<tt>frame3dd</tt> on Linux or OS-X, <tt>frame3dd.exe</tt> on Windows)
+(<tt>frame3dd</tt> on Linux or OS X, <tt>frame3dd.exe</tt> on Windows)
 to compute the solution.
 The <b>Frame3DD</b> executable
-(<tt>frame3dd</tt> on Linux or OS-X, <tt>frame3dd.exe</tt> on Windows)
+(<tt>frame3dd</tt> on Linux or OS X, <tt>frame3dd.exe</tt> on Windows)
 must be saved to a directory within
-a path appropriate for your system, or must be copied to your current
-working directory.
+a path appropriate for your system, as described in the installation instructions, above.
 </p>
 
 <p>
 <ol>
 <li> The Matlab file for your problem first sets up the various matrices defining the problem for analysis and calls frame_3dd.m <br>
-A <a href="Matlab/exA.m">Matlab version of Example A</a> illustrates
+A <a href="../matlab/exA.m">Matlab version of Example A</a> illustrates
 how to analyze problems using the Matlab interface to <b>Frame3DD</b>.<br>
 Matlab versions of the other examples are forthcoming.
 <li> frame_3dd.m writes IOdata.fmm,
@@ -759,6 +790,9 @@ It does not (yet) implement the following features of <b>Frame3DD</b>:
   <li> modal analysis
   <li> matrix condensation
 </ul>
+</p>
+
+<p>
 Adding these features would require Matlab programming, only.
 </p>
 
@@ -863,6 +897,8 @@ Modal analysis results are not (yet) written to the .CSV formatted output file.
 to match the first mode.
 </ul>
 </a>
+
+<p>Source code for FrameEd is not currently available, and development on this GUI is no longer active.</p>
 
 <a name="structuralmodeling"/><h2>7. Structural Modeling</h2>
 
@@ -1357,7 +1393,7 @@ un-stressed stiffness matrix and the tangent stiffness matrix.
 Six types of static loads may be specified:
 </p>
 <ul>
-<li>Concentrated static force loads and concentrated static moments may be applied to joints.</li>
+<li>Concentrated static force loads and concentrated static moments may be applied to joints.
 These loads are specified in the structure's global coordinate system.  
 <li>Concentrated static force loads may be applied to frame elements between the joints.
 These loads are specified in the frame element's local coordinate system.  </li>

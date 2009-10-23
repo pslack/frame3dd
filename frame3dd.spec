@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20091020
+Version:	0.20091022
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -67,6 +67,9 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Thu Oct 22 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091021
+- Updated and improved .ZIP installation instructions. 
+
 * Wed Oct 21 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091021
 - Adding .ZIP packaging for Linux, Windows, and OSX
 - Adding installation instructions to user-manual.html for new .zip packaging

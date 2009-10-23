@@ -1,4 +1,4 @@
-Template for input file format for FRAME program
+Template for input file format for Frame3DD - 3D structural frame analysis
 
 % joint data ...
 nJ						% number of joints
