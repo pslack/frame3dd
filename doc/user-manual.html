@@ -61,7 +61,7 @@ Duke University</a> - Box 90287,
 
 <p><b>Frame3DD</b> is executed from the <a href="http://en.wikipedia.org/wiki/Windows_command_line">command prompt</a> (Windows) or <a href="http://en.wikipedia.org/wiki/Unix_shell">shell</a> (Linux) or <a href="http://www.macdevcenter.com/pub/a/mac/2001/12/14/terminal_one.html">terminal</a> (OS X), as follows, with filenames changed as required:
 <pre>
-               frame3dd inputfile.3dd outputfile.txt
+frame3dd inputfile.3dd outputfile.txt
 </pre>
 </p>
 
@@ -189,13 +189,15 @@ You may edit Input Data files using a good plain text editor
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
  <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>,
  <a href="http://www.barebones.com/products/textwrangler/">TextWrangler (OS X)</a>,
+ <a href="http://emacsformacosx.com/">Emacs for OS X</a>, 
+ <a href="http://macvim.org/OSX/index.php">Vim for OS X</a>. 
  <a href="http://www.apple.com/support/mac101/work/23/">TextEdit (OS X)</a>,
  <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++ (Windows)</a>,
- <a href="http://www.textedit.org/">TextEdit (Windows)</a>,
  <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>,
+ <a href="ftp://ftp.vim.org/pub/vim/pc/gvim72.exe">gvim (Windows)</a>
 etc.),
 using the Matlab interface, or using spreadsheet programs
-(e.g. <a href="http://docs.google.com/">GoogleDocs</a>,
+(<a href="http://docs.google.com/">GoogleDocs</a>,
  <a href="http://www.openoffice.org/">OpenOffice</a>, 
  <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>, or Excel).
 </p>
@@ -215,7 +217,7 @@ found with the Input Data.
 By default, these output files are sent to your temporary file folder. 
 On Windows, the location of this folder is the contents of the TEMP environment variable, which you can examine by typing 
 <pre>
-               echo %TEMP%
+echo %TEMP%
 </pre>
 On other platforms, this is the <tt>/tmp</tt> directory.
 <br><br>
@@ -261,66 +263,55 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <h4>3.1.1 Installing from the .ZIP archive for Linux</h4>
 
 <ol>
+<li> Linux and Unix systems usually have good plain text editors pre-installed.    
+(<a href="http://www.jerrywang.net/vi/">vim</a>,
+ <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
+ <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>)
+There is no need to install a new editor.
+A tutorial for vim is <a href="http://www.jerrywang.net/vi/">here</a>.
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it in your <b>Desktop</b>.
-<li> If the .ZIP archive was not automatically unzipped, open a Terminal window (right-click on an open part of the Desktop to select <b>Open Terminal</b>)
-and unzip the archive to create a <b>Frame3DD</b> directory.
-<pre>
-               cd ~/Desktop
-               unzip Frame3DD_VERSION_linux.zip
-</pre>
+<li> If the .ZIP archive was not automatically unzipped, 
+double-click the icon to extract it. 
 <li>
-If you have a file <tt>~/.bashrc</tt>: <br>
-Open a terminal (right-click on an open part of the Desktop and select <b>Open Terminal</b>).  Open your <tt>~/.bashrc</tt> file using 
-a plain text editor
-(<a href="http://www.jerrywang.net/vi/">vi</a>,
- <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
- <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>).
-Start the editor like this  ...
+<b>(Recommended.)</b>
+Put the <b>Frame3DD</b> directory in your path and set the <tt>FRAME3DD_OUTDIR</tt> location.<br>
+To do this, double-click the <b>Home</b> icon on the Desktop, and select <b>View > Show Hidden Files</b><br><br>
+
+If you have a file <b>.bashrc</b>, open it with a double-click,
+and cut-and paste the following six lines into the beginning of your <b>.bashrc</b> 
 <pre>
-               gedit  ~/.bashrc
-</pre>
-... and cut-and paste the following six lines into the beginning of <tt>~/.bashrc</tt> ...
-<pre>
-               # for Frame3DD ... http://frame3dd.sourceforge.net/
-               export PATH=$PATH:$HOME/Desktop/Frame3DD/         # add to the path
-               if [ ! -d /tmp/frame3dd_temp_$USER ]; then
-                   mkdir /tmp/frame3dd_temp_$USER                # create a Frame3DD output directory
-                   echo "creating /tmp/frame3dd_temp_$USER for Frame3DD"
-               fi
-               export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER   # specify the Frame3DD output directory
+# for Frame3DD ... http://frame3dd.sourceforge.net/
+export PATH=$PATH:$HOME/Desktop/Frame3DD/         # add to the path
+if [ ! -d /tmp/frame3dd_temp_$USER ]; then
+    mkdir /tmp/frame3dd_temp_$USER                # create a Frame3DD output directory
+    echo "creating /tmp/frame3dd_temp_$USER for Frame3DD"
+fi
+export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER   # specify the Frame3DD output directory
 </pre>
 ... save, and exit the editor.   
 
 <br><br>
 
-If you have a file <tt>~/.cshrc</tt>: <br>
-Open a terminal (right-click on an open part of the Desktop and select <b>Open Terminal</b>).  Open your <tt>~/.cshrc</tt> file using 
-a plain text editor
-(<a href="http://www.jerrywang.net/vi/">vi</a>,
- <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
- <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>).
-Start the editor like this  ...
+If you have a file <b>.cshrc</b>, open it with a double-click, 
+and cut-and paste the following six lines into the beginning of your <b>.cshrc</b> 
 <pre>
-               gedit  ~/.cshrc
-</pre>
-... and cut-and paste the following six lines into the beginning of <tt>~/.cshrc</tt> ...
-<pre>
-                # for Frame3DD ... http://frame3dd.sourceforge.net/
-                set path = ( $path $home/Desktop/Frame3DD )      # add to path
-                if ( ! -d /tmp/frame3dd_temp_$user ) then
-                    mkdir /tmp/frame3dd_temp_$user               # create a Frame3DD output directory
-                    echo "creating /tmp/frame3dd_temp_$user for Frame3DD"
-                endif
-                setenv FRAME3DD_OUTDIR /tmp/frame3dd_temp_$user  # specify the Frame3DD output directory
+# for Frame3DD ... http://frame3dd.sourceforge.net/
+set path = ( $path $home/Desktop/Frame3DD )      # add to path
+if ( ! -d /tmp/frame3dd_temp_$user ) then
+    mkdir /tmp/frame3dd_temp_$user               # create a Frame3DD output directory
+    echo "creating /tmp/frame3dd_temp_$user for Frame3DD"
+endif
+setenv FRAME3DD_OUTDIR /tmp/frame3dd_temp_$user  # specify the Frame3DD output directory
 </pre>
 ... save, and exit the editor.   
 
-<li> Change to the directory of example files and run an example. 
+<li> Open a Terminal window by right-clicking on an open part of the Desktop and select <b>Open Terminal</b>. 
+Change to the directory of example files and run an example. 
 <pre>
-               cd  ~/Desktop/Frame3DD/examples/            # change to the examples directory
-               frame3dd  exA.3dd  exA.out                  # run the program
+cd  ~/Desktop/Frame3DD/examples/                 # change to the examples directory
+frame3dd  exA.3dd  exA.out                       # run the program
 </pre>
 Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
@@ -331,20 +322,20 @@ Data files used primarly for plotting are stored in the <b>/tmp/frame3dd_temp_$U
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
  <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>),
 or a spreadsheet program
-(e.g., <a href="http://docs.google.com/">GoogleDocs</a>,
+(<a href="http://docs.google.com/">GoogleDocs</a>,
  <a href="http://www.openoffice.org/">OpenOffice</a>,
  <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).  For example, 
 to read or edit the Input Data file, type
 <pre>
-               gedit  exA.3dd
+gedit  exA.3dd
 </pre>
 and to read or edit the Output Data file, type
 <pre>
-               gedit  exA.out
+gedit  exA.out
 </pre>
 <li>Run your own Frame3DD analyses within the Terminal window using a command like ...
 <pre>
-               frame3dd  MyFrame.3dd  MyResultsA.out
+frame3dd  MyFrame.3dd  MyResultsA.out
 </pre>
 <!-- <li> You may wish to delete all the files in the temporary file directory (c:\temp) after you have finished your analyses.  -->
 </ol>
@@ -358,7 +349,7 @@ If it is not, you may install it only if you have root priviliges using a comman
 
 <li>Start Gnuplot in the Terminal with the command:
 <pre>
-               gnuplot
+gnuplot
 </pre>
 <li>Display the plots of your structure using Gnuplot with a command like ...
 <pre>
@@ -380,7 +371,7 @@ Or hit <b>CTRL-C</b> to stop the plots at the current plot.
 </pre>
 </ol>
 
-<h4>3.1.2 Compiling from source for Linux/Unix</h4>
+<h4>3.1.2 Installing from source for Linux/Unix</h4>
 
 <p>
 <!--
@@ -394,7 +385,7 @@ and should work with minor changes on any other recent Linux or Unix system.
 <ol>
 <li>Ensure you have Python, SCons and GCC installed on your system. It should suffice to 
 <pre>
-               sudo apt-get install build-essential scons
+sudo apt-get install build-essential scons
 </pre>
 <li>If you would like to build the Microstran viewer, ensure you additionally have got <tt>libsoqt-dev</tt> installed on your system.
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
@@ -405,29 +396,29 @@ and save it in your home directory.
 <li>Using the shell, unpack the source code, enter the source directory,
 and build the code
 <pre>
-               tar jxvf frame3dd-VERSION.tar.bz2
-               cd frame3dd-VERSION
-               scons
+tar jxvf frame3dd-VERSION.tar.bz2
+cd frame3dd-VERSION
+scons
 </pre>
-<li>If you have root privileges, install <b>build/frame3dd</b> to <b>/usr/local/bin/</b> ...
+<li>
+If you have root privileges, install <b>build/frame3dd</b> to <b>/usr/local/bin/</b> ...
 <pre>
-               sudo scons install
+sudo scons install
 </pre>
 or you may install frame3dd in another system directory if your choosing, 
 such as, ...
 <pre>
-               sudo scons install INSTALL_PREFIX=/usr/bin/
+sudo scons install INSTALL_PREFIX=/usr/bin/
 </pre>
 <li>If you do not have root privileges, you can run Frame3dd directly from the build tree:
 <pre>
-               export LD_LIBRARY_PATH=~/frame3dd-VERSION/build</tt>
-               export PATH=$PATH:~/frame3dd-VERSION/build
+export LD_LIBRARY_PATH=~/frame3dd-VERSION/build</tt>
+export PATH=$PATH:~/frame3dd-VERSION/build
 </pre>
 
-<li>Copy one of the frame3dd-VERSION/examples/*.3dd files, eg <tt>exA.3dd</tt> into your home directory, make sure you have write-privileges for the file,
-and run one of the examples
+<li>Copy one of the frame3dd-VERSION/examples/*.3dd files (e.g., <tt>exA.3dd</tt>) into your home directory, make sure you have write-privileges for the file, and run one of the examples
 <pre>
-               frame3dd exA.3dd exA.out
+frame3dd  exA.3dd  exA.out
 </pre>
 </ol>
 
@@ -445,46 +436,47 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 
 <ol>
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
+<li>Install a good plain text editor for Windows:
+ <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>, or
+ <a href="http://www.pcshareware.com/anotepad.htm">Notepad</a>, or
+ <a href="ftp://ftp.vim.org/pub/vim/pc/gvim72.exe">gvim</a>.
+A tutorial for gvim is <a href="http://www.jerrywang.net/vi/">here</a>. 
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
-Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it to your <b>Desktop</b>.
+Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it to your <b>Desktop</b>.<br>
 <!-- <li> Read <b>README-win32.txt</b> -->
 <li> If the .ZIP archive was not automatically unzipped, 
-open a 'Command Prompt' window
-(Start > All Programs > Accessories > Command Prompt) and
-and unzip the archive to create a <b>Frame3DD</b> directory.
+double-click the icon to extract it. 
+<li> <b>(Recommended.)</b>
+Put the <b>Frame3DD</b> directory in your path and set the <tt>FRAME3DD_OUTDIR</tt> location.<br>
+To do this, create the folder <b>%TEMP%\frame3dd_temp</b>, open <b>C:\autoexec.bat</b>
+and cut-and-paste the following lines into <b>C:\autoexec.bat</b>
 <pre>
-               cd %HOMEPATH%\Desktop
-               unzip Frame3DD_VERSION_win32.zip
+set PATH=%PATH%;%HOMEPATH%\Desktop\Frame3DD
+set FRAME3DD_OUTDIR=%TEMP%\frame3dd_temp
 </pre>
-<li> If you have administrator priviliges, copy <b>Frame3DD/frame3dd.exe</b> to the <b>Program Files</b> folder. 
-If you do not have administrator priviliges, put the <b>Frame3DD</b> directory in your path.
-To do this, you may 
-open a 'Command Prompt' window and
-cut-and-paste the following lines into the Command Prompt window.
+Preferably, you may set the <tt>PATH</tt> and <tt>FRAME3DD_OUTDIR</tt> using: 
+<b> right-click My Computer > Properties > Advanced > Environment Variables</b>.
+Further instructions are <a href="http://vlaurie.com/computers2/Articles/environment.htm">here</a>.  
+
+<li>Open a 'Command Prompt' window (<b>Start > All Programs > Accessories > Command Prompt</b>),
+change to the directory of example files, and run an example.
 <pre>
-               set PATH=%PATH%;%HOMEPATH%\Desktop\Frame3DD
-               mkdir %TEMP%\frame3dd_temp_%USERNAME%
-               set FRAME3DD_OUTDIR=%TEMP%\frame3dd_temp_%USERNAME%
-</pre>
-If <b>frame3dd.exe</b> is not saved to <b>Program Files</b> you will need to run these three commands each time you
-open a new Command Prompt window to run Frame3DD.  
-The second and third commands are optional.   
-<li>Change to the directory of example files, and run an example.
-<pre>
-               chdir %HOMEPATH%\Desktop\Frame3DD\examples
-               frame3dd  exA.3dd  exA.out
+chdir %HOMEPATH%\Desktop\Frame3DD\examples
+frame3dd  exA.3dd  exA.out
 </pre>
 Some run-time information will be displayed on the Command Prompt window and
 the results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
-Data files used primarly for plotting are stored in the <b>c:/temp</b> folder.
-<li>       You may view Output Data files and edit Input Data files using a good plain text editor
+Data files used primarly for plotting are stored in the <b>%TEMP%\frame3dd_temp</b> folder.
+<li>       You may view Output Data files and edit Input Data files
+using a good plain text editor
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
-<a href="http://internap.dl.sourceforge.net/sourceforge/cream/gvim-7-0-191.exe">vi</a>), or a spreadsheet program
-(e.g., <a href="http://docs.google.com/">GoogleDocs</a>,
-<a href="http://www.openoffice.org/">OpenOffice</a>, Excel).   
+<a href="ftp://ftp.vim.org/pub/vim/pc/gvim72.exe">gvim</a>),
+or a spreadsheet program
+(<a href="http://docs.google.com/">GoogleDocs</a>,
+ <a href="http://www.openoffice.org/">OpenOffice</a>, Excel).   
 <li>Run your own Frame3DD analyses within the Command Prompt window using a command like ...
 <pre>
-               frame3dd  MyFrame.3dd  MyResultsA.out
+frame3dd  MyFrame.3dd  MyResultsA.out
 </pre>
 <!-- <li> You may wish to delete all the files in the temporary file directory (c:\temp) after you have finished your analyses.  -->
 </ol>
@@ -528,26 +520,26 @@ Download</a> and run the binary installer (frame3dd-VERSION.exe).
 Open a 'Command Prompt' window (Start > All Programs > Accessories > Command Prompt) in order to add FRAME3DD to your path,  
 to change to the directory of example files and run an example:
 <pre>
-               set PATH=%PATH%;c:\Program Files\FRAME3DD
+set PATH=%PATH%;c:\Program Files\FRAME3DD
 </pre>
 Optionally, set a location for your output files using a path of your choice:
 <pre>
-                mkdir c:\temp
-                set FRAME3DD_OUTDIR=c:\temp
+mkdir c:\temp
+set FRAME3DD_OUTDIR=c:\temp
 </pre>
 Keep the command prompt window open for the following:
 <li>Change to your documents directory 
 <pre>
-               cd %HOMEPATH%\My Documents
+cd %HOMEPATH%\My Documents
 </pre>
 <li>Run Frame3dd using 
 <pre>
-              frame3dd.exe  exA.3dd  exA.out
+frame3dd.exe  exA.3dd  exA.out
 </pre>
 <li> You may view the output using Gnuplot as described above.  
 </ol>
 
-<h4> 3.2.3 Compiling from source for Windows </h4>
+<h4> 3.2.3 Compiling the source on Windows </h4>
 
 <ol>
 <li> Install a GCC compatible compiler, such as the 
@@ -561,8 +553,8 @@ and save it in your home directory.
 <li> Unpack the source code, enter the source directory,
 and build the code
 <pre>
-               cd frame3dd-VERSION/src/
-               gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
+cd frame3dd-VERSION/src/
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 </pre>
 </ol>
 
@@ -584,34 +576,40 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <h4> 3.3.1 Installing from the .ZIP archive for OS X</h4>
 
 <ol>
+<li> Install a good plain text editor for OS X:
+ <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>, or
+ <a href="http://emacsformacosx.com/">Emacs</a>,  or
+ <a href="http://macvim.org/OSX/index.php">Vim</a>. 
+A tutorial for Vim is <a href="http://www.jerrywang.net/vi/">here</a>. 
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_osx.zip) and save it in your <b>Desktop</b>.
-<li> If the .ZIP archive was not automatically unzipped, open a Terminal 
-(Applications > Utilities > Terminal)
-and unzip the archive to create a <b>Frame3DD</b> directory.
+<li> If the .ZIP archive was not automatically unzipped, 
+double-click the icon to extract it. 
+<li><b>(Recommended.)</b>
+Put the <b>Frame3DD</b> directory in your path and set the <tt>FRAME3DD_OUTDIR</tt> location.<br>
+To do this, open your <b>~/.profile</b> file using your good text editor.<br>
+Using TextWrangler, <b>File > Open Hidden</b> and select <b>.profile</b> from your home directory.<br>
+Using Emacs, <b>File > Open File ...</b> and type <b>~/.profile</b> in the bottom text entry bar.<br>
+Using Vim, <b>File > Open</b> and select <b>.profile</b> from your home directory.<br>
+Cut-and paste the following six lines into the beginning of <b>~/.profile</b> 
 <pre>
-               cd ~/Desktop
-               unzip Frame3DD_VERSION_osx.zip
-</pre>
-<li>
-Open your <tt>~/.bashrc</tt> file using TextEdit
-and cut-and paste the following six lines into the beginning of <tt>~/.bashrc</tt> ...
-<pre>
-               # for Frame3DD ... http://frame3dd.sourceforge.net/
-               export PATH=$PATH:$HOME/Desktop/Frame3DD/         # add to the path
-               if [ ! -d /tmp/frame3dd_temp_$USER ]; then
-                   mkdir /tmp/frame3dd_temp_$USER                # create a Frame3DD output directory
-                   echo "creating /tmp/frame3dd_temp_$USER for Frame3DD"
-               fi
-               export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER   # specify the Frame3DD output directory
+# for Frame3DD ... http://frame3dd.sourceforge.net/
+export PATH=$PATH:$HOME/Desktop/Frame3DD/         # add to the path
+if [ ! -d /tmp/frame3dd_temp_$USER ]; then
+    mkdir /tmp/frame3dd_temp_$USER                # create a Frame3DD output directory
+    echo "creating /tmp/frame3dd_temp_$USER for Frame3DD"
+fi
+export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER   # specify the Frame3DD output directory
 </pre>
 ... save, and exit the editor.   
 
-<li>Change to the directory of example files and run an example.
+<li>
+Open a Terminal (Applications > Utilities > Terminal),  
+change to the directory of example files and run an example.
 <pre>
-               cd  ~/Desktop/Frame3DD/examples/                  # change to the examples directory
-               frame3dd  exA.3dd  exA.out                        # run the program
+cd  ~/Desktop/Frame3DD/examples/   # change to the examples directory
+frame3dd  exA.3dd  exA.out         # run the program
 </pre>
 Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the 
@@ -627,7 +625,7 @@ the results of your Frame3DD analysis will have been appended to the end of the
             <tt>...$   cd ~/Desktop</tt><br>
             <tt>...$   chmod +x frame3dd</tt><br>
          Create a plain text file (using
-<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a> or TextEdit) called  <tt>~/.profile</tt> containing the line:<br>
+<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>) called  <b>~/.profile</b> containing the line:<br>
              <tt>export PATH=".:$PATH:/usr/local/bin"</tt><br>
          Quit the Terminal application.  [APPLE] [Q]
 <li>        Run <b>Frame3DD</b> from a Terminal window:  (Applications > Utilities > Terminal) ... <br>
@@ -639,21 +637,21 @@ the results of your Frame3DD analysis will have been appended to the end of the
              Click on the <b>frame3dd</b> icon in your Desktop.
              A Terminal window should automatically open.
              When asked for the Input/Output file name, type ...<br>
-               <tt>/Users/your_name_here/Desktop/examples/exA.3dd</tt> -->
+<tt>/Users/your_name_here/Desktop/examples/exA.3dd</tt> -->
 
 <li>     You may view Output Data files and edit Input Data files using a good plain text editor
 (<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,
-TextEdit (Applications > TextEdit),
-<a href="http://macvim.org/OSX/index.php">vi</a>)
+<a href="http://emacsformacosx.com/">Emacs</a>, 
+<a href="http://macvim.org/OSX/index.php">Vim</a>) 
 or a spreadsheet program
-(e.g., <a href="http://docs.google.com/">GoogleDocs</a>,
+(<a href="http://docs.google.com/">GoogleDocs</a>,
 <a href="http://www.openoffice.org/">OpenOffice</a>).
 If you use Apple's TextEdit,
 make sure you are in Plain Text mode  ...  [SHIFT] [APPLE] [T] ...  or ...   Format > Make Plain Text ... <br>
 <li>
 Run your own Frame3DD analyses within the Terminal window using a command like ...
 <pre>
-               frame3dd  MyFrame.3dd  MyResultsA.out
+frame3dd  MyFrame.3dd  MyResultsA.out
 </pre>
 </ol>
 
@@ -680,7 +678,7 @@ If this is your first DarwinPorts package installation, it will take several min
 <li>        Test that Gnuplot works.
          Open a Terminal window (Applications > Utilities > Terminal) and 
 <pre>
-               gnuplot
+gnuplot
      gnuplot>  plot sin(x)
      gnuplot>  quit
 </pre>
@@ -688,7 +686,7 @@ If this is your first DarwinPorts package installation, it will take several min
 <li>        Visualize your <b>Frame3DD</b> analysis output.
          Open a Terminal window (Applications > Utilities > Terminal) and ...
 <pre>
-               gnuplot
+gnuplot
      gnuplot>  cd '~/Desktop/Frame3DD/examples'
      gnuplot>  load 'MyResultsA.plt'
 </pre>
@@ -705,7 +703,7 @@ and animations until the <tt> gnuplot></tt> prompt returns.
 </p>
 
 
-<h4> 3.3.2 Compiling from source for OS X</h4>
+<h4> 3.3.2 Compiling the source on OS X</h4>
 
 <ol>
 <li> Install the Xcode development system from your OS X installation DVD.  
@@ -716,9 +714,9 @@ and save it in your home directory.
 <li> Unpack the source code, enter the source directory,
 and build the code
 <pre>
-               tar jxvf frame3dd-VERSION.tar.bz2
-               cd frame3dd-VERSION/src/
-               gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
+tar jxvf frame3dd-VERSION.tar.bz2
+cd frame3dd-VERSION/src/
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 </pre>
 </ol>
 
@@ -751,15 +749,15 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %        1: the joint does have a reaction in that degree of freedom.
 %
 % EAIJ : a 9xB containing the section and modulus properties of each frame el.
-%         row 1 = Ax  cross section area                   for each frame el.
-%         row 2 = Asy shear area y-direction               for each frame el.
-%         row 3 = Asz shear area z-direction               for each frame el.
+%         row 1 = Ax  cross section area    for each frame el.
+%         row 2 = Asy shear area y-directionfor each frame el.
+%         row 3 = Asz shear area z-directionfor each frame el.
 %         row 4 = Jxx torsional moment of inertia - x axis for each frame el.
 %         row 5 = Iyy bending moment of inertia - y axis   for each frame el.
 %         row 6 = Izz bending moment of inertia - z axis   for each frame el.
-%         row 7 = E   elastic modulus                      for each frame el.
-%         row 8 = G   shear   modulus                      for each frame el. 
-%         row 9 = p   roll angle                           for each frame el.
+%         row 7 = E   elastic modulus       for each frame el.
+%         row 8 = G   shear   modulus       for each frame el. 
+%         row 9 = p   roll angle            for each frame el.
 %
 %    P : a 6xJ matrix containing the components of the external
 %        forces and moments applied to each joint.
@@ -1186,7 +1184,7 @@ Rectangular Tube (outer dimension = <i>a</i> x <i>b</i>, wall thickness = <i>t</
 <!-- 
 Asy coefficients
  1.114691 0.552486 -1.234540 1.576674 1.053296 -0.081960 -2.192489 0.027438
- 1.14766  0.28187                     0.96199            -2.17742
+ 1.14766  0.28187      0.96199            -2.17742
 
 Asz coefficients
  1.158912 -2.291419 1.223522 7.370911 0.964439 0.004778 0.718828 -5.417298
@@ -1258,11 +1256,11 @@ efunda
 
 <p>
 <pre>
-                                                  Thermal                     Modulus
-                      Young's       Shear         Expansion     Mass          per
-                      Modulus       Modulus       Coefficient   Density       Density
-                      E             G             a             d             E/d
-                      N/mm^2        N/mm^2        /deg.C        T/mm^3        mm^2/s^2
+     Thermal      Modulus
+       Young's       Shear         Expansion     Mass          per
+       Modulus       Modulus       Coefficient   Density       Density
+       E             G             a             d             E/d
+       N/mm^2        N/mm^2        /deg.C        T/mm^3        mm^2/s^2
   
 Steel A36             200000        79300         11.7e-6       7.85e-9       2.55e13
 Boron  Fiber-Epoxy    106000        38000         30.0e-6       2.00e-9       5.30e13
@@ -1641,17 +1639,17 @@ Iterations are stopped when this error decreases by less than ten percent in an 
 When geometric stiffness effects are included, the solution is obtained
 iteratively, using a quasi Newton-Raphson method:
 </p>
-                <div class=eq>K(D(i)) dD(i) = F - K(D(i)) D(i)</div>
-                <div class=eq>D(i+1)  =  D(i) + dD(i)</div>
+ <div class=eq>K(D(i)) dD(i) = F - K(D(i)) D(i)</div>
+ <div class=eq>D(i+1)  =  D(i) + dD(i)</div>
 <p>
 where
 </p>
 <ul>
 <li>   <i>D(i)  </i>  is the displacement vector at iteration <i>i</i>,
-<li>                <i>K(D(i))  </i>is the secant stiffness matrix at displacements <i>D(i)</i>
-<li>                <i>F </i>     is the applied load vector ,
-<li>                <i>dD(i) </i>  is the incremental displacement vector at iteration <i>i</i> , and
-<li>                <i>D(i+1)</i>  is the displacement vector at iteration <i>i+1</i>
+<li> <i>K(D(i))  </i>is the secant stiffness matrix at displacements <i>D(i)</i>
+<li> <i>F </i>     is the applied load vector ,
+<li> <i>dD(i) </i>  is the incremental displacement vector at iteration <i>i</i> , and
+<li> <i>D(i+1)</i>  is the displacement vector at iteration <i>i+1</i>
 </ul>
 <p>
 At each Newton-Raphson iteration, the relative equilibrium error is displayed
@@ -1695,7 +1693,7 @@ or a Stodola iteration procedure.
 Jacobi-subspace iterations are stopped when the frequency convergence error is less than the specified
 frequency convergence tolerance.  The frequency convergence error is defined here as:
 </p>
-                <div class=eq>error = | fN(i) - fN(i-1) | / fN(i) </div>
+ <div class=eq>error = | fN(i) - fN(i-1) | / fN(i) </div>
 <p>where</p>
 <ul>
 <li><i> fN(i)</i>    is the highest natural frequency computed at iteration <i>i</i> ,
@@ -1712,43 +1710,43 @@ Click <a href="template.3dd">here</a> to download an Input Data template, templa
 A one-line descriptive title of your analysis MUST be the FIRST line of the file
 
 % joint data ...
-nJ                                     % number of joints
+nJ       % number of joints
   J[1]       x[1]       y[1]       z[1]     r[1]
     :          :          :          :        :  % joint numbers and coordinates
   J[nJ]      x[nJ]      y[nJ]      z[nJ]    r[nJ]
 
 % reaction data ...
-nR                                     % number of joints with reactions
+nR       % number of joints with reactions
   J[1]    Rx[1]   Ry[1]   Rz[1]   Rxx[1]  Ryy[1]  Rzz[1]
     :        :       :       :        :       :       :       % 0:free, 1:fixed
  J[nR]    Rx[nR]  Ry[nR]  Rz[nR]  Rxx[nR] Ryy[nR] Rzz[nR]
 
 % frame element data ...
-nB                                     % number of frame elements
-                                       % frame element numbers, loc'ns, and prop's
+nB       % number of frame elements
+         % frame element numbers, loc'ns, and prop's
 M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jxx[1]  Iyy[1]  Izz[1]  E[1]  G[1]  p[1]
   :      :      :      :       :       :       :       :       :     :     :     :
 M[nB] J1[nB] J2[nB] Ax[nB] Asy[nB] Asz[nB] Jxx[nB] Iyy[nB] Izz[nB] E[nB] G[nB] p[nB]
 
-shear                               % 1: include shear deformation;   0: don't
-geom                                % 1: include geometric stiffness; 0: don't
-exagg                               % exaggerate deformations
+shear % 1: include shear deformation;   0: don't
+geom  % 1: include geometric stiffness; 0: don't
+exagg % exaggerate deformations
 
 
 % load data ...
-nL                                     % number of static load cases, up to 63
+nL       % number of static load cases, up to 63
 % begin static load case 1 ---------------------------------------------------
-nF                                                    % number of loaded joints
+nF       % number of loaded joints
   J[1]    Fx[1]   Fy[1]   Fz[1]   Mxx[1]  Myy[1]  Mzz[1]
     :        :       :       :        :       :       :          % nodal forces
   J[nF]   Fx[nF]  Fy[nF]  Fz[nF]  Mxx[nF] Myy[nF] Mzz[nF]
 
-nU                                        % number of uniform distributed loads
+nU          % number of uniform distributed loads
   M[1]    Ux[1]   Uy[1]   Uz[1]
     :        :       :       :     % uniform distributed loads in local coordinates
   M[nU]   Ux[nU]  Uy[nU]  Uz[nU]
 
-nW                                   % number of trapezoidally distributed loads
+nW     % number of trapezoidally distributed loads
   M[1]  xx1[1]  xx2[2]  wx1[1]  wx2[1]   % locations and loads - local x-axis
         xy1[1]  xy2[2]  wy1[1]  wy2[1]   % locations and loads - local y-axis
         xz1[1]  xz2[2]  wz1[1]  wz2[1]   % locations and loads - local z-axis
@@ -1757,34 +1755,34 @@ nW                                   % number of trapezoidally distributed loads
         xy1[nW] xy2[nW] wy1[nW] wy2[nW]  % w1 and w2: start load and end load
         xz1[nW] xz2[nW] wz1[nW] wz2[nW]  % 0 < x1 < x2 < L
 
-nP                                         % number of concentrated point loads
+nP           % number of concentrated point loads
   M[1]    Px[1]   Py[1]   Pz[1]   x[1]     %  point loads in local coordinates
     :        :       :       :      :      %  and x=distance from coordinate J1
   M[nP]   Px[nP]  Py[nP]  Pz[nP]  x[nP]
 
-nT                         % number of frame elements with temperature changes
+nT          % number of frame elements with temperature changes
   M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % element no.,
     :     :       :       :        :       :       :       :      % temp. coef.
   M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, & temps
 
-nD                             % number of joints with prescribed displacements
+nD              % number of joints with prescribed displacements
   J[1]   Dx[1]  Dy[1]  Dz[1]  Dxx[1]  Dyy[1]  Dzz[1]
     :       :      :      :       :       :       :  % prescribed displacements
   J[nD]  Dx[nD] Dy[nD] Dz[nD] Dxx[nD] Dyy[nD] Dzz[nD]
 %  end  static load case 1 --------------------------------------------------
 
 % begin static load case 2 --------------------------------------------------
-nF                                                    % number of loaded joints
+nF       % number of loaded joints
   J[1]    Fx[1]   Fy[1]   Fz[1]   Mxx[1]  Myy[1]  Mzz[1]
     :        :       :       :        :       :       :          % nodal forces
   J[nF]   Fx[nF]  Fy[nF]  Fz[nF]  Mxx[nF] Myy[nF] Mzz[nF]
 
-nU                                        % number of uniform distributed loads
+nU          % number of uniform distributed loads
   M[1]    Ux[1]   Uy[1]   Uz[1]
     :        :       :       :     % uniform distributed loads in local coordinates
   M[nU]   Ux[nU]  Uy[nU]  Uz[nU]
 
-nW                                   % number of trapezoidally distributed loads
+nW     % number of trapezoidally distributed loads
   M[1]  xx1[1]  xx2[2]  wx1[1]  wx2[1]   % locations and loads - local x-axis
         xy1[1]  xy2[2]  wy1[1]  wy2[1]   % locations and loads - local y-axis
         xz1[1]  xz2[2]  wz1[1]  wz2[1]   % locations and loads - local z-axis
@@ -1793,17 +1791,17 @@ nW                                   % number of trapezoidally distributed loads
         xy1[nW] xy2[nW] wy1[nW] wy2[nW]  % w1 and w2: start load and end load
         xz1[nW] xz2[nW] wz1[nW] wz2[nW]  % 0 < x1 < x2 < L
 
-nP                                         % number of concentrated point loads
+nP           % number of concentrated point loads
   M[1]    Px[1]   Py[1]   Pz[1]   xP[1]    %  point loads in local coordinates
     :        :       :       :      :      %  and x=distance from coordinate J1
   M[nP]   Px[nP]  Py[nP]  Pz[nP]  xP[nP]
 
-nT                          % number of frame elements with temperature changes
+nT           % number of frame elements with temperature changes
   M[1]  a[1]   hy[1]   hz[1]   Ty+[1]  Ty-[1]  Tz+[1]  Tz-[1]     % element no.,
     :     :       :       :        :       :       :       :      % temp. coef.
   M[nT] a[nT]  hy[nT]  hz[nT]  Ty+[nT] Ty-[nT] Tz+[nT] Tz-[nT] % sizes, & temps
 
-nD                             % number of joints with prescribed displacements
+nD              % number of joints with prescribed displacements
   J[1]   Dx[1]  Dy[1]  Dz[1]  Dxx[1]  Dyy[1]  Dzz[1]
     :       :      :      :       :       :       :  % prescribed displacements
   J[nD]  Dx[nD] Dy[nD] Dz[nD] Dxx[nD] Dyy[nD] Dzz[nD]
@@ -1823,25 +1821,25 @@ shift   % frequency shift-factor for rigid body modes, make 0 for pos.def. [K]
    :     :       :         % frame element density and extra frame element mass
  M[nB] d[nB] BMs[nB]
 
-nI                          % number of joints with extra joint mass or inertia
+nI           % number of joints with extra joint mass or inertia
  J[1]  JMs[1]   JMx[1]  JMy[1]  JMz[1]     % joint masses and rotatory inertias
-   :       :        :       :       :                      % global coordinates
+   :       :        :       :       :       % global coordinates
  J[nI] JMs[nI]  JMx[nI] JMy[nI] JMz[nI]
 
 % graphical animation data ...
-nA                                    % number of modes to be animated
+nA      % number of modes to be animated
  anim[0] ... anim[nA] % list of modes to be animated, sorted by increasing freq.
-pan                                         % pan rate during animation
+pan           % pan rate during animation
 
 % matrix condensation data ...
 Cmethod % matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
-nC                                                % number of condensed joints
+nC   % number of condensed joints
  J[1]  cx[1]  cy[1]  cz[1]   cxx[1]  cyy[1] czz[1]
     :      :      :      :        :       :       :    % 1: condense; 0: don't
  J[nC] cx[nC] cy[nC] cz[nC]  cxx[nC] cyy[nC]  czz[nC]
 
   m[1]   m[2]   m[3]  ...      % list of modes matched in dynamic condensation
-                               % if Cmethod == 1, only mode m[1] is matched.
+ % if Cmethod == 1, only mode m[1] is matched.
 
 </pre>
 
@@ -1851,7 +1849,7 @@ nC                                                % number of condensed joints
        a         - Coefficient of thermal expansion (1/degree)
        anim      - List of modes to be animated, by mode number
        Ax        - Cross-sectional area of a prismatic frame element
-                   (The x-axis is along the element length, in local coordinates)
+    (The x-axis is along the element length, in local coordinates)
        Asy       - Shear area in the local y-axis of a prismatic frame element
        Asz       - Shear area in the local z-axis of a prismatic frame element
        BMs       - extra mass on a frame element, not including self mass
@@ -1932,29 +1930,29 @@ nC                                                % number of condensed joints
        Uy        - uniform distributed load in the local Y direction
        Uz        - uniform distributed load in the local Z direction
        wx1       - starting value for trapezoidally-distributed loads
-                   in the local x-direction
+    in the local x-direction
        wx2       - stopping value for trapezoidally-distributed loads
-                   in the local x-direction
+    in the local x-direction
        wy1       - starting value for trapezoidally-distributed loads
-                   in the local y-direction
+    in the local y-direction
        wy2       - stopping value for trapezoidally-distributed loads
-                   in the local y-direction
+    in the local y-direction
        wz1       - starting value for trapezoidally-distributed loads
-                   in the local z-direction
+    in the local z-direction
        wz2       - stopping value for trapezoidally-distributed loads
-                   in the local z-direction
+    in the local z-direction
        xx1       - distance along a frame element for starting
-                   trapezoidally-distributed loads in the x-direction
+    trapezoidally-distributed loads in the x-direction
        xx2       - distance along a frame element for stopping
-                   trapezoidally-distributed loads in the x-direction
+    trapezoidally-distributed loads in the x-direction
        xy1       - distance along a frame element for starting
-                   trapezoidally-distributed loads in the y-direction
+    trapezoidally-distributed loads in the y-direction
        xy2       - distance along a frame element for stopping
-                   trapezoidally-distributed loads in the y-direction
+    trapezoidally-distributed loads in the y-direction
        xz1       - distance along a frame element for starting
-                   trapezoidally-distributed loads in the z-direction
+    trapezoidally-distributed loads in the z-direction
        xz2       - distance along a frame element for stopping
-                   trapezoidally-distributed loads in the z-direction
+    trapezoidally-distributed loads in the z-direction
        x         - x coordinate of a joint in global coordinates
        y         - y coordinate of a joint in global coordinates
        z         - y coordinate of a joint in global coordinates
@@ -2110,11 +2108,11 @@ The two primary sources are the texts by
 <ol>
 <li> Howard G. Allen,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0070841004/qid%3D1010096524/ref%3Dsr%5F11%5F0%5F1/103-4346676-9568602">Background to Buckling</a>,
-     McGraw-Hill, 1980.                 ASIN: 0070841004
+     McGraw-Hill, 1980.  ASIN: 0070841004
 
 <li> Klaus-Jurgen Bathe,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0133014584/qid=1003515087/sr=1-1/ref=sr_1_27_1/002-2386037-4350467">Finite Element Procedures</a>,
-    Prentice-Hall, 1995.                ISBN: 0133014584
+    Prentice-Hall, 1995. ISBN: 0133014584
 
 <li> Arthur P. Boresi, Richard J. Schmidt, and Omar M. Sidebottom,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0471551570/ref=pd_cp_nsr_b_1/002-2386037-4350467">Advanced Mechanics of Materials</a>,
@@ -2122,19 +2120,19 @@ The two primary sources are the texts by
 
 <li> Raymond W. Clough and Joseph Penzien,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0070113920/qid%3D1003514837/ref%3Dsr%5F11%5F0%5F1/002-2386037-4350467">Dynamics of Structures</a>,
-    McGraw-Hill, 1993.                  ASIN: 0070113920
+    McGraw-Hill, 1993.   ASIN: 0070113920
 
 <li> J. P. Den Hartog,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0486654079/qid=1003515697/sr=2-1/ref=sr_2_11_1/002-2386037-4350467">Advanced Strength of Materials</a>,
-    Dover Press, 1987.                  ISBN: 0486654079
+    Dover Press, 1987.   ISBN: 0486654079
 
 <li> Thomas J. R. Hughes,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0486411818/ref=pd_pym_sim_1_2/002-2386037-4350467">The Finite Element Method: Linear Static and Dynamic Finite Element Analysis</a>,
-    Dover Press, 2000.                  ISBN: 0486411818
+    Dover Press, 2000.   ISBN: 0486411818
 
 <li> Aslam Kassimali,
     <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/qid=1036162662/sr=1-4/ref=sr_1_4/002-7358683-1549619?v=glance">Matrix Analysis of Structures</a>,
-    Brooks/Cole, 1999.                  ISBN: 0534206700
+    Brooks/Cole, 1999.   ISBN: 0534206700
 
 <li> Jaroslav Mackerle,
     <a href="mackerle97.pdf">Finite element linear and nonlinear, static and dynamic analysis of structural
@@ -2161,18 +2159,18 @@ The two primary sources are the texts by
 
 <li> J.S. Przemieniecki,
     <a href="http://www.amazon.com/exec/obidos/ASIN/0486649482/qid=1003514977/sr=1-1/ref=sr_1_8_1/002-2386037-4350467">Theory of Matrix Structural Analysis</a>,
-    Dover Press, 1985.                  ISBN: 0486649482
+    Dover Press, 1985.   ISBN: 0486649482
 
 <li> Robert E. Sennett,
     <a href="http://www.amazon.com/exec/obidos/ASIN/1577661435/qid=1003515858/sr=1-2/ref=sr_1_12_2/002-2386037-4350467">Matrix Analysis of Structures</a>,
-    Waveland Press, 2000.               ISBN: 1577661435
+    Waveland Press, 2000.ISBN: 1577661435
 
 <li> S. Timoshenko and J.N. Goodier, Theory of Elasticity, 2nd ed.,
     McGraw Hill, 1951.
 
 <li> Ansel C. Ugural and Saul K. Fenster,
     <a href="http://www.amazon.com/exec/obidos/ASIN/013137589X/qid=1003514318/sr=1-1/ref=sr_1_8_1/002-2386037-4350467">Advanced Strength and Applied Elasticity, 3rd ed.</a>,
-    Prentice-Hall, 1995.                ISBN: 013137589X
+    Prentice-Hall, 1995. ISBN: 013137589X
 
 </ol>
 
