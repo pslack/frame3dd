@@ -59,7 +59,9 @@ Duke University</a> - Box 90287,
 
 <!-- 3D frames , 3D frames , 3D frames , 3D frames , 3D frames , 3D frames  -->
 
-<p><b>Frame3DD</b> is executed from the <a href="http://en.wikipedia.org/wiki/Windows_command_line">command prompt</a> (Windows) or <a href="http://en.wikipedia.org/wiki/Unix_shell">shell</a> (Linux) or <a href="http://www.macdevcenter.com/pub/a/mac/2001/12/14/terminal_one.html">terminal</a> (OS X), as follows, with filenames changed as required:
+<p><b>Frame3DD</b> is executed from the
+<a href="http://en.wikipedia.org/wiki/Windows_command_line">command prompt</a> (Windows)
+or <a href="http://en.wikipedia.org/wiki/Unix_shell">shell</a> (Linux) or <a href="http://www.macdevcenter.com/pub/a/mac/2001/12/14/terminal_one.html">terminal</a> (OS X), as follows, with filenames changed as required:
 <pre>
 frame3dd inputfile.3dd outputfile.txt
 </pre>
@@ -186,15 +188,20 @@ and the <a href="#InputData"><b>Input Data format</b></a>, with the <a href="#Va
 <p>
 You may edit Input Data files using a good plain text editor
 (<a href="http://thomer.com/vi/vi.html">vi</a>,
- <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
- <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>,
+ <a href="http://www.jedit.org/index.php">jEdit</a>,
+ <a href="http://www.nano-editor.org/">nano</a>,
+ <a href="http://www.gnome.org/projects/gedit/">gedit (Linux)</a>,
  <a href="http://www.barebones.com/products/textwrangler/">TextWrangler (OS X)</a>,
+<!-- 
  <a href="http://emacsformacosx.com/">Emacs for OS X</a>, 
  <a href="http://macvim.org/OSX/index.php">Vim for OS X</a>. 
  <a href="http://www.apple.com/support/mac101/work/23/">TextEdit (OS X)</a>,
+-->
  <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++ (Windows)</a>,
- <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>,
- <a href="ftp://ftp.vim.org/pub/vim/pc/gvim72.exe">gvim (Windows)</a>
+<!--
+ <a href="ftp://ftp.vim.org/pub/vim/pc/gvim72.exe">gvim (Windows)</a>, 
+ <a href="http://www.pcshareware.com/anotepad.htm">Notepad (Windows)</a>
+-->
 etc.),
 using the Matlab interface, or using spreadsheet programs
 (<a href="http://docs.google.com/">GoogleDocs</a>,
@@ -248,7 +255,7 @@ A separate Windows installer includes a Microstran viewer module for Frame3DD.
 </p>
    
 <p>
-The date stamp at the beginning of the manual corresponds to the corresponding release date of the code.
+The date stamp at the beginning of the manual corresponds to the release date of the code.
 </p>
 
 <a name="runlinux"/><h3>3.1 Linux/Unix</h3>
@@ -263,11 +270,11 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <h4>3.1.1 Installing from the .ZIP archive for Linux</h4>
 
 <ol>
-<li> Linux and Unix systems usually have good plain text editors pre-installed.    
+<li> Linux and Unix systems have good plain text editors pre-installed 
 (<a href="http://www.jerrywang.net/vi/">vim</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
- <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>)
-There is no need to install a new editor.
+ <a href="http://www.nano-editor.org/">nano</a>).
+There should be no need to install another editor.
 A tutorial for vim is <a href="http://www.jerrywang.net/vi/">here</a>.
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
@@ -275,7 +282,7 @@ Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it 
 <li> If the .ZIP archive was not automatically unzipped, 
 double-click the icon to extract it. 
 <li>
-<b>(Recommended.)</b>
+<b>(<i>Recommended</i>)</b>
 Put the <b>Frame3DD</b> directory in your path and set the <tt>FRAME3DD_OUTDIR</tt> location.<br>
 To do this, double-click the <b>Home</b> icon on the Desktop, and select <b>View > Show Hidden Files</b><br><br>
 
@@ -307,8 +314,8 @@ setenv FRAME3DD_OUTDIR /tmp/frame3dd_temp_$user  # specify the Frame3DD output d
 </pre>
 ... save, and exit the editor.   
 
-<li> Open a Terminal window by right-clicking on an open part of the Desktop and select <b>Open Terminal</b>. 
-Change to the directory of example files and run an example. 
+<li> Open a Terminal window. (Right-click on an open part of the Desktop and select <b>Open Terminal</b>). 
+Change to the directory of example files and run an example, as follows. 
 <pre>
 cd  ~/Desktop/Frame3DD/examples/                 # change to the examples directory
 frame3dd  exA.3dd  exA.out                       # run the program
@@ -320,19 +327,13 @@ Data files used primarly for plotting are stored in the <b>/tmp/frame3dd_temp_$U
 <!-- (<a href="http://thomer.com/vi/vi.html">vi</a>, -->
 (<a href="http://www.jerrywang.net/vi/">vi</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
- <a href="http://www.uni.edu/its/us/document/sun/picoqref.html">pico</a>),
+ <a href="http://www.nano-editor.org/">nano</a>),
 or a spreadsheet program
 (<a href="http://docs.google.com/">GoogleDocs</a>,
  <a href="http://www.openoffice.org/">OpenOffice</a>,
  <a href="http://projects.gnome.org/gnumeric/">Gnumeric</a>).  For example, 
-to read or edit the Input Data file, type
-<pre>
-gedit  exA.3dd
-</pre>
-and to read or edit the Output Data file, type
-<pre>
-gedit  exA.out
-</pre>
+to read or edit the Input Data file.   Double-click the <b>Home</b> icon on the Desktop, navigate to the directory of your data files, right click
+on the Data File and select the editor of your choice.
 <li>Run your own Frame3DD analyses within the Terminal window using a command like ...
 <pre>
 frame3dd  MyFrame.3dd  MyResultsA.out
@@ -360,7 +361,7 @@ specified when running Frame3DD.
 <li>Hit the 'Return' key in the Terminal window to see the sequence of plots
 and animations until the <tt>gnuplot></tt> prompt returns.
 Or hit <b>CTRL-C</b> to stop the plots at the current plot.  
-<li> To save the current plot as a PostScript file in the Frame3DD/examples folder,
+<li> To save the current plot as a PostScript file in the Frame3DD/examples folder, use the <tt>saveplot</tt> script included in the Frame3DD/examples folder.
 <pre>
      gnuplot>  load 'saveplot'
      gnuplot>  !cp my-plot.ps PlotFileA.ps
@@ -394,7 +395,7 @@ Download</a> the Frame3DD source-code tarball (frame3dd-VERSION.tar.bz2)
 and save it in your home directory.
 
 <li>Using the shell, unpack the source code, enter the source directory,
-and build the code
+and build the code, as follows:
 <pre>
 tar jxvf frame3dd-VERSION.tar.bz2
 cd frame3dd-VERSION
@@ -438,7 +439,8 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li>Install a good plain text editor for Windows:
  <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>, or
- <a href="http://www.pcshareware.com/anotepad.htm">Notepad</a>, or
+ <a href="http://www.jedit.org/index.php">jEdit</a>, or
+<!-- <a href="http://www.pcshareware.com/anotepad.htm">Notepad</a>, or -->
  <a href="ftp://ftp.vim.org/pub/vim/pc/gvim72.exe">gvim</a>.
 A tutorial for gvim is <a href="http://www.jerrywang.net/vi/">here</a>. 
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
@@ -446,7 +448,7 @@ Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it 
 <!-- <li> Read <b>README-win32.txt</b> -->
 <li> If the .ZIP archive was not automatically unzipped, 
 double-click the icon to extract it. 
-<li> <b>(Recommended.)</b>
+<li> <b>(<i>Recommended</i>)</b>
 Put the <b>Frame3DD</b> directory in your path and set the <tt>FRAME3DD_OUTDIR</tt> location.<br>
 To do this, create the folder <b>%TEMP%\frame3dd_temp</b>, open <b>C:\autoexec.bat</b>
 and cut-and-paste the following lines into <b>C:\autoexec.bat</b>
@@ -458,8 +460,10 @@ Preferably, you may set the <tt>PATH</tt> and <tt>FRAME3DD_OUTDIR</tt> using:
 <b> right-click My Computer > Properties > Advanced > Environment Variables</b>.
 Further instructions are <a href="http://vlaurie.com/computers2/Articles/environment.htm">here</a>.  
 
-<li>Open a 'Command Prompt' window (<b>Start > All Programs > Accessories > Command Prompt</b>),
-change to the directory of example files, and run an example.
+<li>Open a 
+<a href="http://en.wikipedia.org/wiki/Windows_command_line">Command Prompt</a> window
+(<b>Start > All Programs > Accessories > Command Prompt</b>),
+change to the directory of example files, and run an example, as follows:
 <pre>
 chdir %HOMEPATH%\Desktop\Frame3DD\examples
 frame3dd  exA.3dd  exA.out
@@ -470,7 +474,8 @@ Data files used primarly for plotting are stored in the <b>%TEMP%\frame3dd_temp<
 <li>       You may view Output Data files and edit Input Data files
 using a good plain text editor
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
-<a href="ftp://ftp.vim.org/pub/vim/pc/gvim72.exe">gvim</a>),
+ <a href="http://www.jedit.org/index.php">jEdit</a>,
+ <a href="http://www.vim.org/about.php">gvim</a>),
 or a spreadsheet program
 (<a href="http://docs.google.com/">GoogleDocs</a>,
  <a href="http://www.openoffice.org/">OpenOffice</a>, Excel).   
@@ -528,15 +533,8 @@ mkdir c:\temp
 set FRAME3DD_OUTDIR=c:\temp
 </pre>
 Keep the command prompt window open for the following:
-<li>Change to your documents directory 
-<pre>
-cd %HOMEPATH%\My Documents
-</pre>
-<li>Run Frame3dd using 
-<pre>
-frame3dd.exe  exA.3dd  exA.out
-</pre>
-<li> You may view the output using Gnuplot as described above.  
+<li> You may run <b>Frame3DD</b>, examine the analysis results, visualize the results using Gnuplot, and edit Input Data files
+ as described above.  
 </ol>
 
 <h4> 3.2.3 Compiling the source on Windows </h4>
@@ -551,7 +549,7 @@ or the <a href="http://www.mingw.org/"> MinGW compiler</a>.
 Download</a> the Frame3DD source-code tarball (frame3dd-VERSION.tar.bz2)
 and save it in your home directory.
 <li> Unpack the source code, enter the source directory,
-and build the code
+and build the code, as follows:
 <pre>
 cd frame3dd-VERSION/src/
 gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
@@ -577,8 +575,8 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 
 <ol>
 <li> Install a good plain text editor for OS X:
+ <a href="http://www.jedit.org/index.php">jEdit</a>, or
  <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>, or
- <a href="http://emacsformacosx.com/">Emacs</a>,  or
  <a href="http://macvim.org/OSX/index.php">Vim</a>. 
 A tutorial for Vim is <a href="http://www.jerrywang.net/vi/">here</a>. 
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
@@ -586,11 +584,11 @@ A tutorial for Vim is <a href="http://www.jerrywang.net/vi/">here</a>.
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_osx.zip) and save it in your <b>Desktop</b>.
 <li> If the .ZIP archive was not automatically unzipped, 
 double-click the icon to extract it. 
-<li><b>(Recommended.)</b>
+<li><b>(<i>Recommended</i>)</b>
 Put the <b>Frame3DD</b> directory in your path and set the <tt>FRAME3DD_OUTDIR</tt> location.<br>
 To do this, open your <b>~/.profile</b> file using your good text editor.<br>
+Using jEdit, <b>File > Open </b> and type <b>~/.profile</b> in the <b>File Name:</b> text entry bar.<br>
 Using TextWrangler, <b>File > Open Hidden</b> and select <b>.profile</b> from your home directory.<br>
-Using Emacs, <b>File > Open File ...</b> and type <b>~/.profile</b> in the bottom text entry bar.<br>
 Using Vim, <b>File > Open</b> and select <b>.profile</b> from your home directory.<br>
 Cut-and paste the following six lines into the beginning of <b>~/.profile</b> 
 <pre>
@@ -640,9 +638,9 @@ the results of your Frame3DD analysis will have been appended to the end of the
 <tt>/Users/your_name_here/Desktop/examples/exA.3dd</tt> -->
 
 <li>     You may view Output Data files and edit Input Data files using a good plain text editor
-(<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,
-<a href="http://emacsformacosx.com/">Emacs</a>, 
-<a href="http://macvim.org/OSX/index.php">Vim</a>) 
+(<a href="http://www.jedit.org/index.php">jEdit</a>, or
+ <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,
+ <a href="http://macvim.org/OSX/index.php">Vim</a>) 
 or a spreadsheet program
 (<a href="http://docs.google.com/">GoogleDocs</a>,
 <a href="http://www.openoffice.org/">OpenOffice</a>).
@@ -670,8 +668,8 @@ install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href=
 
 <ol>
 <li> From you Mac's Administrator account, first install DarwinPorts, and then install Gnuplot.<br>
-Follow the instructions |<a href="http://darwinports.com/">HERE</a>| to download and install DarwinPorts.<br>
-Follow the instructions |<a href="http://gnuplot.darwinports.com/">HERE</a>|
+Follow <a href="http://darwinports.com/">these instructions</a> to download and install DarwinPorts.<br>
+Follow <a href="http://gnuplot.darwinports.com/">these instructions</a>
 to download and install Gnuplot 4.2.5 for OS X.<br>
 If this is your first DarwinPorts package installation, it will take several minutes to complete.
 <!--
@@ -712,7 +710,7 @@ and animations until the <tt> gnuplot></tt> prompt returns.
 Download</a> the Frame3DD source-code tarball (frame3dd-VERSION.tar.bz2)
 and save it in your home directory.
 <li> Unpack the source code, enter the source directory,
-and build the code
+and build the code, as follows:
 <pre>
 tar jxvf frame3dd-VERSION.tar.bz2
 cd frame3dd-VERSION/src/
