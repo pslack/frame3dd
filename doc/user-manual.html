@@ -168,7 +168,7 @@ Continue to hit the Return (or Enter) key until the last plot is displayed.
 <p>
 The <b>Input Data file</b> is a plain text file and must adhere to the format
 <a href="#InputData">described below</a>.
-Several examples are given at <a href="http://frame3dd.sourceforge.net/">http://frame3dd.sourceforge.net/</a>. When writing input files, note the following points:</p>
+Several examples are given at <a href="http://frame3dd.sourceforge.net/">http://frame3dd.sourceforge.net/</a>. When writing your own input files, note the following points:</p>
 
 <ul>
 <li>Comments may be placed anywhere in the file and are helpful in organizing the Input Data.
@@ -176,7 +176,7 @@ Several examples are given at <a href="http://frame3dd.sourceforge.net/">http://
 A comment begins with one of the following four characters <tt># % ? ; </tt> and continues to the end of the line.
 <li>All commas in the Input Data are ignored.
 <li>Floating point numbers must be entered as 1.234 1234 or 1.234e3.
-<li>Arithmatic operations such as 1.234*10^3 or 6*sin(pi/2) are <b>not</b> allowed
+<li>Arithmetic expressions such as 1.234*10^3 or 6*sin(pi/2) are <b>not</b> allowed
 in the Input Data (unless the <a href="#Matlab">Matlab interface</a> is used).
 </ul>
 
@@ -187,7 +187,7 @@ and the <a href="#InputData"><b>Input Data format</b></a>, with the <a href="#Va
 </p>
 <p>
 You may edit Input Data files using a good plain text editor
-(<a href="http://thomer.com/vi/vi.html">vi</a>,
+(<a href="http://thomer.com/vi/vi.html">vim</a>,
  <a href="http://www.jedit.org/index.php">jEdit</a>,
  <a href="http://www.nano-editor.org/">nano</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit (Linux)</a>,
@@ -214,7 +214,7 @@ Details regarding the spreadsheet interface to Frame3DD are <a href="#CSV">here<
 </p>
 <p>
 It might take a few tries to get your Input Data just right.
-Frame3DD checks the Input Data for errors prior to analysing the system
+Frame3DD checks the Input Data for errors prior to analyzing the system
 and, where possible, displays descriptive diagnostic messages when errors are
 found with the Input Data.
 </p>
@@ -234,8 +234,8 @@ If you would like your output files to be sent to another location, you can set 
 <a name="installrun"/><h2>3. How to install and run Frame3DD</h2>
 
 <p>
-Compiled executeables are updated with some regularity.  
-Frame3DD installation packages are available for download for Linux/Unix,
+Compiled executable programs are updated with some regularity.  
+Frame3DD installation packages are available for download for Linux,
 for OS X, and for Windows operating systems as .ZIP archives.
 These installation .ZIP archives include:
 <ul>
@@ -286,8 +286,9 @@ double-click the icon to extract it.
 Put the <b>Frame3DD</b> directory in your path and set the <tt>FRAME3DD_OUTDIR</tt> location.<br>
 To do this, double-click the <b>Home</b> icon on the Desktop, and select <b>View > Show Hidden Files</b><br><br>
 
-If you have a file <b>.bashrc</b>, open it with a double-click,
-and cut-and paste the following six lines into the beginning of your <b>.bashrc</b> 
+If you have a file called <b>.bashrc</b> in your home directory,
+open it with a double-click,
+and cut-and paste the following six lines into the beginning of <b>.bashrc</b> 
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
 export PATH=$PATH:$HOME/Desktop/Frame3DD/         # add to the path
@@ -301,8 +302,9 @@ export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER   # specify the Frame3DD output 
 
 <br><br>
 
-If you have a file <b>.cshrc</b>, open it with a double-click, 
-and cut-and paste the following six lines into the beginning of your <b>.cshrc</b> 
+If you have a file named <b>.cshrc</b> in your home directory,
+open it with a double-click, 
+and cut-and paste the following six lines into the beginning of <b>.cshrc</b> 
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
 set path = ( $path $home/Desktop/Frame3DD )      # add to path
@@ -312,20 +314,20 @@ if ( ! -d /tmp/frame3dd_temp_$user ) then
 endif
 setenv FRAME3DD_OUTDIR /tmp/frame3dd_temp_$user  # specify the Frame3DD output directory
 </pre>
-... save, and exit the editor.   
+... save, and exit the editor.   <br>.
 
 <li> Open a Terminal window. (Right-click on an open part of the Desktop and select <b>Open Terminal</b>). 
-Change to the directory of example files and run an example, as follows. 
+Change to the directory containing the Frame3DD example files and run an example, as follows. 
 <pre>
 cd  ~/Desktop/Frame3DD/examples/                 # change to the examples directory
 frame3dd  exA.3dd  exA.out                       # run the program
 </pre>
 Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
-Data files used primarly for plotting are stored in the <b>/tmp/frame3dd_temp_$USER</b> directory.
+Data files used primarily for plotting are stored in the <b>/tmp/frame3dd_temp_$USER</b> directory.
 <li>       You may view Output Data files and edit Input Data files using a good plain text editor
-<!-- (<a href="http://thomer.com/vi/vi.html">vi</a>, -->
-(<a href="http://www.jerrywang.net/vi/">vi</a>,
+<!-- (<a href="http://thomer.com/vi/vi.html">vim</a>, -->
+(<a href="http://www.jerrywang.net/vi/">vim</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
  <a href="http://www.nano-editor.org/">nano</a>),
 or a spreadsheet program
@@ -346,7 +348,7 @@ Graphical output may be viewed with <a href="http://www.duke.edu/~hpgavin/gnuplo
 
 <ol>
 <li> Gnuplot is commonly pre-installed on Linux systems.
-If it is not, you may install it only if you have root priviliges using a command like ... <tt> sudo apt-get install gnuplot </tt> ... or by using the package manager GUI installed on your system.
+If it is not, you may install it only if you have root privileges using a command like ... <tt> sudo apt-get install gnuplot </tt> ... or by using the package manager GUI installed on your system.
 
 <li>Start Gnuplot in the Terminal with the command:
 <pre>
@@ -361,7 +363,7 @@ specified when running Frame3DD.
 <li>Hit the 'Return' key in the Terminal window to see the sequence of plots
 and animations until the <tt>gnuplot></tt> prompt returns.
 Or hit <b>CTRL-C</b> to stop the plots at the current plot.  
-<li> To save the current plot as a PostScript file in the Frame3DD/examples folder, use the <tt>saveplot</tt> script included in the Frame3DD/examples folder.
+<li> To save the current plot as a PostScript file in the Frame3DD/examples directory, use the <tt>saveplot</tt> script included in the Frame3DD/examples directory.
 <pre>
      gnuplot>  load 'saveplot'
      gnuplot>  !cp my-plot.ps PlotFileA.ps
@@ -388,13 +390,16 @@ and should work with minor changes on any other recent Linux or Unix system.
 <pre>
 sudo apt-get install build-essential scons
 </pre>
-<li>If you would like to build the Microstran viewer, ensure you additionally have got <tt>libsoqt-dev</tt> installed on your system.
+<li>If you would like to build the Microstran viewer, ensure that the package <tt>libsoqt-dev4</tt> is installed on your system.
+<pre>
+sudo apt-get install libsoqt-dev4
+</pre>
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD source-code tarball (frame3dd-VERSION.tar.bz2)
 and save it in your home directory.
 
-<li>Using the shell, unpack the source code, enter the source directory,
+<li>Open a Terminal, unpack the source code, enter the source directory,
 and build the code, as follows:
 <pre>
 tar jxvf frame3dd-VERSION.tar.bz2
@@ -470,7 +475,7 @@ frame3dd  exA.3dd  exA.out
 </pre>
 Some run-time information will be displayed on the Command Prompt window and
 the results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
-Data files used primarly for plotting are stored in the <b>%TEMP%\frame3dd_temp</b> folder.
+Data files used primarily for plotting are stored in the <b>%TEMP%\frame3dd_temp</b> folder.
 <li>       You may view Output Data files and edit Input Data files
 using a good plain text editor
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
@@ -492,7 +497,7 @@ Use Gnuplot to view the graphical output.
 
 <ol>
 <li>Download the <a href="http://downloads.sourceforge.net/gnuplot/gp424win32.zip">
-MS-Windows version of Gnuplot</a>.
+MS-Windows version of Gnuplot</a>
 and save it to your <b>Desktop</b>.
 <li> Navigate to <b>Desktop > Gnuplot > bin</b> and 
 right click on <b>wgnuplot</b> to create a shortcut to your <b>Desktop</b>.
@@ -505,7 +510,7 @@ right click on <b>wgnuplot</b> to create a shortcut to your <b>Desktop</b>.
 where <tt>MyResultsA.out</tt> is the name of of the Output Data file 
 specified when running Frame3DD. 
 <li>Click <b>OK</b> to see the next plot or <b>Cancel</b> to stop with the current plot.  
-<li> To save the current plot as a PostScript file in the Frame3DD/examples folder,
+<li> To save the current plot as a PostScript file in the Frame3DD/examples folder, use the <tt>saveplot_w32</tt> script included in the Frame3DD/examples folder.
 <pre>
      gnuplot>  load 'saveplot_w32'
      gnuplot>  !copy my-plot.ps PlotFileA.ps
@@ -551,7 +556,6 @@ and save it in your home directory.
 <li> Unpack the source code, enter the source directory,
 and build the code, as follows:
 <pre>
-cd frame3dd-VERSION/src/
 gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 </pre>
 </ol>
@@ -611,7 +615,7 @@ frame3dd  exA.3dd  exA.out         # run the program
 </pre>
 Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the 
-<tt>exA.out</tt> Output Data file. Data files used primarly for plotting are stored in the <b>/tmp/frame3dd_temp_$USER</b> directory. 
+<tt>exA.out</tt> Output Data file. Data files used primarily for plotting are stored in the <b>/tmp/frame3dd_temp_$USER</b> directory. 
 
 <!-- 
 <ol>
@@ -712,8 +716,6 @@ and save it in your home directory.
 <li> Unpack the source code, enter the source directory,
 and build the code, as follows:
 <pre>
-tar jxvf frame3dd-VERSION.tar.bz2
-cd frame3dd-VERSION/src/
 gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 </pre>
 </ol>
@@ -794,7 +796,7 @@ This m-function, <a href="../matlab/frame_3dd.m">frame_3dd.m</a>,
 executes the system command
 (<tt>frame3dd</tt> on Linux or OS X, <tt>frame3dd.exe</tt> on Windows)
 to compute the solution.
-The <b>Frame3DD</b> executable
+The <b>Frame3DD</b> executable programs
 (<tt>frame3dd</tt> on Linux or OS X, <tt>frame3dd.exe</tt> on Windows)
 must be saved to a directory within
 a path appropriate for your system, as described in the installation instructions, above.
@@ -807,10 +809,10 @@ A <a href="../matlab/exA.m">Matlab version of Example A</a> illustrates
 how to analyze problems using the Matlab interface to <b>Frame3DD</b>.<br>
 Matlab versions of the other examples are forthcoming.
 <li> frame_3dd.m writes IOdata.fmm,
-<li> The executeable <tt>frame3dd</tt> writes Output Data to IOdata.out ,
+<li> The executable program <tt>frame3dd</tt> writes Output Data to IOdata.out ,
 and also writes IOdata_out.m, containing the Output Data.<br>
 An m-file containing the Output Data is written whenever the frame3dd
-executeable is run on a file ending in ".fmm",
+executable is run on a file ending in ".fmm",
 whether or not the analysis is initiated by frame_3dd.m.
 <li> frame_3dd.m runs IOdata_out.m, containing the matrices D, R, F, L, and Ks,
 <li> frame_3dd.m returns D, R, F, L, and Ks, to the Matlab workspace, or to your Matlab function.
@@ -856,11 +858,18 @@ When run on a <tt>.CSV</tt> file,
 <b>Frame3DD</b> writes results
 as plain text to the named Output Data file and also
 writes results of the static analyses to a spreadsheet with a filename ending in "<tt>.CSV</tt>".
-These files may be viewed, edited, pre-processed, and post-processed with a spreadsheet program.
+For example, running <b>Frame3DD</b> as follows:
+<pre>
+frame3dd  MyFrame.CSV  MyResultsA.out
+</pre>
+</p>
+<p>
+results in the two Output Data files  <tt>MyResultsA.out</tt> and <tt>MyResultsA_out.CSV</tt>.
+These <tt>.CSV</tt> files may be viewed, edited, pre-processed, and post-processed with a spreadsheet program.
 </p>
 
 <p>
-The results spreadsheet includes an index table specifying the row numbers
+The results spreadsheet file includes an index table specifying the row numbers
 of each type of result.   <br>
 Sections of an example results spreadsheet are shown below.<br>
 <img src="img/CSV1.png" align="center" border="0"><br>
@@ -917,8 +926,8 @@ Modal analysis results are not (yet) written to the .CSV formatted output file.
  The .zip file <a href="http://www.duke.edu/~hpgavin/frame3dd/DOS/FrameEd.zip">FrameEd.zip</a> includes:
 </p>
  <ul>
- <li>the GUI executeable, Frame_Ed.exe
- <li>the frame analysis executeable, Frame3d.exe, for the 20020103 version
+ <li>the GUI executable, Frame_Ed.exe
+ <li>the frame analysis executable, Frame3d.exe, for the 20020103 version
  <li>an example input file, exG.3dd, for the 20020103 version
  <li>a template for the Input Data file, ex2002.3dd, for the 20020103 version
  </ul>
@@ -951,7 +960,7 @@ to match the first mode.
 <h3>7.1 Units</h3>
 
 <p>
-The Output Data is formated using floating point display, not scientific notation.  To
+The Output Data is formatted using floating point display, not scientific notation.  To
 obtain the greatest number of significant digits in the output, use units of force
 and length such that the modulus of elasticity occupies three to five figures before
 the decimal point.  For example, if the frame to be analyzed is made of steel or
@@ -973,12 +982,12 @@ as is done in the example Input Data files.
 </ul>
 </p>
 
-<h3> 7.2 Joints, Support Conditions and Reactions </h3>
+<h3> 7.2 Joints, Coordinates, Support Conditions and Reactions </h3>
 
 <p>
 Joint positions are specified by locations in a three-dimensional
-cartesian coordinate system.
-Each joint has six degrees of freedom: three translations
+Cartesian coordinate system.
+Each joint has six coordinates: three translations
 in the global <i>X</i>, <i>Y</i>, and <i>Z</i> directions and three rotations about the
 global <i>X</i>, <i>Y</i>, and <i>Z</i> axes.
 Optionally,
@@ -991,6 +1000,7 @@ All joints are fully moment resisting.
 Semi-rigid connections may be modeled through the use of short frame elements
 at the ends of longer members.  
 </p>
+<img src="img/coords.png" align="center" border="0"><br>
 
 <p>
 For two-dimensional (planar) structures the global <i>X</i> direction is horizontal and the global <i>Y</i> direction is vertical.
@@ -1000,13 +1010,15 @@ For three-dimensional structures the global <i>X</i> and <i>Y</i> directions are
 <p>
 Joint numbers should be assigned in a systematic way, moving from
 one end of the structural system to the opposite end.  
+<!--
 Ideally a frame element
 will connect every pair of joints with sequential numbers.
+-->
 </p>
 
 <p>
 Support conditions are modeled by fixing the degrees of freedom
-colocated with reaction forces.
+collocated with reaction forces.
 By default, displacements at the fixed degrees of freedom are zero.
 Optionally, displacements at the fixed degrees of freedom may be prescribed
 as a type of loading.
@@ -1023,8 +1035,8 @@ computed and are appended to the Output Data file.
 Frame elements connect pairs of joints.  Each frame element has a 
 "starting joint" (element joint 1, J1)
 and an "ending joint" (element joint 2, J2),
-as described in the <a href="#InputData">Input data format</a>.
-In principle either joint of the frame element could be joint J1 
+as described in the <a href="#InputData">Input Data format</a>.
+In principle, either joint of the frame element could be joint J1 
 and either joint could be J2.  
 The assignment of J1 and J2 to the frame element should not affect the results. 
 However, to avoid confusion in certain cases, the following guidelines are recommended: <br>
@@ -1078,7 +1090,7 @@ For slender frame elements
 (in which the span-to-depth ratio is greater than 10)
 shear deformations contribute only slightly to the overall structural deformation.
 For stocky frame elements
-(in which the span-to-depth ratio is less than 2)
+(in which the span-to-depth ratio is less than 5)
 shear deformations contribute significantly to the overall structural deformation.
 The shear area formulas below for circular, square, and rectangular, cross sections provide 
 accurate approximations of the exact values of these variables.    
@@ -1094,8 +1106,8 @@ For sections with a circular cross section:   <br>
 
 <p>
 For sections with a solid rectangular cross section
-(width=<i>b</i>, depth=<i>d</i>):   <br>
-<i>Jxx =  Q d b<sup>3</sup>    ( b < d ) </i><br></i>
+(width=<i>b</i>, depth=<i>d</i>  <i>( b < d ) </i>):   <br>
+<i>Jxx =  Q d b<sup>3</sup>   </i><br></i>
 where
 <i>Q = 1/3 - 0.2244 / (d/b + 0.1607); </i>
 <!-- a = 0.224435; b = 0.160705 -->
@@ -1320,6 +1332,9 @@ If the roll angle is zero,
 this transformation results in a frame element with no cross-axis bending due to
 loads are applied in the global <i>Y</i>-direction.   In the code, this type of
 transformation is called "<i>Y</i>-axis is vertical."   
+For a derivation of the alternative coordinate transformation method, refer
+to section 8.3 of the textbook <i>Matrix Analysis of Structures</i>
+by A. Kassimali.
 </p>
 
 <p>
@@ -1341,17 +1356,11 @@ For 3D frames made of non-circular or non-square sections and all
 frame elements are aligned with the global X, Y, or Z axes then 
 the roll angle <i>p</i> 
 might matter but <i>p</i> would probably be either "0" or "90 degrees."
-</p>
-
-
-<p>
 Again, for planar structures,
 with no out-of-plane bending, which lie in the global <i>X-Y</i>, <i>Y-Z</i>, or <i>X-Z</i> planes,
 and for structures made entirely of bars with Iyy=Izz, the roll angle, <i>p</i> may be set to zero.  
-For a derivation of the alternative coordinate transformation method, refer
-to section 8.3 of the textbook <i>Matrix Analysis of Structures</i>
-by A. Kassimali.
 </p>
+
 
 <p>
 Coordinate transformations do not currently consider the effect of
@@ -1359,23 +1368,14 @@ finite joint sizes, and are based on joint-to-joint lengths of each
 frame element.
 </p>
 
-<p>
-To analyze a structure as a "truss" with this software, specify <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>
-to be much smaller than they would be normally, but not zero.   If the shear forces and bending
-moments in the structural elements are small, then the structural model
-represents a "truss" approximation of the actual structure.    
-Shear deformation effects and geometric stiffness effects should <b>not</b> be incorporated if  <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i> are made very small.  
-See example A.
-</p>
 
 <h3> 7.7 Connections</h3>
 
 <p>
 All connections in a <b>Frame3DD</b> analysis are moment-resisting.
-Moment-free conditions can be modeled explicitely only at pinned reactions.
 Internal hinges may be modeled using a short element with
 low values of <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>.
-Many connections are most realistically modeled as having some flexibility.
+Many connections are more realistically modeled as having some flexibility.
 Such semi-rigid connections may be modeled through the inclusion of short
 frame elements with appropriate section and material properties to model
 the behavior of the connection.   
@@ -1387,13 +1387,21 @@ through the use of an <i>effective beam length</i>, which is the joint-to-joint
 length of the frame element less the rigid radii on each end.
 </p>
 
+<p>
+To analyze a structure as a "truss" with this software, specify <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>
+to be much smaller than they would be normally, but not zero.   If the shear forces and bending
+moments in the structural elements are small, then the structural model
+represents a "truss" approximation of the actual structure.    
+Shear deformation effects and geometric stiffness effects should <b>not</b> be incorporated if  <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i> are made very small.  
+See Frame3DD example A.
+</p>
 
 <h3> 7.8 Shear Deformation, Geometric Stiffness, and Buckling </h3>
 
 <p>
      The <b>Frame3DD</b> analysis will optionally include the effects of shear deformation and/or geometric stiffness.
 The geometric stiffness matrix includes the effects of axial forces
-on bending and warping-torsoinal behaviors.
+on bending and warping-torsional behaviors.
 When both shear deformations and geometric stiffness effects are included, the geometric stiffness matrix includes shear deformation effects.
 If shear deformation effects are not to be included, simply set the <i>shear</i>
 variable to zero (0).  If shear deformation effects are neglected then the
@@ -1420,8 +1428,11 @@ recommended if a buckling analysis is to be performed.
 
 <p>
 Whenever geometric stiffness effects are included, the analysis is non-linear
-and superposition does not hold.  The geometric stiffness matrix is a secant
-stiffness matrix.  In most cases the geometric stiffness matrix lies between the
+and superposition does not hold.  
+<!--
+The geometric stiffness matrix is a secant stiffness matrix.  
+-->
+In most cases the geometric stiffness matrix lies between the
 un-stressed stiffness matrix and the tangent stiffness matrix.
 </p>
 
@@ -1460,9 +1471,9 @@ Static joint displacements are specified in the structure's global coordinate sy
 Multiple static load cases are generated by specifying
 <a href="#Variables">the variable nL</a>
 in the
-<a href="#InputData">Input Data</a>, and by specifying the six types of loads for each load case,
-as shown in <a href="../examples/exA.3dd">Example A</a> and
-<a href="../examples/exB.3dd">Example B</a>.
+<a href="#InputData">Input Data file</a>, and by specifying the six types of loads for each load case,
+as shown in <a href="../examples/exA.3dd">Frame3DD example A</a> and
+<a href="../examples/exB.3dd">Frame3DD example B</a>.
 </p>
 
 <p>
@@ -1476,9 +1487,9 @@ Whenever the average axial strain in a frame element (<i>Nx/(EAx)</i>) exceeds 0
 0.1% and 0.2%.   When this warning message is displayed the structure is likely in an overloaded condition and the loads should be reduced.
 Note that this check for overloaded elements provides an approximate stress check.
 A more complete stress check would compute
-the composite bending and axial stresses strains at the ends of each element.   
+the composite axial, shear, torsion and bending stresses and strains within each element.   
 Such a check requires additional cross section information: 
-the section modulus or the section dimensions and the bending moment of inertia.  
+the section moduli and the section dimensions.  
 </p>
 
 <h3> 7.10 Dynamic Modal Analysis </h3>
@@ -1493,8 +1504,9 @@ lumped mass matrix.
 
 <p>
 The natural frequencies and mode-shapes of the structural frame may be computed from the stiffness and mass matrices using either the Stodola method or
-the Jacobi method.    The solution method and the convergence tolerance for these iterative methods is specified in the Input Data.
-The Input Data also specifies the mass density of each frame element,
+the Jacobi method.    The solution method and the convergence tolerance for these iterative methods is specified in the Input Data file.
+If a dynamic modal analysis is to be carried out,
+the Input Data file must also specify the mass density of each frame element,
 additional mass carried by the frame element, and extra mass or inertia
 carried by the joints.
 A specified set of modes may be animated within Gnuplot.
@@ -1514,7 +1526,7 @@ natural frequencies and mode shapes presume that the stiffness matrix
 is invertible.
 A  numerical trick called "frequency shifting" overcomes this difficulty.
 Presuming the mass matrix [<i>M</i>] is
-invertible, then given a <i>sufficiently large</i> positive scalar value <i>s</i>, the matrix [[<i>K</i>] + <i>s</i>[M</i>]] is invertible,
+invertible, and given a <i>sufficiently large</i> positive scalar value <i>s</i>, the matrix [[<i>K</i>] + <i>s</i>[<i>M</i>]] is invertible,
 even if the stiffness matrix [<i>K</i>] is not invertible.
 So, for the purpose of computing the natural frequencies of frames
 with rigid-body modes, [<i>K</i>] is replaced by
@@ -1522,7 +1534,7 @@ with rigid-body modes, [<i>K</i>] is replaced by
 The desired natural frequencies
 are shifted by an amount equal to the "shift" variable, <i>s</i>,
 and are shifted back, after the natural frequencies and mode shapes are found.
-The mode shapes are un-changed.
+The mode shapes are un-changed by this "shifting."
 If natural frequencies are computed as "nan" (not a number)
 try increasing the value of the frequency shift variable
 either in the Input Data file or using the
@@ -1540,11 +1552,13 @@ If a dynamic analysis is not to be performed, simply set the
 <a href="#Variables"<i>nM</i> variable</a> (the number of desired modes) to zero (0).
 If <i>nM</i> is set to zero,
 <b>Frame3DD</b> will stop reading the Input file at this point.
-If <i>nM</i> is set to zero, there is no need to provide numerical values for the quantities from <i>lump</i> to <i>m[3] ... </i>.
+If <i>nM</i> is set to zero, there is no need to provide numerical values for the quantities after the <i>nM</i> variable.  
+<!--
 (See the
 <a href="#InputData"><b>Input Data Format</b></a> specification and
 <a href="#Variables"><b>Variable Definitions</b></a>
 below.)
+-->
 </p>
 
 <h3> 7.11 Matrix Condensation</h3>
@@ -1552,7 +1566,8 @@ below.)
 <p>
 Reduced order stiffness and mass matrices may be computed via a static
 condensation, Guyan reduction, or dynamic condensation.  The condensed mass
-and stiffness matrices are saved as text files Kc and Mc.  The Guyan reduction
+and stiffness matrices are saved as text files called Kc and Mc.  
+The Guyan reduction
 method is generalized so that the condensed matrices match the fundamental
 frequency of the original structure exactly.  The dynamic condensation method
 is a pseudo-inverse-modal-matrix method, and the resulting condensed mass and
@@ -1586,7 +1601,7 @@ and designate the direction of the force along those axes.
 A positive <i>Nx</i> at joint 1
 of the member is compressive, while a negative <i>Nx</i> at joint 2 is also
 compressive.  The opposite is true for tension.
-The Output data lists a "t" or a "c" along with the axial forces (<i>Nx</i>)
+The Output Data lists a "t" or a "c" along with the axial forces (<i>Nx</i>)
 in order to help clarify whether the end force is putting the frame element
 into <b>t</b>ension or <b>c</b>ompression.  
 A frame element with positive <i>My</i> at joint 1 and a negative <i>My</i> at joint 2
@@ -1598,9 +1613,39 @@ has positive curvature in the <i>x-y</i> plane.
 <a name="numerical"/><h2>8. Numerical Details</h2>
 
 <p>
-Frame3DD imposes no limit on the number of degrees of freedom.
+<b>Frame3DD</b> imposes no limit on the number of degrees of freedom.
 Dynamic memory allocation is accomplished by the public-domain routines
 found in Press, W.H., et al,  <i>Numerical Recipes In C</i>, (Cambridge, England: Cambridge University Press, 1991).
+</p>
+
+<p> 
+<b>Frame3DD</b> analyzes the response to temperature loads alone prior to solving for the response to the combination of temperature loads and mechanical loads.In this way, temperature loads may be used to simulate the effect of pre-tension in structures, which can provide geometric stiffness.    
+For each load case <b>Frame3DD</b> carries out the following nine steps:
+<ol>
+<li> Assemble the structural stiffness matrix for the un-stressed structure.
+
+<li>Compute the joint displacements due to temperature loads using a linear elastic analysis.
+
+<li>Compute frame element end forces from the displacements due to temperature loads.
+
+<li>Assemble the structural stiffness matrix again.<br>
+If goemetric stiffness effects are to be considered,
+the assembly process makes use of
+the axial frame element forces arising from the temperature loads.
+
+<li>Compute the joint displacements due to mechanical loads.
+
+<li>Add the joint displacements due to mechanical loads to the joint displacements due to temperature loads.
+
+<li>Compute frame element end forces from the displacements due to the combined temperature and mechanical loads.
+
+<li>If geometric stiffness effects are to be considered, carry out quasi Newton-Raphson iterations to converge upon the displacements that satisfy equilibrium.<br>
+The assembly process makes use of
+the axial frame element forces arising from the combined temperature and mechanical loads.
+
+<li>Compute the "RMS relative equilibrium error."
+
+</ol>
 </p>
 
 <p>
@@ -1611,7 +1656,7 @@ iterative improvement for enhanced speed and accuracy.
 
 <p>
 When the program is executed, various solution errors are displayed to the
-screen and are written to the Output data file.   Iterative improvements
+screen and are written to the Output Data file.   Iterative improvements
 to the LDL' back-substitution make use of a quasi Newton-Raphson method:<br>
 <div class=eq>K dD(i) = F - K D(i)</div>
 <div class=eq>D(i+1) = D(i) + dD(i)</div>
@@ -1628,7 +1673,7 @@ where
 
 <p>
 At each LDL' back-substitution iteration, the equilibrium error is displayed
-to the screen as the `RMS matrix error'.  This error is the root-mean-square of
+to the screen as the "RMS equilibrium precision."  This error is the root-mean-square of
 <i>dD(i)</i>.
 Iterations are stopped when this error decreases by less than ten percent in an iteration.
 </p>
@@ -1660,24 +1705,24 @@ The default value is 0.00001
 
 <p>
 The accuracy of the final solution is checked using a global equilibrium check
-and the equilibrium error is reported.  The `RMS relative equilibrium error' is
+and the equilibrium error is reported.  The "RMS relative equilibrium precision" is
 the root-mean-square of internal frame element forces and external applied loads at
 every un-restrained degree of freedom normalized by the root-mean-square of
 the applied loads.   This equilibrium error is typically less than one part
 in one-billion when geometric stiffness effects are neglected.  If an analysis
-has an RMS equilibrium error larger than 0.001, the results should not be
+has an "RMS relative equilibrium precision" larger than 0.001, the results should not be
 trusted.
 </p>
 
 <p>
-If the RMS relative equilibrium error is not adequately small
-and geometric stiffness effects <i>are not</i> included in the analyis,
+If the "RMS relative equilibrium precision" is not adequately small
+and geometric stiffness effects <i>are not</i> included in the analysis,
 try including the effects of geometric stiffness by changing
 the geometric stiffness variable <i>geom</i>
 in the Input Data file to <i>1</i> or by using the
 <a href="#commandline"><i>-gOn</i> command line option</a>.
-Conversely, if the RMS relative equilibrium error is not adequately small
-and geometric stiffness effects <i>are</i> included in the analyis,
+Conversely, if the "RMS relative equilibrium precision" is not adequately small
+and geometric stiffness effects <i>are</i> included in the analysis,
 try neglecting the effects of geometric stiffness by changing
 the geometric stiffness variable <i>geom</i>
 in the Input Data file to <i>0</i> or by using the
@@ -1894,7 +1939,7 @@ nC   % number of condensed joints
        nA        - number of mode shapes to Animate must be less than 20
        nB        - number of Beam elements
        nC        - number of joints for matrix Condensation
-       nD        - number of joints wiht prescribed Displacements (nD <= nR)
+       nD        - number of joints with prescribed Displacements (nD <= nR)
        nF        - number of joints with point Forces or concentrated moments
        nI        - number of joints with extra joint mass or Inertia
        nJ        - number of Joints
@@ -2016,7 +2061,7 @@ or
            frame3dd -h
 </pre>
 
-  Supress screen output:
+  Suppress screen output:
 <pre>
            frame3dd -i InFile -o OutFile -q
 </pre>
@@ -2056,14 +2101,15 @@ set the animation pan rate, over-riding Input Data file values:
     nrutil.c        dynamic memory allocation
 </pre>
 
-<p>In addition to the suggested method using <b>SCons</b> (see <a href="#installrun">above</a>), Frame3DD can also be compiled directly with the <a href="http://gcc.gnu.org/">gcc compiler</a>,
-the <a
-href="http://www.delorie.com/djgpp/"> DJGPP gcc compiler</a>,
+<p>In addition to the recommended method using 
+<a href="http://www.scons.org/">SCons</a> (see <a href="#installrun">above</a>), Frame3DD can also be compiled directly with the <a href="http://gcc.gnu.org/">gcc compiler</a>,
+the <a href="http://developer.apple.com/tools/xcode/">Apple Xcode gcc compiler</a>,
+the <a href="http://www.delorie.com/djgpp/"> DJGPP gcc compiler</a>,
 the <a href="http://www.cs.virginia.edu/~lcc-win32/"> LCC-win32 compiler</a>,
-and the <a href="http://www.mingw.org/"> MinGW compiler</a>.
+and the <a href="http://www.mingw.org/"> MinGW gcc compiler</a>.
 </p>
 
-<p>For example, using GCC, the command is:</p>
+<p>For example, using GCC, the command to compile is:</p>
 
 <pre>
     gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
