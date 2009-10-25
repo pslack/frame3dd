@@ -3,6 +3,9 @@
 # dist_src.sh
 # assemble .ZIP files for Frame3dd source code distribution release
 
+export VERSION=20091022
+echo $VERSION
+
 # clean out prior distribution files
 echo "cleaning out prior distribution files ... "
 rm -rf dist/Frame3DD
@@ -29,10 +32,11 @@ cp --preserve=mode,timestamps README-win32.txt      dist/Frame3DD/.
 # assemble the .zip file
 echo "assembling .zip file ... "
 cd dist
-zip -r Frame3DD_$(date +%Y%m%d)_src.zip Frame3DD/*
+# zip -r Frame3DD_$(date +%Y%m%d)_src.zip Frame3DD/*
+zip -r Frame3DD_$(echo $VERSION)_src.zip Frame3DD/*
 
 echo "Frame3DD .zip archive complete"
 
 # ----------------------------------------------------------- dist_src.sh
-# Henri P. Gavin
-# October 20 2009
+# Henri P. Gavin 2009.10.20
+# updated 2009.10.25

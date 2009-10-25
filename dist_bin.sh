@@ -1,7 +1,10 @@
 # !bin/bash
 #
-# dist_zip.sh
+# dist_bin.sh
 # assemble .ZIP files for Frame3dd binary distribution release
+
+export VERSION=20091022
+echo $VERSION
 
 # clean out prior distribution files
 echo "cleaning out prior distribution files ... "
@@ -44,29 +47,37 @@ cp --preserve=mode,timestamps matlab/*              dist/Frame3DD/matlab/.
 # assemble the .zip file
 echo "assembling .zip file ... "
 cd dist                                           # change to trunk/dist
-zip -r Frame3DD_$(date +%Y%m%d).zip Frame3DD/*
+#zip -r Frame3DD_$(date +%Y%m%d).zip Frame3DD/*
+zip -r Frame3DD_$(echo $VERSION).zip Frame3DD/*
 
 # make copies of .zip files for each operating system
-cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_linux.zip
-cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_osx.zip
-cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_win32.zip
+#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_linux.zip
+#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_osx.zip
+#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_win32.zip
+
+cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_linux.zip
+cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx.zip
+cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_win32.zip
 
 # add Linux executable
 echo "adding Linux executable ... "
 cp --preserve=mode,timestamps ../build/frame3dd        Frame3DD/.
-zip Frame3DD_$(date +%Y%m%d)_linux.zip Frame3DD/frame3dd
+# zip Frame3DD_$(date +%Y%m%d)_linux.zip Frame3DD/frame3dd
+zip Frame3DD_$(echo VERSION)_linux.zip Frame3DD/frame3dd
 rm Frame3DD/frame3dd
 
 # add OS X executable
 echo "adding OS X executable ... "
 cp --preserve=mode,timestamps ../build/frame3ddosx     Frame3DD/frame3dd
-zip Frame3DD_$(date +%Y%m%d)_osx.zip Frame3DD/frame3dd
+#zip Frame3DD_$(date +%Y%m%d)_osx.zip Frame3DD/frame3dd
+zip Frame3DD_$(echo $VERSION)_osx.zip Frame3DD/frame3dd
 rm Frame3DD/frame3dd
 
 # add Windows executable
 echo "adding Windows executable ... "
 cp --preserve=mode,timestamps ../build/frame3dd.exe    Frame3DD/.
-zip Frame3DD_$(date +%Y%m%d)_win32.zip Frame3DD/frame3dd.exe
+#zip Frame3DD_$(date +%Y%m%d)_win32.zip Frame3DD/frame3dd.exe
+zip Frame3DD_$(echo $VERSION)_win32.zip Frame3DD/frame3dd.exe
 rm Frame3DD/frame3dd.exe
 
 rm Frame3DD_$(date +%Y%m%d).zip
@@ -81,4 +92,5 @@ echo "Frame3DD .zip archive complete"
 
 # ----------------------------------------------------------- dist_bin.sh
 # Henri P. Gavin  2009.10.20
-# updated: 2009.10.22
+# updated: 2009.10.22, 2009.10.25
+
