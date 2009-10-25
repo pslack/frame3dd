@@ -80,7 +80,9 @@ cp --preserve=mode,timestamps ../build/frame3dd.exe    Frame3DD/.
 zip Frame3DD_$(echo $VERSION)_win32.zip Frame3DD/frame3dd.exe
 rm Frame3DD/frame3dd.exe
 
-rm Frame3DD_$(date +%Y%m%d).zip
+#rm Frame3DD_$(date +%Y%m%d).zip
+rm Frame3DD_$(echo $VERSION).zip
+rm -rf Frame3DD
 
 echo "Frame3DD .zip archive complete"
 
