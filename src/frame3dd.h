@@ -36,11 +36,12 @@
 
 /** form the global stiffness matrix */
 void assemble_K(
-	double **K,		/**< stiffness matrix		*/
-	int DoF, int nB,	/**< degrees of freedom, number of beams */
+	double **K,		/**< stiffness matrix			*/
+	int DoF,		/**< number of degrees of freedom	*/
+	int nE,			/**< number of frame elements		*/
 	vec3 *xyz,		/**< XYZ locations of every joint	*/
 	float *r,		/**< rigid radius of every joint	*/
-	double *L, double *Le,	/**< length of each beam element, effective */
+	double *L, double *Le,	/**< length of each frame element, effective */
 	int *J1, int *J2,	/**< joint connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
 	float *J, float *Iy, float *Iz,	/**< section inertias	*/
@@ -48,7 +49,7 @@ void assemble_K(
 	float *p,		/**< roll angle, radians		*/
 	int shear,		/**< 1: include shear deformation, 0: don't */
 	int geom,		/**< 1: include goemetric stiffness, 0: don't */
-	double **Q		/**< beam element end forces for every beam */
+	double **Q		/**< frame element end forces		*/
 );
 
 
@@ -77,10 +78,10 @@ void solve_system(
 
 /** evaluate the member end forces for every member */
 void end_forces(
-	double **Q,	/**< beam element end forces for every beam	*/
-	int nB,		/**< number of beam elements			*/
+	double **Q,	/**< frame element end forces			*/
+	int nE,		/**< number of frame elements			*/
 	vec3 *xyz,	/** XYZ locations of each joint			*/
-	double *L, double *Le,	/**< length of each beam element, effective */
+	double *L, double *Le,	/**< length of each frame element, effective */
 	int *J1, int *J2,	/**< joint connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
 	float *J, float *Iy, float *Iz,	/**< section area inertias	*/
@@ -95,14 +96,14 @@ void end_forces(
 /** perform an equilibrium check, F returned as reactions */
 void equilibrium(	
 	vec3 *xyz,	/** XYZ locations of each joint			*/
-	double *L,	/**< length of each beam element, effective	*/
+	double *L,	/**< length of each frame element, effective	*/
 	int *J1, int *J2, /**< joint connectivity			*/
 	double *F,	/**< load vector				*/
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
 	float *p,	/**< roll angle, radians			*/
-	double **Q,	/**< beam element end forces for every beam	*/
-	double **feF,	/**< fixed end forces for every beam element	*/
-	int nB,		/**< number of beam elements			*/
+	double **Q,	/**< frame element end forces			*/
+	double **feF,	/**< fixed end forces for every frame element	*/
+	int nE,		/**< number of frame elements			*/
 	int DoF,	/**< number of degrees of freedom		*/
 	double *err,	/**< root mean squared equilibrium error	*/
 	int verbose	/**< 1: copious screen output; 0: none		*/
@@ -113,16 +114,16 @@ void equilibrium(
 void assemble_M(
 	double **M,	/**< mass matrix				*/
 	int DoF,	/**< number of degrees of freedom		*/
-	int nJ, int nB,	/**< number of joints, number of beam elements	*/
+	int nJ, int nE,	/**< number of joints, number of frame elements	*/
 	vec3 *xyz,	/** XYZ locations of each joint			*/
 	float *r,	/**< rigid radius of every joint		*/
-	double *L,	/**< length of each beam element, effective	*/
+	double *L,	/**< length of each frame element, effective	*/
 	int *J1, int *J2, /**< joint connectivity			*/
 	float *Ax,	/**< joint connectivity				*/
 	float *J, float *Iy, float *Iz,	/**< section area inertias	*/
 	float *p,	/**< roll angle, radians			*/
-	float *d,	/**< beam element density			*/
-	float *BMs,	/**< extra beam mass				*/
+	float *d,	/**< frame element density			*/
+	float *BMs,	/**< extra frame element mass			*/
 	float *JMs,	/**< joint mass					*/
 	float *JMx, float *JMy, float *JMz,	/**< joint inertias	*/
 	int lump	/**< 1: lumped mass matrix, 0: consistent mass	*/
@@ -180,7 +181,7 @@ void dyn_conden(
 	release allocated memory
 */
 void deallocate( 
-	int nJ, int nB, int nL, int *nF, int *nU, int *nW, int *nP, int *nT, int DoF,
+	int nJ, int nE, int nL, int *nF, int *nU, int *nW, int *nP, int *nT, int DoF,
 	int modes,
 	vec3 *xyz, float *r, double *L, double *Le,
 	int *J1, int *J2, int *R,

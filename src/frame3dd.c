@@ -96,7 +96,7 @@ ASSEMBLE_K  -  assemble global stiffness matrix from individual elements 23feb94
 ------------------------------------------------------------------------------*/
 void assemble_K(
 	double **K,
-	int DoF, int nB,
+	int DoF, int nE,
 	vec3 *xyz, float *r, double *L, double *Le,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz,
@@ -110,10 +110,10 @@ void assemble_K(
 	for (i=1; i<=DoF; i++)	for (j=1; j<=DoF; j++)	K[i][j] = 0.0;
 
 	k   =  dmatrix(1,12,1,12);
-	ind = imatrix(1,12,1,nB);
+	ind = imatrix(1,12,1,nE);
 
 
-	for ( i=1; i<= nB; i++ ) {
+	for ( i=1; i<= nE; i++ ) {
 		ind[1][i] = 6*J1[i] - 5;	ind[7][i]  = 6*J2[i] - 5;
 		ind[2][i] = ind[1][i] + 1;	ind[8][i]  = ind[7][i] + 1;
 		ind[3][i] = ind[1][i] + 2;	ind[9][i]  = ind[7][i] + 2;
@@ -122,7 +122,7 @@ void assemble_K(
 		ind[6][i] = ind[1][i] + 5;	ind[12][i] = ind[7][i] + 5;
 	}
 
-	for ( i = 1; i <= nB; i++ ) {
+	for ( i = 1; i <= nE; i++ ) {
 
 		elastic_K ( k, xyz, r, L[i], Le[i], J1[i], J2[i],
 		Ax[i],Asy[i],Asz[i], J[i], Iy[i],Iz[i], E[i],G[i], p[i], shear);
@@ -142,7 +142,7 @@ void assemble_K(
 		}
 	}
 	free_dmatrix ( k,1,12,1,12);
-	free_imatrix(ind,1,12,1,nB);
+	free_imatrix(ind,1,12,1,nE);
 	return;
 }
 
@@ -412,7 +412,7 @@ int	verbose;
 END_FORCES  -  evaluate the member end forces for every member		23feb94
 ------------------------------------------------------------------------------*/
 void end_forces(
-	double **Q, int nB, vec3 *xyz,
+	double **Q, int nE, vec3 *xyz,
 	double *L, double *Le,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz,
@@ -424,7 +424,7 @@ void end_forces(
 
 	s = dvector(1,12);
 
-	for(i=1; i <= nB; i++) {
+	for(i=1; i <= nE; i++) {
 
      		member_force ( s, i, xyz, L[i], Le[i], J1[i], J2[i],
 			Ax[i], Asy[i], Asz[i], J[i], Iy[i], Iz[i],
@@ -566,7 +566,7 @@ EQUILIBRIUM  -  perform an equilibrium check, F returned as reactions   18sep02
 void equilibrium(	
 		vec3 *xyz,
 		double *L, int *J1, int *J2, double *F, int *R, float *p,
-		double **Q, double **feF, int nB, int DoF, double *err,
+		double **Q, double **feF, int nE, int DoF, double *err,
 		int verbose
 ){
 	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
@@ -578,7 +578,7 @@ void equilibrium(
 	for (j=1; j<=DoF; j++) if (R[j] == 0) den += ( F[j]*F[j] );
 	if ( den <= 0 ) den = 1.0;
 
-	for (m=1; m <= nB; m++) {	/* loop over all members */
+	for (m=1; m <= nE; m++) {	/* loop over all members */
 
 		j1 = J1[m];	j2 = J2[m];
 
@@ -637,7 +637,7 @@ void equilibrium(
 ASSEMBLE_M  -  assemble global mass matrix from element mass & inertia  24nov98
 ------------------------------------------------------------------------------*/
 void assemble_M(
-		double **M, int DoF, int nJ, int nB,
+		double **M, int DoF, int nJ, int nE,
 		vec3 *xyz, float *r, double *L,
 		int *J1, int *J2,
 		float *Ax, float *J, float *Iy, float *Iz, float *p,
@@ -654,10 +654,10 @@ void assemble_M(
 	for (i=1; i<=DoF; i++)  for (j=1; j<=DoF; j++)  M[i][j] = 0.0;
 
 	mass   = dmatrix(1,12,1,12);
-	ind    = imatrix(1,12,1,nB);
+	ind    = imatrix(1,12,1,nE);
 
 
-	for ( i=1; i<= nB; i++ ) {
+	for ( i=1; i<= nE; i++ ) {
 		ind[1][i] = 6*J1[i] - 5;	ind[7][i]  = 6*J2[i] - 5;
 		ind[2][i] = ind[1][i] + 1;      ind[8][i]  = ind[7][i] + 1;
 		ind[3][i] = ind[1][i] + 2;      ind[9][i]  = ind[7][i] + 2;
@@ -666,7 +666,7 @@ void assemble_M(
 		ind[6][i] = ind[1][i] + 5;      ind[12][i] = ind[7][i] + 5;
 	}
 
-	for ( m = 1; m <= nB; m++ ) {
+	for ( m = 1; m <= nE; m++ ) {
 
 		if ( lump )	lumped_M ( mass, xyz, L[m], J1[m], J2[m],
 				Ax[m], J[m], Iy[m], Iz[m], d[m], BMs[m], p[m]);
@@ -698,7 +698,7 @@ void assemble_M(
 		}
 	}
 	free_dmatrix ( mass,1,12,1,12);
-	free_imatrix( ind,1,12,1,nB);
+	free_imatrix( ind,1,12,1,nE);
 }
 
 
@@ -1268,7 +1268,7 @@ double rel_norm( double *N, double *D, int n )
 DEALLOCATE  -  release allocated memory					9sep08
 ------------------------------------------------------------------------------*/
 void deallocate( 
-	int nJ, int nB, int nL, int *nF, int *nU, int *nW, int *nP, int *nT,
+	int nJ, int nE, int nL, int *nF, int *nU, int *nW, int *nP, int *nT,
 	int DoF, int nM,
 	vec3 *xyz, float *r, double *L, double *Le,
 	int *J1, int *J2, int *R,
@@ -1291,30 +1291,30 @@ void deallocate(
 	free(xyz);
 
 	free_vector(r,1,nJ);
-	free_dvector(L,1,nB);
-	free_dvector(Le,1,nB);
+	free_dvector(L,1,nE);
+	free_dvector(Le,1,nE);
 
 // printf("..B\n");
-	free_ivector(J1,1,nB);
-	free_ivector(J2,1,nB);
+	free_ivector(J1,1,nE);
+	free_ivector(J2,1,nE);
 	free_ivector(R,1,DoF);
 
 // printf("..C\n");
-	free_vector(Ax,1,nB);
-	free_vector(Asy,1,nB);
-	free_vector(Asz,1,nB);
-	free_vector(J,1,nB);
-	free_vector(Iy,1,nB);
-	free_vector(Iz,1,nB);
-	free_vector(E,1,nB);
-	free_vector(G,1,nB);
-	free_vector(p,1,nB);
+	free_vector(Ax,1,nE);
+	free_vector(Asy,1,nE);
+	free_vector(Asz,1,nE);
+	free_vector(J,1,nE);
+	free_vector(Iy,1,nE);
+	free_vector(Iz,1,nE);
+	free_vector(E,1,nE);
+	free_vector(G,1,nE);
+	free_vector(p,1,nE);
 
 // printf("..D\n");
-	free_D3matrix(U,1,nL,1,nB,1,4);
-	free_D3matrix(W,1,nL,1,nB,1,13);
-	free_D3matrix(P,1,nL,1,nB,1,5);
-	free_D3matrix(T,1,nL,1,nB,1,8);
+	free_D3matrix(U,1,nL,1,nE,1,4);
+	free_D3matrix(W,1,nL,1,nE,1,13);
+	free_D3matrix(P,1,nL,1,nE,1,5);
+	free_D3matrix(T,1,nL,1,nE,1,8);
 	free_matrix(Dp,1,nL,1,DoF);
 
 // printf("..E\n");
@@ -1326,21 +1326,21 @@ void deallocate(
 	free_dvector(F,1,DoF);
 
 // printf("..G\n");
-	free_D3dmatrix(feF_mech,1,nL,1,nB,1,12);
-	free_D3dmatrix(feF_temp,1,nL,1,nB,1,12);
-	free_dmatrix(feF,1,nB,1,12);
+	free_D3dmatrix(feF_mech,1,nL,1,nE,1,12);
+	free_D3dmatrix(feF_temp,1,nL,1,nE,1,12);
+	free_dmatrix(feF,1,nE,1,12);
 
 // printf("..H\n");
 	free_dmatrix(K,1,DoF,1,DoF);
-	free_dmatrix(Q,1,nB,1,12);
+	free_dmatrix(Q,1,nE,1,12);
 
 // printf("..I\n");
 	free_dvector(D,1,DoF);
 	free_dvector(dD,1,DoF);
 
 // printf("..J\n");
-	free_vector(d,1,nB);
-	free_vector(BMs,1,nB);
+	free_vector(d,1,nE);
+	free_vector(BMs,1,nE);
 	free_vector(JMs,1,nJ);
 	free_vector(JMx,1,nJ);
 	free_vector(JMy,1,nJ);

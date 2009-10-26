@@ -1,12 +1,11 @@
 TODO LIST for FRAME3DD
 ----------------------
 
-* Check return values of fscanf functions and report errors to user
-  for input data debugging purposes.
-
-*  Consistent mass matrix including the effects of shear deformation on rotatory inertia
+* Compute reactions forces along with joint displacements in solve_system funcion.  
 
 * Improve rigid joint offset method
+
+* Consistent mass matrix including the effects of shear deformation on rotatory inertia
 
 * Dynamic time-history analysis with the HHT-alpha method
 
@@ -31,15 +30,16 @@ but we can not yet actually calculate using the parsed data.
 import into other programs.
 http://math.nist.gov/MatrixMarket/
 
-* Consider making use of third-party matrix routines, rather to providing them
-ourselves. Good options would be UMFPACK (for sparse matrices) or LAPACK (dense).
-There would be assumed to be some efficiency improvements as a result of this
+* Consider making use of third-party matrix routines, rather to providing them ourselves. Good options would be UMFPACK (for sparse matrices) or LAPACK (dense).  There would be assumed to be some efficiency improvements as a result of this
 also, particularly if sparse matrix methods can be used.
 
 
 
 COMPLETED ITEMS
 ------------------
+
+* Check return values of fscanf functions and report errors to user
+  for input data debugging purposes. (Oct 26 2009)
 
 * Implement command line parsing using the getopt function (Mar 4 2009)
   ... for reasons of ease-of-portability

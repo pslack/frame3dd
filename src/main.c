@@ -96,7 +96,7 @@ int main ( int argc, char *argv[] ) {
 		*D, *dD,	/* displacement and displ increment	*/
 		/*dDdD = 0.0,*/	/* dD' * dD				*/
 		*Fe = NULL,	/* equilibrium error in nonlinear anlys	*/
-		*L  = NULL,	/* joint-to-joint length of each beam	*/
+		*L  = NULL,	/* joint-to-joint length of each element*/
 		*Le = NULL,	/* effcve lngth, accounts for joint size*/
 		**Q = NULL,	/* local member joint end-forces	*/
 		tol = 1.0e-5,	/* tolerance for modal convergence	*/
@@ -111,7 +111,7 @@ int main ( int argc, char *argv[] ) {
 		exagg;		/* exaggerate deformations in mesh data	*/
 
 	int	nJ=0,		/* number of Joints 			*/
-		nB=0,		/* number of Beam elements		*/
+		nE=0,		/* number of frame Elements		*/
 		nL=0, lc=0,	/* number of Load cases			*/
 		DoF=0, i, j, n,	/* number of Degrees of Freedom		*/
 		nR=0,		/* number of restrained joints		*/
@@ -151,6 +151,8 @@ int main ( int argc, char *argv[] ) {
 		write_matrix=-1,/*   write stiffness and mass matrix	*/
 		condense_flag=-1; /* over-ride input file value		*/
 
+	int	sfrv=0;		/* *scanf return value for err checking	*/
+
 	double	exagg_flag=-1.0, /*  over-ride input file value		*/
 		tol_flag  =-1.0, /*  over-ride input file value		*/
 		shift_flag=-1.0; /*  over-ride input file value		*/
@@ -177,7 +179,7 @@ int main ( int argc, char *argv[] ) {
 	/* open the input data file */
 
 	if ((fp = fopen (IN_file, "r")) == NULL) {
-		fprintf (stderr,"\nERROR: cannot open file '%s'\n\n", IN_file);
+		fprintf (stderr,"\n ERROR: cannot open file '%s'\n\n", IN_file);
 		display_help();
 		exit(1);
 	}
@@ -191,14 +193,15 @@ int main ( int argc, char *argv[] ) {
 
 	/* open the clean input file */
 	if ((fp = fopen (temppath, "r")) == NULL) {
-		fprintf (stderr,"\nERROR: cannot open cleaned input file '%s'\n",temppath);
+		fprintf (stderr,"\n ERROR: cannot open cleaned input file '%s'\n",temppath);
 		exit(1);
 	}
 
 	frame3dd_getline(fp, title, 256);
 	if (verbose ) fprintf(stderr," ** %s ** \n\n", title );
 
-	fscanf(fp, "%d", &nJ );		/* number of joints	*/
+	sfrv=fscanf(fp, "%d", &nJ );		/* number of joints	*/
+	if (sfrv != 1)	sferr("nJ value for number of joints");
 	if ( verbose ) {
 	 printf(" number of joints "); dots(stdout,35); printf(" nJ = %3d ",nJ);
 	}
@@ -216,35 +219,36 @@ int main ( int argc, char *argv[] ) {
 	read_reaction_data ( fp, DoF, nJ, &nR, R, &sumR, verbose );
 	if ( verbose )	printf(" ... complete\n");
 
-	fscanf(fp, "%d", &nB );		/* number of beam elements	*/
+	sfrv=fscanf(fp, "%d", &nE );	/* number of frame elements	*/
+	if (sfrv != 1)	sferr("nE value for number of frame elements");
 	if ( verbose ) {
-	 printf(" number of frame elements"); dots(stdout,28); printf(" nB = %3d ",nB);
+	 printf(" number of frame elements"); dots(stdout,28); printf(" nE = %3d ",nE);
 	}
-	if ( nJ > nB + 1) {
-		fprintf(stderr,"warning: %d joints and %d members...", nJ, nB );
+	if ( nJ > nE + 1) {
+		fprintf(stderr,"warning: %d joints and %d members...", nJ, nE );
 		fprintf(stderr," not enough members to connect all joints.\n");
     	}
 
-				/* allocate memory for beams ... */
-	L   = dvector(1,nB);	/* length of each element		*/
-	Le  = dvector(1,nB);	/* effective length of each element	*/
+				/* allocate memory for frame elements ... */
+	L   = dvector(1,nE);	/* length of each element		*/
+	Le  = dvector(1,nE);	/* effective length of each element	*/
 
-	J1  = ivector(1,nB);	/* joint #1 of each element		*/
-	J2  = ivector(1,nB);	/* joint #2 of each element		*/
+	J1  = ivector(1,nE);	/* joint #1 of each element		*/
+	J2  = ivector(1,nE);	/* joint #2 of each element		*/
 
-	Ax  =  vector(1,nB);	/* cross section area of each element	*/
-	Asy =  vector(1,nB);	/* shear area in local y direction 	*/
-	Asz =  vector(1,nB);	/* shear area in local z direction	*/
-	J   =  vector(1,nB);	/* torsional moment of inertia 		*/
-	Iy  =  vector(1,nB);	/* bending moment of inertia about y-axis */
-	Iz  =  vector(1,nB);	/* bending moment of inertia about z-axis */
+	Ax  =  vector(1,nE);	/* cross section area of each element	*/
+	Asy =  vector(1,nE);	/* shear area in local y direction 	*/
+	Asz =  vector(1,nE);	/* shear area in local z direction	*/
+	J   =  vector(1,nE);	/* torsional moment of inertia 		*/
+	Iy  =  vector(1,nE);	/* bending moment of inertia about y-axis */
+	Iz  =  vector(1,nE);	/* bending moment of inertia about z-axis */
 
-	E   =  vector(1,nB);	/* beam element Young's modulus		*/
-	G   =  vector(1,nB);	/* beam element shear modulus		*/
-	p   =  vector(1,nB);	/* member rotation angle about local x axis */
+	E   =  vector(1,nE);	/* frame element Young's modulus	*/
+	G   =  vector(1,nE);	/* frame element shear modulus		*/
+	p   =  vector(1,nE);	/* member rotation angle about local x axis */
 
-	read_beam_data( fp, nJ, nB, xyz,r, L, Le, J1, J2,
-			Ax, Asy, Asz, J, Iy, Iz, E, G, p );
+	read_frame_element_data( fp, nJ, nE, xyz,r, L, Le, J1, J2,
+					Ax, Asy, Asz, J, Iy, Iz, E, G, p );
 	if ( verbose) 	printf(" ... complete\n");
 
 
@@ -252,25 +256,26 @@ int main ( int argc, char *argv[] ) {
 			meshpath, plotpath,
 			&exagg, exagg_flag, &anlyz, anlyz_flag, debug );
 
-	fscanf(fp, "%d", &nL );		/* number of load cases		*/
+	sfrv=fscanf(fp, "%d", &nL );	/* number of load cases		*/
+	if (sfrv != 1)	sferr("nL value for number of load cases");
 	if ( verbose ) {
 		printf(" number of load cases ");
 		dots(stdout,31); printf(" nL = %3d \n",nL);
 	}
 
 	if ( nL < 1 ) {
-		fprintf(stderr,"\nERROR: the number of load cases must be at least 1\n");
+		fprintf(stderr,"\n ERROR: the number of load cases must be at least 1\n");
 		exit(1);
 	}
 	if ( nL >= _NL_ ) {
-		fprintf(stderr,"\nERROR: maximum of %d load cases allowed\n", _NL_-1);
+		fprintf(stderr,"\n ERROR: maximum of %d load cases allowed\n", _NL_-1);
 		exit(1);
 	}
 					/* allocate memory for loads ... */
-	U   =  D3matrix(1,nL,1,nB,1,4); /* uniform load on each member */
-	W   =  D3matrix(1,nL,1,nB,1,13);/* trapezoidal load on each member */
-	P   =  D3matrix(1,nL,1,nB,1,5); /* internal point load each member */
-	T   =  D3matrix(1,nL,1,nB,1,8); /* internal temp change each member */
+	U   =  D3matrix(1,nL,1,nE,1,4); /* uniform load on each member */
+	W   =  D3matrix(1,nL,1,nE,1,13);/* trapezoidal load on each member */
+	P   =  D3matrix(1,nL,1,nE,1,5); /* internal point load each member */
+	T   =  D3matrix(1,nL,1,nE,1,8); /* internal temp change each member */
 	Dp  =  matrix(1,nL,1,DoF); /* prescribed displacement of each joint */
 
 	Fo_mech  = dmatrix(1,nL,1,DoF);	/* mechanical load vector	*/
@@ -278,18 +283,18 @@ int main ( int argc, char *argv[] ) {
 	Fo  = dmatrix(1,nL,1,DoF);	/* external load vector		*/
 	F   = dvector(1,DoF);	/* external load vector with react'ns	*/
 
-	feF_mech =  D3dmatrix(1,nL,1,nB,1,12); /* feF due to mech loads */
-	feF_temp =  D3dmatrix(1,nL,1,nB,1,12); /* feF due to temp loads */
-	feF      = dmatrix(1,nB,1,12);	/* fixed end forces		*/
+	feF_mech =  D3dmatrix(1,nL,1,nE,1,12); /* feF due to mech loads */
+	feF_temp =  D3dmatrix(1,nL,1,nE,1,12); /* feF due to temp loads */
+	feF      = dmatrix(1,nE,1,12);	/* fixed end forces		*/
 
 	K   = dmatrix(1,DoF,1,DoF);	/* global stiffness matrix	*/
-	Q   = dmatrix(1,nB,1,12);	/* end forces for each member	*/
+	Q   = dmatrix(1,nE,1,12);	/* end forces for each member	*/
 
 	D   = dvector(1,DoF);	/* displacments of each joint		*/
 	dD  = dvector(1,DoF);	/* incremental displ. of each joint	*/
 
-	d   =  vector(1,nB);	/* mass density for each member		*/
-	BMs =  vector(1,nB);	/* lumped beam mass for each member	*/
+	d   =  vector(1,nE);	/* mass density for each member		*/
+	BMs =  vector(1,nE);	/* lumped mass for each frame element	*/
 	JMs =  vector(1,nJ);	/* joint mass for each joint		*/
 	JMx =  vector(1,nJ);	/* joint inertia about global X axis	*/
 	JMy =  vector(1,nJ);	/* joint inertia about global Y axis	*/
@@ -299,7 +304,7 @@ int main ( int argc, char *argv[] ) {
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
 
 
-	read_and_assemble_loads( fp, nJ, nB, nL, DoF, xyz, L, Le, J1, J2,
+	read_and_assemble_loads( fp, nJ, nE, nL, DoF, xyz, L, Le, J1, J2,
 				Ax,Asy,Asz, Iy,Iz, E, G, p, R, shear,
 				nF, nU, nW, nP, nT, nD,
 				Q, Fo_mech, Fo_temp, U, W, P, T,
@@ -315,7 +320,7 @@ int main ( int argc, char *argv[] ) {
 		printf(" load data ... complete\n");
 	}
 
-	read_mass_data( fp, IN_file, nJ, nB, &nI, d, BMs, JMs, JMx, JMy, JMz,
+	read_mass_data( fp, IN_file, nJ, nE, &nI, d, BMs, JMs, JMx, JMy, JMz,
 			L, Ax, &total_mass, &struct_mass, &nM,
 			&Mmethod, modal_flag, 
 			&lump, lump_flag, &tol, tol_flag, &shift, shift_flag,
@@ -346,7 +351,7 @@ int main ( int argc, char *argv[] ) {
 		exit(1);
 	}
 
-	write_input_data ( fp, title, nJ,nB,nL, nD,nR, nF,nU,nW,nP,nT,
+	write_input_data ( fp, title, nJ,nE,nL, nD,nR, nF,nU,nW,nP,nT,
 				xyz, r, J1,J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p,
 				Fo, Dp, R, U, W, P, T, shear, anlyz, geom );
 
@@ -359,7 +364,7 @@ int main ( int argc, char *argv[] ) {
 
 			for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
 
-			assemble_K ( K, DoF, nB, xyz,r, L, Le, J1, J2,
+			assemble_K ( K, DoF, nE, xyz,r, L, Le, J1, J2,
 				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
 #ifdef MATRIX_DEBUG
@@ -373,11 +378,11 @@ int main ( int argc, char *argv[] ) {
 				apply_reactions ( DoF, R, Dp[lc], Fo_temp[lc], F, K, 't' );
 				solve_system( K, dD, F, DoF, &ok, verbose );
 				for (i=1; i<=DoF; i++)	D[i] += dD[i];
-				end_forces ( Q, nB, xyz, L, Le, J1,J2,
+				end_forces ( Q, nE, xyz, L, Le, J1,J2,
 					Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 			}
 
-			assemble_K ( K, DoF, nB, xyz, r, L, Le, J1, J2,
+			assemble_K ( K, DoF, nE, xyz, r, L, Le, J1, J2,
 				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
 			/* then add mechanical loads ... */
@@ -387,7 +392,7 @@ int main ( int argc, char *argv[] ) {
 				apply_reactions ( DoF, R, Dp[lc], Fo_mech[lc], F, K, 'm' );
 				solve_system( K, dD, F, DoF, &ok, verbose );
 				for (i=1; i<=DoF; i++)	D[i] += dD[i];
-				end_forces ( Q, nB, xyz, L, Le, J1,J2,
+				end_forces ( Q, nE, xyz, L, Le, J1,J2,
 					Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 			}
 
@@ -409,7 +414,7 @@ int main ( int argc, char *argv[] ) {
 			while ( geom && error > tol && iter < 10 && ok >= 0) {
 				++iter;
 
-				assemble_K ( K, DoF, nB, xyz, r, L, Le, J1, J2,
+				assemble_K ( K, DoF, nE, xyz, r, L, Le, J1, J2,
 					Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
 				apply_reactions ( DoF, R, Dp[lc], Fo[lc], F, K, 'm' );
@@ -440,7 +445,7 @@ int main ( int argc, char *argv[] ) {
 
 				for (i=1; i<=DoF; i++)	D[i] += dD[i];	/* increment D */
 
-				end_forces ( Q, nB, xyz, L, Le,
+				end_forces ( Q, nE, xyz, L, Le,
 					J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 
 						 /* convergence criteria:  */
@@ -462,10 +467,10 @@ int main ( int argc, char *argv[] ) {
 				save_ut_dmatrix ( DoF, K, "Ks" );
 
 			for (i=1; i<=12; i++)
-				for (n=1; n<=nB; n++)
+				for (n=1; n<=nE; n++)
 					feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
 
-			equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF, nB, DoF, &error, verbose );
+			equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF, nE, DoF, &error, verbose );
 
 			if ( verbose ) {
 				printf("  RMS relative equilibrium precision: %9.3e", error );
@@ -473,20 +478,20 @@ int main ( int argc, char *argv[] ) {
 			}
 
 
-			write_static_results ( fp, nJ,nB,nL,lc, DoF, J1,J2, Fo[lc],
+			write_static_results ( fp, nJ,nE,nL,lc, DoF, J1,J2, Fo[lc],
 									 D,R,Q, error, ok );
 
 			if ( filetype == 1 ){
 				write_static_csv(OUT_file, title,
-					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
+					nJ,nE,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
 
 			if ( filetype == 2 ){
 				write_static_mfile (OUT_file, title,
-					nJ,nB,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
+					nJ,nE,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
 
-			static_mesh ( IN_file, meshpath, plotpath, title, nJ, nB, nL, lc,
+			static_mesh ( IN_file, meshpath, plotpath, title, nJ, nE, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
 
 		} /* end load case loop */
@@ -496,7 +501,7 @@ int main ( int argc, char *argv[] ) {
 			printf("\n * %s *\n", title );
 			printf("  DATA CHECK ONLY.\n");
 		}
-		static_mesh ( IN_file, meshpath, plotpath, title, nJ, nB, nL, lc,
+		static_mesh ( IN_file, meshpath, plotpath, title, nJ, nE, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
 	}
 
@@ -510,7 +515,7 @@ int main ( int argc, char *argv[] ) {
 		f   = dvector(1,nM_calc);
 		V   = dmatrix(1,DoF,1,nM_calc);
 
-		assemble_M ( M, DoF, nJ, nB, xyz, r, L, J1,J2,
+		assemble_M ( M, DoF, nJ, nE, xyz, r, L, J1,J2,
 				Ax, J,Iy,Iz, p, d, BMs, JMs, JMx, JMy, JMz, lump );
 
 #ifdef MATRIX_DEBUG
@@ -545,7 +550,7 @@ int main ( int argc, char *argv[] ) {
 
 			for (j=1; j<=nM_calc; j++)	f[j] = sqrt(f[j])/(2.*PI);
 
-			write_modal_results ( fp, nJ,nB,nI, DoF, M,f,V,
+			write_modal_results ( fp, nJ,nE,nI, DoF, M,f,V,
 					total_mass, struct_mass,
 					iter, sumR, nM, shift, lump, tol, ok );
 		}
@@ -557,9 +562,9 @@ int main ( int argc, char *argv[] ) {
 	if(nM > 0 && anlyz){
 
 		modal_mesh ( IN_file, meshpath, modepath, plotpath, title,
-			nJ,nB, DoF, nM, xyz, L, J1,J2, p, M,f,V,exagg,anlyz);
+			nJ,nE, DoF, nM, xyz, L, J1,J2, p, M,f,V,exagg,anlyz);
 		animate ( IN_file, meshpath, modepath, plotpath, title,anim,
-			nJ,nB, DoF, nM, xyz, L, p, J1,J2, f,V, exagg, pan );
+			nJ,nE, DoF, nM, xyz, L, p, J1,J2, f,V, exagg, pan );
 	}
 
 	if(nC > 0){		/* matrix condensation of stiffness and mass */
@@ -605,7 +610,7 @@ int main ( int argc, char *argv[] ) {
 	}
 
 	/* deallocate memory used for each frame analysis variable */
-	deallocate ( nJ, nB, nL, nF, nU, nW, nP, nT, DoF, nM,
+	deallocate ( nJ, nE, nL, nF, nU, nW, nP, nT, DoF, nM,
 			xyz, r, L, Le, J1, J2, R,
 			Ax, Asy, Asz, J, Iy, Iz, E, G, p,
 			U,W,P,T, Dp, Fo_mech, Fo_temp,

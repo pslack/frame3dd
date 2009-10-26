@@ -1,4 +1,9 @@
-* Thu Oct 22 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091021
+* Mon Oct 26 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091026
+- Check return values of fscanf functions and report errors to user for input data debugging purposes. 
+- Change nB variable to nE throughout, including user manual.
+- Add instructions for modeling pre-stressed structures in user-manual.
+
+* Thu Oct 22 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - Updated and improved .ZIP installation instructions. 
 
 * Wed Oct 21 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091021

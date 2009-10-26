@@ -75,6 +75,7 @@ void parse_options (
 ){
 
 	char	option;
+	int	sfrv;	/* *scanf return value	*/
 
 	/* default values */
 
@@ -91,9 +92,11 @@ void parse_options (
 		fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
 		fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
 		fprintf (stderr," Please enter the  input data file name: ");
-		scanf("%s", IN_file );
+		sfrv=scanf("%s", IN_file );
+		if (sfrv != 1) sferr("IN_file");
 		fprintf (stderr," Please enter the output data file name: ");
-		scanf("%s", OUT_file );
+		sfrv=scanf("%s", OUT_file );
+		if (sfrv != 1) sferr("OUT_file");
 		return;
 	 }
 	 case 3: {
@@ -230,9 +233,11 @@ void parse_options (
 
 	if ( strcmp(IN_file,"\0") == 0 ) {
 		fprintf (stderr," Please enter the  input data file name: ");
-		scanf("%s", IN_file );
+		sfrv=scanf("%s", IN_file );
+		if (sfrv != 1) sferr("IN_file");
 		fprintf (stderr," Please enter the output data file name: ");
-		scanf("%s", OUT_file );
+		sfrv=scanf("%s", OUT_file );
+		if (sfrv != 1) sferr("OUT_file");
 	}
 	if ( strcmp(IN_file,"\0") != 0 && strcmp(OUT_file,"\0") == 0 ) {
 		strcpy( OUT_file, IN_file );
@@ -341,16 +346,19 @@ READ_JOINT_DATA  -  read joint location data
 ------------------------------------------------------------------------------*/
 void read_joint_data( FILE *fp, int nJ, vec3 *xyz, float *r )
 {
-	int	i, j;
+	int	i, j,
+		sfrv;		/* *scanf result	*/
 
 	for (i=1;i<=nJ;i++) {		/* read joint coordinates	*/
-		fscanf(fp, "%d", &j );
+		sfrv=fscanf(fp, "%d", &j );
+		if (sfrv != 1) sferr("joint number in joint data");
 		if ( j <= 0 || j > nJ ) {
 		    fprintf(stderr,"\nERROR: in joint coordinate data, joint number out of range\n");
 		    fprintf(stderr,"(joint id is %d <= 0 or > %d)\n", j, nJ);
 		    exit(1);
 		}
-		fscanf(fp, "%lf %lf %lf %f", &xyz[j].x, &xyz[j].y, &xyz[j].z, &r[j]);
+		sfrv=fscanf(fp, "%lf %lf %lf %f", &xyz[j].x, &xyz[j].y, &xyz[j].z, &r[j]);
+		if (sfrv != 4) sferr("joint coordinates in joint data");
 		/* fprintf(stderr,"\nj = %d, pos = (%lf, %lf, %lf), r = %f", j, xyz[j].x, xyz[j].y, xyz[j].z, r[j]); */
 		r[j] = fabs(r[j]);
 	}
@@ -359,99 +367,105 @@ void read_joint_data( FILE *fp, int nJ, vec3 *xyz, float *r )
 
 
 /*------------------------------------------------------------------------------
-READ_BEAM_DATA  -  read beam property data		
+READ_FRAME_ELEMENT_DATA  -  read frame element property data		
 04 Jan 2009
 ------------------------------------------------------------------------------*/
-void read_beam_data(
+void read_frame_element_data(
 	FILE *fp,
-	int nJ, int nB, vec3 *xyz, float *r,
+	int nJ, int nE, vec3 *xyz, float *r,
 	double *L, double *Le,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz,
 	float *J, float *Iy, float *Iz, float *E, float *G, float *p
 ){
-	int	j1, j2, i, j;
+	int	j1, j2, i, b;
+	int	sfrv;	/* *scanf return value */
 
-	for (i=1;i<=nB;i++) {		/* read beam properties	*/
-		fscanf(fp, "%d", &j );
-		if ( j <= 0 || j > nB ) {
-		    fprintf(stderr,"  error in beam property data: Beam number out of range  ");
-		    fprintf(stderr,"  Beam number: %d  \n", j);
+	for (i=1;i<=nE;i++) {		/* read frame element properties */
+		sfrv=fscanf(fp, "%d", &b );
+		if (sfrv != 1) sferr("frame element number in element data");
+		if ( b <= 0 || b > nE ) {
+		    fprintf(stderr,"  error in frame element property data: Element number out of range  ");
+		    fprintf(stderr,"  Frame element number: %d  \n", b);
 		    exit(1);
 		}
-		fscanf(fp, "%d %d", &J1[j], &J2[j] );
-		if ( J1[j] <= 0 || J1[j] > nJ || J2[j] <= 0 || J2[j] > nJ ) {
-		    fprintf(stderr,"  error in beam property data: joint number out of range  ");
-		    fprintf(stderr,"  Beam number: %d \n", j);
+		sfrv=fscanf(fp, "%d %d", &J1[b], &J2[b] );
+		if (sfrv != 2) sferr("joint numbers in frame element data");
+		if ( J1[b] <= 0 || J1[b] > nJ || J2[b] <= 0 || J2[b] > nJ ) {
+		    fprintf(stderr,"  error in frame element property data: joint number out of range  ");
+		    fprintf(stderr,"  Frame element number: %d \n", b);
 		    exit(1);
 		}
-		fscanf(fp, "%f %f %f", &Ax[j], &Asy[j], &Asz[j] );
-		fscanf(fp, "%f %f %f", &J[j],  &Iy[j],  &Iz[j] );
-		fscanf(fp, "%f %f %f", &E[j], &G[j], &p[j]);
+		sfrv=fscanf(fp, "%f %f %f", &Ax[b], &Asy[b], &Asz[b] );
+		if (sfrv != 3) sferr("section areas in frame element data");
+		sfrv=fscanf(fp, "%f %f %f", &J[b],  &Iy[b],  &Iz[b] );
+		if (sfrv != 3) sferr("section inertias in frame element data");
+		sfrv=fscanf(fp, "%f %f %f", &E[b], &G[b], &p[b]);
+		if (sfrv != 3) sferr("material moduli and roll angle in frame element data");
 
-		p[j] = p[j]*PI/180.0;	/* convert from degrees to radians */
+		p[b] = p[b]*PI/180.0;	/* convert from degrees to radians */
 
-		if ( Ax[j] < 0 || Asy[j] < 0 || Asz[j] < 0 ||
-		      J[j] < 0 ||  Iy[j] < 0 ||  Iz[j] < 0	) {
-		    fprintf(stderr,"  error in beam property data: beam section property < 0  ");
-		    fprintf(stderr,"  Beam number: %d  \n", j);
+		if ( Ax[b] < 0 || Asy[b] < 0 || Asz[b] < 0 ||
+		      J[b] < 0 ||  Iy[b] < 0 ||  Iz[b] < 0	) {
+		    fprintf(stderr,"  error in frame element property data: section property < 0  ");
+		    fprintf(stderr,"  Frame element number: %d  \n", b);
 		    exit(1);
 		}
-		if ( Ax[j] == 0 ) {
-		    fprintf(stderr,"  error in beam property data: cross section area is zero   ");
-		    fprintf(stderr,"  Beam number: %d  \n", j);
+		if ( Ax[b] == 0 ) {
+		    fprintf(stderr,"  error in frame element property data: cross section area is zero   ");
+		    fprintf(stderr,"  Frame element number: %d  \n", b);
 		    exit(1);
 		}
-		if ( (Asy[j] == 0 || Asz[j] == 0) && G[j] == 0 ) {
-		    fprintf(stderr,"  error in beam property data: a shear area and shear modulus are zero   ");
-		    fprintf(stderr,"  Beam number: %d  \n", j);
+		if ( (Asy[b] == 0 || Asz[b] == 0) && G[b] == 0 ) {
+		    fprintf(stderr,"  error in frame element property data: a shear area and shear modulus are zero   ");
+		    fprintf(stderr,"  Frame element number: %d  \n", b);
 		    exit(1);
 		}
-		if ( J[j] == 0 ) {
-		    fprintf(stderr,"  error in beam property data: torsional moment of inertia is zero   ");
-		    fprintf(stderr,"  Beam number: %d  \n", j);
+		if ( J[b] == 0 ) {
+		    fprintf(stderr,"  error in frame element property data: torsional moment of inertia is zero   ");
+		    fprintf(stderr,"  Frame element number: %d  \n", b);
 		    exit(1);
 		}
-		if ( Iy[j] == 0 || Iz[j] == 0 ) {
+		if ( Iy[b] == 0 || Iz[b] == 0 ) {
 		    fprintf(stderr,"  error: cross section bending moment of inertia is zero   ");
-		    fprintf(stderr,"  Beam number : %d  \n", j);
+		    fprintf(stderr,"  Frame element number : %d  \n", b);
 		    exit(1);
 		}
-		if ( E[j] <= 0 || G[j] <= 0 ) {
+		if ( E[b] <= 0 || G[b] <= 0 ) {
 		    fprintf(stderr,"  error : material elastic modulus E or G f is not positive   ");
-		    fprintf(stderr,"  Beam number: %d  \n", j);
+		    fprintf(stderr,"  Frame element number: %d  \n", b);
 		    exit(1);
 		}
 	}
-	for (i=1;i<=nB;i++) {		/* calculate beam lengths	*/
-		j1 = J1[i];
-		j2 = J2[i];
+	for (b=1;b<=nE;b++) {		/* calculate frame element lengths */
+		j1 = J1[b];
+		j2 = J2[b];
 
 #define SQ(X) ((X)*(X))
-		L[i] =	SQ(xyz[j2].x - xyz[j1].x) +
+		L[b] =	SQ(xyz[j2].x - xyz[j1].x) +
 			SQ(xyz[j2].y-xyz[j1].y) +
 			SQ(xyz[j2].z-xyz[j1].z);
 #undef SQ
 
-		L[i] = sqrt( L[i] );
-		Le[i] = L[i] - r[j1] - r[j2];
-		if ( j1 == j2 || L[i] == 0.0 ) {
+		L[b] = sqrt( L[b] );
+		Le[b] = L[b] - r[j1] - r[j2];
+		if ( j1 == j2 || L[b] == 0.0 ) {
 		   fprintf(stderr,
-			" Beams must start and stop at different joints\n");
+			" Frame elements must start and stop at different joints\n");
 		   fprintf(stderr,
-			" beam element %d  J1= %d J2= %d L= %e\n", i, j1,j2, L[i] );
+			" frame element %d  J1= %d J2= %d L= %e\n", b, j1,j2, L[b] );
 		   fprintf(stderr,
-			"  Perhaps beam number %d has not been specified.\n",i);
+			"  Perhaps frame element number %d has not been specified.\n",i);
 		   fprintf(stderr,
 			"  or perhaps the Input Data file is missing expected data.\n");
 		   exit(1);
 		}
-		if ( Le[i] <= 0.0 ) {
+		if ( Le[b] <= 0.0 ) {
 		   fprintf(stderr, " Joint radii are too large.\n");
 		   fprintf(stderr,
-			" beam element %d  J1= %d J2= %d L= %e \n", i, j1,j2, L[i] );
+			" frame element %d  J1= %d J2= %d L= %e \n", b, j1,j2, L[b] );
 		   fprintf(stderr,
-			" r1= %e r2= %e Le= %e \n", r[j1], r[j2], Le[i] );
+			" r1= %e r2= %e Le= %e \n", r[j1], r[j2], Le[b] );
 		   exit(1);
 		}
 	}
@@ -482,6 +496,7 @@ void read_run_data (
 	int	full_len=0, len=0;
 	char	base_file[96] = "EMPTY_BASE";
 	char	mesh_file[96] = "EMPTY_MESH";
+	int	sfrv;	/* *scanf return value */
 
 	strcpy(base_file,OUT_file);	
 	while ( base_file[len++] != '\0' )
@@ -499,17 +514,18 @@ void read_run_data (
 	strcat(mesh_file,"-msh");
         output_path(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
 
-	fscanf( fp, "%d %d %lf", shear, geom,  exagg );
+	sfrv=fscanf( fp, "%d %d %lf", shear, geom,  exagg );
+	if (sfrv != 3) sferr("shear, geom or exagg variables");
 
 	if (*shear != 0 && *shear != 1) {
 	    fprintf(stderr," Rember to specify shear deformations");
-	    fprintf(stderr," with a 0 or a 1 after the beam property info.\n");
+	    fprintf(stderr," with a 0 or a 1 after the frame element property info.\n");
 	    exit(1);
 	}
 
 	if (*geom != 0 && *geom != 1) {
 	    fprintf(stderr," Rember to specify geometric stiffness");
-	    fprintf(stderr," with a 0 or a 1 after the beam property info.\n");
+	    fprintf(stderr," with a 0 or a 1 after the frame element property info.\n");
 	    exit(1);
 	}
 
@@ -554,7 +570,7 @@ int     lim
 }
 
 
-/* platform-dependent path sperator character */
+/* platform-dependent path sperator character ... */
 
 #ifdef WIN32
 static const char sep = '\\';
@@ -571,14 +587,17 @@ John Pye, Feb 2009
 static const char *temp_dir(){
 #ifdef WIN32
 	char *tmp;
+	char  outdir;
 	tmp = getenv("TEMP");
-	if(tmp==NULL){
-		fprintf(stderr,"ERROR: %%TEMP%% environment var not found. This "
-			"variable needs to be set so that FRAME3DD knows where to put its "
-			"temporary files. Set this variable, the re-run FRAME3DD."
-                        "The Frame3DD on-line documentation provides help on this.");
+	outdir = getenv("FRAME3DD_OUTDIR"); 
+	if ( tmp==NULL && outdir==NULL ) {
+		fprintf(stderr,
+"ERROR: Environment Variables %%TEMP%% and %%FRAME3DD_OUTDIR%% are not set.  "
+"At least one of these variables must be set so that FRAME3DD knows where to "
+"write its temporary files.  Set one of these variable, then re-run FRAME3DD."
+"The Frame3DD on-line documentation provides help on this issue.");
 		exit(1);
-	}
+	} else if ( tmp==NULL ) strcpy(tmp,outdir);
 #else
 	const char *tmp = "/tmp";
 #endif
@@ -609,14 +628,14 @@ void output_path(const char *fname, char fullpath[], const int len, const char *
 		/* absolute output path specified */
 //		res = snprintf(fullpath,len,"%s",fname);
 		res = sprintf(fullpath,"%s",fname);
-	}else{
+	} else {
 		/* fprintf(stderr,"Generating output path for file '%s'\n",fname); */
 		const char *outdir;
 		outdir = getenv("FRAME3DD_OUTDIR");
 		if(outdir==NULL){
 			if(default_outdir==NULL){
 				outdir = temp_dir();
-			}else{
+			} else {
 				outdir = default_outdir;
 			}
 		}
@@ -695,10 +714,12 @@ void read_reaction_data (
 	FILE *fp, int DoF, int nJ, int *nR, int *R, int *sumR, int verbose
 ){
 	int	i,j,l;
+	int	sfrv;	/* *scanf return value */
 
 	for (i=1; i<=DoF; i++)	R[i] = 0;
 
-	fscanf(fp,"%d", nR );	/* read restrained degrees of freedom */
+	sfrv=fscanf(fp,"%d", nR );	/* read restrained degrees of freedom */
+	if (sfrv != 1) sferr("number of reactions in reaction data");
 	if ( verbose ) {
 		printf(" number of joints with reactions ");
 		dots(stdout,20);
@@ -713,10 +734,12 @@ void read_reaction_data (
 	}
 
 	for (i=1; i <= *nR; i++) {
-	    fscanf(fp,"%d", &j);
+	    sfrv=fscanf(fp,"%d", &j);
+	    if (sfrv != 1) sferr("joint number in reaction data");
 	    for (l=5; l >=0; l--) {
 
-		fscanf(fp,"%d", &R[6*j-l] );
+		sfrv=fscanf(fp,"%d", &R[6*j-l] );
+		if (sfrv != 1) sferr("reaction value in reaction data");
 
 		if ( j > nJ ) {
 		    fprintf(stderr,"  error in reaction data: joint number %d is greater than the number of joints, %d \n", j, nJ );
@@ -763,7 +786,7 @@ read load information data, assemble un-restrained load vectors
 ------------------------------------------------------------------------------*/
 void read_and_assemble_loads(
 		FILE *fp,
-		int nJ, int nB, int nL, int DoF,
+		int nJ, int nE, int nL, int DoF,
 		vec3 *xyz,
 		double *L, double *Le,
 		int *J1, int *J2,
@@ -790,31 +813,34 @@ void read_and_assemble_loads(
 		a, b,				/* point load locations */
 		t1, t2, t3, t4, t5, t6, t7, t8, t9;	/* 3D coord Xfrm coef */
 	int	i,j,l, lc, n, j1, j2;
+	int	sfrv;	/* *scanf return value */
 
 	for (j=1; j<=DoF; j++)
 		for (lc=1; lc <= nL; lc++)
 			F_mech[lc][j] = F_temp[lc][j] = 0.0;
 	for (i=1; i<=12; i++)
-		for (n=1; n<=nB; n++)
+		for (n=1; n<=nE; n++)
 			for (lc=1; lc <= nL; lc++)
 				feF_mech[lc][n][i] = feF_temp[lc][n][i] = 0.0;
 
 	for (i=1; i<=DoF; i++)	for (lc=1; lc<=nL; lc++) Dp[lc][i] = 0.0;
 
-	for (i=1;i<=nB;i++)	for(j=1;j<=12;j++)	Q[i][j] = 0.0;
+	for (i=1;i<=nE;i++)	for(j=1;j<=12;j++)	Q[i][j] = 0.0;
 
 	for (lc = 1; lc <= nL; lc++) {		/* begin load-case loop */
 
 	  if ( verbose ) printf(" load case %d of %d: \n", lc, nL );
 
-	  fscanf(fp,"%d", &nF[lc] );		/* joint point loads		*/
+	  sfrv=fscanf(fp,"%d", &nF[lc] );	/* joint point loads	*/
+	  if (sfrv != 1) sferr("nF value in load data");
 	  if ( verbose ) {
 		printf("  number of loaded joints ");
 	  	dots(stdout,27);
 		printf(" nF = %3d\n", nF[lc]);
 	  }
 	  for (i=1; i <= nF[lc]; i++) {	/* ! global structural coordinates ! */
-		fscanf(fp,"%d", &j);
+		sfrv=fscanf(fp,"%d", &j);
+		if (sfrv != 1) sferr("joint value in point load data");
 		if ( j < 1 || j > nJ ) {
 		    fprintf(stderr,"  error in joint load data: joint number out of range  ");
 		    fprintf(stderr,"  Joint: %d  \n", j);
@@ -823,35 +849,44 @@ void read_and_assemble_loads(
 			"  or perhaps the Input Data file is missing expected data.\n");
 		    exit(1);
 		}
-		for (l=5; l>=0; l--)	fscanf(fp,"%lf", &F_mech[lc][6*j-l] );
+
+		for (l=5; l>=0; l--)	
+			sfrv=fscanf(fp,"%lf", &F_mech[lc][6*j-l] );
+			if (sfrv != 1) sferr("force value in point load data");
+
 		if ( F_mech[lc][6*j-5]==0 && F_mech[lc][6*j-4]==0 && F_mech[lc][6*j-3]==0 && F_mech[lc][6*j-2]==0 && F_mech[lc][6*j-1]==0 && F_mech[lc][6*j]==0 )
 		    fprintf(stderr,"   warning: All joint loads applied at joint %d  are zero\n", j );
 	  }
 
-	  fscanf(fp,"%d", &nU[lc] );	/* uniform distributed loads	*/
+	  sfrv=fscanf(fp,"%d", &nU[lc] );	/* uniform distributed loads */
+	  if (sfrv != 1) sferr("nU value in uniform load data");
 	  if ( verbose ) {
 		printf("  number of uniformly distributed loads ");
 	  	dots(stdout,13);
 	  	printf(" nU = %3d\n", nU[lc]);
 	  }
-	  if ( nU[lc] < 0 || nU[lc] > nB ) {
+	  if ( nU[lc] < 0 || nU[lc] > nE ) {
 		fprintf(stderr,"  number of uniformly distributed loads ");
 	  	dots(stderr,13);
 	  	fprintf(stderr," nU = %3d\n", nU[lc]);
-		fprintf(stderr,"  error: valid ranges for nU is 0 ... %d \n", nB );
+		fprintf(stderr,"  error: valid ranges for nU is 0 ... %d \n", nE );
 		exit(1);
 	  }
 	  for (i=1; i <= nU[lc]; i++) {	/* ! local element coordinates ! */
-		fscanf(fp,"%d", &n );
-		if ( n < 1 || n > nB ) {
+		sfrv=fscanf(fp,"%d", &n );
+	  	if (sfrv != 1) sferr("frame element number in uniform load data");
+		if ( n < 1 || n > nE ) {
 		    fprintf(stderr,"  error in uniform distributed loads: element number %d is out of range\n",n);
 		    exit(1);
 		}
 		U[lc][i][1] = (double) n;
-		for (l=2; l<=4; l++)	fscanf(fp,"%f", &U[lc][i][l] );
+		for (l=2; l<=4; l++) {
+			sfrv=fscanf(fp,"%f", &U[lc][i][l] );
+	  		if (sfrv != 1) sferr("load value in uniform load data");
+		}
 
 		if ( U[lc][i][2]==0 && U[lc][i][3]==0 && U[lc][i][4]==0 )
-		    fprintf(stderr,"   warning: All distributed loads applied to beam element %d  are zero\n", n );
+		    fprintf(stderr,"   warning: All distributed loads applied to frame element %d  are zero\n", n );
 
 		Nx1 = Nx2 = U[lc][i][2]*Le[n] / 2.0;
 		Vy1 = Vy2 = U[lc][i][3]*Le[n] / 2.0;
@@ -898,24 +933,29 @@ void read_and_assemble_loads(
 		printf("\n"); */
 	  }
 
-	  fscanf(fp,"%d", &nW[lc] );	/* trapezoidally distributed loads */
+	  sfrv=fscanf(fp,"%d", &nW[lc] ); /* trapezoidally distributed loads */
+	  if (sfrv != 1) sferr("nW value in load data");
 	  if ( verbose ) {
 		printf("  number of tapezoidally distributed loads ");
 	  	dots(stdout,10);
 	  	printf(" nW = %3d\n", nW[lc]);
 	  }
-	  if ( nW[lc] < 0 || nW[lc] > nB ) {
-		fprintf(stderr,"  error: valid ranges for nW is 0 ... %d \n", nB );
+	  if ( nW[lc] < 0 || nW[lc] > nE ) {
+		fprintf(stderr,"  error: valid ranges for nW is 0 ... %d \n", nE );
 		exit(1);
 	  }
 	  for (i=1; i <= nW[lc]; i++) {	/* ! local element coordinates ! */
-		fscanf(fp,"%d", &n );
-		if ( n < 1 || n > nB ) {
+		sfrv=fscanf(fp,"%d", &n );
+	  	if (sfrv != 1) sferr("frame element number in uniform load data");
+		if ( n < 1 || n > nE ) {
 		    fprintf(stderr,"  error in uniform distributed loads: element number %d is out of range\n",n);
 		    exit(1);
 		}
 		W[lc][i][1] = (double) n;
-		for (l=2; l<=13; l++)	fscanf(fp,"%f", &W[lc][i][l] );
+		for (l=2; l<=13; l++) {
+			sfrv=fscanf(fp,"%f", &W[lc][i][l] );
+			if (sfrv != 1) sferr("value in trapezoidal load data");
+		}
 
 		Ln = L[n];
 
@@ -924,7 +964,7 @@ void read_and_assemble_loads(
 		if ( W[lc][i][ 4]==0 && W[lc][i][ 5]==0 &&
 		     W[lc][i][ 7]==0 && W[lc][i][ 8]==0 &&
 		     W[lc][i][12]==0 && W[lc][i][13]==0 ) {
-		    fprintf(stderr,"   warning: All trapezoidal loads applied to beam element %d  are zero\n", n );
+		    fprintf(stderr,"   warning: All trapezoidal loads applied to frame element %d  are zero\n", n );
 		  fprintf(stderr,"     load case: %d , member %d , load %d\n ", lc, n, i );
 		}
 
@@ -1089,32 +1129,37 @@ void read_and_assemble_loads(
 		printf("\n"); */
 	  }				/* end trapezoidally distributed loads */
 
-	  fscanf(fp,"%d", &nP[lc] );	/* element point loads	*/
+	  sfrv=fscanf(fp,"%d", &nP[lc] );	/* element point loads	*/
+	  if (sfrv != 1) sferr("nP value load data");
 	  if ( verbose ) {
-	  	printf("  number of concentrated beam element point loads ");
+	  	printf("  number of concentrated frame element point loads ");
 	  	dots(stdout,3);
 	  	printf(" nP = %3d\n", nP[lc]);
 	  }
-	  if ( nP[lc] < 0 || nP[lc] > nB ) {
-	  	fprintf(stderr,"  number of concentrated beam element point loads ");
+	  if ( nP[lc] < 0 || nP[lc] > nE ) {
+	  	fprintf(stderr,"  number of concentrated frame element point loads ");
 	  	dots(stderr,3);
 	  	fprintf(stderr," nP = %3d\n", nP[lc]);
-		fprintf(stderr,"  error: valid ranges for nP is 0 ... %d \n", nB );
+		fprintf(stderr,"  error: valid ranges for nP is 0 ... %d \n", nE );
 		exit(1);
 	  }
 	  for (i=1; i <= nP[lc]; i++) {	/* ! local element coordinates ! */
-		fscanf(fp,"%d", &n );
-		if ( n < 1 || n > nB ) {
-		    fprintf(stderr,"   error in internal point loads: beam number %d is out of range\n",n);
+		sfrv=fscanf(fp,"%d", &n );
+		if (sfrv != 1) sferr("frame element number value point load data");
+		if ( n < 1 || n > nE ) {
+		    fprintf(stderr,"   error in internal point loads: frame element number %d is out of range\n",n);
 		    exit(1);
 		}
 		P[lc][i][1] = (double) n;
-		for (l=2; l<=5; l++)	fscanf(fp,"%f", &P[lc][i][l] );
+		for (l=2; l<=5; l++) { 
+			sfrv=fscanf(fp,"%f", &P[lc][i][l] );
+			if (sfrv != 1) sferr("value in point load data");
+		}
 		a = P[lc][i][5];	b = L[n] - a;
 
 		if ( a < 0 || L[n] < a || b < 0 || L[n] < b ) {
 		    fprintf(stderr,"  error in point load data: Point load coord. out of range\n");
-		    fprintf(stderr,"  Beam number: %d  L: %lf  load coord.: %lf\n",
+		    fprintf(stderr,"  Frame element number: %d  L: %lf  load coord.: %lf\n",
 							n, L[n], P[lc][i][5] );
 		    exit(1);
 		}
@@ -1172,34 +1217,39 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 	  }					/* end element point loads */
 
-	  fscanf(fp,"%d", &nT[lc] );		/* thermal loads	*/
+	  sfrv=fscanf(fp,"%d", &nT[lc] );	/* thermal loads	*/
+	  if (sfrv != 1) sferr("nT value in load data");
 	  if ( verbose ) {
 	  	printf("  number of temperature changes ");
 	  	dots(stdout,21);
 	  	printf(" nT = %3d\n", nT[lc] );
 	  }
-	  if ( nT[lc] < 0 || nT[lc] > nB ) {
+	  if ( nT[lc] < 0 || nT[lc] > nE ) {
 	  	fprintf(stderr,"  number of temperature changes ");
 	  	dots(stderr,21);
 	  	fprintf(stderr," nT = %3d\n", nT[lc] );
-		fprintf(stderr,"  error: valid ranges for nT is 0 ... %d \n", nB );
+		fprintf(stderr,"  error: valid ranges for nT is 0 ... %d \n", nE );
 		exit(1);
 	  }
 	  for (i=1; i <= nT[lc]; i++) {	/* ! element coordinates ! */
-		fscanf(fp,"%d", &n );
-		if ( n < 1 || n > nB ) {
-		    fprintf(stderr,"  error in temperature loads: beam number %d is out of range\n",n);
+		sfrv=fscanf(fp,"%d", &n );
+		if (sfrv != 1) sferr("frame element number in temperature load data");
+		if ( n < 1 || n > nE ) {
+		    fprintf(stderr,"  error in temperature loads: frame element number %d is out of range\n",n);
 		    exit(1);
 		}
 		T[lc][i][1] = (double) n;
-		for (l=2; l<=8; l++)	fscanf(fp,"%f", &T[lc][i][l] );
+		for (l=2; l<=8; l++) {
+			sfrv=fscanf(fp,"%f", &T[lc][i][l] );
+			if (sfrv != 1) sferr("value in temperature load data");
+		}
 		a  = T[lc][i][2];
 		hy = T[lc][i][3];
 		hz = T[lc][i][4];
 
 		if ( hy < 0 || hz < 0 ) {
 		    fprintf(stderr,"  error in thermal load data: section dimension < 0\n");
-		    fprintf(stderr,"  Beam number: %d  hy: %f  hz: %f\n", n,hy,hz);
+		    fprintf(stderr,"  Frame element number: %d  hy: %f  hz: %f\n", n,hy,hz);
 		    exit(1);
 		}
 
@@ -1233,7 +1283,7 @@ void read_and_assemble_loads(
 		feF_temp[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 	  }				/* end thermal loads	*/
 
-	  for (n=1; n<=nB; n++) {
+	  for (n=1; n<=nE; n++) {
 	     j1 = J1[n];	j2 = J2[n];
 	     for (i=1; i<= 6; i++) F_mech[lc][6*j1- 6+i] += feF_mech[lc][n][i];
 	     for (i=7; i<=12; i++) F_mech[lc][6*j2-12+i] += feF_mech[lc][n][i];
@@ -1241,16 +1291,19 @@ void read_and_assemble_loads(
 	     for (i=7; i<=12; i++) F_temp[lc][6*j2-12+i] += feF_temp[lc][n][i];
 	  }
 
-	  fscanf(fp,"%d", &nD[lc] );	/* read prescribed displacements */
+	  sfrv=fscanf(fp,"%d", &nD[lc] ); /* read prescribed displacements */
+	  if (sfrv != 1) sferr("nD value in load data");
 	  if ( verbose ) {
 	  	printf("  number of prescribed displacements ");
 	  	dots(stdout,16);
 	  	printf(" nD = %3d\n", nD[lc] );
 	  }
 	  for (i=1; i <= nD[lc]; i++) {
-		fscanf(fp,"%d", &j);
+		sfrv=fscanf(fp,"%d", &j);
+		if (sfrv != 1) sferr("joint number value in prescribed displacement data");
 		for (l=5; l >=0; l--) {
-			fscanf(fp,"%f", &Dp[lc][6*j-l] );
+			sfrv=fscanf(fp,"%f", &Dp[lc][6*j-l] );
+			if (sfrv != 1) sferr("prescribed displacement value");
 			if ( R[6*j-l] == 0 && Dp[lc][6*j-l] != 0.0 ) {
 			    printf(" Initial displacements can be prescribed");
 			    printf(" only at restrained coordinates\n");
@@ -1273,7 +1326,7 @@ READ_MASS_DATA  -  read element densities and extra inertial mass data	16aug01
 void read_mass_data(
 		FILE *fp,
 		char *OUT_file, 
-		int nJ, int nB, int *nI,
+		int nJ, int nE, int *nI,
 		float *d, float *BMs,
 		float *JMs, float *JMx, float *JMy, float *JMz,
 		double *L, float *Ax,
@@ -1286,14 +1339,16 @@ void read_mass_data(
 		int verbose, int debug
 ){
 /*	double	ms = 0.0; */
-	int	chk, j, jnt, m, mem, nA;
+	int	j, jnt, m, b, nA;
 	int	full_len=0, len=0;
+	int	sfrv;	/* *scanf return value	*/
 
 	char	mode_file[96] = "EMPTY_MODE";
 
 	*total_mass = *struct_mass = 0.0;
 
-	chk = fscanf ( fp, "%d", nM );
+	sfrv=fscanf ( fp, "%d", nM );
+	if (sfrv != 1) sferr("nM value in mass data");
 
 	if ( verbose ) {
 		printf(" number of dynamic modes ");
@@ -1301,12 +1356,13 @@ void read_mass_data(
 		printf(" nM = %3d\n", *nM);
 	}
 
-	if ( *nM < 1 || chk != 1 ) {
+	if ( *nM < 1 || sfrv != 1 ) {
 		*nM = 0;
 		return;
 	}
 
-	fscanf( fp, "%d", Mmethod );
+	sfrv=fscanf( fp, "%d", Mmethod );
+	if (sfrv != 1) sferr("Mmethod value in mass data");
 	if ( modal_flag != -1 )	*Mmethod = modal_flag;
 
 	if ( verbose ) {
@@ -1329,23 +1385,28 @@ void read_mass_data(
 	fprintf(mf,"%% element\tAx\t\tlength\t\tdensity\t\tmass \n");
 #endif
 
-	fscanf( fp, "%d", lump );
-	fscanf( fp, "%lf", tol );
-	fscanf( fp, "%lf", shift );
+	sfrv=fscanf( fp, "%d", lump );
+	if (sfrv != 1) sferr("lump value in mass data");
+	sfrv=fscanf( fp, "%lf", tol );
+	if (sfrv != 1) sferr("tol value in mass data");
+	sfrv=fscanf( fp, "%lf", shift );
+	if (sfrv != 1) sferr("shift value in mass data");
 
 	if (  lump_flag != -1   )	*lump = lump_flag;
 	if (  tol_flag  != -1.0 )	*tol  = tol_flag;
 	if ( shift_flag != -1.0 )	*shift = shift_flag;
 
 
-	for (m=1; m <= nB; m++) {	/* read inertia data	*/
-		fscanf(fp, "%d", &mem );
-		fscanf(fp, "%f %f", &d[mem], &BMs[mem] );
-		*total_mass  += d[mem]*Ax[mem]*L[mem] + BMs[mem];
-		*struct_mass += d[mem]*Ax[mem]*L[mem];
+	for (m=1; m <= nE; m++) {	/* read inertia data	*/
+		sfrv=fscanf(fp, "%d", &b );
+		if (sfrv != 1) sferr("frame element number in mass data");
+		sfrv=fscanf(fp, "%f %f", &d[b], &BMs[b] );
+		if (sfrv != 2) sferr("density or element mass value in mass data");
+		*total_mass  += d[b]*Ax[b]*L[b] + BMs[b];
+		*struct_mass += d[b]*Ax[b]*L[b];
 #ifdef MASSDATA_DEBUG
 		fprintf(mf," %4d\t\t%12.5e\t%12.5e\t%12.5e\t%12.5e \n",
-		 mem, Ax[mem], L[mem], d[mem], d[mem]*Ax[mem]*L[mem] );
+		 b, Ax[b], L[b], d[b], d[b]*Ax[b]*L[b] );
 #endif
 	}
 
@@ -1354,14 +1415,16 @@ void read_mass_data(
 #endif
 
 	/* number of joints with extra inertias */
-	fscanf(fp,"%d", nI );
+	sfrv=fscanf(fp,"%d", nI );
+	if (sfrv != 1) sferr("nI value in mass data");
 	if ( verbose ) {
 		printf(" number of joints with extra lumped inertia ");
         	dots(stdout,9);
         	printf(" nI = %3d\n",*nI);
 	}
 	for (j=1; j <= *nI; j++) {
-		fscanf(fp, "%d", &jnt );
+		sfrv=fscanf(fp, "%d", &jnt );
+		if (sfrv != 1) sferr("joint value in extra mass data");
 		if ( jnt < 1 || jnt > nJ ) {
 	    		fprintf(stderr,"  error in joint load data: joint number out of range  ");
 	    		fprintf(stderr,"  Joint: %d  \n", j);
@@ -1370,22 +1433,23 @@ void read_mass_data(
 			"  or perhaps the Input Data file is missing expected data.\n");
 	    		exit(1);
 		}
-		fscanf(fp, "%f %f %f %f",
+		sfrv=fscanf(fp, "%f %f %f %f",
 			&JMs[jnt], &JMx[jnt], &JMy[jnt], &JMz[jnt] );
+		if (sfrv != 4) sferr("joint inertia in extra mass data");
 		*total_mass += JMs[jnt];
 
 		if ( JMs[jnt]==0 && JMx[jnt]==0 && JMy[jnt]==0 && JMz[jnt]==0 )
 	    	fprintf(stderr,"  warning: All extra joint inertia at joint %d  are zero\n", jnt );
 	}
 
-	for (m=1;m<=nB;m++) {			/* chec inertia data	*/
+	for (m=1;m<=nE;m++) {			/* chec inertia data	*/
 	    if ( d[m] < 0.0 || BMs[m] < 0.0 || d[m]+BMs[m] <= 0.0 ) {
 		fprintf(stderr,"  error: Non-positive mass or density\n");
 		fprintf(stderr,"  d[%d]= %f  BMs[%d]= %f\n",m,d[m],m,BMs[m]);
 		exit(1);
 	    }
 	}
-/*	for (m=1;m<=nB;m++) ms += BMs[m]; // consistent mass doesn't agree  */
+/*	for (m=1;m<=nE;m++) ms += BMs[m]; // consistent mass doesn't agree  */
 /*	if ( ms > 0.0 )	    *lump = 1;    // with concentrated masses, BMs  */
 
 	if ( verbose ) {
@@ -1396,7 +1460,8 @@ void read_mass_data(
 		dots(stdout,41);
 		printf("  %12.4e\n",*total_mass);
 	}
-	fscanf ( fp, "%d", &nA );
+	sfrv=fscanf ( fp, "%d", &nA );
+	if (sfrv != 1) sferr("nA value in mode animation data");
 	if ( verbose ) {
 		printf(" number of modes to be animated ");
 		dots(stdout,21);
@@ -1405,9 +1470,13 @@ void read_mass_data(
 	if (nA > 20)
 	  fprintf(stderr," nA = %d, only 20 or fewer modes may be animated\n", nA );
 	for ( m = 0; m < 20; m++ )	anim[m] = 0;
-	for ( m = 0; m < nA; m++ )	fscanf ( fp, "%d", &anim[m] );
+	for ( m = 0; m < nA; m++ ) {
+		sfrv=fscanf ( fp, "%d", &anim[m] );
+		if (sfrv != 1) sferr("mode number in mode animation data");
+	}
 
-	fscanf ( fp, "%f", pan );
+	sfrv=fscanf ( fp, "%f", pan );
+	if (sfrv != 1) sferr("pan value in mode animation data");
 	if ( pan_flag != -1.0 )	*pan = pan_flag;
 
 	strcpy(mode_file,OUT_file);
@@ -1434,11 +1503,12 @@ void read_condensation_data (
 		int *nC, int *Cdof,
 		int *Cmethod, int condense_flag, int *q, int *m, int verbose
 ){
-	int	i,j,k,  chk, **qm;
+	int	i,j,k,  **qm;
+	int	sfrv;	/* *scanf return value */
 
 	*Cmethod = *nC = *Cdof = 0;
 
-	if ( (chk = fscanf ( fp, "%d", Cmethod )) != 1 )   {
+	if ( (sfrv=fscanf ( fp, "%d", Cmethod )) != 1 )   {
 		*Cmethod = *nC = *Cdof = 0;
 		return;
 	}
@@ -1460,7 +1530,7 @@ void read_condensation_data (
 		if ( *Cmethod == 3 )	printf(" (dynamic) \n");
 	}
 
-	if ( (chk = fscanf ( fp, "%d", nC )) != 1 )  {
+	if ( (sfrv=fscanf ( fp, "%d", nC )) != 1 )  {
 		*Cmethod = *nC = *Cdof = 0;
 		return;
 	}
@@ -1482,9 +1552,10 @@ void read_condensation_data (
 	qm = imatrix( 1, *nC, 1,7 );
 
 	for ( i=1; i <= *nC; i++) {
-	 fscanf( fp, "%d %d %d %d %d %d %d",
+	 sfrv=fscanf( fp, "%d %d %d %d %d %d %d",
 	 &qm[i][1],
 	 &qm[i][2], &qm[i][3], &qm[i][4], &qm[i][5], &qm[i][6], &qm[i][7]);
+	 if (sfrv != 7) sferr("DoF numbers in condensation data");
 	 if ( qm[i][1] < 1 || qm[i][1] > nJ ) {		/* error check */
 	  fprintf(stderr," error in matrix condensation data: ");
 	  fprintf(stderr," condensed joint number out of range\n");
@@ -1506,7 +1577,8 @@ void read_condensation_data (
 	}
 
 	for (i=1; i<= *Cdof; i++) {
-	 fscanf( fp, "%d", &m[i] );
+	 sfrv=fscanf( fp, "%d", &m[i] );
+	 if (sfrv != 1) sferr("mode number in condensation data");
 	 if ( (m[i] < 0 || m[i] > nM) && *Cmethod == 3 ) {
 	  fprintf(stderr," error in matrix condensation data: \n");
 	  fprintf(stderr,"  error: m[%d] = %d \n",i,m[i]);
@@ -1526,7 +1598,7 @@ WRITE_INPUT_DATA  -  save input data					07nov02
 ------------------------------------------------------------------------------*/
 void write_input_data(
 	FILE *fp,
-	char *title, int nJ, int nB, int nL,
+	char *title, int nJ, int nE, int nL,
 	int *nD, int nR,
 	int *nF, int *nU, int *nW, int *nP, int *nT,
 	vec3 *xyz, float *r,
@@ -1556,7 +1628,7 @@ void write_input_data(
 	for (i=1; i<=80; i++)	fprintf(fp,"_"); fprintf(fp,"\n");
 
 
-	fprintf(fp,"%d JOINTS;    %d MEMBERS;    %d LOAD CASES;  ",nJ,nB,nL);
+	fprintf(fp,"%d JOINTS;    %d MEMBERS;    %d LOAD CASES;  ",nJ,nE,nL);
 	fprintf(fp,"%d FIXED JOINTS;  \n", nR);
 
 	fprintf(fp,"For 2D problems, the Y-axis is vertical. \n");
@@ -1581,7 +1653,7 @@ void write_input_data(
 	fprintf(fp,"F R A M E   E L E M E N T   D A T A\t\t\t\t\t(local)\n");
 	fprintf(fp,"  Beam   J1    J2     Ax   Asy   Asz    ");
 	fprintf(fp,"Jxx     Iyy     Izz       E       G roll\n");
-	for (i=1; i<= nB; i++) {
+	for (i=1; i<= nE; i++) {
 		fprintf(fp,"%5d %5d %5d %6.1f %5.1f %5.1f",
 					i, J1[i],J2[i], Ax[i], Asy[i], Asz[i] );
 		fprintf(fp," %6.1f %7.1f %7.1f %8.1f %7.1f %3.0f\n",
@@ -1699,12 +1771,12 @@ void write_input_data(
 
 
 /*------------------------------------------------------------------------------
-WRITE_STATIC_RESULTS -  save joint displacements and beam end forces
+WRITE_STATIC_RESULTS -  save joint displacements and frame element end forces
 09 Sep 2008
 ------------------------------------------------------------------------------*/
 void write_static_results (
 		FILE *fp,
-		int nJ, int nB, int nL, int lc, int DoF,
+		int nJ, int nE, int nL, int lc, int DoF,
 		int *J1, int *J2,
 		double *F, double *D, int *R, double **Q,
 		double err, int ok
@@ -1742,7 +1814,7 @@ void write_static_results (
 	fprintf(fp,"\t\t\t\t(local)\n");
 	fprintf(fp,"  Beam   Joint      Nx          Vy         Vz");
 	fprintf(fp,"         Txx        Myy        Mzz\n");
-	for (n=1; n<= nB; n++) {
+	for (n=1; n<= nE; n++) {
 		fprintf(fp," %5d  %5d", n, J1[n]);
 		if ( fabs(Q[n][1]) < 0.0001 )
 			fprintf (fp, "      0.0   ");
@@ -1791,13 +1863,13 @@ void write_static_results (
 
 
 /*------------------------------------------------------------------------------
-WRITE_STATIC_CSV -  save joint displacements and beam end forces
+WRITE_STATIC_CSV -  save joint displacements and frame element end forces
 31 Dec 2008
 ------------------------------------------------------------------------------*/
 void write_static_csv(
 		char *OUT_file,
 		char *title,
-		int nJ, int nB, int nL, int lc, int DoF,
+		int nJ, int nE, int nL, int lc, int DoF,
 		int *J1, int *J2,
 		double *F, double *D, int *R, double **Q,
 		double err, int ok
@@ -1856,14 +1928,14 @@ void write_static_csv(
 	 for (i = 1; i <= nL; i++) {
 	 	fprintf(fpcsv," First Row , %d , %d , %d , %d  \n",
 			i,
-			15+(i-1)*(nJ*2+nB*2+10) + 2*nL,
-			17+(i-1)*(nJ*2+nB*2+10) + 2*nL+ nJ,
-			19+(i-1)*(nJ*2+nB*2+10) + 2*nL+ nJ + 2*nB );
+			15+(i-1)*(nJ*2+nE*2+10) + 2*nL,
+			17+(i-1)*(nJ*2+nE*2+10) + 2*nL+ nJ,
+			19+(i-1)*(nJ*2+nE*2+10) + 2*nL+ nJ + 2*nE );
 	 	fprintf(fpcsv," Last Row , %d , %d , %d , %d  \n",
 			i,
-			15+(i-1)*(nJ*2+nB*2+10) + 2*nL + nJ - 1,
-			17+(i-1)*(nJ*2+nB*2+10) + 2*nL + nJ + 2*nB - 1,
-			19+(i-1)*(nJ*2+nB*2+10) + 2*nL + 2*nJ + 2*nB - 1 );
+			15+(i-1)*(nJ*2+nE*2+10) + 2*nL + nJ - 1,
+			17+(i-1)*(nJ*2+nE*2+10) + 2*nL + nJ + 2*nE - 1,
+			19+(i-1)*(nJ*2+nE*2+10) + 2*nL + 2*nJ + 2*nE - 1 );
 	 }
 
 	}
@@ -1896,7 +1968,7 @@ void write_static_csv(
 	fprintf(fpcsv,"  (local)\"\n");
 	fprintf(fpcsv,"Beam  , Joint ,    Nx     ,    Vy   ,     Vz");
 	fprintf(fpcsv,"   ,     Txx   ,    Myy  ,     Mzz\n");
-	for (n=1; n<= nB; n++) {
+	for (n=1; n<= nE; n++) {
 		fprintf(fpcsv," %5d, %5d,", n, J1[n]);
 		if ( fabs(Q[n][1]) < 0.0001 )
 			fprintf (fpcsv, "      0.0,  ");
@@ -1940,13 +2012,13 @@ void write_static_csv(
 
 /*------------------------------------------------------------------------------
 WRITE_STATIC_MFILE -  						
-save joint displacements and beam end forces in an m-file
+save joint displacements and frame element end forces in an m-file
 this function interacts with frame_3dd.m, an m-file interface to frame3dd
 09 Sep 2008
 ------------------------------------------------------------------------------*/
 void write_static_mfile (
 		char *OUT_file, char *title,
-		int nJ, int nB, int nL, int lc, int DoF,
+		int nJ, int nE, int nL, int lc, int DoF,
 		int *J1, int *J2,
 		double *F, double *D, int *R, double **Q,
 		double err, int ok
@@ -2030,7 +2102,7 @@ void write_static_mfile (
 	fprintf(fpm,"%%\tNx_1\t\tVy_1\t\tVz_1\t\tTxx_1\t\tMyy_1\t\tMzz_1\t");
 	fprintf(fpm,"  \tNx_2\t\tVy_2\t\tVz_2\t\tTxx_2\t\tMyy_2\t\tMzz_2\n");
         fprintf(fpm,"F%d=[",lc);
-	for (n=1; n<= nB; n++) {
+	for (n=1; n<= nE; n++) {
 		if ( fabs(Q[n][1]) < 0.0001 )
 			fprintf (fpm, "\t0.0\t");
 		else    fprintf (fpm, "\t%13.6e", Q[n][1] );
@@ -2047,7 +2119,7 @@ void write_static_mfile (
 				fprintf (fpm, "\t0.0\t");
 			else    fprintf (fpm, "\t%13.6e", Q[n][i] );
 		}
-		if ( n < nB )	fprintf(fpm," ; \n");
+		if ( n < nE )	fprintf(fpm," ; \n");
 		else		fprintf(fpm," ]'; \n\n");
 	}
 
@@ -2080,7 +2152,7 @@ WRITE_MODAL_RESULTS -  save modal frequencies and mode shapes
 ------------------------------------------------------------------------------*/
 void write_modal_results(
 		FILE *fp,
-		int nJ, int nB, int nI, int DoF,
+		int nJ, int nE, int nI, int DoF,
 		double **M, double *f, double **V,
 		double total_mass, double struct_mass,
 		int iter, int sumR, int nM,
@@ -2169,13 +2241,13 @@ useful gnuplot options: set noxtics noytics noztics noborder view nokey
 ------------------------------------------------------------------------------*/
 void static_mesh(
 		char IN_file[], char meshpath[], char plotpath[],
-		char *title, int nJ, int nB, int nL, int lc, int DoF,
+		char *title, int nJ, int nE, int nL, int lc, int DoF,
 		vec3 *xyz, double *L,
 		int *J1, int *J2, float *p, double *D,
 		double exagg, int anlyz
 ){
 	FILE	*fpmfx, *fpm;
-	double	mx, my, mz;	/* coordinates of the beam number labels */
+	double	mx, my, mz;	/* coordinates of the frame element number labels */
 	int	j1, j2, i, j, m, X=0, Y=0, Z=0;
 	char	meshfl[64], str[8], D3 = '#';
 	time_t  now;            /* modern time variable type    (DJGPP) */
@@ -2215,7 +2287,7 @@ void static_mesh(
 	fprintf(fpmfx,"  deflection exaggeration: %.1f\n", exagg );
 	fprintf(fpmfx,"#       X-dsp        Y-dsp        Z-dsp\n");
 
-	for (m=1; m<=nB; m++) {
+	for (m=1; m<=nE; m++) {
 
 		bent_beam ( fpmfx, J1[m], J2[m], xyz, L[m], p[m], D, exagg );
 
@@ -2285,7 +2357,7 @@ void static_mesh(
 					j, xyz[j].x,xyz[j].y,xyz[j].z );
 
 	 fprintf(fpm,"# MEMBER NUMBER LABELS\n");
-	 for (m=1; m<=nB; m++) {
+	 for (m=1; m<=nE; m++) {
 		j1 = J1[m];	j2 = J2[m];
 		mx = 0.5 * ( xyz[j1].x + xyz[j2].x );
 		my = 0.5 * ( xyz[j1].y + xyz[j2].y );
@@ -2348,7 +2420,7 @@ MODAL_MESH  -  create mesh data of the mode-shape meshes, use gnuplot	19oct98
 void modal_mesh(
 		char IN_file[], char meshpath[], char modepath[],
 		char plotpath[], char *title,
-		int nJ, int nB, int DoF, int nM,
+		int nJ, int nE, int DoF, int nM,
 		vec3 *xyz, double *L,
 		int *J1, int *J2, float *p,
 		double **M, double *f, double **V,
@@ -2404,7 +2476,7 @@ void modal_mesh(
 
 		fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
 
-		for(n=1; n<=nB; n++)
+		for(n=1; n<=nE; n++)
 			bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, exagg );
 
 		for ( j=1; j<=nJ; j++ ) {
@@ -2456,7 +2528,7 @@ void animate(
 	char IN_file[], char meshpath[], char modepath[], char plotpath[],
 	char *title,
 	int anim[],
-	int nJ, int nB, int DoF, int nM,
+	int nJ, int nE, int DoF, int nM,
 	vec3 *xyz, double *L, float *p,
 	int *J1, int *J2, double *f, double **V,
 	double exagg,
@@ -2646,7 +2718,7 @@ void animate(
 
 	    fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
 
-	    for (n=1; n<=nB; n++)
+	    for (n=1; n<=nE; n++)
 
 		bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, ex );
 
@@ -2660,8 +2732,8 @@ void animate(
 
 
 /*------------------------------------------------------------------------------
-BENT_BEAM  -  computes cubic deflection functions from beam end deflections
-and beam end rotations.  Saves deflected shapes to a file.  These bent shapes
+BENT_BEAM  -  computes cubic deflection functions from end deflections
+and end rotations.  Saves deflected shapes to a file.  These bent shapes
 are exact for mode-shapes, and for frames loaded at their joints.
 15 May 2009
 ------------------------------------------------------------------------------*/
@@ -2684,7 +2756,7 @@ void bent_beam(
 
 	i1 = 6*(j1-1);	i2 = 6*(j2-1);
 
-		/* compute beam end deflections in local coordinates */
+		/* compute end deflections in local coordinates */
 
 	u1  = exagg*(t1*D[i1+1] + t2*D[i1+2] + t3*D[i1+3]);
 	u2  = exagg*(t4*D[i1+1] + t5*D[i1+2] + t6*D[i1+3]);
@@ -2754,11 +2826,21 @@ void bent_beam(
 }
 
 
+
+/*------------------------------------------------------------------------------
+SFERR  -  Display error message upon an erronous *scanf operation
+------------------------------------------------------------------------------*/
+void sferr ( char s[] ) {
+
+	fprintf(stderr," Frame3DD: Input Data file error while reading %s\n",s);
+	return;
+}
+
 /*------------------------------------------------------------------------------
 MY_ITOA  -  Convert an integer n to charcters in s, from K&R, 1978,   p. 59-60
 ... specialized for portability between GNU GCC and DJGPP GCC
 ------------------------------------------------------------------------------*/
-void my_itoa(int n, char s[], int k){
+void my_itoa ( int n, char s[], int k ) {
 	int	c, i, j, sign;
 
 	if ((sign = n) < 0) 		/* record sign */

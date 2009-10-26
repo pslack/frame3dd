@@ -106,20 +106,20 @@ void read_joint_data (
 );
 
 /**
-	Read beam property data
+	Read frame element property data
 */
-void read_beam_data (
+void read_frame_element_data (
 	FILE *fp,	/**< input data file pointer			*/
 	int nJ,		/**< number of joints				*/
-	int nB,		/**< number of joints				*/
+	int nE,		/**< number of frame elements			*/
 	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
 	float *r,	/**< rigid radius of each joint			*/
-	double *L, double *Le,	/**< length of each beam element, effective */
+	double *L, double *Le,	/**< length of each frame element, effective */
 	int *J1, int *J2, 	/**< joint connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
 	float *J, float *Iy, float *Iz,	/**< section inertias	*/
 	float *E, float *G,	/**< elastic moduli and shear moduli	*/
-	float *p		/**< roll angle of each beam (radians)	*/
+	float *p		/**< roll angle of each frame element (radians)	*/
 );
 
 
@@ -163,16 +163,16 @@ void read_reaction_data(
 void read_and_assemble_loads(
 	FILE *fp,	/**< input data file pointer			*/
 	int nJ,		/**< number of joints				*/
-	int nB,		/**< number of beam elements			*/
+	int nE,		/**< number of frame elements			*/
 	int nL,		/**< number of load cases	i		*/
 	int DoF,	/**< number of degrees of freedom		*/
 	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
-	double *L, double *Le,	/**< length of each beam element, effective */
+	double *L, double *Le,	/**< length of each frame element, effective */
 	int *J1, int *J2, 	/**< joint connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
 	float *Iy, float *Iz,	/**< section inertias			*/
 	float *E, float *G,	/**< elastic moduli and shear moduli	*/
-	float *p,		/**< roll angle of each beam (radians)	*/
+	float *p,		/**< roll angle of each frame element (radians)	*/
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
 	int shear,	/**< 1: include shear deformations, 0: don't	*/
 	int *nF, 		/**< number of concentrated joint loads */
@@ -181,7 +181,7 @@ void read_and_assemble_loads(
 	int *nP, 		/**< number of concentrated point loads	*/
 	int *nT, 		/**< number of temperature loads	*/
 	int *nD,		/**< number of prescribed displacements */
-	double **Q,		/**< beam element end forces, every beam */
+	double **Q,		/**< frame element end forces, every beam */
 	double **F_mech, 	/**< mechanical loads			*/
 	double **F_temp, 	/**< thermal loads			*/
 	float ***U,		/**< uniformally distributed loads	*/
@@ -201,12 +201,12 @@ void read_and_assemble_loads(
 void read_mass_data(
 	FILE *fp,	/**< input data file pointer			*/
 	char *OUT_file,	/**< input output data file name 		*/
-	int nJ, int nB,	/**< number of joints, number of beams		*/
-	int *nI,	/**< number of beams with extra inertia		*/
-	float *d, float *BMs, /**< beam density, extra beam mass	*/
+	int nJ, int nE,	/**< number of joints, number of frame elements */
+	int *nI,	/**< number of elements with extra inertia	*/
+	float *d, float *BMs, /**< density, extra frame element mass	*/
 	float *JMs, float *JMx, float *JMy, float *JMz, /**< joint inertia*/
-	double *L,	/**< length of each beam element		*/
-	float *Ax, 	/**< cross section area of each beam element	*/
+	double *L,	/**< length of each frame element		*/
+	float *Ax, 	/**< cross section area of each frame element	*/
 	double *total_mass,	/**< total mass of structure and extra mass */
 	double *struct_mass, 	/**< mass of structural elements	*/
 	int *nM,	/**< number of modes to find			*/
@@ -248,7 +248,7 @@ void read_condensation_data(
 */
 void write_input_data(
 	FILE *fp,	/**< input data file pointer			*/
-	char *title, int nJ, int nB,  int nL,
+	char *title, int nJ, int nE,  int nL,
 	int *nD, int nR,
 	int *nF, int *nU, int *nW, int *nP, int *nT,
 	vec3 *xyz, float *r,
@@ -268,7 +268,7 @@ void write_input_data(
 */
 void write_static_results(
 	FILE *fp,
-	int nJ, int nB, int nL, int lc, int DoF,
+	int nJ, int nE, int nL, int lc, int DoF,
 	int *J1, int *J2,
 	double *F, double *D, int *R, double **Q,
 	double err, int ok
@@ -280,7 +280,7 @@ void write_static_results(
 */
 void write_static_csv(
 	char *OUT_file, char *title,
-	int nJ, int nB, int nL, int lc, int DoF,
+	int nJ, int nE, int nL, int lc, int DoF,
 	int *J1, int *J2,
 	double *F, double *D, int *R, double **Q,
 	double err, int ok
@@ -292,7 +292,7 @@ void write_static_csv(
 */
 void write_static_mfile (
 	char *OUT_file, char *title,
-	int nJ, int nB, int nL, int lc, int DoF,
+	int nJ, int nE, int nL, int lc, int DoF,
 	int *J1, int *J2,
 	double *F, double *D, int *R, double **Q,
 	double err, int ok
@@ -304,7 +304,7 @@ void write_static_mfile (
 */
 void write_modal_results(
 	FILE *fp,
-	int nJ, int nB, int nI, int DoF,
+	int nJ, int nE, int nI, int DoF,
 	double **M, double *f, double **V,
 	double total_mass, double struct_mass,
 	int iter, int sumR, int nM,
@@ -318,7 +318,7 @@ void write_modal_results(
 */
 void static_mesh(
 	char OUT_file[], char meshpath[], char plotpath[],
-	char *title, int nJ, int nB, int nL, int lc, int DoF,
+	char *title, int nJ, int nE, int nL, int lc, int DoF,
 	vec3 *xyz, double *L,
 	int *J1, int *J, float *p, double *D,
 	double exagg, int anlyz
@@ -332,7 +332,7 @@ void static_mesh(
 void modal_mesh(
 	char OUT_file[], char meshpath[], char modepath[],
 	char plotpath[], char *title,
-	int nJ, int nB, int DoF, int nM,
+	int nJ, int nE, int DoF, int nM,
 	vec3 *xyz, double *L,
 	int *J1, int *J2, float *p,
 	double **M, double *f, double **V,
@@ -350,7 +350,7 @@ void animate(
 	char OUT_file[], char meshpath[], char modepath[], char plotpath[],
 	char *title,
 	int anim[],
-	int nJ, int nB, int DoF, int nM,
+	int nJ, int nE, int DoF, int nM,
 	vec3 *xyz, double *L, float *p,
 	int *J1, int *J2, double *f, double **V,
 	double exagg, float pan
@@ -358,8 +358,8 @@ void animate(
 
 
 /**
-	computes cubic deflection functions from beam end deflections
-	and beam end rotations.  Saves deflected shapes to a file.
+	computes cubic deflection functions from end deflections
+	and end rotations.  Saves deflected shapes to a file.
 	These bent shapes are exact for mode-shapes, and for frames
 	loaded at their joints.
 */
@@ -370,6 +370,11 @@ void bent_beam(
 	double exagg
 );
 
+
+/**
+	display *scanf errors from output from *scanf function
+*/
+void sferr( char *s );
 
 /**
 	return the file extension, including the period (.)

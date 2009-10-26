@@ -222,13 +222,14 @@ found with the Input Data.
 <div class=note>
 <b>Note:</b> Frame3DD generates several <b>additional output files</b> used in plotting deformed frames.  
 By default, these output files are sent to your temporary file folder. 
-On Windows, the location of this folder is the contents of the TEMP environment variable, which you can examine by typing 
+On Windows, the location of this folder is the contents of the <b>%TEMP%</b>
+environment variable, which you can examine by typing 
 <pre>
 echo %TEMP%
 </pre>
-On other platforms, this is the <tt>/tmp</tt> directory.
+On other platforms, this is the <b>/tmp</b> directory.
 <br><br>
-If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <tt>FRAME3DD_OUTDIR</tt> with the path to your output directory. All new output files will then appear in the folder you have specified.
+If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <b>FRAME3DD_OUTDIR</b> with the path to your output directory. All new output files will then appear in the folder you have specified.
 </div>
 
 <a name="installrun"/><h2>3. How to install and run Frame3DD</h2>
@@ -261,9 +262,8 @@ The date stamp at the beginning of the manual corresponds to the release date of
 <a name="runlinux"/><h3>3.1 Linux/Unix</h3>
 
 <p>
-For Linux/Unix
-you may install Frame3DD from a .ZIP archive 
-or you may compile from the source code.
+For Linux you may install Frame3DD from a .ZIP archive 
+or you may compile from the source code for Linux or Unix.
 The following instructions install Frame3DD to the <b>Desktop</b> but other directories may be substituted, if desired.  
 </p>
 
@@ -280,7 +280,7 @@ A tutorial for vim is <a href="http://www.jerrywang.net/vi/">here</a>.
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it in your <b>Desktop</b>.
 <li> If the .ZIP archive was not automatically unzipped, 
-double-click the icon to extract it. 
+double-click the icon to extract it to your <b>Desktop</b>. 
 <li>
 <b>(<i>Recommended</i>)</b>
 Put the <b>Frame3DD</b> directory in your path and set the <tt>FRAME3DD_OUTDIR</tt> location.<br>
@@ -344,7 +344,9 @@ frame3dd  MyFrame.3dd  MyResultsA.out
 </ol>
 
 <p>
-Graphical output may be viewed with <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, 
+Use <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a> 
+to view the graphical output.  
+</p>
 
 <ol>
 <li> Gnuplot is commonly pre-installed on Linux systems.
@@ -452,10 +454,12 @@ A tutorial for gvim is <a href="http://www.jerrywang.net/vi/">here</a>.
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it to your <b>Desktop</b>.<br>
 <!-- <li> Read <b>README-win32.txt</b> -->
 <li> If the .ZIP archive was not automatically unzipped, 
-double-click the icon to extract it. 
+double-click the icon to extract it to your <b>Desktop</b>. 
 <li> <b>(<i>Recommended</i>)</b>
-Put the <b>Frame3DD</b> directory in your path and set the <tt>FRAME3DD_OUTDIR</tt> location.<br>
-To do this, create the folder <b>%TEMP%\frame3dd_temp</b>, open <b>C:\autoexec.bat</b>
+Put the <b>Frame3DD</b> directory in your path and set the 
+<tt>TEMP</tt> and <tt>FRAME3DD_OUTDIR</tt> locations.<br>
+To do this, create the folder <b>%TEMP%\frame3dd_temp</b>,
+open <b>C:\autoexec.bat</b>
 and cut-and-paste the following lines into <b>C:\autoexec.bat</b>
 <pre>
 set PATH=%PATH%;%HOMEPATH%\Desktop\Frame3DD
@@ -466,7 +470,8 @@ Preferably, you may set the <tt>PATH</tt> and <tt>FRAME3DD_OUTDIR</tt> using:
 Further instructions are <a href="http://vlaurie.com/computers2/Articles/environment.htm">here</a>.  
 
 <li>Open a 
-<a href="http://en.wikipedia.org/wiki/Windows_command_line">Command Prompt</a> window
+"<a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">command prompt window</a>" 
+<!-- <a href="http://en.wikipedia.org/wiki/Windows_command_line">Command Prompt</a> window -->
 (<b>Start > All Programs > Accessories > Command Prompt</b>),
 change to the directory of example files, and run an example, as follows:
 <pre>
@@ -492,7 +497,8 @@ frame3dd  MyFrame.3dd  MyResultsA.out
 </ol>
 
 <p>
-Use Gnuplot to view the graphical output.
+Use <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a> 
+to view the graphical output.  
 </p>
 
 <ol>
@@ -527,7 +533,9 @@ Download</a> and run the binary installer (frame3dd-VERSION.exe).
 <li>Use the Start menu to access README information and this documentation.
 <li>Copy one or more of the example files (eg <tt>exA.3dd</tt>) from your <b>Program Files\FRAME3DD\examples</b> folder into your <b>My Documents</b> folder
 <li>
-Open a 'Command Prompt' window (Start > All Programs > Accessories > Command Prompt) in order to add FRAME3DD to your path,  
+Open a
+"<a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">command prompt window</a>" 
+(Start > All Programs > Accessories > Command Prompt) in order to add FRAME3DD to your path,  
 to change to the directory of example files and run an example:
 <pre>
 set PATH=%PATH%;c:\Program Files\FRAME3DD
@@ -587,7 +595,7 @@ A tutorial for Vim is <a href="http://www.jerrywang.net/vi/">here</a>.
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_osx.zip) and save it in your <b>Desktop</b>.
 <li> If the .ZIP archive was not automatically unzipped, 
-double-click the icon to extract it. 
+double-click the icon to extract it to your <b>Desktop</b>. 
 <li><b>(<i>Recommended</i>)</b>
 Put the <b>Frame3DD</b> directory in your path and set the <tt>FRAME3DD_OUTDIR</tt> location.<br>
 To do this, open your <b>~/.profile</b> file using your good text editor.<br>
@@ -658,10 +666,9 @@ frame3dd  MyFrame.3dd  MyResultsA.out
 </ol>
 
 <p>
-       The graphical output is viewed with Gnuplot.  You'll need both <a href="
-http://darwinports.com/">DarwinPorts</a> and <a href="http://gnuplot.darwinports.com">Gnuplot</a> for OS X.
+Use <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a> 
+to view the graphical output.  
 </p>
-
 
 <!--
 <p>
@@ -1444,18 +1451,27 @@ Six types of static loads may be specified:
 </p>
 <ul>
 <li>Concentrated static force loads and concentrated static moments may be applied to joints.
-These loads are specified in the structure's global coordinate system.  
+These loads are specified as
+values of point forces and concentrated moments applied to joints
+in the directions of the structure's global coordinate system.  
 <li>Concentrated static force loads may be applied to frame elements between the joints.
-These loads are specified in the frame element's local coordinate system.  </li>
+These loads are specified as 
+values of point forces applied to the frame element
+in the directions of the frame element's local coordinate system
+and the distance <i>x</i> from joint <i>J1</i> to the location of the load.   
+  </li>
 <li>Uniformly distributed static loads may be applied in the local element coordinate system over entire length of frame elements.
-Uniformly distributed loads may be applied in the local <i>x</i> direction,
+Uniformly distributed loads are specified as
+values of the load per unit length applied to the frame element
+in the local <i>x</i> direction,
 the local <i>y</i> direction, and the local <i>z</i> direction.</li>
-<li>Trapezoidally distributed loads may be applied in the local coordinate system over a partial length of frame elements.
+<li>Trapezoidally distributed loads may be applied
+over a partial span of frame elements.
 Trapezoidally distributed loads may be applied in the local <i>x</i> direction,
 the local <i>y</i> direction, and the local <i>z</i> direction.
 Trapezoidally distributed loads are specified by the distances along
 the local <i>x</i> axis where the loading starts and stops, and
-by the value of the load at the starting location and the stopping location.
+by the value of the load at the starting location and the stopping location.<br>
 The starting location for a trapezoidal load must be greater than 0 and less
 than the stopping location of the trapezoidal load.
 The stopping location for a trapezoidal load must be greater than the
@@ -1463,7 +1479,17 @@ starting value of the trapezoidal load and less
 than the length of the frame element.
 Fixed end forces computed from trapezoidal loads include the effects of
 shear deformation when shear deformation is utilized in the analysis.</li>
-<li>Thermal loads assume a linear temperature gradient through cross sections.</li>
+<li>Thermal loads assume a linear temperature gradient through cross sections.
+Thermal loads are specified by values for the 
+coefficient of thermal expansion,
+the depth of the section in the local <i>y</i> direction, 
+the depth of the section in the local <i>z</i> direction, 
+and the temperature changes on
+the <i>+y</i> surface, 
+the <i>-y</i> surface, 
+the <i>+z</i> surface, and
+the <i>-z</i> surface. 
+</li>
 <li>Static joint displacements may be prescribed at fixed degrees of freedom only.
 Static joint displacements are specified in the structure's global coordinate system.  
 </ul>
@@ -1490,6 +1516,21 @@ A more complete stress check would compute
 the composite axial, shear, torsion and bending stresses and strains within each element.   
 Such a check requires additional cross section information: 
 the section moduli and the section dimensions.  
+</p>
+
+<p>
+The static stability of many structures depends upon a level of prestress
+within the structure.   In such goemetrically non-linear analyses,
+pre-stressed structres may be modeled by specifying a uniform temperature cooling in all pre-tensioned elements.   The value of the temperature change corresponding to a desired pre-stress tension force depends on the stiffness of the 
+components of the structural system and may be determined with a few iterations.
+As an initial guess, set the temperature change to be 
+(<i>-T</i>)/(<i>a E Ax</i>),  
+where <i>T</i> is the value of the desired pre-stress tension of the frame element,
+<i>a</i> is the coefficient of thermal expansion,
+<i>E</i> is the elastic modulus, and
+<i>Ax</i> is the cross section area of the frame element.  
+Section 8, below, describes how thermal (pre-stress) loads are analyzed before 
+the response to mechanical loads is analyzed.  
 </p>
 
 <h3> 7.10 Dynamic Modal Analysis </h3>
@@ -1765,11 +1806,11 @@ nR       % number of joints with reactions
  J[nR]    Rx[nR]  Ry[nR]  Rz[nR]  Rxx[nR] Ryy[nR] Rzz[nR]
 
 % frame element data ...
-nB       % number of frame elements
-         % frame element numbers, loc'ns, and prop's
+nE       % number of frame elements
+         % frame element numbers, locations, and properties
 M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jxx[1]  Iyy[1]  Izz[1]  E[1]  G[1]  p[1]
   :      :      :      :       :       :       :       :       :     :     :     :
-M[nB] J1[nB] J2[nB] Ax[nB] Asy[nB] Asz[nB] Jxx[nB] Iyy[nB] Izz[nB] E[nB] G[nB] p[nB]
+M[nE] J1[nE] J2[nE] Ax[nE] Asy[nE] Asz[nE] Jxx[nE] Iyy[nE] Izz[nE] E[nE] G[nE] p[nE]
 
 shear % 1: include shear deformation;   0: don't
 geom  % 1: include geometric stiffness; 0: don't
@@ -1862,7 +1903,7 @@ shift   % frequency shift-factor for rigid body modes, make 0 for pos.def. [K]
 
  M[1]  d[1]  BMs[1]
    :     :       :         % frame element density and extra frame element mass
- M[nB] d[nB] BMs[nB]
+ M[nE] d[nE] BMs[nE]
 
 nI           % number of joints with extra joint mass or inertia
  J[1]  JMs[1]   JMx[1]  JMy[1]  JMz[1]     % joint masses and rotatory inertias
@@ -1937,9 +1978,9 @@ nC   % number of condensed joints
        m         - list of modes to match in dynamic condensation
        Mmethod   - the modal analysis method 1: Subspace Jacobi, 2: Stodola
        nA        - number of mode shapes to Animate must be less than 20
-       nB        - number of Beam elements
        nC        - number of joints for matrix Condensation
        nD        - number of joints with prescribed Displacements (nD <= nR)
+       nE        - number of frame Elements
        nF        - number of joints with point Forces or concentrated moments
        nI        - number of joints with extra joint mass or Inertia
        nJ        - number of Joints
@@ -2007,23 +2048,22 @@ nC   % number of condensed joints
 
 <p>
 <ul>
-<li>
-<b>Frame3DD</b> is executed from within a
+<li><b>Frame3DD</b> is executed from within a
 <a href="LinuxTerminal.pdf">terminal</a>
 <!-- <a href="LinuxTerminal.pdf"><img src="img/Terminal.jpg" border="0" width="25"></a> -->
 or
 "<a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">command prompt window</a>"
 <!-- <a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">
 <img src="img/WindowsCommandIcon.jpg" border="0" width="25"></a>-->.
-<li> FRAME3DD may be run with interactive prompting for file names by typing ...<br>
+<li><b>Frame3DD</b> may be run with interactive prompting for file names by typing ...<br>
 <pre>
        frame3dd
 </pre>
-<li> FRAME3DD may be run without command-line options by typing ...<br>
+<li><b>Frame3DD</b> may be run without command-line options by typing ...<br>
 <pre>
        frame3dd  InFile   OutFile
 </pre>
-<li> FRAME3DD may be run with command-line options by typing ...<br>
+<li><b>Frame3DD</b> may be run with command-line options by typing ...<br>
 <pre>
        frame3dd -i InFile -o OutFile [OPTIONS]
 </pre>
@@ -2102,14 +2142,14 @@ set the animation pan rate, over-riding Input Data file values:
 </pre>
 
 <p>In addition to the recommended method using 
-<a href="http://www.scons.org/">SCons</a> (see <a href="#installrun">above</a>), Frame3DD can also be compiled directly with the <a href="http://gcc.gnu.org/">gcc compiler</a>,
+<a href="http://www.scons.org/">SCons</a> (see <a href="#installrun">above</a>), Frame3DD can also be compiled directly with the <a href="http://gcc.gnu.org/">GNU gcc compiler</a>,
 the <a href="http://developer.apple.com/tools/xcode/">Apple Xcode gcc compiler</a>,
 the <a href="http://www.delorie.com/djgpp/"> DJGPP gcc compiler</a>,
 the <a href="http://www.cs.virginia.edu/~lcc-win32/"> LCC-win32 compiler</a>,
 and the <a href="http://www.mingw.org/"> MinGW gcc compiler</a>.
 </p>
 
-<p>For example, using GCC, the command to compile is:</p>
+<p>Using GCC, the command to compile is:</p>
 
 <pre>
     gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
