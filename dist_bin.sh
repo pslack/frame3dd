@@ -63,7 +63,7 @@ cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_win32.zip
 echo "adding Linux executable ... "
 cp --preserve=mode,timestamps ../build/frame3dd        Frame3DD/.
 # zip Frame3DD_$(date +%Y%m%d)_linux.zip Frame3DD/frame3dd
-zip Frame3DD_$(echo VERSION)_linux.zip Frame3DD/frame3dd
+zip Frame3DD_$(echo $VERSION)_linux.zip Frame3DD/frame3dd
 rm Frame3DD/frame3dd
 
 # add OS X executable
