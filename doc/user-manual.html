@@ -2014,29 +2014,29 @@ nC   % number of condensed joints
        Uy        - uniform distributed load in the local Y direction
        Uz        - uniform distributed load in the local Z direction
        wx1       - starting value for trapezoidally-distributed loads
-    in the local x-direction
+                   in the local x-direction
        wx2       - stopping value for trapezoidally-distributed loads
-    in the local x-direction
+                   in the local x-direction
        wy1       - starting value for trapezoidally-distributed loads
-    in the local y-direction
+                   in the local y-direction
        wy2       - stopping value for trapezoidally-distributed loads
-    in the local y-direction
+                   in the local y-direction
        wz1       - starting value for trapezoidally-distributed loads
-    in the local z-direction
+                   in the local z-direction
        wz2       - stopping value for trapezoidally-distributed loads
-    in the local z-direction
+                   in the local z-direction
        xx1       - distance along a frame element for starting
-    trapezoidally-distributed loads in the x-direction
+                   trapezoidally-distributed loads in the x-direction
        xx2       - distance along a frame element for stopping
-    trapezoidally-distributed loads in the x-direction
+                   trapezoidally-distributed loads in the x-direction
        xy1       - distance along a frame element for starting
-    trapezoidally-distributed loads in the y-direction
+                   trapezoidally-distributed loads in the y-direction
        xy2       - distance along a frame element for stopping
-    trapezoidally-distributed loads in the y-direction
+                   trapezoidally-distributed loads in the y-direction
        xz1       - distance along a frame element for starting
-    trapezoidally-distributed loads in the z-direction
+                   trapezoidally-distributed loads in the z-direction
        xz2       - distance along a frame element for stopping
-    trapezoidally-distributed loads in the z-direction
+                   trapezoidally-distributed loads in the z-direction
        x         - x coordinate of a joint in global coordinates
        y         - y coordinate of a joint in global coordinates
        z         - y coordinate of a joint in global coordinates
@@ -2057,15 +2057,15 @@ or
 <img src="img/WindowsCommandIcon.jpg" border="0" width="25"></a>-->.
 <li><b>Frame3DD</b> may be run with interactive prompting for file names by typing ...<br>
 <pre>
-       frame3dd
+frame3dd
 </pre>
 <li><b>Frame3DD</b> may be run without command-line options by typing ...<br>
 <pre>
-       frame3dd  InFile   OutFile
+frame3dd  InFile   OutFile
 </pre>
 <li><b>Frame3DD</b> may be run with command-line options by typing ...<br>
 <pre>
-       frame3dd -i InFile -o OutFile [OPTIONS]
+frame3dd -i InFile -o OutFile [OPTIONS]
 </pre>
 
  ... where <tt>[OPTIONS]</tt> over-rides values in the Input Data file and includes
@@ -2098,28 +2098,28 @@ or
 
   Display help information and exit:
 <pre>
-           frame3dd -h
+frame3dd -h
 </pre>
 
   Suppress screen output:
 <pre>
-           frame3dd -i InFile -o OutFile -q
+frame3dd -i InFile -o OutFile -q
 </pre>
 
   Include shear deformation, over-riding the Input Data file value:
 <pre>
-           frame3dd -i InFile -o OutFile -sOn
+frame3dd -i InFile -o OutFile -sOn
 </pre>
 
   Include geometric stiffness and set deformed mesh exaggeration value, over-riding Input Data file values:
 <pre>
-           frame3dd -i InFile -o OutFile -e100 -gOn
+frame3dd -i InFile -o OutFile -e100 -gOn
 </pre>
 
   Use consistent mass matrix, set deformed mesh exaggeration value, and
 set the animation pan rate, over-riding Input Data file values:
 <pre>
-           frame3dd -i InFile -o OutFile -lOff -e100 -p3.4
+frame3dd -i InFile -o OutFile -lOff -e100 -p3.4
 </pre>
 </ul>
 
