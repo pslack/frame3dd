@@ -287,7 +287,7 @@ To do this, double-click the <b>Home</b> icon on the Desktop, and select <b>View
 
 If you have a file called <b>.bashrc</b> in your home directory,
 open it with a double-click,
-and cut-and paste the following six lines into the beginning of <b>.bashrc</b> 
+and cut-and paste the following ten lines into the beginning of <b>.bashrc</b> 
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
 # add to the path
@@ -306,7 +306,7 @@ export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER
 
 If you have a file named <b>.cshrc</b> in your home directory,
 open it with a double-click, 
-and cut-and paste the following six lines into the beginning of <b>.cshrc</b> 
+and cut-and paste the following ten lines into the beginning of <b>.cshrc</b> 
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
 # add to path
@@ -470,15 +470,18 @@ To do this, open your <b>~/.profile</b> file using your good text editor.<br>
 Using jEdit, <b>File > Open </b> and type <b>~/.profile</b> in the <b>File Name:</b> text entry bar.<br>
 Using TextWrangler, <b>File > Open Hidden</b> and select <b>.profile</b> from your home directory.<br>
 Using Vim, <b>File > Open</b> and select <b>.profile</b> from your home directory.<br>
-Cut-and paste the following six lines into the beginning of <b>~/.profile</b> 
+Cut-and paste the following ten lines into the beginning of <b>~/.profile</b> 
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
-export PATH=$PATH:$HOME/Desktop/Frame3DD/         # add to the path
+# add to the path
+export PATH=$PATH:$HOME/Desktop/Frame3DD/
+# create a Frame3DD output directory
 if [ ! -d /tmp/frame3dd_temp_$USER ]; then
-    mkdir /tmp/frame3dd_temp_$USER                # create a Frame3DD output directory
+    mkdir /tmp/frame3dd_temp_$USER
     echo "creating /tmp/frame3dd_temp_$USER for Frame3DD"
 fi
-export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER   # specify the Frame3DD output directory
+# specify the Frame3DD output directory
+export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER
 </pre>
 ... save, and exit the editor.   
 
