@@ -89,6 +89,7 @@ If the Output Data is written to a file called <tt>MyResultsA.out</tt>,
 the Gnuplot script is written to a file called <tt>MyResultsA.plt</tt>.
 Graphical output may be viewed by starting Gnuplot and typing:
 <tt> load 'MyResultsA.plt'</tt>.
+</p>
 
 <p><b>Frame3DD</b> can consider multiple static load cases in a single analysis.</p>
 
@@ -148,13 +149,11 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li>Download or build the Frame3DD executable for your operating system (see below).
 <li>Optionally, obtain a copy of Gnuplot for your operating system.
 <li>  Open a terminal window, go to the Frame3DD/examples directory, and run the program on one of the examples using a command like ...
-	  <tt>frame3dd  exA.3dd  exA.out</tt> 
-<li>Open the Output Data file using your text editor and view the Output Data.
-<!--     Running this program will create many files.  Most of them are used
-         for graphics and should be written to the  /tmp  directory.
-<li>      One of the files will be written to the current working directory and will be called
-         something like frA.plt   This file is used for plotting.   -->
-<li>      Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, and typing
+<pre>
+frame3dd  exA.3dd  exA.out
+</pre>
+<li>Open the Output Data file using a good text editor and view the Output Data.
+<li>Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.duke.edu/~hpgavin/gnuplot.html">Gnuplot</a>, and typing
            <tt>load 'exA.plt'</tt> at the <tt>gnuplot></tt> prompt.
 <br>
 Observe a series of plots by hitting the Return (or Enter) key between plots.
@@ -824,7 +823,7 @@ This m-function, <a href="../matlab/frame_3dd.m">frame_3dd.m</a>,
 executes the system command
 (<tt>frame3dd</tt> on Linux or OS X, <tt>frame3dd.exe</tt> on Windows)
 to compute the solution.
-The <b>Frame3DD</b> executable programs
+The <b>Frame3DD</b> executable program
 (<tt>frame3dd</tt> on Linux or OS X, <tt>frame3dd.exe</tt> on Windows)
 must be saved to a directory within
 a path appropriate for your system, as described in the installation instructions, above.
@@ -836,8 +835,9 @@ a path appropriate for your system, as described in the installation instruction
 A <a href="../matlab/exA.m">Matlab version of Example A</a> illustrates
 how to analyze problems using the Matlab interface to <b>Frame3DD</b>.<br>
 Matlab versions of the other examples are forthcoming.
-<li> frame_3dd.m writes IOdata.fmm,
-<li> The executable program <tt>frame3dd</tt> writes Output Data to IOdata.out ,
+<li> frame_3dd.m writes a <b>Frame3DD</b> input data file called IOdata.fmm,
+<li> frame_3dd.m calls a system command to run the executable program <tt>frame3dd</tt>.
+<li> The executable program <tt>frame3dd</tt> writes the Output Data to IOdata.out ,
 and also writes IOdata_out.m, containing the Output Data.<br>
 An m-file containing the Output Data is written whenever the frame3dd
 executable is run on a file ending in ".fmm",
@@ -926,9 +926,9 @@ row numbers are given in the following table.<br>
 <tr><td>Frame Element End Forces</td> <td>D-12</td><td>D-13</td></tr>
 <tr><td>Reaction Forces</td> <td>E-12</td><td>E-13</td></tr>
 <tr> <th>Load Case 3</th> <th>First Row</th> <th>Last Row</th></tr>
-<tr> <td>Joint Displacements</td> <td>C-14</td><td>C-14</td></tr>
-<tr><td>Frame Element End Forces</td> <td>D-14</td><td>D-14</td></tr>
-<tr><td>Reaction Forces</td> <td>E-14</td><td>E-14</td></tr>
+<tr> <td>Joint Displacements</td> <td>C-14</td><td>C-15</td></tr>
+<tr><td>Frame Element End Forces</td> <td>D-14</td><td>D-15</td></tr>
+<tr><td>Reaction Forces</td> <td>E-14</td><td>E-15</td></tr>
 <tr> <td><i>et cetera</i></td> </tr>
 </table>
 </p>
@@ -1954,7 +1954,7 @@ nC   % number of condensed joints
        a         - Coefficient of thermal expansion (1/degree)
        anim      - List of modes to be animated, by mode number
        Ax        - Cross-sectional area of a prismatic frame element
-    (The x-axis is along the element length, in local coordinates)
+                   (The x-axis is along the element length, in local coordinates)
        Asy       - Shear area in the local y-axis of a prismatic frame element
        Asz       - Shear area in the local z-axis of a prismatic frame element
        BMs       - extra mass on a frame element, not including self mass
@@ -2173,7 +2173,7 @@ and the <a href="http://www.mingw.org/"> MinGW gcc compiler</a>.
 <p>Using GCC, the command to compile is:</p>
 
 <pre>
-    gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 </pre>
 
 <a name="enhancements"/><h2>13. Enhancements projected for future versions</h2>
