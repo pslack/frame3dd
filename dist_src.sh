@@ -37,6 +37,8 @@ zip -r Frame3DD_$(echo $VERSION)_src.zip Frame3DD/*
 
 echo "Frame3DD .zip archive complete"
 
+rm -rf Frame3DD
+
 # ----------------------------------------------------------- dist_src.sh
 # Henri P. Gavin 2009.10.20
-# updated 2009.10.25
+# updated 2009.10.25, 2009.10.27

@@ -67,6 +67,10 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Tue Oct 27 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091026
+- If DJGPP is defined, then also define WIN32, in order to compile with DJGPP
+- user-manual.html updates
+
 * Mon Oct 26 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091026
 - Check return values of fscanf functions and report errors to user for input data debugging purposes. 
 - Change nB variable to nE throughout, including user manual.
