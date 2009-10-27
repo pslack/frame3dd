@@ -587,7 +587,7 @@ John Pye, Feb 2009
 static const char *temp_dir(){
 #ifdef WIN32
 	char *tmp;
-	char  outdir;
+	char *outdir;
 	tmp = getenv("TEMP");
 	outdir = getenv("FRAME3DD_OUTDIR"); 
 	if ( tmp==NULL && outdir==NULL ) {
@@ -1133,7 +1133,7 @@ void read_and_assemble_loads(
 	  if (sfrv != 1) sferr("nP value load data");
 	  if ( verbose ) {
 	  	printf("  number of concentrated frame element point loads ");
-	  	dots(stdout,3);
+	  	dots(stdout,2);
 	  	printf(" nP = %3d\n", nP[lc]);
 	  }
 	  if ( nP[lc] < 0 || nP[lc] > nE ) {
