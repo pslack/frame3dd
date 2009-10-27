@@ -88,7 +88,7 @@ void parse_options (
 
 	switch ( argc ) {
 	 case 1: {
- 		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
+ 		fprintf(stderr,"\n Frame3DD version: %s\n", VERSION);
 		fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
 		fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
 		fprintf (stderr," Please enter the  input data file name: ");
@@ -252,18 +252,18 @@ DISPLAY_HELP -  display help information to stderr
 ------------------------------------------------------------------------------*/
 void display_help()
 {
- fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
+ fprintf(stderr,"\n Frame3DD version: %s\n", VERSION);
  fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
  fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
 /* fprintf(stderr,"  Usage: frame3dd -i<input> -o<output> [-hvcq] [-s<On|Off>] [-g<On|Off>] [-e<value>] [-l<On|Off>] [-f<value>] [-m J|S] [-t<value>] [-p<value>] \n");
  */
- fprintf(stderr,"  FRAME3DD may be run with interactive prompting for file names by typing ...\n");
+ fprintf(stderr,"  Frame3DD may be run with interactive prompting for file names by typing ...\n");
  fprintf(stderr,"       frame3dd \n\n");
- fprintf(stderr,"  FRAME3DD may be run without command-line options by typing ...\n");
+ fprintf(stderr,"  Frame3DD may be run without command-line options by typing ...\n");
  fprintf(stderr,"       frame3dd <InFile> <OutFile> \n\n");
 
 
- fprintf(stderr,"  FRAME3DD may be run with command-line options by typing ...\n");
+ fprintf(stderr,"  Frame3DD may be run with command-line options by typing ...\n");
  fprintf(stderr,"       frame3dd -i <InFile> -o <OutFile> [OPTIONS] \n\n");
 
  fprintf(stderr," ... where [OPTIONS] over-rides values in the input data file and includes\n");
@@ -299,7 +299,7 @@ DISPLAY_USAGE -  display usage information to stderr
 ------------------------------------------------------------------------------*/
 void display_usage()
 {
- fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
+ fprintf(stderr,"\n Frame3DD version: %s\n", VERSION);
  fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
  fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
 /* fprintf(stderr,"  Usage: frame3dd -i<input> -o<output> [-hvcq] [-s<On|Off>] [-g<On|Off>] [-e<value>] [-l<On|Off>] [-f<value>] [-m J|S] [-t<value>] [-p<value>] \n");
@@ -316,7 +316,7 @@ DISPLAY_VERSION_HELP -  display version, website, and brief help info. to stderr
 ------------------------------------------------------------------------------*/
 void display_version()
 {
- fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
+ fprintf(stderr,"\n Frame3DD version: %s\n", VERSION);
  fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
  fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
 
@@ -334,7 +334,7 @@ Contributed by Barry Sanford, barry.sanford@trimjoist.com
 ------------------------------------------------------------------------------*/
 void display_version_about()
 {
- fprintf(stderr," FRAME3DD version: %s\n", VERSION);
+ fprintf(stderr," Frame3DD version: %s\n", VERSION);
  fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness\n");
  fprintf(stderr," http://frame3dd.sourceforge.net\n");
 }
@@ -593,8 +593,8 @@ static const char *temp_dir(){
 	if ( tmp==NULL && outdir==NULL ) {
 		fprintf(stderr,
 "ERROR: Environment Variables %%TEMP%% and %%FRAME3DD_OUTDIR%% are not set.  "
-"At least one of these variables must be set so that FRAME3DD knows where to "
-"write its temporary files.  Set one of these variable, then re-run FRAME3DD."
+"At least one of these variables must be set so that Frame3DD knows where to "
+"write its temporary files.  Set one of these variable, then re-run Frame3DD."
 "The Frame3DD on-line documentation provides help on this issue.");
 		exit(1);
 	} else if ( tmp==NULL ) strcpy(tmp,outdir);
@@ -1615,10 +1615,10 @@ void write_input_data(
         (void) time(&now);
 
 	for (i=1; i<=80; i++)	fprintf(fp,"_");
-  	fprintf(fp,"\nFRAME3DD version: %s ", VERSION );
+  	fprintf(fp,"\nFrame3DD version: %s ", VERSION );
 	fprintf(fp,"              http://frame3dd.sf.net/\n");
 	fprintf(fp,"GPL Copyright (C) 1992-2009, Henri P. Gavin \n");
-	fprintf(fp,"FRAME3DD is distributed in the hope that it will be useful");
+	fprintf(fp,"Frame3DD is distributed in the hope that it will be useful");
 	fprintf(fp," but with no warranty.\n");
 	fprintf(fp,"For details see the GNU Public Licence:");
 	fprintf(fp," http://www.fsf.org/copyleft/gpl.html\n");
@@ -1913,10 +1913,10 @@ void write_static_csv(
 
 
 	if ( lc == 1 ) {
-  	 fprintf(fpcsv,"\" FRAME3DD version: %s ", VERSION );
+  	 fprintf(fpcsv,"\" Frame3DD version: %s ", VERSION );
 	 fprintf(fpcsv,"              http://frame3dd.sf.net/\"\n");
 	 fprintf(fpcsv,"\"GPL Copyright (C) 1992-2009, Henri P. Gavin \"\n");
-	 fprintf(fpcsv,"\"FRAME3DD is distributed in the hope that it will be useful");
+	 fprintf(fpcsv,"\"Frame3DD is distributed in the hope that it will be useful");
 	 fprintf(fpcsv," but with no warranty.\"\n");
 	 fprintf(fpcsv,"\"For details see the GNU Public Licence:");
 	 fprintf(fpcsv," http://www.fsf.org/copyleft/gpl.html\"\n");
@@ -2059,10 +2059,10 @@ void write_static_mfile (
 	}
 
 	if ( lc == 1 ) {
-  	 fprintf(fpm,"%% FRAME3DD version: %s ", VERSION );
+  	 fprintf(fpm,"%% Frame3DD version: %s ", VERSION );
 	 fprintf(fpm,"              http://frame3dd.sf.net/\n");
 	 fprintf(fpm,"%%GPL Copyright (C) 1992-2009, Henri P. Gavin \n");
-	 fprintf(fpm,"%%FRAME3DD is distributed in the hope that it will be useful");
+	 fprintf(fpm,"%%Frame3DD is distributed in the hope that it will be useful");
 	 fprintf(fpm," but with no warranty.\n");
 	 fprintf(fpm,"%%For details see the GNU Public Licence:");
 	 fprintf(fpm," http://www.fsf.org/copyleft/gpl.html\n");
