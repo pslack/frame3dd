@@ -69,6 +69,7 @@ rm -rf %{buildroot}
 #
 * Tue Oct 27 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091026
 - If DJGPP is defined, then also define WIN32, in order to compile with DJGPP
+- There appear to be conflicting definitions for the %TEMP% environment variable in Windows.   The environment variable %TEMP% is defined differently to an executable program than it is to a user.   Until this discrepancy can be resolved, the user-manual will recommend setting the FRAME3DD_OUTDIR environment variable to a value referenced to %HOMEPATH%, such as %HOMEPATH%\Desktop\frame3dd_temp, rather than a value referenced to %TEMP%, such as %TEMP%\frame3dd_temp
 - user-manual.html updates
 
 * Mon Oct 26 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091026

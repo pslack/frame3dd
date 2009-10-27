@@ -220,7 +220,7 @@ found with the Input Data.
 
 <div class=note>
 <b>Note:</b> Frame3DD generates several <b>additional output files</b> used in plotting deformed frames.  
-By default, these output files are sent to your temporary file folder. 
+By default, these output files are sent to a temporary file folder. 
 On Windows, the location of this folder is the contents of the <b>%TEMP%</b>
 environment variable, which you can examine by typing 
 <pre>
@@ -633,12 +633,8 @@ To do this,
 Set a new user variable name <tt>PATH</tt>
 with variable value <tt>%HOMEPATH%\Desktop\Frame3DD</tt></br>
 Set a new user variable name <tt>FRAME3DD_OUTDIR</tt> 
-with variable value <tt>%TEMP%\frame3dd_temp</tt></br>
-<!-- 
-create the folder <b>%TEMP%\frame3dd_temp</b>,
-open <b>C:\autoexec.bat</b>
-and cut-and-paste the following lines into <b>C:\autoexec.bat</b>
--->
+with variable value <tt>%HOMEPATH%\Desktop\frame3dd_temp</tt></br>
+Finally, navigate to the <b>Desktop</b> and create a new folder called <tt>frame3dd_temp</tt>.  
 Detailed information on how to set environment variables in Windows is <a href="http://vlaurie.com/computers2/Articles/environment.htm">here</a>.  
 
 <li>Open a 
@@ -714,18 +710,8 @@ Download</a> and run the binary installer (frame3dd-VERSION.exe).
 -->
 <li> <b>(<i>Recommended</i>)</b>
 Put the <b>Frame3DD</b> directory in your path and set the 
-<tt>PATH</tt> and <tt>FRAME3DD_OUTDIR</tt> environment variables.<br>
-To do this, create the folder <b>%TEMP%\frame3dd_temp</b>,
-open <b>C:\autoexec.bat</b>
-and cut-and-paste the following lines into <b>C:\autoexec.bat</b>
-<pre>
-set PATH=%PATH%;%PROGRAMFILES%\Frame3DD
-set FRAME3DD_OUTDIR=%TEMP%\frame3dd_temp
-</pre>
-Preferably, you may set the <tt>PATH</tt> and <tt>FRAME3DD_OUTDIR</tt> 
-environment variables using: 
-<b> right-click My Computer > Properties > Advanced > Environment Variables</b>.
-Further instructions are <a href="http://vlaurie.com/computers2/Articles/environment.htm">here</a>.  
+<tt>PATH</tt> and <tt>FRAME3DD_OUTDIR</tt> environment variables<br>
+as described above.  
 <li>Copy one or more of the example files (eg <tt>exA.3dd</tt>) from your <b>%PROGRAMFILES%\FRAME3DD\examples</b> folder into your <b>Desktop</b> folder
 <li>
 Open a
