@@ -290,12 +290,15 @@ open it with a double-click,
 and cut-and paste the following six lines into the beginning of <b>.bashrc</b> 
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
-export PATH=$PATH:$HOME/Desktop/Frame3DD/         # add to the path
+# add to the path
+export PATH=$PATH:$HOME/Desktop/Frame3DD/       
+# create a Frame3DD output directory
 if [ ! -d /tmp/frame3dd_temp_$USER ]; then
-    mkdir /tmp/frame3dd_temp_$USER                # create a Frame3DD output directory
+    mkdir /tmp/frame3dd_temp_$USER
     echo "creating /tmp/frame3dd_temp_$USER for Frame3DD"
 fi
-export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER   # specify the Frame3DD output directory
+# specify the Frame3DD output directory
+export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER
 </pre>
 ... save, and exit the editor.   
 
@@ -306,12 +309,15 @@ open it with a double-click,
 and cut-and paste the following six lines into the beginning of <b>.cshrc</b> 
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
-set path = ( $path $home/Desktop/Frame3DD )      # add to path
+# add to path
+set path = ( $path $home/Desktop/Frame3DD )
+# create a Frame3DD output directory
 if ( ! -d /tmp/frame3dd_temp_$user ) then
-    mkdir /tmp/frame3dd_temp_$user               # create a Frame3DD output directory
+    mkdir /tmp/frame3dd_temp_$user
     echo "creating /tmp/frame3dd_temp_$user for Frame3DD"
 endif
-setenv FRAME3DD_OUTDIR /tmp/frame3dd_temp_$user  # specify the Frame3DD output directory
+# specify the Frame3DD output directory
+setenv FRAME3DD_OUTDIR /tmp/frame3dd_temp_$user
 </pre>
 ... save, and exit the editor.   <br>.
 
