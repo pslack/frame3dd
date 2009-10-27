@@ -1,12 +1,12 @@
 ________________________________________________________________________________
-FRAME3DD version: 20091022               http://frame3dd.sf.net/
+Frame3DD version: 20091022               http://frame3dd.sf.net/
 GPL Copyright (C) 1992-2009, Henri P. Gavin 
-FRAME3DD is distributed in the hope that it will be useful but with no warranty.
+Frame3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example D: dynamic properties of an un-restrained frame with a triangular section 
-Tue Oct 27 14:02:26 2009
+Tue Oct 27 14:10:18 2009
 ________________________________________________________________________________
 24 JOINTS;    30 MEMBERS;    1 LOAD CASES;  0 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 
