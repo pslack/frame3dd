@@ -261,8 +261,10 @@ void display_help()
  fprintf(stderr,"       frame3dd \n\n");
  fprintf(stderr,"  Frame3DD may be run without command-line options by typing ...\n");
  fprintf(stderr,"       frame3dd <InFile> <OutFile> \n\n");
+ fprintf(stderr,"  Type ...   frame3dd -h   ... for additional help information.\n\n");
 
 
+/*
  fprintf(stderr,"  Frame3DD may be run with command-line options by typing ...\n");
  fprintf(stderr,"       frame3dd -i <InFile> -o <OutFile> [OPTIONS] \n\n");
 
@@ -278,7 +280,6 @@ void display_help()
  fprintf(stderr,"  -c            data check only - the output data reviews the input data\n");
  fprintf(stderr,"  -w            write stiffness and mass matrices to files named Ks Kd Md\n");
  fprintf(stderr,"  -q            suppress screen output except for warning messages\n");
- fprintf(stderr,"  -w            write mass and stiffness matrices to files\n");
  fprintf(stderr,"  -s  On|Off    On: include shear deformation or Off: neglect ...\n");
  fprintf(stderr,"  -g  On|Off    On: include geometric stiffness or Off: neglect ...\n");
  fprintf(stderr,"  -e <value>    level of deformation exaggeration for Gnuplot output\n");
@@ -289,6 +290,7 @@ void display_help()
  fprintf(stderr,"  -p <value>    pan rate for mode shape animation\n");
  fprintf(stderr,"  -r <value>    matrix condensation method: 0, 1, 2, or 3 \n");
  fprintf(stderr," -------------------------------------------------------------------------\n");
+*/
 
 }
 

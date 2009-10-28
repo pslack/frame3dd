@@ -24,7 +24,9 @@ results in the successful opening of mesh and mode data files such as
 - The (secret) -d "debug" flag is now operational.  It had been broken.
 - In frame3dd_io.c change 
 #ifdef WIN32   to    #if defined(WIN32) || defined(DJGPP)
-- Change location of frame3dd.3dd from "TEMP" to "FRAME3DD_OUTDIR"
+- Change location of  frame3dd.3dd  from  "TEMP"  to  "FRAME3DD_OUTDIR"
+- When run by clicking the frame3dd.exe (in Windows) the Command Prompt window
+remains open until the user hits 'Enter'
 - Updates to user-manual.html 
 
 * Mon Oct 26 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022

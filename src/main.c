@@ -181,6 +181,11 @@ int main ( int argc, char *argv[] ) {
 	if ((fp = fopen (IN_file, "r")) == NULL) {
 		fprintf (stderr,"\n ERROR: cannot open file '%s'\n\n", IN_file);
 		display_help();
+		if ( argc == 1 ) {
+			fprintf(stderr," Press the 'Enter' key to close.\n");
+			(void) getchar();	// clear the buffer ?? 
+			while( !getchar() ) ;	// wait for the Enter key 
+		}
 		exit(1);
 	}
 
