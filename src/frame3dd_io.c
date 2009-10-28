@@ -132,7 +132,7 @@ void parse_options (
 				*anlyz_flag = 0;
 				break;
 			case 'd':		/* debug */
-				*debug = 0;
+				*debug = 1;
 				break;
 			case 'w':		/* write stiffness and mass */
 				*write_matrix = 1;
@@ -493,7 +493,7 @@ void read_run_data (
 	int	anlyz_flag,
 	int	debug
 ){
-	int	full_len=0, len=0;
+	int	full_len=0, len=0, i;
 	char	base_file[96] = "EMPTY_BASE";
 	char	mesh_file[96] = "EMPTY_MESH";
 	int	sfrv;	/* *scanf return value */
@@ -505,14 +505,27 @@ void read_run_data (
 	while ( base_file[len--] != '.' && len > 0 )
 		/* find the last '.' in base_file */ ;
 	if ( len == 0 )	len = full_len;
-	base_file[++len] = '\0';
+	base_file[++len] = '\0';	/* end base_file at the last '.' */
 
 	strcpy(plotpath,base_file);
 	strcat(plotpath,".plt");
 
-	strcpy(mesh_file,base_file);
+	while ( base_file[len] != '/' && base_file[len] != '\\' && len > 0 )
+		len--;	/* find the last '/' or '\' in base_file */ 
+	i = 0;
+	len++;
+	while ( base_file[len] != '\0' )
+		mesh_file[i++] = base_file[len++];
+	mesh_file[i] = '\0';
 	strcat(mesh_file,"-msh");
         output_path(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
+
+	if ( debug) {
+		fprintf(stderr,"OUT_FILE = %s \n", OUT_file);
+		fprintf(stderr,"BASE_FILE = %s \n", base_file);
+		fprintf(stderr,"PLOTPATH = %s \n", plotpath);
+		fprintf(stderr,"MESHPATH = %s \n", meshpath);
+	}
 
 	sfrv=fscanf( fp, "%d %d %lf", shear, geom,  exagg );
 	if (sfrv != 3) sferr("shear, geom or exagg variables");
@@ -541,12 +554,6 @@ void read_run_data (
 	if ( exagg_flag != -1.0 )	*exagg = exagg_flag;
 	if ( anlyz_flag != -1.0 )	*anlyz = anlyz_flag;
 
-	if ( debug) {
-		printf("OUT_FILE = %s \n", OUT_file);
-		printf("BASE_FILE = %s \n", base_file);
-		printf("PLOTPATH = %s \n", plotpath);
-		printf("MESHPATH = %s \n", meshpath);
-	}
 
 	return;
 }
@@ -572,48 +579,35 @@ int     lim
 
 /* platform-dependent path sperator character ... */
 
-#ifdef WIN32
+#if defined(WIN32) || defined(DJGPP)
 static const char sep = '\\';
 #else
 static const char sep = '/';
 #endif
 
 /*----------------------------------------------------------------------------
-TEMP_FILE_LOCATION
-return platform-specific temp file locations -- 
+TEMP_DIR
+return platform-specific temp file location -- 
 John Pye, Feb 2009
 ----------------------------------------------------------------------------*/
-
 static const char *temp_dir(){
-#ifdef WIN32
+#if defined(WIN32) || defined(DJGPP)
 	char *tmp;
-	char *outdir;
 	tmp = getenv("TEMP");
-	outdir = getenv("FRAME3DD_OUTDIR"); 
-	if ( tmp==NULL && outdir==NULL ) {
+	if ( tmp==NULL ) {
 		fprintf(stderr,
 "ERROR: Environment Variables %%TEMP%% and %%FRAME3DD_OUTDIR%% are not set.  "
 "At least one of these variables must be set so that Frame3DD knows where to "
 "write its temporary files.  Set one of these variable, then re-run Frame3DD."
 "The Frame3DD on-line documentation provides help on this issue.");
 		exit(1);
-	} else if ( tmp==NULL ) strcpy(tmp,outdir);
+	} 
 #else
-	const char *tmp = "/tmp";
+	const char *tmp = "/tmp";	/* Linux, Unix, OS X	*/
 #endif
 	return tmp;
 }
 
-void temp_file_location(const char *fname, char fullpath[], const int len){
-	const char *tmp = temp_dir();
-	int res;
-//	res = snprintf(fullpath,len,"%s%c%s",tmp,sep,fname);
-	res = sprintf(fullpath,"%s%c%s",tmp,sep,fname);
-	if(res > len){
-		fprintf(stderr,"ERROR: unable to construct temp filename: overflow\n");
-		exit(1);
-	}
-}
 
 /*------------------------------------------------------------------------------
 OUTPUT_PATH
@@ -621,10 +615,10 @@ return path for output files using either current directory, or FRAME3DD_OUTDIR
 if specified. -- 
 John Pye, Feb 2009.
 ------------------------------------------------------------------------------*/
-void output_path(const char *fname, char fullpath[], const int len, const char *default_outdir){
+void output_path(const char *fname, char fullpath[], const int len, const char *default_outdir) {
 	assert(fname!=NULL);
 	int res;
-	if(fname[0]==sep){
+	if ( fname[0]==sep ) {
 		/* absolute output path specified */
 //		res = snprintf(fullpath,len,"%s",fname);
 		res = sprintf(fullpath,"%s",fname);
@@ -632,8 +626,8 @@ void output_path(const char *fname, char fullpath[], const int len, const char *
 		/* fprintf(stderr,"Generating output path for file '%s'\n",fname); */
 		const char *outdir;
 		outdir = getenv("FRAME3DD_OUTDIR");
-		if(outdir==NULL){
-			if(default_outdir==NULL){
+		if (outdir==NULL) {
+			if (default_outdir==NULL) {
 				outdir = temp_dir();
 			} else {
 				outdir = default_outdir;
@@ -1339,10 +1333,11 @@ void read_mass_data(
 		int verbose, int debug
 ){
 /*	double	ms = 0.0; */
-	int	j, jnt, m, b, nA;
+	int	i,j, jnt, m, b, nA;
 	int	full_len=0, len=0;
 	int	sfrv;	/* *scanf return value	*/
 
+	char	base_file[96] = "EMPTY_BASE";
 	char	mode_file[96] = "EMPTY_MODE";
 
 	*total_mass = *struct_mass = 0.0;
@@ -1479,16 +1474,26 @@ void read_mass_data(
 	if (sfrv != 1) sferr("pan value in mode animation data");
 	if ( pan_flag != -1.0 )	*pan = pan_flag;
 
-	strcpy(mode_file,OUT_file);
-	while ( mode_file[len++] != '\0' ) /* the length of mode_file */ ;
+
+	strcpy(base_file,OUT_file);	
+	while ( base_file[len++] != '\0' )
+		/* the length of the base_file */ ;
         full_len = len;
-	while ( mode_file[len--] != '.' && len > 0 ) /* the last '.' in mode_file */ ;
+
+	while ( base_file[len--] != '.' && len > 0 )
+		/* find the last '.' in base_file */ ;
 	if ( len == 0 )	len = full_len;
-	mode_file[++len] = '\0';
+	base_file[++len] = '\0';	/* end base_file at the last '.' */
 
+	while ( base_file[len] != '/' && base_file[len] != '\\' && len > 0 )
+		len--;	/* find the last '/' or '\' in base_file */ 
+	i = 0;
+	len++;
+	while ( base_file[len] != '\0' )
+		mode_file[i++] = base_file[len++];
+	mode_file[i] = '\0';
 	strcat(mode_file,"-m");
-
-	output_path(mode_file,modepath,FRAME3DD_PATHMAX,NULL);
+        output_path(mode_file,modepath,FRAME3DD_PATHMAX,NULL);
 
 	return;
 }
@@ -2982,3 +2987,4 @@ void evaluate ( float error ) {
 	}
 
 }
+

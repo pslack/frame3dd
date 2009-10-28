@@ -186,7 +186,8 @@ int main ( int argc, char *argv[] ) {
 
 	filetype = get_file_ext( IN_file, extn ); /* .CSV or .FMM or other? */
 
-	temp_file_location("frame3dd.3dd",temppath,FRAME3DD_PATHMAX);
+//	temp_file_location("frame3dd.3dd",temppath,FRAME3DD_PATHMAX);
+	output_path("frame3dd.3dd",temppath,FRAME3DD_PATHMAX,NULL);
 
 	parse_input(fp, temppath);	/* strip comments from input data */
 	fclose(fp);
@@ -620,6 +621,15 @@ int main ( int argc, char *argv[] ) {
 	);
 
 	if ( verbose ) printf("\n");
+
+	/* wait for keyboard entry to close the terminal */
+	if ( argc == 1 ) {
+	 fprintf(stderr," The Output Data was appended to %s \n", OUT_file );
+	 fprintf(stderr," A Gnuplot script was written to %s \n", plotpath );
+	 fprintf(stderr," Press the 'Enter' key to close.\n");
+	 (void) getchar();	// clear the buffer ?? 
+	 while( !getchar() ) ;	// wait for the Enter key to be hit 
+	}
 
 	return(0);
 }

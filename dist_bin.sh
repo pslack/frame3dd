@@ -44,6 +44,10 @@ cp --preserve=mode,timestamps examples/saveplot_w32 dist/Frame3DD/examples/.
 echo "copying matlab files ... "
 cp --preserve=mode,timestamps matlab/*              dist/Frame3DD/matlab/.
 
+# make an empty temp directory
+echo "making an empty Frame3DD/temp directory ... "
+mkdir dist/Frame3DD/temp/
+
 # assemble the .zip file
 echo "assembling .zip file ... "
 cd dist                                           # change to trunk/dist
@@ -88,11 +92,11 @@ echo "Frame3DD .zip archive complete"
 
 # Uploading distribution files to sourceforge.net ...
 #
-# scp Frame3DD_*.zip hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091022/.
+# rsync -uav *.zip hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091022/.
 #
-# scp frame3dd-*.bz2  hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091022/.
+# rsync -uav *.bz2  hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091022/.
 
 # ----------------------------------------------------------- dist_bin.sh
 # Henri P. Gavin  2009.10.20
-# updated: 2009.10.22, 2009.10.25
+# updated: 2009.10.22, 2009.10.25, 2009.10.27
 

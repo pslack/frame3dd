@@ -59,7 +59,7 @@ Duke University</a> - Box 90287,
 
 <!-- 3D frames , 3D frames , 3D frames , 3D frames , 3D frames , 3D frames  -->
 
-<p><b>Frame3DD</b> is executed from the
+<p><b>Frame3DD</b> is preferably executed from the
 <a href="http://en.wikipedia.org/wiki/Windows_command_line">command prompt</a> (Windows)
 or <a href="http://en.wikipedia.org/wiki/Unix_shell">shell</a> (Linux) or <a href="http://www.macdevcenter.com/pub/a/mac/2001/12/14/terminal_one.html">terminal</a> (OS X), as follows, with filenames changed as required:
 <pre>
@@ -218,18 +218,19 @@ and, where possible, displays descriptive diagnostic messages when errors are
 found with the Input Data.
 </p>
 
-<div class=note>
-<b>Note:</b> Frame3DD generates several <b>additional output files</b> used in plotting deformed frames.  
+<!-- <div class=note> 
+<b>Note:</b> 
+-->
+<p>
+<b>Frame3DD</b> generates several <b>additional output files</b> used in plotting deformed frames.  
 By default, these output files are sent to a temporary file folder. 
-On Windows, the location of this folder is the contents of the <b>%TEMP%</b>
-environment variable, which you can examine by typing 
-<pre>
-echo %TEMP%
-</pre>
-On OS X, Linux, and Unix, this is the <b>/tmp</b> directory.
+On OS X, Linux, and Unix, the location of this folder defaults to the <b>/tmp</b> directory.
+On Windows, the location of this folder defaults to either <b>WINDOWS\Temp</b>
+or the user's <b>Local Settings\Temp</b> (XP) or <b>AppData\Local\Temp</b> (Vista).  
 <br><br>
-If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <b>FRAME3DD_OUTDIR</b> with the path to your output directory. All new output files will then appear in the folder you have specified.
-</div>
+If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <b>FRAME3DD_OUTDIR</b> with the path to your desired temporary output directory. The additional output files will then appear in the folder you have specified.
+</p>
+<!-- </div> -->
 
 <a name="installrun"/><h2>3. How to install and run Frame3DD</h2>
 
@@ -460,6 +461,8 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
  <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>, or
  <a href="http://macvim.org/OSX/index.php">Vim</a>. 
 A tutorial for Vim is <a href="http://www.jerrywang.net/vi/">here</a>. 
+Alternatively, you may use
+<a href="http://support.apple.com/kb/HT2523">TextEdit</a>.
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li>
 <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
@@ -498,24 +501,6 @@ Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the 
 <tt>exA.out</tt> Output Data file. Data files used primarily for plotting are stored in the <b>/tmp/frame3dd_temp_$USER</b> directory. 
 
-<!-- 
-<ol>
-<li>        Download the <b>Frame3DD</b> application and save as "frame3dd" on your Desktop,
-         or some other directory:<br> | <a href="http://www.duke.edu/~hpgavin/frame3dd/OSX-PPC/frame3dd">CTRL-CLICK-HERE-FOR-PPC</a> | <a href="OSX-Intel/frame3dd">CTRL-CLICK-HERE-FOR-INTEL</a> |
-<li>        Download and save an example Input Data file, such as <tt>exA.3dd</tt>,
-         on your Desktop, or some other directory:<br> | <a href="../examples/exA.3dd">CTRL-CLICK-HERE</a> |
-<li>        Open a Terminal window (Applications > Utilities > Terminal) and ...<br>
-            <tt>...$   cd ~/Desktop</tt><br>
-            <tt>...$   chmod +x frame3dd</tt><br>
-         Create a plain text file (using
-<a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>) called  <b>~/.profile</b> containing the line:<br>
-             <tt>export PATH=".:$PATH:/usr/local/bin"</tt><br>
-         Quit the Terminal application.  [APPLE] [Q]
-<li>        Run <b>Frame3DD</b> from a Terminal window:  (Applications > Utilities > Terminal) ... <br>
-            <tt>...$   cd ~/Desktop</tt><br>
-            <tt>...$   frame3dd  example.3dd  example.out</tt><br>
-         where <tt>example.3dd</tt> is the name of your Input Data file.
-<!-- 
 <!-- <li>        Run <b>Frame3DD</b> from a Terminal window  (another way).
              Click on the <b>frame3dd</b> icon in your Desktop.
              A Terminal window should automatically open.
@@ -620,6 +605,8 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <!-- <a href="http://www.pcshareware.com/anotepad.htm">Notepad</a>, or -->
  <a href="ftp://ftp.vim.org/pub/vim/pc/gvim72.exe">gvim</a>.
 A tutorial for gvim is <a href="http://www.jerrywang.net/vi/">here</a>. 
+Alternatively, you may use
+<a href="http://en.wikipedia.org/wiki/Notepad_(Windows)">NotePad</a>.
 <li>
 <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it to your <b>Desktop</b>.<br>
@@ -633,9 +620,9 @@ To do this,
 Set a new user variable name <tt>PATH</tt>
 with variable value <tt>%HOMEPATH%\Desktop\Frame3DD</tt></br>
 Set a new user variable name <tt>FRAME3DD_OUTDIR</tt> 
-with variable value <tt>%HOMEPATH%\Desktop\frame3dd_temp</tt></br>
-Finally, navigate to the <b>Desktop</b> and create a new folder called <tt>frame3dd_temp</tt>.  <br>
-Detailed information on how to set environment variables in Windows is <a href="http://vlaurie.com/computers2/Articles/environment.htm">here</a>.  
+with variable value <tt>%HOMEPATH%\Desktop\Frame3DD\temp</tt></br>
+(The <tt>Desktop\Frame3DD\temp</tt> folder should already exist.)<br>
+Detailed information on how to set environment variables in Windows is <a href="http://vlaurie.com/computers2/Articles/environment.htm">here</a>, if you need it.  
 
 <li>Open a 
 "<a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">command prompt window</a>" 
@@ -646,9 +633,11 @@ change to the directory of example files, and run an example, as follows:
 chdir %HOMEPATH%\Desktop\Frame3DD\examples
 frame3dd  exA.3dd  exA.out
 </pre>
+Alternatively, you may double-click on the <b>frame3dd.exe</b> icon and
+enter the Input Data file name and Output Data file name when prompted.<br>
 Some run-time information will be displayed on the Command Prompt window and
 the results of your Frame3DD analysis will have been appended to the end of the <tt>exA.out</tt> Output Data file.
-Data files used primarily for plotting are stored in the <b>%TEMP%\frame3dd_temp</b> folder.
+Data files used primarily for plotting are stored in the <b>Desktop\Frame3DD\temp</b> folder.
 <li>       You may view Output Data files and edit Input Data files
 using a good plain text editor
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
@@ -702,6 +691,8 @@ specified when running Frame3DD.
 <!-- <a href="http://www.pcshareware.com/anotepad.htm">Notepad</a>, or -->
  <a href="ftp://ftp.vim.org/pub/vim/pc/gvim72.exe">gvim</a>.
 A tutorial for gvim is <a href="http://www.jerrywang.net/vi/">here</a>. 
+Alternatively, you may use
+<a href="http://en.wikipedia.org/wiki/Notepad_(Windows)">NotePad</a>.
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> and run the binary installer (frame3dd-VERSION.exe).
@@ -710,8 +701,16 @@ Download</a> and run the binary installer (frame3dd-VERSION.exe).
 -->
 <li> <b>(<i>Recommended</i>)</b>
 Put the <b>Frame3DD</b> directory in your path and set the 
-<tt>PATH</tt> and <tt>FRAME3DD_OUTDIR</tt> environment variables<br>
-as described above.  
+<tt>PATH</tt> and <tt>FRAME3DD_OUTDIR</tt> environment variables<br>. 
+To do this,
+<b> right-click My Computer > Properties > Advanced > Environment Variables</b><br>
+Set a new user variable name <tt>PATH</tt>
+with variable value <tt>%PROGRAMFILES%\Frame3DD</tt></br>
+Set a new user variable name <tt>FRAME3DD_OUTDIR</tt> 
+with variable value <tt>%HOMEPATH%\Desktop\temp</tt></br>
+You will need to create this Temp folder: <tt>Desktop\Frame3DD\temp</tt>.<br> 
+Detailed information on how to set environment variables in Windows is <a href="http://vlaurie.com/computers2/Articles/environment.htm">here</a>, if you need it.  
+
 <li>Copy one or more of the example files (eg <tt>exA.3dd</tt>) from your <b>%PROGRAMFILES%\FRAME3DD\examples</b> folder into your <b>Desktop</b> folder
 <li>
 Open a

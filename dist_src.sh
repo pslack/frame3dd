@@ -29,6 +29,9 @@ cp --preserve=mode,timestamps LICENSE.txt           dist/Frame3DD/.
 cp --preserve=mode,timestamps README.txt            dist/Frame3DD/.
 cp --preserve=mode,timestamps README-win32.txt      dist/Frame3DD/.
 
+# make a Frame3DD/temp directory
+mkdir dist/Frame3DD/temp
+
 # assemble the .zip file
 echo "assembling .zip file ... "
 cd dist
