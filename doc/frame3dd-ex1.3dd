@@ -31,7 +31,7 @@ frame3dd-ex1 --- a planar frame  (N, mm, tonne, s)
 # frame element data ...
 
 3                               # number of frame elements
-#.element j1 j2    Ax    Ay   Az     Jx    Iy     Iz     E    G    p
+#.element j1 j2    Ax    Asy  Asz    Jx    Iy     Iz     E    G    p
 #                 mm^2  mm^2 mm^2   mm^4  mm^4   mm^4   N/mm N/mm  deg
   1        1  2   200   100  100    1e6   1e6    4e4    2e5  8e4   0
   2        2  3   200   100  100    1e6   1e6   10e4    2e5  8e4   0
