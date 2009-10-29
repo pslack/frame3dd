@@ -1,8 +1,8 @@
 Example D: dynamic properties of an un-restrained frame with a triangular section
 
-24			% number of joints
-%.joint  x       y       z       r
-%        in      in      in      in
+24			# number of joints
+#.joint  x       y       z       r
+#        in      in      in      in
 
   1     -120	0	-210	10
   2	0	0	-210	0
@@ -29,11 +29,11 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
  23	0	230	210	10
  24	-60	115	210	0
 
-0                               % number of joints with reactions
+0                               # number of joints with reactions
 
-30			% number of members
-%.m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%         in^2  in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+30			# number of members
+#.m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#         in^2  in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
  1  1  2  125	100	100	5000	2500	2500	29000	11500 0
  2  2  3  125	100	100	5000	2500	2500	29000	11500 0
@@ -66,33 +66,33 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
 29 23 24  125	100	100	5000	2500	2500	29000	11500 0
 30 24 19  125	100	100	5000	2500	2500	29000	11500 0
 
-1                               % 1: include shear deformation
-0                               % 1: include geometric stiffness
-20.0                            % exaggerate mesh deformations
+1                               # 1: include shear deformation
+0                               # 1: include geometric stiffness
+20.0                            # exaggerate mesh deformations
 
 
-1			% number of static load cases
-				% Begin Static Load Case 1 of 1
-0                               % number of loaded joints
-0                               % number of uniform loads
-0                               % number of trapezoidal loads
-0                               % number of internal concentrated loads
-0                               % number of temperature loads
-0                               % number of support settlements
-				% End   Static Load Case 1 of 1
+1			# number of static load cases
+				# Begin Static Load Case 1 of 1
+0                               # number of loaded joints
+0                               # number of uniform loads
+0                               # number of trapezoidal loads
+0                               # number of internal concentrated loads
+0                               # number of temperature loads
+0                               # number of support settlements
+				# End   Static Load Case 1 of 1
 
 
-14                              % number of desired dynamic modes of vibration
-1                               % 1: subspace Jacobi     2: Stodola
-0                               % 0: consistent mass ... 1: lumped mass matrix
-5e-5                            % mode shape tolerance
-1.00                            % shift value ... for unrestrained structures
+14                              # number of desired dynamic modes of vibration
+1                               # 1: subspace Jacobi     2: Stodola
+0                               # 0: consistent mass ... 1: lumped mass matrix
+5e-5                            # mode shape tolerance
+1.00                            # shift value ... for unrestrained structures
 
 
 
-%.M     density		mass
-%       k/in^3		kip
- 1	7.324e-7	0.0             % bar numbers, density, and extra mass
+#.M     density		mass
+#       k/in^3		kip
+ 1	7.324e-7	0.0             # bar numbers, density, and extra mass
  2	7.324e-7	0.0
  3	7.324e-7	0.0
  4	7.324e-7	0.0
@@ -123,12 +123,12 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
 29	7.324e-7	0.0
 30	7.324e-7	0.0
 
-0                       % number of joints with extra mass or inertia
-%.j      M      Ixx     Iyy     Izz -  joints and concentrated mass and inertia
+0                       # number of joints with extra mass or inertia
+#.j      M      Ixx     Iyy     Izz -  joints and concentrated mass and inertia
 
-5                               % number of modes to animate
- 1  7  9  11  12                % modes to animate
-2                               % pan rate during animation
+5                               # number of modes to animate
+ 1  7  9  11  12                # modes to animate
+2                               # pan rate during animation
 
 
 

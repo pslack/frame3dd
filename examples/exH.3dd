@@ -1,11 +1,11 @@
 Example H: a pedestrian ramp  (kip, in)
 
-148                     % number of joints 
+148                     # number of joints 
 
-% CENTER BAY
+# CENTER BAY
 
-%.joint  x       y       z       r	 units:  inches and kips
-%        in      in      in      in
+#.joint  x       y       z       r	 units:  inches and kips
+#        in      in      in      in
 
 1	-661	0	0	0
 2	-541	0	0	0
@@ -59,10 +59,10 @@ Example H: a pedestrian ramp  (kip, in)
 49	  181	0	620	0
 50	 -181	0	640	0
 
-% LEFT BAY
+# LEFT BAY
 
-%.joint  x       y       z       r
-%        in      in      in      in
+#.joint  x       y       z       r
+#        in      in      in      in
 
 51	-661	-240	0	0
 52	-541	-240	0	0
@@ -76,8 +76,8 @@ Example H: a pedestrian ramp  (kip, in)
 60	 661	-240	120	0
 61	-661	-240	180	0
 62	-541	-240	180	0
-63	 541	-240	240	0 %
-64	 661	-240	240	0 %
+63	 541	-240	240	0 #
+64	 661	-240	240	0 #
 65	-661	-240	300	0
 66	-541	-240	300	0
 67	 541	-240	360	0
@@ -116,10 +116,10 @@ Example H: a pedestrian ramp  (kip, in)
 99	  181	-240	620	0
 100	 -181	-240	640	0
 
-% RIGHT BAY
+# RIGHT BAY
 
-%.joint  x       y       z       r
-%        in      in      in      in
+#.joint  x       y       z       r
+#        in      in      in      in
 
 101	-661	240	0	0
 102	-541	240	0	0
@@ -133,8 +133,8 @@ Example H: a pedestrian ramp  (kip, in)
 110	 661	240	120	0
 111	-661	240	180	0
 112	-541	240	180	0
-113	 541	240	240	0 %
-114	 661	240	240	0 %
+113	 541	240	240	0 #
+114	 661	240	240	0 #
 115	-661	240	300	0
 116	-541	240	300	0
 117	 541	240	360	0
@@ -171,8 +171,8 @@ Example H: a pedestrian ramp  (kip, in)
 147	 -181	240	560	0
 148	  181	240	580	0
 
-36                              % number of joints with reactions
-%.J     x  y  z  xx yy zz       1=fixed, 0=free
+36                              # number of joints with reactions
+#.J     x  y  z  xx yy zz       1=fixed, 0=free
 
  1	1  1  1  1  1  1
  2	1  1  1  1  1  1
@@ -193,7 +193,7 @@ Example H: a pedestrian ramp  (kip, in)
 105	1  1  1  1  1  1
 106	1  1  1  1  1  1
 
- 27     1  1  1  0  0  0	% pinned to stadium
+ 27     1  1  1  0  0  0	# pinned to stadium
  77     1  1  1  0  0  0
 127     1  1  1  0  0  0
  23     1  1  1  0  0  0
@@ -213,12 +213,12 @@ Example H: a pedestrian ramp  (kip, in)
 107     1  1  1  0  0  0
 
 
-295			% number of members
+295			# number of members
 
-% CENTER-BAY six main columns		tube 14 x 14 x 1/2
+# CENTER-BAY six main columns		tube 14 x 14 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 1    1  7	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
 2    7  11	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
@@ -265,10 +265,10 @@ Example H: a pedestrian ramp  (kip, in)
 43   45 48	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
 44   48 49	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
 
-% CENTER BAY horizontal floor beams 	tube 10 x 10 x 1/2
+# CENTER BAY horizontal floor beams 	tube 10 x 10 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 45   7  8 	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 46   11 12	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
@@ -282,10 +282,10 @@ Example H: a pedestrian ramp  (kip, in)
 54   21 22	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 55   25 26	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 
-% CENTER BAY inclined floor beams  	tube 10 x 10 x 1/2
+# CENTER BAY inclined floor beams  	tube 10 x 10 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 56   5  29	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 57   29 30	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
@@ -322,10 +322,10 @@ Example H: a pedestrian ramp  (kip, in)
 88   50 28	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 
 
-% LEFT-BAY six main columns		tube 14 x 14 x 1/2
+# LEFT-BAY six main columns		tube 14 x 14 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 89   51 57	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
 90   57 61	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
@@ -372,10 +372,10 @@ Example H: a pedestrian ramp  (kip, in)
 131  95 98	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
 132  98 99	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
 
-% LEFT BAY horizontal floor beams  	tube 10 x 10 x 1/2
+# LEFT BAY horizontal floor beams  	tube 10 x 10 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 133  57 58 	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 134  61 62	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
@@ -389,10 +389,10 @@ Example H: a pedestrian ramp  (kip, in)
 142  71 72	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 143  75 76	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 
-% LEFT BAY inclined floor beams  	tube 10 x 10 x 1/2
+# LEFT BAY inclined floor beams  	tube 10 x 10 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 144   55 79	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 145   79 80	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
@@ -413,10 +413,10 @@ Example H: a pedestrian ramp  (kip, in)
 160   99 100	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 161  100 78	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 
-% RIGHT-BAY six main columns		tube 14 x 14 x 1/2
+# RIGHT-BAY six main columns		tube 14 x 14 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 162   101 107	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
 163   107 111	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
@@ -461,10 +461,10 @@ Example H: a pedestrian ramp  (kip, in)
 202   144 145	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
 203   145 148	28.1	14.2	14.2	28.2	821.1	821.2	29000  11500 0
 
-% RIGHT BAY horizontal floor beams  	tube 10 x 10 x 1/2
+# RIGHT BAY horizontal floor beams  	tube 10 x 10 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 204   107 108 	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 205   111 112	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
@@ -478,10 +478,10 @@ Example H: a pedestrian ramp  (kip, in)
 213   121 122	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 214   125 126	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 
-% RIGHT BAY inclined floor beams  	tube 10 x 10 x 1/2
+# RIGHT BAY inclined floor beams  	tube 10 x 10 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 215   108 131	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 216   131 132	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
@@ -500,10 +500,10 @@ Example H: a pedestrian ramp  (kip, in)
 229   148 125	20.1	10.2	10.2	20.2	286.6	286.6	29000  11500 0
 
 
-% LATERAL floor beams  -  horizontal sections	8 x 8 x 1/2
+# LATERAL floor beams  -  horizontal sections	8 x 8 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 230     7  57	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  11500 0
 231     8  58	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  11500 0
@@ -551,10 +551,10 @@ Example H: a pedestrian ramp  (kip, in)
 272    27 127	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  11500 0
 273    28 128	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  11500 0
 
-% LATERAL floor beams  -  CENTER to LEFT on inclined sections	8 x 8 x 1/2
+# LATERAL floor beams  -  CENTER to LEFT on inclined sections	8 x 8 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 274    29  79	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  11500 0
 275    30  80	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  11500 0
@@ -569,10 +569,10 @@ Example H: a pedestrian ramp  (kip, in)
 284    49  99	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  11500 0
 285    50 100	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  11500 0
 
-% LATERAL floor beams  -  CENTER to RIGHT on inclined sections	8 x 8 x 1/2
+# LATERAL floor beams  -  CENTER to RIGHT on inclined sections	8 x 8 x 1/2
 
-%.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
-%               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
+#.m  j1 j        Ax     Asy     Asz     Jxx     Iyy     Izz     E       G    p
+#               in^2    in^2    in^2    in^4    in^4    in^4    ksi     ksi  deg
 
 286    31 131	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  11500 0
 287    32 132	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  11500 0
@@ -586,19 +586,19 @@ Example H: a pedestrian ramp  (kip, in)
 295    48 148	16.1	 8.2	 8.2	16.3	141.2	141.2	29000  11500 0
 
 
-1                               % 1: include shear deformation
-1                               % 1: include geometric stiffness
-100.0                           % exaggerate mesh deformations
+1                               # 1: include shear deformation
+1                               # 1: include geometric stiffness
+100.0                           # exaggerate mesh deformations
 
 
-1			% number of static load cases
-				% Begin Static Load Case 1 of 1
-0                               % number of loaded joints
+1			# number of static load cases
+				# Begin Static Load Case 1 of 1
+0                               # number of loaded joints
 
-166				% number of uniform distributed loads
-%.m   wx  wy  wz		% vertical gravity load k/in; concrete floor = 
-%             k/in 
-44    0   0   -0.100		% concrete floor = 100 lb / sq.ft.
+166				# number of uniform distributed loads
+#.m   wx  wy  wz		# vertical gravity load k/in; concrete floor = 
+#             k/in 
+44    0   0   -0.100		# concrete floor = 100 lb / sq.ft.
 45    0   0   -0.100
 46    0   0   -0.100
 47    0   0   -0.100
@@ -769,22 +769,22 @@ Example H: a pedestrian ramp  (kip, in)
 295   0   0   -0.100
 
 
-0  				% number of trapezoidal distributed loads
-0                               % number of internal concentrated loads
-0                               % number of temperature loads
-0                               % number of support settlements
-				% End   Static Load Case 1 of 1
+0  				# number of trapezoidal distributed loads
+0                               # number of internal concentrated loads
+0                               # number of temperature loads
+0                               # number of support settlements
+				# End   Static Load Case 1 of 1
 
 
-5                               % number of desired dynamic modes of vibration
-1                               % 1: subspace Jacobi     2: Stodola
-0                               % 0: consistent mass ... 1: lumped mass matrix
-1e-4                            % mode shape tolerance
-1.0                             % shift value ... for unrestrained structures
+5                               # number of desired dynamic modes of vibration
+1                               # 1: subspace Jacobi     2: Stodola
+0                               # 0: consistent mass ... 1: lumped mass matrix
+1e-4                            # mode shape tolerance
+1.0                             # shift value ... for unrestrained structures
 
-%.M     density         mass
-%       kip/in^3        kip
-1	7.324e-7	0.0	        % bar numbers, density, and extra mass
+#.M     density         mass
+#       kip/in^3        kip
+1	7.324e-7	0.0	        # bar numbers, density, and extra mass
 2	7.324e-7	0.0
 3	7.324e-7	0.0
 4	7.324e-7	0.0
@@ -874,7 +874,7 @@ Example H: a pedestrian ramp  (kip, in)
 87	7.324e-7	0.026
 88	7.324e-7	0.026
 
-89	7.324e-7	0.0	        % bar numbers, density, and extra mass
+89	7.324e-7	0.0	        # bar numbers, density, and extra mass
 90	7.324e-7	0.0
 91	7.324e-7	0.0
 92	7.324e-7	0.0
@@ -949,7 +949,7 @@ Example H: a pedestrian ramp  (kip, in)
 160	7.324e-7	0.026
 161	7.324e-7	0.026
 
-162	7.324e-7	0.0	        % bar numbers, density, and extra mass
+162	7.324e-7	0.0	        # bar numbers, density, and extra mass
 163	7.324e-7	0.0
 164	7.324e-7	0.0
 165	7.324e-7	0.0
@@ -1088,11 +1088,11 @@ Example H: a pedestrian ramp  (kip, in)
 294	7.324e-7	0.026
 295	7.324e-7	0.026
 
-0                                % number of joints with extra mass or inertia
-%.j      M      Ixx     Iyy     Izz -  joints and concentrated mass and inertia
+0                                # number of joints with extra mass or inertia
+#.j      M      Ixx     Iyy     Izz -  joints and concentrated mass and inertia
 
-5                               % number of modes to animate
- 1  2  3  4  5                 % modes to animate
-1                              % pan during animation
+5                               # number of modes to animate
+ 1  2  3  4  5                 # modes to animate
+1                              # pan during animation
 
 
