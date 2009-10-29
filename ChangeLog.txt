@@ -1,3 +1,9 @@
+* Thu Oct 29 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- Increase limit on the number of trapezoidally distributed load from
+one per frame element to ten per frame element
+- Fixed Frame3DD example files in the doc directory and renamed them to 
+frame3dd-ex1.3dd and frame3dd-ex2.3dd
+
 * Tue Oct 27 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 
 - There appear to be conflicting definitions for the %TEMP% environment

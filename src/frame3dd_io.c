@@ -932,12 +932,12 @@ void read_and_assemble_loads(
 	  sfrv=fscanf(fp,"%d", &nW[lc] ); /* trapezoidally distributed loads */
 	  if (sfrv != 1) sferr("nW value in load data");
 	  if ( verbose ) {
-		printf("  number of tapezoidally distributed loads ");
-	  	dots(stdout,10);
+		printf("  number of trapezoidally distributed loads ");
+	  	dots(stdout,9);
 	  	printf(" nW = %3d\n", nW[lc]);
 	  }
-	  if ( nW[lc] < 0 || nW[lc] > nE ) {
-		fprintf(stderr,"  error: valid ranges for nW is 0 ... %d \n", nE );
+	  if ( nW[lc] < 0 || nW[lc] > 10*nE ) {
+		fprintf(stderr,"  error: valid ranges for nW is 0 ... %d \n", 10*nE );
 		exit(1);
 	  }
 	  for (i=1; i <= nW[lc]; i++) {	/* ! local element coordinates ! */

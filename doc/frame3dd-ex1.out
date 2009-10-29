@@ -1,0 +1,69 @@
+________________________________________________________________________________
+Frame3DD version: 20091022               http://frame3dd.sf.net/
+GPL Copyright (C) 1992-2009, Henri P. Gavin 
+Frame3DD is distributed in the hope that it will be useful but with no warranty.
+For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
+________________________________________________________________________________
+
+frame3dd-ex1 --- a planar frame  (N  mm  tonne  s) 
+Thu Oct 29 10:32:46 2009
+________________________________________________________________________________
+4 JOINTS;    3 MEMBERS;    1 LOAD CASES;  2 FIXED JOINTS;  
+For 2D problems, the Y-axis is vertical. 
+For 3D problems, the Z-axis is vertical. 
+________________________________________________________________________________
+J O I N T   D A T A                                         R E S T R A I N T S
+  Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
+    1       0.000000       0.000000       0.000000    0.000   1  1  1  1  1  0
+    2       0.000000     800.000000       0.000000    0.000   0  0  0  0  0  0
+    3    1000.000000     800.000000       0.000000    0.000   0  0  0  0  0  0
+    4    1000.000000       0.000000       0.000000    0.000   0  1  1  1  1  0
+F R A M E   E L E M E N T   D A T A					(local)
+  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+    1     1     2  200.0 100.0 100.0 1000000.0 1000000.0 40000.0 200000.0 80000.0   0
+    2     2     3  200.0 100.0 100.0 1000000.0 1000000.0 100000.0 200000.0 80000.0   0
+    3     4     3  200.0 100.0 100.0 1000000.0 1000000.0 60000.0 200000.0 80000.0   0
+  Neglect shear deformations.
+  Neglect geometric stiffness.
+
+L O A D   C A S E   1   O F   1  ... 
+
+   1 concentrated loads
+   1 uniformly distributed loads
+   0 trapezoidally distributed loads
+   0 concentrated point loads
+   0 temperature loads
+   0 prescribed displacements
+#J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
+  Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
+     2    1500.000   -2500.000       0.000       0.000       0.000 -416666.667
+     3       0.000   -2500.000       0.000       0.000       0.000  416666.667
+ U N I F O R M   L O A D S						(local)
+  Beam        Ux               Uy               Uz
+     2       0.00000000      -5.00000000       0.00000000
+
+E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
+
+
+L O A D   C A S E   1   O F   1  ... 
+
+J O I N T   D I S P L A C E M E N T S					(global)
+  Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+     1    0.0         0.0         0.0         0.0         0.0        -0.090465
+     2   56.371733   -0.026000    0.0         0.0         0.0        -0.030465
+     3   56.371733   -0.074000    0.0         0.0         0.0         0.020369
+     4   72.666667    0.0         0.0         0.0         0.0         0.020369
+F R A M E   E L E M E N T   E N D   F O R C E S				(local)
+  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+     1      1   1300.000c   1500.000      0.0        0.0        0.0        0.0  
+     1      2  -1300.000c  -1500.000      0.0        0.0        0.0   1200000.000
+     2      2      0.0      1300.000      0.0        0.0        0.0   -1200000.000
+     2      3      0.0      3700.000      0.0        0.0        0.0        0.0  
+     3      4   3700.000c      0.0        0.0        0.0        0.0        0.0  
+     3      3  -3700.000c      0.0        0.0        0.0        0.0        0.0  
+R E A C T I O N S							(global)
+  Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
+     1   -1500.000    1300.000       0.0         0.0         0.0         0.0  
+     4       0.0      3700.000       0.0         0.0         0.0         0.0  
+R M S   E Q U I L I B R I U M    E R R O R: 2.608e-16
+

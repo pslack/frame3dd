@@ -1,0 +1,63 @@
+frame3dd-ex2   a 3D frame problem with torsion (kip, in, s)
+# ______________________________________________________________________
+# DUKE UNIVERSITY ---- Dept. of Civil and Environmental Engineering
+# CE 131L. Matrix Structural Analysis                        Fall 2009
+# ______________________________________________________________________
+
+#	INPUT  FILE  DESCRIPTION  FOR  PROGRAM  FRAME3DD  -- EXAMPLE 2
+#	http://frame3dd.sourceforge.net
+	
+
+
+# joint data ...
+
+3				# number of joints
+#.joint   X-coord  Y-coord  Z-coord  radius
+#            in.      in.      in.      in.
+  1          0.0      0.0      0.0      0.0	
+  2         60.0      0.0      0.0      0.0
+  3         60.0      0.0     40.0      0.0
+
+
+# reaction data ...
+#
+1				# number of joints with reactions
+#.joint  X  Y  Z  XX YY ZZ  reactions ( 0: free   1: fixed )
+  1      1  1  1   1  1  1	
+
+
+# frame element data ...
+
+2				# number of frame elements
+#.element j1 j2    Ax    Ay   Az     Jx    Iy    Iz     E    G   p
+#                  in^2  in^2 in^2  in^4  in^4  in^4  ksi  ksi   deg
+  1        1  2    10.0  9.0  9.0  19.22  9.61  9.61  30e3 12e3  0
+  2        2  3    10.0  9.0  9.0  19.22  9.61  9.61  30e3 12e3  0
+
+
+0				# 0: neglect shear deformations,  1: include 
+0				# 0: neglect geometric stiffness, 1: include 
+
+				# graphical output data information:
+10				# deflection exageration factor
+
+
+# load data ...
+
+1				# number of static load cases
+ 2				# number of concentrated joint loads
+#.joint  X-load  Y-load  Z-load  X-mom   Y-mom   Z-mom
+#         kip     kip     kip     k.in   k.in    k.in
+  2       0       0       0.8      0      0       0
+  3       0      -0.5     0        0      0       0
+
+ 0				# number of uniformly distributed loads
+ 0				# number of trapezoidally distributed loads
+ 0				# number of interior point loads
+ 0				# number of temperature loads
+ 0				# number of prescribed displacements
+
+ 0                              # number of desired vibratory modes
+
+# to perform the analysis open a terminal and type:
+# frame3dd  frame3dd-ex2.3dd  frame3dd-ex2.out
