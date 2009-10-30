@@ -278,10 +278,10 @@ int main ( int argc, char *argv[] ) {
 		exit(1);
 	}
 					/* allocate memory for loads ... */
-	U   =  D3matrix(1,nL,1,nE,1,4); /* uniform load on each member */
-	W   =  D3matrix(1,nL,1,nE,1,13);/* trapezoidal load on each member */
-	P   =  D3matrix(1,nL,1,nE,1,5); /* internal point load each member */
-	T   =  D3matrix(1,nL,1,nE,1,8); /* internal temp change each member */
+	U   =  D3matrix(1,nL,1,nE,1,4);    /* uniform load on each member */
+	W   =  D3matrix(1,nL,1,10*nE,1,13);/* trapezoidal load on each member */
+	P   =  D3matrix(1,nL,1,10*nE,1,5); /* internal point load each member */
+	T   =  D3matrix(1,nL,1,nE,1,8);    /* internal temp change each member*/
 	Dp  =  matrix(1,nL,1,DoF); /* prescribed displacement of each joint */
 
 	Fo_mech  = dmatrix(1,nL,1,DoF);	/* mechanical load vector	*/

@@ -1312,8 +1312,8 @@ void deallocate(
 
 // printf("..D\n");
 	free_D3matrix(U,1,nL,1,nE,1,4);
-	free_D3matrix(W,1,nL,1,nE,1,13);
-	free_D3matrix(P,1,nL,1,nE,1,5);
+	free_D3matrix(W,1,nL,1,10*nE,1,13);
+	free_D3matrix(P,1,nL,1,10*nE,1,5);
 	free_D3matrix(T,1,nL,1,nE,1,8);
 	free_matrix(Dp,1,nL,1,DoF);
 

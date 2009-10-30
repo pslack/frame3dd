@@ -960,7 +960,7 @@ void read_and_assemble_loads(
 		if ( W[lc][i][ 4]==0 && W[lc][i][ 5]==0 &&
 		     W[lc][i][ 7]==0 && W[lc][i][ 8]==0 &&
 		     W[lc][i][12]==0 && W[lc][i][13]==0 ) {
-		    fprintf(stderr,"   warning: All trapezoidal loads applied to frame element %d  are zero\n", n );
+		  fprintf(stderr,"   warning: All trapezoidal loads applied to frame element %d  are zero\n", n );
 		  fprintf(stderr,"     load case: %d , member %d , load %d\n ", lc, n, i );
 		}
 
@@ -1123,7 +1123,7 @@ void read_and_assemble_loads(
 			   printf(" feF %d = %9.3f ", l, feF_mech[lc][n][l] );
 		}
 		printf("\n"); */
-	  }				/* end trapezoidally distributed loads */
+	  }			/* end trapezoidally distributed loads */
 
 	  sfrv=fscanf(fp,"%d", &nP[lc] );	/* element point loads	*/
 	  if (sfrv != 1) sferr("nP value load data");
@@ -2833,15 +2833,14 @@ void bent_beam(
 }
 
 
-
 /*------------------------------------------------------------------------------
 SFERR  -  Display error message upon an erronous *scanf operation
 ------------------------------------------------------------------------------*/
 void sferr ( char s[] ) {
-
-	fprintf(stderr," Frame3DD: Input Data file error while reading %s\n",s);
+	fprintf(stderr," >> Input Data file error while reading %s\n",s);
 	return;
 }
+
 
 /*------------------------------------------------------------------------------
 MY_ITOA  -  Convert an integer n to charcters in s, from K&R, 1978,   p. 59-60

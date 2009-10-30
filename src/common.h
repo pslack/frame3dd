@@ -32,10 +32,6 @@
 # define VERSION "20091022"
 #endif
 
-//#ifdef DJGPP
-//# define WIN32 1
-//#endif
-
 #ifndef PI
 # define PI 3.14159265358979323846
 #endif
