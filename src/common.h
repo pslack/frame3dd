@@ -28,6 +28,8 @@
 
 #define FRAME3DD_PATHMAX 256
 
+#define FILENMAX 96
+
 #ifndef VERSION
 # define VERSION "20091022"
 #endif

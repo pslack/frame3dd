@@ -54,8 +54,6 @@ For compilation/installation, see README.txt.
 
 int main ( int argc, char *argv[] ) {
 
-#define FILENMAX 96
-
 	char	IN_file[FILENMAX],	/* the input  data filename	*/
 		OUT_file[FILENMAX],	/* the output data filename	*/
 		title[256],		/* the title of the analysis	*/

@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example C: a tetrahedral frame - static and dynamic analysis (in  kip) 
-Tue Oct 27 22:12:52 2009
+Wed Nov  4 10:14:42 2009
 ________________________________________________________________________________
 18 JOINTS;    48 MEMBERS;    1 LOAD CASES;  4 FIXED JOINTS;  
 For 2D problems, the Y-axis is vertical. 

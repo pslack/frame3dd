@@ -72,7 +72,7 @@ rm -rf %{buildroot}
 one per frame element to ten per frame element
 - Fixed Frame3DD example files in the doc directory and renamed them to 
 frame3dd-ex1.3dd and frame3dd-ex2.3dd
-- Changed comment chararacter from % to # in examples for sytax highlighting
+- Changed comment chararacter from % to # in examples for syntax highlighting
 - user-manual refinement
 
 * Tue Oct 27 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
