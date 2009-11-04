@@ -67,6 +67,11 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Wed Nov  4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- Move ... #define FILENMAX 96 ... from main.c to common.h because a number of
+c++ objects require FILENMAX too ... suggested by Andrew Kovalev during GUI
+development for Frame3DD
+
 * Thu Oct 29 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - Increase limit on the number of trapezoidally distributed load from
 one per frame element to ten per frame element

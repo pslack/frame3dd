@@ -52,7 +52,16 @@ For compilation/installation, see README.txt.
 #include "eig.h"
 #include "nrutil.h"
 
-int main ( int argc, char *argv[] ) {
+
+// compile the Frame3DD analysis into another code, such as a GUI
+#ifdef WITH_GLOBALS	
+ int run_kernel ( int argc, char *argv[] ) {
+#endif
+
+// compile Frame3DD to run as a stand-alone code through the terminal
+#ifndef WITH_GLOBALS
+ int main ( int argc, char *argv[] ) {
+#endif
 
 	char	IN_file[FILENMAX],	/* the input  data filename	*/
 		OUT_file[FILENMAX],	/* the output data filename	*/
