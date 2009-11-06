@@ -6,11 +6,11 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example H: a pedestrian ramp  (kip  in) 
-Wed Nov  4 10:23:37 2009
+Thu Nov  5 21:56:29 2009
 ________________________________________________________________________________
-148 JOINTS;    295 MEMBERS;    1 LOAD CASES;  36 FIXED JOINTS;  
-For 2D problems, the Y-axis is vertical. 
-For 3D problems, the Z-axis is vertical. 
+In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
+________________________________________________________________________________
+  148 JOINTS            36 FIXED JOINTS     295 FRAME ELEMENTS   1 LOAD CASES   
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S
   Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
@@ -163,7 +163,7 @@ J O I N T   D A T A                                         R E S T R A I N T S
   147    -181.000000     240.000000     560.000000    0.000   0  0  0  0  0  0
   148     181.000000     240.000000     580.000000    0.000   0  0  0  0  0  0
 F R A M E   E L E M E N T   D A T A					(local)
-  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+  Elmnt  J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
     1     1     7   28.1  14.2  14.2   28.2   821.1   821.2  29000.0 11500.0   0
     2     7    11   28.1  14.2  14.2   28.2   821.1   821.2  29000.0 11500.0   0
     3    11    15   28.1  14.2  14.2   28.2   821.1   821.2  29000.0 11500.0   0
@@ -585,7 +585,7 @@ L O A D   C A S E   1   O F   1  ...
    147       2.000       0.000     -48.100     480.000      12.033       0.000
    148       2.000       0.000     -48.100     480.000     -12.033       0.000
  U N I F O R M   L O A D S						(local)
-  Beam        Ux               Uy               Uz
+  Elmnt       Ux               Uy               Uz
     44       0.00000000       0.00000000      -0.10000000
     45       0.00000000       0.00000000      -0.10000000
     46       0.00000000       0.00000000      -0.10000000
@@ -759,7 +759,7 @@ E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 L O A D   C A S E   1   O F   1  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
-  Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      7    0.0         0.0         0.0         0.000246    0.000034    0.000001
      8    0.001006    0.000042   -0.026746   -0.000001    0.000784   -0.000003
      9    0.006510   -0.000366   -0.048779    0.000005   -0.000969   -0.000008
@@ -891,7 +891,7 @@ J O I N T   D I S P L A C E M E N T S					(global)
    147   -0.001316   -0.010324   -0.095587    0.000685   -0.000056    0.000017
    148   -0.005267   -0.007047   -0.101560    0.000667   -0.000067    0.000038
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
      1      1      0.0        -6.565     -0.898     -0.007     13.601    -99.380
      1      7      0.0         6.565      0.898      0.007     40.303   -294.493
      2      7      0.0        -1.674     -1.209     -0.002     58.783   -160.436

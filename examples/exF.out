@@ -6,11 +6,11 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example F: a seismically-isolated building model (units: N  mm  ton) 
-Wed Nov  4 10:23:34 2009
+Thu Nov  5 21:56:28 2009
 ________________________________________________________________________________
-36 JOINTS;    58 MEMBERS;    1 LOAD CASES;  14 FIXED JOINTS;  
-For 2D problems, the Y-axis is vertical. 
-For 3D problems, the Z-axis is vertical. 
+In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
+________________________________________________________________________________
+   36 JOINTS            14 FIXED JOINTS      58 FRAME ELEMENTS   1 LOAD CASES   
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S
   Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
@@ -51,7 +51,7 @@ J O I N T   D A T A                                         R E S T R A I N T S
    35   -2000.000000   -1500.000000    5387.000000  100.000   0  0  0  0  0  0
    36   -2000.000000    1500.000000    5387.000000  100.000   0  0  0  0  0  0
 F R A M E   E L E M E N T   D A T A					(local)
-  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+  Elmnt  J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
     1     1    16 2592.0 1200.0 900.0 87160.0 10108000.0 1502000.0 200000.0 79300.0   0
     2    16    23 2592.0 1200.0 900.0 87160.0 10108000.0 1502000.0 200000.0 79300.0   0
     3    23    30 2592.0 1200.0 900.0 87160.0 10108000.0 1502000.0 200000.0 79300.0   0
@@ -155,7 +155,7 @@ E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 L O A D   C A S E   1   O F   1  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
-  Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.0         1.185749    0.0        -0.000000    0.0         0.0     
      2    0.0         1.185748   -0.000019   -0.000000    0.0         0.0     
      3    0.0         1.185748    0.000017   -0.000000    0.0         0.0     
@@ -189,7 +189,7 @@ J O I N T   D I S P L A C E M E N T S					(global)
     35    0.000016    1.254506   -0.182400   -0.000002   -0.000000    0.000004
     36   -0.000016    1.254506   -0.182884   -0.000002    0.000000    0.000004
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
      1      1  29357.134c    -16.705     -0.024      0.291     12.736 -14904.066
      1     16 -29357.134c     16.705      0.024     -0.291     27.446 -13503.922
      2     16  19575.606c    -16.476     -0.066      2.773     52.182 -13318.759

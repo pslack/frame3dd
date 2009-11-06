@@ -961,60 +961,60 @@ void read_and_assemble_loads(
 		     W[lc][i][ 7]==0 && W[lc][i][ 8]==0 &&
 		     W[lc][i][12]==0 && W[lc][i][13]==0 ) {
 		  fprintf(stderr,"   warning: All trapezoidal loads applied to frame element %d  are zero\n", n );
-		  fprintf(stderr,"     load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"     load case: %d , element %d , load %d\n ", lc, n, i );
 		}
 
 		if ( W[lc][i][ 2] < 0 ) {
 		  fprintf(stderr,"   error in x-axis trapezoidal loads, ");
-		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][2]);
 		  exit(1);
 		}
 		if ( W[lc][i][ 2] > W[lc][i][3] ) {
 		  fprintf(stderr,"   error in x-axis trapezoidal loads, ");
-		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][2], W[lc][i][3] );
 		  exit(1);
 		}
 		if ( W[lc][i][ 3] > Ln ) {
 		  fprintf(stderr,"   error in x-axis trapezoidal loads, ");
-		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][3], Ln );
 		  exit(1);
 		}
 		if ( W[lc][i][ 6] < 0 ) {
 		  fprintf(stderr,"   error in y-axis trapezoidal loads, ");
-		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][6]);
 		  exit(1);
 		}
 		if ( W[lc][i][ 6] > W[lc][i][7] ) {
 		  fprintf(stderr,"   error in y-axis trapezoidal loads, ");
-		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][6], W[lc][i][7] );
 		  exit(1);
 		}
 		if ( W[lc][i][ 7] > Ln ) {
 		  fprintf(stderr,"   error in y-axis trapezoidal loads, ");
-		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][7],Ln );
 		  exit(1);
 		}
 		if ( W[lc][i][10] < 0 ) {
 		  fprintf(stderr,"   error in z-axis trapezoidal loads, ");
-		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][10]);
 		  exit(1);
 		}
 		if ( W[lc][i][10] > W[lc][i][11] ) {
 		  fprintf(stderr,"   error in z-axis trapezoidal loads, ");
-		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][10], W[lc][i][11] );
 		  exit(1);
 		}
 		if ( W[lc][i][11] > Ln ) {
 		  fprintf(stderr,"   error in z-axis trapezoidal loads, ");
-		  fprintf(stderr,"    load case: %d , member %d , load %d\n ", lc, n, i );
+		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][11], Ln );
 		  exit(1);
 		}
@@ -1632,20 +1632,24 @@ void write_input_data(
 	for (i=1; i<=80; i++)	fprintf(fp,"_"); fprintf(fp,"\n\n");
 	fprintf(fp,"%s\n",title);
 	fprintf(fp, "%s", ctime(&now) );
-	for (i=1; i<=80; i++)	fprintf(fp,"_"); fprintf(fp,"\n");
 
+	for (i=1; i<=80; i++)	fprintf(fp,"_");	fprintf(fp,"\n");
 
-	fprintf(fp,"%d JOINTS;    %d MEMBERS;    %d LOAD CASES;  ",nJ,nE,nL);
-	fprintf(fp,"%d FIXED JOINTS;  \n", nR);
-
-	fprintf(fp,"For 2D problems, the Y-axis is vertical. \n");
+	fprintf(fp,"In 2D problems the Y-axis is vertical.  ");
 #if Zvert
-	fprintf(fp,"For 3D problems, the Z-axis is vertical. \n");
+	fprintf(fp,"In 3D problems the Z-axis is vertical.\n");
 #else
-	fprintf(fp,"For 3D problems, the Y-axis is vertical. \n");
+	fprintf(fp,"In 3D problems the Y-axis is vertical.\n");
 #endif
 
 	for (i=1; i<=80; i++)	fprintf(fp,"_");	fprintf(fp,"\n");
+
+	fprintf(fp,"%5d JOINTS         ", nJ ); 
+	fprintf(fp,"%5d FIXED JOINTS   ", nR );
+        fprintf(fp,"%5d FRAME ELEMENTS ", nE ); 
+        fprintf(fp,"%3d LOAD CASES   \n", nL );
+
+	for (i=1; i<=80; i++)	fprintf(fp,"_"); fprintf(fp,"\n");
 
 	fprintf(fp,"J O I N T   D A T A     ");
 	fprintf(fp,"                                    R E S T R A I N T S\n");
@@ -1658,7 +1662,7 @@ void write_input_data(
 			R[j+1], R[j+2], R[j+3], R[j+4], R[j+5], R[j+6] );
 	}
 	fprintf(fp,"F R A M E   E L E M E N T   D A T A\t\t\t\t\t(local)\n");
-	fprintf(fp,"  Beam   J1    J2     Ax   Asy   Asz    ");
+	fprintf(fp,"  Elmnt  J1    J2     Ax   Asy   Asz    ");
 	fprintf(fp,"Jxx     Iyy     Izz       E       G roll\n");
 	for (i=1; i<= nE; i++) {
 		fprintf(fp,"%5d %5d %5d %6.1f %5.1f %5.1f",
@@ -1699,7 +1703,7 @@ void write_input_data(
 	  if ( nU[lc] > 0 ) {
 	    fprintf(fp," U N I F O R M   L O A D S");
 	    fprintf(fp,"\t\t\t\t\t\t(local)\n");
-	    fprintf(fp,"  Beam        Ux               Uy               Uz\n");
+	    fprintf(fp,"  Elmnt       Ux               Uy               Uz\n");
 	    for (n=1; n<=nU[lc]; n++) {
 		fprintf(fp, " %5d", (int) (U[lc][n][1]) );
 		for (i=2; i<=4; i++) fprintf(fp, " %16.8f", U[lc][n][i] );
@@ -1710,7 +1714,7 @@ void write_input_data(
 	  if ( nW[lc] > 0 ) {
 	    fprintf(fp," T R A P E Z O I D A L   L O A D S");
 	    fprintf(fp,"\t\t\t\t\t(local)\n");
-	    fprintf(fp,"  Beam        x1               x2               W1               W2\n");
+	    fprintf(fp,"  Elmnt       x1               x2               W1               W2\n");
 	    for (n=1; n<=nW[lc]; n++) {
 	        fprintf(fp, " %5d", (int) (W[lc][n][1]) );
 		for (i=2; i<=5; i++) fprintf(fp, " %16.8f", W[lc][n][i] );
@@ -1727,7 +1731,7 @@ void write_input_data(
 	  if ( nP[lc] > 0 ) {
 	    fprintf(fp," C O N C E T R A T E D   P O I N T   L O A D S");
 	    fprintf(fp,"\t\t\t\t(local)\n");
-	    fprintf(fp,"  Beam        Px          Py          Pz          x\n");
+	    fprintf(fp,"  Elmnt       Px          Py          Pz          x\n");
 	    for (n=1; n<=nP[lc]; n++) {
 		fprintf(fp, " %5d", (int) (P[lc][n][1]) );
 		for (i=2; i<=5; i++) fprintf(fp, " %11.3f", P[lc][n][i] );
@@ -1738,7 +1742,7 @@ void write_input_data(
 	  if ( nT[lc] > 0 ) {
 	    fprintf(fp," T E M P E R A T U R E   C H A N G E S");
 	    fprintf(fp,"\t\t\t\t\t(local)\n");
-	    fprintf(fp,"  Beam      coef      hy        hz");
+	    fprintf(fp,"  Elmnt     coef      hy        hz");
 	    fprintf(fp,"        Ty+       Ty-       Tz+       Tz-\n");
 	    for (n=1; n<=nT[lc]; n++) {
 		fprintf(fp, " %5d", (int) (T[lc][n][1]) );
@@ -1802,7 +1806,7 @@ void write_static_results (
 
 	fprintf(fp,"J O I N T   D I S P L A C E M E N T S");
 	fprintf(fp,"\t\t\t\t\t(global)\n");
-	fprintf(fp,"  Joint    X-dsp       Y-dsp       Z-dsp");
+	fprintf(fp,"  Joint   X-dsp       Y-dsp       Z-dsp");
 	fprintf(fp,"       X-rot       Y-rot       Z-rot\n");
 	for (j=1; j<= nJ; j++) {
 	    disp = 0.0;
@@ -1819,8 +1823,8 @@ void write_static_results (
 	}
 	fprintf(fp,"F R A M E   E L E M E N T   E N D   F O R C E S");
 	fprintf(fp,"\t\t\t\t(local)\n");
-	fprintf(fp,"  Beam   Joint      Nx          Vy         Vz");
-	fprintf(fp,"         Txx        Myy        Mzz\n");
+	fprintf(fp,"  Elmnt  Joint      Nx          Vy         Vz");
+	fprintf(fp,"        Txx        Myy        Mzz\n");
 	for (n=1; n<= nE; n++) {
 		fprintf(fp," %5d  %5d", n, J1[n]);
 		if ( fabs(Q[n][1]) < 0.0001 )
@@ -1973,7 +1977,7 @@ void write_static_csv(
 	}
 	fprintf(fpcsv,"\"F R A M E   E L E M E N T   E N D   F O R C E S");
 	fprintf(fpcsv,"  (local)\"\n");
-	fprintf(fpcsv,"Beam  , Joint ,    Nx     ,    Vy   ,     Vz");
+	fprintf(fpcsv,"Elmnt , Joint ,    Nx     ,    Vy   ,     Vz");
 	fprintf(fpcsv,"   ,     Txx   ,    Myy  ,     Mzz\n");
 	for (n=1; n<= nE; n++) {
 		fprintf(fpcsv," %5d, %5d,", n, J1[n]);
@@ -2363,7 +2367,7 @@ void static_mesh(
 		fprintf(fpm,"set label ' %d' at %12.4e, %12.4e, %12.4e\n",
 					j, xyz[j].x,xyz[j].y,xyz[j].z );
 
-	 fprintf(fpm,"# MEMBER NUMBER LABELS\n");
+	 fprintf(fpm,"# ELEMENT NUMBER LABELS\n");
 	 for (m=1; m<=nE; m++) {
 		j1 = J1[m];	j2 = J2[m];
 		mx = 0.5 * ( xyz[j1].x + xyz[j2].x );

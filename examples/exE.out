@@ -6,11 +6,11 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example E: a three dimensional structure showing lateral-torsional dynamic modes (units: kip  in) 
-Wed Nov  4 10:23:34 2009
+Thu Nov  5 21:56:28 2009
 ________________________________________________________________________________
-12 JOINTS;    15 MEMBERS;    1 LOAD CASES;  3 FIXED JOINTS;  
-For 2D problems, the Y-axis is vertical. 
-For 3D problems, the Z-axis is vertical. 
+In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
+________________________________________________________________________________
+   12 JOINTS             3 FIXED JOINTS      15 FRAME ELEMENTS   1 LOAD CASES   
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S
   Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
@@ -27,7 +27,7 @@ J O I N T   D A T A                                         R E S T R A I N T S
    11      72.000000      72.000000    -120.000000    0.000   1  1  1  1  1  1
    12      72.000000      36.000000       0.000000    0.000   0  0  0  0  0  0
 F R A M E   E L E M E N T   D A T A					(local)
-  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+  Elmnt  J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
     1     1     2 1100.0 800.0 800.0 1000.0   500.0   500.0 999000.0 11500.0   0
     2     2     3 1100.0 800.0 800.0 1000.0   500.0   500.0 999000.0 11500.0   0
     3     3     4 1100.0 800.0 800.0 1000.0   500.0   500.0 999000.0 11500.0   0
@@ -63,7 +63,7 @@ L O A D   C A S E   1   O F   1  ...
     10      -5.400       0.000       0.000       0.000    -144.010       0.000
     11      -7.200       0.000       0.000       0.000    -192.014       0.000
  T R A P E Z O I D A L   L O A D S					(local)
-  Beam        x1               x2               W1               W2
+  Elmnt       x1               x2               W1               W2
      9       0.00000000       0.00000000       0.00000000       0.00000000  (x)
      9       0.00000000       0.00000000       0.00000000       0.00000000  (y)
      9       0.00000000     120.00000000       0.00000000       0.20000000  (z)
@@ -80,7 +80,7 @@ E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 L O A D   C A S E   1   O F   1  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
-  Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    2.522821   -1.425467    0.000808    0.009636    0.000086    0.143923
      2    2.522826    8.937177    0.007634   -0.000027   -0.000061    0.143950
      3    2.522827   19.304915   -0.000882   -0.011442    0.000402    0.143960
@@ -91,7 +91,7 @@ J O I N T   D I S P L A C E M E N T S					(global)
      8   -2.658615   -1.425468    0.347340    0.009548    0.004576    0.143928
     12   -2.658615    8.937176    0.006357   -0.000080    0.005099    0.143941
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
      1      1    -76.278t      0.220   -109.895   1543.378   4975.446    221.842
      1      2     76.278t     -0.220    109.895  -1543.378   2936.507    584.418
      2      2    -18.857t    -45.645    -53.509   1823.108  -1287.935  -1614.527

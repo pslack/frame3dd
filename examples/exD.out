@@ -6,11 +6,11 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example D: dynamic properties of an un-restrained frame with a triangular section 
-Wed Nov  4 10:23:33 2009
+Thu Nov  5 21:56:27 2009
 ________________________________________________________________________________
-24 JOINTS;    30 MEMBERS;    1 LOAD CASES;  0 FIXED JOINTS;  
-For 2D problems, the Y-axis is vertical. 
-For 3D problems, the Z-axis is vertical. 
+In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
+________________________________________________________________________________
+   24 JOINTS             0 FIXED JOINTS      30 FRAME ELEMENTS   1 LOAD CASES   
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S
   Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
@@ -39,7 +39,7 @@ J O I N T   D A T A                                         R E S T R A I N T S
    23       0.000000     230.000000     210.000000   10.000   0  0  0  0  0  0
    24     -60.000000     115.000000     210.000000    0.000   0  0  0  0  0  0
 F R A M E   E L E M E N T   D A T A					(local)
-  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+  Elmnt  J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
     1     1     2  125.0 100.0 100.0 5000.0  2500.0  2500.0  29000.0 11500.0   0
     2     2     3  125.0 100.0 100.0 5000.0  2500.0  2500.0  29000.0 11500.0   0
     3     3     4  125.0 100.0 100.0 5000.0  2500.0  2500.0  29000.0 11500.0   0
@@ -88,9 +88,9 @@ E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 L O A D   C A S E   1   O F   1  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
-  Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
      1      1      0.0         0.0        0.0        0.0        0.0        0.0  
      1      2      0.0         0.0        0.0        0.0        0.0        0.0  
      2      2      0.0         0.0        0.0        0.0        0.0        0.0  

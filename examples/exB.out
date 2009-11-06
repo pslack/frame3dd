@@ -6,11 +6,11 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis (N mm ton) 
-Wed Nov  4 10:23:31 2009
+Thu Nov  5 21:56:26 2009
 ________________________________________________________________________________
-5 JOINTS;    4 MEMBERS;    3 LOAD CASES;  4 FIXED JOINTS;  
-For 2D problems, the Y-axis is vertical. 
-For 3D problems, the Z-axis is vertical. 
+In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
+________________________________________________________________________________
+    5 JOINTS             4 FIXED JOINTS       4 FRAME ELEMENTS   3 LOAD CASES   
 ________________________________________________________________________________
 J O I N T   D A T A                                         R E S T R A I N T S
   Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
@@ -20,7 +20,7 @@ J O I N T   D A T A                                         R E S T R A I N T S
     4    1200.000000     900.000000       0.000000    0.000   1  1  1  1  1  1
     5   -1200.000000     900.000000       0.000000    0.000   1  1  1  1  1  1
 F R A M E   E L E M E N T   D A T A					(local)
-  Beam   J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
+  Elmnt  J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll
     1     1     2   36.0  20.0  20.0 1000.0   492.0   492.0 200000.0 79300.0   0
     2     1     3   36.0  20.0  20.0 1000.0   492.0   492.0 200000.0 79300.0   0
     3     1     4   36.0  20.0  20.0 1000.0   492.0   492.0 200000.0 79300.0   0
@@ -56,11 +56,11 @@ L O A D   C A S E   2   O F   3  ...
      4       2.142       1.606       3.892   -1385.829    1847.773       0.000
      5      -2.190       1.447       3.930   -1345.801   -1877.794     -75.053
  U N I F O R M   L O A D S						(local)
-  Beam        Ux               Uy               Uz
+  Elmnt       Ux               Uy               Uz
      2       0.00000000       0.10000000       0.00000000
      1       0.00000000       0.00000000       0.10000000
  T R A P E Z O I D A L   L O A D S					(local)
-  Beam        x1               x2               W1               W2
+  Elmnt       x1               x2               W1               W2
      3      20.00000000      80.00000000       0.01000000       0.05000000  (x)
      3       0.00000000       0.00000000       0.00000000       0.00000000  (y)
      3      80.00000000     830.00000000      -0.05000000       0.07000000  (z)
@@ -68,7 +68,7 @@ L O A D   C A S E   2   O F   3  ...
      4      68.00000000     330.00000000       0.05000000       0.00000000  (y)
      4      80.00000000     830.00000000      -0.05000000       0.07000000  (z)
  T E M P E R A T U R E   C H A N G E S					(local)
-  Beam      coef      hy        hz        Ty+       Ty-       Tz+       Tz-
+  Elmnt     coef      hy        hz        Ty+       Ty-       Tz+       Tz-
      1  1.20e-05    10.000    10.000    20.000    10.000    10.000   -10.000
 
 L O A D   C A S E   3   O F   3  ... 
@@ -85,7 +85,7 @@ L O A D   C A S E   3   O F   3  ...
      2     118.793      56.771    -193.646  -66039.844  100371.709  -11086.726
      3     -12.999     -94.251      69.227   41223.390   18451.306   32861.892
  C O N C E T R A T E D   P O I N T   L O A D S				(local)
-  Beam        Px          Py          Pz          x
+  Elmnt       Px          Py          Pz          x
      1       0.000     100.000    -900.000     600.000
      2       0.000    -200.000     200.000     800.000
 
@@ -95,10 +95,10 @@ E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 L O A D   C A S E   1   O F   3  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
-  Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.141295   -0.502425   -0.203476    0.000644    0.000089    0.000112
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
      1      1   1076.909c     -0.267      0.010    -23.526     -7.957     45.022
      1      2  -1076.909c      0.267     -0.010     23.526     59.508     -2.681
      2      1   1828.163c      0.322     -0.061     14.159   -101.086    -76.724
@@ -118,10 +118,10 @@ R M S   E Q U I L I B R I U M    E R R O R: 2.045e-04
 L O A D   C A S E   2   O F   3  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
-  Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.063577    0.091772    0.088920   -0.001908    0.019001    0.031677
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
      1      1     99.014c      4.918    -86.264  -1134.333  23716.498   6123.558
      1      2    -99.014c     -4.918    -94.013   1134.333 -30692.705   2761.716
      2      1   -210.954t    -86.211     -2.825  -1246.063   3766.511 -21899.764
@@ -141,10 +141,10 @@ R M S   E Q U I L I B R I U M    E R R O R: 9.189e-06
 L O A D   C A S E   3   O F   3  ... 
 
 J O I N T   D I S P L A C E M E N T S					(global)
-  Joint    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.025016   -0.008275   -0.091834    0.175938   -0.405708   -0.024910
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Beam   Joint      Nx          Vy         Vz         Txx        Myy        Mzz
+  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
      1      1    153.441c    -68.115    595.736   4365.694 -162309.448 -20130.346
      1      2   -153.441c    -31.885    304.264  -4365.694 170843.062  17615.878
      2      1    286.452c    146.231    -83.295  14668.596  16782.777  78255.091

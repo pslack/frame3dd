@@ -1,3 +1,6 @@
+* Thu Nov  5 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- Small polishing edits to the format of the Output Data file.  
+
 * Wed Nov  4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - Move ... #define FILENMAX 96 ... from main.c to common.h because a number of
 c++ objects require FILENMAX too
