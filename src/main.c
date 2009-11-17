@@ -101,12 +101,12 @@ For compilation/installation, see README.txt.
 		***feF_temp,	/* fixed end forces from temp loads	*/
 		**feF,		/* a general set of fixed end forces	*/
 		*D, *dD,	/* displacement and displ increment	*/
-		/*dDdD = 0.0,*/	/* dD' * dD				*/
+		dDdD = 0.0,	/* dD' * dD				*/
 		*Fe = NULL,	/* equilibrium error in nonlinear anlys	*/
 		*L  = NULL,	/* joint-to-joint length of each element*/
 		*Le = NULL,	/* effcve lngth, accounts for joint size*/
 		**Q = NULL,	/* local member joint end-forces	*/
-		tol = 1.0e-5,	/* tolerance for modal convergence	*/
+		tol = 1.0e-9,	/* tolerance for modal convergence	*/
 		shift = 0.0,	/* shift-factor for rigid-body-modes	*/
 		struct_mass,	/* mass of structural system		*/
 		total_mass,	/* total structural mass and extra mass */
@@ -447,7 +447,9 @@ For compilation/installation, see README.txt.
 					for (j=1; j<=DoF; j++)
 						Ks[i][j] -= Fe[i]*dD[j] / dDdD;
 */
+
 				apply_reactions ( DoF, R, Dp[lc], Fe, Fe, Ks, 'm' );
+
 				solve_system ( K, dD, Fe, DoF, &ok, verbose );
 
 				if ( ok < 0 ) {
@@ -462,7 +464,7 @@ For compilation/installation, see README.txt.
 					J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 
 						 /* convergence criteria:  */
-//				error = rel_norm ( dD, D, DoF ); /* displacement increment */
+				//error = rel_norm ( dD, D, DoF ); /* displacement increment */
 				error = rel_norm ( Fe, F, DoF ); /* force balance	   */
 
 				if ( verbose ) { 
@@ -480,10 +482,11 @@ For compilation/installation, see README.txt.
 				save_ut_dmatrix ( DoF, K, "Ks" );
 
 			for (i=1; i<=12; i++)
-				for (n=1; n<=nE; n++)
-					feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
+			    for (n=1; n<=nE; n++)
+				feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
 
-			equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF, nE, DoF, &error, verbose );
+			equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF,
+						nE, DoF, &error, verbose );
 
 			if ( verbose ) {
 				printf("  RMS relative equilibrium precision: %9.3e", error );

@@ -296,9 +296,9 @@ void geometric_K(
 	for (i=1; i<=12; i++)
 	    for (j=i+1; j<=12; j++) 
 		if ( kg[i][j] != kg[j][i] ) {
+			//fprintf(stderr,"kg[%2d][%2d]/kg[%2d][%2d] - 1 = %14.5e\n",
+			//i,j,j,i,kg[i][j]/kg[j][i]-1 ); 
 			kg[i][j] = kg[j][i] = 0.5 * ( kg[i][j] + kg[j][i] );
-/*			fprintf(stderr,"kg[%d][%d] = %e    ",i,j,kg[i][j] ); */
-/*			fprintf(stderr,"kg[%d][%d] = %e  \n",j,i,kg[j][i] ); */
 		}
 
 #ifdef MATRIX_DEBUG
@@ -453,7 +453,7 @@ void member_force(
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord Xformn	*/
 		d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12,
 		x1, y1, z1, x2, y2, z2,	/* joint coordinates	*/
-		/* Ls, */		/* stretched length of element */
+		//Ls,			/* stretched length of element */
 		delta=0.0,		/* stretch in the frame element */
 		Ksy, Ksz, Dsy, Dsz,	/* shear deformation coeff's	*/
 		T = 0.0;		/* axial force for geometric stiffness */
@@ -487,22 +487,24 @@ void member_force(
 
 	/* finite strain ... (not consistent with formulation) */
 /*
- *	delta += ( pow(((d7-d1)*t4 + (d8-d2)*t5 + (d9-d3)*t6),2.0) + 
- *		   pow(((d7-d1)*t7 + (d8-d2)*t8 + (d9-d3)*t9),2.0) )/(2.0*L);
- */
+ 	delta += ( pow(((d7-d1)*t4 + (d8-d2)*t5 + (d9-d3)*t6),2.0) + 
+ 		   pow(((d7-d1)*t7 + (d8-d2)*t8 + (d9-d3)*t9),2.0) )/(2.0*L);
+*/
 
 	/* true strain ... (not appropriate for structural materials) */
+  
 /*
- *	Ls    = pow((x2+d7-x1-d1),2.0) + 
- *		pow((y2+d8-y1-d2),2.0) + 
- *		pow((z2+d9-z1-d3),2.0);
- *	Ls = sqrt(Ls) + Le - L;
- */	/* end of true strain calculation */
+  	Ls    = pow((x2+d7-x1-d1),2.0) + 
+  		pow((y2+d8-y1-d2),2.0) + 
+  		pow((z2+d9-z1-d3),2.0);
+  	Ls = sqrt(Ls) + Le - L;
+*/
+   	/* end of true strain calculation */
 
 	*axial_strain = delta / Le;
 
 	if ( geom )	T = Ax*E/Le * delta;
-		/*	T  = Ax*E*log(Ls/Le); */	/* true strain */
+			//T  = Ax*E*log(Ls/Le); 	/* true strain */
 
 	if ( geom )
 		s[1] = -T;
@@ -572,11 +574,18 @@ void equilibrium(
 	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
 		f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12,
 		num = 0.0, den = 0.0;	/* RMS relative equilibrium error */
-	int	j,m, j1, j2;
+	int	j,k,m, j1, j2, J, x;
 
 	den = 0.0;
-	for (j=1; j<=DoF; j++) if (R[j] == 0) den += ( F[j]*F[j] );
-	if ( den <= 0 ) den = 1.0;
+	k = 0;
+	for (j=1; j<=DoF; j++) {
+		if ( R[j] == 0 && F[j] != 0.0 ) {
+			++k;
+			den += ( F[j]*F[j] );
+		}
+	}
+	if ( den <= 0 ) den = 1.0;	/* for structures w/o static loads*/
+	den = sqrt( den / (double) k );
 
 	for (m=1; m <= nE; m++) {	/* loop over all members */
 
@@ -587,7 +596,9 @@ void equilibrium(
 
 		j1 = 6*(j1-1);	j2 = 6*(j2-1);
 
-		/* subtract internal forces from external loads	*/
+
+		/* subtract internal forces from external loads		*/
+		/* the resulting F vector should contains only reactions*/
 
 							/* {F} = [T]' {Q} */
 		F[j1+1] -= ( Q[m][1] *t1 + Q[m][2] *t4 + Q[m][3] *t7 );
@@ -604,7 +615,7 @@ void equilibrium(
 		F[j2+5] -= ( Q[m][10]*t2 + Q[m][11]*t5 + Q[m][12]*t8 );
 		F[j2+6] -= ( Q[m][10]*t3 + Q[m][11]*t6 + Q[m][12]*t9 );
 
-		/* subtract fixed end forces (equivalent loads) from internal loads */
+		/* add fixed end forces (-equivalent loads) to internal loads */
 	
 		f1 = feF[m][1];		f2 = feF[m][2];		f3 = feF[m][3];
 		f4 = feF[m][4];		f5 = feF[m][5];		f6 = feF[m][6];
@@ -624,11 +635,25 @@ void equilibrium(
 		Q[m][10] -= ( f10*t1 + f11*t2 + f12*t3 );
 		Q[m][11] -= ( f10*t4 + f11*t5 + f12*t6 );
 		Q[m][12] -= ( f10*t7 + f11*t8 + f12*t9 );
+
 	}
 
 	num = 0.0;
-	for ( j=1; j<=DoF; j++ ) if (R[j] ==0) num += ( F[j]*F[j] );
-	*err = sqrt ( num ) / sqrt ( den );
+	for ( j=1; j<=DoF; j++ ) if (R[j] == 0 && F[j] != 0) num += ( F[j]*F[j] );
+	num = sqrt( num / (double) k );
+
+/*	
+	// find coordinates with out-of-balance loads
+	for ( j=1; j<=DoF; j++ ) {
+		if ( R[j] == 0 && fabs(F[j])/den > 1e-4 ) {
+			J = ceil(j/6.0);
+			x = j-6*(J-1);
+			fprintf(stderr,"equilibrium error at joint %3d, coordinate %2d = %12.4e  num=%12.4e, den=%12.4e\n", J, x, F[j],num, den );
+		}
+	}
+*/
+ 
+	*err = num / den;
 
 }
 
