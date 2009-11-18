@@ -1179,7 +1179,7 @@ of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of iner
 -->
 
 
-<h4> 7.4.5 Cross Section Properties of Circular Tube, Square Tube and Rectangular Tube Sections </h4>
+<h4> 7.4.5 Cross Section Properties of Circular Tube, Square Tube, Rectangular Tube and I-shaped Sections </h4>
 
 <img src="img/Tsections.png" align="center" border="0"><br>
 
@@ -1221,6 +1221,26 @@ Rectangular Tube (outer dimension = <i>a</i> x <i>b</i>, wall thickness = <i>t</
 </ul>
 </p>
 
+
+<p>
+I sections (depth = <i>d</i>, width = <i>b</i>, flange thickness = <i>t</i>, web thickness = <i>w</i>):
+</p>
+
+<img src="img/Isection.png" align="center" border="0"><br>
+
+<ul>
+<li> <i> Ax = bd  - (d-2t)(b-w)</i>
+<li> <i> Asy = 1.64 b t </i>
+<li> <i> Asz = d w </i>
+<li> <i> Jxx = (1/3) ( 2 b t<sup>3</sup> + d w<sup>3</sup> ) </i>
+<li> <i> Iyy = (1/12) ( bd<sup>3</sup> - (b-w)(d-2t)<sup>3</sup> )</i>
+<li> <i> Izz = (1/12) ( 2 t b<sup>3</sup> + (d-2t)w<sup>3</sup> ) </i>
+</ul>
+</p>
+<p>
+<b>Note:</b> Commercial sections have rounded corners.   Manufacturer specifications for cross sectional properties account for the fact that the corners of the cross sections are rounded.   Manufacturer specifcations for section properties should therefore be used whenever available.   Some tabulated section properties are provided below.  
+</p>
+
 <!-- 
 Asy coefficients
  1.114691 0.552486 -1.234540 1.576674 1.053296 -0.081960 -2.192489 0.027438
@@ -1246,21 +1266,6 @@ Asz coefficients
 <li><a href="http://www.engineersedge.com/channel_aluminum.htm">Aluminum Channels</a>
 </ul>
 
-<p>
-I sections (depth = <i>d</i>, width = <i>b</i>, flange thickness = <i>t</i>, web thickness = <i>w</i>):
-</p>
-
-<img src="img/Isection.png" align="center" border="0"><br>
-
-<ul>
-<li> <i> Ax = bd  - (d-2t)(b-w)</i>
-<li> <i> Asy = 1.64 b t </i>
-<li> <i> Asz = d w </i>
-<li> <i> Jxx = (1/3) ( 2 b t<sup>3</sup> + d w<sup>3</sup> ) </i>
-<li> <i> Iyy = (1/12) ( bd<sup>3</sup> - (b-w)(d-2t)<sup>3</sup> )</i>
-<li> <i> Izz = (1/12) ( 2 t b<sup>3</sup> + (d-2t)w<sup>3</sup> ) </i>
-</ul>
-</p>
 
 <!-- <li><a href="http://www.aisc.org/Content/NavigationMenu/ePubs/ePubs_Home/AISC_SHAPES_DATABASE/AISC_SHAPES_DATABASE.htm">AISC Shapes Database</a>-->
 
@@ -1550,7 +1555,8 @@ Note that this check for overloaded elements provides an approximate stress chec
 A more complete stress check would compute
 the composite axial, shear, torsion and bending stresses and strains within each element.   
 Such a check requires additional cross section information: 
-the section moduli and the section dimensions.  
+the section moduli and the section dimensions,
+as described in section 7.13 below.  
 </p>
 
 <p>
@@ -1685,6 +1691,116 @@ has positive curvature in the <i>x-z</i> plane.
 A frame element with negative <i>Mz</i> at joint 1 and a positive <i>Mz</i> at joint 2
 has positive curvature in the <i>x-y</i> plane.  
 </p>
+
+<h3> 7.13 Stress Check </h3>
+
+<h4> 7.13.1 Section Modulus and Torsion Shear Constant </h4>
+
+<p>
+The section properties required for elastic frame analysis are
+<i>Ax</i>, <i>Asy</i>, <i>Asz</i>, <i>Jxx</i>, <i>Iyy</i>, and <i>Izz</i>,
+as described section 7.4.  
+To compute stresses from the frame element end forces,
+the following section properties are required:
+<ul>
+<li> Section Area, <i>Ax</i> , 
+<li> Section Shear Area, <i>Asy</i> and <i>Asz</i> , 
+<li> Section Modulus, <i>Sy</i> and <i>Sz</i> , and
+<li> Torsion Shear Constant, <i>C</i> . 
+</ul>
+</p>
+<p>
+The units of <i>Sy</i>, <i>Sz</i> and <i>C</i> are length-cubed
+(like in<sup>3</sup> or mm<sup>3</sup>).  
+Referring to the text and figures of section 7.4, the section moduli and torsional shear constants may be found as follows:
+</p>
+
+<p>
+Circular Tube (outer radius= <i>R<sub>o</sub></i>, inner radius = <i>R<sub>i</sub></i>):
+<ul>
+<li> <i> Sy  =  Sz  =  Iyy / R<sub>o</sub>  =  Izz / R<sub>o</sub></i>
+<li> <i> C = Jxx / R<sub>o</sub></i>
+</ul>
+</p>
+
+<p>
+Square Tube (outer dimension = <i>b</i> x <i>b</i>, wall thickness = <i>t</i>):
+<ul>
+<li> <i> Sy  =  Sz  =  Iyy / (b/2)  =  Izz / (b/2)</i>
+<li> <i> C = 2 t ( b-t )<sup>2</sup></i>
+</ul>
+</p>
+
+<p>
+Rectangular Tube (outer dimension = <i>a</i> x <i>b</i>, wall thickness = <i>t</i>):
+<ul>
+<li> <i> Sy  =  Iyy / ( b/2 ) </i>
+<li> <i> Sz  =  Izz / ( a/2 )</i>
+<li> <i> C = 2 t (a-t) (b-t)</i>
+</ul>
+</p>
+
+<p>
+I sections (depth = <i>d</i>, width = <i>b</i>, flange thickness = <i>t</i>, web thickness = <i>w</i>):
+<ul>
+<li> <i> Sy  =  Iyy / ( d/2 ) </i>
+<li> <i> Sz  =  Izz / ( b/2 )</i>
+<li> <i> C = Jxx / ( 1.28 t )</i> ... assuming <i> t > w </i>
+</ul>
+</p>
+
+<p>
+<b>Note:</b> Commercial sections have rounded corners.   Manufacturer specifications for cross sectional properties account for the fact that the corners of the cross sections are rounded.   Manufacturer specifcations for section properties should therefore be used whenever available.   Some tabulated section properties are provided in section 7.4.
+</p>
+
+
+<h4> 7.13.2 Axial Stress </h4> 
+
+<p>
+Given the section properties <i>Ax</i>, <i>Sy</i>, and <i>Sz</i>,  
+the axial stresses at the ends of frame elements may be bounded as follows:
+</p>
+
+<p>
+At end (1) of a frame element the maximum bending plus axial tensile stress in the frame element is no greater than:
+<ul>
+<li><i>-Nx<sub>1</sub> / Ax  +  abs(Myy<sub>1</sub>) / Sy  +  abs(Mzz<sub>1</sub>) / Sz</i>
+</ul>
+</p>
+<p>
+At end (2) the maximum bending plus axial tensile stress in the frame element is no greater than:
+<ul>
+<li><i>+Nx<sub>2</sub> / Ax  +  abs(Myy<sub>2</sub>) / Sy  +  abs(Mzz<sub>2</sub>) / Sz</i>
+</ul>
+</p>
+<p>
+A "c" indicator on "Nx" values in the Frame3DD Output Data file indicates compression.
+A "t" indicator on "Nx" values indicates tension.
+</p>
+
+<h4> 7.13.3  Shear Stress </h4> 
+
+<p>
+Given the section properties <i>Asy</i>, <i>Asz</i>, and <i>C</i>,
+the axial stresses at the ends of frame elements may be approximated as follows:
+</p>
+
+<p>
+At end (1) the shear stress in the local y axis (on average) is:
+<ul>
+<li> <i>Vy<sub>1</sub> / Asy  +  abs(Txx<sub>1</sub>) / C</i>
+</ul>
+</p>
+<p>
+At end (1) the shear stress in the local z axis (on average) is
+<ul>
+<li><i>Vz<sub>1</sub> / Asz  +  abs(Txx<sub>1</sub>) / C</i>
+</ul>
+</p>
+<p>
+And likewise for end (2).
+</p>
+
 
 <a name="numerical"/><h2>8. Numerical Details</h2>
 

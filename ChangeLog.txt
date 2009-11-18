@@ -1,4 +1,7 @@
-* Thu Nov 17 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+* Wed Nov 18 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- Add Stress Check information to the user manual in section 7.13.  
+
+* Tue Nov 17 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - Increase precision for numerical solution for geometric nonlinear problems.
 - Add code to check for out-of-balance forces in the equilibrium() function.
 
