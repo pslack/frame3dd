@@ -1,3 +1,6 @@
+* Mon Nov 23 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- Fix broken links to Mackerle and Pilkey references in the user manual.
+
 * Wed Nov 18 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - Add Stress Check information to the user manual in section 7.13.  
 
