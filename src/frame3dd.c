@@ -3,7 +3,7 @@
  Static and dynamic structural analysis of 2D and 3D frames and trusses with
  elastic and geometric stiffness.
  ---------------------------------------------------------------------------
- http://www.duke.edu/~hpgavin/frame/
+ http://frame3dd.sourceforge.net/
  ---------------------------------------------------------------------------
  Copyright (C) 1992-2009  Henri P. Gavin
  
@@ -574,7 +574,7 @@ void equilibrium(
 	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
 		f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12,
 		num = 0.0, den = 0.0;	/* RMS relative equilibrium error */
-	int	j,k,m, j1, j2, J, x;
+	int	j,k,m, j1, j2; //, J, x;
 
 	den = 0.0;
 	k = 0;

@@ -3,7 +3,7 @@
  Static and dynamic structural analysis of 2D & 3D frames and trusses
  with elastic and geometric stiffness.
  ---------------------------------------------------------------------------
- http://www.duke.edu/~hpgavin/frame/
+ http://frame3dd.sourceforge.net/
  ---------------------------------------------------------------------------
  Copyright (C) 1992-2009  Henri P. Gavin
 
@@ -20,7 +20,6 @@
     You should have received a copy of the GNU General Public License
     along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//** @file
-	this file contains some #defines to set up 'float' to be 'double' instead.
 */
 
 #ifndef FRAME_COMMON_H

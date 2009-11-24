@@ -3,7 +3,7 @@
  Static and dynamic structural analysis of 2D and 3D frames and trusses with
  elastic and geometric stiffness.
  ---------------------------------------------------------------------------
- http://www.duke.edu/~hpgavin/frame/
+ http://frame3dd.sourceforge.net/
  ---------------------------------------------------------------------------
  Copyright (C) 1992-2009  Henri P. Gavin
 
@@ -101,7 +101,7 @@ For compilation/installation, see README.txt.
 		***feF_temp,	/* fixed end forces from temp loads	*/
 		**feF,		/* a general set of fixed end forces	*/
 		*D, *dD,	/* displacement and displ increment	*/
-		dDdD = 0.0,	/* dD' * dD				*/
+		//dDdD = 0.0,	/* dD' * dD				*/
 		*Fe = NULL,	/* equilibrium error in nonlinear anlys	*/
 		*L  = NULL,	/* joint-to-joint length of each element*/
 		*Le = NULL,	/* effcve lngth, accounts for joint size*/

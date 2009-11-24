@@ -3,7 +3,7 @@
  Static and dynamic structural analysis of 2D and 3D frames and trusses with
  elastic and geometric stiffness.
  ---------------------------------------------------------------------------
- http://www.duke.edu/~hpgavin/frame/
+ http://frame3dd.sourceforge.net/
  ---------------------------------------------------------------------------
  Copyright (C) 1992-2009  Henri P. Gavin
 

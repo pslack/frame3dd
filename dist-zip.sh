@@ -108,6 +108,7 @@ mkdir dist/Frame3DD/src/microstran
 echo "copying source code ... "
 cp --preserve=mode,timestamps src/*.c               dist/Frame3DD/src/.
 cp --preserve=mode,timestamps src/*.h               dist/Frame3DD/src/.
+cp --preserve=mode,timestamps src/Makefile          dist/Frame3DD/src/.
 cp --preserve=mode,timestamps src/microstran/vec3.h dist/Frame3DD/src/microstran/.
 cp --preserve=mode,timestamps src/microstran/config.h dist/Frame3DD/src/microstran/.
 
