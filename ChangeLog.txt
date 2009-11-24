@@ -1,6 +1,8 @@
 * Tue Nov 24 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - Change Duke Univ URL in source code comments to frame3dd.sourceforge.net
 - Added a simple Makefile to   trunk/src/  directory
+- Changed FrameDD to Frame3DD on website/index.html
+- Change trunk/LICENSE.txt to GPL v3 license.
 
 * Mon Nov 23 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - Fix broken links to Mackerle and Pilkey references in the user manual.
