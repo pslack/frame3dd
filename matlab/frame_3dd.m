@@ -238,7 +238,8 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
       L(b) = sqrt((x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2);
   end
 
-  system(['frame3dd -i ' IOfilename '.FMM -o ' IOfilename '.OUT']); 	% run the frame3dd analysis
+% run the frame3dd analysis
+  system(['frame3dd -w -i ' IOfilename '.FMM -o ' IOfilename '.OUT']); 
 
   run(Mfilename);				% load the results
 

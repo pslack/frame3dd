@@ -261,10 +261,7 @@ void display_help()
  fprintf(stderr,"       frame3dd \n\n");
  fprintf(stderr,"  Frame3DD may be run without command-line options by typing ...\n");
  fprintf(stderr,"       frame3dd <InFile> <OutFile> \n\n");
- fprintf(stderr,"  Type ...   frame3dd -h   ... for additional help information.\n\n");
 
-
-/*
  fprintf(stderr,"  Frame3DD may be run with command-line options by typing ...\n");
  fprintf(stderr,"       frame3dd -i <InFile> -o <OutFile> [OPTIONS] \n\n");
 
@@ -290,7 +287,7 @@ void display_help()
  fprintf(stderr,"  -p <value>    pan rate for mode shape animation\n");
  fprintf(stderr,"  -r <value>    matrix condensation method: 0, 1, 2, or 3 \n");
  fprintf(stderr," -------------------------------------------------------------------------\n");
-*/
+
 
 }
 
@@ -308,7 +305,7 @@ void display_usage()
  */
  fprintf(stderr,"  Usage: frame3dd -i <input> -o <output> [OPTIONS] \n\n");
 
- fprintf(stderr,"  Try ... frame3dd -h  ... for help information\n\n");
+ fprintf(stderr,"  Type ...   frame3dd -h   ... for additional help information.\n\n");
 
 }
 
@@ -324,7 +321,7 @@ void display_version()
 
  fprintf(stderr,"  Usage: frame3dd -i <input> -o <output> [OPTIONS] \n\n");
 
- fprintf(stderr,"  Try ... frame3dd -h  ... for help information\n");
+ fprintf(stderr,"  Type ...   frame3dd -h   ... for additional help information.\n\n");
 }
 
 

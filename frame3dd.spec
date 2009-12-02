@@ -67,6 +67,29 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Tue Dec 1 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- Provide more information from "help" request ... frame3dd -h
+- Add -w flag to frame_3dd.m so that the stiffness matrix is written
+
+* Tue Nov 24 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- Change Duke Univ URL in source code comments to frame3dd.sourceforge.net
+- Added a simple Makefile to   trunk/src/  directory
+- Changed FrameDD to Frame3DD on website/index.html
+- Change trunk/LICENSE.txt to GPL v3 license.
+
+* Mon Nov 23 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- Fix broken links to Mackerle and Pilkey references in the user manual.
+
+* Wed Nov 18 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- Add Stress Check information to the user manual in section 7.13.  
+
+* Tue Nov 17 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- Increase precision for numerical solution for geometric nonlinear problems.
+- Add code to check for out-of-balance forces in the equilibrium() function.
+
+* Thu Nov  5 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- Small polishing edits to the format of the Output Data file.  
+
 * Wed Nov  4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - Move ... #define FILENMAX 96 ... from main.c to common.h because a number of
 c++ objects require FILENMAX too
