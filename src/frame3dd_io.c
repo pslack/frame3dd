@@ -376,7 +376,7 @@ void read_frame_element_data(
 	double *L, double *Le,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz,
-	float *J, float *Iy, float *Iz, float *E, float *G, float *p
+	float *J, float *Iy, float *Iz, float *E, float *G, float *p, float *d
 ){
 	int	j1, j2, i, b;
 	int	sfrv;	/* *scanf return value */
@@ -400,51 +400,62 @@ void read_frame_element_data(
 		if (sfrv != 3) sferr("section areas in frame element data");
 		sfrv=fscanf(fp, "%f %f %f", &J[b],  &Iy[b],  &Iz[b] );
 		if (sfrv != 3) sferr("section inertias in frame element data");
-		sfrv=fscanf(fp, "%f %f %f", &E[b], &G[b], &p[b]);
-		if (sfrv != 3) sferr("material moduli and roll angle in frame element data");
+		sfrv=fscanf(fp, "%f %f %f", &E[b], &G[b] );
+		if (sfrv != 2) sferr("material moduli in frame element data");
+		sfrv=fscanf(fp, "%f", &p[b]);
+		if (sfrv != 1) sferr("roll angle in frame element data");
 
 		p[b] = p[b]*PI/180.0;	/* convert from degrees to radians */
 
+		sfrv=fscanf(fp, "%f",  &d[b]);
+		if (sfrv != 1) sferr("mass density in frame element data");
+
 		if ( Ax[b] < 0 || Asy[b] < 0 || Asz[b] < 0 ||
 		      J[b] < 0 ||  Iy[b] < 0 ||  Iz[b] < 0	) {
-		    fprintf(stderr,"  error in frame element property data: section property < 0  ");
-		    fprintf(stderr,"  Frame element number: %d  \n", b);
-		    exit(1);
+		 fprintf(stderr,"  error in frame element property data: section property < 0  ");
+		 fprintf(stderr,"  Frame element number: %d  \n", b);
+		 exit(1);
 		}
 		if ( Ax[b] == 0 ) {
-		    fprintf(stderr,"  error in frame element property data: cross section area is zero   ");
-		    fprintf(stderr,"  Frame element number: %d  \n", b);
-		    exit(1);
+		 fprintf(stderr,"  error in frame element property data: cross section area is zero   ");
+		 fprintf(stderr,"  Frame element number: %d  \n", b);
+		 exit(1);
 		}
 		if ( (Asy[b] == 0 || Asz[b] == 0) && G[b] == 0 ) {
-		    fprintf(stderr,"  error in frame element property data: a shear area and shear modulus are zero   ");
-		    fprintf(stderr,"  Frame element number: %d  \n", b);
-		    exit(1);
+		 fprintf(stderr,"  error in frame element property data: a shear area and shear modulus are zero   ");
+		 fprintf(stderr,"  Frame element number: %d  \n", b);
+		 exit(1);
 		}
 		if ( J[b] == 0 ) {
-		    fprintf(stderr,"  error in frame element property data: torsional moment of inertia is zero   ");
-		    fprintf(stderr,"  Frame element number: %d  \n", b);
-		    exit(1);
+		 fprintf(stderr,"  error in frame element property data: torsional moment of inertia is zero   ");
+		 fprintf(stderr,"  Frame element number: %d  \n", b);
+		 exit(1);
 		}
 		if ( Iy[b] == 0 || Iz[b] == 0 ) {
-		    fprintf(stderr,"  error: cross section bending moment of inertia is zero   ");
-		    fprintf(stderr,"  Frame element number : %d  \n", b);
-		    exit(1);
+		 fprintf(stderr,"  error: cross section bending moment of inertia is zero   ");
+		 fprintf(stderr,"  Frame element number : %d  \n", b);
+		 exit(1);
 		}
 		if ( E[b] <= 0 || G[b] <= 0 ) {
-		    fprintf(stderr,"  error : material elastic modulus E or G f is not positive   ");
-		    fprintf(stderr,"  Frame element number: %d  \n", b);
-		    exit(1);
+		 fprintf(stderr,"  error : material elastic modulus E or G is not positive   ");
+		 fprintf(stderr,"  Frame element number: %d  \n", b);
+		 exit(1);
+		}
+		if ( d[b] <= 0 ) {
+		 fprintf(stderr,"  error : mass density d is not positive   ");
+		 fprintf(stderr,"  Frame element number: %d  \n", b);
+		 exit(1);
 		}
 	}
+
 	for (b=1;b<=nE;b++) {		/* calculate frame element lengths */
 		j1 = J1[b];
 		j2 = J2[b];
 
 #define SQ(X) ((X)*(X))
-		L[b] =	SQ(xyz[j2].x - xyz[j1].x) +
-			SQ(xyz[j2].y-xyz[j1].y) +
-			SQ(xyz[j2].z-xyz[j1].z);
+		L[b] =	SQ( xyz[j2].x - xyz[j1].x ) +
+			SQ( xyz[j2].y - xyz[j1].y ) +
+			SQ( xyz[j2].z - xyz[j1].z );
 #undef SQ
 
 		L[b] = sqrt( L[b] );
@@ -786,6 +797,7 @@ void read_and_assemble_loads(
 		float *Ax, float *Asy, float *Asz,
 		float *Iy, float *Iz, float *E, float *G,
 		float *p,
+		float *d, float *gX, float *gY, float *gZ, 
 		int *R,
 		int shear,
 		int *nF, int *nU, int *nW, int *nP, int *nT, int *nD,
@@ -823,6 +835,42 @@ void read_and_assemble_loads(
 	for (lc = 1; lc <= nL; lc++) {		/* begin load-case loop */
 
 	  if ( verbose ) printf(" load case %d of %d: \n", lc, nL );
+
+	  /* gravity loads	*/
+	  sfrv=fscanf(fp,"%f %f %f", &gX[lc], &gY[lc], &gZ[lc] );
+	  if (sfrv != 3) sferr("gX gY gZ values in load data");
+
+	  for (n=1; n<=nE; n++) {
+
+		j1 = J1[n];	j2 = J2[n];
+
+		coord_trans ( xyz, L[n], j1, j2,
+			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
+
+		feF_mech[lc][n][1]  = d[n]*Ax[n]*L[n]*gX[lc] / 2.0;
+		feF_mech[lc][n][2]  = d[n]*Ax[n]*L[n]*gY[lc] / 2.0;
+		feF_mech[lc][n][3]  = d[n]*Ax[n]*L[n]*gZ[lc] / 2.0;
+
+		feF_mech[lc][n][4]  = d[n]*Ax[n]*L[n]*L[n] / 12.0 *
+			( (-t4*t8+t5*t7)*gY[lc] + (-t4*t9+t6*t7)*gZ[lc] );
+		feF_mech[lc][n][5]  = d[n]*Ax[n]*L[n]*L[n] / 12.0 *
+			( (-t5*t7+t4*t8)*gX[lc] + (-t5*t9+t6*t8)*gZ[lc] );
+		feF_mech[lc][n][6]  = d[n]*Ax[n]*L[n]*L[n] / 12.0 *
+			( (-t6*t7+t4*t9)*gX[lc] + (-t6*t8+t5*t9)*gY[lc] );
+
+		feF_mech[lc][n][7]  = d[n]*Ax[n]*L[n]*gX[lc] / 2.0;
+		feF_mech[lc][n][8]  = d[n]*Ax[n]*L[n]*gY[lc] / 2.0;
+		feF_mech[lc][n][9]  = d[n]*Ax[n]*L[n]*gZ[lc] / 2.0;
+
+		feF_mech[lc][n][10] = d[n]*Ax[n]*L[n]*L[n] / 12.0 *
+			( ( t4*t8-t5*t7)*gY[lc] + ( t4*t9-t6*t7)*gZ[lc] );
+		feF_mech[lc][n][11] = d[n]*Ax[n]*L[n]*L[n] / 12.0 *
+			( ( t5*t7-t4*t8)*gX[lc] + ( t5*t9-t6*t8)*gZ[lc] );
+		feF_mech[lc][n][12] = d[n]*Ax[n]*L[n]*L[n] / 12.0 *
+			( ( t6*t7-t4*t9)*gX[lc] + ( t6*t8-t5*t9)*gY[lc] );
+
+	  }
+
 
 	  sfrv=fscanf(fp,"%d", &nF[lc] );	/* joint point loads	*/
 	  if (sfrv != 1) sferr("nF value in load data");
@@ -1320,7 +1368,7 @@ READ_MASS_DATA  -  read element densities and extra inertial mass data	16aug01
 void read_mass_data(
 		FILE *fp,
 		char *OUT_file, 
-		int nJ, int nE, int *nI,
+		int nJ, int nE, int *nI, int *nX, 
 		float *d, float *BMs,
 		float *JMs, float *JMx, float *JMy, float *JMz,
 		double *L, float *Ax,
@@ -1395,23 +1443,6 @@ void read_mass_data(
 	if ( shift_flag != -1.0 )	*shift = shift_flag;
 
 
-	for (m=1; m <= nE; m++) {	/* read inertia data	*/
-		sfrv=fscanf(fp, "%d", &b );
-		if (sfrv != 1) sferr("frame element number in mass data");
-		sfrv=fscanf(fp, "%f %f", &d[b], &BMs[b] );
-		if (sfrv != 2) sferr("density or element mass value in mass data");
-		*total_mass  += d[b]*Ax[b]*L[b] + BMs[b];
-		*struct_mass += d[b]*Ax[b]*L[b];
-#ifdef MASSDATA_DEBUG
-		fprintf(mf," %4d\t\t%12.5e\t%12.5e\t%12.5e\t%12.5e \n",
-		 b, Ax[b], L[b], d[b], d[b]*Ax[b]*L[b] );
-#endif
-	}
-
-#ifdef MASSDATA_DEBUG
-	fclose(mf);
-#endif
-
 	/* number of joints with extra inertias */
 	sfrv=fscanf(fp,"%d", nI );
 	if (sfrv != 1) sferr("nI value in mass data");
@@ -1422,10 +1453,10 @@ void read_mass_data(
 	}
 	for (j=1; j <= *nI; j++) {
 		sfrv=fscanf(fp, "%d", &jnt );
-		if (sfrv != 1) sferr("joint value in extra mass data");
+		if (sfrv != 1) sferr("joint value in extra joint mass data");
 		if ( jnt < 1 || jnt > nJ ) {
-	    		fprintf(stderr,"  error in joint load data: joint number out of range  ");
-	    		fprintf(stderr,"  Joint: %d  \n", j);
+	    		fprintf(stderr,"  error in joint mass data: joint number out of range  ");
+	    		fprintf(stderr,"  Joint: %d  \n", jnt );
 	    		fprintf(stderr,"  Perhaps you did not specify %d extra masses \n", *nI );
 			fprintf(stderr,
 			"  or perhaps the Input Data file is missing expected data.\n");
@@ -1439,6 +1470,44 @@ void read_mass_data(
 		if ( JMs[jnt]==0 && JMx[jnt]==0 && JMy[jnt]==0 && JMz[jnt]==0 )
 	    	fprintf(stderr,"  warning: All extra joint inertia at joint %d  are zero\n", jnt );
 	}
+
+	/* number of frame elements with extra beam mass */
+	sfrv=fscanf(fp,"%d", nX );
+	if (sfrv != 1) sferr("nX value in mass data");
+	if ( verbose ) {
+		printf(" number of frame elements with extra mass ");
+        	dots(stdout,11);
+        	printf(" nX = %3d\n",*nX);
+		if (sfrv != 1) sferr("element value in extra element mass data");
+	}
+	for (m=1; m=nX; m++) {
+		sfrv=fscanf(fp, "%d", &b );
+		if (sfrv != 1) sferr("element number in extra element mass data");
+		if ( b < 1 || b > nE ) {
+	    		fprintf(stderr,"  error in element mass data: element number out of range  ");
+	    		fprintf(stderr,"  Element: %d  \n", b );
+	    		fprintf(stderr,"  Perhaps you did not specify %d extra masses \n", *nX );
+			fprintf(stderr,
+			"  or perhaps the Input Data file is missing expected data.\n");
+	    		exit(1);
+		}
+		sfrv=fscanf(fp, "%f", &BMs[b] );
+		if (sfrv != 1) sferr("extra element mass value in mass data");
+	}
+
+	/* calculate the total mass and the structural mass */
+	for (m=1; m <= nE; m++) {
+		*total_mass  += d[b]*Ax[b]*L[b] + BMs[b];
+		*struct_mass += d[b]*Ax[b]*L[b];
+#ifdef MASSDATA_DEBUG
+		fprintf(mf," %4d\t\t%12.5e\t%12.5e\t%12.5e\t%12.5e \n",
+		 b, Ax[b], L[b], d[b], d[b]*Ax[b]*L[b] );
+#endif
+	}
+
+#ifdef MASSDATA_DEBUG
+	fclose(mf);
+#endif
 
 	for (m=1;m<=nE;m++) {			/* chec inertia data	*/
 	    if ( d[m] < 0.0 || BMs[m] < 0.0 || d[m]+BMs[m] <= 0.0 ) {

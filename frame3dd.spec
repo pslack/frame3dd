@@ -67,10 +67,15 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
-* Wed Dec 1 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+* Wed Dec 2 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - fix bug in creating mesh_file and mode_file the first char was being clipped
 - change exagg to exagg_static ... specifically for exaggerating static meshes
 - add new variable exagg_modal ... specifically for exaggerating modal  meshes
+The new variable "exagg_modal" is specified right after the "shift" variable
+in the Input Data file.    The command-line option -e applies only to the
+static mesh exaggeration, not the dynamic mesh exaggeration.
+- Update user-manual.html and the examples/ex*.3dd to reflect the change
+- Re-run example files
 
 * Tue Dec 1 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - Provide more information from "help" request ... frame3dd -h

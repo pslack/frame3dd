@@ -119,7 +119,8 @@ void read_frame_element_data (
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
 	float *J, float *Iy, float *Iz,	/**< section inertias	*/
 	float *E, float *G,	/**< elastic moduli and shear moduli	*/
-	float *p		/**< roll angle of each frame element (radians)	*/
+	float *p,	/**< roll angle of each frame element (radians)	*/
+	float *d	/**< mass density of each frame element		*/
 );
 
 
@@ -172,7 +173,11 @@ void read_and_assemble_loads(
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
 	float *Iy, float *Iz,	/**< section inertias			*/
 	float *E, float *G,	/**< elastic moduli and shear moduli	*/
-	float *p,		/**< roll angle of each frame element (radians)	*/
+	float *p,	/**< roll angle of each frame element (radians)	*/
+	float *d,  /**< mass density of each frame element		*/
+	float *gX, /**< gravitational acceleration in global X each load case */
+	float *gY, /**< gravitational acceleration in global Y each load case */
+	float *gZ, /**< gravitational acceleration in global Z each load case */
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
 	int shear,	/**< 1: include shear deformations, 0: don't	*/
 	int *nF, 		/**< number of concentrated joint loads */
@@ -202,7 +207,8 @@ void read_mass_data(
 	FILE *fp,	/**< input data file pointer			*/
 	char *OUT_file,	/**< input output data file name 		*/
 	int nJ, int nE,	/**< number of joints, number of frame elements */
-	int *nI,	/**< number of elements with extra inertia	*/
+	int *nI,	/**< number of joints with extra inertia	*/
+	int *nX,	/**< number of elements with extra mass		*/
 	float *d, float *BMs, /**< density, extra frame element mass	*/
 	float *JMs, float *JMx, float *JMy, float *JMz, /**< joint inertia*/
 	double *L,	/**< length of each frame element		*/

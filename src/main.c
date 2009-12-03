@@ -88,6 +88,9 @@ For compilation/installation, see README.txt.
 		*d, *BMs,	/* member densities and extra inertia	*/
 		*JMs, 		/* mass of a joint			*/
 		*JMx,*JMy,*JMz,	/* inertia of a joint in global coord	*/
+		gX[_NL_],	/* gravitational acceleration in global X */
+		gY[_NL_],	/* gravitational acceleration in global Y */
+		gZ[_NL_],	/* gravitational acceleration in global Z */
 		pan=1.0;	/* >0: pan during animation; 0: don't	*/
 
 	double	**K, **Ks=NULL,	/* global stiffness matrix		*/
@@ -130,6 +133,7 @@ For compilation/installation, see README.txt.
 		nP[_NL_],	/* number of members w/ conc point loads*/
 		nT[_NL_],	/* number of members w/ temp. changes	*/
 		nI=0,		/* number of joints w/ extra inertia	*/
+		nX=0,		/* number of elemts w/ extra mass	*/
 		nC=0,		/* number of condensed joints		*/
 		*J1, *J2,	/* begin and end joint numbers		*/
 		shear=0,	/* indicates shear deformationi		*/
@@ -260,9 +264,10 @@ For compilation/installation, see README.txt.
 	E   =  vector(1,nE);	/* frame element Young's modulus	*/
 	G   =  vector(1,nE);	/* frame element shear modulus		*/
 	p   =  vector(1,nE);	/* member rotation angle about local x axis */
+	d   =  vector(1,nE);	/* member rotation angle about local x axis */
 
 	read_frame_element_data( fp, nJ, nE, xyz,r, L, Le, J1, J2,
-					Ax, Asy, Asz, J, Iy, Iz, E, G, p );
+					Ax, Asy, Asz, J, Iy, Iz, E, G, p, d );
 	if ( verbose) 	printf(" ... complete\n");
 
 
@@ -307,7 +312,6 @@ For compilation/installation, see README.txt.
 	D   = dvector(1,DoF);	/* displacments of each joint		*/
 	dD  = dvector(1,DoF);	/* incremental displ. of each joint	*/
 
-	d   =  vector(1,nE);	/* mass density for each member		*/
 	BMs =  vector(1,nE);	/* lumped mass for each frame element	*/
 	JMs =  vector(1,nJ);	/* joint mass for each joint		*/
 	JMx =  vector(1,nJ);	/* joint inertia about global X axis	*/
@@ -319,7 +323,9 @@ For compilation/installation, see README.txt.
 
 
 	read_and_assemble_loads( fp, nJ, nE, nL, DoF, xyz, L, Le, J1, J2,
-				Ax,Asy,Asz, Iy,Iz, E, G, p, R, shear,
+				Ax,Asy,Asz, Iy,Iz, E, G, p,
+				d, gX, gY, gZ, 
+				R, shear,
 				nF, nU, nW, nP, nT, nD,
 				Q, Fo_mech, Fo_temp, U, W, P, T,
 				Dp, feF_mech, feF_temp, verbose );
@@ -334,7 +340,8 @@ For compilation/installation, see README.txt.
 		printf(" load data ... complete\n");
 	}
 
-	read_mass_data( fp, IN_file, nJ, nE, &nI, d, BMs, JMs, JMx, JMy, JMz,
+	read_mass_data( fp, IN_file, nJ, nE, &nI, &nX,
+			d, BMs, JMs, JMx, JMy, JMz,
 			L, Ax, &total_mass, &struct_mass, &nM,
 			&Mmethod, modal_flag, 
 			&lump, lump_flag, &tol, tol_flag, &shift, shift_flag,

@@ -1972,11 +1972,12 @@ nR                           # number of joints with reactions
 
 nE                        # number of frame elements 
 
-#.elmnt j1     j2      Ax     Asy     Asz     Jx     Iy     Iz     E     G     p
-#                      mm^2   mm^2    mm^2    mm^4   mm^4   mm^4   N/mm N/mm  deg                        
-  M[1]  J1[1]  J2[1]   Ax[1]  Asy[1]  Asz[1]  Jx[1]  Iy[1]  Iz[1]  E[1]  G[1]  p[1]
-    :      :      :       :       :       :      :      :      :     :     :     :
-  M[nE] J1[nE] J2[nE]  Ax[nE] Asy[nE] Asz[nE] Jx[nE] Iy[nE] Iz[nE] E[nE] G[nE] p[nE]
+#.elmnt j1     j2    Ax     Asy     Asz     Jx     Iy     Iz     E     G     p     density
+#       .      .     mm^2   mm^2    mm^2    mm^4   mm^4   mm^4   MPa   MPa   deg   tonne/mm^3
+ M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jx[1]  Iy[1]  Iz[1]  E[1]  G[1]  p[1]  d[1]
+   :      :      :      :       :       :      :      :      :     :     :     :     :
+ M[nE] J1[nE] J2[nE] Ax[nE] Asy[nE] Asz[nE] Jx[nE] Iy[nE] Iz[nE] E[nE] G[nE] p[nE] d[nE]
+
 
 shear                      # 1: include shear deformation, 0: don't
 geom                       # 1: include geometric stiffness. 0: don't
@@ -1989,21 +1990,24 @@ nL                        # number of static load cases
 
 # Begin Static Load Case 1  
 
-nF                               # number of loaded joints
+# gravitational acceleration for self-weight loading, mm/s^2 (global)
+ gX  gY  gZ                         
+
+nF                     # number of loaded joints (global)
 #.joint  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
 #         N        N        N        N.mm      N.mm      N.mm
   J[1]    Fx[1]    Fy[1]    Fz[1]    Mxx[1]    Myy[1]    Mzz[1]
     :        :        :        :         :         :         :  
   J[nF]   Fx[nF]   Fy[nF]   Fz[nF]   Mxx[nF]   Myy[nF]   Mzz[nF]
 
-nU                       # number of uniform distributed loads
+nU                     # number of uniform distributed loads (local)
 #.elmnt  X-load   Y-load   Z-load   uniform member loads in member coordinates
 #         N/mm     N/mm     N/mm
   M[1]    Ux[1]    Uy[1]    Uz[1]
     :        :        :        :  
   M[nU]   Ux[nU]   Uy[nU]   Uz[nU]
 
-nW                     # number of trapezoidally distributed loads
+nW                     # number of trapezoidally distributed loads (local)
 #       start    stop     start    stop
 #.elmnt loc'n    loc'n    load     load
 #       mm       mm       N/mm     N/mm
@@ -2015,20 +2019,20 @@ nW                     # number of trapezoidally distributed loads
         xy1[nW]  xy2[nW]  wy1[nW]  wy2[nW] # w1 and w2: start load and end load
         xz1[nW]  xz2[nW]  wz1[nW]  wz2[nW] # 0 < x1 < x2 < L
 
-nP                        # number of concentrated interior point loads
+nP                     # number of concentrated interior point loads (local)
 #.elmnt  X-load   Y-load   Z-load    x-loc'n  point loads in member coordinates 
   M[1]    Px[1]    Py[1]    Pz[1]    x[1]      
     :        :        :        :       :    # x=distance from coordinate J1 
   M[nP]   Px[nP]   Py[nP]   Pz[nP]   x[nP]  # 0 < x < L
 
-nT                     # number of members temperature changes
+nT                     # number of members temperature changes (local)
 #.elmnt   coef.  y-depth  z-depth  deltaTy+  deltaTy-  deltaTz+  deltaTz-
 #         /deg.C  mm       mm       deg.C     deg.C     deg.C     deg.C
   M[1]    a[1]    hy[1]    hz[1]    Ty+[1]    Ty-[1]    Tz+[1]    Tz-[1] 
     :       :        :        :         :         :         :         :   
   M[nT]   a[nT]   hy[nT]   hz[nT]   Ty+[nT]   Ty-[nT]   Tz+[nT]   Tz-[nT] 
 
-nD                             # number of prescribed displacements nD<=nR
+nD                     # number of prescribed displacements nD<=nR (global)
 #.jnt    X-displ  Y-displ  Z-displ  X-rot'n   Y-rot'n   Z-rot'n
 #         mm       mm       mm       radian    radian    radian
   J[1]    Dx[1]    Dy[1]    Dz[3]    Dxx[1]    Dyy[1]    Dzz[1]
@@ -2039,21 +2043,24 @@ nD                             # number of prescribed displacements nD<=nR
 
 # Begin Static Load Case 2
 
-nF                               # number of loaded joints
+# gravitational acceleration for self-weight loading, mm/s^2
+ gX  gY  gZ                         
+
+nF                     # number of loaded joints (global)
 #.joint  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
 # .       N        N        N        N.mm      N.mm      N.mm
   J[1]    Fx[1]    Fy[1]    Fz[1]    Mxx[1]    Myy[1]    Mzz[1]
     :        :        :        :         :         :         :  
   J[nF]   Fx[nF]   Fy[nF]   Fz[nF]   Mxx[nF]   Myy[nF]   Mzz[nF]
 
-nU                       # number of uniform distributed loads
+nU                     # number of uniform distributed loads (local)
 #.elmnt  X-load   Y-load   Z-load   uniform member loads in member coordinates
 #         N/mm     N/mm     N/mm
   M[1]    Ux[1]    Uy[1]    Uz[1]
     :        :        :        :  
   M[nU]   Ux[nU]   Uy[nU]   Uz[nU]
 
-nW                     # number of trapezoidally distributed loads
+nW                     # number of trapezoidally distributed loads (local)
 #       start    stop     start    stop
 #.elmnt loc'n    loc'n    load     load
 #       mm       mm       N/mm     N/mm
@@ -2065,20 +2072,20 @@ nW                     # number of trapezoidally distributed loads
         xy1[nW]  xy2[nW]  wy1[nW]  wy2[nW] # w1 and w2: start load and end load
         xz1[nW]  xz2[nW]  wz1[nW]  wz2[nW] # 0 < x1 < x2 < L
 
-nP                        # number of concentrated interior point loads
+nP                     # number of concentrated interior point loads (local)
 #.elmnt  X-load   Y-load   Z-load    x-loc'n  point loads in member coordinates 
   M[1]    Px[1]    Py[1]    Pz[1]    x[1]      
     :        :        :        :       :    # x=distance from coordinate J1 
   M[nP]   Px[nP]   Py[nP]   Pz[nP]   x[nP]  # 0 < x < L
 
-nT                     # number of members temperature changes
+nT                     # number of members temperature changes (local)
 #.elmnt   coef.  y-depth  z-depth  deltaTy+  deltaTy-  deltaTz+  deltaTz-
 #         /deg.C  mm       mm       deg.C     deg.C     deg.C     deg.C
   M[1]    a[1]    hy[1]    hz[1]    Ty+[1]    Ty-[1]    Tz+[1]    Tz-[1] 
     :       :        :        :         :         :         :         :   
   M[nT]   a[nT]   hy[nT]   hz[nT]   Ty+[nT]   Ty-[nT]   Tz+[nT]   Tz-[nT] 
 
-nD                             # number of prescribed displacements nD<=nR
+nD                     # number of prescribed displacements nD<=nR (global)
 #.jnt    X-displ  Y-displ  Z-displ  X-rot'n   Y-rot'n   Z-rot'n
 #         mm       mm       mm       radian    radian    radian
   J[1]    Dx[1]    Dy[1]    Dz[3]    Dxx[1]    Dyy[1]    Dzz[1]
@@ -2087,7 +2094,7 @@ nD                             # number of prescribed displacements nD<=nR
 
 # End Static Load Case 2
 
-# repeat up to 128 static load cases
+# repeat up to 32 static load cases
 
 
 # dynamic analysis data ...
@@ -2102,21 +2109,24 @@ tol     #  frequency convergence tolerance  approx 1e-4
 shift   # frequency shift-factor for rigid body modes, make 0 for pos.def. [K]
 exagg_modal  # exaggeration factor for the modal displacements in the plot
 
-# element density and extra mass data ...
 
-#.elmnt   density      extra mass
-#         tonne/mm^3   tonne
-  M[1]    d[1]         BMs[1]
-    :       :              :   
-  M[nE]   d[nE]        BMs[nE]
-
-# data for extra inertia of joint masses
+# extra joint inertia data ...
 nI               # number of joints with extra joint mass or rotatory inertia
 #.jnt   mass      XX-inertia   YY-inertia   ZZ-inertia
 #       tonne     tonne.mm^2   tonne.mm^2   tonne.mm^2
- J[1]   JMs[1]    JMx[1]       JMy[1]       JMz[1]  
+ J[1]   JMs[1]    JMx[1]       JMy[1]       JMz[1]
    :        :         :            :            :    # (global coordinates)
  J[nI]  JMs[nI]   JMx[nI]      JMy[nI]      JMz[nI]
+
+
+# extra frame element mass data ...
+nX               # number of frame elements with extra mass 
+#.elmnt   extra mass
+#         tonne
+  M[1]    BMs[1]
+    :         :
+  M[nX]   BMs[nE]
+
 
 # mode shape animation data ...
 nA                        # number of modes to be animated
@@ -2169,6 +2179,9 @@ nC                                                # number of condensed joints
     Fy           - Joint load in the global Y direction
     Fz           - Joint load in the global Z direction
     G            -  Shear modulus of elasticity of frame element i
+    gX           - gravitational acceleration in the global X direction
+    gY           - gravitational acceleration in the global Y direction          
+    gZ           - gravitational acceleration in the global Z direction
     geom         - 1: include geometric stiffness effects, 0: do not.
     hy           - cross-section dimension in the local y coordinate dir.
     hz           - cross-section dimension in the local z coordinate dir.
