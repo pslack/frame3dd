@@ -588,7 +588,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 1                               # 1: include shear deformation
 1                               # 1: include geometric stiffness
-100.0                           # exaggerate mesh deformations
+100.0                           # exaggerate static mesh deformations
 
 
 1			# number of static load cases
@@ -781,6 +781,7 @@ Example H: a pedestrian ramp  (kip, in)
 0                               # 0: consistent mass ... 1: lumped mass matrix
 1e-4                            # mode shape tolerance
 1.0                             # shift value ... for unrestrained structures
+100.0                           # exaggerate modal mesh deformations
 
 #.M     density         mass
 #       kip/in^3        kip

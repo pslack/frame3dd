@@ -115,7 +115,8 @@ For compilation/installation, see README.txt.
 		error = 1.0,	/* rms equilibrium error and reactions	*/
 		Cfreq = 0.0,	/* frequency used for Guyan condensation*/
 		**Kc, **Mc,	/* condensed stiffness and mass matrices*/
-		exagg;		/* exaggerate deformations in mesh data	*/
+		exagg_static=10,/* exaggerate static displ. in mesh data*/
+		exagg_modal=10;	/* exaggerate modal displ. in mesh data	*/
 
 	int	nJ=0,		/* number of Joints 			*/
 		nE=0,		/* number of frame Elements		*/
@@ -267,7 +268,7 @@ For compilation/installation, see README.txt.
 
 	read_run_data ( fp, OUT_file, &shear, shear_flag, &geom, geom_flag,
 			meshpath, plotpath,
-			&exagg, exagg_flag, &anlyz, anlyz_flag, debug );
+			&exagg_static, exagg_flag, &anlyz, anlyz_flag, debug );
 
 	sfrv=fscanf(fp, "%d", &nL );	/* number of load cases		*/
 	if (sfrv != 1)	sferr("nL value for number of load cases");
@@ -337,6 +338,7 @@ For compilation/installation, see README.txt.
 			L, Ax, &total_mass, &struct_mass, &nM,
 			&Mmethod, modal_flag, 
 			&lump, lump_flag, &tol, tol_flag, &shift, shift_flag,
+			&exagg_modal,
 			modepath,
 			anim, &pan, pan_flag, 
 			verbose, debug );
@@ -497,18 +499,24 @@ For compilation/installation, see README.txt.
 			write_static_results ( fp, nJ,nE,nL,lc, DoF, J1,J2, Fo[lc],
 									 D,R,Q, error, ok );
 
-			if ( filetype == 1 ){
+			if ( filetype == 1 ) {		// .CSV format output
 				write_static_csv(OUT_file, title,
 					nJ,nE,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
 
-			if ( filetype == 2 ){
+			if ( filetype == 2 ) {		// matlab format output
 				write_static_mfile (OUT_file, title,
 					nJ,nE,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
 
+			if ( verbose ) 
+				printf("\n    If the program pauses here for very long,"
+				" hit CTRL-C to stop execution, \n"
+				"    reduce exagg_static in the Input Data,"
+				" and re-run the analysis. \n");
+
 			static_mesh ( IN_file, meshpath, plotpath, title, nJ, nE, nL, lc,
-				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
+				DoF, xyz, L, J1,J2, p, D, exagg_static, anlyz);
 
 		} /* end load case loop */
 	} else {
@@ -518,8 +526,9 @@ For compilation/installation, see README.txt.
 			printf("  DATA CHECK ONLY.\n");
 		}
 		static_mesh ( IN_file, meshpath, plotpath, title, nJ, nE, nL, lc,
-				DoF, xyz, L, J1,J2, p, D, exagg, anlyz);
+				DoF, xyz, L, J1,J2, p, D, exagg_static, anlyz);
 	}
+
 
 	if(nM > 0){ /* modal analysis */
 
@@ -578,9 +587,9 @@ For compilation/installation, see README.txt.
 	if(nM > 0 && anlyz){
 
 		modal_mesh ( IN_file, meshpath, modepath, plotpath, title,
-			nJ,nE, DoF, nM, xyz, L, J1,J2, p, M,f,V,exagg,anlyz);
+		    nJ,nE, DoF, nM, xyz, L, J1,J2, p, M,f,V,exagg_modal,anlyz);
 		animate ( IN_file, meshpath, modepath, plotpath, title,anim,
-			nJ,nE, DoF, nM, xyz, L, p, J1,J2, f,V, exagg, pan );
+		    nJ,nE, DoF, nM, xyz, L, p, J1,J2, f,V, exagg_modal, pan );
 	}
 
 	if(nC > 0){		/* matrix condensation of stiffness and mass */

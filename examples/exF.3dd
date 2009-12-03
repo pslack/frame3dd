@@ -139,7 +139,7 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 
 1                               # 1: include shear deformation
 1                               # 1: include geometric stiffness
-2000                            # exaggerate mesh deformations
+2000                            # exaggerate static mesh deformations
 
 
 
@@ -188,6 +188,7 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 0                               # 0: consistent mass ... 1: lumped mass matrix
 1.00e-6                         # mode shape tolerance
 0.0                             # shift value ... for unrestrained structures
+100                             # exaggerate modal mesh deformations
 
 
 

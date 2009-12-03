@@ -46,7 +46,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 
 1                               # 1: include shear deformation
 1                               # 1: include geometric stiffness
-10.0                            # exaggerate mesh deformations
+10.0                            # exaggerate static mesh deformations
 
 
 
@@ -82,6 +82,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 0                               # 0: consistent mass ... 1: lumped mass matrix
 1e-5                            # mode shape tolerance
 1.0                             # shift value ... for unrestrained structures
+10.0                            # exaggerate modal mesh deformations
 
 
 #.M     density    mass

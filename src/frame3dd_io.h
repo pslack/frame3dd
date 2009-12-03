@@ -135,7 +135,7 @@ void read_run_data (
 	int geom_flag,	/**< command-line over-ride			*/
 	char meshpath[],/**< file name for mesh data output		*/
 	char plotpath[],/**< file name for Gnuplot script		*/
-	double *exagg,	/**< factor for deformation exaggeration	*/
+	double *exagg_static,/**< factor for static displ. exaggeration	*/
 	double exagg_flag, /**< command-line over-ride			*/
 	int *anlyz,	/* 1: perform elastic analysis, 0: don't	*/
 	int anlyz_flag,	/**< command-line over-ride			*/
@@ -218,6 +218,7 @@ void read_mass_data(
 	double tol_flag, /**< command-line over-ride			*/
 	double *shift,	/**< frequency shift for unrestrained frames	*/
 	double shift_flag, /**< command-line over-ride			*/
+	double *exagg_modal, /**< exaggerate modal displacements	*/
 	char modepath[], /**< filename for mode shape data for plotting	*/
 	int *anim,	/**< list of modes to be graphically animated	*/
 	float *pan,	/**< 1: pan viewpoint during animation, 0: don't */
@@ -321,7 +322,7 @@ void static_mesh(
 	char *title, int nJ, int nE, int nL, int lc, int DoF,
 	vec3 *xyz, double *L,
 	int *J1, int *J, float *p, double *D,
-	double exagg, int anlyz
+	double exagg_static, int anlyz
 );
 
 
@@ -336,7 +337,7 @@ void modal_mesh(
 	vec3 *xyz, double *L,
 	int *J1, int *J2, float *p,
 	double **M, double *f, double **V,
-	double exagg, int anlyz
+	double exagg_modal, int anlyz
 );
 
 
@@ -353,7 +354,7 @@ void animate(
 	int nJ, int nE, int DoF, int nM,
 	vec3 *xyz, double *L, float *p,
 	int *J1, int *J2, double *f, double **V,
-	double exagg, float pan
+	double exagg_modal, float pan
 );
 
 

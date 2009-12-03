@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example D: dynamic properties of an un-restrained frame with a triangular section 
-Thu Nov  5 21:56:27 2009
+Wed Dec  2 23:41:06 2009
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -153,7 +153,7 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
     30     19      0.0         0.0        0.0        0.0        0.0        0.0  
 R E A C T I O N S							(global)
   Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
-R M S   E Q U I L I B R I U M    E R R O R: 0.000e+00
+R M S   E Q U I L I B R I U M    E R R O R:       nan
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  3.237697e-01     Structural Mass:  3.237697e-01 

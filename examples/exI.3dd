@@ -60,7 +60,7 @@ Example I: a triangular tower  (kip,in)
 
 1                               # 1: include shear deformation
 1                               # 1: include geometric stiffness
-2.0                             # exaggerate mesh deformations
+2.0                             # exaggerate static mesh deformations
 
 
 
@@ -99,6 +99,7 @@ Example I: a triangular tower  (kip,in)
 0                               # 0: consistent mass ... 1: lumped mass matrix
 1e-6                            # mode shape tolerance
 0.0                             # shift value ... for unrestrained structures
+5.0                             # exaggerate modal mesh deformations
 
 #.M    density mass
 #      k/in^3  kip

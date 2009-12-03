@@ -67,9 +67,16 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Wed Dec 1 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
+- fix bug in creating mesh_file and mode_file the first char was being clipped
+- change exagg to exagg_static ... specifically for exaggerating static meshes
+- add new variable exagg_modal ... specifically for exaggerating modal  meshes
+
 * Tue Dec 1 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - Provide more information from "help" request ... frame3dd -h
 - Add -w flag to frame_3dd.m so that the stiffness matrix is written
+- Replace ``smart quotes'' from LICENSE.txt with "regular quotes."
+- chmod -w LICENSE.txt
 
 * Tue Nov 24 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - Change Duke Univ URL in source code comments to frame3dd.sourceforge.net

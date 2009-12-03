@@ -1978,9 +1978,9 @@ nE                        # number of frame elements
     :      :      :       :       :       :      :      :      :     :     :     :
   M[nE] J1[nE] J2[nE]  Ax[nE] Asy[nE] Asz[nE] Jx[nE] Iy[nE] Iz[nE] E[nE] G[nE] p[nE]
 
-shear                      # 1: include shear deformation
-geom                       # 1: include geometric stiffness
-exagg                      # exaggerate mesh deformations
+shear                      # 1: include shear deformation, 0: don't
+geom                       # 1: include geometric stiffness. 0: don't
+exagg_static               # exaggeration factor for static mesh deformations
 
 
 # load data ...
@@ -1991,7 +1991,7 @@ nL                        # number of static load cases
 
 nF                               # number of loaded joints
 #.joint  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
-# .       N        N        N        N.mm      N.mm      N.mm
+#         N        N        N        N.mm      N.mm      N.mm
   J[1]    Fx[1]    Fy[1]    Fz[1]    Mxx[1]    Myy[1]    Mzz[1]
     :        :        :        :         :         :         :  
   J[nF]   Fx[nF]   Fy[nF]   Fz[nF]   Mxx[nF]   Myy[nF]   Mzz[nF]
@@ -2100,6 +2100,7 @@ Mmethod # 1: Subspace-Jacobi iteration, 2: Stodola method
 lump    # 0: consistent mass matrix, 1: lumped mass matrix
 tol     #  frequency convergence tolerance  approx 1e-4
 shift   # frequency shift-factor for rigid body modes, make 0 for pos.def. [K]
+exagg_modal  # exaggeration factor for the modal displacements in the plot
 
 # element density and extra mass data ...
 
@@ -2140,117 +2141,118 @@ nC                                                # number of condensed joints
 <a name="Variables"/><h2>10. Variable Definitions</h2>
 
 <pre>
-       a         - Coefficient of thermal expansion (1/degree)
-       anim      - List of modes to be animated, by mode number
-       Ax        - Cross-sectional area of a prismatic frame element
-                   (The x-axis is along the element length, in local coordinates)
-       Asy       - Shear area in the local y-axis of a prismatic frame element
-       Asz       - Shear area in the local z-axis of a prismatic frame element
-       BMs       - extra mass on a frame element, not including self mass
-       Cmethod   -  matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
-       cx        - 1: retain X d.o.f. in condensed system at joint J;  0: don't
-       cy        - 1: retain Y d.o.f. in condensed system at joint J;  0: don't
-       cz        - 1: retain Z d.o.f. in condensed system at joint J;  0: don't
-       cxx       - 1: retain X axis rotation at joint J;  0: don't
-       cyy       - 1: retain Y axis rotation at joint J;  0: don't
-       czz       - 1: retain Z axis rotation at joint J;  0: don't
-       Dx        - Prescribed displacement in the global X direction
-       Dy        - Prescribed displacement in the global Y direction
-       Dz        - Prescribed displacement in the global Z direction
-       Dxx       - Prescribed rotation in the global X direction
-       Dyy       - Prescribed rotation in the global Y direction
-       Dzz       - Prescribed rotation in the global Z direction
-       d         - mass density of a frame element
-       E         - Modulus of elasticity of a frame element
-       exagg     - Factor for exaggeration of the deformations in the plot
-       Fx        - Joint load in the global X direction
-       Fy        - Joint load in the global Y direction
-       Fz        - Joint load in the global Z direction
-       G         -  Shear modulus of elasticity of frame element i
-       geom      - 1: include geometric stiffness effects, 0: do not.
-       hy        - cross-section dimension in the local y coordinate dir.
-       hz        - cross-section dimension in the local z coordinate dir.
-       Iyy       - Moment of inertia for bending about the local y axis
-       Izz       - Moment of inertia for bending about the local z axis
-       J         - Joint number
-       J1        - Joint 1 of a frame element
-       J2        - Joint 2 of a frame element
-       JMs       - extra mass of a joint for translational motion
-       JMx       - extra rotatory inertia of a joint about global x coord. dir.
-       JMy       - extra rotatory inertia of a joint about global y coord. dir.
-       JMz       - extra rotatory inertia of a joint about global z coord. dir.
-       Jxx       - Torsional moment of inertia of a frame element
-       lump      - 1: use lumped mass matrix, 0: use consistent mass matrix
-       M         - Member number
-       Mxx       - Joint Moment about the global X axis
-       Myy       - Joint Moment about the global Y axis
-       Mzz       - Joint Moment about the global Z axis
-       m         - list of modes to match in dynamic condensation
-       Mmethod   - the modal analysis method 1: Subspace Jacobi, 2: Stodola
-       nA        - number of mode shapes to Animate must be less than 20
-       nC        - number of joints for matrix Condensation
-       nD        - number of joints with prescribed Displacements (nD <= nR)
-       nE        - number of frame Elements
-       nF        - number of joints with point Forces or concentrated moments
-       nI        - number of joints with extra joint mass or Inertia
-       nJ        - number of Joints
-       nL        - number of static Load cases
-       nM        - number of Modes to be calculated
-       nP        - number of frame elements with concentrated point loads
-       nR        - number of joints with Reaction forces
-       nT        - number of frame elements with Temperature changes
-       nU        - number of uniformly distributed loads
-       nW        - number of trapezoidally distributed loads
-       p         - the roll angle of the frame element, in degrees
-       pan       - the pan rate of the view point during animation
-       Px        - concentrated point load in the local x direction
-       Py        - concentrated point load in the local y direction
-       Pz        - concentrated point load in the local z direction
-       Rx        - 1: reaction force in the global X direction,  0: free
-       Ry        - 1: reaction force in the global Y direction,  0: free
-       Rz        - 1: reaction force in the global Z direction,  0: free
-       Rxx       - 1: reactoin moment about the global X axis, 0: free
-       Ryy       - 1: reaction moment about the global Y axis, 0: free
-       Rzz       - 1: reaction moment about the global Z axis, 0: free
-       r         - r radius of rigid joint sphere around joint i
-       shear     - 1: include shear deformations, 0: do not.
-       shift     - shift factor for non-definite stiffness matrices
-       tol       - tolerance for finding mode shapes ~ 1.e-4
-       Ty+       - temperature change on the local +y face of the element
-       Ty-       - temperature change on the local -y face of the element
-       Tz+       - temperature change on the local +z face of the element
-       Tz-       - temperature change on the local -z face of the element
-       Ux        - uniform distributed load in the local X direction
-       Uy        - uniform distributed load in the local Y direction
-       Uz        - uniform distributed load in the local Z direction
-       wx1       - starting value for trapezoidally-distributed loads
+    a         - Coefficient of thermal expansion (1/degree)
+    anim      - List of modes to be animated, by mode number
+    Ax        - Cross-sectional area of a prismatic frame element
+                (The x-axis is along the element length, in local coordinates)
+    Asy       - Shear area in the local y-axis of a prismatic frame element
+    Asz       - Shear area in the local z-axis of a prismatic frame element
+    BMs       - extra mass on a frame element, not including self mass
+    Cmethod   -  matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
+    cx           - 1: retain X d.o.f. in condensed system at joint J;  0: don't
+    cy           - 1: retain Y d.o.f. in condensed system at joint J;  0: don't
+    cz           - 1: retain Z d.o.f. in condensed system at joint J;  0: don't
+    cxx             - 1: retain X axis rotation at joint J;  0: don't
+    cyy          - 1: retain Y axis rotation at joint J;  0: don't
+    czz          - 1: retain Z axis rotation at joint J;  0: don't
+    Dx           - Prescribed displacement in the global X direction
+    Dy           - Prescribed displacement in the global Y direction
+    Dz           - Prescribed displacement in the global Z direction
+    Dxx          - Prescribed rotation in the global X direction
+    Dyy          - Prescribed rotation in the global Y direction
+    Dzz          - Prescribed rotation in the global Z direction
+    d            - mass density of a frame element
+    E            - Modulus of elasticity of a frame element
+    exagg_modal  - Exaggeration factor for the modal  displacements in the plot
+    exagg_static - Exaggeration factor for the static displacements in the plot
+    Fx           - Joint load in the global X direction
+    Fy           - Joint load in the global Y direction
+    Fz           - Joint load in the global Z direction
+    G            -  Shear modulus of elasticity of frame element i
+    geom         - 1: include geometric stiffness effects, 0: do not.
+    hy           - cross-section dimension in the local y coordinate dir.
+    hz           - cross-section dimension in the local z coordinate dir.
+    Iyy          - Moment of inertia for bending about the local y axis
+    Izz          - Moment of inertia for bending about the local z axis
+    J            - Joint number
+    J1           - Joint 1 of a frame element
+    J2           - Joint 2 of a frame element
+    JMs          - extra mass of a joint for translational motion
+    JMx          - extra rotatory inertia of a joint about global x coord. dir.
+    JMy          - extra rotatory inertia of a joint about global y coord. dir.
+    JMz          - extra rotatory inertia of a joint about global z coord. dir.
+    Jxx          - Torsional moment of inertia of a frame element
+    lump         - 1: use lumped mass matrix, 0: use consistent mass matrix
+    M            - Member number
+    Mxx          - Joint Moment about the global X axis
+    Myy          - Joint Moment about the global Y axis
+    Mzz          - Joint Moment about the global Z axis
+    m            - list of modes to match in dynamic condensation
+    Mmethod      - the modal analysis method 1: Subspace Jacobi, 2: Stodola
+    nA           - number of mode shapes to Animate must be less than 20
+    nC           - number of joints for matrix Condensation
+    nD           - number of joints with prescribed Displacements (nD <= nR)
+    nE           - number of frame Elements
+    nF           - number of joints with point Forces or concentrated moments
+    nI           - number of joints with extra joint mass or Inertia
+    nJ           - number of Joints
+    nL           - number of static Load cases
+    nM           - number of Modes to be calculated
+    nP           - number of frame elements with concentrated point loads
+    nR           - number of joints with Reaction forces
+    nT           - number of frame elements with Temperature changes
+    nU           - number of uniformly distributed loads
+    nW           - number of trapezoidally distributed loads
+    p            - the roll angle of the frame element, in degrees
+    pan          - the pan rate of the view point during animation
+    Px           - concentrated point load in the local x direction
+    Py           - concentrated point load in the local y direction
+    Pz           - concentrated point load in the local z direction
+    Rx           - 1: reaction force in the global X direction,  0: free
+    Ry           - 1: reaction force in the global Y direction,  0: free
+    Rz           - 1: reaction force in the global Z direction,  0: free
+    Rxx          - 1: reactoin moment about the global X axis, 0: free
+    Ryy          - 1: reaction moment about the global Y axis, 0: free
+    Rzz          - 1: reaction moment about the global Z axis, 0: free
+    r            - r radius of rigid joint sphere around joint i
+    shear        - 1: include shear deformations, 0: do not.
+    shift        - shift factor for non-definite stiffness matrices
+    tol          - tolerance for finding mode shapes ~ 1.e-4
+    Ty+          - temperature change on the local +y face of the element
+    Ty-          - temperature change on the local -y face of the element
+    Tz+          - temperature change on the local +z face of the element
+    Tz-          - temperature change on the local -z face of the element
+    Ux           - uniform distributed load in the local X direction
+    Uy           - uniform distributed load in the local Y direction
+    Uz           - uniform distributed load in the local Z direction
+    wx1          - starting value for trapezoidally-distributed loads
                    in the local x-direction
-       wx2       - stopping value for trapezoidally-distributed loads
+    wx2          - stopping value for trapezoidally-distributed loads
                    in the local x-direction
-       wy1       - starting value for trapezoidally-distributed loads
+    wy1          - starting value for trapezoidally-distributed loads
                    in the local y-direction
-       wy2       - stopping value for trapezoidally-distributed loads
+    wy2          - stopping value for trapezoidally-distributed loads
                    in the local y-direction
-       wz1       - starting value for trapezoidally-distributed loads
+    wz1          - starting value for trapezoidally-distributed loads
                    in the local z-direction
-       wz2       - stopping value for trapezoidally-distributed loads
+    wz2          - stopping value for trapezoidally-distributed loads
                    in the local z-direction
-       xx1       - distance along a frame element for starting
+    xx1          - distance along a frame element for starting
                    trapezoidally-distributed loads in the x-direction
-       xx2       - distance along a frame element for stopping
+    xx2          - distance along a frame element for stopping
                    trapezoidally-distributed loads in the x-direction
-       xy1       - distance along a frame element for starting
+    xy1          - distance along a frame element for starting
                    trapezoidally-distributed loads in the y-direction
-       xy2       - distance along a frame element for stopping
+    xy2          - distance along a frame element for stopping
                    trapezoidally-distributed loads in the y-direction
-       xz1       - distance along a frame element for starting
+    xz1          - distance along a frame element for starting
                    trapezoidally-distributed loads in the z-direction
-       xz2       - distance along a frame element for stopping
+    xz2          - distance along a frame element for stopping
                    trapezoidally-distributed loads in the z-direction
-       x         - x coordinate of a joint in global coordinates
-       y         - y coordinate of a joint in global coordinates
-       z         - y coordinate of a joint in global coordinates
-       xP        - distance from J1 to the concentrated point load
+    x            - x coordinate of a joint in global coordinates
+    y            - y coordinate of a joint in global coordinates
+    z            - y coordinate of a joint in global coordinates
+    xP           - distance from J1 to the concentrated point load
 
 </pre>
 

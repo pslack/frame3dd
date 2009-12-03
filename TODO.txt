@@ -1,6 +1,13 @@
 TODO LIST for FRAME3DD
 ----------------------
 
+* Specify element density along with elastic modulus and shear modulus in the
+Frame Element Data section of the Input Data file
+
+* Add nX variables for number of beams with eXtra mass,
+... redefine the entry of extra beam mass in a way that is similar
+to extra joint inertia. 
+
 * Compute reactions forces along with joint displacements in solve_system funcion.  
 
 * Improve rigid joint offset method
@@ -37,6 +44,8 @@ also, particularly if sparse matrix methods can be used.
 
 COMPLETED ITEMS
 ------------------
+
+* Separate exaggeration factors for static and dynamic meshes (Dec 2 2009)
 
 * Check return values of fscanf functions and report errors to user
   for input data debugging purposes. (Oct 26 2009)

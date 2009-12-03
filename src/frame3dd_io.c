@@ -80,7 +80,8 @@ void parse_options (
 	/* default values */
 
 	*shear_flag = *geom_flag  = *anlyz_flag = *lump_flag = *modal_flag = -1;
-	*exagg_flag = *tol_flag = *shift_flag = *pan_flag = *condense_flag = -1.0;
+	*exagg_flag = *tol_flag = *shift_flag = -1.0;
+	*pan_flag = *condense_flag = -1.0;
 	*write_matrix = 0;
 	*debug = 0; *verbose = 1;
 
@@ -486,7 +487,7 @@ void read_run_data (
 	int	geom_flag,
 	char	*meshpath,
 	char	*plotpath,
-	double	*exagg,
+	double	*exagg_static,
 	double	exagg_flag,
 	int	*anlyz,
 	int	anlyz_flag,
@@ -512,7 +513,6 @@ void read_run_data (
 	while ( base_file[len] != '/' && base_file[len] != '\\' && len > 0 )
 		len--;	/* find the last '/' or '\' in base_file */ 
 	i = 0;
-	len++;
 	while ( base_file[len] != '\0' )
 		mesh_file[i++] = base_file[len++];
 	mesh_file[i] = '\0';
@@ -526,8 +526,8 @@ void read_run_data (
 		fprintf(stderr,"MESHPATH = %s \n", meshpath);
 	}
 
-	sfrv=fscanf( fp, "%d %d %lf", shear, geom,  exagg );
-	if (sfrv != 3) sferr("shear, geom or exagg variables");
+	sfrv=fscanf( fp, "%d %d %lf", shear, geom,  exagg_static );
+	if (sfrv != 3) sferr("shear, geom or exagg_static variables");
 
 	if (*shear != 0 && *shear != 1) {
 	    fprintf(stderr," Rember to specify shear deformations");
@@ -541,7 +541,7 @@ void read_run_data (
 	    exit(1);
 	}
 
-	if ( *exagg < 0.0 ) {
+	if ( *exagg_static < 0.0 ) {
 	    fprintf(stderr," Remember to specify an exageration");
 	    fprintf(stderr," factor greater than zero\n");
 	    exit(1);
@@ -550,7 +550,7 @@ void read_run_data (
 	/* over-ride values from input data file with command-line options */
 	if ( shear_flag != -1   )	*shear = shear_flag;
 	if ( geom_flag  != -1   )	*geom = geom_flag;
-	if ( exagg_flag != -1.0 )	*exagg = exagg_flag;
+	if ( exagg_flag != -1.0 )	*exagg_static = exagg_flag;
 	if ( anlyz_flag != -1.0 )	*anlyz = anlyz_flag;
 
 
@@ -843,9 +843,10 @@ void read_and_assemble_loads(
 		    exit(1);
 		}
 
-		for (l=5; l>=0; l--)	
+		for (l=5; l>=0; l--) {
 			sfrv=fscanf(fp,"%lf", &F_mech[lc][6*j-l] );
 			if (sfrv != 1) sferr("force value in point load data");
+		}
 
 		if ( F_mech[lc][6*j-5]==0 && F_mech[lc][6*j-4]==0 && F_mech[lc][6*j-3]==0 && F_mech[lc][6*j-2]==0 && F_mech[lc][6*j-1]==0 && F_mech[lc][6*j]==0 )
 		    fprintf(stderr,"   warning: All joint loads applied at joint %d  are zero\n", j );
@@ -1327,6 +1328,7 @@ void read_mass_data(
 		int *nM, int *Mmethod, int modal_flag, 
 		int *lump, int lump_flag, 
 		double *tol, double tol_flag, double *shift, double shift_flag,
+		double *exagg_modal, 
 		char modepath[],
 		int anim[], float *pan, float pan_flag,
 		int verbose, int debug
@@ -1385,6 +1387,8 @@ void read_mass_data(
 	if (sfrv != 1) sferr("tol value in mass data");
 	sfrv=fscanf( fp, "%lf", shift );
 	if (sfrv != 1) sferr("shift value in mass data");
+	sfrv=fscanf( fp, "%lf", exagg_modal );
+	if (sfrv != 1) sferr("exagg_modal value in mass data");
 
 	if (  lump_flag != -1   )	*lump = lump_flag;
 	if (  tol_flag  != -1.0 )	*tol  = tol_flag;
@@ -1487,7 +1491,6 @@ void read_mass_data(
 	while ( base_file[len] != '/' && base_file[len] != '\\' && len > 0 )
 		len--;	/* find the last '/' or '\' in base_file */ 
 	i = 0;
-	len++;
 	while ( base_file[len] != '\0' )
 		mode_file[i++] = base_file[len++];
 	mode_file[i] = '\0';
@@ -2252,7 +2255,7 @@ void static_mesh(
 		char *title, int nJ, int nE, int nL, int lc, int DoF,
 		vec3 *xyz, double *L,
 		int *J1, int *J2, float *p, double *D,
-		double exagg, int anlyz
+		double exagg_static, int anlyz
 ){
 	FILE	*fpmfx, *fpm;
 	double	mx, my, mz;	/* coordinates of the frame element number labels */
@@ -2275,7 +2278,7 @@ void static_mesh(
 		exit(1);
 	}
 
-	if (!anlyz) exagg = 0.0;
+	if (!anlyz) exagg_static = 0.0;
 
 
 
@@ -2284,7 +2287,7 @@ void static_mesh(
 	fprintf(fpm,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
         fprintf(fpm,"# %s", ctime(&now) );
 	fprintf(fpm,"# M E S H   D A T A   (global coordinates)");
-	fprintf(fpm," deflection exaggeration: %.1f\n", exagg );
+	fprintf(fpm," deflection exaggeration: %.1f\n", exagg_static );
 	fprintf(fpm,"# Joint      X           Y           Z");
 	fprintf(fpm,"          X-dsp       Y-dsp       Z-dsp\n");
 
@@ -2292,27 +2295,27 @@ void static_mesh(
 	fprintf(fpmfx,"# %s\n", title );
         fprintf(fpmfx,"# %s", ctime(&now) );
 	fprintf(fpmfx,"# F L E X E D   M E S H   D A T A ");
-	fprintf(fpmfx,"  deflection exaggeration: %.1f\n", exagg );
+	fprintf(fpmfx,"  deflection exaggeration: %.1f\n", exagg_static );
 	fprintf(fpmfx,"#       X-dsp        Y-dsp        Z-dsp\n");
 
 	for (m=1; m<=nE; m++) {
 
-		bent_beam ( fpmfx, J1[m], J2[m], xyz, L[m], p[m], D, exagg );
+		bent_beam ( fpmfx, J1[m],J2[m],xyz, L[m],p[m],D, exagg_static );
 
 		j = J1[m];	i = 6*(j-1);
 		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, xyz[j].x,xyz[j].y,xyz[j].z);
 		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-			xyz[j].x + exagg*D[i+1],
-			xyz[j].y + exagg*D[i+2],
-			xyz[j].z + exagg*D[i+3]
+			xyz[j].x + exagg_static*D[i+1],
+			xyz[j].y + exagg_static*D[i+2],
+			xyz[j].z + exagg_static*D[i+3]
 		);
 
 		j = J2[m];	i = 6*(j-1);
 		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, xyz[j].x,xyz[j].y,xyz[j].z);
 		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-			xyz[j].x + exagg*D[i+1],
-			xyz[j].y + exagg*D[i+2],
-			xyz[j].z + exagg*D[i+3]
+			xyz[j].x + exagg_static*D[i+1],
+			xyz[j].y + exagg_static*D[i+2],
+			xyz[j].z + exagg_static*D[i+3]
 		);
 		fprintf(fpm,"\n\n");
 	}
@@ -2348,7 +2351,7 @@ void static_mesh(
 
 	 fprintf(fpm,"set title \"%s\\n", title );
 	 fprintf(fpm,"analysis file: %s ", IN_file );
-	 fprintf(fpm,"  deflection exaggeration: %.1f ", exagg );
+	 fprintf(fpm,"  deflection exaggeration: %.1f ", exagg_static );
 	 fprintf(fpm,"  load case %d of %d \"\n", lc, nL );
 
 	 fprintf(fpm,"set autoscale\n");
@@ -2395,7 +2398,7 @@ void static_mesh(
 
 	 fprintf(fpm,"set title \"%s\\n", title );
 	 fprintf(fpm,"analysis file: %s ", IN_file );
-	 fprintf(fpm,"  deflection exaggeration: %.1f ", exagg );
+	 fprintf(fpm,"  deflection exaggeration: %.1f ", exagg_static );
 	 fprintf(fpm,"  load case %d of %d \"\n", lc, nL );
 
 	 fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w lp ", meshpath);
@@ -2432,7 +2435,7 @@ void modal_mesh(
 		vec3 *xyz, double *L,
 		int *J1, int *J2, float *p,
 		double **M, double *f, double **V,
-		double exagg, int anlyz
+		double exagg_modal, int anlyz
 ){
 	FILE	*fpm;
 	double mpfX, mpfY, mpfZ;	/* mode participation factors	*/
@@ -2455,7 +2458,7 @@ void modal_mesh(
 		for (j=3; j<=DoF; j+=6) msZ[i] += M[i][j];
 	}
 
-	if (!anlyz) exagg = 0.0;
+	if (!anlyz) exagg_modal = 0.0;
 
 	for (m=1; m<=nM; m++) {
 
@@ -2471,7 +2474,7 @@ void modal_mesh(
 		fprintf(fpm,"# %s\n", title );
 		fprintf(fpm,"# M O D E   S H A P E   D A T A   F O R   M O D E");
 		fprintf(fpm,"   %d\t(global coordinates)\n", m );
-		fprintf(fpm,"# deflection exaggeration: %.1f\n\n", exagg );
+		fprintf(fpm,"# deflection exaggeration: %.1f\n\n", exagg_modal );
 		mpfX = 0.0;	for (i=1; i<=DoF; i++)    mpfX += V[i][m]*msX[i];
 		mpfY = 0.0;	for (i=1; i<=DoF; i++)    mpfY += V[i][m]*msY[i];
 		mpfZ = 0.0;	for (i=1; i<=DoF; i++)    mpfZ += V[i][m]*msZ[i];
@@ -2485,7 +2488,7 @@ void modal_mesh(
 		fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
 
 		for(n=1; n<=nE; n++)
-			bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, exagg );
+			bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, exagg_modal );
 
 		for ( j=1; j<=nJ; j++ ) {
 			if (xyz[j].x != 0.0) X=1;	/* check for three-dimensional frame */
@@ -2539,7 +2542,7 @@ void animate(
 	int nJ, int nE, int DoF, int nM,
 	vec3 *xyz, double *L, float *p,
 	int *J1, int *J2, double *f, double **V,
-	double exagg,
+	double exagg_modal,
 	float pan
 ){
 	FILE	*fpm;
@@ -2597,17 +2600,17 @@ void animate(
 		fprintf(fpm,"set xrange [ %lf : %lf ] \n",
 	 		x_min-0.2*(x_max-x_min), x_max+0.2*(x_max-x_min) );
 	   else fprintf(fpm,"set xrange [ %lf : %lf ] \n",
-			x_min-exagg, x_max+exagg );
+			x_min-exagg_modal, x_max+exagg_modal );
 	   if (y_min != y_max)
 		fprintf(fpm,"set yrange [ %lf : %lf ] \n",
 	 		y_min-0.2*(y_max-y_min), y_max+0.2*(y_max-y_min) );
 	   else fprintf(fpm,"set yrange [ %lf : %lf ] \n",
-			y_min-exagg, y_max+exagg );
+			y_min-exagg_modal, y_max+exagg_modal );
 	   if (z_min != z_max)
 	   	fprintf(fpm,"set zrange [ %lf : %lf ] \n",
 			z_min-0.2*(z_max-z_min), z_max+0.2*(z_max-z_min) );
 	   else fprintf(fpm,"set zrange [ %lf : %lf ] \n",
-			z_min-exagg, z_max+exagg );
+			z_min-exagg_modal, z_max+exagg_modal );
 
 	   fprintf(fpm,"%c set parametric\n", D3 );
 	   fprintf(fpm,"%c set view 60, 70, 1 \n", D3 );
@@ -2714,13 +2717,13 @@ void animate(
 		exit(1);
 	    }
 
+	    ex = exagg_modal*cos( PI*fr/frames );
+
 	    fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/\n");
-		fprintf(fpm,"# %s\n", title );
+	    fprintf(fpm,"# %s\n", title );
 	    fprintf(fpm,"# A N I M A T E D   M O D E   S H A P E   D A T A \n");
 	    fprintf(fpm,"# deflection exaggeration: %.1f\n", ex );
 	    fprintf(fpm,"# MODE %5d: f= %lf Hz  T= %lf sec\n\n",m,f[m],1./f[m]);
-
-	    ex = exagg*cos( PI*fr/frames );
 
 	    for (j=1; j<=DoF; j++)	v[j] = V[j][m];		/* mode "m" */
 

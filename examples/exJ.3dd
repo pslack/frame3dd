@@ -72,7 +72,7 @@ Example J: tesseract  (N, mm, ton)
 
 1                               # 1: include shear deformation
 0                               # 1: include geometric stiffness
-1.0                             # exaggerate mesh deformations
+1.0                             # exaggerate static mesh deformations
 
 
 1			# number of static load cases
@@ -90,6 +90,7 @@ Example J: tesseract  (N, mm, ton)
 0                               # 0: consistent mass ... 1: lumped mass matrix
 1e-6                            # mode shape tolerance
 10.0				# modal frequency shift factor
+1.0                             # exaggerate modal mesh deformations
 
 
 #.M    density  mass

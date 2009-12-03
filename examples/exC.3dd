@@ -86,7 +86,7 @@ Example C: a tetrahedral frame - static and dynamic analysis (in, kip)
 
 1                               # 1: include shear deformation
 1                               # 1: include geometric stiffness
-2.0                             # exaggerate mesh deformations
+2.0                             # exaggerate static mesh deformations
 
 
  1                      # number of static load cases
@@ -113,6 +113,7 @@ Example C: a tetrahedral frame - static and dynamic analysis (in, kip)
 0                               # 0: consistent mass ... 1: lumped mass matrix
 1e-9                            # mode shape tolerance
 0.0                             # shift value ... for unrestrained structures
+2.0                             # exaggerate modal mesh deformations
 
 
 #.M     density mass

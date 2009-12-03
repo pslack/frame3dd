@@ -58,7 +58,7 @@ Example G: a building with a set-back  (in,kip)
 
 1                               # 1: include shear deformation
 1                               # 1: include geometric stiffness
-2.0                             # exaggerate mesh deformations
+2.0                             # exaggerate static mesh deformations
 
 
 
@@ -97,6 +97,7 @@ Example G: a building with a set-back  (in,kip)
 0                               # 0: consistent mass ... 1: lumped mass matrix
 1e-6                            # mode shape tolerance
 0.0                             # shift value ... for unrestrained structures
+2.0                             # exaggerate modal mesh deformations
 
  1     7.324e-7  0			# bar numbers, density, and extra mass
  2     7.324e-7  0

@@ -27,15 +27,15 @@ nR                           # number of joints with reactions
 
 nE                        # number of frame elements 
 
-#.elmnt j1     j2      Ax     Asy     Asz     Jx     Iy     Iz     E     G     p
-#                      mm^2   mm^2    mm^2    mm^4   mm^4   mm^4   N/mm N/mm  deg                        
+#.elmnt j1     j2      Ax     Asy     Asz     Jx     Iy     Iz     E     G    p
+#                      mm^2   mm^2    mm^2    mm^4   mm^4   mm^4   MPa   MPa deg
   M[1]  J1[1]  J2[1]   Ax[1]  Asy[1]  Asz[1]  Jx[1]  Iy[1]  Iz[1]  E[1]  G[1]  p[1]
     :      :      :       :       :       :      :      :      :     :     :     :
   M[nE] J1[nE] J2[nE]  Ax[nE] Asy[nE] Asz[nE] Jx[nE] Iy[nE] Iz[nE] E[nE] G[nE] p[nE]
 
 shear                      # 1: include shear deformation
 geom                       # 1: include geometric stiffness
-exagg                      # exaggerate mesh deformations
+exagg_static               # exaggerate static mesh deformations
 
 
 # load data ...
@@ -46,7 +46,7 @@ nL                        # number of static load cases
 
 nF                               # number of loaded joints
 #.joint  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
-# .       N        N        N        N.mm      N.mm      N.mm
+#         N        N        N        N.mm      N.mm      N.mm
   J[1]    Fx[1]    Fy[1]    Fz[1]    Mxx[1]    Myy[1]    Mzz[1]
     :        :        :        :         :         :         :  
   J[nF]   Fx[nF]   Fy[nF]   Fz[nF]   Mxx[nF]   Myy[nF]   Mzz[nF]
@@ -147,7 +147,7 @@ nD                             # number of prescribed displacements nD<=nR
 
 # dynamic analysis data ...
 
-nM      #       number of desired modes of vibration 
+nM      #       number of desired dynamic modes 
 
 # if nM is set to 0 (zero) the remaining Input Data may be omitted
 
@@ -155,6 +155,7 @@ Mmethod # 1: Subspace-Jacobi iteration, 2: Stodola method
 lump    # 0: consistent mass matrix, 1: lumped mass matrix
 tol     #  frequency convergence tolerance  approx 1e-4
 shift   # frequency shift-factor for rigid body modes, make 0 for pos.def. [K]
+exagg_modal  # exaggerate modal mesh deformations
 
 # element density and extra mass data ...
 

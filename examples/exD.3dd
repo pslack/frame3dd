@@ -68,7 +68,7 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
 
 1                               # 1: include shear deformation
 0                               # 1: include geometric stiffness
-20.0                            # exaggerate mesh deformations
+20.0                            # exaggerate static mesh deformations
 
 
 1			# number of static load cases
@@ -87,6 +87,7 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
 0                               # 0: consistent mass ... 1: lumped mass matrix
 5e-5                            # mode shape tolerance
 1.00                            # shift value ... for unrestrained structures
+20.0                            # exaggerate modal mesh deformations
 
 
 
