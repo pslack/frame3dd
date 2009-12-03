@@ -509,12 +509,14 @@ For compilation/installation, see README.txt.
 					nJ,nE,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
 			}
 
-			if ( verbose ) 
-				printf("\n    If the program pauses here for very long,"
-				" hit CTRL-C to stop execution, \n"
-				"    reduce exagg_static in the Input Data,"
-				" and re-run the analysis. \n");
-
+/*
+ *			if ( verbose ) 
+ *			 printf("\n   If the program pauses here for very long,"
+ *			 " hit CTRL-C to stop execution, \n"
+ *			 "    reduce exagg_static in the Input Data,"
+ *			 " and re-run the analysis. \n");
+ *
+ */
 			static_mesh ( IN_file, meshpath, plotpath, title, nJ, nE, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg_static, anlyz);
 
