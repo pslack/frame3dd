@@ -19,13 +19,13 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
   5	1  1  1  1  1  1
 
 4				# number of members			
-#.m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz         E      G   p
-#         mm^2  mm^2    mm^2    mm^4    mm^4    mm^4    N/mm^2  N/mm^2 deg.
+#.m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz     E       G   roll density
+#         mm^2  mm^2    mm^2    mm^4    mm^4    mm^4    MPa     MPa  deg T/mm^3
 
-1 1 2	36.0	20.0	20.0	1000 	492 	492	200000	79300  0
-2 1 3	36.0	20.0	20.0	1000	492 	492	200000	79300  0
-3 1 4	36.0	20.0	20.0	1000	492 	492	200000	79300  0
-4 1 5	36.0	20.0	20.0	1000	492 	492	200000	79300  0
+1 1 2	36.0	20.0	20.0	1000 	492 	492	200000	79300  0 7.85e-9
+2 1 3	36.0	20.0	20.0	1000	492 	492	200000	79300  0 7.85e-9
+3 1 4	36.0	20.0	20.0	1000	492 	492	200000	79300  0 7.85e-9
+4 1 5	36.0	20.0	20.0	1000	492 	492	200000	79300  0 7.85e-9
 
  
 1                               # 1: include shear deformation
@@ -35,6 +35,9 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 
 3				# number of static load cases
 				# Begin Static Load Case 1 of 3
+
+0  0  9806.33			# gravity in the X, Y, Z, directions (global)
+	
 1				# number of loaded joints
 #.J      Fx       Fy     Fz      Mxx     Myy     Mzz
 #        N        N      N       N.mm    N.mm    N.mm
@@ -47,6 +50,9 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 				# End   Static Load Case 1 of 3
 
 				# Begin Static Load Case 2 of 3
+
+0  0  9806.33			# gravity in the X, Y, Z, directions (global)
+	
 0				# number of loaded joints
 2                               # number of uniform loads
 #.M    Ux   Uy   Uz
@@ -73,6 +79,9 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 				# End   Static Load Case 2 of 3
 
 				# Begin Static Load Case 3 of 3
+
+0  0  9806.33			# gravity in the X, Y, Z, directions (global)
+	
 0				# number of loaded joints
 0                               # number of uniform loads
 0                               # number of trapezoidal loads
@@ -93,18 +102,13 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 0.0				# shift value ... for unrestrained structures
 10.0                            # exaggerate modal mesh deformations
 
-#.M     density   mass     
-#       ton/mm^3  ton
-1       7.85e-9   0.0		# beam numbers, density, and extra beam mass 
-2       7.85e-9   0.0
-3       7.85e-9   0.0
-4       7.85e-9   0.0
-
 # joints and concentrated mass and inertia
 1                               # number of joints with extra inertia
 #.j      M      Ixx      Iyy      Izz 
 #        ton    ton.mm^2 ton.mm^2 ton.mm^2
 1        0.1    0        0        0
+
+0                               # frame elements with extra mass
 
 6				# number of modes to animate
  1  2  3  4 5 6 		# modes to animate

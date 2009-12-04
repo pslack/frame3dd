@@ -812,11 +812,11 @@ void read_and_assemble_loads(
 	float	x1,x2, w1,w2;
 	double	Ln, R1o, R2o, f01, f02; 
 
-	double	Nx1, Vy1, Vz1, Mx1, My1=0.0, Mz1=0.0,	/* fixed end forces */
-		Nx2, Vy2, Vz2, Mx2, My2=0.0, Mz2=0.0,
+	double	Nx1, Vy1, Vz1, Mx1=0.0, My1=0.0, Mz1=0.0, /* fixed end forces */
+		Nx2, Vy2, Vz2, Mx2=0.0, My2=0.0, Mz2=0.0,
 		Ksy, Ksz, 		/* shear deformatn coefficients	*/
-		a, b,				/* point load locations */
-		t1, t2, t3, t4, t5, t6, t7, t8, t9;	/* 3D coord Xfrm coef */
+		a, b,			/* point load locations */
+		t1, t2, t3, t4, t5, t6, t7, t8, t9;	/* 3D coord Xfrm coeffs */
 	int	i,j,l, lc, n, j1, j2;
 	int	sfrv;	/* *scanf return value */
 
@@ -836,7 +836,7 @@ void read_and_assemble_loads(
 
 	  if ( verbose ) printf(" load case %d of %d: \n", lc, nL );
 
-	  /* gravity loads	*/
+	  /* gravity loads applied uniformly to all frame elements	*/
 	  sfrv=fscanf(fp,"%f %f %f", &gX[lc], &gY[lc], &gZ[lc] );
 	  if (sfrv != 3) sferr("gX gY gZ values in load data");
 
@@ -869,7 +869,14 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][12] = d[n]*Ax[n]*L[n]*L[n] / 12.0 *
 			( ( t6*t7-t4*t9)*gX[lc] + ( t6*t8-t5*t9)*gY[lc] );
 
-	  }
+		/* debugging 
+		printf("n=%d ", n);
+		for (l=1;l<=12;l++) {
+			if (feF_mech[lc][n][l] != 0)
+			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
+		}
+		printf("\n");  */
+	  }					/* end gravity loads */
 
 
 	  sfrv=fscanf(fp,"%d", &nF[lc] );	/* joint point loads	*/
@@ -898,9 +905,9 @@ void read_and_assemble_loads(
 
 		if ( F_mech[lc][6*j-5]==0 && F_mech[lc][6*j-4]==0 && F_mech[lc][6*j-3]==0 && F_mech[lc][6*j-2]==0 && F_mech[lc][6*j-1]==0 && F_mech[lc][6*j]==0 )
 		    fprintf(stderr,"   warning: All joint loads applied at joint %d  are zero\n", j );
-	  }
+	  }					/* end joint point loads  */
 
-	  sfrv=fscanf(fp,"%d", &nU[lc] );	/* uniform distributed loads */
+	  sfrv=fscanf(fp,"%d", &nU[lc] );	/* uniformly distributed loads */
 	  if (sfrv != 1) sferr("nU value in uniform load data");
 	  if ( verbose ) {
 		printf("  number of uniformly distributed loads ");
@@ -966,14 +973,14 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
 		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 
-		/* debugging 
+		/* debugging  
 		printf("n=%d ", n);
 		for (l=1;l<=12;l++) {
 			if (feF_mech[lc][n][l] != 0)
 			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
 		}
-		printf("\n"); */
-	  }
+		printf("\n");  */
+	  }				/* end uniformly distributed loads */
 
 	  sfrv=fscanf(fp,"%d", &nW[lc] ); /* trapezoidally distributed loads */
 	  if (sfrv != 1) sferr("nW value in load data");
@@ -1273,7 +1280,7 @@ void read_and_assemble_loads(
 		fprintf(stderr,"  error: valid ranges for nT is 0 ... %d \n", nE );
 		exit(1);
 	  }
-	  for (i=1; i <= nT[lc]; i++) {	/* ! element coordinates ! */
+	  for (i=1; i <= nT[lc]; i++) {	/* ! local element coordinates ! */
 		sfrv=fscanf(fp,"%d", &n );
 		if (sfrv != 1) sferr("frame element number in temperature load data");
 		if ( n < 1 || n > nE ) {
@@ -1324,6 +1331,16 @@ void read_and_assemble_loads(
 		feF_temp[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
 		feF_temp[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 	  }				/* end thermal loads	*/
+
+	  /* debugging ...  check feF's prior to asembly 
+	  for (n=1; n<=nE; n++) {	
+		printf("n=%d ", n);
+		for (l=1;l<=12;l++) {
+			if (feF_mech[lc][n][l] != 0)
+			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
+		}
+		printf("\n"); 
+	  } */
 
 	  for (n=1; n<=nE; n++) {
 	     j1 = J1[n];	j2 = J2[n];
@@ -1495,8 +1512,9 @@ void read_mass_data(
 		if (sfrv != 1) sferr("extra element mass value in mass data");
 	}
 
+
 	/* calculate the total mass and the structural mass */
-	for (m=1; m <= nE; m++) {
+	for (b=1; b <= nE; b++) {
 		*total_mass  += d[b]*Ax[b]*L[b] + BMs[b];
 		*struct_mass += d[b]*Ax[b]*L[b];
 #ifdef MASSDATA_DEBUG
@@ -1509,7 +1527,7 @@ void read_mass_data(
 	fclose(mf);
 #endif
 
-	for (m=1;m<=nE;m++) {			/* chec inertia data	*/
+	for (m=1;m<=nE;m++) {			/* check inertia data	*/
 	    if ( d[m] < 0.0 || BMs[m] < 0.0 || d[m]+BMs[m] <= 0.0 ) {
 		fprintf(stderr,"  error: Non-positive mass or density\n");
 		fprintf(stderr,"  d[%d]= %f  BMs[%d]= %f\n",m,d[m],m,BMs[m]);
@@ -1680,7 +1698,9 @@ void write_input_data(
 	vec3 *xyz, float *r,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz,
-	float *E, float *G, float *p, double **F, float **Dp,
+	float *E, float *G, float *p, float *d, 
+	float *gX, float *gY, float *gZ, 
+	double **F, float **Dp,
 	int *R,
 	float ***U, float ***W, float ***P, float ***T,
 	int shear, int anlyz, int geom
@@ -1732,12 +1752,12 @@ void write_input_data(
 	}
 	fprintf(fp,"F R A M E   E L E M E N T   D A T A\t\t\t\t\t(local)\n");
 	fprintf(fp,"  Elmnt  J1    J2     Ax   Asy   Asz    ");
-	fprintf(fp,"Jxx     Iyy     Izz       E       G roll\n");
+	fprintf(fp,"Jxx     Iyy     Izz       E       G roll  density\n");
 	for (i=1; i<= nE; i++) {
 		fprintf(fp,"%5d %5d %5d %6.1f %5.1f %5.1f",
 					i, J1[i],J2[i], Ax[i], Asy[i], Asz[i] );
-		fprintf(fp," %6.1f %7.1f %7.1f %8.1f %7.1f %3.0f\n",
-				J[i], Iy[i], Iz[i], E[i], G[i], p[i]*180.0/PI );
+		fprintf(fp," %6.1f %7.1f %7.1f %8.1f %7.1f %3.0f %8.2e\n",
+			J[i], Iy[i], Iz[i], E[i], G[i], p[i]*180.0/PI, d[i] );
 	}
 	if ( shear )	fprintf(fp,"  Include shear deformations.\n");
 	else		fprintf(fp,"  Neglect shear deformations.\n");
@@ -1747,6 +1767,13 @@ void write_input_data(
 	for (lc = 1; lc <= nL; lc++) {		/* start load case loop */
 
 	  fprintf(fp,"\nL O A D   C A S E   %d   O F   %d  ... \n\n", lc,nL);
+	  fprintf(fp,"   Gravity X = ");
+	  if (gX[lc] == 0) fprintf(fp," 0.0 "); else fprintf(fp," %f ", gX[lc]);
+	  fprintf(fp,"   Gravity Y = ");
+	  if (gY[lc] == 0) fprintf(fp," 0.0 "); else fprintf(fp," %f ", gY[lc]);
+	  fprintf(fp,"   Gravity Z = ");
+	  if (gZ[lc] == 0) fprintf(fp," 0.0 "); else fprintf(fp," %f ", gZ[lc]);
+	  fprintf(fp,"\n");
 	  fprintf(fp," %3d concentrated loads\n", nF[lc] );
 	  fprintf(fp," %3d uniformly distributed loads\n", nU[lc]);
 	  fprintf(fp," %3d trapezoidally distributed loads\n", nW[lc]);

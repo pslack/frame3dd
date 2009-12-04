@@ -375,166 +375,168 @@ For compilation/installation, see README.txt.
 
 	write_input_data ( fp, title, nJ,nE,nL, nD,nR, nF,nU,nW,nP,nT,
 				xyz, r, J1,J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p,
+				d, gX, gY, gZ, 
 				Fo, Dp, R, U, W, P, T, shear, anlyz, geom );
 
 	if ( anlyz ) {			/* solve the problem	*/
-		srand(time(NULL));
-		for (lc=1; lc<=nL; lc++) {	/* begin load case loop	*/
+	 srand(time(NULL));
+	 for (lc=1; lc<=nL; lc++) {	/* begin load case loop	*/
 
-			if ( verbose )
-				printf("\n Load Case %d of %d ... \n", lc,nL );
+		if ( verbose )
+			printf("\n Load Case %d of %d ... \n", lc,nL );
 
-			for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
+		for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
 
-			assemble_K ( K, DoF, nE, xyz,r, L, Le, J1, J2,
+		assemble_K ( K, DoF, nE, xyz,r, L, Le, J1, J2,
 				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
 #ifdef MATRIX_DEBUG
-			save_dmatrix ( DoF, DoF, K, "Kf" ); /* free stiffness matrix */
+		save_dmatrix ( DoF, DoF, K, "Kf" ); /* free stiffness matrix */
 #endif
 
-			/* apply temperature loads first ... */
-			if (nT[lc] > 0) {
-				if ( verbose )
-					printf(" Linear Elastic Analysis ... Temperature Loads\n");
-				apply_reactions ( DoF, R, Dp[lc], Fo_temp[lc], F, K, 't' );
-				solve_system( K, dD, F, DoF, &ok, verbose );
-				for (i=1; i<=DoF; i++)	D[i] += dD[i];
-				end_forces ( Q, nE, xyz, L, Le, J1,J2,
-					Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
+		/* apply temperature loads first ... */
+		if (nT[lc] > 0) {
+			if ( verbose )
+				printf(" Linear Elastic Analysis ... Temperature Loads\n");
+			apply_reactions ( DoF, R, Dp[lc], Fo_temp[lc], F, K, 't' );
+			solve_system( K, dD, F, DoF, &ok, verbose );
+			for (i=1; i<=DoF; i++)	D[i] += dD[i];
+			end_forces ( Q, nE, xyz, L, Le, J1,J2,
+				Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
+		}
+
+		assemble_K ( K, DoF, nE, xyz, r, L, Le, J1, J2,
+				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
+
+		/* then add mechanical loads ... */
+		if ( nF[lc]>0 || nU[lc]>0 || nW[lc]>0 || nP[lc]>0 || nD[lc]>0 || 
+		     gX[lc] != 0 || gY[lc] != 0 || gZ[lc] != 0 ) {
+			if ( verbose )
+				printf(" Linear Elastic Analysis ... Mechanical Loads\n");
+			apply_reactions ( DoF, R, Dp[lc], Fo_mech[lc], F, K, 'm' );
+			solve_system( K, dD, F, DoF, &ok, verbose );
+			for (i=1; i<=DoF; i++)	D[i] += dD[i];
+			end_forces ( Q, nE, xyz, L, Le, J1,J2,
+				Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
+		}
+
+		/* Newton-Raphson iterations for geometric non-linearity */
+		if ( geom ) {
+			Fe  = dvector( 1, DoF ); /* force equilibrium error  */
+			Ks  = dmatrix( 1, DoF, 1, DoF );
+			for (i=1;i<=DoF;i++){ /* initialize Broyden secant stiffness */
+				for(j=i;j<=DoF;j++){
+					Ks[i][j]=Ks[j][i]=K[i][j];
+				}
 			}
+			if ( verbose )
+				printf("\n Non-Linear Elastic Analysis ...\n");
+		}
+
+		/* Newton Raphson iteration for geometric nonlinearity */
+		ok = 0; iter = 0; error = 1.0;	/* re-initialize */
+		while ( geom && error > tol && iter < 10 && ok >= 0) {
+			++iter;
 
 			assemble_K ( K, DoF, nE, xyz, r, L, Le, J1, J2,
 				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
 
-			/* then add mechanical loads ... */
-			if ( nF[lc] > 0 || nU[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nD[lc] > 0 ) {
-				if ( verbose )
-					printf(" Linear Elastic Analysis ... Mechanical Loads\n");
-				apply_reactions ( DoF, R, Dp[lc], Fo_mech[lc], F, K, 'm' );
-				solve_system( K, dD, F, DoF, &ok, verbose );
-				for (i=1; i<=DoF; i++)	D[i] += dD[i];
-				end_forces ( Q, nE, xyz, L, Le, J1,J2,
-					Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
+			apply_reactions ( DoF, R, Dp[lc], Fo[lc], F, K, 'm' );
+
+			for (i=1; i<=DoF; i++) {	/* equilibrium error	*/
+				Fe[i] = F[i];
+				for (j=1; j<=DoF; j++)
+					if ( K[i][j] != 0.0 && D[j] != 0.0 )
+						Fe[i] -= K[i][j]*D[j];
 			}
 
-			/* Newton-Raphson iterations for geometric non-linearity */
-			if ( geom ) {
-				Fe  = dvector( 1, DoF );	/* force equilibrium error  */
-				Ks  = dmatrix( 1, DoF, 1, DoF );
-				for (i=1;i<=DoF;i++){ /* initialize Broyden secant stiffness */
-					for(j=i;j<=DoF;j++){
-						Ks[i][j]=Ks[j][i]=K[i][j];
-					}
-				}
-				if ( verbose )
-					printf("\n Non-Linear Elastic Analysis ...\n");
-			}
-
-			/* Newton Raphson iteration for geometric nonlinearity */
-			ok = 0; iter = 0; error = 1.0;	/* re-initialize */
-			while ( geom && error > tol && iter < 10 && ok >= 0) {
-				++iter;
-
-				assemble_K ( K, DoF, nE, xyz, r, L, Le, J1, J2,
-					Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
-
-				apply_reactions ( DoF, R, Dp[lc], Fo[lc], F, K, 'm' );
-
-				for (i=1; i<=DoF; i++) {	/* equilibrium error	*/
-					Fe[i] = F[i];
-					for (j=1; j<=DoF; j++)
-						if ( K[i][j] != 0.0 && D[j] != 0.0 )
-							Fe[i] -= K[i][j]*D[j];
-				}
-
-				/* Broyden secant stiffness matrix update */
+			/* Broyden secant stiffness matrix update */
 /*
-				dDdD = 0.0;
-				for (i=1; i<=DoF; i++) dDdD += dD[i]*dD[i];
-				for (i=1; i<=DoF; i++)
-					for (j=1; j<=DoF; j++)
-						Ks[i][j] -= Fe[i]*dD[j] / dDdD;
+			dDdD = 0.0;
+			for (i=1; i<=DoF; i++) dDdD += dD[i]*dD[i];
+			for (i=1; i<=DoF; i++)
+				for (j=1; j<=DoF; j++)
+					Ks[i][j] -= Fe[i]*dD[j] / dDdD;
 */
 
-				apply_reactions ( DoF, R, Dp[lc], Fe, Fe, Ks, 'm' );
+			apply_reactions ( DoF, R, Dp[lc], Fe, Fe, Ks, 'm' );
 
-				solve_system ( K, dD, Fe, DoF, &ok, verbose );
+			solve_system ( K, dD, Fe, DoF, &ok, verbose );
 
-				if ( ok < 0 ) {
-					fprintf(stderr,"   The stiffness matrix is not pos-def. \n");
-					fprintf(stderr,"   Reduce loads and re-run the analysis.\n");
-					break;
-				}			/* end Newton Raphson iterations */
+			if ( ok < 0 ) {
+				fprintf(stderr,"   The stiffness matrix is not pos-def. \n");
+				fprintf(stderr,"   Reduce loads and re-run the analysis.\n");
+				break;
+			}			/* end Newton Raphson iterations */
 
-				for (i=1; i<=DoF; i++)	D[i] += dD[i];	/* increment D */
+			for (i=1; i<=DoF; i++)	D[i] += dD[i];	/* increment D */
 
-				end_forces ( Q, nE, xyz, L, Le,
-					J1,J2, Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
+			end_forces ( Q, nE, xyz, L, Le, J1,J2, 
+				Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
 
-						 /* convergence criteria:  */
-				//error = rel_norm ( dD, D, DoF ); /* displacement increment */
-				error = rel_norm ( Fe, F, DoF ); /* force balance	   */
+					 /* convergence criteria:  */
+			//error = rel_norm ( dD, D, DoF ); /* displ. increment */
+			error = rel_norm ( Fe, F, DoF ); /* force balance   */
 
-				if ( verbose ) { 
-					printf("   NR iteration %3d ---", iter);
-					printf(" RMS equilibrium precision: %8.2e \n", error);
-				}
+			if ( verbose ) { 
+				printf("   NR iteration %3d ---", iter);
+				printf(" RMS equilibrium precision: %8.2e \n",error);
 			}
+		}			/* end Newton-Raphson iteration */
 
-			if ( geom ) {
-				free_dvector(Fe, 1, DoF );
-				free_dmatrix(Ks, 1, DoF, 1, DoF );
-			}
+		if ( geom ) {
+			free_dvector(Fe, 1, DoF );
+			free_dmatrix(Ks, 1, DoF, 1, DoF );
+		}
 
-			if ( write_matrix ) /* write static stiffness matrix */
-				save_ut_dmatrix ( DoF, K, "Ks" );
+		if ( write_matrix ) /* write static stiffness matrix */
+			save_ut_dmatrix ( DoF, K, "Ks" );
 
-			for (i=1; i<=12; i++)
-			    for (n=1; n<=nE; n++)
-				feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
+		for (i=1; i<=12; i++)
+		    for (n=1; n<=nE; n++)
+			feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
 
-			equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF,
+		equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF,
 						nE, DoF, &error, verbose );
 
-			if ( verbose ) {
-				printf("  RMS relative equilibrium precision: %9.3e", error );
-				evaluate ( error );
-			}
+		if ( verbose ) {
+			printf("  RMS relative equilibrium precision: %9.3e",error );
+			evaluate ( error );
+		}
 
 
-			write_static_results ( fp, nJ,nE,nL,lc, DoF, J1,J2, Fo[lc],
-									 D,R,Q, error, ok );
+		write_static_results ( fp, nJ,nE,nL,lc, DoF, J1,J2, Fo[lc],
+								 D,R,Q, error, ok );
 
-			if ( filetype == 1 ) {		// .CSV format output
-				write_static_csv(OUT_file, title,
+		if ( filetype == 1 ) {		// .CSV format output
+			write_static_csv(OUT_file, title,
+				nJ,nE,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
+		}
+
+		if ( filetype == 2 ) {		// matlab format output
+			write_static_mfile (OUT_file, title,
 					nJ,nE,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
-			}
-
-			if ( filetype == 2 ) {		// matlab format output
-				write_static_mfile (OUT_file, title,
-					nJ,nE,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
-			}
+		}
 
 /*
- *			if ( verbose ) 
- *			 printf("\n   If the program pauses here for very long,"
- *			 " hit CTRL-C to stop execution, \n"
- *			 "    reduce exagg_static in the Input Data,"
- *			 " and re-run the analysis. \n");
+ *		if ( verbose ) 
+ *		 printf("\n   If the program pauses here for very long,"
+ *		 " hit CTRL-C to stop execution, \n"
+ *		 "    reduce exagg_static in the Input Data,"
+ *		 " and re-run the analysis. \n");
  *
  */
-			static_mesh ( IN_file, meshpath, plotpath, title, nJ, nE, nL, lc,
+		static_mesh ( IN_file, meshpath, plotpath, title, nJ, nE, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg_static, anlyz);
 
-		} /* end load case loop */
+	 } /* end load case loop */
 	} else {
 	
-		if ( verbose ) {
-			printf("\n * %s *\n", title );
-			printf("  DATA CHECK ONLY.\n");
-		}
-		static_mesh ( IN_file, meshpath, plotpath, title, nJ, nE, nL, lc,
+	 if ( verbose ) {
+	 	printf("\n * %s *\n", title );
+	 	printf("  DATA CHECK ONLY.\n");
+	 }
+	 static_mesh ( IN_file, meshpath, plotpath, title, nJ, nE, nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg_static, anlyz);
 	}
 

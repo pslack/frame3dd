@@ -3,7 +3,7 @@
 # dist-zip.sh
 # assemble .ZIP files for Frame3dd executable and source distribution release
 
-export VERSION=20091022
+export VERSION=20091203
 echo $VERSION
 
 # clean out prior distribution files
@@ -56,11 +56,13 @@ zip -r Frame3DD_$(echo $VERSION).zip Frame3DD/*
 
 # make copies of .zip files for each operating system
 #cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_linux.zip
-#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_osx.zip
+#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_osx34.zip
+#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_osx56.zip
 #cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_win32.zip
 
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_linux.zip
-cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx.zip
+cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx34.zip
+cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx56.zip
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_win32.zip
 
 # add Linux executable
@@ -70,11 +72,12 @@ cp --preserve=mode,timestamps ../build/frame3dd        Frame3DD/.
 zip Frame3DD_$(echo $VERSION)_linux.zip Frame3DD/frame3dd
 rm Frame3DD/frame3dd
 
-# add OS X executable
+# add OS X 10.5 10.6 executable
 echo "adding OS X executable ... "
-cp --preserve=mode,timestamps ../build/frame3ddosx     Frame3DD/frame3dd
-#zip Frame3DD_$(date +%Y%m%d)_osx.zip Frame3DD/frame3dd
-zip Frame3DD_$(echo $VERSION)_osx.zip Frame3DD/frame3dd
+cp --preserve=mode,timestamps ../build/frame3ddosx10.4     Frame3DD/frame3dd
+zip Frame3DD_$(echo $VERSION)_osx34.zip Frame3DD/frame3dd
+cp --preserve=mode,timestamps ../build/frame3ddosx56       Frame3DD/frame3dd
+zip Frame3DD_$(echo $VERSION)_osx56.zip Frame3DD/frame3dd
 rm Frame3DD/frame3dd
 
 # add Windows executable
@@ -133,9 +136,9 @@ rm -rf Frame3DD
 
 # To upload distribution files to sourceforge.net ...
 #
-# rsync -uav *.zip hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091022/.
+# rsync -uav *.zip hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091203/.
 #
-# rsync -uav *.bz2  hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091022/.
+# rsync -uav *.bz2  hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091203/.
 
 # ----------------------------------------------------------- dist-zip.sh
 # Henri P. Gavin  2009.10.20

@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20091022
+Version:	0.20091203
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -67,6 +67,17 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Thu Dec 3 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+- release version 20091203 
+- add gravity loading to Frame3DD
+new variables gX gY gZ for gravitational acceleration in the global X Y and Z
+directions, add density data to frame element data section, remove density 
+data from mass data, new variable nX for extra beam mass, simplified data
+entry for extra beam mass.
+- user manual updated
+- template.3dd updated
+- examples updated and checked
+
 * Wed Dec 2 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091022
 - fix bug in creating mesh_file and mode_file the first char was being clipped
 - change exagg to exagg_static ... specifically for exaggerating static meshes

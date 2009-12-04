@@ -8,7 +8,7 @@ Template for input file format for Frame3DD - 3D structural frame analysis
 
 nJ                        # number of joints
 #.joint       X-coord  Y-coord  Z-coord  radius 
-#  .             mm       mm       mm      mm
+#                mm       mm       mm      mm
   J[1]           x[1]     y[1]     z[1]    r[1]    
     :              :        :        :       :  
   J[nJ]          x[nJ]    y[nJ]    z[nJ]   r[nJ]
@@ -27,7 +27,7 @@ nR                           # number of joints with reactions
 
 nE                        # number of frame elements 
 
-#.elmnt j1     j2    Ax     Asy     Asz     Jx     Iy     Iz     E     G     p     density
+#.elmnt j1     j2    Ax     Asy     Asz     Jx     Iy     Iz     E     G     roll  density
 #       .      .     mm^2   mm^2    mm^2    mm^4   mm^4   mm^4   MPa   MPa   deg   tonne/mm^3
  M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jx[1]  Iy[1]  Iz[1]  E[1]  G[1]  p[1]  d[1]
    :      :      :      :       :       :      :      :      :     :     :     :     :
@@ -44,8 +44,10 @@ nL                        # number of static load cases
 
 # Begin Static Load Case 1  
 
-# gravitational acceleration for self-weight loading, mm/s^2 (global
-  gX  gY  gZ   
+# gravitational acceleration for self-weight loading, mm/s^2 (global)
+#   gX         gY         gZ
+#   mm/s^2     mm/s^2     mm/s^2
+    gX         gY         gZ   
 
 nF                        # number of loaded joints (global)
 #.joint  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
@@ -98,7 +100,9 @@ nD                        # number of prescribed displacements nD<=nR (global)
 # Begin Static Load Case 2
 
 # gravitational acceleration for self-weight loading, mm/s^2 (global)
-  gX  gY  gZ   
+#   gX         gY         gZ
+#   mm/s^2     mm/s^2     mm/s^2
+    gX         gY         gZ   
 
 nF                        # number of loaded joints (global)
 #.joint  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom

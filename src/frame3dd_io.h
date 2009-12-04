@@ -263,6 +263,7 @@ void write_input_data(
 	float *Ax, float *Asy, float *Asz,
 	float *J, float *Iy, float *Iz,
 	float *E, float *G, float *p,
+	float *d, float *gX, float *gY, float *gZ, 
 	double **F, float **Dp,
 	int *R,
 	float ***U, float ***W, float ***P, float ***T,
