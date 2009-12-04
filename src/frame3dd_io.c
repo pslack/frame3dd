@@ -2356,7 +2356,7 @@ void static_mesh(
 	FILE	*fpmfx, *fpm;
 	double	mx, my, mz;	/* coordinates of the frame element number labels */
 	int	j1, j2, i, j, m, X=0, Y=0, Z=0;
-	char	meshfl[64], str[8], D3 = '#';
+	char	meshfl[128], str[8], D3 = '#';
 	time_t  now;            /* modern time variable type    (DJGPP) */
 
 	strcpy(meshfl,meshpath);
@@ -2539,7 +2539,7 @@ void modal_mesh(
 	double *v;		/* a mode-shape vector */
 
 	int	i, j, m,n, X=0, Y=0, Z=0;
-	char	D3 = '#', s1[16],  s2[16], modefl[64];
+	char	D3 = '#', s1[16],  s2[16], modefl[128];
 
 
 	msX = dvector(1,DoF);
@@ -2662,7 +2662,7 @@ void animate(
 
 	char	D3 = '#',
 		Movie = '#',	/* use '#' for no-movie  -OR-  ' ' for movie */
-		s1[16], s2[16], modefl[64], framefl[64];
+		s1[16], s2[16], modefl[128], framefl[128];
 
 	for (j=1; j<=nJ; j++) {		/* check for three-dimensional frame */
 		if (xyz[j].x != 0.0) X=1;

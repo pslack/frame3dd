@@ -74,7 +74,7 @@ rm Frame3DD/frame3dd
 
 # add OS X 10.5 10.6 executable
 echo "adding OS X executable ... "
-cp --preserve=mode,timestamps ../build/frame3ddosx10.4     Frame3DD/frame3dd
+cp --preserve=mode,timestamps ../build/frame3ddosx34     Frame3DD/frame3dd
 zip Frame3DD_$(echo $VERSION)_osx34.zip Frame3DD/frame3dd
 cp --preserve=mode,timestamps ../build/frame3ddosx56       Frame3DD/frame3dd
 zip Frame3DD_$(echo $VERSION)_osx56.zip Frame3DD/frame3dd

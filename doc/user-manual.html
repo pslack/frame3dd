@@ -1964,7 +1964,7 @@ Template for input file format for Frame3DD - 3D structural frame analysis
 
 nJ                        # number of joints
 #.joint       X-coord  Y-coord  Z-coord  radius joint numbers and coordinates
-#  .             mm       mm       mm      mm
+#                mm       mm       mm      mm
   J[1]           x[1]     y[1]     z[1]    r[1]    
     :              :        :        :       :  
   J[nJ]          x[nJ]    y[nJ]    z[nJ]   r[nJ]
@@ -2062,7 +2062,7 @@ nD                     # number of prescribed displacements nD<=nR (global)
 
 nF                     # number of loaded joints (global)
 #.joint  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
-# .       N        N        N        N.mm      N.mm      N.mm
+#         N        N        N        N.mm      N.mm      N.mm
   J[1]    Fx[1]    Fy[1]    Fz[1]    Mxx[1]    Myy[1]    Mzz[1]
     :        :        :        :         :         :         :  
   J[nF]   Fx[nF]   Fy[nF]   Fz[nF]   Mxx[nF]   Myy[nF]   Mzz[nF]
