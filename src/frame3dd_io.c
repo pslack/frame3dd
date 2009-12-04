@@ -400,7 +400,7 @@ void read_frame_element_data(
 		if (sfrv != 3) sferr("section areas in frame element data");
 		sfrv=fscanf(fp, "%f %f %f", &J[b],  &Iy[b],  &Iz[b] );
 		if (sfrv != 3) sferr("section inertias in frame element data");
-		sfrv=fscanf(fp, "%f %f %f", &E[b], &G[b] );
+		sfrv=fscanf(fp, "%f %f", &E[b], &G[b] );
 		if (sfrv != 2) sferr("material moduli in frame element data");
 		sfrv=fscanf(fp, "%f", &p[b]);
 		if (sfrv != 1) sferr("roll angle in frame element data");
@@ -1480,7 +1480,7 @@ void read_mass_data(
         	printf(" nX = %3d\n",*nX);
 		if (sfrv != 1) sferr("element value in extra element mass data");
 	}
-	for (m=1; m=nX; m++) {
+	for (m=1; m <= *nX; m++) {
 		sfrv=fscanf(fp, "%d", &b );
 		if (sfrv != 1) sferr("element number in extra element mass data");
 		if ( b < 1 || b > nE ) {
