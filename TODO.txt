@@ -1,22 +1,15 @@
 TODO LIST for FRAME3DD
 ----------------------
 
-* Specify element density along with elastic modulus and shear modulus in the
-Frame Element Data section of the Input Data file
-
-* Add nX variables for number of beams with eXtra mass,
-... redefine the entry of extra beam mass in a way that is similar
-to extra joint inertia. 
+* Dynamic time-history analysis with the HHT-alpha method
 
 * Compute reactions forces along with joint displacements in solve_system funcion.  
 
-* Improve rigid joint offset method
-
 * Consistent mass matrix including the effects of shear deformation on rotatory inertia
 
-* Dynamic time-history analysis with the HHT-alpha method
-
 * Create structs to contain frame attributes, coordinates, etc, in order to migrate to a more object-oriented coding style, and simplify the passing of parameters to functions.
+
+* Improve rigid joint offset method
 
 * Member end joint releases
 Implment end_release function in frame3dd.c into the code to 
@@ -44,6 +37,15 @@ also, particularly if sparse matrix methods can be used.
 
 COMPLETED ITEMS
 ------------------
+
+* Add gravity load option via gravitational acceleration vector (Dec 3 2009)
+
+* Specify element density along with elastic modulus and shear modulus in the
+Frame Element Data section of the Input Data file  (Dec 3 2009)
+
+* Add nX variables for number of beams with eXtra mass,
+... redefine the entry of extra beam mass in a way that is similar
+to extra joint inertia.  (Dec 3 2009)
 
 * Separate exaggeration factors for static and dynamic meshes (Dec 2 2009)
 
