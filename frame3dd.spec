@@ -67,6 +67,13 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+* Fri Dec 4 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+- increase allocated memory for file name strings 'modefl', 'meshfl', 'framefl'
+from 64 to 128 ... Full path file names to local temp directories can be quite
+long in Windows.  
+- use sprintf to concatenate path name to file names
+- my_itoa() is no longer used
+
 * Thu Dec 3 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
 - release version 20091203 
 - add gravity loading to Frame3DD

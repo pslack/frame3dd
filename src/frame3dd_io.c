@@ -42,8 +42,6 @@
 
 /* forward decls */
 
-static void my_itoa(int n, char s[], int k); /* specialized for portability */
-
 static void getline_no_comment(
 	FILE *fp,    /**< pointer to the file from which to read */
 	char *s,     /**< pointer to the string to which to write */
@@ -486,7 +484,7 @@ void read_frame_element_data(
 
 
 /*------------------------------------------------------------------------------
-READ_RUN_DATA  -  read information for analysis                  
+READ_RUN_DATA  -  read information for analysis
 29 Dec 2008
 ------------------------------------------------------------------------------*/
 void read_run_data (
@@ -512,7 +510,7 @@ void read_run_data (
 	strcpy(base_file,OUT_file);	
 	while ( base_file[len++] != '\0' )
 		/* the length of the base_file */ ;
-        full_len = len;
+	full_len = len;
 	while ( base_file[len--] != '.' && len > 0 )
 		/* find the last '.' in base_file */ ;
 	if ( len == 0 )	len = full_len;
@@ -528,7 +526,7 @@ void read_run_data (
 		mesh_file[i++] = base_file[len++];
 	mesh_file[i] = '\0';
 	strcat(mesh_file,"-msh");
-        output_path(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
+	output_path(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
 
 	if ( debug) {
 		fprintf(stderr,"OUT_FILE = %s \n", OUT_file);
@@ -580,7 +578,7 @@ int     lim
     int     c=0, i=0;
 
     while (--lim > 0 && (c=getc(fp)) != EOF && c != '\n' )
-            s[i++] = c;
+	s[i++] = c;
 /*      if (c == '\n')  s[i++] = c;	*/
     s[i] = '\0';
     return;
@@ -692,7 +690,7 @@ void getline_no_comment(
 	int     c=0, i=0;
 
 	while (--lim > 0 && (c=getc(fp)) != EOF && c != '\n' && c != '%' &&
-                 c != '#' && c != ';' && c != '?' ) {
+		c != '#' && c != ';' && c != '?' ) {
 		if (c != ',' && c != '"' )
 			s[i++] = c;
 		else
@@ -955,8 +953,8 @@ void read_and_assemble_loads(
 
 		/* debugging
 		printf("t1=%5.2f t2=%5.2f t3=%5.2f \n", t1, t2, t3 );
-                printf("t4=%5.2f t5=%5.2f t6=%5.2f \n", t4, t5, t6 );
-                printf("t7=%5.2f t8=%5.2f t9=%5.2f \n", t7, t8, t9 ); */
+		printf("t4=%5.2f t5=%5.2f t6=%5.2f \n", t4, t5, t6 );
+		printf("t7=%5.2f t8=%5.2f t9=%5.2f \n", t7, t8, t9 ); */
 
 		/* {F} = [T]'{Q} */
 		feF_mech[lc][n][1]  += ( Nx1*t1 + Vy1*t4 + Vz1*t7 );
@@ -1149,8 +1147,8 @@ void read_and_assemble_loads(
 
 		/* debugging
 		printf("t1=%5.2f t2=%5.2f t3=%5.2f \n", t1, t2, t3 );
-                printf("t4=%5.2f t5=%5.2f t6=%5.2f \n", t4, t5, t6 );
-                printf("t7=%5.2f t8=%5.2f t9=%5.2f \n", t7, t8, t9 ); */
+		printf("t4=%5.2f t5=%5.2f t6=%5.2f \n", t4, t5, t6 );
+		printf("t7=%5.2f t8=%5.2f t9=%5.2f \n", t7, t8, t9 ); */
 
 		/* {F} = [T]'{Q} */
 		feF_mech[lc][n][1]  += ( Nx1*t1 + Vy1*t4 + Vz1*t7 );
@@ -1465,8 +1463,8 @@ void read_mass_data(
 	if (sfrv != 1) sferr("nI value in mass data");
 	if ( verbose ) {
 		printf(" number of joints with extra lumped inertia ");
-        	dots(stdout,9);
-        	printf(" nI = %3d\n",*nI);
+		dots(stdout,9);
+		printf(" nI = %3d\n",*nI);
 	}
 	for (j=1; j <= *nI; j++) {
 		sfrv=fscanf(fp, "%d", &jnt );
@@ -1493,8 +1491,8 @@ void read_mass_data(
 	if (sfrv != 1) sferr("nX value in mass data");
 	if ( verbose ) {
 		printf(" number of frame elements with extra mass ");
-        	dots(stdout,11);
-        	printf(" nX = %3d\n",*nX);
+		dots(stdout,11);
+		printf(" nX = %3d\n",*nX);
 		if (sfrv != 1) sferr("element value in extra element mass data");
 	}
 	for (m=1; m <= *nX; m++) {
@@ -1568,7 +1566,7 @@ void read_mass_data(
 	strcpy(base_file,OUT_file);	
 	while ( base_file[len++] != '\0' )
 		/* the length of the base_file */ ;
-        full_len = len;
+	full_len = len;
 
 	while ( base_file[len--] != '.' && len > 0 )
 		/* find the last '.' in base_file */ ;
@@ -1582,7 +1580,7 @@ void read_mass_data(
 		mode_file[i++] = base_file[len++];
 	mode_file[i] = '\0';
 	strcat(mode_file,"-m");
-        output_path(mode_file,modepath,FRAME3DD_PATHMAX,NULL);
+	output_path(mode_file,modepath,FRAME3DD_PATHMAX,NULL);
 
 	return;
 }
@@ -1679,7 +1677,7 @@ void read_condensation_data (
 	  fprintf(stderr,"  The condensed mode number must be between ");
 	  fprintf(stderr,"  1 and %d (modes).\n", nM);
 	  exit(1);
-         }
+	 }
 	}
 
 	free_imatrix(qm,1, *nC, 1,7);
@@ -1706,9 +1704,9 @@ void write_input_data(
 	int shear, int anlyz, int geom
 ){
 	int	i,j,n, lc;
-        time_t  now;            /* modern time variable type    (DJGPP) */
+	time_t  now;		/* modern time variable type    (DJGPP) */
 
-        (void) time(&now);
+	(void) time(&now);
 
 	for (i=1; i<=80; i++)	fprintf(fp,"_");
   	fprintf(fp,"\nFrame3DD version: %s ", VERSION );
@@ -1735,8 +1733,8 @@ void write_input_data(
 
 	fprintf(fp,"%5d JOINTS         ", nJ ); 
 	fprintf(fp,"%5d FIXED JOINTS   ", nR );
-        fprintf(fp,"%5d FRAME ELEMENTS ", nE ); 
-        fprintf(fp,"%3d LOAD CASES   \n", nL );
+	fprintf(fp,"%5d FRAME ELEMENTS ", nE ); 
+	fprintf(fp,"%3d LOAD CASES   \n", nL );
 
 	for (i=1; i<=80; i++)	fprintf(fp,"_"); fprintf(fp,"\n");
 
@@ -1768,11 +1766,11 @@ void write_input_data(
 
 	  fprintf(fp,"\nL O A D   C A S E   %d   O F   %d  ... \n\n", lc,nL);
 	  fprintf(fp,"   Gravity X = ");
-	  if (gX[lc] == 0) fprintf(fp," 0.0 "); else fprintf(fp," %f ", gX[lc]);
+	  if (gX[lc] == 0) fprintf(fp," 0.0 "); else fprintf(fp," %.3f ", gX[lc]);
 	  fprintf(fp,"   Gravity Y = ");
-	  if (gY[lc] == 0) fprintf(fp," 0.0 "); else fprintf(fp," %f ", gY[lc]);
+	  if (gY[lc] == 0) fprintf(fp," 0.0 "); else fprintf(fp," %.3f ", gY[lc]);
 	  fprintf(fp,"   Gravity Z = ");
-	  if (gZ[lc] == 0) fprintf(fp," 0.0 "); else fprintf(fp," %f ", gZ[lc]);
+	  if (gZ[lc] == 0) fprintf(fp," 0.0 "); else fprintf(fp," %.3f ", gZ[lc]);
 	  fprintf(fp,"\n");
 	  fprintf(fp," %3d concentrated loads\n", nF[lc] );
 	  fprintf(fp," %3d uniformly distributed loads\n", nU[lc]);
@@ -1812,13 +1810,13 @@ void write_input_data(
 	    fprintf(fp,"\t\t\t\t\t(local)\n");
 	    fprintf(fp,"  Elmnt       x1               x2               W1               W2\n");
 	    for (n=1; n<=nW[lc]; n++) {
-	        fprintf(fp, " %5d", (int) (W[lc][n][1]) );
+		fprintf(fp, " %5d", (int) (W[lc][n][1]) );
 		for (i=2; i<=5; i++) fprintf(fp, " %16.8f", W[lc][n][i] );
 		fprintf(fp, "  (x)\n");
-	        fprintf(fp, " %5d", (int) (W[lc][n][1]) );
+		fprintf(fp, " %5d", (int) (W[lc][n][1]) );
 		for (i=6; i<=9; i++) fprintf(fp, " %16.8f", W[lc][n][i] );
 		fprintf(fp, "  (y)\n");
-	        fprintf(fp, " %5d", (int) (W[lc][n][1]) );
+		fprintf(fp, " %5d", (int) (W[lc][n][1]) );
 		for (i=10; i<=13; i++) fprintf(fp, " %16.8f", W[lc][n][i] );
 		fprintf(fp, "  (z)\n");
 	    }
@@ -1898,7 +1896,7 @@ void write_static_results (
 /*	 return; */
 	}
 
-        fprintf(fp,"\nL O A D   C A S E   %d   O F   %d  ... \n\n", lc, nL);
+	fprintf(fp,"\nL O A D   C A S E   %d   O F   %d  ... \n\n", lc, nL);
 
 	fprintf(fp,"J O I N T   D I S P L A C E M E N T S");
 	fprintf(fp,"\t\t\t\t\t(global)\n");
@@ -1910,9 +1908,9 @@ void write_static_results (
 	    if ( disp > 0.0 ) {
 		fprintf(fp," %5d", j);
 		for ( i=5; i>=0; i-- ) {
-                        if ( fabs(D[6*j-i]) < 1.e-8 )
-                                fprintf (fp, "    0.0     ");
-                        else    fprintf (fp, " %11.6f",  D[6*j-i] );
+			if ( fabs(D[6*j-i]) < 1.e-8 )
+				fprintf (fp, "    0.0     ");
+			else    fprintf (fp, " %11.6f",  D[6*j-i] );
 		}
 		fprintf(fp,"\n");
 	    }
@@ -1932,7 +1930,7 @@ void write_static_results (
 			if ( fabs(Q[n][i]) < 0.0001 )
 				fprintf (fp, "      0.0  ");
 			else    fprintf (fp, " %10.3f", Q[n][i] );
-                }
+		}
 		fprintf(fp,"\n");
 		fprintf(fp," %5d  %5d", n, J2[n]);
 		if ( fabs(Q[n][7]) < 0.0001 )
@@ -1955,11 +1953,11 @@ void write_static_results (
 		if ( R[i+1] || R[i+2] || R[i+3] ||
 		     R[i+4] || R[i+5] || R[i+6] ) {
 			fprintf(fp, " %5d", j);
-                        for (i=5; i>=0; i--) {
-                                if ( !R[6*j-i] || fabs(F[6*j-i]) < 0.0001 )
-                                        fprintf (fp, "       0.0  ");
-                                else    fprintf (fp, " %11.3f", -F[6*j-i] );
-                        }
+			for (i=5; i>=0; i--) {
+				if ( !R[6*j-i] || fabs(F[6*j-i]) < 0.0001 )
+					fprintf (fp, "       0.0  ");
+				else    fprintf (fp, " %11.3f", -F[6*j-i] );
+			}
 			fprintf(fp, "\n");
 		}
 	}
@@ -1986,9 +1984,9 @@ void write_static_csv(
 	int	i,j,n;
 	char	*wa;
 	char	CSV_file[128];
-        time_t  now;            /* modern time variable type    (DJGPP) */
+	time_t  now;		/* modern time variable type    (DJGPP) */
 
-        (void) time(&now);
+	(void) time(&now);
 
 	i=0;
 	j=0;
@@ -1998,8 +1996,8 @@ void write_static_csv(
 		     CSV_file[j] == '-' ||
 		     CSV_file[j] == '*' ||
 		     CSV_file[j] == '^' ||
-                     CSV_file[j] == '.' ||
-                     CSV_file[j] == '\0') {
+		     CSV_file[j] == '.' ||
+		     CSV_file[j] == '\0') {
 			CSV_file[j] = '_';
 			break;
 		}
@@ -2056,7 +2054,7 @@ void write_static_csv(
 	}
 
 
-        fprintf(fpcsv,"\n\"L O A D   C A S E   %d   O F   %d  ... \"\n\n", lc, nL);
+	fprintf(fpcsv,"\n\"L O A D   C A S E   %d   O F   %d  ... \"\n\n", lc, nL);
 
 	fprintf(fpcsv,"\"J O I N T   D I S P L A C E M E N T S");
 	fprintf(fpcsv,"  (global)\"\n");
@@ -2065,9 +2063,9 @@ void write_static_csv(
 	for (j=1; j<= nJ; j++) {
 		fprintf(fpcsv," %5d,", j);
 		for ( i=5; i>=0; i-- ) {
-                        if ( fabs(D[6*j-i]) < 1.e-8 )
-                                fprintf (fpcsv, "    0.0,    ");
-                        else    fprintf (fpcsv, " %12.5e,",  D[6*j-i] );
+			if ( fabs(D[6*j-i]) < 1.e-8 )
+				fprintf (fpcsv, "    0.0,    ");
+			else    fprintf (fpcsv, " %12.5e,",  D[6*j-i] );
 		}
 		fprintf(fpcsv,"\n");
 	}
@@ -2084,7 +2082,7 @@ void write_static_csv(
 			if ( fabs(Q[n][i]) < 0.0001 )
 				fprintf (fpcsv, "      0.0, ");
 			else    fprintf (fpcsv, " %12.5e,", Q[n][i] );
-                }
+		}
 		fprintf(fpcsv,"\n");
 		fprintf(fpcsv," %5d, %5d,", n, J2[n]);
 		if ( fabs(Q[n][7]) < 0.0001 )
@@ -2103,9 +2101,9 @@ void write_static_csv(
 	for (j=1; j<=nJ; j++) {
 		i = 6*(j-1);
 		fprintf(fpcsv, " %5d,", j);
-                for (i=5; i>=0; i--) {
-                	if ( !R[6*j-i] || fabs(F[6*j-i]) < 0.0001 )
-                        	fprintf (fpcsv, "       0.0, ");
+		for (i=5; i>=0; i--) {
+			if ( !R[6*j-i] || fabs(F[6*j-i]) < 0.0001 )
+				fprintf (fpcsv, "       0.0, ");
 			else    fprintf (fpcsv, " %12.5e,", -F[6*j-i] );
 		}
 		fprintf(fpcsv, "\n");
@@ -2134,9 +2132,9 @@ void write_static_mfile (
 	int	i,j,n;
 	char	*wa;
 	char	M_file[128];
-        time_t  now;            /* modern time variable type    (DJGPP) */
+	time_t  now;	/* modern time variable type    (DJGPP) */
 
-        (void) time(&now);
+	(void) time(&now);
 
 	i=0;
 	j=0;
@@ -2146,8 +2144,8 @@ void write_static_mfile (
 		     M_file[j] == '-' ||
 		     M_file[j] == '*' ||
 		     M_file[j] == '^' ||
-                     M_file[j] == '.' ||
-                     M_file[j] == '\0') {
+		     M_file[j] == '.' ||
+		     M_file[j] == '\0') {
 			M_file[j] = '_';
 			break;
 		}
@@ -2188,17 +2186,17 @@ void write_static_mfile (
 /*	 return; */
 	}
 
-        fprintf(fpm,"\n%% L O A D   C A S E   %d   O F   %d  ... \n\n", lc, nL);
+	fprintf(fpm,"\n%% L O A D   C A S E   %d   O F   %d  ... \n\n", lc, nL);
 
 	fprintf(fpm,"%% J O I N T   D I S P L A C E M E N T S");
 	fprintf(fpm,"\t\t(global)\n");
 	fprintf(fpm,"%%\tX-dsp\t\tY-dsp\t\tZ-dsp\t\tX-rot\t\tY-rot\t\tZ-rot\n");
-        fprintf(fpm,"D%d=[",lc);
+	fprintf(fpm,"D%d=[",lc);
 	for (j=1; j<= nJ; j++) {
 		for ( i=5; i>=0; i-- ) {
-                        if ( fabs(D[6*j-i]) < 1.e-8 )
-                                fprintf (fpm, "\t0.0\t");
-                        else    fprintf (fpm, "\t%13.6e",  D[6*j-i] );
+			if ( fabs(D[6*j-i]) < 1.e-8 )
+				fprintf (fpm, "\t0.0\t");
+			else    fprintf (fpm, "\t%13.6e",  D[6*j-i] );
 		}
 		if ( j < nJ )	fprintf(fpm," ; \n");
 		else		fprintf(fpm," ]'; \n\n");
@@ -2208,7 +2206,7 @@ void write_static_mfile (
 	fprintf(fpm,"\t\t(local)\n");
 	fprintf(fpm,"%%\tNx_1\t\tVy_1\t\tVz_1\t\tTxx_1\t\tMyy_1\t\tMzz_1\t");
 	fprintf(fpm,"  \tNx_2\t\tVy_2\t\tVz_2\t\tTxx_2\t\tMyy_2\t\tMzz_2\n");
-        fprintf(fpm,"F%d=[",lc);
+	fprintf(fpm,"F%d=[",lc);
 	for (n=1; n<= nE; n++) {
 		if ( fabs(Q[n][1]) < 0.0001 )
 			fprintf (fpm, "\t0.0\t");
@@ -2232,7 +2230,7 @@ void write_static_mfile (
 
 	fprintf(fpm,"%% R E A C T I O N S\t\t\t\t(global)\n");
 	fprintf(fpm,"%%\tFx\t\tFy\t\tFz\t\tMxx\t\tMyy\t\tMzz\n");
-        fprintf(fpm,"R%d=[",lc);
+	fprintf(fpm,"R%d=[",lc);
 	for (j=1; j<=nJ; j++) {
 		i = 6*(j-1);
 		for (i=5; i>=0; i--) {
@@ -2317,20 +2315,20 @@ void write_modal_results(
 	    for (j=1; j<= nJ; j++) {
 		fprintf(fp," %5d", j);
 		for ( i=5; i>=0; i-- )	fprintf (fp, " %11.3e", V[6*j-i][m] );
-                fprintf(fp,"\n");
-            }
+		fprintf(fp,"\n");
+	    }
 	}
 
 	fprintf(fp,"M A T R I X    I T E R A T I O N S: %d\n", iter );
 
 	fs = sqrt(4.0*PI*PI*f[nM]*f[nM] + tol) / (2.0*PI);
 
-        fprintf(fp,"There are %d modes below %f Hz.", -ok, fs );
-        if ( -ok > nM ) {
-                fprintf(fp," ... %d modes were not found.\n", -ok-nM );
-                fprintf(fp," Try increasing the number of modes in \n");
-                fprintf(fp," order to get the missing modes below %f Hz.\n",fs);
-        } else  fprintf(fp," ... All %d modes were found.\n", nM );
+	fprintf(fp,"There are %d modes below %f Hz.", -ok, fs );
+	if ( -ok > nM ) {
+		fprintf(fp," ... %d modes were not found.\n", -ok-nM );
+		fprintf(fp," Try increasing the number of modes in \n");
+		fprintf(fp," order to get the missing modes below %f Hz.\n",fs);
+	} else  fprintf(fp," ... All %d modes were found.\n", nM );
 
 
 	free_dvector(msX,1,DoF);
@@ -2356,21 +2354,20 @@ void static_mesh(
 	FILE	*fpmfx, *fpm;
 	double	mx, my, mz;	/* coordinates of the frame element number labels */
 	int	j1, j2, i, j, m, X=0, Y=0, Z=0;
-	char	meshfl[128], str[8], D3 = '#';
-	time_t  now;            /* modern time variable type    (DJGPP) */
+	char	meshfl[128], D3 = '#';
+	time_t  now;		/* modern time variable type    (DJGPP) */
 
-	strcpy(meshfl,meshpath);
-	str[0]='f'; str[1]='\0';	strcat(meshfl,str);
-	str[0]='.'; str[1]='\0';	strcat(meshfl,str);
-	my_itoa(lc,str,3);		strcat(meshfl,str);
+	(void) time(&now);
+
+	sprintf( meshfl, "%sf.%03d", meshpath, lc );
 
 	if ((fpmfx = fopen (meshfl, "w")) == NULL) {
-		printf (" error: cannot open meshpath: %s\n", meshpath);
+		printf (" error: cannot open meshpath: %s\n", meshfl );
 		exit(1);
 	}
 
 	if ((fpm = fopen (meshpath, "w")) == NULL) {
-		printf (" error: cannot open meshpath: %s\n", meshpath);
+		printf (" error: cannot open meshpath: %s\n", meshpath );
 		exit(1);
 	}
 
@@ -2381,7 +2378,7 @@ void static_mesh(
 	fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/\n");
 	fprintf(fpm,"# %s\n", title );
 	fprintf(fpm,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
-        fprintf(fpm,"# %s", ctime(&now) );
+	fprintf(fpm,"# %s", ctime(&now) );
 	fprintf(fpm,"# M E S H   D A T A   (global coordinates)");
 	fprintf(fpm," deflection exaggeration: %.1f\n", exagg_static );
 	fprintf(fpm,"# Joint      X           Y           Z");
@@ -2389,7 +2386,7 @@ void static_mesh(
 
 	fprintf(fpmfx,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/\n");
 	fprintf(fpmfx,"# %s\n", title );
-        fprintf(fpmfx,"# %s", ctime(&now) );
+	fprintf(fpmfx,"# %s", ctime(&now) );
 	fprintf(fpmfx,"# F L E X E D   M E S H   D A T A ");
 	fprintf(fpmfx,"  deflection exaggeration: %.1f\n", exagg_static );
 	fprintf(fpmfx,"#       X-dsp        Y-dsp        Z-dsp\n");
@@ -2539,7 +2536,7 @@ void modal_mesh(
 	double *v;		/* a mode-shape vector */
 
 	int	i, j, m,n, X=0, Y=0, Z=0;
-	char	D3 = '#', s1[16],  s2[16], modefl[128];
+	char	D3 = '#', modefl[128];
 
 
 	msX = dvector(1,DoF);
@@ -2558,8 +2555,7 @@ void modal_mesh(
 
 	for (m=1; m<=nM; m++) {
 
-		strcpy(modefl,modepath);
-		s1[0]='-'; s1[1]='\0'; my_itoa(m,s2,2);  strcat(s1,s2);  strcat(modefl,s1);
+		sprintf( modefl,"%s-%02d-", modepath, m );
 
 		if ((fpm = fopen (modefl, "w")) == NULL) {
 			printf (" error: cannot open modal mesh file: %s\n", modefl);
@@ -2662,7 +2658,7 @@ void animate(
 
 	char	D3 = '#',
 		Movie = '#',	/* use '#' for no-movie  -OR-  ' ' for movie */
-		s1[16], s2[16], modefl[128], framefl[128];
+		modefl[128], framefl[128];
 
 	for (j=1; j<=nJ; j++) {		/* check for three-dimensional frame */
 		if (xyz[j].x != 0.0) X=1;
@@ -2724,22 +2720,15 @@ void animate(
 	 for ( c=1; c <= CYCLES; c++ ) {
 	  for ( fr=0; fr<=frames; fr++ ) {
 
-	    strcpy(modefl,modepath);
-	    strcpy(framefl,modepath);
-	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
-	    strcat(framefl,s1);
-	    strcat(s1,"."); my_itoa(fr,s2,3); strcat(s1,s2); strcat(modefl,s1);
-	    s1[0] = '-'; s1[1] = 'f'; s1[2] = '-'; s1[3] = '\0';
-	    my_itoa(frame_number++,s2,3); strcat(s1,s2); strcat(framefl,s1);
-	    s1[0] = '.'; s1[1] = 'p'; s1[2] = 's'; s1[3] = '\0';
-	    strcat(framefl,s1);
+	    sprintf(modefl,"%s-%02d.%03d", modepath, m, fr  );
+	    sprintf(framefl,"%s-%02d-f-%03d.ps", modepath, m, fr  );
 
 	    if ( D3 == '#' ) {
 		fprintf(fpm,"plot '%s' u 2:3 w l lw 1 lt 5, ", meshpath );
 	 	fprintf(fpm," '%s' u 1:2 w l lw 2 lt 3 ;", modefl );
 	    } else {
 	      if ( pan != 0.0 )
- 	        fprintf(fpm,"%c set view %5.1f, %5.1f, %4.2f \n", D3,
+		fprintf(fpm,"%c set view %5.1f, %5.1f, %4.2f \n", D3,
 		rot_x_init + pan*(rot_x_final-rot_x_init)*frame_number/total_frames,
 		rot_z_init + pan*(rot_z_final-rot_z_init)*frame_number/total_frames,
 		zoom_init + pan*(zoom_final-zoom_init)*frame_number/total_frames );
@@ -2753,22 +2742,15 @@ void animate(
 	  }
 	  for ( fr = frames-1; fr > 0; fr-- ) {
 
-	    strcpy(modefl,modepath);
-	    strcpy(framefl,modepath);
-	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
-	    strcat(framefl,s1);
-	    strcat(s1,"."); my_itoa(fr,s2,3); strcat(s1,s2); strcat(modefl,s1);
-	    s1[0] = '-'; s1[1] = 'f'; s1[2] = '-'; s1[3] = '\0';
-	    my_itoa(frame_number++,s2,3); strcat(s1,s2); strcat(framefl,s1);
-	    s1[0] = '.'; s1[1] = 'p'; s1[2] = 's'; s1[3] = '\0';
-	    strcat(framefl,s1);
+	    sprintf(modefl,"%s-%02d.%03d", modepath, m, fr  );
+	    sprintf(framefl,"%s-%02d-f-%03d.ps", modepath, m, fr  );
 
 	    if ( D3 == '#' ) {
 	 	fprintf(fpm,"plot '%s' u 2:3 w l lw 1 lt 5, ", meshpath );
 		fprintf(fpm," '%s' u 1:2 w l lw 2 lt 3;", modefl );
 	    } else {
 	      if ( pan != 0.0 )
-	        fprintf(fpm,"%c set view %5.1f, %5.1f, %4.2f \n", D3,
+		fprintf(fpm,"%c set view %5.1f, %5.1f, %4.2f \n", D3,
 		rot_x_init + pan*(rot_x_final-rot_x_init)*frame_number/total_frames,
 		rot_z_init + pan*(rot_z_final-rot_z_init)*frame_number/total_frames,
 		zoom_init + pan*(zoom_final-zoom_init)*frame_number/total_frames );
@@ -2782,9 +2764,7 @@ void animate(
 	 }
 	 fr = 0;
 
-	 strcpy(modefl,modepath);
-	 s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
-	 strcat(s1,".");  my_itoa(fr,s2,3);  strcat(s1,s2);  strcat(modefl,s1);
+	 sprintf(modefl,"%s-%02d.%03d", modepath, m, fr  );
 
 	 if ( D3 == '#' ) {
 	 	fprintf(fpm,"plot '%s' u 2:3 w l lw 2 lt 5, ", meshpath );
@@ -2804,9 +2784,7 @@ void animate(
 	while ( (m = anim[i]) != 0 ) {
 	  for ( fr=0; fr<=frames; fr++ ) {
 
-	    strcpy(modefl,modepath);
-	    s1[0] = '-';  s1[1] = '\0';  my_itoa(m,s2,2);  strcat(s1,s2);
-	    strcat(s1,"."); my_itoa(fr,s2,3); strcat(s1,s2); strcat(modefl,s1);
+	    sprintf(modefl,"%s-%02d.%03d", modepath, m, fr  );
 
 	    if ((fpm = fopen (modefl, "w")) == NULL) {
 		printf (" error: cannot open modal mesh file: %s\n", modefl);
@@ -2830,7 +2808,7 @@ void animate(
 		bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, ex );
 
 	    fclose(fpm);
-          }
+	  }
 	  i++;
 	}
 	free_dvector(v,1,DoF);
@@ -2984,7 +2962,7 @@ int get_file_ext( char *filename, char *ext )
 	int	i=0, full_len=0, len=0;
 
 	while ( filename[len++] != '\0' ) /* the length of file filename */ ;
-       	full_len = len;
+	full_len = len;
 	while ( filename[len--] != '.' && len > 0 ) /* the last '.' in filename */ ;
 	if ( len == 0 )	len = full_len;
 	++len;
