@@ -223,8 +223,8 @@ Example H: a pedestrian ramp  (kip, in)
 
 # CENTER-BAY six main columns		tube 14 x 14 x 1/2
 
-#.m  j1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
-#           in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
+#.m  j1 j2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#    .  .   in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
  1    1  7  28.1  14.2  14.2  28.2  821.1  821.2  29000  11500 0 7.324e-7
  2    7 11  28.1  14.2  14.2  28.2  821.1  821.2  29000  11500 0 7.324e-7

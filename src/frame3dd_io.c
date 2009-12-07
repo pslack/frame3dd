@@ -867,13 +867,13 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][12] = d[n]*Ax[n]*L[n]*L[n] / 12.0 *
 			( ( t6*t7-t4*t9)*gX[lc] + ( t6*t8-t5*t9)*gY[lc] );
 
-		/* debugging 
+		/* debugging  
 		printf("n=%d ", n);
 		for (l=1;l<=12;l++) {
 			if (feF_mech[lc][n][l] != 0)
 			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
 		}
-		printf("\n");  */
+		printf("\n");   */
 	  }					/* end gravity loads */
 
 
@@ -977,7 +977,7 @@ void read_and_assemble_loads(
 			if (feF_mech[lc][n][l] != 0)
 			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
 		}
-		printf("\n");  */
+		printf("\n"); */ 
 	  }				/* end uniformly distributed loads */
 
 	  sfrv=fscanf(fp,"%d", &nW[lc] ); /* trapezoidally distributed loads */

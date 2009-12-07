@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example G: a building with a set-back  (in kip) 
-Thu Dec  3 23:56:34 2009
+Sun Dec  6 21:11:22 2009
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -60,7 +60,7 @@ F R A M E   E L E M E N T   D A T A					(local)
 
 L O A D   C A S E   1   O F   1  ... 
 
-   Gravity X =  0.0    Gravity Y =  0.0    Gravity Z =  -386.399994 
+   Gravity X =  0.0    Gravity Y =  0.0    Gravity Z =  -386.400 
    1 concentrated loads
   12 uniformly distributed loads
    0 trapezoidally distributed loads

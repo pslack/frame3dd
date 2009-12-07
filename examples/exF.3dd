@@ -73,7 +73,7 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 # frame element data ...
 58		# number of frame elements
 #.m j1  j2     Ax   Asy   Asz   Jxx         Iyy       Izz     E      G   roll density
-#             mm^2  mm^2  mm^2  mm^4        mm^4      mm^4    MPa    MPa  deg T/mm^3
+#   .   .     mm^2  mm^2  mm^2  mm^4        mm^4      mm^4    MPa    MPa  deg T/mm^3
 
 1    1  16   2592  1200   900  8.7160e4   10.108e6   1.502e6  200000 79300 0  7.85e-9
 2   16  23   2592  1200   900  8.7160e4   10.108e6   1.502e6  200000 79300 0  7.85e-9

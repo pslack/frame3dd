@@ -1,0 +1,112 @@
+________________________________________________________________________________
+Frame3DD version: 20091203               http://frame3dd.sf.net/
+GPL Copyright (C) 1992-2009, Henri P. Gavin 
+Frame3DD is distributed in the hope that it will be useful but with no warranty.
+For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
+________________________________________________________________________________
+
+Test gravity load features of Frame3DD  kip  in  sec  
+Sun Dec  6 21:15:46 2009
+________________________________________________________________________________
+In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
+________________________________________________________________________________
+    5 JOINTS             1 FIXED JOINTS       4 FRAME ELEMENTS   2 LOAD CASES   
+________________________________________________________________________________
+J O I N T   D A T A                                         R E S T R A I N T S
+  Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
+    1       0.000000       0.000000       0.000000    0.000   1  1  1  1  1  1
+    2      10.000000      10.000000      10.000000    0.000   0  0  0  0  0  0
+    3      40.000000      40.000000      40.000000    0.000   0  0  0  0  0  0
+    4      80.000000      80.000000      80.000000    0.000   0  0  0  0  0  0
+    5     100.000000     100.000000     100.000000    0.000   0  0  0  0  0  0
+F R A M E   E L E M E N T   D A T A					(local)
+  Elmnt  J1    J2     Ax   Asy   Asz    Jxx     Iyy     Izz       E       G roll  density
+    1     1     2   10.0   6.0   6.0  100.0  1000.0  1000.0 100000.0 10000.0   0 1.00e-01
+    2     2     3   10.0   6.0   6.0  100.0  1000.0  1000.0 100000.0 10000.0   0 1.00e-01
+    3     3     4   10.0   6.0   6.0  100.0  1000.0  1000.0 100000.0 10000.0   0 1.00e-01
+    4     4     5   10.0   6.0   6.0  100.0  1000.0  1000.0 100000.0 10000.0   0 1.00e-01
+  Neglect shear deformations.
+  Neglect geometric stiffness.
+
+L O A D   C A S E   1   O F   2  ... 
+
+   Gravity X =  0.0    Gravity Y =  0.0    Gravity Z =  -1.000 
+   0 concentrated loads
+   0 uniformly distributed loads
+   0 trapezoidally distributed loads
+   0 concentrated point loads
+   0 temperature loads
+   0 prescribed displacements
+
+L O A D   C A S E   2   O F   2  ... 
+
+   Gravity X =  0.0    Gravity Y =  0.0    Gravity Z =  0.0 
+   0 concentrated loads
+   4 uniformly distributed loads
+   0 trapezoidally distributed loads
+   0 concentrated point loads
+   0 temperature loads
+   0 prescribed displacements
+ J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
+  Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
+     1       0.000       0.000      -8.660     -14.434      14.434       0.000
+     2       0.000       0.000     -34.641    -115.470     115.470       0.000
+     3       0.000       0.000     -60.622    -101.036     101.036       0.000
+     4       0.000       0.000     -51.962     173.205    -173.205       0.000
+     5       0.000       0.000     -17.321      57.735     -57.735       0.000
+ U N I F O R M   L O A D S						(local)
+  Elmnt       Ux               Uy               Uz
+     1      -0.57735026       0.00000000      -0.81649661
+     2      -0.57735026       0.00000000      -0.81649661
+     3      -0.57735026       0.00000000      -0.81649661
+     4      -0.57735026       0.00000000      -0.81649661
+
+E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
+
+
+L O A D   C A S E   1   O F   2  ... 
+
+J O I N T   D I S P L A C E M E N T S					(global)
+  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+     2    0.006063    0.006063   -0.014975   -0.001355    0.001355    0.0     
+     3    0.088000    0.088000   -0.185600   -0.003920    0.003920    0.0     
+     4    0.270400    0.270400   -0.555200   -0.004960    0.004960    0.0     
+     5    0.370000    0.370000   -0.755000   -0.005000    0.005000    0.0     
+F R A M E   E L E M E N T   E N D   F O R C E S				(local)
+  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
+     1      1    100.000c      0.0      141.421      0.0   -12247.449      0.0  
+     1      2    -90.000c      0.0     -127.279      0.0     9920.434      0.0  
+     2      2     90.000c      0.0      127.279      0.0    -9920.434      0.0  
+     2      3    -60.000c      0.0      -84.853      0.0     4409.082      0.0  
+     3      3     60.000c      0.0       84.853      0.0    -4409.082      0.0  
+     3      4    -20.000c      0.0      -28.284      0.0      489.898      0.0  
+     4      4     20.000c      0.0       28.284      0.0     -489.898      0.0  
+     4      5      0.0         0.0        0.0        0.0        0.0        0.0  
+R E A C T I O N S							(global)
+  Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
+     1       0.0         0.0       173.205    8660.254   -8660.254       0.0  
+R M S   E Q U I L I B R I U M    E R R O R: 1.088e-13
+
+L O A D   C A S E   2   O F   2  ... 
+
+J O I N T   D I S P L A C E M E N T S					(global)
+  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+     2    0.006063    0.006063   -0.014975   -0.001355    0.001355    0.0     
+     3    0.088000    0.088000   -0.185600   -0.003920    0.003920    0.0     
+     4    0.270400    0.270400   -0.555200   -0.004960    0.004960    0.0     
+     5    0.370000    0.370000   -0.755000   -0.005000    0.005000    0.0     
+F R A M E   E L E M E N T   E N D   F O R C E S				(local)
+  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
+     1      1    100.000c      0.0      141.421      0.0   -12247.449      0.0  
+     1      2    -90.000c      0.0     -127.279      0.0     9920.434      0.0  
+     2      2     90.000c      0.0      127.279      0.0    -9920.434      0.0  
+     2      3    -60.000c      0.0      -84.853      0.0     4409.082      0.0  
+     3      3     60.000c      0.0       84.853      0.0    -4409.082      0.0  
+     3      4    -20.000c      0.0      -28.284      0.0      489.898      0.0  
+     4      4     20.000c      0.0       28.284      0.0     -489.898      0.0  
+     4      5      0.0         0.0        0.0        0.0        0.0        0.0  
+R E A C T I O N S							(global)
+  Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
+     1       0.0         0.0       173.205    8660.254   -8660.254       0.0  
+R M S   E Q U I L I B R I U M    E R R O R: 1.175e-13
+

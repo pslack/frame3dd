@@ -25,7 +25,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 
 15			# number of members
 #.m   j1   j2    Ax      Asy   Asz    Jxx    Iyy    Izz    E      G    roll density
-#                in^2    in^2  in^2   in^4   in^4   in^4   ksi    ksi   deg
+#     .    .     in^2    in^2  in^2   in^4   in^4   in^4   ksi    ksi   deg
 
   1    1    2    1100    800   800    1000    500    500   999000 11500 0   7e-7
   2    2    3    1100    800   800    1000    500    500   999000 11500 0   7e-7

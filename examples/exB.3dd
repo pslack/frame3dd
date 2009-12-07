@@ -20,7 +20,7 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 
 4				# number of members			
 #.m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz     E       G   roll density
-#         mm^2  mm^2    mm^2    mm^4    mm^4    mm^4    MPa     MPa  deg T/mm^3
+#   .  .  mm^2  mm^2    mm^2    mm^4    mm^4    mm^4    MPa     MPa  deg T/mm^3
 
 1 1 2	36.0	20.0	20.0	1000 	492 	492	200000	79300  0 7.85e-9
 2 1 3	36.0	20.0	20.0	1000	492 	492	200000	79300  0 7.85e-9
@@ -36,7 +36,7 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 3				# number of static load cases
 				# Begin Static Load Case 1 of 3
 
-0  0  9806.33			# gravity in the X, Y, Z, directions (global)
+0  0  -9806.33			# gravity in the X, Y, Z, directions (global)
 	
 1				# number of loaded joints
 #.J      Fx       Fy     Fz      Mxx     Myy     Mzz
@@ -51,7 +51,7 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 
 				# Begin Static Load Case 2 of 3
 
-0  0  9806.33			# gravity in the X, Y, Z, directions (global)
+0  0  -9806.33			# gravity in the X, Y, Z, directions (global)
 	
 0				# number of loaded joints
 2                               # number of uniform loads
@@ -80,7 +80,7 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 
 				# Begin Static Load Case 3 of 3
 
-0  0  9806.33			# gravity in the X, Y, Z, directions (global)
+0  0  -9806.33			# gravity in the X, Y, Z, directions (global)
 	
 0				# number of loaded joints
 0                               # number of uniform loads

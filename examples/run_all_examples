@@ -1,4 +1,4 @@
-rm *.out
+rm ex*.out
 frame3dd -i exA.3dd -o exA.out 
 frame3dd -i exB.3dd -o exB.out 
 frame3dd -i exC.3dd -o exC.out 

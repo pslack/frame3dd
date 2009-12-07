@@ -30,7 +30,7 @@ Example I: a triangular tower  (kip,in)
 
 24			# number of members
 #.m    j1 j2   Ax  Asy   Asz   Jxx    Iyy   Izz    E      G    p
-#             in^2 in^2  in^2  in^2   in^2  in^2   ksi    ksi  deg
+#      .  .   in^2 in^2  in^2  in^2   in^2  in^2   ksi    ksi  deg
 
  1      1  4  100  60    60    500   1000  1000    9990   3800 0
  2      2  5  100  60    60    500   1000  1000    9990   3800 0

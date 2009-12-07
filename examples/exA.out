@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example A: linear static analysis of a 2D truss with support settlement (kips in)  
-Thu Dec  3 23:56:31 2009
+Sun Dec  6 21:11:19 2009
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -54,7 +54,7 @@ F R A M E   E L E M E N T   D A T A					(local)
 
 L O A D   C A S E   1   O F   2  ... 
 
-   Gravity X =  0.0    Gravity Y =  -386.399994    Gravity Z =  0.0 
+   Gravity X =  0.0    Gravity Y =  -386.400    Gravity Z =  0.0 
    5 concentrated loads
    0 uniformly distributed loads
    0 trapezoidally distributed loads
@@ -82,7 +82,7 @@ L O A D   C A S E   1   O F   2  ...
 
 L O A D   C A S E   2   O F   2  ... 
 
-   Gravity X =  0.0    Gravity Y =  -386.399994    Gravity Z =  0.0 
+   Gravity X =  0.0    Gravity Y =  -386.400    Gravity Z =  0.0 
    3 concentrated loads
    0 uniformly distributed loads
    0 trapezoidally distributed loads
