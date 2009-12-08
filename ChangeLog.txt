@@ -267,19 +267,19 @@ software.
 * Wed Dec 31 2008 Henri Gavin <henri.gavin@duke.edu> 0.20081231
 - Moved rel_norm() from ldl_dcmp.c to frame3dd.c
 - User input variables are now float instead of double
-  ... except for joint location variable (xyz) which is still type vec3
+... except for joint location variable (xyz) which is still type vec3
 
 * Tue Dec 30 2008 Henri Gavin <henri.gavin@duke.edu> 0.20081230
 - The Input Data file format changed in two ways as follows:
-  > Reaction data are listed just after the Member data.
-  > Prescribed displacements are listed separately for each load case.
+> Reaction data are listed just after the Member data.
+> Prescribed displacements are listed separately for each load case.
 - Added comments to src/*.h files
 - Changed "nM" variable name to "nB" ... number of beam elements
 - Changed "modes" variable name to "nM" ... number of dynamic modes
 - Changed "pos" variable name to "xyz" ... joint locations
 - Removed many #include "abc.h" lines from .c source files
-  without affecting the ability to execute or to compile warning-free via  ... 
-    gcc -O -Wall -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
+without affecting the ability to execute or to compile warning-free via  ... 
+gcc -O -Wall -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 - Updated TODO.txt, website, examples, and documentation.
 
 * Fri Dec 12 2008 Henri Gavin <henri.gavin@duke.edu> 0.20081212
@@ -297,29 +297,28 @@ software.
 
 * Mon Dec 01 2008 Henri Gavin <henri.gavin@duke.edu> 0.20081201
 - Removed the redefine of float to double, now all floating point
-  variables are defined as doubles.
-  In a future version variables that can actually be floats, such
-  as variables read from input data files, will be re-defined as floats.
+variables are defined as doubles.
+In a future version variables that can actually be floats, such
+as variables read from input data files, will be re-defined as floats.
 - Support for vec3 is retained througout.
 - Renamed frm_io.c to frame3dd_io.c
 - Renamed frm_io.h to frame3dd_io.h
 - Updated Sconscript with these file name changes
 - Changed getline_no_comment in frame3dd_io.c to support
-  data files with comma-delimited values , with anticipated support
-  for .CSV files
+data files with comma-delimited values , with anticipated support
+for .CSV files
 
 * Mon Oct 13 2008 John Pye <john@curioussymbols.com> 20081013
 - Incorporated Henri's recent changes back into SF.net repository
 - Changed URLs to http://frame3dd.sf.net (which currently redirects to
-  Henri's personal homepage, but proposed to move to SF.net in future)
+Henri's personal homepage, but proposed to move to SF.net in future)
 - Merged support for 'vec3' type in FRAME3DD, first step towards refactoring
-  to some simpler API definitions.
+to some simpler API definitions.
 
 * Tue Sep  9 2008 Henri Gavin <henri.gavin@duke.edu> 20080909
 - Added multiple load case capability
 - Updated web site http://www.duke.edu/~hpgavin/frame/
-  with revised examples and revised instructions for the
-  multiple load case capability
+with revised examples and revised instructions for the multiple load case capability
 
 * Mon Mar 17 2008 John Pye <john@curioussymbols.com>
 - Renamed to 'frame3dd' inline with new SF.net project name.
@@ -327,8 +326,8 @@ software.
 * Fri Mar 14 2008 Henri Gavin <henri.gavin@duke.edu> 20080314
 - Changed name of project from FRAME to FRAME3DD
 - Modified content of project web site ...
-   http://www.duke.edu/~hpgavin/frame/
-  and doc/user-manual.html to reflect change in name. The URL has not changed.
+http://www.duke.edu/~hpgavin/frame/
+and doc/user-manual.html to reflect change in name. The URL has not changed.
 - Updated source files to reflect name change 
 - Renamed src/frame.h to src/frame3dd.h
 - Renamed src/frame.c to src/frame3dd.c
