@@ -150,7 +150,7 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
 Download</a> Frame3DD and save the Frame3DD folder to your Desktop (more details below).
 <li>Optionally, obtain a copy of Gnuplot for your operating system (more details below).
-<li>Open a terminal window, go to the Frame3DD directory, and run the program on one of the examples using a command like ...
+<li>Open a terminal, go to the Frame3DD directory, and run the program on one of the examples using a command like ...
 <pre>
 frame3dd  examples/exE.3dd  examples/exE.out
 </pre>
@@ -194,7 +194,7 @@ You may edit Input Data files using a good plain text editor
  <a href="http://www.jedit.org/index.php">jEdit</a>,
  <a href="http://www.nano-editor.org/">nano</a>,
  <a href="http://www.gnome.org/projects/gedit/">gedit (Linux)</a>,
- <a href="http://www.barebones.com/products/textwrangler/">TextWrangler (OS X)</a>,
+<!-- <a href="http://www.barebones.com/products/textwrangler/">TextWrangler (OS X)</a>, -->
 <!-- 
  <a href="http://emacsformacosx.com/">Emacs for OS X</a>, 
  <a href="http://macvim.org/OSX/index.php">Vim for OS X</a>. 
@@ -464,7 +464,7 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <ol>
 <li> Install a good plain text editor for OS X:
  <a href="http://www.jedit.org/index.php">jEdit</a>, or
- <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>, or
+<!--  <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>, or -->
  <a href="http://macvim.org/OSX/index.php">Vim</a>. 
 A tutorial for Vim is <a href="http://www.jerrywang.net/vi/">here</a>. 
 Alternatively, you may use
@@ -478,10 +478,10 @@ double-click the icon to extract it to your <b>Desktop</b>.
 <li><b>(<i>Recommended</i>)</b>
 Put the <b>Frame3DD</b> directory in your path and set the <b>FRAME3DD_OUTDIR</b> location.<br>
 To do this, open your <b>~/.profile</b> file using your good text editor.<br>
-Using TextEdit, open a terminal <b>Applications > Utilities > Terminal</b> and type: <b>open -a TextEdit .profile</b><br>
-Using jEdit, <b>File > Open </b> and type <b>~/.profile</b> in the <b>File Name:</b> text entry bar.<br>
-Using Vim, <b>File > Open</b> and select <b>.profile</b> from your home directory.<br>
-Using TextWrangler, <b>File > Open Hidden</b> and select <b>.profile</b> from your home directory.<br>
+* Using TextEdit, open a Terminal <b>Applications > Utilities > Terminal</b> and type: <b>open  -a  TextEdit  .profile</b><br>
+* Using jEdit, <b>File > Open </b> and type <b>~/.profile</b> in the <b>File Name:</b> text entry bar.<br>
+* Using Vim, <b>File > Open</b> and select <b>.profile</b> from your home directory.<br>
+<!-- * Using TextWrangler, <b>File > Open Hidden</b> and select <b>.profile</b> from your home directory.<br> -->
 Copy-and-paste the following ten lines into the beginning of <b>~/.profile</b> 
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
@@ -510,11 +510,12 @@ the results of your Frame3DD analysis will have been appended to the end of the
 
 <li>     You may view Output Data files and edit Input Data files using your plain text editor
 (<a href="http://www.jedit.org/index.php">jEdit</a>, 
- <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,
- <a href="http://macvim.org/OSX/index.php">Vim</a>) 
+<!-- <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,-->
+ <a href="http://macvim.org/OSX/index.php">Vim</a>, 
+ <a href="http://support.apple.com/kb/HT2523">TextEdit</a>)
 or a spreadsheet program
 (<a href="http://docs.google.com/">GoogleDocs</a>,
-<a href="http://www.openoffice.org/">OpenOffice</a>).
+<a href="http://www.openoffice.org/">OpenOffice</a>).<br>
 If you use Apple's TextEdit,
 make sure you are in Plain Text mode  ...  [SHIFT] [APPLE] [T] ...  or ...   Format > Make Plain Text ... <br>
 <li>
@@ -574,7 +575,8 @@ and animations until the <b>gnuplot></b> prompt returns.
 <h4> 3.2.2 Compiling the source on OS X</h4>
 
 <ol>
-<li> Install the Xcode development system from your OS X installation DVD.  
+<li> Install the Xcode development system from your OS X installation DVD or
+from <a href="http://developer.apple.com/tools/xcode/">developer.apple.com</a>.
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD source-code tarball (frame3dd-VERSION.tar.bz2)
@@ -650,7 +652,7 @@ using a good plain text editor
  <a href="http://www.vim.org/about.php">gvim</a>),
 or a spreadsheet program
 (<a href="http://docs.google.com/">GoogleDocs</a>,
- <a href="http://www.openoffice.org/">OpenOffice</a>, Excel).   
+ <a href="http://www.openoffice.org/">OpenOffice</a>).
 <li>Run your own Frame3DD analyses within the Command Prompt window using a command like ...
 <pre>
 frame3dd  MyFrame.3dd  MyResultsA.out
