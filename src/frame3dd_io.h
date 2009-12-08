@@ -48,6 +48,7 @@ void parse_options (
 	double *shift_flag,
 	float *pan_flag,
 	int *write_matrix,
+	int *axial_sign, 
 	int *condense_flag,
 	int *verbose,
 	int *debug
@@ -279,7 +280,7 @@ void write_static_results(
 	int nJ, int nE, int nL, int lc, int DoF,
 	int *J1, int *J2,
 	double *F, double *D, int *R, double **Q,
-	double err, int ok
+	double err, int ok, int axial_sign
 );
 
 

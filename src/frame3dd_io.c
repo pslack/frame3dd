@@ -67,6 +67,7 @@ void parse_options (
 	double *shift_flag,
 	float *pan_flag,
 	int *write_matrix,
+	int *axial_sign,
 	int *condense_flag,
 	int *verbose,
 	int *debug
@@ -81,6 +82,7 @@ void parse_options (
 	*exagg_flag = *tol_flag = *shift_flag = -1.0;
 	*pan_flag = *condense_flag = -1.0;
 	*write_matrix = 0;
+	*axial_sign = 1;
 	*debug = 0; *verbose = 1;
 
 	/* set up file names for the the input data and the output data */
@@ -107,7 +109,9 @@ void parse_options (
 	 }
 	}
 
-	while ((option=getopt(argc,argv, "i:o:hvaqcdws:g:e:l:m:t:f:p:r:")) != -1){
+	// remaining unused flags ... b j k n u y z
+
+	while ((option=getopt(argc,argv, "i:o:acdhqvwxs:e:f:g:l:m:p:r:t:")) != -1){
 		switch ( option ) {
 			case 'i':		/* input data file name */
 				strcpy(IN_file,optarg);
@@ -118,10 +122,10 @@ void parse_options (
 			case 'h':		/* help	*/
 				display_help();
 				exit(0);
-			case 'v':		/*version */
+			case 'v':		/* version */
 				display_version();
 				exit(0);
-			case 'a':		/*version */
+			case 'a':		/* about */
 				display_version_about();
 				exit(0);
 			case 'q':		/* quiet */
@@ -135,6 +139,9 @@ void parse_options (
 				break;
 			case 'w':		/* write stiffness and mass */
 				*write_matrix = 1;
+				break;
+			case 'x':		/* write sign of axial forces */
+				*axial_sign = 0;
 				break;
 			case 's':		/* shear deformation */
 				if (strcmp(optarg,"Off")==0)
@@ -275,6 +282,7 @@ void display_help()
  fprintf(stderr,"  -a            display program version, website and exit\n");
  fprintf(stderr,"  -c            data check only - the output data reviews the input data\n");
  fprintf(stderr,"  -w            write stiffness and mass matrices to files named Ks Kd Md\n");
+ fprintf(stderr,"  -x            suppress writing of 't' or 'c' for sign of axial forces\n");
  fprintf(stderr,"  -q            suppress screen output except for warning messages\n");
  fprintf(stderr,"  -s  On|Off    On: include shear deformation or Off: neglect ...\n");
  fprintf(stderr,"  -g  On|Off    On: include geometric stiffness or Off: neglect ...\n");
@@ -335,6 +343,11 @@ void display_version_about()
  fprintf(stderr," Frame3DD version: %s\n", VERSION);
  fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness\n");
  fprintf(stderr," http://frame3dd.sourceforge.net\n");
+ fprintf(stderr," GPL Copyright (C) 1992-2009, Henri P. Gavin \n");
+ fprintf(stderr," Frame3DD is distributed in the hope that it will be useful");
+ fprintf(stderr," but with no warranty.\n");
+ fprintf(stderr," For details see the GNU Public Licence:");
+ fprintf(stderr," http://www.fsf.org/copyleft/gpl.html\n");
 }
 
 
@@ -1884,7 +1897,7 @@ void write_static_results (
 		int nJ, int nE, int nL, int lc, int DoF,
 		int *J1, int *J2,
 		double *F, double *D, int *R, double **Q,
-		double err, int ok
+		double err, int ok, int axial_sign
 ){
 	double	disp;
 	int	i,j,n;
@@ -1924,8 +1937,9 @@ void write_static_results (
 		if ( fabs(Q[n][1]) < 0.0001 )
 			fprintf (fp, "      0.0   ");
 		else    fprintf (fp, " %10.3f", Q[n][1] );
-		if ( Q[n][1] >=  0.0001 ) fprintf(fp, "c");
-		if ( Q[n][1] <= -0.0001 ) fprintf(fp, "t");
+		if ( Q[n][1] >=  0.0001 && axial_sign) fprintf(fp, "c");
+		if ( Q[n][1] <= -0.0001 && axial_sign) fprintf(fp, "t");
+		if (!axial_sign) fprintf(fp," ");
 		for (i=2; i<=6; i++) {
 			if ( fabs(Q[n][i]) < 0.0001 )
 				fprintf (fp, "      0.0  ");
@@ -1936,8 +1950,9 @@ void write_static_results (
 		if ( fabs(Q[n][7]) < 0.0001 )
 			fprintf (fp, "      0.0   ");
 		else    fprintf (fp, " %10.3f", Q[n][7] );
-		if ( Q[n][7] >=  0.0001 ) fprintf(fp, "t");
-		if ( Q[n][7] <= -0.0001 ) fprintf(fp, "c");
+		if ( Q[n][7] >=  0.0001 && axial_sign) fprintf(fp, "t");
+		if ( Q[n][7] <= -0.0001 && axial_sign) fprintf(fp, "c");
+		if (!axial_sign) fprintf(fp," ");
 		for (i=8; i<=12; i++) {
 			if ( fabs(Q[n][i]) < 0.0001 )
 				fprintf (fp, "      0.0  ");

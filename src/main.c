@@ -161,6 +161,7 @@ For compilation/installation, see README.txt.
 		lump_flag = -1,	/*   over-ride input file value		*/
 		modal_flag= -1,	/*   over-ride input file value		*/
 		write_matrix=-1,/*   write stiffness and mass matrix	*/
+		axial_sign=-1,  /*   suppress 't' or 'c' in output data */
 		condense_flag=-1; /* over-ride input file value		*/
 
 	int	sfrv=0;		/* *scanf return value for err checking	*/
@@ -177,7 +178,7 @@ For compilation/installation, see README.txt.
 	parse_options ( argc, argv, IN_file, OUT_file, 
 			&shear_flag, &geom_flag, &anlyz_flag, &exagg_flag, 
 			&lump_flag, &modal_flag, &tol_flag, &shift_flag, 
-			&pan_flag, &write_matrix, &condense_flag, &verbose, &debug);
+			&pan_flag, &write_matrix, &axial_sign, &condense_flag, &verbose, &debug);
 
 	if ( verbose ) {
 		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
@@ -506,7 +507,7 @@ For compilation/installation, see README.txt.
 
 
 		write_static_results ( fp, nJ,nE,nL,lc, DoF, J1,J2, Fo[lc],
-								 D,R,Q, error, ok );
+						 D,R,Q, error, ok, axial_sign );
 
 		if ( filetype == 1 ) {		// .CSV format output
 			write_static_csv(OUT_file, title,

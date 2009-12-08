@@ -1,3 +1,6 @@
+* Tue Dec 8 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+- add "-x" flag to suppress writing of 't' or 'c' characters in the Ouput Data
+
 * Sun Dec 6 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
 - add example/selfweight.3dd to validate gravity load analysis
 

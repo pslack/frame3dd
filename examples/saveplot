@@ -4,8 +4,11 @@
 #   gnuplot>   load 'saveplot'
 #   gnuplot>   !cp  my-plot.ps plotfileA.ps
 set size 1.0, 0.6
+
+# ... for PostScript plots ...
 set terminal postscript portrait enhanced color solid lw 2 "Helvetica" 14 
 set output "my-plot.ps"
+
 replot
 set terminal x11
 set size 1,1

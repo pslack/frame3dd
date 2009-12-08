@@ -433,7 +433,7 @@ void end_forces(
 		for(j=1; j<=12; j++)	Q[i][j] = s[j];
 
 		if ( fabs(axial_strain > 0.001) )
-		 fprintf(stderr," Warning! Frame element %2d has an average axial strain of %6.3f\n", i, axial_strain ); 
+		 fprintf(stderr," Warning! Frame element %2d has an average axial strain of %8.6f\n", i, axial_strain ); 
 
 	}
 
