@@ -1,4 +1,5 @@
 * Tue Dec 8 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+- User Manual instructions on opening .profile using TextEdit
 - add "-x" flag to suppress writing of 't' or 'c' characters in the Ouput Data
 - Change line terminator to CR/LF 
 
