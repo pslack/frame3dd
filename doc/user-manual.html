@@ -382,7 +382,7 @@ Or hit <b>CTRL-C</b> to stop the plots at the current plot.
      gnuplot>  load 'saveplot'
      gnuplot>  !cp my-plot.ps PlotFileA.ps
 </pre>
-<li>After finishing with your plots, you can exit Gnuplot by typing 
+<li>After finishing with your plots, you can exit Gnuplot by typing  ...
 <pre>
      gnuplot>  quit
 </pre>
@@ -538,11 +538,25 @@ install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href=
 -->
 
 <ol>
-<li> From you Mac's Administrator account, first install DarwinPorts, and then install Gnuplot.<br>
-Follow <a href="http://darwinports.com/">these instructions</a> to download and install DarwinPorts.<br>
-Follow <a href="http://gnuplot.darwinports.com/">these instructions</a>
-to download and install Gnuplot 4.2.5 for OS X.<br>
-If this is your first DarwinPorts package installation, it will take several minutes to complete.
+<li> From you Mac's Administrator account, first install Xcode, then install MacPorts, and finally install Gnuplot.<br>
+<ul>
+<li>To install Xcode, go to the
+<a href="http://connect.apple.com/"> Apple Developer Connection (ADC)</a>,
+join ADC to create an account, log in, and then click on <b>Downloads > Developer Tools</b>, and browse for the version of Xcode for your version of OS X.<br>
+For OS X <b>10.4</b> Tiger, install Xcode <b>2.5</b> Developer Tools<br>
+For OS X <b>10.5</b> Leopard, install Xcode <b>3.1.4</b> Developer Tools<br>
+For OS X <b>10.6</b> Snow Leopard, install Xcode <b>3.2.1</b> Developer Tools<br>
+Make sure the "Unix Development" option is selected if installing Xcode 3.1.4 or 3.2.1. 
+<li> To install MacPorts
+for your version of OS X (10.4 Tiger, 10.5 Leopard, or 10.6 Snow Leopard),
+follow <a href="http://www.macports.org/install.php#pkg">
+these instructions</a>.
+<li> To install Gnuplot, open a terminal and type:
+<pre>
+sudo port install gnuplot
+</pre>
+If this is your first MacPorts package installation, it will take several minutes to complete.
+</ul>
 <!--
 <li>        Test that Gnuplot works.
          Open a Terminal window (Applications > Utilities > Terminal) and 
@@ -563,10 +577,14 @@ where <b>MyResultsA.out</b> is the name of of the Output Data file specified
 when running frame3dd.
 <li>Hit the 'Return' key in the Terminal window to see the sequence of plots
 and animations until the <b>gnuplot></b> prompt returns.
-<li>Save or print plots using [APPLE] [P].<br>
-<li>After finishing with your plots, quit Gnuplot by typing ... 
+<li> To save the current plot as a PDF file in the Frame3DD/examples directory, use the <b>saveplot_osx</b> script included in the Frame3DD/examples directory.
 <pre>
-      gnuplot>  quit
+     gnuplot>  load 'saveplot_osx'
+     gnuplot>  !cp my-plot.pdf PlotFileA.pdf
+</pre>
+<li>After finishing with your plots, you can exit Gnuplot by typing  ...
+<pre>
+     gnuplot>  quit
 </pre>
 </ol>
 </p>
@@ -575,9 +593,8 @@ and animations until the <b>gnuplot></b> prompt returns.
 <h4> 3.2.2 Compiling the source on OS X</h4>
 
 <ol>
-<li> Install the Xcode development system from your OS X installation DVD or
-from <a href="http://developer.apple.com/tools/xcode/">developer.apple.com</a>.
-<!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
+<li> Install the Xcode Developer Tools for your version of OS X 
+as described above.  
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> the Frame3DD source-code tarball (frame3dd-VERSION.tar.bz2)
 and save it in your home directory.

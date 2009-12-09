@@ -4,7 +4,7 @@
 #   gnuplot>   load 'saveplot'
 #   gnuplot>   !copy my-plot.ps plotfileA.ps
 set size 1.0, 0.6
-set terminal postscript portrait enhanced color solid lw 2 "Helvetica" 14 
+set terminal postscript portrait enhanced color solid lw 2 "Helvetica" 10 
 set output "my-plot.ps"
 replot
 set terminal windows

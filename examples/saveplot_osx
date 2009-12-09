@@ -1,17 +1,25 @@
-# File name: saveplot 
-#  creates a PostScript file using  Gnuplot version 4.2 on Linux and OS X
+# File name: saveplot_osx
+#  creates a PDF file using  Gnuplot version 4.2 on OS X
 #  to save the current plot as a postscript file issue the commands:
-#   gnuplot>   load 'saveplot'
+#   gnuplot>   load 'saveplot_osx'
 #   gnuplot>   !cp  my-plot.ps plotfileA.ps
-set size 1.0, 0.6
 
-# ... for PostScript plots ...
-set terminal postscript portrait enhanced color solid lw 2 "Helvetica,10" 
-set output "my-plot.ps"
+# set size 1.0, 1.0
+
+set terminal pdf enhanced color solid lw 2 fname "Helvetica,6"
+set output "my-plot.pdf"
 
 replot
 set terminal x11
 set size 1,1
+
+#      set terminal pdf {color | colour | monochrome}
+#                       {enhanced | noenhanced}
+#                       {fname "<fontname>"{,<fontsize>}"}
+#                       {linewidth <linewidth>} {rounded | butt}
+#                       {solid | dashed} {dl <dashlength>}
+#                       {size <XX>{unit},<YY>{unit}}
+
 
 #      set terminal postscript {landscape | portrait | eps}
 #                              {enhanced | noenhanced}

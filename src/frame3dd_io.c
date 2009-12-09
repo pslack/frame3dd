@@ -80,7 +80,7 @@ void parse_options (
 
 	*shear_flag = *geom_flag  = *anlyz_flag = *lump_flag = *modal_flag = -1;
 	*exagg_flag = *tol_flag = *shift_flag = -1.0;
-	*pan_flag = *condense_flag = -1.0;
+	*pan_flag = *condense_flag = 0.0;
 	*write_matrix = 0;
 	*axial_sign = 1;
 	*debug = 0; *verbose = 1;
@@ -1573,7 +1573,7 @@ void read_mass_data(
 
 	sfrv=fscanf ( fp, "%f", pan );
 	if (sfrv != 1) sferr("pan value in mode animation data");
-	if ( pan_flag != -1.0 )	*pan = pan_flag;
+	if ( pan_flag != -0.0 )	*pan = pan_flag;
 
 
 	strcpy(base_file,OUT_file);	
@@ -2654,15 +2654,15 @@ void animate(
 ){
 	FILE	*fpm;
 
-	double x_min = 0, x_max = 0,
-		y_min = 0, y_max = 0,
-		z_min = 0, z_max = 0,
-		rot_x_init = 70,	/* inital x-rotation in 3D animation */
-		rot_x_final = 60,	/* final  x-rotation in 3D animation */
-		rot_z_init = 100,	/* inital z-rotation in 3D animation */
-		rot_z_final = 120,	/* final  z-rotation in 3D animation */
-		zoom_init = 1.1,	/* inital zoom scale in 3D animation */
-		zoom_final = 1.1,	/* final  zoom scale in 3D animation */
+	double	x_min = 0.0, x_max = 0.0,
+		y_min = 0.0, y_max = 0.0,
+		z_min = 0.0, z_max = 0.0,
+		rot_x_init  =  70.0,	/* inital x-rotation in 3D animation */
+		rot_x_final =  60.0,	/* final  x-rotation in 3D animation */
+		rot_z_init  = 100.0,	/* inital z-rotation in 3D animation */
+		rot_z_final = 120.0,	/* final  z-rotation in 3D animation */
+		zoom_init  = 1.1,	/* inital zoom scale in 3D animation */
+		zoom_final = 1.2,	/* final  zoom scale in 3D animation */
 		frames = 25,	/* number of frames in animation	*/
 		ex=10,		/* an exageration factor, for animation */
 		*v;
@@ -2698,6 +2698,13 @@ void animate(
 	 if ( i==0 ) {
 
 	   fprintf(fpm,"\n# --- M O D E   S H A P E   A N I M A T I O N ---\n");
+	   fprintf(fpm,"# rot_x_init  = %7.2f\n", rot_x_init ); 
+	   fprintf(fpm,"# rot_x_final = %7.2f\n", rot_x_final ); 
+	   fprintf(fpm,"# rot_z_init  = %7.2f\n", rot_z_init ); 
+	   fprintf(fpm,"# rot_z_final = %7.2f\n", rot_z_final ); 
+	   fprintf(fpm,"# zoom_init   = %7.2f\n", zoom_init ); 
+	   fprintf(fpm,"# zoom_final  = %7.2f\n", zoom_init );
+	   fprintf(fpm,"# pan rate    = %7.2f \n", pan );
 	   fprintf(fpm,"set noborder\n");
 	   fprintf(fpm,"set nozeroaxis\n");
 	   fprintf(fpm,"set autoscale\n");
@@ -2735,6 +2742,8 @@ void animate(
 	 for ( c=1; c <= CYCLES; c++ ) {
 	  for ( fr=0; fr<=frames; fr++ ) {
 
+	    ++frame_number;
+
 	    sprintf(modefl,"%s-%02d.%03d", modepath, m, fr  );
 	    sprintf(framefl,"%s-%02d-f-%03d.ps", modepath, m, fr  );
 
@@ -2743,10 +2752,10 @@ void animate(
 	 	fprintf(fpm," '%s' u 1:2 w l lw 2 lt 3 ;", modefl );
 	    } else {
 	      if ( pan != 0.0 )
-		fprintf(fpm,"%c set view %5.1f, %5.1f, %4.2f \n", D3,
-		rot_x_init + pan*(rot_x_final-rot_x_init)*frame_number/total_frames,
-		rot_z_init + pan*(rot_z_final-rot_z_init)*frame_number/total_frames,
-		zoom_init + pan*(zoom_final-zoom_init)*frame_number/total_frames );
+		fprintf(fpm,"%c set view %7.2f, %7.2f, %5.3f # pan = %f\n", D3,
+		rot_x_init + pan*(rot_x_final-rot_x_init)*(float)frame_number/total_frames,
+		rot_z_init + pan*(rot_z_final-rot_z_init)*(float)frame_number/total_frames,
+		zoom_init + pan*(zoom_final-zoom_init)*(float)frame_number/total_frames, pan );
 	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshpath);
 	      fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
 	    }
@@ -2757,6 +2766,8 @@ void animate(
 	  }
 	  for ( fr = frames-1; fr > 0; fr-- ) {
 
+	    ++frame_number;
+
 	    sprintf(modefl,"%s-%02d.%03d", modepath, m, fr  );
 	    sprintf(framefl,"%s-%02d-f-%03d.ps", modepath, m, fr  );
 
@@ -2765,10 +2776,10 @@ void animate(
 		fprintf(fpm," '%s' u 1:2 w l lw 2 lt 3;", modefl );
 	    } else {
 	      if ( pan != 0.0 )
-		fprintf(fpm,"%c set view %5.1f, %5.1f, %4.2f \n", D3,
-		rot_x_init + pan*(rot_x_final-rot_x_init)*frame_number/total_frames,
-		rot_z_init + pan*(rot_z_final-rot_z_init)*frame_number/total_frames,
-		zoom_init + pan*(zoom_final-zoom_init)*frame_number/total_frames );
+		fprintf(fpm,"%c set view %7.2f, %7.2f, %5.3f # pan = %f\n", D3,
+		rot_x_init + pan*(rot_x_final-rot_x_init)*(float)frame_number/total_frames,
+		rot_z_init + pan*(rot_z_final-rot_z_init)*(float)frame_number/total_frames,
+		zoom_init + pan*(zoom_final-zoom_init)*(float)frame_number/total_frames, pan );
 	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshpath);
 	      fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
 	    }
