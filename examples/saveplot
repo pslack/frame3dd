@@ -3,7 +3,8 @@
 #  to save the current plot as a postscript file issue the commands:
 #   gnuplot>   load 'saveplot'
 #   gnuplot>   !cp  my-plot.ps plotfileA.ps
-set size 1.0, 0.6
+
+# set size 1.0, 0.6
 
 # ... for PostScript plots ...
 set terminal postscript portrait enhanced color solid lw 2 "Helvetica,10" 

@@ -2654,7 +2654,7 @@ void animate(
 ){
 	FILE	*fpm;
 
-	double	x_min = 0.0, x_max = 0.0,
+	float	x_min = 0.0, x_max = 0.0,
 		y_min = 0.0, y_max = 0.0,
 		z_min = 0.0, z_max = 0.0,
 		rot_x_init  =  70.0,	/* inital x-rotation in 3D animation */
@@ -2663,8 +2663,9 @@ void animate(
 		rot_z_final = 120.0,	/* final  z-rotation in 3D animation */
 		zoom_init  = 1.1,	/* inital zoom scale in 3D animation */
 		zoom_final = 1.2,	/* final  zoom scale in 3D animation */
-		frames = 25,	/* number of frames in animation	*/
-		ex=10,		/* an exageration factor, for animation */
+		frames = 25;	/* number of frames in animation	*/
+
+	double	ex=10,		/* an exageration factor, for animation */
 		*v;
 
 	int	fr, i,j, m,n, X=0, Y=0, Z=0, c, CYCLES=3,
@@ -2753,9 +2754,9 @@ void animate(
 	    } else {
 	      if ( pan != 0.0 )
 		fprintf(fpm,"%c set view %7.2f, %7.2f, %5.3f # pan = %f\n", D3,
-		rot_x_init + pan*(rot_x_final-rot_x_init)*(float)frame_number/total_frames,
-		rot_z_init + pan*(rot_z_final-rot_z_init)*(float)frame_number/total_frames,
-		zoom_init + pan*(zoom_final-zoom_init)*(float)frame_number/total_frames, pan );
+		rot_x_init + pan*(rot_x_final-rot_x_init)*frame_number/total_frames,
+		rot_z_init + pan*(rot_z_final-rot_z_init)*frame_number/total_frames,
+		zoom_init + pan*(zoom_final-zoom_init)*frame_number/total_frames, pan );
 	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshpath);
 	      fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
 	    }
@@ -2777,9 +2778,9 @@ void animate(
 	    } else {
 	      if ( pan != 0.0 )
 		fprintf(fpm,"%c set view %7.2f, %7.2f, %5.3f # pan = %f\n", D3,
-		rot_x_init + pan*(rot_x_final-rot_x_init)*(float)frame_number/total_frames,
-		rot_z_init + pan*(rot_z_final-rot_z_init)*(float)frame_number/total_frames,
-		zoom_init + pan*(zoom_final-zoom_init)*(float)frame_number/total_frames, pan );
+		rot_x_init + pan*(rot_x_final-rot_x_init)*frame_number/total_frames,
+		rot_z_init + pan*(rot_z_final-rot_z_init)*frame_number/total_frames,
+		zoom_init + pan*(zoom_final-zoom_init)*frame_number/total_frames, pan );
 	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshpath);
 	      fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
 	    }

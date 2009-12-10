@@ -6,7 +6,7 @@
 
 # set size 1.0, 1.0
 
-set terminal pdf enhanced color solid lw 2 fname "Helvetica,6"
+set terminal pdf color enhanced fname "Helvetica,6" lw 2 solid
 set output "my-plot.pdf"
 
 replot
