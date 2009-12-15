@@ -1,4 +1,7 @@
-* Tue Dec 8 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+*Tue Dec 15 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+- Add doc/img/Sketchup-Frame1.jpg and doc/img/Sketchup-Trailer1.jpg
+
+*Tue Dec 8 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
 - Remove TextWrangler suggestion from user manual
 - User Manual instructions on opening .profile using TextEdit
 - add "-x" flag to suppress writing of 't' or 'c' characters in the Ouput Data
