@@ -1,5 +1,6 @@
 *Tue Dec 15 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
 - Add doc/img/Sketchup-Frame1.jpg and doc/img/Sketchup-Trailer1.jpg
+- Add doc/img/exp_ansys_gavin.png
 
 *Tue Dec 8 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
 - Remove TextWrangler suggestion from user manual
