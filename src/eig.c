@@ -681,7 +681,7 @@ int sturm(
 		fprintf(stderr," Try increasing the number of modes in \n");
 		fprintf(stderr," order to get the missing modes below %f Hz.\n",
 							sqrt(ws)/(2.0*PI) );
-	} else if ( verbose )  printf(" ... all %d modes were found.\n",modes);
+	} else if ( verbose )  printf("  All %d modes were found.\n",modes);
 
 	for (i=1; i<=n; i++) for (j=i; j<=n; j++) K[i][j] += ws_shift*M[i][j];
 

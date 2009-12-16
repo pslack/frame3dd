@@ -1,6 +1,6 @@
 # !bin/bash
 #
-# dist-zip.sh
+# zipdist.sh
 # assemble .ZIP files for Frame3dd executable and source distribution release
 
 export VERSION=20091203
@@ -140,6 +140,6 @@ rm -rf Frame3DD
 #
 # rsync -uav *.bz2  hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20091203/.
 
-# ----------------------------------------------------------- dist-zip.sh
+# ----------------------------------------------------------- zipdist.sh
 # Henri P. Gavin  2009.10.20
 # updated: 2009.10.22, 2009.10.25, 2009.10.27, 2009.10.29

@@ -89,8 +89,8 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
 14                              # number of desired dynamic modes of vibration
 1                               # 1: subspace Jacobi     2: Stodola
 0                               # 0: consistent mass ... 1: lumped mass matrix
-5e-5                            # mode shape tolerance
-1.00                            # shift value ... for unrestrained structures
+1e-6                            # mode shape tolerance
+10.00                           # shift value ... for unrestrained structures
 20.0                            # exaggerate modal mesh deformations
 
 0                       # number of joints with extra mass or inertia

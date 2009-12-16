@@ -222,7 +222,7 @@ For compilation/installation, see README.txt.
 	sfrv=fscanf(fp, "%d", &nJ );		/* number of joints	*/
 	if (sfrv != 1)	sferr("nJ value for number of joints");
 	if ( verbose ) {
-	 printf(" number of joints "); dots(stdout,35); printf(" nJ = %3d ",nJ);
+	 printf(" number of joints "); dots(stdout,35); printf(" nJ =%4d ",nJ);
 	}
 
 					/* allocate memory for joint data ... */
@@ -241,10 +241,10 @@ For compilation/installation, see README.txt.
 	sfrv=fscanf(fp, "%d", &nE );	/* number of frame elements	*/
 	if (sfrv != 1)	sferr("nE value for number of frame elements");
 	if ( verbose ) {
-	 printf(" number of frame elements"); dots(stdout,28); printf(" nE = %3d ",nE);
+	 printf(" number of frame elements"); dots(stdout,28); printf(" nE =%4d ",nE);
 	}
 	if ( nJ > nE + 1) {
-		fprintf(stderr,"warning: %d joints and %d members...", nJ, nE );
+		fprintf(stderr,"\n  warning: %d joints and %d members...", nJ, nE );
 		fprintf(stderr," not enough members to connect all joints.\n");
     	}
 
@@ -544,7 +544,7 @@ For compilation/installation, see README.txt.
 
 	if(nM > 0){ /* modal analysis */
 
-		if ( verbose ) printf("\n Modal Analysis ...\n");
+		if ( verbose ) printf("\n\n Modal Analysis ...\n");
 
 		nM_calc = (nM+8)<(2*nM) ? nM+8 : 2*nM;
 

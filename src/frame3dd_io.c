@@ -396,14 +396,14 @@ void read_frame_element_data(
 		sfrv=fscanf(fp, "%d", &b );
 		if (sfrv != 1) sferr("frame element number in element data");
 		if ( b <= 0 || b > nE ) {
-		    fprintf(stderr,"  error in frame element property data: Element number out of range  ");
+		    fprintf(stderr,"\n  error in frame element property data: Element number out of range  ");
 		    fprintf(stderr,"  Frame element number: %d  \n", b);
 		    exit(1);
 		}
 		sfrv=fscanf(fp, "%d %d", &J1[b], &J2[b] );
 		if (sfrv != 2) sferr("joint numbers in frame element data");
 		if ( J1[b] <= 0 || J1[b] > nJ || J2[b] <= 0 || J2[b] > nJ ) {
-		    fprintf(stderr,"  error in frame element property data: joint number out of range  ");
+		    fprintf(stderr,"\n  error in frame element property data: joint number out of range  ");
 		    fprintf(stderr,"  Frame element number: %d \n", b);
 		    exit(1);
 		}
@@ -423,37 +423,37 @@ void read_frame_element_data(
 
 		if ( Ax[b] < 0 || Asy[b] < 0 || Asz[b] < 0 ||
 		      J[b] < 0 ||  Iy[b] < 0 ||  Iz[b] < 0	) {
-		 fprintf(stderr,"  error in frame element property data: section property < 0  ");
+		 fprintf(stderr,"\n  error in frame element property data: section property < 0  ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
 		 exit(1);
 		}
 		if ( Ax[b] == 0 ) {
-		 fprintf(stderr,"  error in frame element property data: cross section area is zero   ");
+		 fprintf(stderr,"\n  error in frame element property data: cross section area is zero   ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
 		 exit(1);
 		}
 		if ( (Asy[b] == 0 || Asz[b] == 0) && G[b] == 0 ) {
-		 fprintf(stderr,"  error in frame element property data: a shear area and shear modulus are zero   ");
+		 fprintf(stderr,"\n  error in frame element property data: a shear area and shear modulus are zero   ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
 		 exit(1);
 		}
 		if ( J[b] == 0 ) {
-		 fprintf(stderr,"  error in frame element property data: torsional moment of inertia is zero   ");
+		 fprintf(stderr,"\n  error in frame element property data: torsional moment of inertia is zero   ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
 		 exit(1);
 		}
 		if ( Iy[b] == 0 || Iz[b] == 0 ) {
-		 fprintf(stderr,"  error: cross section bending moment of inertia is zero   ");
+		 fprintf(stderr,"\n  error: cross section bending moment of inertia is zero   ");
 		 fprintf(stderr,"  Frame element number : %d  \n", b);
 		 exit(1);
 		}
 		if ( E[b] <= 0 || G[b] <= 0 ) {
-		 fprintf(stderr,"  error : material elastic modulus E or G is not positive   ");
+		 fprintf(stderr,"\n  error : material elastic modulus E or G is not positive   ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
 		 exit(1);
 		}
 		if ( d[b] <= 0 ) {
-		 fprintf(stderr,"  error : mass density d is not positive   ");
+		 fprintf(stderr,"\n  error : mass density d is not positive   ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
 		 exit(1);
 		}
@@ -738,13 +738,13 @@ void read_reaction_data (
 	if ( verbose ) {
 		printf(" number of joints with reactions ");
 		dots(stdout,20);
-		printf(" nR = %3d ", *nR );
+		printf(" nR =%4d ", *nR );
 	}
 	if ( *nR < 0 || *nR > DoF/6 ) {
 		fprintf(stderr," number of joints with reactions ");
 		dots(stderr,20);
 		fprintf(stderr," nR = %3d ", *nR );
-		fprintf(stderr,"  error: valid ranges for nR is 0 ... %d \n", DoF/6 );
+		fprintf(stderr,"\n  error: valid ranges for nR is 0 ... %d \n", DoF/6 );
 		exit(1);
 	}
 
@@ -757,11 +757,11 @@ void read_reaction_data (
 		if (sfrv != 1) sferr("reaction value in reaction data");
 
 		if ( j > nJ ) {
-		    fprintf(stderr,"  error in reaction data: joint number %d is greater than the number of joints, %d \n", j, nJ );
+		    fprintf(stderr,"\n  error in reaction data: joint number %d is greater than the number of joints, %d \n", j, nJ );
 		    exit(1);
 		}
 		if ( R[6*j-l] != 0 && R[6*j-l] != 1 ) {
-		    fprintf(stderr,"  error in reaction data: Reaction data must be 0 or 1\n");
+		    fprintf(stderr,"\n  error in reaction data: Reaction data must be 0 or 1\n");
 		    fprintf(stderr,"  Data for joint %d, DoF %d is %d\n",
 							j, 6-l, R[6*j-l] );
 		    exit(1);
@@ -770,7 +770,7 @@ void read_reaction_data (
 	    *sumR = 0;
 	    for (l=5; l >=0; l--) 	*sumR += R[6*j-l];
 	    if ( *sumR == 0 ) {
-		fprintf(stderr,"  error: joint %3d has no reactions\n", j);
+		fprintf(stderr,"\n  error: joint %3d has no reactions\n", j);
 		fprintf(stderr,"  Remove joint %3d from the list of reactions\n", j);
 		fprintf(stderr,"  and set nR to %3d \n", *nR-1);
 		exit(1);
@@ -778,13 +778,13 @@ void read_reaction_data (
 	}
 	*sumR=0;	for (i=1;i<=DoF;i++)	*sumR += R[i];
 	if ( *sumR < 4 ) {
-	    fprintf(stderr,"  warning:  Un-restrained structure\n");
+	    fprintf(stderr,"\n  Warning:  un-restrained structure ");
 	    fprintf(stderr,"  %d imposed reactions.\n", *sumR );
 	    fprintf(stderr,"  At least 4 reactions are required to support static loads.\n");
 	    /*	exit(1); */
 	}
 	if ( *sumR >= DoF ) {
-	    fprintf(stderr,"  error in reaction data:  Fully restrained structure\n");
+	    fprintf(stderr,"\n  error in reaction data:  Fully restrained structure\n");
 	    fprintf(stderr,"  %d imposed reactions >= %d degrees of freedom\n",
 								*sumR, DoF );
 	    exit(1);
@@ -901,7 +901,7 @@ void read_and_assemble_loads(
 		sfrv=fscanf(fp,"%d", &j);
 		if (sfrv != 1) sferr("joint value in point load data");
 		if ( j < 1 || j > nJ ) {
-		    fprintf(stderr,"  error in joint load data: joint number out of range  ");
+		    fprintf(stderr,"\n  error in joint load data: joint number out of range  ");
 		    fprintf(stderr,"  Joint: %d  \n", j);
 		    fprintf(stderr,"  Perhaps you did not specify %d joint loads \n", nF[lc] );
 		   fprintf(stderr,
@@ -915,7 +915,7 @@ void read_and_assemble_loads(
 		}
 
 		if ( F_mech[lc][6*j-5]==0 && F_mech[lc][6*j-4]==0 && F_mech[lc][6*j-3]==0 && F_mech[lc][6*j-2]==0 && F_mech[lc][6*j-1]==0 && F_mech[lc][6*j]==0 )
-		    fprintf(stderr,"   warning: All joint loads applied at joint %d  are zero\n", j );
+		    fprintf(stderr,"\n   Warning: All joint loads applied at joint %d  are zero\n", j );
 	  }					/* end joint point loads  */
 
 	  sfrv=fscanf(fp,"%d", &nU[lc] );	/* uniformly distributed loads */
@@ -929,14 +929,14 @@ void read_and_assemble_loads(
 		fprintf(stderr,"  number of uniformly distributed loads ");
 	  	dots(stderr,13);
 	  	fprintf(stderr," nU = %3d\n", nU[lc]);
-		fprintf(stderr,"  error: valid ranges for nU is 0 ... %d \n", nE );
+		fprintf(stderr,"\n  error: valid ranges for nU is 0 ... %d \n", nE );
 		exit(1);
 	  }
 	  for (i=1; i <= nU[lc]; i++) {	/* ! local element coordinates ! */
 		sfrv=fscanf(fp,"%d", &n );
 	  	if (sfrv != 1) sferr("frame element number in uniform load data");
 		if ( n < 1 || n > nE ) {
-		    fprintf(stderr,"  error in uniform distributed loads: element number %d is out of range\n",n);
+		    fprintf(stderr,"\n  error in uniform distributed loads: element number %d is out of range\n",n);
 		    exit(1);
 		}
 		U[lc][i][1] = (double) n;
@@ -946,7 +946,7 @@ void read_and_assemble_loads(
 		}
 
 		if ( U[lc][i][2]==0 && U[lc][i][3]==0 && U[lc][i][4]==0 )
-		    fprintf(stderr,"   warning: All distributed loads applied to frame element %d  are zero\n", n );
+		    fprintf(stderr,"\n   Warning: All distributed loads applied to frame element %d  are zero\n", n );
 
 		Nx1 = Nx2 = U[lc][i][2]*Le[n] / 2.0;
 		Vy1 = Vy2 = U[lc][i][3]*Le[n] / 2.0;
@@ -1001,14 +1001,14 @@ void read_and_assemble_loads(
 	  	printf(" nW = %3d\n", nW[lc]);
 	  }
 	  if ( nW[lc] < 0 || nW[lc] > 10*nE ) {
-		fprintf(stderr,"  error: valid ranges for nW is 0 ... %d \n", 10*nE );
+		fprintf(stderr,"\n  error: valid ranges for nW is 0 ... %d \n", 10*nE );
 		exit(1);
 	  }
 	  for (i=1; i <= nW[lc]; i++) {	/* ! local element coordinates ! */
 		sfrv=fscanf(fp,"%d", &n );
 	  	if (sfrv != 1) sferr("frame element number in uniform load data");
 		if ( n < 1 || n > nE ) {
-		    fprintf(stderr,"  error in uniform distributed loads: element number %d is out of range\n",n);
+		    fprintf(stderr,"\n  error in uniform distributed loads: element number %d is out of range\n",n);
 		    exit(1);
 		}
 		W[lc][i][1] = (double) n;
@@ -1024,60 +1024,60 @@ void read_and_assemble_loads(
 		if ( W[lc][i][ 4]==0 && W[lc][i][ 5]==0 &&
 		     W[lc][i][ 7]==0 && W[lc][i][ 8]==0 &&
 		     W[lc][i][12]==0 && W[lc][i][13]==0 ) {
-		  fprintf(stderr,"   warning: All trapezoidal loads applied to frame element %d  are zero\n", n );
+		  fprintf(stderr,"\n   Warning: All trapezoidal loads applied to frame element %d  are zero\n", n );
 		  fprintf(stderr,"     load case: %d , element %d , load %d\n ", lc, n, i );
 		}
 
 		if ( W[lc][i][ 2] < 0 ) {
-		  fprintf(stderr,"   error in x-axis trapezoidal loads, ");
+		  fprintf(stderr,"\n   error in x-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][2]);
 		  exit(1);
 		}
 		if ( W[lc][i][ 2] > W[lc][i][3] ) {
-		  fprintf(stderr,"   error in x-axis trapezoidal loads, ");
+		  fprintf(stderr,"\n   error in x-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][2], W[lc][i][3] );
 		  exit(1);
 		}
 		if ( W[lc][i][ 3] > Ln ) {
-		  fprintf(stderr,"   error in x-axis trapezoidal loads, ");
+		  fprintf(stderr,"\n   error in x-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][3], Ln );
 		  exit(1);
 		}
 		if ( W[lc][i][ 6] < 0 ) {
-		  fprintf(stderr,"   error in y-axis trapezoidal loads, ");
+		  fprintf(stderr,"\n   error in y-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][6]);
 		  exit(1);
 		}
 		if ( W[lc][i][ 6] > W[lc][i][7] ) {
-		  fprintf(stderr,"   error in y-axis trapezoidal loads, ");
+		  fprintf(stderr,"\n   error in y-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][6], W[lc][i][7] );
 		  exit(1);
 		}
 		if ( W[lc][i][ 7] > Ln ) {
-		  fprintf(stderr,"   error in y-axis trapezoidal loads, ");
+		  fprintf(stderr,"\n   error in y-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][7],Ln );
 		  exit(1);
 		}
 		if ( W[lc][i][10] < 0 ) {
-		  fprintf(stderr,"   error in z-axis trapezoidal loads, ");
+		  fprintf(stderr,"\n   error in z-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][10]);
 		  exit(1);
 		}
 		if ( W[lc][i][10] > W[lc][i][11] ) {
-		  fprintf(stderr,"   error in z-axis trapezoidal loads, ");
+		  fprintf(stderr,"\n   error in z-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][10], W[lc][i][11] );
 		  exit(1);
 		}
 		if ( W[lc][i][11] > Ln ) {
-		  fprintf(stderr,"   error in z-axis trapezoidal loads, ");
+		  fprintf(stderr,"\n   error in z-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][11], Ln );
 		  exit(1);
@@ -1200,14 +1200,14 @@ void read_and_assemble_loads(
 	  	fprintf(stderr,"  number of concentrated frame element point loads ");
 	  	dots(stderr,3);
 	  	fprintf(stderr," nP = %3d\n", nP[lc]);
-		fprintf(stderr,"  error: valid ranges for nP is 0 ... %d \n", nE );
+		fprintf(stderr,"\n  error: valid ranges for nP is 0 ... %d \n", nE );
 		exit(1);
 	  }
 	  for (i=1; i <= nP[lc]; i++) {	/* ! local element coordinates ! */
 		sfrv=fscanf(fp,"%d", &n );
 		if (sfrv != 1) sferr("frame element number value point load data");
 		if ( n < 1 || n > nE ) {
-		    fprintf(stderr,"   error in internal point loads: frame element number %d is out of range\n",n);
+		    fprintf(stderr,"\n   error in internal point loads: frame element number %d is out of range\n",n);
 		    exit(1);
 		}
 		P[lc][i][1] = (double) n;
@@ -1218,7 +1218,7 @@ void read_and_assemble_loads(
 		a = P[lc][i][5];	b = L[n] - a;
 
 		if ( a < 0 || L[n] < a || b < 0 || L[n] < b ) {
-		    fprintf(stderr,"  error in point load data: Point load coord. out of range\n");
+		    fprintf(stderr,"\n  error in point load data: Point load coord. out of range\n");
 		    fprintf(stderr,"  Frame element number: %d  L: %lf  load coord.: %lf\n",
 							n, L[n], P[lc][i][5] );
 		    exit(1);
@@ -1288,14 +1288,14 @@ void read_and_assemble_loads(
 	  	fprintf(stderr,"  number of temperature changes ");
 	  	dots(stderr,21);
 	  	fprintf(stderr," nT = %3d\n", nT[lc] );
-		fprintf(stderr,"  error: valid ranges for nT is 0 ... %d \n", nE );
+		fprintf(stderr,"\n  error: valid ranges for nT is 0 ... %d \n", nE );
 		exit(1);
 	  }
 	  for (i=1; i <= nT[lc]; i++) {	/* ! local element coordinates ! */
 		sfrv=fscanf(fp,"%d", &n );
 		if (sfrv != 1) sferr("frame element number in temperature load data");
 		if ( n < 1 || n > nE ) {
-		    fprintf(stderr,"  error in temperature loads: frame element number %d is out of range\n",n);
+		    fprintf(stderr,"\n  error in temperature loads: frame element number %d is out of range\n",n);
 		    exit(1);
 		}
 		T[lc][i][1] = (double) n;
@@ -1308,7 +1308,7 @@ void read_and_assemble_loads(
 		hz = T[lc][i][4];
 
 		if ( hy < 0 || hz < 0 ) {
-		    fprintf(stderr,"  error in thermal load data: section dimension < 0\n");
+		    fprintf(stderr,"\n  error in thermal load data: section dimension < 0\n");
 		    fprintf(stderr,"  Frame element number: %d  hy: %f  hz: %f\n", n,hy,hz);
 		    exit(1);
 		}
@@ -1450,7 +1450,7 @@ void read_mass_data(
 	FILE	*mf;				// mass data file
 	mf = fopen("MassData.txt","w");		// open mass data file
 	if ((mf = fopen ("MassData.txt", "w")) == NULL) {
-	  fprintf (stderr," error: cannot open file 'MassData.txt'\n");
+	  fprintf (stderr,"\n  error: cannot open file 'MassData.txt'\n");
 	  exit(1);
 	}
 	fprintf(mf,"%% structural mass data \n");
@@ -1483,7 +1483,7 @@ void read_mass_data(
 		sfrv=fscanf(fp, "%d", &jnt );
 		if (sfrv != 1) sferr("joint value in extra joint mass data");
 		if ( jnt < 1 || jnt > nJ ) {
-	    		fprintf(stderr,"  error in joint mass data: joint number out of range  ");
+	    		fprintf(stderr,"\n  error in joint mass data: joint number out of range  ");
 	    		fprintf(stderr,"  Joint: %d  \n", jnt );
 	    		fprintf(stderr,"  Perhaps you did not specify %d extra masses \n", *nI );
 			fprintf(stderr,
@@ -1496,7 +1496,7 @@ void read_mass_data(
 		*total_mass += JMs[jnt];
 
 		if ( JMs[jnt]==0 && JMx[jnt]==0 && JMy[jnt]==0 && JMz[jnt]==0 )
-	    	fprintf(stderr,"  warning: All extra joint inertia at joint %d  are zero\n", jnt );
+	    	fprintf(stderr,"\n  Warning: All extra joint inertia at joint %d  are zero\n", jnt );
 	}
 
 	/* number of frame elements with extra beam mass */
@@ -1512,7 +1512,7 @@ void read_mass_data(
 		sfrv=fscanf(fp, "%d", &b );
 		if (sfrv != 1) sferr("element number in extra element mass data");
 		if ( b < 1 || b > nE ) {
-	    		fprintf(stderr,"  error in element mass data: element number out of range  ");
+	    		fprintf(stderr,"\n  error in element mass data: element number out of range  ");
 	    		fprintf(stderr,"  Element: %d  \n", b );
 	    		fprintf(stderr,"  Perhaps you did not specify %d extra masses \n", *nX );
 			fprintf(stderr,
@@ -1540,7 +1540,7 @@ void read_mass_data(
 
 	for (m=1;m<=nE;m++) {			/* check inertia data	*/
 	    if ( d[m] < 0.0 || BMs[m] < 0.0 || d[m]+BMs[m] <= 0.0 ) {
-		fprintf(stderr,"  error: Non-positive mass or density\n");
+		fprintf(stderr,"\n  error: Non-positive mass or density\n");
 		fprintf(stderr,"  d[%d]= %f  BMs[%d]= %f\n",m,d[m],m,BMs[m]);
 		exit(1);
 	    }
@@ -1647,7 +1647,7 @@ void read_condensation_data (
 	}
 
 	if ( (*nC) > nJ ) {
-	  fprintf(stderr," error in matrix condensation data: \n");
+	  fprintf(stderr,"\n  error in matrix condensation data: \n");
 	  fprintf(stderr,"  error: nC > nJ ... nC=%d; nJ=%d;\n",*nC,nJ);
 	  fprintf(stderr,"  The number of joints with condensed DoF's ");
 	  fprintf(stderr,"may not exceed the total number of joints.\n");
@@ -1662,8 +1662,8 @@ void read_condensation_data (
 	 &qm[i][2], &qm[i][3], &qm[i][4], &qm[i][5], &qm[i][6], &qm[i][7]);
 	 if (sfrv != 7) sferr("DoF numbers in condensation data");
 	 if ( qm[i][1] < 1 || qm[i][1] > nJ ) {		/* error check */
-	  fprintf(stderr," error in matrix condensation data: ");
-	  fprintf(stderr," condensed joint number out of range\n");
+	  fprintf(stderr,"\n  error in matrix condensation data: ");
+	  fprintf(stderr,"\n  condensed joint number out of range\n");
 	  fprintf(stderr,"  cj[%d] = %d  ... nJ = %d  \n", i, qm[i][1], nJ );
 	  exit(1);
 	 }
@@ -1685,8 +1685,8 @@ void read_condensation_data (
 	 sfrv=fscanf( fp, "%d", &m[i] );
 	 if (sfrv != 1) sferr("mode number in condensation data");
 	 if ( (m[i] < 0 || m[i] > nM) && *Cmethod == 3 ) {
-	  fprintf(stderr," error in matrix condensation data: \n");
-	  fprintf(stderr,"  error: m[%d] = %d \n",i,m[i]);
+	  fprintf(stderr,"\n  error in matrix condensation data: \n");
+	  fprintf(stderr,"\n  error: m[%d] = %d \n",i,m[i]);
 	  fprintf(stderr,"  The condensed mode number must be between ");
 	  fprintf(stderr,"  1 and %d (modes).\n", nM);
 	  exit(1);
@@ -2027,7 +2027,7 @@ void write_static_csv(
 	if (lc == 1) wa = "w";
 
 	if ((fpcsv = fopen (CSV_file, wa)) == NULL) {
-	  fprintf (stderr," error: cannot open CSV file %s\n", CSV_file);
+	  fprintf (stderr,"\n  error: cannot open CSV file %s\n", CSV_file);
 	  exit(1);
 	}
 
@@ -2174,7 +2174,7 @@ void write_static_mfile (
 	if (lc == 1) wa = "w";
 
 	if ((fpm = fopen (M_file, wa)) == NULL) {
-	  fprintf (stderr," error: cannot open file %s\n", M_file );
+	  fprintf (stderr,"\n  error: cannot open file %s\n", M_file );
 	  exit(1);
 	}
 
@@ -2377,12 +2377,12 @@ void static_mesh(
 	sprintf( meshfl, "%sf.%03d", meshpath, lc );
 
 	if ((fpmfx = fopen (meshfl, "w")) == NULL) {
-		printf (" error: cannot open meshpath: %s\n", meshfl );
+		printf ("\n  error: cannot open meshpath: %s\n", meshfl );
 		exit(1);
 	}
 
 	if ((fpm = fopen (meshpath, "w")) == NULL) {
-		printf (" error: cannot open meshpath: %s\n", meshpath );
+		printf ("\n  error: cannot open meshpath: %s\n", meshpath );
 		exit(1);
 	}
 
@@ -2440,12 +2440,12 @@ void static_mesh(
 
 	if (lc == 1) {
 	    if ((fpm = fopen (plotpath, "w")) == NULL) {
-		printf (" error: cannot open plot file: %s\n", plotpath);
+		printf ("\n  error: cannot open plot file: %s\n", plotpath);
 		exit(1);
 	    }
 	} else {
 	    if ((fpm = fopen (plotpath, "a")) == NULL) {
-		printf (" error: cannot open plot file: %s\n", plotpath);
+		printf ("\n  error: cannot open plot file: %s\n", plotpath);
 		exit(1);
 	    }
 	}
@@ -2573,7 +2573,7 @@ void modal_mesh(
 		sprintf( modefl,"%s-%02d-", modepath, m );
 
 		if ((fpm = fopen (modefl, "w")) == NULL) {
-			printf (" error: cannot open modal mesh file: %s\n", modefl);
+			printf ("\n  error: cannot open modal mesh file: %s\n", modefl);
 			exit(1);
 		}
 
@@ -2608,7 +2608,7 @@ void modal_mesh(
 		fclose(fpm);
 
 		if ((fpm = fopen (plotpath, "a")) == NULL) {
-			printf (" error: cannot append plot file: %s\n",plotpath);
+			printf ("\n  error: cannot append plot file: %s\n",plotpath);
 			exit(1);
 		}
 		fprintf(fpm,"pause -1\n");
@@ -2691,7 +2691,7 @@ void animate(
 
 
 	if ((fpm = fopen (plotpath, "a")) == NULL) {
-		printf (" error: cannot append plot file: %s\n",plotpath);
+		printf ("\n  error: cannot append plot file: %s\n",plotpath);
 		exit(1);
 	}
 	i = 0;
@@ -2814,7 +2814,7 @@ void animate(
 	    sprintf(modefl,"%s-%02d.%03d", modepath, m, fr  );
 
 	    if ((fpm = fopen (modefl, "w")) == NULL) {
-		printf (" error: cannot open modal mesh file: %s\n", modefl);
+		printf ("\n  error: cannot open modal mesh file: %s\n", modefl);
 		exit(1);
 	    }
 

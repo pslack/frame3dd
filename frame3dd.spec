@@ -67,7 +67,16 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
-* Tue Dec 8 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+*Wed Dec 16 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+- Add a newline character "\n" to the beginning of warning and error messages  
+- Small edits to user-manual.html
+- Rename dist-zip.sh to zipdist.sh
+
+*Tue Dec 15 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+- Add doc/img/Sketchup-Frame1.jpg and doc/img/Sketchup-Trailer1.jpg
+- Add doc/img/exp_ansys_gavin.png
+
+*Tue Dec 8 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
 - Remove TextWrangler suggestion from user manual
 - User Manual instructions on opening .profile using TextEdit
 - add "-x" flag to suppress writing of 't' or 'c' characters in the Ouput Data
