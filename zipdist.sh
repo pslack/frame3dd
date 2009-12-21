@@ -25,7 +25,7 @@ cp --preserve=mode,timestamps doc/template.3dd      dist/Frame3DD/doc/.
 cp --preserve=mode,timestamps doc/img/*.png         dist/Frame3DD/doc/img/.
 cp --preserve=mode,timestamps doc/img/*.jpg         dist/Frame3DD/doc/img/.
 cp --preserve=mode,timestamps doc/img/*.gif         dist/Frame3DD/doc/img/.
-cp --preserve=mode,timestamps doc/LinuxTerminal.pdf dist/Frame3DD/doc/.	
+#cp --preserve=mode,timestamps doc/LinuxTerminal.pdf dist/Frame3DD/doc/.	
 
 # copy ChangeLog, license, and README files
 cp --preserve=mode,timestamps ChangeLog.txt         dist/Frame3DD/.
