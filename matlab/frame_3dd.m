@@ -19,7 +19,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %        0: the joint has no reaction in that degree of freedom,
 %        1: the joint does have a reaction in that degree of freedom.
 %
-% EAIJ : a 9xB containing the section and modulus properties of each frame el.
+% EAIJ : a 10xB containing the section and modulus properties of each frame el.
 %         row 1 = Ax  cross section area                   for each frame el.
 %         row 2 = Asy shear area y-direction               for each frame el.
 %         row 3 = Asz shear area z-direction               for each frame el. 
@@ -29,6 +29,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %         row 7 = E   elastic modulus                      for each frame el.
 %         row 8 = G   shear   modulus                      for each frame el.
 %         row 9 = p   roll angle                           for each frame el.
+%         row 10 = d  mass density                         for each frame el.
 %         
 %    P : a 6xJ matrix containing the components of the external 
 %        forces and moments applied to each joint.
@@ -66,6 +67,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 % This m-function, frame_3dd.m, executes the system command, frame3dd, 
 % to compute the solution.  This m-function interface to frame3dd does not 
 % (yet) implement the following features of frame3dd:
+%   gravitational loading 
 %   point forces applied between the joints of a member
 %   temperature loads
 %   multiple load cases
@@ -115,8 +117,8 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
   if any(~(size(RCT)==[6,J]))
      error('The dimension of RCT must be 6 by # of joints.')
   end
-  if any(~(size(EAIJ)==[9,B]))
-     error('The dimension of EAIJ must be 9 by # of frame elements.')
+  if any(~(size(EAIJ)==[10,B]))
+     error('The dimension of EAIJ must be 10 by # of frame elements.')
   end
   if any(~(size(P)==[6,J]))
      error('The dimension of P must be 6 by # of joints.')
@@ -155,13 +157,13 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 
   fprintf(fp,'%% frame element section property data ...\n');
   fprintf(fp,'%d\t\t%% number of frame elements\n', B);
-  fprintf(fp,'%% m\tj1\tj2\t\tAx\t\tAsy\t\tAsz\t\tJxx\t\tIyy\t\tIzz\t\tE\t\tG\t\tp\n');
+  fprintf(fp,'%% m\tj1\tj2\t\tAx\t\tAsy\t\tAsz\t\tJxx\t\tIyy\t\tIzz\t\tE\t\tG\t\tp\tdensity\n');
   for b=1:B
-      fprintf(fp,'%d\t%d\t%d\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n', ...
+      fprintf(fp,'%d\t%d\t%d\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n', ...
 	b, JTS(1,b), JTS(2,b), ...
 	EAIJ(1,b), EAIJ(2,b), EAIJ(3,b), ...
 	EAIJ(4,b), EAIJ(5,b), EAIJ(6,b), ...
-        EAIJ(7,b), EAIJ(8,b), EAIJ(9,b) );
+        EAIJ(7,b), EAIJ(8,b), EAIJ(9,b), EAIJ(10,b) );
   end
   fprintf(fp,'\n');
 
@@ -172,7 +174,13 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 
   fprintf(fp,'%% static load data ...\n');
   fprintf(fp,'%d\t\t%% number of static load cases \n', 1);
-  fprintf(fp,'\t\t%% begin static load case 1 of 1 \n');
+  fprintf(fp,'\t\t%% begin static load case 1 of 1 \n\n');
+
+
+  fprintf(fp,'%% gravitational acceleration for self-weight loading\n');
+  fprintf(fp,'%% gX         gY         gZ\n');
+  fprintf(fp,'  0.0        0.0        0.0\n\n');
+
   nF = sum(max(abs(P))~=0);
   fprintf(fp,'%d\t\t%% number of loaded joints\n', nF);
   fprintf(fp,'%% j\t\tFx\t\tFy\t\tFz\t\tMxx\t\tMyy\t\tMzz\n'); 

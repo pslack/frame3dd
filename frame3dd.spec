@@ -67,6 +67,14 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+*Fri Jan 1 2010 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+- update Matlab inteface program frame_3dd.m to work with recent enhancements
+to Frame3DD (density in frame element data and gravitational loading)
+
+*Mon Dec 21 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+- replace link to LinuxTerminal.pdf link from user-manual.html with a link to
+http://www.ee.surrey.ac.uk/Teaching/Unix/unix1.html
+
 *Wed Dec 16 2009 Henri Gavin <henri.gavin@duke.edu> 0.20091203
 - Add a newline character "\n" to the beginning of warning and error messages  
 - Small edits to user-manual.html

@@ -797,16 +797,17 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %        0: the joint has no reaction in that degree of freedom,
 %        1: the joint does have a reaction in that degree of freedom.
 %
-% EAIJ : a 9xB containing the section and modulus properties of each frame el.
-%         row 1 = Ax  cross section area    for each frame el.
-%         row 2 = Asy shear area y-directionfor each frame el.
-%         row 3 = Asz shear area z-directionfor each frame el.
-%         row 4 = Jxx torsional moment of inertia - x axis for each frame el.
-%         row 5 = Iyy bending moment of inertia - y axis   for each frame el.
-%         row 6 = Izz bending moment of inertia - z axis   for each frame el.
-%         row 7 = E   elastic modulus       for each frame el.
-%         row 8 = G   shear   modulus       for each frame el. 
-%         row 9 = p   roll angle            for each frame el.
+% EAIJ : a 10xB containing the section and modulus properties of each frame el.
+%         row  1 = Ax  cross section area    for each frame el.
+%         row  2 = Asy shear area y-directionfor each frame el.
+%         row  3 = Asz shear area z-directionfor each frame el.
+%         row  4 = Jxx torsional moment of inertia - x axis for each frame el.
+%         row  5 = Iyy bending moment of inertia - y axis   for each frame el.
+%         row  6 = Izz bending moment of inertia - z axis   for each frame el.
+%         row  7 = E   elastic modulus       for each frame el.
+%         row  8 = G   shear   modulus       for each frame el. 
+%         row  9 = p   roll angle            for each frame el.
+%         row 10 = d   mass density          for each frame el.
 %
 %    P : a 6xJ matrix containing the components of the external
 %        forces and moments applied to each joint.
@@ -875,6 +876,7 @@ is currently capable of static analyses.
 It does not (yet) implement the following features of <b>Frame3DD</b>:
 <ul>
   <li> Matlab functions for graphical display of the results
+  <li> gravity loading 
   <li> point forces applied between the joints of a frame element
   <li> temperature loads
   <li> multiple load cases
@@ -884,7 +886,7 @@ It does not (yet) implement the following features of <b>Frame3DD</b>:
 </p>
 
 <p>
-Adding these features would require Matlab programming, only.
+Adding these features would only require editing the matlab inteface function, frame_3dd.m.
 </p>
 
 <a name="CSV"><h2>5. Spreadsheet Interface</h2>

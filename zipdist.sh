@@ -72,7 +72,7 @@ cp --preserve=mode,timestamps ../build/frame3dd        Frame3DD/.
 zip Frame3DD_$(echo $VERSION)_linux.zip Frame3DD/frame3dd
 rm Frame3DD/frame3dd
 
-# add OS X 10.5 10.6 executable
+# add OS X 10.3 10.4 10.5 10.6 executables  
 echo "adding OS X executable ... "
 cp --preserve=mode,timestamps ../build/frame3ddosx34     Frame3DD/frame3dd
 zip Frame3DD_$(echo $VERSION)_osx34.zip Frame3DD/frame3dd
@@ -86,6 +86,9 @@ cp --preserve=mode,timestamps ../build/frame3dd.exe    Frame3DD/.
 #zip Frame3DD_$(date +%Y%m%d)_win32.zip Frame3DD/frame3dd.exe
 zip Frame3DD_$(echo $VERSION)_win32.zip Frame3DD/frame3dd.exe
 rm Frame3DD/frame3dd.exe
+
+# put documentation into the source code .zip distribution
+zip -r Frame3DD_$(echo $VERSION)_src.zip Frame3DD/doc/*
 
 #rm Frame3DD_$(date +%Y%m%d).zip
 rm Frame3DD_$(echo $VERSION).zip
