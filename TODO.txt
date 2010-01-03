@@ -1,13 +1,13 @@
 TODO LIST for FRAME3DD
 ----------------------
 
+* Create structs to contain frame attributes, coordinates, etc, in order to migrate to a more object-oriented coding style, and simplify the passing of parameters to functions.
+
 * Dynamic time-history analysis with the HHT-alpha method
 
 * Compute reactions forces along with joint displacements in solve_system funcion.  
 
 * Consistent mass matrix including the effects of shear deformation on rotatory inertia
-
-* Create structs to contain frame attributes, coordinates, etc, in order to migrate to a more object-oriented coding style, and simplify the passing of parameters to functions.
 
 * Improve rigid joint offset method
 

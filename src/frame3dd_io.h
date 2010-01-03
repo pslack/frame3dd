@@ -166,7 +166,7 @@ void read_and_assemble_loads(
 	FILE *fp,	/**< input data file pointer			*/
 	int nJ,		/**< number of joints				*/
 	int nE,		/**< number of frame elements			*/
-	int nL,		/**< number of load cases	i		*/
+	int nL,		/**< number of load cases			*/
 	int DoF,	/**< number of degrees of freedom		*/
 	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
 	double *L, double *Le,	/**< length of each frame element, effective */

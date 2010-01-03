@@ -1,9 +1,9 @@
-% FRAME3DD version: 20090304               http://frame3dd.sf.net/
+% Frame3DD version: 20091203               http://frame3dd.sf.net/
 %GPL Copyright (C) 1992-2009, Henri P. Gavin 
-%FRAME3DD is distributed in the hope that it will be useful but with no warranty.
+%Frame3DD is distributed in the hope that it will be useful but with no warranty.
 %For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 % frame analysis via Matlab interface 
-% Tue Mar 31 10:23:30 2009
+% Sun Jan  3 10:09:02 2010
 % m-file formatted results of frame3dd analysis
 % to be read by frame_3dd.m
 
@@ -24,7 +24,7 @@ D1=[	0.0		0.0		0.0		0.0		0.0		-1.712305e-03 ;
 	 2.179763e-03	-3.586605e-02	0.0		0.0		0.0		 7.979142e-04 ; 
 	 5.063876e-05	-2.069475e-02	0.0		0.0		0.0		 1.210416e-03 ]'; 
 
-% B E A M   E N D   F O R C E S				(local)
+% F R A M E   E L E M E N T   E N D   F O R C E S		(local)
 %	Nx_1		Vy_1		Vz_1		Txx_1		Myy_1		Mzz_1	  	Nx_2		Vy_2		Vz_2		Txx_2		Myy_2		Mzz_2
 F1=[	-1.613810e+01	 2.395833e-03	0.0		0.0		0.0		 1.126185e-02	 1.613810e+01	-2.395833e-03	0.0		0.0		0.0		 1.748814e-02 ; 
 	-7.290698e+01	 3.012485e-03	0.0		0.0		0.0		 1.297515e-02	 7.290698e+01	-3.012485e-03	0.0		0.0		0.0		 2.317466e-02 ; 

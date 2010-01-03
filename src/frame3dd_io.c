@@ -2130,6 +2130,30 @@ void write_static_csv(
 	return;
 }
 
+
+/*------------------------------------------------------------------------------
+WRITE_VALUE - write a value in %f or %e notation depending on numerical values
+and the number of available significant figures
+12 Dec 2009
+------------------------------------------------------------------------------*/
+/*
+void write_value ( 
+		FILE *fp, 
+		int sig_figs, 
+		float threshold, 
+		char *spaces,
+		double x
+){
+	int nZspaces;
+
+	nZspaces = (int) strlen(*spaces);
+
+	if ( fabs(x) < threshold ) fprintf ( fp, "0.0 \n");
+
+}
+*/
+
+
 /*------------------------------------------------------------------------------
 WRITE_STATIC_MFILE -  						
 save joint displacements and frame element end forces in an m-file
@@ -2635,6 +2659,7 @@ void modal_mesh(
 	free_dvector(msZ,1,DoF);
 	free_dvector(v,1,DoF);
 }
+
 
 /*------------------------------------------------------------------------------
 ANIMATE -  create mesh data of animated mode-shape meshes, use gnuplot	16dec98

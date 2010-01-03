@@ -67,6 +67,9 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+*Sun Jan 3 2010 Henri Gavin <henri.gavin@duke.edu> 0.20091203
+- add matlab path instructions to the user manual
+
 *Fri Jan 1 2010 Henri Gavin <henri.gavin@duke.edu> 0.20091203
 - update Matlab inteface program frame_3dd.m to work with recent enhancements
 to Frame3DD (density in frame element data and gravitational loading)

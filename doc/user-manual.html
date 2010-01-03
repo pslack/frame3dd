@@ -842,28 +842,48 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 </p>
 
 <p>
-This m-function, <a href="../matlab/frame_3dd.m">frame_3dd.m</a>,
-executes the system command
-(<b>frame3dd</b> on Linux or OS X, <b>frame3dd.exe</b> on Windows)
-to compute the solution.
 The <b>Frame3DD</b> executable program
 (<b>frame3dd</b> on Linux or OS X, <b>frame3dd.exe</b> on Windows)
-must be saved to a directory within
-a path appropriate for your system, as described in the installation instructions, above.
+and the matlab interface function, <b>frame_3dd.m</b>
+must be saved to directories within your Matlab path.    
+<!-- 
+You may either copy the <b>Frame3DD</b> executable program and <b>frame_3dd.m</b> to 
+directories in your Matlab path, or you may add the <b>Desktop/Frame3DD</b> and <b>Desktop/Frame3DD/matlab</b>
+directories to your Matlab path. 
+-->
+To display the or modify the matlab path, use the matlab command <b>path</b>.   
 </p>
 
 <p>
+In Linux and OS X you can add the Frame3DD directory to your matlab path with the matlab commands:<br>
+<pre>
+path([ getenv('HOME') '/Desktop/Frame3DD' ],path) 
+path([ getenv('HOME') '/Desktop/Frame3DD/matlab' ],path) 
+</pre>
+</p>
+
+<p>
+In Windows you can add the Frame3DD directory to your matlab path with the matlab commands:<br>
+<pre>
+path([ getenv('USERPROFILE') '/Desktop/Frame3DD' ],path) 
+path([ getenv('USERPROFILE') '/Desktop/Frame3DD/matlab' ],path) 
+</pre>
+</p>
+
+<p>
+The matlab interface function, <a href="../matlab/frame_3dd.m">frame_3dd.m</a>, executes the system command
+(<b>frame3dd</b> on Linux or OS X, <b>frame3dd.exe</b> on Windows) to compute the solution.
 <ol>
 <li> The Matlab file for your problem first sets up the various matrices defining the problem for analysis and calls frame_3dd.m <br>
 A <a href="../matlab/exA.m">Matlab version of Example A</a> illustrates
 how to analyze problems using the Matlab interface to <b>Frame3DD</b>.<br>
 Matlab versions of the other examples are forthcoming.
-<li> frame_3dd.m writes a <b>Frame3DD</b> input data file called IOdata.fmm,
-<li> frame_3dd.m calls a system command to run the executable program <b>frame3dd</b>.
-<li> The executable program <b>frame3dd</b> writes the Output Data to IOdata.out ,
+<li> frame_3dd.m writes a <b>Frame3DD</b> input data file called IOdata.FMM,
+<li> frame_3dd.m calls a system command to run the executable program <b>frame3dd</b> in the input data file IOdata.FMM .
+<li> The executable program <b>frame3dd</b> writes the Output Data to IOdata.OUT ,
 and also writes IOdata_out.m, containing the Output Data.<br>
 An m-file containing the Output Data is written whenever the frame3dd
-executable is run on a file ending in ".fmm",
+executable is run on a file ending in ".FMM",
 whether or not the analysis is initiated by frame_3dd.m.
 <li> frame_3dd.m runs IOdata_out.m, containing the matrices D, R, F, L, and Ks,
 <li> frame_3dd.m returns D, R, F, L, and Ks, to the Matlab workspace, or to your Matlab function.
@@ -886,7 +906,7 @@ It does not (yet) implement the following features of <b>Frame3DD</b>:
 </p>
 
 <p>
-Adding these features would only require editing the matlab inteface function, frame_3dd.m.
+Adding these features would require editing the matlab inteface function, frame_3dd.m.
 </p>
 
 <a name="CSV"><h2>5. Spreadsheet Interface</h2>
