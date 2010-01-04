@@ -1006,9 +1006,9 @@ void read_and_assemble_loads(
 	  }
 	  for (i=1; i <= nW[lc]; i++) {	/* ! local element coordinates ! */
 		sfrv=fscanf(fp,"%d", &n );
-	  	if (sfrv != 1) sferr("frame element number in uniform load data");
+	  	if (sfrv != 1) sferr("frame element number in trapezoidal load data");
 		if ( n < 1 || n > nE ) {
-		    fprintf(stderr,"\n  error in uniform distributed loads: element number %d is out of range\n",n);
+		    fprintf(stderr,"\n  error in trapezoidally-distributed loads: element number %d is out of range\n",n);
 		    exit(1);
 		}
 		W[lc][i][1] = (double) n;

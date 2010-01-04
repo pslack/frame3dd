@@ -587,7 +587,7 @@ void equilibrium(
 	if ( den <= 0 ) den = 1.0;	/* for structures w/o static loads*/
 	den = sqrt( den / (double) k );
 
-	for (m=1; m <= nE; m++) {	/* loop over all members */
+	for (m=1; m <= nE; m++) {	/* loop over all frame elements */
 
 		j1 = J1[m];	j2 = J2[m];
 
@@ -655,6 +655,180 @@ void equilibrium(
  
 	*err = num / den;
 
+}
+
+
+/*------------------------------------------------------------------------------
+INTERNAL_FOCES - 
+compute internal axial forces, shear forces, torsion moments, bending moments
+and transverse displacements
+4jan10
+------------------------------------------------------------------------------*/
+void internal_forces(
+		float dx, vec3 *xyz, float *p,
+		double **Q, int nJ, int nE, double *L, int *J1, int *J2, 
+		float *Ax, float *Asy, float *Asz, float *Iy, float *Iz,
+		float *d, float gX, float gY, float gZ,
+		double **U, double **W, double **P,
+		double *D
+){
+	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord Xformn	*/
+//		d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12,
+//		x1, y1, z1, x2, y2, z2,	/* joint coordinates	*/
+		//Ls,			/* stretched length of element */
+		delta=0.0;		/* stretch in the frame element */
+
+	double	xx1,xx2, wx1,wx2,	/* trapz load data, local x dir */
+		xy1,xy2, wy1,wy2,	/* trapz load data, local y dir */
+		xz1,xz2, wz1,wz2;	/* trapz load data, local z dir */
+
+	double	wx, wy, wz,	/* distributed loads in local x, y, z coord's */
+		wxg, wyg, wzg,	/* gravity loads in local x, y, z coord's */
+		tx = 0.0;	/* distributed torque about local x coord */
+
+	double	xp;		/* location of internal point loads	*/
+
+	double	*x,		/* distance along frame element		*/
+		*Nx,		/* axial force within frame el.		*/
+		*Vy, *Vz,	/* shear forces within frame el.	*/
+		*Tx,		/* torsional moment within frame el.	*/
+		*My, *Mz, 	/* bending moments within frame el.	*/
+		*Sy, *Sz,	/* transverse slopes of frame el.	*/
+		*Dy, *Dz;	/* transverse dislacements of frame el.	*/
+
+	int	n, m,		/* frame element number			*/
+		i, nx,		/* number of sections alont x axis	*/
+		j1, j2;		/* starting and stopping joint no's	*/
+
+	FILE	*fp_if;
+
+	fp_if = fopen("internal_forces.dat","w");
+
+	fprintf(fp_if,"%% frame element internal forces \n\n");
+
+	for ( m=1; m <= nE; m++ ) {	// loop over all frame elements
+
+		j1 = J1[m];	j2 = J2[m];
+
+		fprintf(fp_if,"%% frame element %d, j1= %d, j2=%d\n", m, j1,j2);
+		fprintf(fp_if,"%% x\t\tNx\t\tVy\t\tVz\t\tTx\t\tMy\t\tMz\n");
+
+		coord_trans ( xyz, L[m], j1, j2,
+			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[m] );
+
+		// distributed gravity load in local x, y, z coordinates
+		wxg = d[m]*Ax[m]*(t1*gX + t2*gY + t3*gZ);
+		wyg = d[m]*Ax[m]*(t4*gX + t5*gY + t6*gZ);
+		wzg = d[m]*Ax[m]*(t7*gX + t8*gY + t9*gZ);
+
+		// add uniformly-distributed loads 
+		for (n=1; n<=nE; n++) {
+			if ( (int) U[n][1] == m ) { // load n on element m
+				wxg += U[n][2];
+				wyg += U[n][3];
+				wzg += U[n][4];
+			}
+		}
+
+		nx = floor(L[m]/dx);
+
+		x  = dvector(0,nx);
+		Nx = dvector(0,nx);
+		Vy = dvector(0,nx);
+		Vz = dvector(0,nx);
+		Tx = dvector(0,nx);
+		My = dvector(0,nx);
+		Mz = dvector(0,nx);
+		Sy = dvector(0,nx);
+		Sz = dvector(0,nx);
+		Dy = dvector(0,nx);
+		Dz = dvector(0,nx);
+
+		for (i=0; i<=nx; i++)	x[i] = i*dx;
+
+		Nx[0] = Q[m][1];
+		Vy[0] = Q[m][2];
+		Vz[0] = Q[m][3];
+		Tx[0] = Q[m][4];
+		My[0] = Q[m][5];
+		Mz[0] = Q[m][6];
+
+		for (i=1; i<=nx; i++) {
+
+			wx = wxg;
+			wy = wyg;
+			wz = wzg;
+
+			// add trapezoidally-distributed loads
+			for (n=1; n<=10*nE; n++) {
+			    if ( (int) W[n][1] == m ) { // load n on element m
+				xx1 = W[n][2]; xx2 = W[n][3];
+				wx1 = W[n][4]; wx2 = W[n][5];
+				xy1 = W[n][2]; xy2 = W[n][3];
+				wy1 = W[n][4]; wy2 = W[n][5];
+				xz1 = W[n][2]; xz2 = W[n][3];
+				wz1 = W[n][4]; wz2 = W[n][5];
+
+				if ( x[i]>xx1 && x[i]<xx2 )
+				  wx += wx1+(wx2-wx1)*(x[i]-xx1)/(xx2-xx1);
+				if ( x[i]>xy1 && x[i]<xy2 )
+				  wy += wy1+(wy2-wy1)*(x[i]-xy1)/(xy2-xy1);
+				if ( x[i]>xz1 && x[i]<xz2 )
+				  wz += wz1+(wz2-wz1)*(x[i]-xz1)/(xz2-xz1);
+			    }
+			}
+
+			// add interior point loads 
+			for (n=1; n<=10*nE; n++) {
+			    if ( (int) P[n][1] == m ) { // load n on element m
+				xp = P[n][5];
+				if ( x[i]>xp && x[i]<xp+dx )
+				 wx += P[n][2]/dx;
+				 wy += P[n][3]/dx;
+				 wz += P[n][4]/dx;
+			    }
+			}
+
+			Nx[i] = Nx[i-1] + wx*dx;
+			Vy[i] = Vy[i-1] + wy*dx;
+			Vz[i] = Vz[i-1] + wz*dx;
+			Tx[i] = Tx[i-1] + tx*dx;
+			My[i] = My[i-1] + 0.5*(Vy[i]+Vy[i-1])*dx;
+			Mz[i] = Mz[i-1] + 0.5*(Vz[i]+Vz[i-1])*dx;
+		}
+
+/*
+		j1 = 6*(j1-1);	j2 = 6*(j2-1);
+
+		d1  = D[j1+1];	d2  = D[j1+2];	d3  = D[j1+3];
+		d4  = D[j1+4];	d5  = D[j1+5];	d6  = D[j1+6];
+		d7  = D[j2+1];	d8  = D[j2+2];	d9  = D[j2+3];
+		d10 = D[j2+4];	d11 = D[j2+5];	d12 = D[j2+6];
+*/
+
+		for (i=0; i<=nx; i++) {
+			fprintf(fp_if,"%12.4e\t", x[i] );
+			fprintf(fp_if,"%12.4e\t%12.4e\t%12.4e\t",
+							Nx[i], Vy[i], Vz[i] );
+			fprintf(fp_if,"%12.4e\t%12.4e\t%12.4e\n",
+							Tx[i], My[i], Mz[i] );
+		}
+		fprintf(fp_if,"%%---------------------------------------\n\n");
+
+		free_dvector(x,0,nx);
+		free_dvector(Nx,0,nx);
+		free_dvector(Vy,0,nx);
+		free_dvector(Vz,0,nx);
+		free_dvector(Tx,0,nx);
+		free_dvector(My,0,nx);
+		free_dvector(Mz,0,nx);
+		free_dvector(Sy,0,nx);
+		free_dvector(Sz,0,nx);
+		free_dvector(Dy,0,nx);
+		free_dvector(Dz,0,nx);
+
+	}
+	fclose(fp_if);
 }
 
 

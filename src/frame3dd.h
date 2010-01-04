@@ -95,7 +95,7 @@ void end_forces(
 
 /** perform an equilibrium check, F returned as reactions */
 void equilibrium(	
-	vec3 *xyz,	/** XYZ locations of each joint			*/
+	vec3 *xyz,	/**< XYZ locations of each joint		*/
 	double *L,	/**< length of each frame element, effective	*/
 	int *J1, int *J2, /**< joint connectivity			*/
 	double *F,	/**< load vector				*/
@@ -109,6 +109,26 @@ void equilibrium(
 	int verbose	/**< 1: copious screen output; 0: none		*/
 );
 
+/** calculate frame element internal forces, Nx, Vy, Vz, Tx, My, Mz */
+void internal_forces(
+	float dx,	/**< increment distance along local x axis	*/
+	vec3 *xyz,	/**< XYZ locations of each joint		*/
+	float *p,	/**< roll angle, radians			*/
+	double **Q,	/**< frame element end forces			*/
+	int nJ,		/**< number of joints				*/
+	int nE,		/**< number of frame elements			*/
+	double *L,	/**< length of each frame element		*/
+	int *J1, int *J2, /**< joint connectivity			*/
+	float *Ax,	/**< cross sectional area			*/
+	float *Asy, float *Asz, /**< effective shear area		*/
+	float *Iy, float *Iz,	/**< bending moment of inertia		*/
+	float *d,	/**< mass density 				*/
+	float gX, float gY, float gZ,	/**< gravitational acceleration	*/
+	double **U,	/**< uniformly distributed load data		*/
+	double **W,	/**< trapezoidally distributed load data	*/
+	double **P,	/**< internal point load data			*/
+	double *D	/**< joint displacements			*/	
+);
 
 /** assemble global mass matrix from element mass & inertia */
 void assemble_M(
