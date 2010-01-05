@@ -2464,7 +2464,7 @@ void write_internal_forces(
 
 		}
 		// linear correction for integration bias
-		for (i=0; i<=nx; i++) {
+		for (i=1; i<=nx; i++) {
 			Nx[i] -= (Nx[nx]-Q[m][7])  * i/nx;
 			Vy[i] -= (Vy[nx]-Q[m][8])  * i/nx;
 			Vz[i] -= (Vz[nx]-Q[m][9])  * i/nx;
@@ -2477,7 +2477,7 @@ void write_internal_forces(
 
 		}
 		// linear correction for integration bias
-		for (i=0; i<=nx; i++) {
+		for (i=1; i<=nx; i++) {
 			My[i] -= (My[nx]+Q[m][11])  * i/nx;
 			Mz[i] -= (Mz[nx]-Q[m][12])  * i/nx;
 		}
@@ -2506,11 +2506,11 @@ void write_internal_forces(
 		if ( shear ) {
 			for (i=1; i<=nx; i++) {
 				Sy[i] += Vy[i]/(G[m]*Asy[m]);
-				Sz[i] += Vz[i]/(G[m]*Asy[m]);
+				Sz[i] += Vz[i]/(G[m]*Asz[m]);
 			}
 		}
 		// linear correction for integration bias
-		for (i=0; i<=nx; i++) {
+		for (i=1; i<=nx; i++) {
 			Sy[i] -= (Sy[nx]-d12)  * i/nx;
 			Sz[i] -= (Sz[nx]+d11)  * i/nx;
 		}
@@ -2520,7 +2520,7 @@ void write_internal_forces(
 			Dz[i] = Dz[i-1] + 0.5*(Sz[i-1]+Sz[i])*dx;
 		}
 		// linear correction for integration bias
- 		for (i=0; i<=nx; i++) {
+ 		for (i=1; i<=nx; i++) {
 			Dy[i] -= (Dy[nx]-d8)  * i/nx;
 			Dz[i] -= (Dz[nx]-d9)  * i/nx;
 		}
