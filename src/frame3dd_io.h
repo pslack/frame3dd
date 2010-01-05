@@ -332,8 +332,11 @@ void write_internal_forces(
 	float *p,	/**< roll angle, radians                        */
 	float *d,	/**< mass density                               */
 	float gX, float gY, float gZ,	/**< gravitational acceleration */
+	int nU,		/**< number of uniformly-distributed loads	*/
 	float **U,	/**< uniformly distributed load data            */
+	int nW,		/**< number of trapezoidally-distributed loads	*/
 	float **W,	/**< trapezoidally distributed load data        */
+	int nP,		/**< number of internal point loads		*/
 	float **P,	/**< internal point load data                   */
 	double *D,	/**< joint displacements                        */
 	int     shear	/**< shear deformation flag                     */

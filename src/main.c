@@ -537,7 +537,8 @@ For compilation/installation, see README.txt.
 					Q, nJ, nE, L, J1, J2, 
 					Ax, Asy, Asz, Iy, Iz, E, G, p,
 					d, gX[lc], gY[lc], gZ[lc],
-					U[lc], W[lc], P[lc], D, shear );
+					nU[lc],U[lc],nW[lc],W[lc],nP[lc],P[lc],
+					D, shear );
 
 	 } /* end load case loop */
 	} else {
@@ -551,18 +552,19 @@ For compilation/installation, see README.txt.
 	}
 
 
-	if(nM > 0){ /* modal analysis */
+	if (nM > 0) { /* modal analysis */
 
 		if ( verbose ) printf("\n\n Modal Analysis ...\n");
 
-		nM_calc = (nM+8)<(2*nM) ? nM+8 : 2*nM;
+		nM_calc = (nM+8)<(2*nM) ? nM+8 : 2*nM;		/* Bathe */
 
 		M   = dmatrix(1,DoF,1,DoF);
 		f   = dvector(1,nM_calc);
 		V   = dmatrix(1,DoF,1,nM_calc);
 
 		assemble_M ( M, DoF, nJ, nE, xyz, r, L, J1,J2,
-				Ax, J,Iy,Iz, p, d, BMs, JMs, JMx, JMy, JMz, lump );
+				Ax, J,Iy,Iz, p, d, BMs, JMs, JMx, JMy, JMz,
+				lump );
 
 #ifdef MATRIX_DEBUG
 		save_dmatrix ( DoF, DoF, M, "Mf" );	/* free mass matrix */

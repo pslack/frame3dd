@@ -70,12 +70,13 @@ rm -rf %{buildroot}
 *Tue Jan 5 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
 - fix error in equivalent load calculation for trapezoidally-distributed loads
 acting along the local x-axis.
-- add function "write_internal_forces" to compute and save the internal axial
-force, shear forces, torsion, bending moments, and transverse displacements
-for each frame element.
+- add function "write_internal_forces" to frame3dd_io.c in order to compute
+and save the internal axial force, shear forces, torsion, bending moments,
+and transverse displacements for each frame element.
 - add varialbe dx for user-specified x-axis increment for the internal force
 calculations
-- update example *.3dd data files with new dx variable and re-run all examples
+- update examples/*.3dd data files with new dx variable and re-run all examples
+- update exampes/test*.3dd data files with new input data format
 - update user-manual.html
 - issue release 20100105
 

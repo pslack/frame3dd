@@ -1615,7 +1615,7 @@ A more complete stress check would compute
 the composite axial, shear, torsion and bending stresses and strains within each element.   
 Such a check requires additional cross section information: 
 the section moduli and the section dimensions,
-as described in section 7.13 below.  
+as described in section 7.14 below.  
 </p>
 
 <p>
@@ -1770,15 +1770,16 @@ Each section has nine columns, as follows:
 <li> column 3: frame element shear force in the local <i>y</i> direction
 <li> column 4: frame element shear force in the local <i>z</i> direction
 <li> column 5: frame element torsion about the local <i>x</i> axis
-<li> column 6: frame element bending moments about the local <i>y</i> axis
+<li> column 6: frame element bending moments about the local <i>-y</i> axis
 <li> column 7: frame element bending moments about the local <i>z</i> axis
 <li> column 8: frame element transverse displacement in the local <i>y</i> direction
 <li> column 9: frame element transverse displacement in the local <i>z</i> direction
 </ul>
 </p>
 <p>
-The frame element internal force data file may be read by a spread sheet 
-program, or may be read by Matlab for further post-processing.   An example
+The frame element internal force data file may be 
+plotted with Gnuplot, may be read by a spreadsheet program,
+or may be read by Matlab for further post-processing.   An example
 of the first several lines of an internal force data file is shown here.
 The <i>x</i>-axis increment is 1 mm in this analysis.  
 <img src="img/InternForces.png" align="center" border="0"><br>
@@ -1798,11 +1799,16 @@ and <i>z</i> directions.
 </p>
 
 <p>
+The sign convention for internal forces is illustrated below:<br>
+<img src="img/IntForceSign.png" align="center" border="0"><br>
+</p>
+
+<p>
 Internal forces and transverse displacements
 are computed using numerical integration of the
 distributed loads on the frame elements.   
-A modified trapezoidal integration method is implemented 
-so that the internal force and transverse displacement data matches the 
+A corrected trapezoidal integration method is implemented 
+so that the internal force and transverse displacement data match the 
 known internal forces and joint displacements at both ends of each frame element.  
 </p>
 

@@ -33,6 +33,7 @@ Test gravity load features of Frame3DD  kip  in  sec
 0                      # 1: include shear deformation
 0                      # 1: include geometric stiffness
 10                     # exaggerate static mesh deformations
+1.0                    # x-axis increment for internal force data
 
 
 # load data ...

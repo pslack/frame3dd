@@ -554,7 +554,7 @@ void read_run_data (
 	}
 
 	sfrv=fscanf( fp, "%d %d %lf %f", shear, geom,  exagg_static, dx );
-	if (sfrv != 3) sferr("shear, geom or exagg_static variables");
+	if (sfrv != 4) sferr("shear, geom, exagg_static, or dx variables");
 
 	if (*shear != 0 && *shear != 1) {
 	    fprintf(stderr," Rember to specify shear deformations");
@@ -2302,7 +2302,7 @@ void write_static_mfile (
 
 
 /*------------------------------------------------------------------------------
-WRITE_INTERNAL_FOCES - 
+WRITE_INTERNAL_FORCES - 
 compute internal axial forces, shear forces, torsion moments, bending moments
 and transverse displacements
 4jan10
@@ -2314,7 +2314,7 @@ void write_internal_forces(
 		float *Ax, float *Asy, float *Asz, float *Iy, float *Iz,
 		float *E, float *G, float *p,
 		float *d, float gX, float gY, float gZ,
-		float **U, float **W, float **P,
+		int nU, float **U, int nW, float **W, int nP, float **P,
 		double *D, int shear
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord Xformn	*/
@@ -2324,13 +2324,14 @@ void write_internal_forces(
 		xy1,xy2, wy1,wy2,	/* trapz load data, local y dir */
 		xz1,xz2, wz1,wz2;	/* trapz load data, local z dir */
 
-	double	wx, wy, wz,	/* distributed loads in local x, y, z coord's */
+	double	wx, wy, wz,	/* distributed loads in local coords at x[i] */
+		wx_, wy_, wz_,	/* distributed loads in local coords at x[i-1]*/
 		wxg, wyg, wzg,	/* gravity loads in local x, y, z coord's */
-		tx = 0.0;	/* distributed torque about local x coord */
+		tx=0.0, tx_=0.0;/* distributed torque about local x coord */
 
 	double	xp;		/* location of internal point loads	*/
 
-	double	*x,		/* distance along frame element		*/
+	double	*x, dx_, dxnx,	/* distance along frame element		*/
 		*Nx,		/* axial force within frame el.		*/
 		*Vy, *Vz,	/* shear forces within frame el.	*/
 		*Tx,		/* torsional moment within frame el.	*/
@@ -2339,6 +2340,7 @@ void write_internal_forces(
 		*Dy, *Dz;	/* transverse dislacements of frame el.	*/
 
 	int	n, m,		/* frame element number			*/
+		cU=0, cW=0, cP=0, /* counters for U, W, and P loads	*/
 		i, nx,		/* number of sections alont x axis	*/
 		j1, j2;		/* starting and stopping joint no's	*/
 
@@ -2371,7 +2373,7 @@ void write_internal_forces(
 
 		j1 = J1[m];	j2 = J2[m];
 
-		fprintf(fpif,"# frame element %d: j1=%4d  j2=%4d\n", m,j1,j2);
+		fprintf(fpif,"# frame element %d: J1=%d  J2=%d\n", m,j1,j2);
 		fprintf(fpif,"#.x\t\tNx\t\tVy\t\tVz\t\tTx\t\tMy\t\tMz\t\tDy\t\tDz\n");
 
 		coord_trans ( xyz, L[m], j1, j2,
@@ -2382,12 +2384,13 @@ void write_internal_forces(
 		wyg = d[m]*Ax[m]*(t4*gX + t5*gY + t6*gZ);
 		wzg = d[m]*Ax[m]*(t7*gX + t8*gY + t9*gZ);
 
-		// add uniformly-distributed loads 
-		for (n=1; n<=nE; n++) {
+		// add uniformly-distributed loads to gravity load
+		for (n=1; n<=nE && cU<nU; n++) {
 			if ( (int) U[n][1] == m ) { // load n on element m
 				wxg += U[n][2];
 				wyg += U[n][3];
 				wzg += U[n][4];
+				++cU;
 			}
 		}
 
@@ -2406,8 +2409,10 @@ void write_internal_forces(
 		Dy = dvector(0,nx);
 		Dz = dvector(0,nx);
 
-		// local x-axis for frame element "m"
-		for (i=0; i<=nx; i++)	x[i] = i*dx;	
+		// local x-axis for frame element "m" starts at 0, ends at L[m]
+		for (i=0; i<nx; i++)	x[i] = i*dx;	
+		x[nx] = L[m];
+		dxnx = x[nx]-x[nx-1];
 
 	// find interior axial force, shear forces, and bending moments
 
@@ -2419,6 +2424,7 @@ void write_internal_forces(
 		My[0] =  Q[m][5];
 		Mz[0] = -Q[m][6];
 
+		dx_ = dx;
 		for (i=1; i<=nx; i++) {
 
 			// start with gravitational plus uniform loads
@@ -2426,9 +2432,17 @@ void write_internal_forces(
 			wy = wyg;
 			wz = wzg;
 
+			if (i==1) {
+				wx_ = wxg;
+				wy_ = wyg;
+				wz_ = wzg;
+				tx_ = tx;
+			}
+
 			// add trapezoidally-distributed loads
-			for (n=1; n<=10*nE; n++) {
+			for (n=1; n<=10*nE && cW<nW; n++) {
 			    if ( (int) W[n][1] == m ) { // load n on element m
+				if (i==nx) ++cW;
 				xx1 = W[n][2];  xx2 = W[n][3];
 				wx1 = W[n][4];  wx2 = W[n][5];
 				xy1 = W[n][6];  xy2 = W[n][7];
@@ -2437,33 +2451,43 @@ void write_internal_forces(
 				wz1 = W[n][12]; wz2 = W[n][13];
 
 				if ( x[i]>xx1 && x[i]<=xx2 )
-				  wx += wx1+(wx2-wx1)*(x[i]-xx1)/(xx2-xx1);
+				    wx += wx1+(wx2-wx1)*(x[i]-xx1)/(xx2-xx1);
 				if ( x[i]>xy1 && x[i]<=xy2 )
-				  wy += wy1+(wy2-wy1)*(x[i]-xy1)/(xy2-xy1);
+				    wy += wy1+(wy2-wy1)*(x[i]-xy1)/(xy2-xy1);
 				if ( x[i]>xz1 && x[i]<=xz2 )
-				  wz += wz1+(wz2-wz1)*(x[i]-xz1)/(xz2-xz1);
+				    wz += wz1+(wz2-wz1)*(x[i]-xz1)/(xz2-xz1);
 			    }
 			}
 
+			// trapezoidal integration of distributed loads 
+			// for forces and torques
+			if (i==nx)	dx_ = dxnx;
+			Nx[i] = Nx[i-1] - 0.5*(wx+wx_)*dx_;
+			Vy[i] = Vy[i-1] - 0.5*(wy+wy_)*dx_;
+			Vz[i] = Vz[i-1] - 0.5*(wz+wz_)*dx_;
+			Tx[i] = Tx[i-1] - 0.5*(tx+tx_)*dx_;
+
+			// update distributed loads at x[i-1]
+			wx_ = wx;
+			wy_ = wy;
+			wz_ = wz;
+			tx_ = tx;
+			
 			// add interior point loads 
-			for (n=1; n<=10*nE; n++) {
+			for (n=1; n<=10*nE && cP<nP; n++) {
 			    if ( (int) P[n][1] == m ) { // load n on element m
+				if (i==nx) ++cP;
 				xp = P[n][5];
-				if ( x[i]>xp && x[i]<=xp+dx ) {
-					wx += P[n][2]/dx;
-					wy += P[n][3]/dx;
-					wz += P[n][4]/dx;
+				if ( x[i]>xp && x[i]<=xp+dx_ ) {
+					Nx[i] -= P[n][2];
+					Vy[i] -= P[n][3];
+					Vz[i] -= P[n][4];
 				}
 			    }
 			}
 
-			Nx[i] = Nx[i-1] - wx*dx;
-			Vy[i] = Vy[i-1] - wy*dx;
-			Vz[i] = Vz[i-1] - wz*dx;
-			Tx[i] = Tx[i-1] - tx*dx;
-
 		}
-		// linear correction for integration bias
+		// linear correction for bias in trapezoidal integration
 		for (i=1; i<=nx; i++) {
 			Nx[i] -= (Nx[nx]-Q[m][7])  * i/nx;
 			Vy[i] -= (Vy[nx]-Q[m][8])  * i/nx;
@@ -2471,15 +2495,17 @@ void write_internal_forces(
 			Tx[i] -= (Tx[nx]-Q[m][10]) * i/nx;
 		}
 		// trapezoidal integration of shear force for bending momemnt
+		dx_ = dx;
 		for (i=1; i<=nx; i++) {
-			My[i] = My[i-1] - 0.5*(Vz[i]+Vz[i-1])*dx;
-			Mz[i] = Mz[i-1] - 0.5*(Vy[i]+Vy[i-1])*dx;
+			if (i==nx)	dx_ = dxnx;
+			My[i] = My[i-1] - 0.5*(Vz[i]+Vz[i-1])*dx_;
+			Mz[i] = Mz[i-1] - 0.5*(Vy[i]+Vy[i-1])*dx_;
 
 		}
-		// linear correction for integration bias
+		// linear correction for bias in trapezoidal integration
 		for (i=1; i<=nx; i++) {
-			My[i] -= (My[nx]+Q[m][11])  * i/nx;
-			Mz[i] -= (Mz[nx]-Q[m][12])  * i/nx;
+			My[i] -= (My[nx]+Q[m][11]) * i/nx;
+			Mz[i] -= (Mz[nx]-Q[m][12]) * i/nx;
 		}
 
 	// find interior transverse displacements 
@@ -2492,16 +2518,18 @@ void write_internal_forces(
 		d10 = D[j2+4];	d11 = D[j2+5];	d12 = D[j2+6];
 
 
-		// interior forces for frame element "m" at (x=0)
+		// rotations and displacements for frame element "m" at (x=0)
 		Sy[0] =  d6;
 		Sz[0] = -d5;
 		Dy[0] =  d2;
 		Dz[0] =  d3;
 
 		// slope along frame element "m"
+		dx_ = dx;
 		for (i=1; i<=nx; i++) {
-			Sy[i] = Sy[i-1] + 0.5*(Mz[i-1]+Mz[i])/(E[m]*Iz[m])*dx;
-			Sz[i] = Sz[i-1] + 0.5*(My[i-1]+My[i])/(E[m]*Iy[m])*dx;
+			if (i==nx)	dx_ = dxnx;
+			Sy[i] = Sy[i-1] + 0.5*(Mz[i-1]+Mz[i])/(E[m]*Iz[m])*dx_;
+			Sz[i] = Sz[i-1] + 0.5*(My[i-1]+My[i])/(E[m]*Iy[m])*dx_;
 		}
 		if ( shear ) {
 			for (i=1; i<=nx; i++) {
@@ -2509,20 +2537,22 @@ void write_internal_forces(
 				Sz[i] += Vz[i]/(G[m]*Asz[m]);
 			}
 		}
-		// linear correction for integration bias
+		// linear correction for bias in trapezoidal integration
 		for (i=1; i<=nx; i++) {
-			Sy[i] -= (Sy[nx]-d12)  * i/nx;
-			Sz[i] -= (Sz[nx]+d11)  * i/nx;
+			Sy[i] -= (Sy[nx]-d12) * i/nx;
+			Sz[i] -= (Sz[nx]+d11) * i/nx;
 		}
 		// displacement along frame element "m"
+		dx_ = dx;
 		for (i=1; i<=nx; i++) {
-			Dy[i] = Dy[i-1] + 0.5*(Sy[i-1]+Sy[i])*dx;
-			Dz[i] = Dz[i-1] + 0.5*(Sz[i-1]+Sz[i])*dx;
+			if (i==nx)	dx_ = dxnx;
+			Dy[i] = Dy[i-1] + 0.5*(Sy[i-1]+Sy[i])*dx_;
+			Dz[i] = Dz[i-1] + 0.5*(Sz[i-1]+Sz[i])*dx_;
 		}
-		// linear correction for integration bias
+		// linear correction for bias in trapezoidal integration
  		for (i=1; i<=nx; i++) {
-			Dy[i] -= (Dy[nx]-d8)  * i/nx;
-			Dz[i] -= (Dz[nx]-d9)  * i/nx;
+			Dy[i] -= (Dy[nx]-d8) * i/nx;
+			Dz[i] -= (Dz[nx]-d9) * i/nx;
 		}
 
 

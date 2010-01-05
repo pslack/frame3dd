@@ -1,0 +1,41 @@
+test buckling calculation
+
+# joint data
+5 		# number of joints
+ 1 0   0 0 0
+ 2 25  0 0 0
+ 3 50  0 0 0
+ 4 75  0 0 0
+ 5 100 0 0 0
+
+# reaction data
+2		# number of joints with reactions
+ 1 1 1 1 1 1 1
+ 4 0 1 1 1 1 1
+
+# frame element data
+4		# number of frame elements
+ 1 1 2 100 50 50 200 100 100 10000 15000 0 1e-9
+ 2 2 3 100 50 50 200 100 100 10000 15000 0 1e-9
+ 3 3 4 100 50 50 200 100 100 10000 15000 0 1e-9
+ 4 4 5 100 50 50 200 100 100 10000 15000 0 1e-9
+
+0		# shear
+1		# geom
+20		# exagg
+1.0		# dx
+
+# load data
+
+1		# number of load cases
+
+0 0 0		# gravity
+
+1		# number of loaded joints
+  5  -3975 0 0 0 0 0
+0
+0
+0
+0
+0
+
