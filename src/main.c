@@ -5,7 +5,7 @@
  ---------------------------------------------------------------------------
  http://frame3dd.sourceforge.net/
  ---------------------------------------------------------------------------
- Copyright (C) 1992-2009  Henri P. Gavin
+ Copyright (C) 1992-2010  Henri P. Gavin
 
     FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -68,6 +68,7 @@ For compilation/installation, see README.txt.
 		title[256],		/* the title of the analysis	*/
 		meshpath[FRAME3DD_PATHMAX] = "EMPTY_MESH", /* mesh data path */
 		plotpath[FRAME3DD_PATHMAX] = "EMPTY_PLOT", /* plot file path */
+		infcpath[FRAME3DD_PATHMAX] = "EMPTY_INFC", /* int  file path */
 		modepath[FRAME3DD_PATHMAX] = "EMPTY_MODE", /* mode data path */
 		temppath[FRAME3DD_PATHMAX] = "EMPTY_TEMP"; /* temp data path */
 
@@ -91,7 +92,8 @@ For compilation/installation, see README.txt.
 		gX[_NL_],	/* gravitational acceleration in global X */
 		gY[_NL_],	/* gravitational acceleration in global Y */
 		gZ[_NL_],	/* gravitational acceleration in global Z */
-		pan=1.0;	/* >0: pan during animation; 0: don't	*/
+		pan=1.0,	/* >0: pan during animation; 0: don't	*/
+		dx=1.0;		/* x-increment for internal force data	*/
 
 	double	**K, **Ks=NULL,	/* global stiffness matrix		*/
 		traceK = 0.0,	/* trace of the global stiffness matrix	*/
@@ -184,7 +186,7 @@ For compilation/installation, see README.txt.
 		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
 		fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
 		fprintf(stderr," http://frame3dd.sf.net\n");
-		fprintf(stderr," GPL Copyright (C) 1992-2009, Henri P. Gavin\n");
+		fprintf(stderr," GPL Copyright (C) 1992-2010, Henri P. Gavin\n");
 		fprintf(stderr," This is free software with absolutely no warranty.\n");
 		fprintf(stderr," For details, see the GPL license file, LICENSE.txt\n\n");
 	}
@@ -273,8 +275,9 @@ For compilation/installation, see README.txt.
 
 
 	read_run_data ( fp, OUT_file, &shear, shear_flag, &geom, geom_flag,
-			meshpath, plotpath,
-			&exagg_static, exagg_flag, &anlyz, anlyz_flag, debug );
+			meshpath, plotpath, infcpath, 
+			&exagg_static, exagg_flag, &dx, &anlyz, anlyz_flag,
+			debug );
 
 	sfrv=fscanf(fp, "%d", &nL );	/* number of load cases		*/
 	if (sfrv != 1)	sferr("nL value for number of load cases");
@@ -515,8 +518,8 @@ For compilation/installation, see README.txt.
 		}
 
 		if ( filetype == 2 ) {		// matlab format output
-			write_static_mfile (OUT_file, title,
-					nJ,nE,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
+			write_static_mfile (OUT_file, title, nJ,nE,nL,lc, DoF,
+					J1,J2, Fo[lc], D,R,Q, error, ok );
 		}
 
 /*
@@ -527,8 +530,14 @@ For compilation/installation, see README.txt.
  *		 " and re-run the analysis. \n");
  *
  */
-		static_mesh ( IN_file, meshpath, plotpath, title, nJ, nE, nL, lc,
+		static_mesh ( IN_file, meshpath, plotpath, title, nJ,nE,nL, lc,
 				DoF, xyz, L, J1,J2, p, D, exagg_static, anlyz);
+
+		write_internal_forces ( infcpath, lc, nL, title, dx, xyz,
+					Q, nJ, nE, L, J1, J2, 
+					Ax, Asy, Asz, Iy, Iz, E, G, p,
+					d, gX[lc], gY[lc], gZ[lc],
+					U[lc], W[lc], P[lc], D, shear );
 
 	 } /* end load case loop */
 	} else {

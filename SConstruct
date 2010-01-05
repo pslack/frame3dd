@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-version = '0.20091203'
+version = '0.20100105'
 
 import platform
 deftools = ['default']

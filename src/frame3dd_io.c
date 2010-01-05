@@ -5,7 +5,7 @@
  ---------------------------------------------------------------------------
  http://frame3dd.sourceforge.net/
  ---------------------------------------------------------------------------
- Copyright (C) 1992-2009  Henri P. Gavin
+ Copyright (C) 1992-2010  Henri P. Gavin
 
  FRAME3DD is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -343,7 +343,7 @@ void display_version_about()
  fprintf(stderr," Frame3DD version: %s\n", VERSION);
  fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness\n");
  fprintf(stderr," http://frame3dd.sourceforge.net\n");
- fprintf(stderr," GPL Copyright (C) 1992-2009, Henri P. Gavin \n");
+ fprintf(stderr," GPL Copyright (C) 1992-2010, Henri P. Gavin \n");
  fprintf(stderr," Frame3DD is distributed in the hope that it will be useful");
  fprintf(stderr," but with no warranty.\n");
  fprintf(stderr," For details see the GNU Public Licence:");
@@ -509,8 +509,10 @@ void read_run_data (
 	int	geom_flag,
 	char	*meshpath,
 	char	*plotpath,
+	char	*infcpath,
 	double	*exagg_static,
 	double	exagg_flag,
+	float	*dx,
 	int	*anlyz,
 	int	anlyz_flag,
 	int	debug
@@ -532,6 +534,9 @@ void read_run_data (
 	strcpy(plotpath,base_file);
 	strcat(plotpath,".plt");
 
+	strcpy(infcpath,base_file);
+	strcat(infcpath,".if");
+
 	while ( base_file[len] != '/' && base_file[len] != '\\' && len > 0 )
 		len--;	/* find the last '/' or '\' in base_file */ 
 	i = 0;
@@ -548,7 +553,7 @@ void read_run_data (
 		fprintf(stderr,"MESHPATH = %s \n", meshpath);
 	}
 
-	sfrv=fscanf( fp, "%d %d %lf", shear, geom,  exagg_static );
+	sfrv=fscanf( fp, "%d %d %lf %f", shear, geom,  exagg_static, dx );
 	if (sfrv != 3) sferr("shear, geom or exagg_static variables");
 
 	if (*shear != 0 && *shear != 1) {
@@ -566,6 +571,12 @@ void read_run_data (
 	if ( *exagg_static < 0.0 ) {
 	    fprintf(stderr," Remember to specify an exageration");
 	    fprintf(stderr," factor greater than zero\n");
+	    exit(1);
+	}
+
+	if ( *dx < 0.0 ) {
+	    fprintf(stderr," Remember to specify a frame element increment");
+	    fprintf(stderr," greater than zero\n");
 	    exit(1);
 	}
 
@@ -1022,7 +1033,7 @@ void read_and_assemble_loads(
 		/* error checking */
 
 		if ( W[lc][i][ 4]==0 && W[lc][i][ 5]==0 &&
-		     W[lc][i][ 7]==0 && W[lc][i][ 8]==0 &&
+		     W[lc][i][ 8]==0 && W[lc][i][ 9]==0 &&
 		     W[lc][i][12]==0 && W[lc][i][13]==0 ) {
 		  fprintf(stderr,"\n   Warning: All trapezoidal loads applied to frame element %d  are zero\n", n );
 		  fprintf(stderr,"     load case: %d , element %d , load %d\n ", lc, n, i );
@@ -1093,7 +1104,7 @@ void read_and_assemble_loads(
 		w1 =  W[lc][i][4]; w2 =  W[lc][i][5];
 
 		Nx1 = ( 3.0*(w1+w2)*Ln*(x2-x1) - (2.0*w2+w1)*x2*x2 + (w2-w1)*x2*x1 + (2.0*w1+w2)*x1*x1 ) / (6.0*Ln);
-		Nx2 = ( -(2.0*w1+w2)*x1*x1 + (2.0*w2+w1)*x2*x2  - (w1-w2)*x1*x2 ) / ( 6.0*Ln );
+		Nx2 = ( -(2.0*w1+w2)*x1*x1 + (2.0*w2+w1)*x2*x2  - (w2-w1)*x1*x2 ) / ( 6.0*Ln );
 
 		/* y-axis trapezoidal loads (across the frame element length) */
 		x1 =  W[lc][i][6];  x2 = W[lc][i][7];
@@ -1717,14 +1728,14 @@ void write_input_data(
 	int shear, int anlyz, int geom
 ){
 	int	i,j,n, lc;
-	time_t  now;		/* modern time variable type    (DJGPP) */
+	time_t  now;		/* modern time variable type	*/
 
 	(void) time(&now);
 
 	for (i=1; i<=80; i++)	fprintf(fp,"_");
   	fprintf(fp,"\nFrame3DD version: %s ", VERSION );
 	fprintf(fp,"              http://frame3dd.sf.net/\n");
-	fprintf(fp,"GPL Copyright (C) 1992-2009, Henri P. Gavin \n");
+	fprintf(fp,"GPL Copyright (C) 1992-2010, Henri P. Gavin \n");
 	fprintf(fp,"Frame3DD is distributed in the hope that it will be useful");
 	fprintf(fp," but with no warranty.\n");
 	fprintf(fp,"For details see the GNU Public Licence:");
@@ -1999,7 +2010,7 @@ void write_static_csv(
 	int	i,j,n;
 	char	*wa;
 	char	CSV_file[128];
-	time_t  now;		/* modern time variable type    (DJGPP) */
+	time_t  now;		/* modern time variable type	*/
 
 	(void) time(&now);
 
@@ -2035,7 +2046,7 @@ void write_static_csv(
 	if ( lc == 1 ) {
   	 fprintf(fpcsv,"\" Frame3DD version: %s ", VERSION );
 	 fprintf(fpcsv,"              http://frame3dd.sf.net/\"\n");
-	 fprintf(fpcsv,"\"GPL Copyright (C) 1992-2009, Henri P. Gavin \"\n");
+	 fprintf(fpcsv,"\"GPL Copyright (C) 1992-2010, Henri P. Gavin \"\n");
 	 fprintf(fpcsv,"\"Frame3DD is distributed in the hope that it will be useful");
 	 fprintf(fpcsv," but with no warranty.\"\n");
 	 fprintf(fpcsv,"\"For details see the GNU Public Licence:");
@@ -2171,7 +2182,7 @@ void write_static_mfile (
 	int	i,j,n;
 	char	*wa;
 	char	M_file[128];
-	time_t  now;	/* modern time variable type    (DJGPP) */
+	time_t  now;	/* modern time variable type	*/
 
 	(void) time(&now);
 
@@ -2205,7 +2216,7 @@ void write_static_mfile (
 	if ( lc == 1 ) {
   	 fprintf(fpm,"%% Frame3DD version: %s ", VERSION );
 	 fprintf(fpm,"              http://frame3dd.sf.net/\n");
-	 fprintf(fpm,"%%GPL Copyright (C) 1992-2009, Henri P. Gavin \n");
+	 fprintf(fpm,"%%GPL Copyright (C) 1992-2010, Henri P. Gavin \n");
 	 fprintf(fpm,"%%Frame3DD is distributed in the hope that it will be useful");
 	 fprintf(fpm," but with no warranty.\n");
 	 fprintf(fpm,"%%For details see the GNU Public Licence:");
@@ -2287,6 +2298,260 @@ void write_static_mfile (
 	fclose(fpm);
 
 	return;
+}
+
+
+/*------------------------------------------------------------------------------
+WRITE_INTERNAL_FOCES - 
+compute internal axial forces, shear forces, torsion moments, bending moments
+and transverse displacements
+4jan10
+------------------------------------------------------------------------------*/
+void write_internal_forces(
+		char infcpath[], int lc, int nL, char title[], float dx,
+		vec3 *xyz, 
+		double **Q, int nJ, int nE, double *L, int *J1, int *J2, 
+		float *Ax, float *Asy, float *Asz, float *Iy, float *Iz,
+		float *E, float *G, float *p,
+		float *d, float gX, float gY, float gZ,
+		float **U, float **W, float **P,
+		double *D, int shear
+){
+	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord Xformn	*/
+		d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12; /* displ. */
+
+	double	xx1,xx2, wx1,wx2,	/* trapz load data, local x dir */
+		xy1,xy2, wy1,wy2,	/* trapz load data, local y dir */
+		xz1,xz2, wz1,wz2;	/* trapz load data, local z dir */
+
+	double	wx, wy, wz,	/* distributed loads in local x, y, z coord's */
+		wxg, wyg, wzg,	/* gravity loads in local x, y, z coord's */
+		tx = 0.0;	/* distributed torque about local x coord */
+
+	double	xp;		/* location of internal point loads	*/
+
+	double	*x,		/* distance along frame element		*/
+		*Nx,		/* axial force within frame el.		*/
+		*Vy, *Vz,	/* shear forces within frame el.	*/
+		*Tx,		/* torsional moment within frame el.	*/
+		*My, *Mz, 	/* bending moments within frame el.	*/
+		*Sy, *Sz,	/* transverse slopes of frame el.	*/
+		*Dy, *Dz;	/* transverse dislacements of frame el.	*/
+
+	int	n, m,		/* frame element number			*/
+		i, nx,		/* number of sections alont x axis	*/
+		j1, j2;		/* starting and stopping joint no's	*/
+
+	char	fnif[FILENMAX];/* file name    for internal force data	*/
+	FILE	*fpif;		/* file pointer for internal force data */
+	time_t  now;		/* modern time variable type		*/
+
+	(void) time(&now);
+
+	/* file name for internal force data for load case "lc" */
+	sprintf(fnif,"%s%02d",infcpath,lc);
+	
+	/* open the interior force data file */
+	if ((fpif = fopen (fnif, "w")) == NULL) {
+         fprintf (stderr,"\n ERROR: cannot open interior force data file '%s'\n",fnif);
+         exit(1);
+	}
+
+	fprintf(fpif,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
+	fprintf(fpif," VERSION %s \n", VERSION);
+	fprintf(fpif,"# %s\n", title );
+	fprintf(fpif,"# %s\n", fnif);
+	fprintf(fpif,"# %s", ctime(&now) );
+	fprintf(fpif,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
+	fprintf(fpif,"# F R A M E   E L E M E N T   I N T E R N A L   F O R C E S (local)\n");
+	fprintf(fpif,"# F R A M E   E L E M E N T   T R A N S V E R S E   D I S P L A C E M E N T S (local)\n\n");
+
+
+	for ( m=1; m <= nE; m++ ) {	// loop over all frame elements
+
+		j1 = J1[m];	j2 = J2[m];
+
+		fprintf(fpif,"# frame element %d: j1=%4d  j2=%4d\n", m,j1,j2);
+		fprintf(fpif,"#.x\t\tNx\t\tVy\t\tVz\t\tTx\t\tMy\t\tMz\t\tDy\t\tDz\n");
+
+		coord_trans ( xyz, L[m], j1, j2,
+			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[m] );
+
+		// distributed gravity load in local x, y, z coordinates
+		wxg = d[m]*Ax[m]*(t1*gX + t2*gY + t3*gZ);
+		wyg = d[m]*Ax[m]*(t4*gX + t5*gY + t6*gZ);
+		wzg = d[m]*Ax[m]*(t7*gX + t8*gY + t9*gZ);
+
+		// add uniformly-distributed loads 
+		for (n=1; n<=nE; n++) {
+			if ( (int) U[n][1] == m ) { // load n on element m
+				wxg += U[n][2];
+				wyg += U[n][3];
+				wzg += U[n][4];
+			}
+		}
+
+		nx = floor(L[m]/dx);		// number of x-axis increments
+
+	// allocate memory for interior force data for frame element "m"
+		x  = dvector(0,nx);
+		Nx = dvector(0,nx);
+		Vy = dvector(0,nx);
+		Vz = dvector(0,nx);
+		Tx = dvector(0,nx);
+		My = dvector(0,nx);
+		Mz = dvector(0,nx);
+		Sy = dvector(0,nx);
+		Sz = dvector(0,nx);
+		Dy = dvector(0,nx);
+		Dz = dvector(0,nx);
+
+		// local x-axis for frame element "m"
+		for (i=0; i<=nx; i++)	x[i] = i*dx;	
+
+	// find interior axial force, shear forces, and bending moments
+
+		// interior forces for frame element "m" at (x=0)
+		Nx[0] = -Q[m][1];
+		Vy[0] = -Q[m][2];
+		Vz[0] = -Q[m][3];
+		Tx[0] = -Q[m][4];
+		My[0] =  Q[m][5];
+		Mz[0] = -Q[m][6];
+
+		for (i=1; i<=nx; i++) {
+
+			// start with gravitational plus uniform loads
+			wx = wxg;
+			wy = wyg;
+			wz = wzg;
+
+			// add trapezoidally-distributed loads
+			for (n=1; n<=10*nE; n++) {
+			    if ( (int) W[n][1] == m ) { // load n on element m
+				xx1 = W[n][2];  xx2 = W[n][3];
+				wx1 = W[n][4];  wx2 = W[n][5];
+				xy1 = W[n][6];  xy2 = W[n][7];
+				wy1 = W[n][8];  wy2 = W[n][9];
+				xz1 = W[n][10]; xz2 = W[n][11];
+				wz1 = W[n][12]; wz2 = W[n][13];
+
+				if ( x[i]>xx1 && x[i]<=xx2 )
+				  wx += wx1+(wx2-wx1)*(x[i]-xx1)/(xx2-xx1);
+				if ( x[i]>xy1 && x[i]<=xy2 )
+				  wy += wy1+(wy2-wy1)*(x[i]-xy1)/(xy2-xy1);
+				if ( x[i]>xz1 && x[i]<=xz2 )
+				  wz += wz1+(wz2-wz1)*(x[i]-xz1)/(xz2-xz1);
+			    }
+			}
+
+			// add interior point loads 
+			for (n=1; n<=10*nE; n++) {
+			    if ( (int) P[n][1] == m ) { // load n on element m
+				xp = P[n][5];
+				if ( x[i]>xp && x[i]<=xp+dx ) {
+					wx += P[n][2]/dx;
+					wy += P[n][3]/dx;
+					wz += P[n][4]/dx;
+				}
+			    }
+			}
+
+			Nx[i] = Nx[i-1] - wx*dx;
+			Vy[i] = Vy[i-1] - wy*dx;
+			Vz[i] = Vz[i-1] - wz*dx;
+			Tx[i] = Tx[i-1] - tx*dx;
+
+		}
+		// linear correction for integration bias
+		for (i=0; i<=nx; i++) {
+			Nx[i] -= (Nx[nx]-Q[m][7])  * i/nx;
+			Vy[i] -= (Vy[nx]-Q[m][8])  * i/nx;
+			Vz[i] -= (Vz[nx]-Q[m][9])  * i/nx;
+			Tx[i] -= (Tx[nx]-Q[m][10]) * i/nx;
+		}
+		// trapezoidal integration of shear force for bending momemnt
+		for (i=1; i<=nx; i++) {
+			My[i] = My[i-1] - 0.5*(Vz[i]+Vz[i-1])*dx;
+			Mz[i] = Mz[i-1] - 0.5*(Vy[i]+Vy[i-1])*dx;
+
+		}
+		// linear correction for integration bias
+		for (i=0; i<=nx; i++) {
+			My[i] -= (My[nx]+Q[m][11])  * i/nx;
+			Mz[i] -= (Mz[nx]-Q[m][12])  * i/nx;
+		}
+
+	// find interior transverse displacements 
+
+		j1 = 6*(j1-1);	j2 = 6*(j2-1);
+
+		d1  = D[j1+1];	d2  = D[j1+2];	d3  = D[j1+3];
+		d4  = D[j1+4];	d5  = D[j1+5];	d6  = D[j1+6];
+		d7  = D[j2+1];	d8  = D[j2+2];	d9  = D[j2+3];
+		d10 = D[j2+4];	d11 = D[j2+5];	d12 = D[j2+6];
+
+
+		// interior forces for frame element "m" at (x=0)
+		Sy[0] =  d6;
+		Sz[0] = -d5;
+		Dy[0] =  d2;
+		Dz[0] =  d3;
+
+		// slope along frame element "m"
+		for (i=1; i<=nx; i++) {
+			Sy[i] = Sy[i-1] + 0.5*(Mz[i-1]+Mz[i])/(E[m]*Iz[m])*dx;
+			Sz[i] = Sz[i-1] + 0.5*(My[i-1]+My[i])/(E[m]*Iy[m])*dx;
+		}
+		if ( shear ) {
+			for (i=1; i<=nx; i++) {
+				Sy[i] += Vy[i]/(G[m]*Asy[m]);
+				Sz[i] += Vz[i]/(G[m]*Asy[m]);
+			}
+		}
+		// linear correction for integration bias
+		for (i=0; i<=nx; i++) {
+			Sy[i] -= (Sy[nx]-d12)  * i/nx;
+			Sz[i] -= (Sz[nx]+d11)  * i/nx;
+		}
+		// displacement along frame element "m"
+		for (i=1; i<=nx; i++) {
+			Dy[i] = Dy[i-1] + 0.5*(Sy[i-1]+Sy[i])*dx;
+			Dz[i] = Dz[i-1] + 0.5*(Sz[i-1]+Sz[i])*dx;
+		}
+		// linear correction for integration bias
+ 		for (i=0; i<=nx; i++) {
+			Dy[i] -= (Dy[nx]-d8)  * i/nx;
+			Dz[i] -= (Dz[nx]-d9)  * i/nx;
+		}
+
+
+	// write results to the internal frame element force output data file
+		for (i=0; i<=nx; i++) {
+			fprintf(fpif,"%14.6e\t", x[i] );
+			fprintf(fpif,"%14.6e\t%14.6e\t%14.6e\t",
+							Nx[i], Vy[i], Vz[i] );
+			fprintf(fpif,"%14.6e\t%14.6e\t%14.6e\t",
+							Tx[i], My[i], Mz[i] );
+			fprintf(fpif,"%14.6e\t%14.6e\n", Dy[i], Dz[i] );
+		}
+		fprintf(fpif,"#---------------------------------------\n\n\n");
+
+	// free memory
+		free_dvector(x,0,nx);
+		free_dvector(Nx,0,nx);
+		free_dvector(Vy,0,nx);
+		free_dvector(Vz,0,nx);
+		free_dvector(Tx,0,nx);
+		free_dvector(My,0,nx);
+		free_dvector(Mz,0,nx);
+		free_dvector(Sy,0,nx);
+		free_dvector(Sz,0,nx);
+		free_dvector(Dy,0,nx);
+		free_dvector(Dz,0,nx);
+
+	}
+	fclose(fpif);
 }
 
 
@@ -2394,7 +2659,7 @@ void static_mesh(
 	double	mx, my, mz;	/* coordinates of the frame element number labels */
 	int	j1, j2, i, j, m, X=0, Y=0, Z=0;
 	char	meshfl[128], D3 = '#';
-	time_t  now;		/* modern time variable type    (DJGPP) */
+	time_t  now;		/* modern time variable type	*/
 
 	(void) time(&now);
 
@@ -2414,7 +2679,8 @@ void static_mesh(
 
 
 
-	fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/\n");
+	fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
+	fprintf(fpm," VERSION %s \n", VERSION);
 	fprintf(fpm,"# %s\n", title );
 	fprintf(fpm,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
 	fprintf(fpm,"# %s", ctime(&now) );
@@ -2423,7 +2689,8 @@ void static_mesh(
 	fprintf(fpm,"# Joint      X           Y           Z");
 	fprintf(fpm,"          X-dsp       Y-dsp       Z-dsp\n");
 
-	fprintf(fpmfx,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/\n");
+	fprintf(fpmfx,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
+	fprintf(fpm," VERSION %s \n", VERSION);
 	fprintf(fpmfx,"# %s\n", title );
 	fprintf(fpmfx,"# %s", ctime(&now) );
 	fprintf(fpmfx,"# F L E X E D   M E S H   D A T A ");
@@ -2476,7 +2743,8 @@ void static_mesh(
 
 	if (lc == 1) {		/* first load case */
 
-	 fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/\n");
+	 fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
+	fprintf(fpm," VERSION %s \n", VERSION);
 	 fprintf(fpm,"# %s\n", title );
 	 fprintf(fpm,"# %s", ctime(&now) );
 	 fprintf(fpm,"# M E S H   A N N O T A T I O N   F I L E \n");
@@ -2601,7 +2869,8 @@ void modal_mesh(
 			exit(1);
 		}
 
-		fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/\n");
+		fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
+		fprintf(fpm," VERSION %s \n", VERSION);
 		fprintf(fpm,"# %s\n", title );
 		fprintf(fpm,"# M O D E   S H A P E   D A T A   F O R   M O D E");
 		fprintf(fpm,"   %d\t(global coordinates)\n", m );
@@ -2845,7 +3114,8 @@ void animate(
 
 	    ex = exagg_modal*cos( PI*fr/frames );
 
-	    fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/\n");
+	    fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
+	    fprintf(fpm," VERSION %s \n", VERSION);
 	    fprintf(fpm,"# %s\n", title );
 	    fprintf(fpm,"# A N I M A T E D   M O D E   S H A P E   D A T A \n");
 	    fprintf(fpm,"# deflection exaggeration: %.1f\n", ex );

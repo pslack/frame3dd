@@ -31,6 +31,8 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 1                               # 1: include shear deformation
 1                               # 1: include geometric stiffness
 10.0                            # exaggerate static mesh deformations
+1.0                             # x-axis increment for internal forces
+
 
 
 3				# number of static load cases

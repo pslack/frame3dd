@@ -5,7 +5,7 @@
  ---------------------------------------------------------------------------
  http://frame3dd.sourceforge.net/
  ---------------------------------------------------------------------------
- Copyright (C) 1992-2009  Henri P. Gavin
+ Copyright (C) 1992-2010  Henri P. Gavin
 
  FRAME3DD is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -137,9 +137,11 @@ void read_run_data (
 	int geom_flag,	/**< command-line over-ride			*/
 	char meshpath[],/**< file name for mesh data output		*/
 	char plotpath[],/**< file name for Gnuplot script		*/
+	char infcpath[],/**< file name for internal force data		*/
 	double *exagg_static,/**< factor for static displ. exaggeration	*/
 	double exagg_flag, /**< command-line over-ride			*/
-	int *anlyz,	/* 1: perform elastic analysis, 0: don't	*/
+	float *dx,	/**< frame element increment for internal forces*/
+	int *anlyz,	/**< 1: perform elastic analysis, 0: don't	*/
 	int anlyz_flag,	/**< command-line over-ride			*/
 	int debug	/**< print debugging information		*/
 );
@@ -299,12 +301,42 @@ void write_static_csv(
 /**
 	save joint displacements and member end forces in an m-file	9sep08
 */
-void write_static_mfile (
+void write_static_mfile(
 	char *OUT_file, char *title,
 	int nJ, int nE, int nL, int lc, int DoF,
 	int *J1, int *J2,
 	double *F, double *D, int *R, double **Q,
 	double err, int ok
+);
+
+
+/** 
+	calculate frame element internal forces, Nx, Vy, Vz, Tx, My, Mz 4jan10
+*/
+void write_internal_forces(
+	char infcpath[],/**< interior force data file			*/
+	int lc,		/**< load case number				*/
+	int nL,		/**< number of static load cases		*/
+	char title[],	/**< title of the analysis			*/
+	float dx,	/**< increment distance along local x axis      */
+	vec3 *xyz,	/**< XYZ locations of each joint                */
+	double **Q,	/**< frame element end forces                   */
+	int nJ,		/**< number of joints                           */
+	int nE,		/**< number of frame elements                   */
+	double *L,	/**< length of each frame element               */
+	int *J1, int *J2, /**< joint connectivity                       */
+	float *Ax,	/**< cross sectional area                       */
+	float *Asy, float *Asz,	/**< effective shear area               */
+	float *Iy, float *Iz,	/**< bending moment of inertia          */
+	float *E, float *G,	/**< elastic and shear modulii          */
+	float *p,	/**< roll angle, radians                        */
+	float *d,	/**< mass density                               */
+	float gX, float gY, float gZ,	/**< gravitational acceleration */
+	float **U,	/**< uniformly distributed load data            */
+	float **W,	/**< trapezoidally distributed load data        */
+	float **P,	/**< internal point load data                   */
+	double *D,	/**< joint displacements                        */
+	int     shear	/**< shear deformation flag                     */
 );
 
 

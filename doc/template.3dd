@@ -36,6 +36,7 @@ nE                        # number of frame elements
 shear                      # 1: include shear deformation
 geom                       # 1: include geometric stiffness
 exagg_static               # exaggerate static mesh deformations
+dx                         # x-axis increment for frame element internal forces
 
 
 # load data ...

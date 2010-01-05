@@ -38,6 +38,8 @@ also, particularly if sparse matrix methods can be used.
 COMPLETED ITEMS
 ------------------
 
+* Add frame element internal force and transverse displacement calculations (Jan 5 2010)
+
 * Add gravity load option via gravitational acceleration vector (Dec 3 2009)
 
 * Specify element density along with elastic modulus and shear modulus in the

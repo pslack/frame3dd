@@ -3,7 +3,7 @@
 # zipdist.sh
 # assemble .ZIP files for Frame3dd executable and source distribution release
 
-export VERSION=20091203
+export VERSION=20100105
 echo $VERSION
 
 # clean out prior distribution files

@@ -30,7 +30,7 @@
 #define FILENMAX 96
 
 #ifndef VERSION
-# define VERSION "20091203"
+# define VERSION "20100105"
 #endif
 
 #ifndef PI

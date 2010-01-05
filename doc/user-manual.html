@@ -91,9 +91,12 @@ Graphical output may be viewed by starting Gnuplot and typing:
 <b> load 'MyResultsA.plt'</b>.
 </p>
 
-<p><b>Frame3DD</b> can consider multiple static load cases in a single analysis.</p>
+<p><b>Frame3DD</b> can consider multiple static load cases in a single analysis.
+Separate output data files list the internal axial force, shear forces, torsion, and bending moments along each frame element for each static load case.
+</p>
 
-<p><b>Frame3DD</b> may optionally interface with Matlab and with spreadsheet programs.</p>
+<p><b>Frame3DD</b> may optionally interface with Matlab and with spreadsheet programs.
+</p>
 
 <p><b>Frame3DD</b> is <b>free open-source software</b>; you may redistribute it and/or modify it under
 the terms of the GNU General Public License (GPL) as published by the
@@ -1748,9 +1751,64 @@ A frame element with negative <i>Mz</i> at joint 1 and a positive <i>Mz</i> at j
 has positive curvature in the <i>x-y</i> plane.  
 </p>
 
-<h3> 7.13 Stress Check </h3>
+<h3> 7.13 Internal Frame Element Forces and Transverse Displacements</h3>
 
-<h4> 7.13.1 Section Modulus and Torsion Shear Constant </h4>
+<p>
+<b>Frame3DD</b> generates an output data file listing the internal
+axial force, shear forces, torsion, and bending momements for each
+frame element.  A separate internal force output file is provided
+for each load case.   If the Frame3DD analysis Output Data file 
+is named <b>MyResultsA.out</b>, then the internal force output data 
+files are automatically named as
+<b>MyResultsA.if01</b> for load case 1, 
+<b>MyResultsA.if02</b> for load case 2, and so on. 
+The internal force output data contains a section for each frame element.
+Each section has nine columns, as follows:
+<ul>
+<li> column 1: <i>x</i> axis data with a user-specified <i>x</i>-axis increment, <i>dx</i>.
+<li> column 2: frame element axial force along the local <i>x</i> axis 
+<li> column 3: frame element shear force in the local <i>y</i> direction
+<li> column 4: frame element shear force in the local <i>z</i> direction
+<li> column 5: frame element torsion about the local <i>x</i> axis
+<li> column 6: frame element bending moments about the local <i>y</i> axis
+<li> column 7: frame element bending moments about the local <i>z</i> axis
+<li> column 8: frame element transverse displacement in the local <i>y</i> direction
+<li> column 9: frame element transverse displacement in the local <i>z</i> direction
+</ul>
+</p>
+<p>
+The frame element internal force data file may be read by a spread sheet 
+program, or may be read by Matlab for further post-processing.   An example
+of the first several lines of an internal force data file is shown here.
+The <i>x</i>-axis increment is 1 mm in this analysis.  
+<img src="img/InternForces.png" align="center" border="0"><br>
+</p>
+
+<p>
+The sign convention for internal forces and transverse displacements is as follows:
+<ul>
+<li> Positive internal axial force (Nx) is tensile.
+<li> Positive internal shear forces (Vy and Vz) are in the positive <i>y</i> and <i>z</i>
+directions on positive <i>x</i> surfaces.
+<li> Positive internal torsion (Tx) is counter-clockwise about the positive <i>x</i> axis.  
+<li> Positive bending moments (My and Mz) produce positive curvature bending deformation in the <i>x-z</i> and <i>x-y</i> planes.  
+<li> Positive transverse displacements (Dy and Dz) are in the positive <i>y</i>
+and <i>z</i> directions.
+</ul>
+</p>
+
+<p>
+Internal forces and transverse displacements
+are computed using numerical integration of the
+distributed loads on the frame elements.   
+A modified trapezoidal integration method is implemented 
+so that the internal force and transverse displacement data matches the 
+known internal forces and joint displacements at both ends of each frame element.  
+</p>
+
+<h3> 7.14 Stress Check </h3>
+
+<h4> 7.14.1 Section Modulus and Torsion Shear Constant </h4>
 
 <p>
 The section properties required for elastic frame analysis are
@@ -1810,7 +1868,7 @@ I sections (depth = <i>d</i>, width = <i>b</i>, flange thickness = <i>t</i>, web
 </p>
 
 
-<h4> 7.13.2 Axial Stress </h4> 
+<h4> 7.14.2 Axial Stress </h4> 
 
 <p>
 Given the section properties <i>Ax</i>, <i>Sy</i>, and <i>Sz</i>,  
@@ -1834,7 +1892,7 @@ A "c" indicator on "Nx" values in the Frame3DD Output Data file indicates compre
 A "t" indicator on "Nx" values indicates tension.
 </p>
 
-<h4> 7.13.3  Shear Stress </h4> 
+<h4> 7.14.3  Shear Stress </h4> 
 
 <p>
 Given the section properties <i>Asy</i>, <i>Asz</i>, and <i>C</i>,
@@ -2042,6 +2100,7 @@ nE                        # number of frame elements
 shear                      # 1: include shear deformation, 0: don't
 geom                       # 1: include geometric stiffness. 0: don't
 exagg_static               # exaggeration factor for static mesh deformations
+dx                         # x-axis increment for frame element internal forces
 
 
 # load data ...
@@ -2214,14 +2273,14 @@ nC                                                # number of condensed joints
 <a name="Variables"/><h2>10. Variable Definitions</h2>
 
 <pre>
-    a         - Coefficient of thermal expansion (1/degree)
-    anim      - List of modes to be animated, by mode number
-    Ax        - Cross-sectional area of a prismatic frame element
-                (The x-axis is along the element length, in local coordinates)
-    Asy       - Shear area in the local y-axis of a prismatic frame element
-    Asz       - Shear area in the local z-axis of a prismatic frame element
-    BMs       - extra mass on a frame element, not including self mass
-    Cmethod   -  matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
+    a            - Coefficient of thermal expansion (1/degree)
+    anim         - List of modes to be animated, by mode number
+    Ax           - Cross-sectional area of a prismatic frame element
+                   (The x-axis is along the element length, in local coordinates)
+    Asy          - Shear area in the local y-axis of a prismatic frame element
+    Asz          - Shear area in the local z-axis of a prismatic frame element
+    BMs          - extra mass on a frame element, not including self mass
+    Cmethod      -  matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
     cx           - 1: retain X d.o.f. in condensed system at joint J;  0: don't
     cy           - 1: retain Y d.o.f. in condensed system at joint J;  0: don't
     cz           - 1: retain Z d.o.f. in condensed system at joint J;  0: don't
@@ -2235,6 +2294,7 @@ nC                                                # number of condensed joints
     Dyy          - Prescribed rotation in the global Y direction
     Dzz          - Prescribed rotation in the global Z direction
     d            - mass density of a frame element
+    dx           - x-axis increment for frame element internal force data
     E            - Modulus of elasticity of a frame element
     exagg_modal  - Exaggeration factor for the modal  displacements in the plot
     exagg_static - Exaggeration factor for the static displacements in the plot

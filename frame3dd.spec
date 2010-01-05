@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20091203
+Version:	0.20100105
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -67,6 +67,18 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+*Tue Jan 5 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- fix error in equivalent load calculation for trapezoidally-distributed loads
+acting along the local x-axis.
+- add function "write_internal_forces" to compute and save the internal axial
+force, shear forces, torsion, bending moments, and transverse displacements
+for each frame element.
+- add varialbe dx for user-specified x-axis increment for the internal force
+calculations
+- update example *.3dd data files with new dx variable and re-run all examples
+- update user-manual.html
+- issue release 20100105
+
 *Sun Jan 3 2010 Henri Gavin <henri.gavin@duke.edu> 0.20091203
 - add matlab path instructions to the user manual
 

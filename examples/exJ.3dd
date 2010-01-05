@@ -76,6 +76,7 @@ Example J: tesseract  (N, mm, ton)
 1                               # 1: include shear deformation
 0                               # 1: include geometric stiffness
 1.0                             # exaggerate static mesh deformations
+1.0                             # x-axis increment for internal force data
 
 
 1			# number of static load cases
