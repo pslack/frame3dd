@@ -16,7 +16,7 @@ The licenses  for most software and other practical works are designed
 to take away your freedom to share and change the works.  By contrast, 
 the GNU  General  Public License is intended to guarantee your freedom 
 to share and change all versions of a program--to make sure it remains 
- free  software for all its users.   We, the Free Software Foundation, 
+free  software for all its users.    We, the Free Software Foundation, 
 use the  GNU  General  Public  License  for  most  of our software; it 
 applies also to any other work released this way by its authors.   You 
 can apply it to your programs, too. 
@@ -24,7 +24,7 @@ can apply it to your programs, too.
 When we  speak  of  free  software,  we  are referring to freedom, not 
 price.  Our General Public Licenses are designed to make sure that you 
 have the freedom to distribute copies of free software (and charge for 
- them  if you wish), that you receive source code or can get it if you 
+them  if you wish), that you receive source code or can get it if you 
 want it,  that  you can change the software or use pieces of it in new 
 free programs, and that you know you can do these things. 
 
@@ -32,12 +32,12 @@ To protect  your  rights,  we  need to prevent others from denying you
 these  rights  or asking you to surrender the rights.   Therefore, you 
 have certain  responsibilities  if  you  distribute  copies  of  the  
 software, or if you modify it: responsibilities to respect the freedom 
- of others. 
+of others. 
 
 For example,  if  you  distribute  copies  of  such a program, whether 
 gratis  or  for  a  fee,  you  must pass on to the recipients the same 
 freedoms that you received. You must make sure that they, too, receive 
- or can  get  the source code.   And you must show them these terms so 
+or can  get  the source code.   And you must show them these terms so 
 they know their rights. 
 
 Developers  that  use  the GNU GPL protect your rights with two steps: 
@@ -167,8 +167,8 @@ rights of fair use or other equivalent, as provided by copyright law.
 
 You may  make, run and propagate covered works that you do not convey, 
 without conditions so long as your license otherwise remains in force. 
- You may convey covered works to others for the sole purpose of having 
- them  make  modifications  exclusively  for  you, or provide you with 
+You may convey covered works to others for the sole purpose of having 
+them  make  modifications  exclusively  for  you, or provide you with 
 facilities  for running those works, provided that you comply with the 
 terms  of  this License in conveying all material for which you do not 
 control copyright.  Those thus making or running the covered works for 
@@ -178,7 +178,7 @@ copyrighted material outside their relationship with you.
 
 Conveying  under any other circumstances is permitted solely under the 
 conditions stated below. Sublicensing is not allowed; section 10 makes 
- it unnecessary. 
+it unnecessary. 
 
 3. Protecting Users' Legal Rights From Anti-Circumvention Law. 
 
@@ -256,11 +256,11 @@ used for  software  interchange.    * b) Convey the object code in, or
 embodied  in,  a  physical  product (including a physical distribution 
 medium),  accompanied  by  a  written  offer, valid for at least three 
 years  and  valid  for  as  long  as you offer spare parts or customer 
-support  for  that  product  model,  to give anyone who possesses t he 
+support  for  that  product  model,  to give  anyone who possesses the 
 object  code either (1) a copy of the Corresponding Source for all the 
 software  in the product that is covered by this License, on a durable 
 physical medium customarily used for software interchange, for a price 
- no more  than  your  reasonable  cost  of  physically performing this 
+no more  than  your  reasonable  cost  of  physically performing this 
 conveying  of  source,  or (2) access to copy the Corresponding Source 
 from a network server at no charge.   * c) Convey individual copies of 
 the object  code  with  a  copy  of  the  written offer to provide the 
@@ -270,18 +270,18 @@ such an  offer, in accord with subsection 6b.   * d) Convey the object
 code by  offering  access  from  a  designated  place (gratis or for a 
 charge),  and  offer  equivalent access to the Corresponding Source in 
 the same way through the same place at no further charge. You need not 
- require  recipients  to  copy the Corresponding Source along with the 
+require  recipients  to  copy the Corresponding Source along with the 
 object code. If the place to copy the object code is a network server, 
- the Corresponding  Source  may  be on a different server (operated by 
+the Corresponding  Source  may  be on a different server (operated by 
 you or  a  third  party)  that supports equivalent copying facilities, 
 provided  you maintain clear directions next to the object code saying 
 where  to  find  the Corresponding Source.   Regardless of what server 
 hosts the Corresponding Source, you remain obligated to ensure that it 
- is available for as long as needed to satisfy these requirements.   * 
-e) Convey  the  object  code using peer-to-peer transmission, provided 
-you inform  other peers where the object code and Corresponding Source 
-of the work are being offered to the general public at no charge under 
- subsection 6d. 
+is available for as long as needed to satisfy these requirements. * e)
+Convey  the  object  code  using  peer-to-peer  transmission, provided
+you inform  other peers where the object code and Corresponding Source
+of the work are being offered to the general public at no charge under
+subsection 6d. 
 
 A separable  portion of the object code, whose source code is excluded 
 from the  Corresponding  Source  as  a  System  Library,  need  not be 
@@ -321,10 +321,10 @@ modified  object  code  on the User Product (for example, the work has
 been installed in ROM). 
 
 The requirement to provide Installation Information does not include a 
- requirement  to  continue  to  provide  support service, warranty, or 
+requirement  to  continue  to  provide  support service, warranty, or 
 updates  for  a  work  that  has  been  modified  or  installed by the 
 recipient,  or  for  the User Product in which it has been modified or 
-installed.    Access to a network ma y be denied when the modification 
+installed.    Access to a network  may be denied when the modification 
 itself  materially  and adversely affects the operation of the network 
 or violates  the  rules  and  protocols  for  communication across the 
 network. 
@@ -402,7 +402,7 @@ this License  (including  any  patent licenses granted under the third
 paragraph of section 11). 
 
 However, if you cease all violation of this License, then your license 
- from  a  particular copyright holder is reinstated (a) provisionally, 
+from  a  particular copyright holder is reinstated (a) provisionally, 
 unless  and  until  the  copyright  holder  explicitly  and  finally  
 terminates  your license, and (b) permanently, if the copyright holder 
 fails to notify you of the violation by some reasonable means prior to 
@@ -424,7 +424,7 @@ material under section 10.
 9. Acceptance Not Required for Having Copies. 
 
 You are not required to accept this License in order to receive or run 
- a copy  of  the  Program.     Ancillary propagation of a covered work 
+a copy  of  the  Program.     Ancillary propagation of a covered work 
 occurring  solely  as a consequence of using peer-to-peer transmission 
 to receive  a  copy  likewise  does not require acceptance.   However, 
 nothing  other than this License grants you permission to propagate or 
@@ -453,9 +453,9 @@ You may  not  impose  any  further restrictions on the exercise of the
 rights  granted or affirmed under this License.   For example, you may 
 not impose  a  license  fee,  royalty, or other charge for exercise of 
 rights granted under this License, and you may not initiate litigation 
- (including a cross-claim o r counterclaim in a lawsuit) alleging that 
- any patent claim is infringed by making, using, selling, offering for 
- sale, or importing the Program or any portion of it. 
+(including a cross-claim or counterclaim in a lawsuit) alleging that 
+any patent claim is infringed by making, using, selling, offering for 
+sale, or importing the Program or any portion of it. 
 
 11. Patents. 
 
@@ -529,12 +529,12 @@ otherwise be available to you under applicable patent law.
 12. No Surrender of Others' Freedom. 
 
 If conditions are imposed on you (whether by court order, agreement or 
- otherwise)  that  contradict  the conditions of this License, they do 
+otherwise)  that  contradict  the conditions of this License, they do 
 not excuse  you  from  the conditions of this License.   If you cannot 
 convey a covered work so as to satisfy simultaneously your obligations 
 under  this  License  and  any  other pertinent obligations, then as a 
 consequence you may not convey it at all. For example, if you agree to 
- terms  that  obligate  you to collect a royalty for further conveying 
+terms  that  obligate  you to collect a royalty for further conveying 
 from those  to  whom  you  convey  the Program, the only way you could 
 satisfy both those terms and this License would be to refrain entirely 
 from conveying the Program. 
@@ -554,7 +554,7 @@ the combination as such.
 
 The Free  Software  Foundation may publish revised and/or new versions 
 of the GNU General Public License from time to time. Such new versions 
- will  be  similar in spirit to the present version, but may differ in 
+will  be  similar in spirit to the present version, but may differ in 
 detail to address new problems or concerns. 
 
 Each version is given a distinguishing version number.  If the Program 
@@ -567,7 +567,7 @@ License,  you  may  choose  any  version  ever  published  by the Free
 Software Foundation. 
 
 If the Program specifies that a proxy can decide which future versions 
- of the  GNU  General  Public License can be used, that proxy's public 
+of the  GNU  General  Public License can be used, that proxy's public 
 statement  of  acceptance  of  a version permanently authorizes you to 
 choose that version for the Program. 
 
