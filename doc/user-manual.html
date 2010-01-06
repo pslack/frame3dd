@@ -2126,7 +2126,6 @@ nL                        # number of static load cases
 #   mm/s^2     mm/s^2     mm/s^2
     gX         gY         gZ
 
-
 nF                     # number of loaded joints (global)
 #.joint  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
 #         N        N        N        N.mm      N.mm      N.mm
@@ -2177,8 +2176,10 @@ nD                     # number of prescribed displacements nD<=nR (global)
 
 # Begin Static Load Case 2
 
-# gravitational acceleration for self-weight loading, mm/s^2
- gX  gY  gZ                         
+# gravitational acceleration for self-weight loading, mm/s^2 (global)
+#   gX         gY         gZ
+#   mm/s^2     mm/s^2     mm/s^2
+    gX         gY         gZ                         
 
 nF                     # number of loaded joints (global)
 #.joint  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
