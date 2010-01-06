@@ -1,5 +1,5 @@
 /*	
- FRAME3DD: 
+ This file is part of FRAME3DD: 
  Static and dynamic structural analysis of 2D & 3D frames and trusses
  with elastic and geometric stiffness.
  ---------------------------------------------------------------------------
