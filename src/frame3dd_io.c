@@ -574,11 +574,13 @@ void read_run_data (
 	    exit(1);
 	}
 
-	if ( *dx < 0.0 ) {
+	
+	if ( *dx <= 0.0 && *dx != -1 ) {
 	    fprintf(stderr," Remember to specify a frame element increment");
 	    fprintf(stderr," greater than zero\n");
 	    exit(1);
 	}
+	
 
 	/* over-ride values from input data file with command-line options */
 	if ( shear_flag != -1   )	*shear = shear_flag;
@@ -2348,7 +2350,7 @@ void write_internal_forces(
 	FILE	*fpif;		/* file pointer for internal force data */
 	time_t  now;		/* modern time variable type		*/
 
-	if (dx <= 0.0)	return;
+	if (dx == -1.0)	return;	// skip calculation of internal forces and displ
 
 	(void) time(&now);
 

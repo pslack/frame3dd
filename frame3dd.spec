@@ -67,6 +67,12 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+*Wed Jan 6 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- if dx == -1 then skip the calculation of internal forces and transverse
+displacements.  
+- update examples/*.3dd data files with new dx variable and re-run all examples
+- update user-manual.html
+
 *Tue Jan 5 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
 - fix error in equivalent load calculation for trapezoidally-distributed loads
 acting along the local x-axis.
