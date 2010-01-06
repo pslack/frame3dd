@@ -31,7 +31,7 @@ Test internal force calculations - Jan 4 2010   (N, mm, tonne)
 1			# 1: include shear deformation
 0                       # 1: include geometric stiffness
 10                      # exaggerate static mesh deformations
-1.0			# x-axis increment for internal forces
+1.00			# x-axis increment for internal forces and displ
 
 
 # load data ...
