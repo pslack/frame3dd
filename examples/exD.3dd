@@ -68,10 +68,10 @@ Example D: dynamic properties of an un-restrained frame with a triangular sectio
 29 23 24  125   100   100   5000   2500   2500   29000   11500 0  7.32e-7
 30 24 19  125   100   100   5000   2500   2500   29000   11500 0  7.32e-7
 
-1                               # 1: include shear deformation
-0                               # 1: include geometric stiffness
-20.0                            # exaggerate static mesh deformations
-1.0                             # x-axis increment for internal forces
+1           # 1: include shear deformation
+0           # 1: include geometric stiffness
+20.0        # exaggerate static mesh deformations
+-1          # dx = -1 means no internal force or transverse displ. calculation
 
 
 

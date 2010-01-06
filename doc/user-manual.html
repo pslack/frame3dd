@@ -1126,12 +1126,12 @@ specifying element joint 1 location as (<i>x1, y1, z1</i>) and
 element joint 2 location as (<i>x2, y2, z2</i>), 
 <ul>
 <li>If <i>x1 &#8800; x2</i> then <i>x1</i> should be less then <i>x2</i>.
-Joint J2 should be toward the more positive side of the <i>X</i> axis.  
+Joint J2 should be toward the more positive side of the <i>X</i>-axis.  
  
 <li>If <i>x1=x2</i> and <i>y1 &#8800; y2</i> then <i>y1</i> should be less then <i>y2</i>. 
-Joint J2 should be toward the more positive side of the <i>Y</i> axis.  
+Joint J2 should be toward the more positive side of the <i>Y</i>-axis.  
 <li> If <i>x1=x2</i> and <i>y1=y2</i> and <i>z1 &#8800; z2</i> then <i>z1</i> should be less then <i>z2</i>.
-Joint J2 should be toward the more positive side of the <i>Z</i> axis.  
+Joint J2 should be toward the more positive side of the <i>Z</i>-axis.  
 </ul>
 </p>
 <p>
@@ -1561,7 +1561,7 @@ Up to ten trapezoidal loads may be specified per frame element.
 Trapezoidally distributed loads have components in the local <i>x</i> direction,
 the local <i>y</i> direction, and the local <i>z</i> direction.
 Trapezoidally distributed loads are specified by the distances along
-the local <i>x</i> axis where the loading starts and stops, and
+the local <i>x</i>-axis where the loading starts and stops, and
 by the value of the load at the starting location and the stopping location.<br>
 The starting location for a trapezoidal load must be greater than 0 and less
 than the stopping location of the trapezoidal load.
@@ -1723,7 +1723,7 @@ conditioning of the condensed mass and stiffness matrices.
 The frame element end forces listed in the Output data file adhere to a
 sign convention determined by the local coordinate system of the frame element.
 The local coordinate system of the frame element has its origin at joint 1 of the frame element.   
-The local <i>x</i> axis lies along the element, from joint 1 to joint 2.  
+The local <i>x</i>-axis lies along the element, from joint 1 to joint 2.  
 The local <i>y</i> and <i>z</i> axes are aligned with the principle axes of the frame element cross section.   
 The frame element end forces are designated as
 <i>Nx</i>, <i>Vy</i>, <i>Vz</i> for the axial force and end shears 
@@ -1754,24 +1754,30 @@ has positive curvature in the <i>x-y</i> plane.
 <h3> 7.13 Internal Frame Element Forces and Transverse Displacements</h3>
 
 <p>
-<b>Frame3DD</b> generates an output data file listing the internal
-axial force, shear forces, torsion, and bending momements for each
-frame element.  A separate internal force output file is provided
-for each load case.   If the Frame3DD analysis Output Data file 
+<b>Frame3DD</b> optionally generates output data files listing the internal
+axial force, shear forces, torsion, and bending momements and
+transverse displacements for each frame element.   
+These quantities are tabulated at user-specified increments 
+of length <i>dx</i> along the local <i>x</i>-axis of each frame element.   
+If the <i>x</i>-axis increment, <i>dx</i>, is specified as a non-positive number
+then the calculation of internal frame element forces 
+and transverse displacements is skipped.  
+Otherwise a separate internal force output file is written for each load case.
+If the Frame3DD analysis Output Data file 
 is named <b>MyResultsA.out</b>, then the internal force output data 
-files are automatically named as
+files are automatically named 
 <b>MyResultsA.if01</b> for load case 1, 
 <b>MyResultsA.if02</b> for load case 2, and so on. 
 The internal force output data contains a section for each frame element.
 Each section has nine columns, as follows:
 <ul>
-<li> column 1: <i>x</i> axis data with a user-specified <i>x</i>-axis increment, <i>dx</i>.
-<li> column 2: frame element axial force along the local <i>x</i> axis 
+<li> column 1: <i>x</i>-axis data with a user-specified <i>x</i>-axis increment, <i>dx</i>.
+<li> column 2: frame element axial force along the local <i>x</i>-axis 
 <li> column 3: frame element shear force in the local <i>y</i> direction
 <li> column 4: frame element shear force in the local <i>z</i> direction
-<li> column 5: frame element torsion about the local <i>x</i> axis
-<li> column 6: frame element bending moments about the local <i>-y</i> axis
-<li> column 7: frame element bending moments about the local <i>z</i> axis
+<li> column 5: frame element torsion about the local <i>x</i>-axis
+<li> column 6: frame element bending moments about the local <i>-y</i>-axis
+<li> column 7: frame element bending moments about the local <i>z</i>-axis
 <li> column 8: frame element transverse displacement in the local <i>y</i> direction
 <li> column 9: frame element transverse displacement in the local <i>z</i> direction
 </ul>
@@ -1781,7 +1787,7 @@ The frame element internal force data file may be
 plotted with Gnuplot, may be read by a spreadsheet program,
 or may be read by Matlab for further post-processing.   An example
 of the first several lines of an internal force data file is shown here.
-The <i>x</i>-axis increment is 1 mm in this analysis.  
+In this example, the <i>x</i>-axis increment, <i>dx</i>, has a length of 1 mm.
 <img src="img/InternForces.png" align="center" border="0"><br>
 </p>
 
@@ -1791,7 +1797,7 @@ The sign convention for internal forces and transverse displacements is as follo
 <li> Positive internal axial force (Nx) is tensile.
 <li> Positive internal shear forces (Vy and Vz) are in the positive <i>y</i> and <i>z</i>
 directions on positive <i>x</i> surfaces.
-<li> Positive internal torsion (Tx) is counter-clockwise about the positive <i>x</i> axis.  
+<li> Positive internal torsion (Tx) is counter-clockwise about the positive <i>x</i>-axis.  
 <li> Positive bending moments (My and Mz) produce positive curvature bending deformation in the <i>x-z</i> and <i>x-y</i> planes.  
 <li> Positive transverse displacements (Dy and Dz) are in the positive <i>y</i>
 and <i>z</i> directions.
@@ -2103,11 +2109,11 @@ nE                        # number of frame elements
  M[nE] J1[nE] J2[nE] Ax[nE] Asy[nE] Asz[nE] Jx[nE] Iy[nE] Iz[nE] E[nE] G[nE] p[nE] d[nE]
 
 
-shear                      # 1: include shear deformation, 0: don't
-geom                       # 1: include geometric stiffness. 0: don't
-exagg_static               # exaggeration factor for static mesh deformations
-dx                         # x-axis increment for frame element internal forces
-
+shear        # 1: include shear deformation, 0: don't
+geom         # 1: include geometric stiffness. 0: don't
+exagg_static # exaggeration factor for static mesh deformations
+dx           # length of x-axis increment for frame element internal force data
+             # if dx <= 0 then internal force calculations are skipped
 
 # load data ...
 

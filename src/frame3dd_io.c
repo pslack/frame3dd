@@ -2348,6 +2348,8 @@ void write_internal_forces(
 	FILE	*fpif;		/* file pointer for internal force data */
 	time_t  now;		/* modern time variable type		*/
 
+	if (dx <= 0.0)	return;
+
 	(void) time(&now);
 
 	/* file name for internal force data for load case "lc" */

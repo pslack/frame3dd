@@ -33,10 +33,11 @@ nE                        # number of frame elements
    :      :      :      :       :       :      :      :      :     :     :     :     :
  M[nE] J1[nE] J2[nE] Ax[nE] Asy[nE] Asz[nE] Jx[nE] Iy[nE] Iz[nE] E[nE] G[nE] p[nE] d[nE]
 
-shear                      # 1: include shear deformation
-geom                       # 1: include geometric stiffness
-exagg_static               # exaggerate static mesh deformations
-dx                         # x-axis increment for frame element internal forces
+shear        # 1: include shear deformation, 0: don't
+geom         # 1: include geometric stiffness. 0: don't
+exagg_static # exaggeration factor for static mesh deformations
+dx           # length of x-axis increment for frame element internal force data
+             # if dx <= 0 then internal force calculations are skipped
 
 
 # load data ...
