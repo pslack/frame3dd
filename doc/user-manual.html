@@ -1611,8 +1611,8 @@ the same frame element in the same load case.
 Whenever the average axial strain in a frame element (<i>Nx/(EAx)</i>) exceeds 0.001 (0.1%) in magnitude, a warning message is displayed indicating the strain level and the element in question.    Most structural materials yield at strains between
 0.1% and 0.2%.   When this warning message is displayed the structure is likely in an overloaded condition and the loads should be reduced.
 Note that this check for overloaded elements provides an approximate stress check.
-A more complete stress check would compute
-the composite axial, shear, torsion and bending stresses and strains within each element.   
+A more complete stress check would compute the composite axial, shear, torsion
+and bending stresses and strains within each element.   
 Such a check requires additional cross section information: 
 the section moduli and the section dimensions,
 as described in section 7.14 below.  
@@ -1816,6 +1816,10 @@ distributed loads on the frame elements.
 A corrected trapezoidal integration method is implemented 
 so that the internal force and transverse displacement data match the 
 known internal forces and joint displacements at both ends of each frame element.  
+Internal forces and displacements computed with 
+a smaller increment length, <i>dx</i>, will be more accurate.  
+In general, a value of <i>dx</i> equal to one percent to ten percent of the
+typical frame elemnt length is sufficiently accurate.  
 </p>
 
 <h3> 7.14 Stress Check </h3>
