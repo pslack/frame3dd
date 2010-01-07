@@ -44,7 +44,7 @@ void assemble_K(
 	double *L, double *Le,	/**< length of each frame element, effective */
 	int *J1, int *J2,	/**< joint connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
-	float *J, float *Iy, float *Iz,	/**< section inertias	*/
+	float *Jx, float *Iy, float *Iz,	/**< section inertias	*/
 	float *E, float *G,	/**< elastic and shear moduli		*/
 	float *p,		/**< roll angle, radians		*/
 	int shear,		/**< 1: include shear deformation, 0: don't */
@@ -84,7 +84,7 @@ void end_forces(
 	double *L, double *Le,	/**< length of each frame element, effective */
 	int *J1, int *J2,	/**< joint connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
-	float *J, float *Iy, float *Iz,	/**< section area inertias	*/
+	float *Jx, float *Iy, float *Iz,	/**< section area inertias */
 	float *E, float *G,	/**< elastic and shear moduli		*/
 	float *p,		/**< roll angle, radians		*/
 	double *D,	/**< displacement vector			*/
@@ -120,7 +120,7 @@ void assemble_M(
 	double *L,	/**< length of each frame element, effective	*/
 	int *J1, int *J2, /**< joint connectivity			*/
 	float *Ax,	/**< joint connectivity				*/
-	float *J, float *Iy, float *Iz,	/**< section area inertias	*/
+	float *Jx, float *Iy, float *Iz,	/**< section area inertias*/
 	float *p,	/**< roll angle, radians			*/
 	float *d,	/**< frame element density			*/
 	float *BMs,	/**< extra frame element mass			*/
@@ -186,7 +186,7 @@ void deallocate(
 	vec3 *xyz, float *r, double *L, double *Le,
 	int *J1, int *J2, int *R,
 	float *Ax, float *Asy, float *Asz,
-	float *J, float *Iy, float *Iz,
+	float *Jx, float *Iy, float *Iz,
 	float *E, float *G,
 	float *p,
 	float ***U, float ***W, float ***P, float ***T,

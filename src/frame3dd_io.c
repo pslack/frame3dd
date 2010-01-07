@@ -387,7 +387,7 @@ void read_frame_element_data(
 	double *L, double *Le,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz,
-	float *J, float *Iy, float *Iz, float *E, float *G, float *p, float *d
+	float *Jx, float *Iy, float *Iz, float *E, float *G, float *p, float *d
 ){
 	int	j1, j2, i, b;
 	int	sfrv;	/* *scanf return value */
@@ -409,7 +409,7 @@ void read_frame_element_data(
 		}
 		sfrv=fscanf(fp, "%f %f %f", &Ax[b], &Asy[b], &Asz[b] );
 		if (sfrv != 3) sferr("section areas in frame element data");
-		sfrv=fscanf(fp, "%f %f %f", &J[b],  &Iy[b],  &Iz[b] );
+		sfrv=fscanf(fp, "%f %f %f", &Jx[b],  &Iy[b],  &Iz[b] );
 		if (sfrv != 3) sferr("section inertias in frame element data");
 		sfrv=fscanf(fp, "%f %f", &E[b], &G[b] );
 		if (sfrv != 2) sferr("material moduli in frame element data");
@@ -422,7 +422,7 @@ void read_frame_element_data(
 		if (sfrv != 1) sferr("mass density in frame element data");
 
 		if ( Ax[b] < 0 || Asy[b] < 0 || Asz[b] < 0 ||
-		      J[b] < 0 ||  Iy[b] < 0 ||  Iz[b] < 0	) {
+		     Jx[b] < 0 ||  Iy[b] < 0 ||  Iz[b] < 0	) {
 		 fprintf(stderr,"\n  error in frame element property data: section property < 0  ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
 		 exit(1);
@@ -437,7 +437,7 @@ void read_frame_element_data(
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
 		 exit(1);
 		}
-		if ( J[b] == 0 ) {
+		if ( Jx[b] == 0 ) {
 		 fprintf(stderr,"\n  error in frame element property data: torsional moment of inertia is zero   ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
 		 exit(1);
@@ -1721,7 +1721,7 @@ void write_input_data(
 	int *nF, int *nU, int *nW, int *nP, int *nT,
 	vec3 *xyz, float *r,
 	int *J1, int *J2,
-	float *Ax, float *Asy, float *Asz, float *J, float *Iy, float *Iz,
+	float *Ax, float *Asy, float *Asz, float *Jx, float *Iy, float *Iz,
 	float *E, float *G, float *p, float *d, 
 	float *gX, float *gY, float *gZ, 
 	double **F, float **Dp,
@@ -1781,7 +1781,7 @@ void write_input_data(
 		fprintf(fp,"%5d %5d %5d %6.1f %5.1f %5.1f",
 					i, J1[i],J2[i], Ax[i], Asy[i], Asz[i] );
 		fprintf(fp," %6.1f %7.1f %7.1f %8.1f %7.1f %3.0f %8.2e\n",
-			J[i], Iy[i], Iz[i], E[i], G[i], p[i]*180.0/PI, d[i] );
+			Jx[i], Iy[i], Iz[i], E[i], G[i], p[i]*180.0/PI, d[i] );
 	}
 	if ( shear )	fprintf(fp,"  Include shear deformations.\n");
 	else		fprintf(fp,"  Neglect shear deformations.\n");
@@ -2305,21 +2305,22 @@ void write_static_mfile (
 
 /*------------------------------------------------------------------------------
 WRITE_INTERNAL_FORCES - 
-compute internal axial forces, shear forces, torsion moments, bending moments
-and transverse displacements
+calculate frame element internal forces, Nx, Vy, Vz, Tx, My, Mz
+calculate frame element local displacements, Rx, Dx, Dy, Dz
+write internal forces and local displacements to an output data file
 4jan10
 ------------------------------------------------------------------------------*/
 void write_internal_forces(
 		char infcpath[], int lc, int nL, char title[], float dx,
 		vec3 *xyz, 
 		double **Q, int nJ, int nE, double *L, int *J1, int *J2, 
-		float *Ax, float *Asy, float *Asz, float *Iy, float *Iz,
+		float *Ax,float *Asy,float *Asz,float *Jx,float *Iy,float *Iz,
 		float *E, float *G, float *p,
 		float *d, float gX, float gY, float gZ,
 		int nU, float **U, int nW, float **W, int nP, float **P,
-		double *D, int shear
+		double *D, int shear, double error
 ){
-	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord Xformn	*/
+	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord transformation */
 		d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12; /* displ. */
 
 	double	xx1,xx2, wx1,wx2,	/* trapz load data, local x dir */
@@ -2339,6 +2340,7 @@ void write_internal_forces(
 		*Tx,		/* torsional moment within frame el.	*/
 		*My, *Mz, 	/* bending moments within frame el.	*/
 		*Sy, *Sz,	/* transverse slopes of frame el.	*/
+		*Dx, *Rx,	/* displacement in local x-dir and twist*/
 		*Dy, *Dz;	/* transverse dislacements of frame el.	*/
 
 	int	n, m,		/* frame element number			*/
@@ -2378,7 +2380,7 @@ void write_internal_forces(
 		j1 = J1[m];	j2 = J2[m];
 
 		fprintf(fpif,"# frame element %d: J1=%d  J2=%d\n", m,j1,j2);
-		fprintf(fpif,"#.x\t\tNx\t\tVy\t\tVz\t\tTx\t\tMy\t\tMz\t\tDy\t\tDz\n");
+		fprintf(fpif,"#.x\t\tNx\t\tVy\t\tVz\t\tTx\t\tMy\t\tMz\t\tDx\t\tDy\t\tDz\t\tRx\n");
 
 		coord_trans ( xyz, L[m], j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[m] );
@@ -2410,23 +2412,25 @@ void write_internal_forces(
 		Mz = dvector(0,nx);
 		Sy = dvector(0,nx);
 		Sz = dvector(0,nx);
+		Rx = dvector(0,nx);
+		Dx = dvector(0,nx);
 		Dy = dvector(0,nx);
 		Dz = dvector(0,nx);
 
 		// local x-axis for frame element "m" starts at 0, ends at L[m]
 		for (i=0; i<nx; i++)	x[i] = i*dx;	
-		x[nx] = L[m];
-		dxnx = x[nx]-x[nx-1];
+		x[nx] = L[m];		
+		dxnx = x[nx]-x[nx-1];	// length of the last x-axis increment
 
 	// find interior axial force, shear forces, and bending moments
 
 		// interior forces for frame element "m" at (x=0)
-		Nx[0] = -Q[m][1];
-		Vy[0] = -Q[m][2];
-		Vz[0] = -Q[m][3];
-		Tx[0] = -Q[m][4];
-		My[0] =  Q[m][5];
-		Mz[0] = -Q[m][6];
+		Nx[0] = -Q[m][1];	// positive Nx is tensile
+		Vy[0] = -Q[m][2];	// positive Vy in local y direction
+		Vz[0] = -Q[m][3];	// positive Vz in local z direction
+		Tx[0] = -Q[m][4];	// positive Tx r.h.r. about local x axis
+		My[0] =  Q[m][5];	// positive My -> positive x-z curvature
+		Mz[0] = -Q[m][6];	// positive Mz -> positive x-y curvature
 
 		dx_ = dx;
 		for (i=1; i<=nx; i++) {
@@ -2464,7 +2468,7 @@ void write_internal_forces(
 			}
 
 			// trapezoidal integration of distributed loads 
-			// for forces and torques
+			// for axial forces, shear forces and torques
 			if (i==nx)	dx_ = dxnx;
 			Nx[i] = Nx[i-1] - 0.5*(wx+wx_)*dx_;
 			Vy[i] = Vy[i-1] - 0.5*(wy+wy_)*dx_;
@@ -2523,12 +2527,36 @@ void write_internal_forces(
 
 
 		// rotations and displacements for frame element "m" at (x=0)
-		Sy[0] =  d6;
-		Sz[0] = -d5;
-		Dy[0] =  d2;
-		Dz[0] =  d3;
+		Dx[0] =  d1;	// displacement in  local x dir  at joint J1
+		Dy[0] =  d2;	// displacement in  local y dir  at joint J1
+		Dz[0] =  d3;	// displacement in  local z dir  at joint J1
+		Rx[0] =  d4;	// rotationin about local x axis at joint J1
+		Sy[0] =  d6;	// slope in  local y  direction  at joint J1
+		Sz[0] = -d5;	// slope in  local z  direction  at joint J1
 
-		// slope along frame element "m"
+		// axial displacement along frame element "m"
+		dx_ = dx;
+		for (i=1; i<=nx; i++) {
+			if (i==nx)	dx_ = dxnx;
+			Dx[i] = Dx[i-1] + 0.5*(Nx[i-1]+Nx[i])/(E[m]*Ax[m])*dx_;
+		}
+		// linear correction for bias in trapezoidal integration
+		for (i=1; i<=nx; i++) {
+			Dx[i] -= (Dx[nx]-d7) * i/nx;
+		}
+		
+		// torsional rotation along frame element "m"
+		dx_ = dx;
+		for (i=1; i<=nx; i++) {
+			if (i==nx)	dx_ = dxnx;
+			Rx[i] = Rx[i-1] + 0.5*(Tx[i-1]+Tx[i])/(G[m]*Jx[m])*dx_;
+		}
+		// linear correction for bias in trapezoidal integration
+		for (i=1; i<=nx; i++) {
+			Rx[i] -= (Rx[nx]-d10) * i/nx;
+		}
+		
+		// transverse slope along frame element "m"
 		dx_ = dx;
 		for (i=1; i<=nx; i++) {
 			if (i==nx)	dx_ = dxnx;
@@ -2564,10 +2592,11 @@ void write_internal_forces(
 		for (i=0; i<=nx; i++) {
 			fprintf(fpif,"%14.6e\t", x[i] );
 			fprintf(fpif,"%14.6e\t%14.6e\t%14.6e\t",
-							Nx[i], Vy[i], Vz[i] );
+						Nx[i], Vy[i], Vz[i] );
 			fprintf(fpif,"%14.6e\t%14.6e\t%14.6e\t",
-							Tx[i], My[i], Mz[i] );
-			fprintf(fpif,"%14.6e\t%14.6e\n", Dy[i], Dz[i] );
+						Tx[i], My[i], Mz[i] );
+			fprintf(fpif,"%14.6e\t%14.6e\t%14.6e\t%14.6e\n",
+						Dx[i], Dy[i], Dz[i], Rx[i] );
 		}
 		fprintf(fpif,"#---------------------------------------\n\n\n");
 
@@ -2579,8 +2608,10 @@ void write_internal_forces(
 		free_dvector(Tx,0,nx);
 		free_dvector(My,0,nx);
 		free_dvector(Mz,0,nx);
+		free_dvector(Rx,0,nx);
 		free_dvector(Sy,0,nx);
 		free_dvector(Sz,0,nx);
+		free_dvector(Dx,0,nx);
 		free_dvector(Dy,0,nx);
 		free_dvector(Dz,0,nx);
 

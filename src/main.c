@@ -78,7 +78,7 @@ For compilation/installation, see README.txt.
 
 	float	*r,		/* joint size radius, for finite sizes	*/
 		*Ax,*Asy, *Asz,	/* cross section areas, incl. shear	*/
-		*J,*Iy,*Iz,	/* section inertias			*/
+		*Jx,*Iy,*Iz,	/* section inertias			*/
 		*E, *G,		/* elastic modulus and shear moduli	*/
 		*p,		/* roll of each member, radians		*/
 		***U,		/* uniform distributed member loads	*/
@@ -260,7 +260,7 @@ For compilation/installation, see README.txt.
 	Ax  =  vector(1,nE);	/* cross section area of each element	*/
 	Asy =  vector(1,nE);	/* shear area in local y direction 	*/
 	Asz =  vector(1,nE);	/* shear area in local z direction	*/
-	J   =  vector(1,nE);	/* torsional moment of inertia 		*/
+	Jx  =  vector(1,nE);	/* torsional moment of inertia 		*/
 	Iy  =  vector(1,nE);	/* bending moment of inertia about y-axis */
 	Iz  =  vector(1,nE);	/* bending moment of inertia about z-axis */
 
@@ -270,7 +270,7 @@ For compilation/installation, see README.txt.
 	d   =  vector(1,nE);	/* member rotation angle about local x axis */
 
 	read_frame_element_data( fp, nJ, nE, xyz,r, L, Le, J1, J2,
-					Ax, Asy, Asz, J, Iy, Iz, E, G, p, d );
+					Ax, Asy, Asz, Jx, Iy, Iz, E, G, p, d );
 	if ( verbose) 	printf(" ... complete\n");
 
 
@@ -378,7 +378,7 @@ For compilation/installation, see README.txt.
 	}
 
 	write_input_data ( fp, title, nJ,nE,nL, nD,nR, nF,nU,nW,nP,nT,
-				xyz, r, J1,J2, Ax,Asy,Asz, J,Iy,Iz, E,G, p,
+				xyz, r, J1,J2, Ax,Asy,Asz, Jx,Iy,Iz, E,G, p,
 				d, gX, gY, gZ, 
 				Fo, Dp, R, U, W, P, T, shear, anlyz, geom );
 
@@ -392,7 +392,8 @@ For compilation/installation, see README.txt.
 		for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
 
 		assemble_K ( K, DoF, nE, xyz,r, L, Le, J1, J2,
-				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
+					Ax, Asy, Asz, Jx,Iy,Iz, E, G, p,
+					shear, geom, Q );
 
 #ifdef MATRIX_DEBUG
 		save_dmatrix ( DoF, DoF, K, "Kf" ); /* free stiffness matrix */
@@ -406,11 +407,11 @@ For compilation/installation, see README.txt.
 			solve_system( K, dD, F, DoF, &ok, verbose );
 			for (i=1; i<=DoF; i++)	D[i] += dD[i];
 			end_forces ( Q, nE, xyz, L, Le, J1,J2,
-				Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
+				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 		}
 
 		assemble_K ( K, DoF, nE, xyz, r, L, Le, J1, J2,
-				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
+				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p, shear,geom, Q );
 
 		/* then add mechanical loads ... */
 		if ( nF[lc]>0 || nU[lc]>0 || nW[lc]>0 || nP[lc]>0 || nD[lc]>0 || 
@@ -421,7 +422,7 @@ For compilation/installation, see README.txt.
 			solve_system( K, dD, F, DoF, &ok, verbose );
 			for (i=1; i<=DoF; i++)	D[i] += dD[i];
 			end_forces ( Q, nE, xyz, L, Le, J1,J2,
-				Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
+				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 		}
 
 		/* Newton-Raphson iterations for geometric non-linearity */
@@ -443,7 +444,7 @@ For compilation/installation, see README.txt.
 			++iter;
 
 			assemble_K ( K, DoF, nE, xyz, r, L, Le, J1, J2,
-				Ax, Asy, Asz, J,Iy,Iz, E, G, p, shear, geom, Q );
+				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p, shear,geom, Q );
 
 			apply_reactions ( DoF, R, Dp[lc], Fo[lc], F, K, 'm' );
 
@@ -476,7 +477,7 @@ For compilation/installation, see README.txt.
 			for (i=1; i<=DoF; i++)	D[i] += dD[i];	/* increment D */
 
 			end_forces ( Q, nE, xyz, L, Le, J1,J2, 
-				Ax, Asy,Asz, J,Iy,Iz, E,G, p, D, shear, geom );
+				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 
 					 /* convergence criteria:  */
 			//error = rel_norm ( dD, D, DoF ); /* displ. increment */
@@ -530,15 +531,15 @@ For compilation/installation, see README.txt.
  *		 " and re-run the analysis. \n");
  *
  */
-		static_mesh ( IN_file, meshpath, plotpath, title, nJ,nE,nL, lc,
-				DoF, xyz, L, J1,J2, p, D, exagg_static, anlyz);
-
 		write_internal_forces ( infcpath, lc, nL, title, dx, xyz,
 					Q, nJ, nE, L, J1, J2, 
-					Ax, Asy, Asz, Iy, Iz, E, G, p,
+					Ax, Asy, Asz, Jx, Iy, Iz, E, G, p,
 					d, gX[lc], gY[lc], gZ[lc],
 					nU[lc],U[lc],nW[lc],W[lc],nP[lc],P[lc],
-					D, shear );
+					D, shear, error );
+
+		static_mesh ( IN_file, meshpath, plotpath, title, nJ,nE,nL, lc,
+				DoF, xyz, L, J1,J2, p, D, exagg_static, anlyz);
 
 	 } /* end load case loop */
 	} else {
@@ -563,7 +564,7 @@ For compilation/installation, see README.txt.
 		V   = dmatrix(1,DoF,1,nM_calc);
 
 		assemble_M ( M, DoF, nJ, nE, xyz, r, L, J1,J2,
-				Ax, J,Iy,Iz, p, d, BMs, JMs, JMx, JMy, JMz,
+				Ax, Jx,Iy,Iz, p, d, BMs, JMs, JMx, JMy, JMz,
 				lump );
 
 #ifdef MATRIX_DEBUG
@@ -660,7 +661,7 @@ For compilation/installation, see README.txt.
 	/* deallocate memory used for each frame analysis variable */
 	deallocate ( nJ, nE, nL, nF, nU, nW, nP, nT, DoF, nM,
 			xyz, r, L, Le, J1, J2, R,
-			Ax, Asy, Asz, J, Iy, Iz, E, G, p,
+			Ax, Asy, Asz, Jx, Iy, Iz, E, G, p,
 			U,W,P,T, Dp, Fo_mech, Fo_temp,
 			feF_mech, feF_temp, feF, Fo, F,
 			K, Q, D, dD,

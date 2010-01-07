@@ -118,7 +118,7 @@ void read_frame_element_data (
 	double *L, double *Le,	/**< length of each frame element, effective */
 	int *J1, int *J2, 	/**< joint connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
-	float *J, float *Iy, float *Iz,	/**< section inertias	*/
+	float *Jx, float *Iy, float *Iz,	/**< section inertias	*/
 	float *E, float *G,	/**< elastic moduli and shear moduli	*/
 	float *p,	/**< roll angle of each frame element (radians)	*/
 	float *d	/**< mass density of each frame element		*/
@@ -264,7 +264,7 @@ void write_input_data(
 	vec3 *xyz, float *r,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz,
-	float *J, float *Iy, float *Iz,
+	float *Jx, float *Iy, float *Iz,
 	float *E, float *G, float *p,
 	float *d, float *gX, float *gY, float *gZ, 
 	double **F, float **Dp,
@@ -311,7 +311,10 @@ void write_static_mfile(
 
 
 /** 
-	calculate frame element internal forces, Nx, Vy, Vz, Tx, My, Mz 4jan10
+	calculate frame element internal forces, Nx, Vy, Vz, Tx, My, Mz
+	calculate frame element local displacements, Rx, Dx, Dy, Dz
+	write internal forces and local displacements to an output data file
+	4jan10
 */
 void write_internal_forces(
 	char infcpath[],/**< interior force data file			*/
@@ -327,6 +330,7 @@ void write_internal_forces(
 	int *J1, int *J2, /**< joint connectivity                       */
 	float *Ax,	/**< cross sectional area                       */
 	float *Asy, float *Asz,	/**< effective shear area               */
+	float *Jx, 	/**< torsional moment of inertia 	         */
 	float *Iy, float *Iz,	/**< bending moment of inertia          */
 	float *E, float *G,	/**< elastic and shear modulii          */
 	float *p,	/**< roll angle, radians                        */
@@ -339,7 +343,8 @@ void write_internal_forces(
 	int nP,		/**< number of internal point loads		*/
 	float **P,	/**< internal point load data                   */
 	double *D,	/**< joint displacements                        */
-	int     shear	/**< shear deformation flag                     */
+	int shear,	/**< shear deformation flag                     */
+	double error	/**< RMS equilibrium error			*/
 );
 
 
@@ -364,7 +369,7 @@ void static_mesh(
 	char OUT_file[], char meshpath[], char plotpath[],
 	char *title, int nJ, int nE, int nL, int lc, int DoF,
 	vec3 *xyz, double *L,
-	int *J1, int *J, float *p, double *D,
+	int *J1, int *J2, float *p, double *D,
 	double exagg_static, int anlyz
 );
 

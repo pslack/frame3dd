@@ -1,3 +1,6 @@
+*Thu Jan 7 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- add torsion and axial displacement to frame element internal displacements
+
 *Wed Jan 6 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
 - if dx == -1 then skip the calculation of internal forces and transverse
 displacements.  

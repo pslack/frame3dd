@@ -43,34 +43,38 @@ static void elastic_K(
 	double L, double Le,
 	int j1, int j2,
 	float Ax, float Asy, float Asz,
-	float J, float Iy, float Iz, float E, float G, float p,
+	float Jx, float Iy, float Iz, float E, float G, float p,
 	int shear
 );
 
 static void geometric_K(
 	double **k, vec3 *xyz, float *r,
 	double L, double Le, 
-	int j1, int j2, float Ax, float Asy, float Asz, float J, 
-	float Iy, float Iz, float E, float G, float p, double T, 
+	int j1, int j2, float
+	Ax, float Asy, float Asz, float Jx, float Iy, float Iz,
+	float E, float G, float p, double T, 
 	int shear
 );
 
 static void member_force(
 	double *s, int M, vec3 *xyz, double L, double Le,
-	int j1, int j2, float Ax, float Asy, float Asz, float J,
-	float Iy, float Iz, float E, float G, float p, double *D,
+	int j1, int j2,
+	float Ax, float Asy, float Asz, float Jx, float Iy, float Iz,
+	float E, float G, float p, double *D,
 	int shear, int geom, double *axial_strain
 );
 
 static void lumped_M(
 	double **m, vec3 *xyz,
-	double L, int j1, int j2, float Ax, float J, float Iy, float Iz,
+	double L, int j1, int j2,
+	float Ax, float Jx, float Iy, float Iz,
 	float d, float p, float BMs
 );
 
 static void consistent_M(
 	double **m, vec3 *xyz, float *r, double L,
-	int j1, int j2, float Ax, float J, float Iy, float Iz, float d,
+	int j1, int j2,
+	float Ax, float Jx, float Iy, float Iz, float d,
 	float BMs, float p
 );
 
@@ -99,8 +103,8 @@ void assemble_K(
 	int DoF, int nE,
 	vec3 *xyz, float *r, double *L, double *Le,
 	int *J1, int *J2,
-	float *Ax, float *Asy, float *Asz,
-	float *J, float *Iy, float *Iz, float *E, float *G, float *p,
+	float *Ax, float *Asy, float *Asz, float *Jx, float *Iy, float *Iz,
+	float *E, float *G, float *p,
 	int shear, int geom, double **Q
 ){
 	double	**k;		/* element stiffness matrix in global coord */
@@ -125,12 +129,12 @@ void assemble_K(
 	for ( i = 1; i <= nE; i++ ) {
 
 		elastic_K ( k, xyz, r, L[i], Le[i], J1[i], J2[i],
-		Ax[i],Asy[i],Asz[i], J[i], Iy[i],Iz[i], E[i],G[i], p[i], shear);
+		Ax[i],Asy[i],Asz[i], Jx[i],Iy[i],Iz[i], E[i],G[i], p[i], shear);
 
 		if (geom)
 		 geometric_K( k, xyz, r, L[i], Le[i], J1[i], J2[i],
 		           Ax[i], Asy[i],Asz[i], 
-                           J[i], Iy[i], Iz[i], 
+                           Jx[i], Iy[i], Iz[i], 
                            E[i],G[i], p[i], -Q[i][1], shear);
 
 		for ( l=1; l <= 12; l++ ) {
@@ -417,7 +421,7 @@ void end_forces(
 	double *L, double *Le,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz,
-	float *J, float *Iy, float *Iz, float *E, float *G, float *p,
+	float *Jx, float *Iy, float *Iz, float *E, float *G, float *p,
 	double *D, int shear, int geom
 ){
 	double	*s, axial_strain;
@@ -428,7 +432,7 @@ void end_forces(
 	for(i=1; i <= nE; i++) {
 
      		member_force ( s, i, xyz, L[i], Le[i], J1[i], J2[i],
-			Ax[i], Asy[i], Asz[i], J[i], Iy[i], Iz[i],
+			Ax[i], Asy[i], Asz[i], Jx[i], Iy[i], Iz[i],
 			E[i], G[i], p[i], D, shear, geom, &axial_strain );
 
 		for(j=1; j<=12; j++)	Q[i][j] = s[j];
@@ -666,7 +670,7 @@ void assemble_M(
 		double **M, int DoF, int nJ, int nE,
 		vec3 *xyz, float *r, double *L,
 		int *J1, int *J2,
-		float *Ax, float *J, float *Iy, float *Iz, float *p,
+		float *Ax, float *Jx, float *Iy, float *Iz, float *p,
 		float *d, float *BMs,
 		float *JMs, float *JMx, float *JMy, float *JMz,
 		int lump
@@ -695,9 +699,9 @@ void assemble_M(
 	for ( m = 1; m <= nE; m++ ) {
 
 		if ( lump )	lumped_M ( mass, xyz, L[m], J1[m], J2[m],
-				Ax[m], J[m], Iy[m], Iz[m], d[m], BMs[m], p[m]);
+				Ax[m], Jx[m], Iy[m], Iz[m], d[m], BMs[m], p[m]);
 		else		consistent_M ( mass, xyz,r,L[m], J1[m], J2[m],
-				Ax[m], J[m], Iy[m], Iz[m], d[m], BMs[m], p[m]);
+				Ax[m], Jx[m], Iy[m], Iz[m], d[m], BMs[m], p[m]);
 
 		for ( l=1; l <= 12; l++ ) {
 			ii = ind[l][m];
