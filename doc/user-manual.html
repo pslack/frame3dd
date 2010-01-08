@@ -1769,17 +1769,19 @@ files are automatically named
 <b>MyResultsA.if01</b> for load case 1, 
 <b>MyResultsA.if02</b> for load case 2, and so on. 
 The internal force output data contains a section for each frame element.
-Each section has nine columns, as follows:
+Each section has eleven columns, as follows:
 <ul>
-<li> column 1: <i>x</i>-axis data with a user-specified <i>x</i>-axis increment, <i>dx</i>.
-<li> column 2: frame element axial force along the local <i>x</i>-axis 
-<li> column 3: frame element shear force in the local <i>y</i> direction
-<li> column 4: frame element shear force in the local <i>z</i> direction
-<li> column 5: frame element torsion about the local <i>x</i>-axis
-<li> column 6: frame element bending moments about the local <i>-y</i>-axis
-<li> column 7: frame element bending moments about the local <i>z</i>-axis
-<li> column 8: frame element transverse displacement in the local <i>y</i> direction
-<li> column 9: frame element transverse displacement in the local <i>z</i> direction
+<li> column A: (x) <i>x</i>-axis data with a user-specified <i>x</i>-axis increment, <i>dx</i>.
+<li> column B: (Nx) frame element axial force along the local <i>x</i>-axis 
+<li> column C: (Vy) frame element shear force in the local <i>y</i> direction
+<li> column D: (Vz) frame element shear force in the local <i>z</i> direction
+<li> column E: (Tx) frame element torsion about the local <i>x</i>-axis
+<li> column F: (My) frame element bending moments about the local <i>-y</i>-axis
+<li> column G: (Mz) frame element bending moments about the local <i>z</i>-axis
+<li> column H: (Dx) frame element axial displacement in the local <i>x</i> direction
+<li> column I: (Dy) frame element transverse displacement in the local <i>y</i> direction
+<li> column J: (Dz) frame element transverse displacement in the local <i>z</i> direction
+<li> column K: (Rx) frame element twist rotation about the local <i>x</i>-axis 
 </ul>
 </p>
 <p>
@@ -1787,8 +1789,16 @@ The frame element internal force data file may be
 plotted with Gnuplot, may be read by a spreadsheet program,
 or may be read by Matlab for further post-processing.   An example
 of the first several lines of an internal force data file is shown here.
-In this example, the <i>x</i>-axis increment, <i>dx</i>, has a length of 1 mm.
+In this example, the <i>x</i>-axis increment, <i>dx</i>, has a length of 10 mm.
 <img src="img/InternForces.png" align="center" border="0"><br>
+</p>
+
+<p>
+The last column of the last line of header information before the data (column L) contains a field "@ el_num num_x" in which "el_num" is the frame element number and 
+"num_x" is the number of increments along the local x axis.  
+This field may be helpful in parsing this data for further post-processing.
+In the figure above, the field "@ 1 181" indicates that the following data 
+represents internal forces and displacements for frame element number 1 and that this data is tabulated at 181 increments along the local <i>x</i>-axis.  
 </p>
 
 <p>

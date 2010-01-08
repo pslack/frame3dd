@@ -22,10 +22,10 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 #.m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz     E       G   roll density
 #   .  .  mm^2  mm^2    mm^2    mm^4    mm^4    mm^4    MPa     MPa  deg T/mm^3
 
-1 1 2	36.0	20.0	20.0	1000 	492 	492	200000	79300  0 7.85e-9
+1 2 1	36.0	20.0	20.0	1000 	492 	492	200000	79300  0 7.85e-9
 2 1 3	36.0	20.0	20.0	1000	492 	492	200000	79300  0 7.85e-9
 3 1 4	36.0	20.0	20.0	1000	492 	492	200000	79300  0 7.85e-9
-4 1 5	36.0	20.0	20.0	1000	492 	492	200000	79300  0 7.85e-9
+4 5 1	36.0	20.0	20.0	1000	492 	492	200000	79300  0 7.85e-9
 
  
 1                               # 1: include shear deformation

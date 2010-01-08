@@ -89,7 +89,7 @@ Example C: a tetrahedral frame - static and dynamic analysis (in, kip)
 
 1                               # 1: include shear deformation
 1                               # 1: include geometric stiffness
-2.0                             # exaggerate static mesh deformations
+10.0                            # exaggerate static mesh deformations
 12.0                            # x-axis increment for internal forces, in
 
 
@@ -102,7 +102,7 @@ Example C: a tetrahedral frame - static and dynamic analysis (in, kip)
 			
 0                               # number of loaded joints
 
-5				# number of uniform loads
+5				# number of uniform loads (local)
 #.j      Ux       Uy     Uz
 #       k/in     k/in   k/in
   5	0.0	-1.1	0.0

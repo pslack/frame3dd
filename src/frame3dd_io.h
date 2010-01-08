@@ -83,7 +83,7 @@ FRAME3DD_GETLINE
 	get line into a character string. from K&R.
 	@NOTE this is different from the GNU 'getline'.
 */
-void frame3dd_getline( FILE *fp, char *s, int lim );
+int frame3dd_getline( FILE *fp, char *s, int lim );
 
 
 /**
@@ -366,11 +366,12 @@ void write_modal_results(
 	useful gnuplot options: set noxtics noytics noztics noborder view nokey
 */
 void static_mesh(
-	char OUT_file[], char meshpath[], char plotpath[],
+	char OUT_file[],
+	char infcpath[], char meshpath[], char plotpath[],
 	char *title, int nJ, int nE, int nL, int lc, int DoF,
 	vec3 *xyz, double *L,
 	int *J1, int *J2, float *p, double *D,
-	double exagg_static, int anlyz
+	double exagg_static, int anlyz, float dx
 );
 
 
@@ -412,13 +413,34 @@ void animate(
 	These bent shapes are exact for mode-shapes, and for frames
 	loaded at their joints.
 */
-void bent_beam(
-	FILE *fp, int j1, int j2,
-	vec3 *xyz,
-	double L, float p, double *D,
-	double exagg
+void cubic_bent_beam(
+	FILE *fpm,	/**< deformed mesh data file pointer	*/
+	int j1, int j2,	/**< joint 1 and joint 2 of the frame element */
+	vec3 *xyz,	/**< joint coordinates			*/
+	double L,	/**< frame element lengths		*/
+	float p,	/**< frame element local rotations	*/
+	double *D,	/**< joint displacements		*/
+	double exagg	/**< mesh exaggeration factor		*/
 );
 
+
+/**
+	reads internal frame element forces and deflections
+	from the internal force and deflection data file.  
+	Saves deflected shapes to a file.  These bent shapes are exact. 
+*/
+void force_bent_beam(
+	FILE *fpm,	/**< deformed mesh data file pointer	*/
+	FILE *fpif,	/**< internal force data file pointer	*/
+	char fnif[],	/**< internal force data file name	*/
+	int nx,		/**< number of x-axis increments	*/
+	int j1, int j2,	/**< joint 1 and joint 2 of the frame element */
+	vec3 *xyz,	/**< joint coordinates			*/
+	double L,	/**< frame element lengths		*/
+	float p,	/**< frame element local rotations	*/
+	double *D,	/**< joint displacements		*/
+	double exagg	/**< mesh exaggeration factor		*/
+);
 
 /**
 	display *scanf errors from output from *scanf function

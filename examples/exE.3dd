@@ -46,7 +46,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 
 1                               # 1: include shear deformation
 1                               # 1: include geometric stiffness
-10.0                            # exaggerate static mesh deformations
+2.0                            # exaggerate static mesh deformations
 6.0                             # x-axis increment for internal force data, in
 
 

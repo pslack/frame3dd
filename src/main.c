@@ -529,8 +529,8 @@ For compilation/installation, see README.txt.
  *		 " hit CTRL-C to stop execution, \n"
  *		 "    reduce exagg_static in the Input Data,"
  *		 " and re-run the analysis. \n");
- *
  */
+
 		write_internal_forces ( infcpath, lc, nL, title, dx, xyz,
 					Q, nJ, nE, L, J1, J2, 
 					Ax, Asy, Asz, Jx, Iy, Iz, E, G, p,
@@ -538,8 +538,9 @@ For compilation/installation, see README.txt.
 					nU[lc],U[lc],nW[lc],W[lc],nP[lc],P[lc],
 					D, shear, error );
 
-		static_mesh ( IN_file, meshpath, plotpath, title, nJ,nE,nL, lc,
-				DoF, xyz, L, J1,J2, p, D, exagg_static, anlyz);
+		static_mesh ( IN_file, infcpath, meshpath, plotpath, title,
+				nJ, nE, nL, lc, DoF,
+				xyz, L, J1,J2, p, D, exagg_static, anlyz, dx );
 
 	 } /* end load case loop */
 	} else {
@@ -548,8 +549,9 @@ For compilation/installation, see README.txt.
 	 	printf("\n * %s *\n", title );
 	 	printf("  DATA CHECK ONLY.\n");
 	 }
-	 static_mesh ( IN_file, meshpath, plotpath, title, nJ, nE, nL, lc,
-				DoF, xyz, L, J1,J2, p, D, exagg_static, anlyz);
+	 static_mesh ( IN_file, infcpath, meshpath, plotpath, title,
+			nJ, nE, nL, lc, DoF,
+			xyz, L, J1,J2, p, D, exagg_static, anlyz, dx );
 	}
 
 

@@ -67,6 +67,22 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+*Fri Jan 8 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- add function force_bent_beam to frame3dd_io.c to compute deformed mesh
+shapes from static loads using statics and mechanics equations instead of a
+simple cubic interpolation between joint displacements and rotations.
+This function parses the output data file containing internal forces and
+transverse displacements.  This function may be easily extended to plot
+diagrams of internal axial force, shear force, torsion moment and bending
+moment.   
+- modification to formatting of internal force data file to make parsing a
+little easier
+- bug fix in internal frame element displacements (add coord. transformation)
+- update user-manual.html
+
+*Thu Jan 7 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- add torsion and axial displacement to frame element internal displacements
+
 *Wed Jan 6 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
 - if dx == -1 then skip the calculation of internal forces and transverse
 displacements.  

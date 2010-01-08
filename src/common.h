@@ -27,7 +27,7 @@
 
 #define FRAME3DD_PATHMAX 256
 
-#define FILENMAX 96
+#define FILENMAX 128
 
 #ifndef VERSION
 # define VERSION "20100105"

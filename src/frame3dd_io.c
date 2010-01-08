@@ -74,7 +74,7 @@ void parse_options (
 ){
 
 	char	option;
-	int	sfrv;	/* *scanf return value	*/
+	int	sfrv=0;		/* *scanf return value	*/
 
 	/* default values */
 
@@ -358,7 +358,7 @@ READ_JOINT_DATA  -  read joint location data
 void read_joint_data( FILE *fp, int nJ, vec3 *xyz, float *r )
 {
 	int	i, j,
-		sfrv;		/* *scanf result	*/
+		sfrv=0;		/* *scanf return value	*/
 
 	for (i=1;i<=nJ;i++) {		/* read joint coordinates	*/
 		sfrv=fscanf(fp, "%d", &j );
@@ -390,7 +390,7 @@ void read_frame_element_data(
 	float *Jx, float *Iy, float *Iz, float *E, float *G, float *p, float *d
 ){
 	int	j1, j2, i, b;
-	int	sfrv;	/* *scanf return value */
+	int	sfrv=0;		/* *scanf return value */
 
 	for (i=1;i<=nE;i++) {		/* read frame element properties */
 		sfrv=fscanf(fp, "%d", &b );
@@ -520,7 +520,7 @@ void read_run_data (
 	int	full_len=0, len=0, i;
 	char	base_file[96] = "EMPTY_BASE";
 	char	mesh_file[96] = "EMPTY_MESH";
-	int	sfrv;	/* *scanf return value */
+	int	sfrv=0;		/* *scanf return value */
 
 	strcpy(base_file,OUT_file);	
 	while ( base_file[len++] != '\0' )
@@ -596,7 +596,7 @@ void read_run_data (
 /*-----------------------------------------------------------------------------
 FRAME3DD_GETLINE -  get line into a character string. from K&R        03feb94
 -----------------------------------------------------------------------------*/
-void frame3dd_getline (
+int frame3dd_getline (
 FILE	*fp,
 char    *s,
 int     lim
@@ -607,7 +607,7 @@ int     lim
 	s[i++] = c;
 /*      if (c == '\n')  s[i++] = c;	*/
     s[i] = '\0';
-    return;
+    return i;
 }
 
 
@@ -742,7 +742,7 @@ void read_reaction_data (
 	FILE *fp, int DoF, int nJ, int *nR, int *R, int *sumR, int verbose
 ){
 	int	i,j,l;
-	int	sfrv;	/* *scanf return value */
+	int	sfrv=0;		/* *scanf return value */
 
 	for (i=1; i<=DoF; i++)	R[i] = 0;
 
@@ -842,7 +842,7 @@ void read_and_assemble_loads(
 		a, b,			/* point load locations */
 		t1, t2, t3, t4, t5, t6, t7, t8, t9;	/* 3D coord Xfrm coeffs */
 	int	i,j,l, lc, n, j1, j2;
-	int	sfrv;	/* *scanf return value */
+	int	sfrv=0;		/* *scanf return value */
 
 	for (j=1; j<=DoF; j++)
 		for (lc=1; lc <= nL; lc++)
@@ -1425,7 +1425,7 @@ void read_mass_data(
 /*	double	ms = 0.0; */
 	int	i,j, jnt, m, b, nA;
 	int	full_len=0, len=0;
-	int	sfrv;	/* *scanf return value	*/
+	int	sfrv=0;		/* *scanf return value	*/
 
 	char	base_file[96] = "EMPTY_BASE";
 	char	mode_file[96] = "EMPTY_MODE";
@@ -1622,7 +1622,7 @@ void read_condensation_data (
 		int *Cmethod, int condense_flag, int *q, int *m, int verbose
 ){
 	int	i,j,k,  **qm;
-	int	sfrv;	/* *scanf return value */
+	int	sfrv=0;		/* *scanf return value */
 
 	*Cmethod = *nC = *Cdof = 0;
 
@@ -2011,14 +2011,14 @@ void write_static_csv(
 	FILE	*fpcsv;
 	int	i,j,n;
 	char	*wa;
-	char	CSV_file[128];
+	char	CSV_file[FILENMAX];
 	time_t  now;		/* modern time variable type	*/
 
 	(void) time(&now);
 
 	i=0;
 	j=0;
-	while (i<128) {
+	while (i<FILENMAX) {
 		CSV_file[j] = OUT_file[i];
 		if ( CSV_file[j] == '+' ||
 		     CSV_file[j] == '-' ||
@@ -2183,14 +2183,14 @@ void write_static_mfile (
 	FILE	*fpm;
 	int	i,j,n;
 	char	*wa;
-	char	M_file[128];
+	char	M_file[FILENMAX];
 	time_t  now;	/* modern time variable type	*/
 
 	(void) time(&now);
 
 	i=0;
 	j=0;
-	while (i<128) {
+	while (i<FILENMAX) {
 		M_file[j] = OUT_file[i];
 		if ( M_file[j] == '+' ||
 		     M_file[j] == '-' ||
@@ -2321,7 +2321,7 @@ void write_internal_forces(
 		double *D, int shear, double error
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord transformation */
-		d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12; /* displ. */
+		u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12; /* displ. */
 
 	double	xx1,xx2, wx1,wx2,	/* trapz load data, local x dir */
 		xy1,xy2, wy1,wy2,	/* trapz load data, local y dir */
@@ -2340,13 +2340,13 @@ void write_internal_forces(
 		*Tx,		/* torsional moment within frame el.	*/
 		*My, *Mz, 	/* bending moments within frame el.	*/
 		*Sy, *Sz,	/* transverse slopes of frame el.	*/
-		*Dx, *Rx,	/* displacement in local x-dir and twist*/
-		*Dy, *Dz;	/* transverse dislacements of frame el.	*/
+		*Dx, *Dy, *Dz,	/* frame el. displ. in local x,y,z, dir's */
+		*Rx;		/* twist rotation about the local x-axis */
 
 	int	n, m,		/* frame element number			*/
 		cU=0, cW=0, cP=0, /* counters for U, W, and P loads	*/
 		i, nx,		/* number of sections alont x axis	*/
-		j1, j2;		/* starting and stopping joint no's	*/
+		j1,j2,i1,i2;	/* starting and stopping joint no's	*/
 
 	char	fnif[FILENMAX];/* file name    for internal force data	*/
 	FILE	*fpif;		/* file pointer for internal force data */
@@ -2377,10 +2377,37 @@ void write_internal_forces(
 
 	for ( m=1; m <= nE; m++ ) {	// loop over all frame elements
 
-		j1 = J1[m];	j2 = J2[m];
+		j1 = J1[m];	j2 = J2[m]; // joint 1 and joint 2 of elmnt m
 
-		fprintf(fpif,"# frame element %d: J1=%d  J2=%d\n", m,j1,j2);
-		fprintf(fpif,"#.x\t\tNx\t\tVy\t\tVz\t\tTx\t\tMy\t\tMz\t\tDx\t\tDy\t\tDz\t\tRx\n");
+		nx = floor(L[m]/dx);	// number of x-axis increments
+
+	// allocate memory for interior force data for frame element "m"
+		x  = dvector(0,nx);
+		Nx = dvector(0,nx);
+		Vy = dvector(0,nx);
+		Vz = dvector(0,nx);
+		Tx = dvector(0,nx);
+		My = dvector(0,nx);
+		Mz = dvector(0,nx);
+		Sy = dvector(0,nx);
+		Sz = dvector(0,nx);
+		Rx = dvector(0,nx);
+		Dx = dvector(0,nx);
+		Dy = dvector(0,nx);
+		Dz = dvector(0,nx);
+
+	// the local x-axis for frame element "m" starts at 0 and ends at L[m]
+		for (i=0; i<nx; i++)	x[i] = i*dx;	
+		x[nx] = L[m];		
+		dxnx = x[nx]-x[nx-1];	// length of the last x-axis increment
+
+	// write header information for each frame element
+
+		fprintf(fpif,"# frame element %d: J1=%d  J2=%d;", m,j1,j2);
+		fprintf(fpif,"  number of x-axis increments : %d\n", nx+1 );
+		fprintf(fpif,"#.x\t\tNx\t\tVy\t\tVz\t\tTx\t\tMy\t\tMz\t\tDx\t\tDy\t\tDz\t\tRx\t\t@ %d %d\n", m, nx+1 );
+
+	// find interior axial force, shear forces, torsion and bending moments
 
 		coord_trans ( xyz, L[m], j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[m] );
@@ -2399,30 +2426,6 @@ void write_internal_forces(
 				++cU;
 			}
 		}
-
-		nx = floor(L[m]/dx);		// number of x-axis increments
-
-	// allocate memory for interior force data for frame element "m"
-		x  = dvector(0,nx);
-		Nx = dvector(0,nx);
-		Vy = dvector(0,nx);
-		Vz = dvector(0,nx);
-		Tx = dvector(0,nx);
-		My = dvector(0,nx);
-		Mz = dvector(0,nx);
-		Sy = dvector(0,nx);
-		Sz = dvector(0,nx);
-		Rx = dvector(0,nx);
-		Dx = dvector(0,nx);
-		Dy = dvector(0,nx);
-		Dz = dvector(0,nx);
-
-		// local x-axis for frame element "m" starts at 0, ends at L[m]
-		for (i=0; i<nx; i++)	x[i] = i*dx;	
-		x[nx] = L[m];		
-		dxnx = x[nx]-x[nx-1];	// length of the last x-axis increment
-
-	// find interior axial force, shear forces, and bending moments
 
 		// interior forces for frame element "m" at (x=0)
 		Nx[0] = -Q[m][1];	// positive Nx is tensile
@@ -2518,21 +2521,34 @@ void write_internal_forces(
 
 	// find interior transverse displacements 
 
-		j1 = 6*(j1-1);	j2 = 6*(j2-1);
+		i1 = 6*(j1-1);	i2 = 6*(j2-1);
 
-		d1  = D[j1+1];	d2  = D[j1+2];	d3  = D[j1+3];
-		d4  = D[j1+4];	d5  = D[j1+5];	d6  = D[j1+6];
-		d7  = D[j2+1];	d8  = D[j2+2];	d9  = D[j2+3];
-		d10 = D[j2+4];	d11 = D[j2+5];	d12 = D[j2+6];
+		/* compute end deflections in local coordinates */
+
+		u1  = t1*D[i1+1] + t2*D[i1+2] + t3*D[i1+3];
+		u2  = t4*D[i1+1] + t5*D[i1+2] + t6*D[i1+3];
+		u3  = t7*D[i1+1] + t8*D[i1+2] + t9*D[i1+3];
+
+		u4  = t1*D[i1+4] + t2*D[i1+5] + t3*D[i1+6];
+		u5  = t4*D[i1+4] + t5*D[i1+5] + t6*D[i1+6];
+		u6  = t7*D[i1+4] + t8*D[i1+5] + t9*D[i1+6];
+
+		u7  = t1*D[i2+1] + t2*D[i2+2] + t3*D[i2+3];
+		u8  = t4*D[i2+1] + t5*D[i2+2] + t6*D[i2+3];
+		u9  = t7*D[i2+1] + t8*D[i2+2] + t9*D[i2+3];
+
+		u10 = t1*D[i2+4] + t2*D[i2+5] + t3*D[i2+6];
+		u11 = t4*D[i2+4] + t5*D[i2+5] + t6*D[i2+6];
+		u12 = t7*D[i2+4] + t8*D[i2+5] + t9*D[i2+6];
 
 
 		// rotations and displacements for frame element "m" at (x=0)
-		Dx[0] =  d1;	// displacement in  local x dir  at joint J1
-		Dy[0] =  d2;	// displacement in  local y dir  at joint J1
-		Dz[0] =  d3;	// displacement in  local z dir  at joint J1
-		Rx[0] =  d4;	// rotationin about local x axis at joint J1
-		Sy[0] =  d6;	// slope in  local y  direction  at joint J1
-		Sz[0] = -d5;	// slope in  local z  direction  at joint J1
+		Dx[0] =  u1;	// displacement in  local x dir  at joint J1
+		Dy[0] =  u2;	// displacement in  local y dir  at joint J1
+		Dz[0] =  u3;	// displacement in  local z dir  at joint J1
+		Rx[0] =  u4;	// rotationin about local x axis at joint J1
+		Sy[0] =  u6;	// slope in  local y  direction  at joint J1
+		Sz[0] = -u5;	// slope in  local z  direction  at joint J1
 
 		// axial displacement along frame element "m"
 		dx_ = dx;
@@ -2542,7 +2558,7 @@ void write_internal_forces(
 		}
 		// linear correction for bias in trapezoidal integration
 		for (i=1; i<=nx; i++) {
-			Dx[i] -= (Dx[nx]-d7) * i/nx;
+			Dx[i] -= (Dx[nx]-u7) * i/nx;
 		}
 		
 		// torsional rotation along frame element "m"
@@ -2553,7 +2569,7 @@ void write_internal_forces(
 		}
 		// linear correction for bias in trapezoidal integration
 		for (i=1; i<=nx; i++) {
-			Rx[i] -= (Rx[nx]-d10) * i/nx;
+			Rx[i] -= (Rx[nx]-u10) * i/nx;
 		}
 		
 		// transverse slope along frame element "m"
@@ -2571,8 +2587,8 @@ void write_internal_forces(
 		}
 		// linear correction for bias in trapezoidal integration
 		for (i=1; i<=nx; i++) {
-			Sy[i] -= (Sy[nx]-d12) * i/nx;
-			Sz[i] -= (Sz[nx]+d11) * i/nx;
+			Sy[i] -= (Sy[nx]-u12) * i/nx;
+			Sz[i] -= (Sz[nx]+u11) * i/nx;
 		}
 		// displacement along frame element "m"
 		dx_ = dx;
@@ -2583,8 +2599,8 @@ void write_internal_forces(
 		}
 		// linear correction for bias in trapezoidal integration
  		for (i=1; i<=nx; i++) {
-			Dy[i] -= (Dy[nx]-d8) * i/nx;
-			Dz[i] -= (Dz[nx]-d9) * i/nx;
+			Dy[i] -= (Dy[nx]-u8) * i/nx;
+			Dz[i] -= (Dz[nx]-u9) * i/nx;
 		}
 
 
@@ -2615,7 +2631,8 @@ void write_internal_forces(
 		free_dvector(Dy,0,nx);
 		free_dvector(Dz,0,nx);
 
-	}
+	}				// end of loop over all frame elements
+
 	fclose(fpif);
 }
 
@@ -2714,22 +2731,38 @@ create mesh data of deformed and undeformed mesh, use gnuplot	22 Feb 1999
 useful gnuplot options: set noxtics noytics noztics noborder view nokey
 ------------------------------------------------------------------------------*/
 void static_mesh(
-		char IN_file[], char meshpath[], char plotpath[],
+		char IN_file[],
+		char infcpath[], char meshpath[], char plotpath[],
 		char *title, int nJ, int nE, int nL, int lc, int DoF,
 		vec3 *xyz, double *L,
 		int *J1, int *J2, float *p, double *D,
-		double exagg_static, int anlyz
+		double exagg_static, int anlyz, float dx
 ){
-	FILE	*fpmfx, *fpm;
+	FILE	*fpif=NULL, *fpmfx=NULL, *fpm=NULL;
 	double	mx, my, mz;	/* coordinates of the frame element number labels */
 	int	j1, j2, i, j, m, X=0, Y=0, Z=0;
-	char	meshfl[128], D3 = '#';
+	char	fnif[FILENMAX], meshfl[FILENMAX], D3 = '#', ch = 'a';
+	int	sfrv=0;		/* *scanf return value		*/
+	int	frel, nx;	/* frame element number, number of increments */
 	time_t  now;		/* modern time variable type	*/
 
 	(void) time(&now);
 
+	/* file name for internal force data for load case "lc" */
+	sprintf( fnif, "%s%02d", infcpath, lc );
+	
+	/* open the interior force data file for reading */
+	if ( dx > 0 ) {
+	 if ((fpif = fopen (fnif, "r")) == NULL) {
+          fprintf (stderr,"\n ERROR: cannot open interior force data file '%s'\n",fnif);
+          exit(1);
+	 }
+	}
+
+	/* file name for deformed mesh data for load case "lc" */
 	sprintf( meshfl, "%sf.%03d", meshpath, lc );
 
+	/* open the deformed mesh data file for writing */
 	if ((fpmfx = fopen (meshfl, "w")) == NULL) {
 		printf ("\n  error: cannot open meshpath: %s\n", meshfl );
 		exit(1);
@@ -2741,8 +2774,6 @@ void static_mesh(
 	}
 
 	if (!anlyz) exagg_static = 0.0;
-
-
 
 	fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
 	fprintf(fpm," VERSION %s \n", VERSION);
@@ -2764,25 +2795,43 @@ void static_mesh(
 
 	for (m=1; m<=nE; m++) {
 
-		bent_beam ( fpmfx, J1[m],J2[m],xyz, L[m],p[m],D, exagg_static );
+		ch = 'a'; 
+
+		if ( dx == -1.0 ) {
+			cubic_bent_beam ( fpmfx,
+				J1[m],J2[m], xyz, L[m],p[m], D, exagg_static );
+		} else {
+			while ( ch != '@' )	ch = getc(fpif);
+			sfrv=fscanf(fpif,"%d %d", &frel, &nx);
+			if (sfrv != 2) sferr(fnif);
+			if ( frel != m ) {
+			 printf(" error in static_mesh parsing\n");
+			 printf("  frel = %d; m = %d; nx = %d \n", frel,m,nx );
+			}
+			// printf("  frel = %3d; m = %3d; nx = %3d L = %f \n", frel,m,nx, L[m] ); /* debug */
+			force_bent_beam ( fpmfx, fpif, fnif, nx, 
+				J1[m],J2[m], xyz, L[m],p[m], D, exagg_static );
+		}
+	
 
 		j = J1[m];	i = 6*(j-1);
-		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, xyz[j].x,xyz[j].y,xyz[j].z);
+		fprintf (fpm,"%5d %11.3e %11.3e %11.3e",
+					j, xyz[j].x, xyz[j].y, xyz[j].z );
 		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-			xyz[j].x + exagg_static*D[i+1],
-			xyz[j].y + exagg_static*D[i+2],
-			xyz[j].z + exagg_static*D[i+3]
-		);
+					xyz[j].x + exagg_static*D[i+1] ,
+					xyz[j].y + exagg_static*D[i+2] ,
+					xyz[j].z + exagg_static*D[i+3] );
 
 		j = J2[m];	i = 6*(j-1);
-		fprintf (fpm,"%5d %11.3e %11.3e %11.3e", j, xyz[j].x,xyz[j].y,xyz[j].z);
+		fprintf (fpm,"%5d %11.3e %11.3e %11.3e",
+					j , xyz[j].x , xyz[j].y , xyz[j].z );
 		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-			xyz[j].x + exagg_static*D[i+1],
-			xyz[j].y + exagg_static*D[i+2],
-			xyz[j].z + exagg_static*D[i+3]
-		);
+					xyz[j].x + exagg_static*D[i+1] ,
+					xyz[j].y + exagg_static*D[i+2] ,
+					xyz[j].z + exagg_static*D[i+3] );
 		fprintf(fpm,"\n\n");
 	}
+	if ( dx != -1.0 ) fclose(fpif);
 
 	for ( j=1; j<=nJ; j++ ) {
 		if (xyz[j].x != 0.0) X=1;	/* check for three-dimensional frame */
@@ -2809,7 +2858,7 @@ void static_mesh(
 	if (lc == 1) {		/* first load case */
 
 	 fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
-	fprintf(fpm," VERSION %s \n", VERSION);
+	 fprintf(fpm," VERSION %s \n", VERSION);
 	 fprintf(fpm,"# %s\n", title );
 	 fprintf(fpm,"# %s", ctime(&now) );
 	 fprintf(fpm,"# M E S H   A N N O T A T I O N   F I L E \n");
@@ -2908,7 +2957,7 @@ void modal_mesh(
 	double *v;		/* a mode-shape vector */
 
 	int	i, j, m,n, X=0, Y=0, Z=0;
-	char	D3 = '#', modefl[128];
+	char	D3 = '#', modefl[FILENMAX];
 
 
 	msX = dvector(1,DoF);
@@ -2953,7 +3002,7 @@ void modal_mesh(
 		fprintf(fpm,"#      X-dsp       Y-dsp       Z-dsp\n\n");
 
 		for(n=1; n<=nE; n++)
-			bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, exagg_modal );
+			cubic_bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, exagg_modal );
 
 		for ( j=1; j<=nJ; j++ ) {
 			if (xyz[j].x != 0.0) X=1;	/* check for three-dimensional frame */
@@ -3033,7 +3082,7 @@ void animate(
 
 	char	D3 = '#',
 		Movie = '#',	/* use '#' for no-movie  -OR-  ' ' for movie */
-		modefl[128], framefl[128];
+		modefl[FILENMAX], framefl[FILENMAX];
 
 	for (j=1; j<=nJ; j++) {		/* check for three-dimensional frame */
 		if (xyz[j].x != 0.0) X=1;
@@ -3192,7 +3241,7 @@ void animate(
 
 	    for (n=1; n<=nE; n++)
 
-		bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, ex );
+		cubic_bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, ex );
 
 	    fclose(fpm);
 	  }
@@ -3204,19 +3253,19 @@ void animate(
 
 
 /*------------------------------------------------------------------------------
-BENT_BEAM  -  computes cubic deflection functions from end deflections
+CUBIC_BENT_BEAM  -  computes cubic deflection functions from end deflections
 and end rotations.  Saves deflected shapes to a file.  These bent shapes
 are exact for mode-shapes, and for frames loaded at their joints.
 15 May 2009
 ------------------------------------------------------------------------------*/
-void bent_beam(
-	FILE *fp, int j1, int j2, vec3 *xyz,
+void cubic_bent_beam(
+	FILE *fpm, int j1, int j2, vec3 *xyz,
 	double L, float p, double *D, double exagg
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, 	/* coord xfmn	*/
 		u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12,
 		*a, *b, **A,
-		s, v, w, dx, dy, dz;
+		s, v, w, dX, dY, dZ;
 	int	i1, i2, pd;
 
 	A = dmatrix(1,4,1,4);
@@ -3248,14 +3297,10 @@ void bent_beam(
 
 		/* curve-fitting problem for a cubic polynomial */
 
-	a[1] = u2;		b[1] = u3;
-	a[2] = u8;   		b[2] = u9;
-	a[3] = u6;		b[3] = -u5;
-	a[4] = u12;		b[4] = -u11;
-/*
-	a[3] = exagg*tan(u6);	b[3] = exagg*tan(-u5);
-	a[4] = exagg*tan(u12);	b[4] = exagg*tan(-u11);
-*/
+	a[1] =  u2;		b[1] =  u3;
+	a[2] =  u8;   		b[2] =  u9;
+	a[3] =  u6;		b[3] = -u5;
+	a[4] =  u12;		b[4] = -u11;
 
 	u7 += L;
 	A[1][1] = 1.0;   A[1][2] = u1;   A[1][3] = u1*u1;   A[1][4] = u1*u1*u1;
@@ -3280,15 +3325,14 @@ void bent_beam(
 		w = b[1] + b[2]*s + b[3]*s*s + b[4]*s*s*s;
 
 			/* deformed shape in global coordinates */
-		dx = t1*s + t4*v + t7*w;
-		dy = t2*s + t5*v + t8*w;
-		dz = t3*s + t6*v + t9*w;
+		dX = t1*s + t4*v + t7*w;
+		dY = t2*s + t5*v + t8*w;
+		dZ = t3*s + t6*v + t9*w;
 
-		fprintf (fp," %12.4e %12.4e %12.4e\n",
-			xyz[j1].x + dx, xyz[j1].y + dy, xyz[j1].z + dz
-		);
+		fprintf (fpm," %12.4e %12.4e %12.4e\n",
+			xyz[j1].x + dX , xyz[j1].y + dY , xyz[j1].z + dZ );
 	}
-	fprintf(fp,"\n\n");
+	fprintf(fpm,"\n\n");
 
 	free_dmatrix(A,1,4,1,4);
 	free_dvector(a,1,4);
@@ -3299,10 +3343,69 @@ void bent_beam(
 
 
 /*------------------------------------------------------------------------------
+FORCE_BENT_BEAM  -  reads internal frame element forces and deflections
+from the internal force and deflection data file.  
+Saves deflected shapes to a file.  These bent shapes are exact. 
+Note: It would not be difficult to adapt this function to plot
+internal axial force, shear force, torques, or bending moments. 
+9 Jan 2010
+------------------------------------------------------------------------------*/
+void force_bent_beam(
+	FILE *fpm, FILE *fpif, char fnif[], int nx, int j1, int j2, vec3 *xyz,
+	double L, float p, double *D, double exagg
+){
+	double	t1, t2, t3, t4, t5, t6, t7, t8, t9; 	/* coord xfmn	*/
+	double	xi, dX, dY, dZ;
+	float	x, Nx, Vy, Vz, Tx, My, Mz, Dx, Dy, Dz, Rx;
+	double	Lx, Ly, Lz;
+	int	n;
+	int	sfrv=0;		/* *scanf return value	*/
+
+	Lx = xyz[j2].x - xyz[j1].x;
+	Ly = xyz[j2].y - xyz[j1].y;
+	Lz = xyz[j2].z - xyz[j1].z;
+
+	coord_trans ( xyz, L, j1, j2,
+			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p );
+
+	x = -1.0;
+	n =  0;
+	for ( xi = 0; xi <= 1.01*L && n < nx; xi += 0.10*L ) {
+
+		while ( x < xi && n < nx ) {
+		    /* read the deformed shape in local coordinates */
+		    sfrv=fscanf(fpif,"%f %f %f %f %f %f %f %f %f %f %f",
+			&x, &Nx, &Vy, &Vz, &Tx, &My, &Mz, &Dx, &Dy, &Dz, &Rx );
+		    if (sfrv != 11) sferr(fnif);
+		    ++n;
+		} 
+
+		/* exaggerated deformed shape in global coordinates */
+		dX = exagg * ( t1*Dx + t4*Dy + t7*Dz );
+		dY = exagg * ( t2*Dx + t5*Dy + t8*Dz );
+		dZ = exagg * ( t3*Dx + t6*Dy + t9*Dz );
+
+		fprintf (fpm," %12.4e %12.4e %12.4e\n",
+					xyz[j1].x + (x/L)*Lx + dX ,
+					xyz[j1].y + (x/L)*Ly + dY ,
+					xyz[j1].z + (x/L)*Lz + dZ );
+
+//		printf("...  x = %7.3f  n = %3d  Dx = %10.3e   Dy = %10.3e   Dz = %10.3e \n", x,n,Dx,Dy,Dz ); /* debug */
+//		printf("                           dX = %10.3e   dY = %10.3e   dZ = %10.3e \n", dX,dY,dZ ); /* debug */
+
+	}
+
+	fprintf(fpm,"\n\n");
+
+	return;
+}
+
+
+/*------------------------------------------------------------------------------
 SFERR  -  Display error message upon an erronous *scanf operation
 ------------------------------------------------------------------------------*/
 void sferr ( char s[] ) {
-	fprintf(stderr," >> Input Data file error while reading %s\n",s);
+	fprintf(stderr,">> Input Data file error while reading %s\n",s);
 	return;
 }
 
