@@ -1,4 +1,4 @@
-Template for input file format for Frame3DD - 3D structural frame analysis
+Template Input Data file for Frame3DD - 3D structural frame analysis (N,mm,ton)
 
 # this template indicates units of Newton, millimeter, and tonne
 # other units may be specified as desired      

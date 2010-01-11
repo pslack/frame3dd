@@ -1790,15 +1790,27 @@ plotted with Gnuplot, may be read by a spreadsheet program,
 or may be read by Matlab for further post-processing.   An example
 of the first several lines of an internal force data file is shown here.
 In this example, the <i>x</i>-axis increment, <i>dx</i>, has a length of 10 mm.
-<img src="img/InternForces.png" align="center" border="0"><br>
+<img src="img/InternalForces.png" align="center" border="0"><br>
 </p>
 
 <p>
-The last column of the last line of header information before the data (column L) contains a field "@ el_num num_x" in which "el_num" is the frame element number and 
-"num_x" is the number of increments along the local x axis.  
-This field may be helpful in parsing this data for further post-processing.
-In the figure above, the field "@ 1 181" indicates that the following data 
-represents internal forces and displacements for frame element number 1 and that this data is tabulated at 181 increments along the local <i>x</i>-axis.  
+The header information for each frame element contains the element number
+(column B),
+the element's end joints (columns C and D), the end joint coordinates
+(columns E - J),
+and the number of <i>x</i>-axis increments for the frame element
+(column K).   
+The data for this part of the header information is preceded with a '@' character, to facilitate parsing of this data file.  
+The last header character prior to the the internal force data is a '~' character, again to facilitate parsing of the data. 
+In the figure above, <i>nx</i> is 181 (K,10), indicating
+that the following element data 
+is tabulated at 181 increments along the local <i>x</i>-axis.  
+</p>
+
+<p>
+The data in this file is sufficient to plot the undeformed mesh, 
+the deformed mesh, and plots of internal forces, torisons, and moments
+super-imposed upon the structural mesh.
 </p>
 
 <p>
@@ -1827,7 +1839,7 @@ A corrected trapezoidal integration method is implemented
 so that the internal force and transverse displacement data match the 
 known internal forces and joint displacements at both ends of each frame element.  
 Internal forces and displacements computed with 
-a smaller increment length, <i>dx</i>, will be more accurate.  
+a smaller increment length, <i>dx</i>, are more accurate.  
 In general, a value of <i>dx</i> equal to one percent to ten percent of the
 typical frame element length is sufficiently accurate.  
 </p>
@@ -2083,11 +2095,15 @@ frequency convergence tolerance.  The frequency convergence error is defined her
 <p>
 Click <a href="template.3dd">here</a> to download an Input Data template, template.3dd, or copy-and-paste the text below.
 </p>
-</a>
+
+<p>
+The first line of the Input Data file must be a one-line title of your analysis.
+It is recommended to write the system of units into the title.   
+The title must not contain the '@' or the '~' characters, as these characters are used for parsing the Internal Force data file.  
+</p>
 
 <pre>
-
-Template for input file format for Frame3DD - 3D structural frame analysis
+Template Input Data file for Frame3DD - 3D structural frame analysis (N,mm,ton)
 
 # this template indicates units of Newton, millimeter, and tonne
 # other units may be specified as desired

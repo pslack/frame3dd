@@ -1,6 +1,8 @@
 TODO LIST for FRAME3DD
 ----------------------
 
+* Gnuplot data output for internal forces and moments
+
 * Create structs to contain frame attributes, coordinates, etc, in order to migrate to a more object-oriented coding style, and simplify the passing of parameters to functions.
 
 * Dynamic time-history analysis with the HHT-alpha method

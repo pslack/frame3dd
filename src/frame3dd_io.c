@@ -2403,9 +2403,9 @@ void write_internal_forces(
 
 	// write header information for each frame element
 
-		fprintf(fpif,"# frame element %d: J1=%d  J2=%d;", m,j1,j2);
-		fprintf(fpif,"  number of x-axis increments : %d\n", nx+1 );
-		fprintf(fpif,"#.x\t\tNx\t\tVy\t\tVz\t\tTx\t\tMy\t\tMz\t\tDx\t\tDy\t\tDz\t\tRx\t\t@ %d %d\n", m, nx+1 );
+		fprintf(fpif,"#\tElmnt\tJ1\tJ2\t\tX1\t\tY1\t\tZ1\t\tX2\t\tY2\t\tZ2\tnx\n");
+		fprintf(fpif,"# @\t%5d\t%5d\t%5d\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%5d\n",m, j1, j2, xyz[j1].x, xyz[j1].y, xyz[j1].z, xyz[j2].x, xyz[j2].y, xyz[j2].z, nx+1 );
+		fprintf(fpif,"#.x\t\t\tNx\t\tVy\t\tVz\t\tTx\t\tMy\t\tMz\t\tDx\t\tDy\t\tDz\t\tRx\t~\n");
 
 	// find interior axial force, shear forces, torsion and bending moments
 
@@ -2729,6 +2729,10 @@ void write_modal_results(
 STATIC_MESH  -
 create mesh data of deformed and undeformed mesh, use gnuplot	22 Feb 1999
 useful gnuplot options: set noxtics noytics noztics noborder view nokey
+This function illustrates how to read the internal force output data file.
+The internal force output data file contains all the information required 
+to plot deformed meshes, internal axial force, internal shear force, internal
+torsion, and internal bending moment diagrams.
 ------------------------------------------------------------------------------*/
 void static_mesh(
 		char IN_file[],
@@ -2740,10 +2744,14 @@ void static_mesh(
 ){
 	FILE	*fpif=NULL, *fpmfx=NULL, *fpm=NULL;
 	double	mx, my, mz;	/* coordinates of the frame element number labels */
-	int	j1, j2, i, j, m, X=0, Y=0, Z=0;
 	char	fnif[FILENMAX], meshfl[FILENMAX], D3 = '#', ch = 'a';
-	int	sfrv=0;		/* *scanf return value		*/
-	int	frel, nx;	/* frame element number, number of increments */
+	int	sfrv=0,		/* *scanf return value		*/
+		frel, nx,	/* frame element number, number of increments */
+		j1, j2;		/* joint numbers		*/
+	float	x1, y1, z1,	/* coordinates of joint j1	*/
+		x2, y2, z2;	/* coordinates of joint j2	*/
+	int	i, j, m,
+		X=0, Y=0, Z=0;
 	time_t  now;		/* modern time variable type	*/
 
 	(void) time(&now);
@@ -2802,13 +2810,15 @@ void static_mesh(
 				J1[m],J2[m], xyz, L[m],p[m], D, exagg_static );
 		} else {
 			while ( ch != '@' )	ch = getc(fpif);
-			sfrv=fscanf(fpif,"%d %d", &frel, &nx);
-			if (sfrv != 2) sferr(fnif);
-			if ( frel != m ) {
+			sfrv=fscanf(fpif,"%d %d %d %f %f %f %f %f %f %d",
+			 &frel, &j1, &j2, &x1, &y1, &z1, &x2, &y2, &z2, &nx);
+			if (sfrv != 10) sferr(fnif);
+			if ( frel != m || J1[m] != j1 || J2[m] != j2 ) {
 			 printf(" error in static_mesh parsing\n");
 			 printf("  frel = %d; m = %d; nx = %d \n", frel,m,nx );
 			}
-			// printf("  frel = %3d; m = %3d; nx = %3d L = %f \n", frel,m,nx, L[m] ); /* debug */
+//			printf("  frel = %3d; m = %3d; j1 =%4d; j2 = %4d; nx = %3d L = %f \n", frel,m,j1,j2,nx,L[m] ); /* debug */
+			while ( ch != '~' )	ch = getc(fpif);
 			force_bent_beam ( fpmfx, fpif, fnif, nx, 
 				J1[m],J2[m], xyz, L[m],p[m], D, exagg_static );
 		}
@@ -3369,13 +3379,14 @@ void force_bent_beam(
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p );
 
 	x = -1.0;
-	n =  0;
+	n = 0;
 	for ( xi = 0; xi <= 1.01*L && n < nx; xi += 0.10*L ) {
 
 		while ( x < xi && n < nx ) {
 		    /* read the deformed shape in local coordinates */
 		    sfrv=fscanf(fpif,"%f %f %f %f %f %f %f %f %f %f %f",
 			&x, &Nx, &Vy, &Vz, &Tx, &My, &Mz, &Dx, &Dy, &Dz, &Rx );
+//		    printf("x = %12.4f\n", x );		/* debug */
 		    if (sfrv != 11) sferr(fnif);
 		    ++n;
 		} 

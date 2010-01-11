@@ -67,6 +67,10 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+*Mon Jan 11 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- improve parsing of internal element forces and displacements
+- update user-manual.html
+
 *Fri Jan 8 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
 - add function force_bent_beam to frame3dd_io.c to compute deformed mesh
 shapes from static loads using statics and mechanics equations instead of a
