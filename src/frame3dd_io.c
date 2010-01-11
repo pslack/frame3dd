@@ -2794,8 +2794,9 @@ void static_mesh(
 	fprintf(fpm,"          X-dsp       Y-dsp       Z-dsp\n");
 
 	fprintf(fpmfx,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
-	fprintf(fpm," VERSION %s \n", VERSION);
+	fprintf(fpmfx," VERSION %s \n", VERSION);
 	fprintf(fpmfx,"# %s\n", title );
+	fprintf(fpmfx,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
 	fprintf(fpmfx,"# %s", ctime(&now) );
 	fprintf(fpmfx,"# F L E X E D   M E S H   D A T A ");
 	fprintf(fpmfx,"  deflection exaggeration: %.1f\n", exagg_static );
