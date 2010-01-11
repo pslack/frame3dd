@@ -68,8 +68,9 @@ rm -rf %{buildroot}
 # changes there.
 #
 *Mon Jan 11 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
-- improve parsing of internal element forces and displacements
+- improve parsing data format for internal element forces and displacements
 - update user-manual.html
+- plotting of internal forces in Gnuplot is the next step (?)
 
 *Fri Jan 8 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
 - add function force_bent_beam to frame3dd_io.c to compute deformed mesh

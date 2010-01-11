@@ -2756,6 +2756,59 @@ void static_mesh(
 
 	(void) time(&now);
 
+	// undeformed mesh data
+
+	if (lc == 1) {
+	 // open the undeformed mesh data file for writing
+	 if ((fpm = fopen (meshpath, "w")) == NULL) {
+		printf ("\n  error: cannot open meshpath: %s\n", meshpath );
+		exit(1);
+	 }
+
+	 fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
+	 fprintf(fpm," VERSION %s \n", VERSION);
+	 fprintf(fpm,"# %s\n", title );
+//	 fprintf(fpm,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
+	 fprintf(fpm,"# %s", ctime(&now) );
+	 fprintf(fpm,"# U N D E F O R M E D   M E S H   D A T A   (global coordinates)\n");
+//	 fprintf(fpm," deflection exaggeration: %.1f\n", exagg_static );
+	 fprintf(fpm,"# Joint       X            Y            Z \n");
+//	 fprintf(fpm,"          X-dsp       Y-dsp       Z-dsp\n");
+
+	 for (m=1; m<=nE; m++) {
+		j = J1[m];	i = 6*(j-1);
+		fprintf (fpm,"%5d %12.4e %12.4e %12.4e \n",
+					j , xyz[j].x , xyz[j].y , xyz[j].z );
+		j = J2[m];	i = 6*(j-1);
+		fprintf (fpm,"%5d %12.4e %12.4e %12.4e",
+					j , xyz[j].x , xyz[j].y , xyz[j].z );
+		fprintf (fpm,"\n\n\n");
+	 }
+	 fclose(fpm);
+	}
+
+	// deformed mesh data
+
+	if (!anlyz) exagg_static = 0.0;
+
+	// file name for deformed mesh data for load case "lc" 
+	sprintf( meshfl, "%sf.%03d", meshpath, lc );
+
+	// open the deformed mesh data file for writing 
+	if ((fpmfx = fopen (meshfl, "w")) == NULL) {
+		printf ("\n  error: cannot open meshpath: %s\n", meshfl );
+		exit(1);
+	}
+
+	fprintf(fpmfx,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
+	fprintf(fpmfx," VERSION %s \n", VERSION);
+	fprintf(fpmfx,"# %s\n", title );
+	fprintf(fpmfx,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
+	fprintf(fpmfx,"# %s", ctime(&now) );
+	fprintf(fpmfx,"# F L E X E D   M E S H   D A T A ");
+	fprintf(fpmfx,"  deflection exaggeration: %.1f\n", exagg_static );
+	fprintf(fpmfx,"#       X-dsp        Y-dsp        Z-dsp\n");
+
 	/* file name for internal force data for load case "lc" */
 	sprintf( fnif, "%s%02d", infcpath, lc );
 	
@@ -2766,41 +2819,6 @@ void static_mesh(
           exit(1);
 	 }
 	}
-
-	/* file name for deformed mesh data for load case "lc" */
-	sprintf( meshfl, "%sf.%03d", meshpath, lc );
-
-	/* open the deformed mesh data file for writing */
-	if ((fpmfx = fopen (meshfl, "w")) == NULL) {
-		printf ("\n  error: cannot open meshpath: %s\n", meshfl );
-		exit(1);
-	}
-
-	if ((fpm = fopen (meshpath, "w")) == NULL) {
-		printf ("\n  error: cannot open meshpath: %s\n", meshpath );
-		exit(1);
-	}
-
-	if (!anlyz) exagg_static = 0.0;
-
-	fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
-	fprintf(fpm," VERSION %s \n", VERSION);
-	fprintf(fpm,"# %s\n", title );
-	fprintf(fpm,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
-	fprintf(fpm,"# %s", ctime(&now) );
-	fprintf(fpm,"# M E S H   D A T A   (global coordinates)");
-	fprintf(fpm," deflection exaggeration: %.1f\n", exagg_static );
-	fprintf(fpm,"# Joint      X           Y           Z");
-	fprintf(fpm,"          X-dsp       Y-dsp       Z-dsp\n");
-
-	fprintf(fpmfx,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
-	fprintf(fpmfx," VERSION %s \n", VERSION);
-	fprintf(fpmfx,"# %s\n", title );
-	fprintf(fpmfx,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
-	fprintf(fpmfx,"# %s", ctime(&now) );
-	fprintf(fpmfx,"# F L E X E D   M E S H   D A T A ");
-	fprintf(fpmfx,"  deflection exaggeration: %.1f\n", exagg_static );
-	fprintf(fpmfx,"#       X-dsp        Y-dsp        Z-dsp\n");
 
 	for (m=1; m<=nE; m++) {
 
@@ -2823,50 +2841,32 @@ void static_mesh(
 			force_bent_beam ( fpmfx, fpif, fnif, nx, 
 				J1[m],J2[m], xyz, L[m],p[m], D, exagg_static );
 		}
-	
-
-		j = J1[m];	i = 6*(j-1);
-		fprintf (fpm,"%5d %11.3e %11.3e %11.3e",
-					j, xyz[j].x, xyz[j].y, xyz[j].z );
-		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-					xyz[j].x + exagg_static*D[i+1] ,
-					xyz[j].y + exagg_static*D[i+2] ,
-					xyz[j].z + exagg_static*D[i+3] );
-
-		j = J2[m];	i = 6*(j-1);
-		fprintf (fpm,"%5d %11.3e %11.3e %11.3e",
-					j , xyz[j].x , xyz[j].y , xyz[j].z );
-		fprintf (fpm," %11.3e %11.3e %11.3e\n",
-					xyz[j].x + exagg_static*D[i+1] ,
-					xyz[j].y + exagg_static*D[i+2] ,
-					xyz[j].z + exagg_static*D[i+3] );
-		fprintf(fpm,"\n\n");
 	}
 	if ( dx != -1.0 ) fclose(fpif);
+	fclose(fpmfx);
 
-	for ( j=1; j<=nJ; j++ ) {
-		if (xyz[j].x != 0.0) X=1;	/* check for three-dimensional frame */
+	// gnuplot plotting script commands
+
+	for ( j=1; j<=nJ; j++ ) { // check for three-dimensional frame 
+		if (xyz[j].x != 0.0) X=1;
 		if (xyz[j].y != 0.0) Y=1;
 		if (xyz[j].z != 0.0) Z=1;
 	}
 	if ( X && Y && Z ) D3 = ' ';
 
-	fclose(fpmfx);
-	fclose(fpm);
-
-	if (lc == 1) {
+	if (lc == 1) {	// open plotting script file for writing
 	    if ((fpm = fopen (plotpath, "w")) == NULL) {
 		printf ("\n  error: cannot open plot file: %s\n", plotpath);
 		exit(1);
 	    }
-	} else {
+	} else {	// open plotting script file for appending
 	    if ((fpm = fopen (plotpath, "a")) == NULL) {
 		printf ("\n  error: cannot open plot file: %s\n", plotpath);
 		exit(1);
 	    }
 	}
 
-	if (lc == 1) {		/* first load case */
+	if (lc == 1) {		// first load case,  write header information
 
 	 fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
 	 fprintf(fpm," VERSION %s \n", VERSION);
@@ -3015,8 +3015,8 @@ void modal_mesh(
 		for(n=1; n<=nE; n++)
 			cubic_bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, exagg_modal );
 
-		for ( j=1; j<=nJ; j++ ) {
-			if (xyz[j].x != 0.0) X=1;	/* check for three-dimensional frame */
+		for ( j=1; j<=nJ; j++ ) { // check for three-dimensional frame
+			if (xyz[j].x != 0.0) X=1;
 			if (xyz[j].y != 0.0) Y=1;
 			if (xyz[j].z != 0.0) Z=1;
 		}
@@ -3095,7 +3095,7 @@ void animate(
 		Movie = '#',	/* use '#' for no-movie  -OR-  ' ' for movie */
 		modefl[FILENMAX], framefl[FILENMAX];
 
-	for (j=1; j<=nJ; j++) {		/* check for three-dimensional frame */
+	for (j=1; j<=nJ; j++) {		// check for three-dimensional frame
 		if (xyz[j].x != 0.0) X=1;
 		if (xyz[j].y != 0.0) Y=1;
 		if (xyz[j].z != 0.0) Z=1;
