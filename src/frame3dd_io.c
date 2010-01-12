@@ -2742,21 +2742,23 @@ void static_mesh(
 		int *J1, int *J2, float *p, double *D,
 		double exagg_static, int anlyz, float dx
 ){
-	FILE	*fpif=NULL, *fpmfx=NULL, *fpm=NULL;
-	double	mx, my, mz;	/* coordinates of the frame element number labels */
-	char	fnif[FILENMAX], meshfl[FILENMAX], D3 = '#', ch = 'a';
-	int	sfrv=0,		/* *scanf return value		*/
+	FILE	*fpif=NULL, *fpm=NULL;
+	double	mx, my, mz; /* coordinates of the frame element number labels */
+	char	fnif[FILENMAX], meshfl[FILENMAX],
+		D2='#', D3='#',	/* indicates plotting in 2D or 3D	*/
+		ch = 'a';
+	int	sfrv=0,		/* *scanf return value			*/
 		frel, nx,	/* frame element number, number of increments */
-		j1, j2;		/* joint numbers		*/
-	float	x1, y1, z1,	/* coordinates of joint j1	*/
-		x2, y2, z2;	/* coordinates of joint j2	*/
+		j1, j2;		/* joint numbers			*/
+	float	x1, y1, z1,	/* coordinates of joint j1		*/
+		x2, y2, z2;	/* coordinates of joint j2		*/
 	int	i, j, m,
 		X=0, Y=0, Z=0;
-	time_t  now;		/* modern time variable type	*/
+	time_t  now;		/* modern time variable type		*/
 
 	(void) time(&now);
 
-	// undeformed mesh data
+	// write undeformed mesh data
 
 	if (lc == 1) {
 	 // open the undeformed mesh data file for writing
@@ -2768,12 +2770,9 @@ void static_mesh(
 	 fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
 	 fprintf(fpm," VERSION %s \n", VERSION);
 	 fprintf(fpm,"# %s\n", title );
-//	 fprintf(fpm,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
 	 fprintf(fpm,"# %s", ctime(&now) );
 	 fprintf(fpm,"# U N D E F O R M E D   M E S H   D A T A   (global coordinates)\n");
-//	 fprintf(fpm," deflection exaggeration: %.1f\n", exagg_static );
 	 fprintf(fpm,"# Joint       X            Y            Z \n");
-//	 fprintf(fpm,"          X-dsp       Y-dsp       Z-dsp\n");
 
 	 for (m=1; m<=nE; m++) {
 		j = J1[m];	i = 6*(j-1);
@@ -2787,7 +2786,7 @@ void static_mesh(
 	 fclose(fpm);
 	}
 
-	// deformed mesh data
+	// write deformed mesh data
 
 	if (!anlyz) exagg_static = 0.0;
 
@@ -2795,24 +2794,24 @@ void static_mesh(
 	sprintf( meshfl, "%sf.%03d", meshpath, lc );
 
 	// open the deformed mesh data file for writing 
-	if ((fpmfx = fopen (meshfl, "w")) == NULL) {
+	if ((fpm = fopen (meshfl, "w")) == NULL) {
 		printf ("\n  error: cannot open meshpath: %s\n", meshfl );
 		exit(1);
 	}
 
-	fprintf(fpmfx,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
-	fprintf(fpmfx," VERSION %s \n", VERSION);
-	fprintf(fpmfx,"# %s\n", title );
-	fprintf(fpmfx,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
-	fprintf(fpmfx,"# %s", ctime(&now) );
-	fprintf(fpmfx,"# F L E X E D   M E S H   D A T A ");
-	fprintf(fpmfx,"  deflection exaggeration: %.1f\n", exagg_static );
-	fprintf(fpmfx,"#       X-dsp        Y-dsp        Z-dsp\n");
+	fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
+	fprintf(fpm," VERSION %s \n", VERSION);
+	fprintf(fpm,"# %s\n", title );
+	fprintf(fpm,"# L O A D  C A S E   %d  of   %d \n", lc, nL );
+	fprintf(fpm,"# %s", ctime(&now) );
+	fprintf(fpm,"# D E F O R M E D   M E S H   D A T A ");
+	fprintf(fpm,"  deflection exaggeration: %.1f\n", exagg_static );
+	fprintf(fpm,"#       X-dsp        Y-dsp        Z-dsp\n");
 
-	/* file name for internal force data for load case "lc" */
+	// file name for internal force data for load case "lc" 
 	sprintf( fnif, "%s%02d", infcpath, lc );
 	
-	/* open the interior force data file for reading */
+	// open the interior force data file for reading 
 	if ( dx > 0 ) {
 	 if ((fpif = fopen (fnif, "r")) == NULL) {
           fprintf (stderr,"\n ERROR: cannot open interior force data file '%s'\n",fnif);
@@ -2825,7 +2824,7 @@ void static_mesh(
 		ch = 'a'; 
 
 		if ( dx == -1.0 ) {
-			cubic_bent_beam ( fpmfx,
+			cubic_bent_beam ( fpm,
 				J1[m],J2[m], xyz, L[m],p[m], D, exagg_static );
 		} else {
 			while ( ch != '@' )	ch = getc(fpif);
@@ -2838,21 +2837,25 @@ void static_mesh(
 			}
 //			printf("  frel = %3d; m = %3d; j1 =%4d; j2 = %4d; nx = %3d L = %f \n", frel,m,j1,j2,nx,L[m] ); /* debug */
 			while ( ch != '~' )	ch = getc(fpif);
-			force_bent_beam ( fpmfx, fpif, fnif, nx, 
+			force_bent_beam ( fpm, fpif, fnif, nx, 
 				J1[m],J2[m], xyz, L[m],p[m], D, exagg_static );
 		}
 	}
 	if ( dx != -1.0 ) fclose(fpif);
-	fclose(fpmfx);
+	fclose(fpm);
 
-	// gnuplot plotting script commands
+	// write gnuplot plotting script commands
 
 	for ( j=1; j<=nJ; j++ ) { // check for three-dimensional frame 
 		if (xyz[j].x != 0.0) X=1;
 		if (xyz[j].y != 0.0) Y=1;
 		if (xyz[j].z != 0.0) Z=1;
 	}
-	if ( X && Y && Z ) D3 = ' ';
+	if ( X && Y && Z ) {
+		D3 = ' '; D2 = '#';
+	} else {
+		D3 = '#'; D2 = ' ';
+	}
 
 	if (lc == 1) {	// open plotting script file for writing
 	    if ((fpm = fopen (plotpath, "w")) == NULL) {
@@ -2866,18 +2869,15 @@ void static_mesh(
 	    }
 	}
 
-	if (lc == 1) {		// first load case,  write header information
+	// write header, plot-setup cmds, joint label, and element label data
+
+	if (lc == 1) {	
 
 	 fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
 	 fprintf(fpm," VERSION %s \n", VERSION);
 	 fprintf(fpm,"# %s\n", title );
 	 fprintf(fpm,"# %s", ctime(&now) );
 	 fprintf(fpm,"# M E S H   A N N O T A T I O N   F I L E \n");
-
-	 fprintf(fpm,"set title \"%s\\n", title );
-	 fprintf(fpm,"analysis file: %s ", IN_file );
-	 fprintf(fpm,"  deflection exaggeration: %.1f ", exagg_static );
-	 fprintf(fpm,"  load case %d of %d \"\n", lc, nL );
 
 	 fprintf(fpm,"set autoscale\n");
 	 fprintf(fpm,"set noborder\n");
@@ -2901,9 +2901,8 @@ void static_mesh(
 		fprintf(fpm,"set label ' %d' at %12.4e, %12.4e, %12.4e\n",
 								m, mx, my, mz );
 	 }
-	 fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w lp ", meshpath);
-	 if (!anlyz) fprintf(fpm,"lw 2 lt 1 pt 6 \n");
-	 else fprintf(fpm,"lw 1 lt 5 pt 6, '%s' u 1:2 t 'load case %d of %d' w l lw 2 lt 3\n", meshfl, lc, nL );
+
+	 // 3D plot setup commands
 
 	 fprintf(fpm,"%c set parametric\n", D3 );
 	 fprintf(fpm,"%c set view 60, 70, 1 \n", D3 );
@@ -2911,37 +2910,32 @@ void static_mesh(
 	 fprintf(fpm,"%c set xlabel 'x'\n", D3 );
 	 fprintf(fpm,"%c set ylabel 'y'\n", D3 );
 	 fprintf(fpm,"%c set zlabel 'z'\n", D3 );
-/*	 fprintf(fpm,"%c set nolabel\n", D3 );	*/
-	 fprintf(fpm,"%c splot '%s' u 2:3:4 t 'load case %d of %d' w lp ",
+//	 fprintf(fpm,"%c set nolabel\n", D3 );
+
+	} 
+
+	// different plot title for each load case
+
+	fprintf(fpm,"set title \"%s\\n", title );
+	fprintf(fpm,"analysis file: %s ", IN_file );
+	fprintf(fpm,"  deflection exaggeration: %.1f ", exagg_static );
+	fprintf(fpm,"  load case %d of %d \"\n", lc, nL );
+
+	// 2D plot command
+
+	fprintf(fpm,"%c plot '%s' u 2:3 t 'undeformed mesh' w lp ",
+								D2, meshpath);
+	if (!anlyz) fprintf(fpm,"lw 2 lt 1 pt 6 \n");
+	else fprintf(fpm,"lw 1 lt 5 pt 6, '%s' u 1:2 t 'load case %d of %d' w l lw 2 lt 3\n", meshfl, lc, nL );
+
+	// 3D plot command
+
+	fprintf(fpm,"%c splot '%s' u 2:3:4 t 'load case %d of %d' w lp ",
 							D3, meshpath, lc, nL );
-	 if (!anlyz) fprintf(fpm," lw 2 lt 1 pt 6 \n");
-	 else fprintf(fpm," lw 1 lt 5 pt 6, '%s' u 1:2:3 t 'load case %d of %d' w l lw 2 lt 3\n",meshfl, lc, nL );
+	if (!anlyz) fprintf(fpm," lw 2 lt 1 pt 6 \n");
+	else fprintf(fpm," lw 1 lt 5 pt 6, '%s' u 1:2:3 t 'load case %d of %d' w l lw 2 lt 3\n",meshfl, lc, nL );
 
-	} else { 		/* additional load cases */
-
-	 fprintf(fpm,"pause -1\n");
-
-	 fprintf(fpm,"set title \"%s\\n", title );
-	 fprintf(fpm,"analysis file: %s ", IN_file );
-	 fprintf(fpm,"  deflection exaggeration: %.1f ", exagg_static );
-	 fprintf(fpm,"  load case %d of %d \"\n", lc, nL );
-
-	 fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w lp ", meshpath);
-	 if (!anlyz) fprintf(fpm,"lw 2 lt 1 pt 6 \n");
-	 else fprintf(fpm,"lw 1 lt 5 pt 6, '%s' u 1:2 t 'load case %d of %d' w l lw 2 lt 3\n", meshfl, lc, nL );
-
-	 fprintf(fpm,"%c set parametric\n", D3 );
-	 fprintf(fpm,"%c set view 60, 70, 1 \n", D3 );
-	 fprintf(fpm,"%c set nokey\n", D3 );
-	 fprintf(fpm,"%c set xlabel 'x'\n", D3 );
-	 fprintf(fpm,"%c set ylabel 'y'\n", D3 );
-	 fprintf(fpm,"%c set zlabel 'z'\n", D3 );
-/*	 fprintf(fpm,"%c set nolabel\n", D3 );	*/
-	 fprintf(fpm,"%c splot '%s' u 2:3:4 t 'undeformed mesh' w lp ",
-								D3, meshpath );
-	 if (!anlyz) fprintf(fpm," lw 2 lt 1 pt 6 \n");
-	 else fprintf(fpm," lw 1 lt 5 pt 6, '%s' u 1:2:3 t 'load case %d of %d' w l lw 2 lt 3\n",meshfl, lc, nL );
-	}
+	if (lc < nL)	fprintf(fpm,"pause -1\n");
 
 	fclose(fpm);
 
@@ -2968,7 +2962,8 @@ void modal_mesh(
 	double *v;		/* a mode-shape vector */
 
 	int	i, j, m,n, X=0, Y=0, Z=0;
-	char	D3 = '#', modefl[FILENMAX];
+	char	D2='#', D3 = '#',	/* indicate 2D or 3D frame	*/
+		modefl[FILENMAX];
 
 
 	msX = dvector(1,DoF);
@@ -3015,34 +3010,47 @@ void modal_mesh(
 		for(n=1; n<=nE; n++)
 			cubic_bent_beam ( fpm, J1[n], J2[n], xyz, L[n], p[n], v, exagg_modal );
 
+		fclose(fpm);
+
 		for ( j=1; j<=nJ; j++ ) { // check for three-dimensional frame
 			if (xyz[j].x != 0.0) X=1;
 			if (xyz[j].y != 0.0) Y=1;
 			if (xyz[j].z != 0.0) Z=1;
 		}
 
-		if ( X && Y && Z ) D3 = ' ';
+		if ( X && Y && Z ) {
+			D3 = ' '; D2 = '#';
+		} else {
+			D3 = '#'; D2 = ' ';
+		}
 
-		fclose(fpm);
 
 		if ((fpm = fopen (plotpath, "a")) == NULL) {
 			printf ("\n  error: cannot append plot file: %s\n",plotpath);
 			exit(1);
 		}
+
 		fprintf(fpm,"pause -1\n");
-		fprintf(fpm,"set nolabel\n");
+
+		if (m==1) {
+			fprintf(fpm,"set nolabel\n");
+			fprintf(fpm,"%c set nokey\n", D3 );
+		}
+
 		fprintf(fpm,"set title '%s     mode %d     %lf Hz'\n",IN_file,m,f[m]);
-		fprintf(fpm,"plot '%s' u 2:3 t 'undeformed mesh' w l ", meshpath );
+
+		// 2D plot command
+
+		fprintf(fpm,"%c plot '%s' u 2:3 t 'undeformed mesh' w l ", D2, meshpath );
 		if (!anlyz) fprintf(fpm," lw 2 lt 1 \n");
-		else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2 t 'mode-shape %d' w l lw 2 lt 3\n",
-								modefl, m );
-		fprintf(fpm,"%c pause -1\n", D3 );
-		fprintf(fpm,"%c set nokey\n", D3 );
+		else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2 t 'mode-shape %d' w l lw 2 lt 3\n", modefl, m );
+
+		// 3D plot command 
+
 		fprintf(fpm,"%c splot '%s' u 2:3:4 t 'undeformed mesh' w l ",
 								D3, meshpath);
 		if (!anlyz) fprintf(fpm," lw 2 lt 1 \n");
-		else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2:3 t 'mode-shape %d' w l lw 2 lt 3\n",
-								modefl, m );
+		else fprintf(fpm," lw 1 lt 5 , '%s' u 1:2:3 t 'mode-shape %d' w l lw 2 lt 3\n", modefl, m );
 
 		fclose(fpm);
 
@@ -3091,7 +3099,7 @@ void animate(
 		frame_number = 0,
 		total_frames;	/* total number of frames in animation */
 
-	char	D3 = '#',
+	char	D2 = '#', D3 = '#',	/* indicate 2D or 3D frame	*/
 		Movie = '#',	/* use '#' for no-movie  -OR-  ' ' for movie */
 		modefl[FILENMAX], framefl[FILENMAX];
 
@@ -3106,7 +3114,11 @@ void animate(
 		if ( y_max < xyz[j].y ) y_max = xyz[j].y;
 		if ( z_max < xyz[j].z ) z_max = xyz[j].z;
 	}
-	if ( X && Y && Z ) D3 = ' ';
+	if ( X && Y && Z ) {
+		D3 = ' '; D2 = '#';
+	} else {
+		D3 = '#'; D2 = ' ';
+	}
 
 
 	if ((fpm = fopen (plotpath, "a")) == NULL) {
@@ -3160,6 +3172,7 @@ void animate(
 	 frame_number = 0;
 	 total_frames = 2*CYCLES*frames;
 	 for ( c=1; c <= CYCLES; c++ ) {
+
 	  for ( fr=0; fr<=frames; fr++ ) {
 
 	    ++frame_number;
@@ -3167,18 +3180,16 @@ void animate(
 	    sprintf(modefl,"%s-%02d.%03d", modepath, m, fr  );
 	    sprintf(framefl,"%s-%02d-f-%03d.ps", modepath, m, fr  );
 
-	    if ( D3 == '#' ) {
-		fprintf(fpm,"plot '%s' u 2:3 w l lw 1 lt 5, ", meshpath );
-	 	fprintf(fpm," '%s' u 1:2 w l lw 2 lt 3 ;", modefl );
-	    } else {
-	      if ( pan != 0.0 )
-		fprintf(fpm,"%c set view %7.2f, %7.2f, %5.3f # pan = %f\n", D3,
+	    fprintf(fpm,"%c plot '%s' u 2:3 w l lw 1 lt 5, ", D2,meshpath );
+	    fprintf(fpm," '%s' u 1:2 w l lw 2 lt 3 ; \n", modefl );
+	    if ( pan != 0.0 )
+	     fprintf(fpm,"%c set view %7.2f, %7.2f, %5.3f # pan = %f\n", D3,
 		rot_x_init + pan*(rot_x_final-rot_x_init)*frame_number/total_frames,
 		rot_z_init + pan*(rot_z_final-rot_z_init)*frame_number/total_frames,
 		zoom_init + pan*(zoom_final-zoom_init)*frame_number/total_frames, pan );
-	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshpath);
-	      fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
-	    }
+	    fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshpath);
+            fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
+
 	    if ( fr==0 && c==1 )	fprintf(fpm,"  pause 1.5 \n");
 	    else			fprintf(fpm,"  pause 0.05 \n");
 	    fprintf(fpm,"%c  load 'saveplot';\n",Movie);
@@ -3191,34 +3202,29 @@ void animate(
 	    sprintf(modefl,"%s-%02d.%03d", modepath, m, fr  );
 	    sprintf(framefl,"%s-%02d-f-%03d.ps", modepath, m, fr  );
 
-	    if ( D3 == '#' ) {
-	 	fprintf(fpm,"plot '%s' u 2:3 w l lw 1 lt 5, ", meshpath );
-		fprintf(fpm," '%s' u 1:2 w l lw 2 lt 3;", modefl );
-	    } else {
-	      if ( pan != 0.0 )
-		fprintf(fpm,"%c set view %7.2f, %7.2f, %5.3f # pan = %f\n", D3,
+	    fprintf(fpm,"%c plot '%s' u 2:3 w l lw 1 lt 5, ", D2,meshpath );
+	    fprintf(fpm," '%s' u 1:2 w l lw 2 lt 3; \n", modefl );
+	    if ( pan != 0.0 )
+	     fprintf(fpm,"%c set view %7.2f, %7.2f, %5.3f # pan = %f\n", D3,
 		rot_x_init + pan*(rot_x_final-rot_x_init)*frame_number/total_frames,
 		rot_z_init + pan*(rot_z_final-rot_z_init)*frame_number/total_frames,
 		zoom_init + pan*(zoom_final-zoom_init)*frame_number/total_frames, pan );
-	      fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshpath);
-	      fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
-	    }
+	    fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 1 lt 5, ",D3,meshpath);
+	    fprintf(fpm," '%s' u 1:2:3 w l lw 2 lt 3;", modefl );
 	    fprintf(fpm,"  pause 0.05 \n");
 	    fprintf(fpm,"%c  load 'saveplot';\n",Movie);
 	    fprintf(fpm,"%c  !mv my-plot.ps %s\n", Movie, framefl );
 	  }
+
 	 }
 	 fr = 0;
 
 	 sprintf(modefl,"%s-%02d.%03d", modepath, m, fr  );
 
-	 if ( D3 == '#' ) {
-	 	fprintf(fpm,"plot '%s' u 2:3 w l lw 2 lt 5, ", meshpath );
-		fprintf(fpm," '%s' u 1:2 w l lw 3 lt 3 \n", modefl );
-	 } else {
-		fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 2 lt 5, ",D3,meshpath);
-		fprintf(fpm," '%s' u 1:2:3 w l lw 3 lt 3 \n", modefl );
-	 }
+	 fprintf(fpm,"%c plot '%s' u 2:3 w l lw 2 lt 5, ", D2, meshpath );
+	 fprintf(fpm," '%s' u 1:2 w l lw 3 lt 3 \n", modefl );
+	 fprintf(fpm,"%c splot '%s' u 2:3:4 w l lw 2 lt 5, ",D3,meshpath);
+	 fprintf(fpm," '%s' u 1:2:3 w l lw 3 lt 3 \n", modefl );
 
 	 i++;
 	}
@@ -3258,7 +3264,9 @@ void animate(
 	  }
 	  i++;
 	}
+
 	free_dvector(v,1,DoF);
+
 	return;
 }
 

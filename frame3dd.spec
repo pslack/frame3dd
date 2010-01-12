@@ -69,6 +69,11 @@ rm -rf %{buildroot}
 #
 *Mon Jan 11 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
 - improve parsing data format for internal element forces and displacements
+- separate deformed mesh and undeformed mesh data files
+- shorten loops for writing mesh data files
+- stream-line writing of gnuplot scripts ...
+sections of duplicated code are combined and 
+mode shapes for 3D frames are no longer plotted in 2D before being plotted in 3D
 - update user-manual.html
 - plotting of internal forces in Gnuplot is the next step (?)
 
