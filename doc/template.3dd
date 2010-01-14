@@ -42,7 +42,7 @@ dx           # length of x-axis increment for frame element internal force data,
 
 # load data ...
 
-nL                        # number of static load cases,  1..63
+nL                        # number of static load cases,  1..30
 
 # Begin Static Load Case 1  
 
@@ -154,7 +154,7 @@ nD                   # number of prescribed displacements nD<=nR (global)
 
 # End Static Load Case 2
 
-# repeat up to 32 static load cases
+# repeat up to 30 static load cases
 
 
 # dynamic analysis data ...
