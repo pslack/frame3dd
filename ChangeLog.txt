@@ -1,3 +1,6 @@
+*Thu Jan 14 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- improve grammar in template.3dd
+
 *Mon Jan 11 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
 - improve parsing data format for internal element forces and displacements
 - separate deformed mesh and undeformed mesh data files
