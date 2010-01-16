@@ -67,6 +67,18 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+*Sat Jan 16 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- create a set of exit codes with an exit code index in user-manual
+- standardize usage of stderr prior to exit calls and stdout for "verbose"
+- update user-manual.html with exit codes
+- fix bug in path name parsing in frame3dd_io.c : 658 function output_path() 
+In windows absolute path starts with "C:\" .. not "\" or "/"
+In Unix and OS X the absolute path starts with "/"
+
+*Thu Jan 14 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- improve grammar in template.3dd
+- update user-manual.html to specify the maximum number of load cases is 30 
+
 *Mon Jan 11 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
 - improve parsing data format for internal element forces and displacements
 - separate deformed mesh and undeformed mesh data files

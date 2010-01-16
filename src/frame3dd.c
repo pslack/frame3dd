@@ -397,16 +397,16 @@ int	verbose;
 	if ( *ok < 0 ) {
 	 	fprintf(stderr," Make sure that all six");
 		fprintf(stderr," rigid body translations are restrained!\n");
-		/* exit(1); */
+		/* exit(31); */
 	} else {				/* back substitute for D */
 		ldl_dcmp( K, DoF, diag, F, D, 0, 1, ok ); /* LDL'  back-sub */
-		if ( verbose ) printf("    LDL' RMS matrix precision:");
+		if ( verbose ) fprintf(stdout,"    LDL' RMS matrix precision:");
 		error = *ok = 1;
 		do {					/* improve solution */
 			ldl_mprove ( K, DoF, diag, F, D, &error, ok );
-			if ( verbose ) printf("%9.2e", error );
+			if ( verbose ) fprintf(stdout,"%9.2e", error );
 		} while ( *ok );
-	        if ( verbose ) printf("\n");
+	        if ( verbose ) fprintf(stdout,"\n");
 	}
 
 	free_dvector( diag, 1, DoF );
@@ -1147,13 +1147,13 @@ void invAB(
 		for (k=1; k<=n; k++)  b[k] = B[k][j];
 		ldl_dcmp( A, n, diag, b, x, 0, 1, ok ); /*  L D L'  bksbtn */
 
-		if ( verbose ) printf("    LDL' RMS matrix precision:");
+		if ( verbose ) fprintf(stdout,"    LDL' RMS matrix precision:");
 		error = *ok = 1;
 		do {					/*improve the solution*/
 			ldl_mprove ( A, n, diag, b, x, &error, ok );
-			if ( verbose ) printf("%9.2e", error );
+			if ( verbose ) fprintf(stdout,"%9.2e", error );
 		} while ( *ok );
-		if ( verbose ) printf("\n");
+		if ( verbose ) fprintf(stdout,"\n");
 
 		for (i=1; i<=n; i++)	AiB[i][j] = x[i];
 	}
@@ -1187,13 +1187,13 @@ void xtaiy(
 		for (k=1; k<=n; k++)  y[k] = Y[k][j];
 		ldl_dcmp( A, n, diag, y, x, 0, 1, &ok ); /*  L D L'  bksbtn */
 
-		if ( verbose ) printf("    LDL' RMS matrix precision:");
+		if ( verbose ) fprintf(stdout,"    LDL' RMS matrix precision:");
 		error = ok = 1;
 		do {					/*improve the solution*/
 			ldl_mprove ( A, n, diag, y, x, &error, &ok );
-			if ( verbose ) printf("%9.2e", error );
+			if ( verbose ) fprintf(stdout,"%9.2e", error );
 		} while ( ok );
-		if ( verbose ) printf("\n");
+		if ( verbose ) fprintf(stdout,"\n");
 
 		for (i=1; i<=m; i++) {
 			Ac[i][j] = 0.0;
@@ -1238,13 +1238,13 @@ int	verbose;
 		b[j] = 1.0;
 		ldl_dcmp( A, n, diag, b, x, 0, 1, &ok ); /*  L D L'  bksbtn */
 
-		if ( verbose ) printf("    LDL' RMS matrix precision:");
+		if ( verbose ) fprintf(stdout,"    LDL' RMS matrix precision:");
 		error = ok = 1;
 		do {					/*improve the solution*/
 			ldl_mprove ( A, n, diag, b, x, &error, &ok );
-			if ( verbose ) printf("%9.2e", error );
+			if ( verbose ) fprintf(stdout,"%9.2e", error );
 		} while ( ok );
-		if ( verbose ) printf("\n");
+		if ( verbose ) fprintf(stdout,"\n");
 
 		for (k=1; k<=n; k++)  Ai[j][k] = x[k];	/* save inv(A) */
 	}
@@ -1324,12 +1324,12 @@ void deallocate(
 	free_dvector(L,1,nE);
 	free_dvector(Le,1,nE);
 
-// printf("..B\n");
+// printf("..B\n"); /* debug */
 	free_ivector(J1,1,nE);
 	free_ivector(J2,1,nE);
 	free_ivector(R,1,DoF);
 
-// printf("..C\n");
+// printf("..C\n"); /* debug */
 	free_vector(Ax,1,nE);
 	free_vector(Asy,1,nE);
 	free_vector(Asz,1,nE);
@@ -1340,35 +1340,35 @@ void deallocate(
 	free_vector(G,1,nE);
 	free_vector(p,1,nE);
 
-// printf("..D\n");
+// printf("..D\n"); /* debug */
 	free_D3matrix(U,1,nL,1,nE,1,4);
 	free_D3matrix(W,1,nL,1,10*nE,1,13);
 	free_D3matrix(P,1,nL,1,10*nE,1,5);
 	free_D3matrix(T,1,nL,1,nE,1,8);
 	free_matrix(Dp,1,nL,1,DoF);
 
-// printf("..E\n");
+// printf("..E\n"); /* debug */
 	free_dmatrix(Fo_mech,1,nL,1,DoF);
 	free_dmatrix(Fo_temp,1,nL,1,DoF);
 
-// printf("..F\n");
+// printf("..F\n"); /* debug */
 	free_dmatrix(Fo,1,nL,1,DoF);
 	free_dvector(F,1,DoF);
 
-// printf("..G\n");
+// printf("..G\n"); /* debug */
 	free_D3dmatrix(feF_mech,1,nL,1,nE,1,12);
 	free_D3dmatrix(feF_temp,1,nL,1,nE,1,12);
 	free_dmatrix(feF,1,nE,1,12);
 
-// printf("..H\n");
+// printf("..H\n"); /* debug */
 	free_dmatrix(K,1,DoF,1,DoF);
 	free_dmatrix(Q,1,nE,1,12);
 
-// printf("..I\n");
+// printf("..I\n"); /* debug */
 	free_dvector(D,1,DoF);
 	free_dvector(dD,1,DoF);
 
-// printf("..J\n");
+// printf("..J\n"); /* debug */
 	free_vector(d,1,nE);
 	free_vector(BMs,1,nE);
 	free_vector(JMs,1,nJ);
@@ -1376,11 +1376,11 @@ void deallocate(
 	free_vector(JMy,1,nJ);
 	free_vector(JMz,1,nJ);
 
-// printf("..K\n");
+// printf("..K\n"); /* debug */
 	free_ivector(q,1,DoF);
 	free_ivector(m,1,DoF);
 
-// printf("..L\n");
+// printf("..L\n"); /* debug */
 	if ( nM > 0 ) {
 		free_dmatrix(M,1,DoF,1,DoF);
 		free_dvector(f,1,nM);

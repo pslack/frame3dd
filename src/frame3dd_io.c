@@ -149,10 +149,10 @@ void parse_options (
 				else if (strcmp(optarg,"On")==0)
 					*shear_flag = 1;
 				else {
-					printf(" frame3dd command-line error"); 
-					printf(": argument to -s option"); 
-					printf(" should be either On or Off\n");
-					exit(1);
+				 fprintf(stderr," frame3dd command-line error"); 
+				 fprintf(stderr,": argument to -s option"); 
+				 fprintf(stderr," should be either On or Off\n");
+				 exit(3);
 				}
 				break;
 			case 'g':		/* geometric stiffness */
@@ -161,10 +161,10 @@ void parse_options (
 				else if (strcmp(optarg,"On")==0)
 					*geom_flag = 1;
 				else {
-					printf(" frame3dd command-line error"); 
-					printf(": argument to -g option"); 
-					printf(" should be either On or Off\n");
-					exit(1);
+				 fprintf(stderr," frame3dd command-line error"); 
+				 fprintf(stderr,": argument to -g option"); 
+				 fprintf(stderr," should be either On or Off\n");
+				 exit(4);
 				}
 				break;
 			case 'e':		/* exaggeration factor */
@@ -176,10 +176,10 @@ void parse_options (
 				else if (strcmp(optarg,"On")==0)
 					*lump_flag = 1;
 				else {
-					printf(" frame3dd command-line error"); 
-					printf(": argument to -l option"); 
-					printf(" should be either On or Off\n");
-					exit(1);
+				 fprintf(stderr," frame3dd command-line error"); 
+				 fprintf(stderr,": argument to -l option"); 
+				 fprintf(stderr," should be either On or Off\n");
+				 exit(5);
 				}
 				break;
 			case 'm':		/* modal analysis method */
@@ -188,52 +188,52 @@ void parse_options (
 				else if (strcmp(optarg,"S")==0)
 					*modal_flag = 2;
 				else {
-					printf(" frame3dd command-line error"); 
-					printf(": argument to -m option"); 
-					printf(" should be either J or S\n\n");
-					exit(1);
+				 fprintf(stderr," frame3dd command-line error"); 
+				 fprintf(stderr,": argument to -m option"); 
+				 fprintf(stderr," should be either J or S\n\n");
+				 exit(6);
 				}
 				break;
 			case 't':		/* modal analysis tolerence */
 				*tol_flag = atof(optarg);
 				if (*tol_flag == 0.0) {
-					printf(" frame3dd command-line error"); 
-					printf(": argument to -t option"); 
-					printf(" should be a number.\n\n");
-					exit(1);
+				 fprintf(stderr," frame3dd command-line error"); 
+				 fprintf(stderr,": argument to -t option"); 
+				 fprintf(stderr," should be a number.\n\n");
+				 exit(7);
 				}
 				break;
 			case 'f':		/* modal analysis freq. shift */
 				*shift_flag = atof(optarg);
 				if (*shift_flag == 0.0) {
-					printf(" frame3dd command-line error"); 
-					printf(": argument to -f option"); 
-					printf(" should be a number.\n\n");
-					exit(1);
+				 fprintf(stderr," frame3dd command-line error"); 
+				 fprintf(stderr,": argument to -f option"); 
+				 fprintf(stderr," should be a number.\n\n");
+				 exit(8);
 				}
 				break;
 			case 'p':		/* pan rate	*/
 				*pan_flag = atof(optarg);
 				if (*pan_flag == 0.0) {
-					printf(" frame3dd command-line error"); 
-					printf(": argument to -p option"); 
-					printf(" should be a number.\n");
-					exit(1);
+				 fprintf(stderr," frame3dd command-line error"); 
+				 fprintf(stderr,": argument to -p option"); 
+				 fprintf(stderr," should be a number.\n");
+				 exit(9);
 				}
 				break;
 			case 'r':		/* matrix condensation method */
 				*condense_flag = atoi(optarg);
 				if (*condense_flag < 0 || *condense_flag > 3) {
-					printf(" frame3dd command-line error"); 
-					printf(": argument to -r option"); 
-					printf(" should be 0, 1, or 2.\n\n");
-					exit(1);
+				 fprintf(stderr," frame3dd command-line error"); 
+				 fprintf(stderr,": argument to -r option"); 
+				 fprintf(stderr," should be 0, 1, or 2.\n\n");
+				 exit(10);
 				}
 				break;
 			case '?':
-				printf("  Missing argument or Unknown option: -%c\n\n", option );
+				fprintf(stderr,"  Missing argument or Unknown option: -%c\n\n", option );
 				display_help();
-				exit(1);
+				exit(2);
 		}
 	}
 
@@ -366,7 +366,7 @@ void read_joint_data( FILE *fp, int nJ, vec3 *xyz, float *r )
 		if ( j <= 0 || j > nJ ) {
 		    fprintf(stderr,"\nERROR: in joint coordinate data, joint number out of range\n");
 		    fprintf(stderr,"(joint id is %d <= 0 or > %d)\n", j, nJ);
-		    exit(1);
+		    exit(41);
 		}
 		sfrv=fscanf(fp, "%lf %lf %lf %f", &xyz[j].x, &xyz[j].y, &xyz[j].z, &r[j]);
 		if (sfrv != 4) sferr("joint coordinates in joint data");
@@ -398,14 +398,14 @@ void read_frame_element_data(
 		if ( b <= 0 || b > nE ) {
 		    fprintf(stderr,"\n  error in frame element property data: Element number out of range  ");
 		    fprintf(stderr,"  Frame element number: %d  \n", b);
-		    exit(1);
+		    exit(51);
 		}
 		sfrv=fscanf(fp, "%d %d", &J1[b], &J2[b] );
 		if (sfrv != 2) sferr("joint numbers in frame element data");
 		if ( J1[b] <= 0 || J1[b] > nJ || J2[b] <= 0 || J2[b] > nJ ) {
 		    fprintf(stderr,"\n  error in frame element property data: joint number out of range  ");
 		    fprintf(stderr,"  Frame element number: %d \n", b);
-		    exit(1);
+		    exit(52);
 		}
 		sfrv=fscanf(fp, "%f %f %f", &Ax[b], &Asy[b], &Asz[b] );
 		if (sfrv != 3) sferr("section areas in frame element data");
@@ -425,37 +425,37 @@ void read_frame_element_data(
 		     Jx[b] < 0 ||  Iy[b] < 0 ||  Iz[b] < 0	) {
 		 fprintf(stderr,"\n  error in frame element property data: section property < 0  ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
-		 exit(1);
+		 exit(53);
 		}
 		if ( Ax[b] == 0 ) {
 		 fprintf(stderr,"\n  error in frame element property data: cross section area is zero   ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
-		 exit(1);
+		 exit(54);
 		}
 		if ( (Asy[b] == 0 || Asz[b] == 0) && G[b] == 0 ) {
 		 fprintf(stderr,"\n  error in frame element property data: a shear area and shear modulus are zero   ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
-		 exit(1);
+		 exit(55);
 		}
 		if ( Jx[b] == 0 ) {
 		 fprintf(stderr,"\n  error in frame element property data: torsional moment of inertia is zero   ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
-		 exit(1);
+		 exit(56);
 		}
 		if ( Iy[b] == 0 || Iz[b] == 0 ) {
 		 fprintf(stderr,"\n  error: cross section bending moment of inertia is zero   ");
 		 fprintf(stderr,"  Frame element number : %d  \n", b);
-		 exit(1);
+		 exit(57);
 		}
 		if ( E[b] <= 0 || G[b] <= 0 ) {
 		 fprintf(stderr,"\n  error : material elastic modulus E or G is not positive   ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
-		 exit(1);
+		 exit(58);
 		}
 		if ( d[b] <= 0 ) {
 		 fprintf(stderr,"\n  error : mass density d is not positive   ");
 		 fprintf(stderr,"  Frame element number: %d  \n", b);
-		 exit(1);
+		 exit(59);
 		}
 	}
 
@@ -480,7 +480,7 @@ void read_frame_element_data(
 			"  Perhaps frame element number %d has not been specified.\n",i);
 		   fprintf(stderr,
 			"  or perhaps the Input Data file is missing expected data.\n");
-		   exit(1);
+		   exit(60);
 		}
 		if ( Le[b] <= 0.0 ) {
 		   fprintf(stderr, " Joint radii are too large.\n");
@@ -488,7 +488,7 @@ void read_frame_element_data(
 			" frame element %d  J1= %d J2= %d L= %e \n", b, j1,j2, L[b] );
 		   fprintf(stderr,
 			" r1= %e r2= %e Le= %e \n", r[j1], r[j2], Le[b] );
-		   exit(1);
+		   exit(61);
 		}
 	}
 
@@ -547,10 +547,11 @@ void read_run_data (
 	output_path(mesh_file,meshpath,FRAME3DD_PATHMAX,NULL);
 
 	if ( debug) {
-		fprintf(stderr,"OUT_FILE = %s \n", OUT_file);
+		fprintf(stderr,"OUT_FILE  = %s \n", OUT_file);
 		fprintf(stderr,"BASE_FILE = %s \n", base_file);
-		fprintf(stderr,"PLOTPATH = %s \n", plotpath);
-		fprintf(stderr,"MESHPATH = %s \n", meshpath);
+		fprintf(stderr,"PLOTPATH  = %s \n", plotpath);
+		fprintf(stderr,"MESH_FILE = %s \n", mesh_file);
+		fprintf(stderr,"MESHPATH  = %s \n", meshpath);
 	}
 
 	sfrv=fscanf( fp, "%d %d %lf %f", shear, geom,  exagg_static, dx );
@@ -559,26 +560,26 @@ void read_run_data (
 	if (*shear != 0 && *shear != 1) {
 	    fprintf(stderr," Rember to specify shear deformations");
 	    fprintf(stderr," with a 0 or a 1 after the frame element property info.\n");
-	    exit(1);
+	    exit(71);
 	}
 
 	if (*geom != 0 && *geom != 1) {
 	    fprintf(stderr," Rember to specify geometric stiffness");
 	    fprintf(stderr," with a 0 or a 1 after the frame element property info.\n");
-	    exit(1);
+	    exit(72);
 	}
 
 	if ( *exagg_static < 0.0 ) {
 	    fprintf(stderr," Remember to specify an exageration");
 	    fprintf(stderr," factor greater than zero\n");
-	    exit(1);
+	    exit(73);
 	}
 
 	
 	if ( *dx <= 0.0 && *dx != -1 ) {
 	    fprintf(stderr," Remember to specify a frame element increment");
 	    fprintf(stderr," greater than zero\n");
-	    exit(1);
+	    exit(74);
 	}
 	
 
@@ -634,7 +635,7 @@ static const char *temp_dir(){
 "At least one of these variables must be set so that Frame3DD knows where to "
 "write its temporary files.  Set one of these variable, then re-run Frame3DD."
 "The Frame3DD on-line documentation provides help on this issue.");
-		exit(1);
+		exit(15);
 	} 
 #else
 	const char *tmp = "/tmp";	/* Linux, Unix, OS X	*/
@@ -650,31 +651,38 @@ if specified. --
 John Pye, Feb 2009.
 ------------------------------------------------------------------------------*/
 void output_path(const char *fname, char fullpath[], const int len, const char *default_outdir) {
-	assert(fname!=NULL);
 	int res;
-	if ( fname[0]==sep ) {
-		/* absolute output path specified */
+	assert(fname!=NULL);
+
+	/*			deprecated code, January 15 2010 ...
+	if ( fname[0]==sep ) {	in Win32 absolute path starts with C:\ not \ ??
+		// absolute output path specified 
 //		res = snprintf(fullpath,len,"%s",fname);
 		res = sprintf(fullpath,"%s",fname);
 	} else {
-		/* fprintf(stderr,"Generating output path for file '%s'\n",fname); */
+	*/
+
+//		fprintf(stderr,"Generating output path for file '%s'\n",fname);
 		const char *outdir;
 		outdir = getenv("FRAME3DD_OUTDIR");
 		if (outdir==NULL) {
-			if (default_outdir==NULL) {
+			if (default_outdir==NULL)
 				outdir = temp_dir();
-			} else {
+			else
 				outdir = default_outdir;
-			}
 		}
 //		res = snprintf(fullpath,len,"%s%c%s",outdir,sep,fname);
 		res = sprintf(fullpath,"%s%c%s",outdir,sep,fname);
+
+	/*			closing bracket for deprecated code "if"
 	}
-	if(res > len){
+	*/
+
+	if ( res > len ) {
 		fprintf(stderr,"ERROR: unable to construct output filename: overflow.\n");
-		exit(1);
+		exit(16);
 	}
-	/* fprintf(stderr,"Output file path generated: %s\n",fullpath); */
+//	printf("Output file path generated: %s\n",fullpath); /* debug */
 }
 
 
@@ -688,7 +696,7 @@ void parse_input(FILE *fp, const char *tpath){
 
 	if ((fpc = fopen (tpath, "w")) == NULL) {
 		fprintf (stderr,"ERROR: cannot open file '%s'\n",tpath);
-		exit(1);
+		exit(12);
 	}
 
 	do {
@@ -749,16 +757,16 @@ void read_reaction_data (
 	sfrv=fscanf(fp,"%d", nR );	/* read restrained degrees of freedom */
 	if (sfrv != 1) sferr("number of reactions in reaction data");
 	if ( verbose ) {
-		printf(" number of joints with reactions ");
+		fprintf(stdout," number of joints with reactions ");
 		dots(stdout,20);
-		printf(" nR =%4d ", *nR );
+		fprintf(stdout," nR =%4d ", *nR );
 	}
 	if ( *nR < 0 || *nR > DoF/6 ) {
 		fprintf(stderr," number of joints with reactions ");
 		dots(stderr,20);
 		fprintf(stderr," nR = %3d ", *nR );
 		fprintf(stderr,"\n  error: valid ranges for nR is 0 ... %d \n", DoF/6 );
-		exit(1);
+		exit(80);
 	}
 
 	for (i=1; i <= *nR; i++) {
@@ -771,13 +779,13 @@ void read_reaction_data (
 
 		if ( j > nJ ) {
 		    fprintf(stderr,"\n  error in reaction data: joint number %d is greater than the number of joints, %d \n", j, nJ );
-		    exit(1);
+		    exit(81);
 		}
 		if ( R[6*j-l] != 0 && R[6*j-l] != 1 ) {
 		    fprintf(stderr,"\n  error in reaction data: Reaction data must be 0 or 1\n");
 		    fprintf(stderr,"  Data for joint %d, DoF %d is %d\n",
 							j, 6-l, R[6*j-l] );
-		    exit(1);
+		    exit(82);
 		}
 	    }
 	    *sumR = 0;
@@ -786,7 +794,7 @@ void read_reaction_data (
 		fprintf(stderr,"\n  error: joint %3d has no reactions\n", j);
 		fprintf(stderr,"  Remove joint %3d from the list of reactions\n", j);
 		fprintf(stderr,"  and set nR to %3d \n", *nR-1);
-		exit(1);
+		exit(83);
 	    }
 	}
 	*sumR=0;	for (i=1;i<=DoF;i++)	*sumR += R[i];
@@ -794,13 +802,13 @@ void read_reaction_data (
 	    fprintf(stderr,"\n  Warning:  un-restrained structure ");
 	    fprintf(stderr,"  %d imposed reactions.\n", *sumR );
 	    fprintf(stderr,"  At least 4 reactions are required to support static loads.\n");
-	    /*	exit(1); */
+	    /*	exit(84); */
 	}
 	if ( *sumR >= DoF ) {
 	    fprintf(stderr,"\n  error in reaction data:  Fully restrained structure\n");
 	    fprintf(stderr,"  %d imposed reactions >= %d degrees of freedom\n",
 								*sumR, DoF );
-	    exit(1);
+	    exit(85);
 	}
 
 	return;
@@ -858,7 +866,7 @@ void read_and_assemble_loads(
 
 	for (lc = 1; lc <= nL; lc++) {		/* begin load-case loop */
 
-	  if ( verbose ) printf(" load case %d of %d: \n", lc, nL );
+	  if ( verbose ) fprintf(stdout," load case %d of %d: \n", lc, nL );
 
 	  /* gravity loads applied uniformly to all frame elements	*/
 	  sfrv=fscanf(fp,"%f %f %f", &gX[lc], &gY[lc], &gZ[lc] );
@@ -893,22 +901,22 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][12] = d[n]*Ax[n]*L[n]*L[n] / 12.0 *
 			( ( t6*t7-t4*t9)*gX[lc] + ( t6*t8-t5*t9)*gY[lc] );
 
-		/* debugging  
+		/* debugging ... check feF data
 		printf("n=%d ", n);
 		for (l=1;l<=12;l++) {
 			if (feF_mech[lc][n][l] != 0)
 			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
 		}
-		printf("\n");   */
+		printf("\n");
+		*/
 	  }					/* end gravity loads */
 
 
 	  sfrv=fscanf(fp,"%d", &nF[lc] );	/* joint point loads	*/
 	  if (sfrv != 1) sferr("nF value in load data");
 	  if ( verbose ) {
-		printf("  number of loaded joints ");
-	  	dots(stdout,27);
-		printf(" nF = %3d\n", nF[lc]);
+		fprintf(stdout,"  number of loaded joints ");
+	  	dots(stdout,27);	fprintf(stdout," nF = %3d\n", nF[lc]);
 	  }
 	  for (i=1; i <= nF[lc]; i++) {	/* ! global structural coordinates ! */
 		sfrv=fscanf(fp,"%d", &j);
@@ -917,9 +925,8 @@ void read_and_assemble_loads(
 		    fprintf(stderr,"\n  error in joint load data: joint number out of range  ");
 		    fprintf(stderr,"  Joint: %d  \n", j);
 		    fprintf(stderr,"  Perhaps you did not specify %d joint loads \n", nF[lc] );
-		   fprintf(stderr,
-			"  or perhaps the Input Data file is missing expected data.\n");
-		    exit(1);
+		    fprintf(stderr,"  or perhaps the Input Data file is missing expected data.\n");
+		    exit(121);
 		}
 
 		for (l=5; l>=0; l--) {
@@ -934,23 +941,22 @@ void read_and_assemble_loads(
 	  sfrv=fscanf(fp,"%d", &nU[lc] );	/* uniformly distributed loads */
 	  if (sfrv != 1) sferr("nU value in uniform load data");
 	  if ( verbose ) {
-		printf("  number of uniformly distributed loads ");
-	  	dots(stdout,13);
-	  	printf(" nU = %3d\n", nU[lc]);
+		fprintf(stdout,"  number of uniformly distributed loads ");
+	  	dots(stdout,13);	fprintf(stdout," nU = %3d\n", nU[lc]);
 	  }
 	  if ( nU[lc] < 0 || nU[lc] > nE ) {
 		fprintf(stderr,"  number of uniformly distributed loads ");
 	  	dots(stderr,13);
 	  	fprintf(stderr," nU = %3d\n", nU[lc]);
 		fprintf(stderr,"\n  error: valid ranges for nU is 0 ... %d \n", nE );
-		exit(1);
+		exit(131);
 	  }
 	  for (i=1; i <= nU[lc]; i++) {	/* ! local element coordinates ! */
 		sfrv=fscanf(fp,"%d", &n );
 	  	if (sfrv != 1) sferr("frame element number in uniform load data");
 		if ( n < 1 || n > nE ) {
 		    fprintf(stderr,"\n  error in uniform distributed loads: element number %d is out of range\n",n);
-		    exit(1);
+		    exit(132);
 		}
 		U[lc][i][1] = (double) n;
 		for (l=2; l<=4; l++) {
@@ -968,19 +974,21 @@ void read_and_assemble_loads(
 		My1 = -U[lc][i][4]*Le[n]*Le[n] / 12.0;	My2 = -My1;
 		Mz1 =  U[lc][i][3]*Le[n]*Le[n] / 12.0;	Mz2 = -Mz1;
 
-		/* debugging 
+		/* debugging ... check end force values
 		printf("n=%d Vy=%9.2e Vz=%9.2e My=%9.2e Mz=%9.2e\n",
-						n, Vy1,Vz1, My1,Mz1 );	*/
+						n, Vy1,Vz1, My1,Mz1 );
+		*/
 
 		j1 = J1[n];	j2 = J2[n];
 
 		coord_trans ( xyz, L[n], j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
-		/* debugging
+		/* debugging ... check coordinate transform coefficients
 		printf("t1=%5.2f t2=%5.2f t3=%5.2f \n", t1, t2, t3 );
 		printf("t4=%5.2f t5=%5.2f t6=%5.2f \n", t4, t5, t6 );
-		printf("t7=%5.2f t8=%5.2f t9=%5.2f \n", t7, t8, t9 ); */
+		printf("t7=%5.2f t8=%5.2f t9=%5.2f \n", t7, t8, t9 );
+		*/
 
 		/* {F} = [T]'{Q} */
 		feF_mech[lc][n][1]  += ( Nx1*t1 + Vy1*t4 + Vz1*t7 );
@@ -997,32 +1005,32 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
 		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 
-		/* debugging  
+		/* debugging ... check feF values
 		printf("n=%d ", n);
 		for (l=1;l<=12;l++) {
 			if (feF_mech[lc][n][l] != 0)
 			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
 		}
-		printf("\n"); */ 
+		printf("\n");
+		*/ 
 	  }				/* end uniformly distributed loads */
 
 	  sfrv=fscanf(fp,"%d", &nW[lc] ); /* trapezoidally distributed loads */
 	  if (sfrv != 1) sferr("nW value in load data");
 	  if ( verbose ) {
-		printf("  number of trapezoidally distributed loads ");
-	  	dots(stdout,9);
-	  	printf(" nW = %3d\n", nW[lc]);
+		fprintf(stdout,"  number of trapezoidally distributed loads ");
+	  	dots(stdout,9);	fprintf(stdout," nW = %3d\n", nW[lc]);
 	  }
 	  if ( nW[lc] < 0 || nW[lc] > 10*nE ) {
 		fprintf(stderr,"\n  error: valid ranges for nW is 0 ... %d \n", 10*nE );
-		exit(1);
+		exit(140);
 	  }
 	  for (i=1; i <= nW[lc]; i++) {	/* ! local element coordinates ! */
 		sfrv=fscanf(fp,"%d", &n );
 	  	if (sfrv != 1) sferr("frame element number in trapezoidal load data");
 		if ( n < 1 || n > nE ) {
 		    fprintf(stderr,"\n  error in trapezoidally-distributed loads: element number %d is out of range\n",n);
-		    exit(1);
+		    exit(141);
 		}
 		W[lc][i][1] = (double) n;
 		for (l=2; l<=13; l++) {
@@ -1045,55 +1053,55 @@ void read_and_assemble_loads(
 		  fprintf(stderr,"\n   error in x-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][2]);
-		  exit(1);
+		  exit(142);
 		}
 		if ( W[lc][i][ 2] > W[lc][i][3] ) {
 		  fprintf(stderr,"\n   error in x-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][2], W[lc][i][3] );
-		  exit(1);
+		  exit(143);
 		}
 		if ( W[lc][i][ 3] > Ln ) {
 		  fprintf(stderr,"\n   error in x-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][3], Ln );
-		  exit(1);
+		  exit(144);
 		}
 		if ( W[lc][i][ 6] < 0 ) {
 		  fprintf(stderr,"\n   error in y-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][6]);
-		  exit(1);
+		  exit(142);
 		}
 		if ( W[lc][i][ 6] > W[lc][i][7] ) {
 		  fprintf(stderr,"\n   error in y-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][6], W[lc][i][7] );
-		  exit(1);
+		  exit(143);
 		}
 		if ( W[lc][i][ 7] > Ln ) {
 		  fprintf(stderr,"\n   error in y-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][7],Ln );
-		  exit(1);
+		  exit(144);
 		}
 		if ( W[lc][i][10] < 0 ) {
 		  fprintf(stderr,"\n   error in z-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f < 0\n",W[lc][i][10]);
-		  exit(1);
+		  exit(142);
 		}
 		if ( W[lc][i][10] > W[lc][i][11] ) {
 		  fprintf(stderr,"\n   error in z-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    starting location = %f > ending location = %f \n",W[lc][i][10], W[lc][i][11] );
-		  exit(1);
+		  exit(143);
 		}
 		if ( W[lc][i][11] > Ln ) {
 		  fprintf(stderr,"\n   error in z-axis trapezoidal loads, ");
 		  fprintf(stderr,"    load case: %d , element %d , load %d\n ", lc, n, i );
 		  fprintf(stderr,"    ending location = %f > L (%f) \n",W[lc][i][11], Ln );
-		  exit(1);
+		  exit(144);
 		}
 
 		if ( shear ) {
@@ -1162,19 +1170,21 @@ void read_and_assemble_loads(
 		Vz1 =  R1o - My1/Ln - My2/Ln;
 		Vz2 =  R2o + My1/Ln + My2/Ln;
 
-		/* debugging 
+		/* debugging ... check internal force values
 		printf("n=%d\n Nx1=%9.3f\n Nx2=%9.3f\n Vy1=%9.3f\n Vy2=%9.3f\n Vz1=%9.3f\n Vz2=%9.3f\n My1=%9.3f\n My2=%9.3f\n Mz1=%9.3f\n Mz2=%9.3f\n",
-				n, Nx1,Nx2,Vy1,Vy2,Vz1,Vz2, My1,My2,Mz1,Mz2 );	*/
+				n, Nx1,Nx2,Vy1,Vy2,Vz1,Vz2, My1,My2,Mz1,Mz2 );
+		*/
 
 		j1 = J1[n];	j2 = J2[n];
 
 		coord_trans ( xyz, Ln, j1, j2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
-		/* debugging
+		/* debugging ... check coordinate transformation coefficients
 		printf("t1=%5.2f t2=%5.2f t3=%5.2f \n", t1, t2, t3 );
 		printf("t4=%5.2f t5=%5.2f t6=%5.2f \n", t4, t5, t6 );
-		printf("t7=%5.2f t8=%5.2f t9=%5.2f \n", t7, t8, t9 ); */
+		printf("t7=%5.2f t8=%5.2f t9=%5.2f \n", t7, t8, t9 );
+		*/
 
 		/* {F} = [T]'{Q} */
 		feF_mech[lc][n][1]  += ( Nx1*t1 + Vy1*t4 + Vz1*t7 );
@@ -1191,7 +1201,7 @@ void read_and_assemble_loads(
 		feF_mech[lc][n][11] += ( Mx2*t2 + My2*t5 + Mz2*t8 );
 		feF_mech[lc][n][12] += ( Mx2*t3 + My2*t6 + Mz2*t9 );
 
-		/* debugging
+		/* debugging ... check feF data
 		for (l=1;l<=13;l++) printf(" %9.2e ", W[lc][i][l] );
 		printf("\n"); 
 		printf("n=%d ", n);
@@ -1199,29 +1209,29 @@ void read_and_assemble_loads(
 			if (feF_mech[lc][n][l] != 0)
 			   printf(" feF %d = %9.3f ", l, feF_mech[lc][n][l] );
 		}
-		printf("\n"); */
+		printf("\n");
+		*/
 	  }			/* end trapezoidally distributed loads */
 
 	  sfrv=fscanf(fp,"%d", &nP[lc] );	/* element point loads	*/
 	  if (sfrv != 1) sferr("nP value load data");
 	  if ( verbose ) {
-	  	printf("  number of concentrated frame element point loads ");
-	  	dots(stdout,2);
-	  	printf(" nP = %3d\n", nP[lc]);
+	  	fprintf(stdout,"  number of concentrated frame element point loads ");
+	  	dots(stdout,2);	fprintf(stdout," nP = %3d\n", nP[lc]);
 	  }
 	  if ( nP[lc] < 0 || nP[lc] > nE ) {
 	  	fprintf(stderr,"  number of concentrated frame element point loads ");
 	  	dots(stderr,3);
 	  	fprintf(stderr," nP = %3d\n", nP[lc]);
 		fprintf(stderr,"\n  error: valid ranges for nP is 0 ... %d \n", nE );
-		exit(1);
+		exit(150);
 	  }
 	  for (i=1; i <= nP[lc]; i++) {	/* ! local element coordinates ! */
 		sfrv=fscanf(fp,"%d", &n );
 		if (sfrv != 1) sferr("frame element number value point load data");
 		if ( n < 1 || n > nE ) {
 		    fprintf(stderr,"\n   error in internal point loads: frame element number %d is out of range\n",n);
-		    exit(1);
+		    exit(151);
 		}
 		P[lc][i][1] = (double) n;
 		for (l=2; l<=5; l++) { 
@@ -1234,7 +1244,7 @@ void read_and_assemble_loads(
 		    fprintf(stderr,"\n  error in point load data: Point load coord. out of range\n");
 		    fprintf(stderr,"  Frame element number: %d  L: %lf  load coord.: %lf\n",
 							n, L[n], P[lc][i][5] );
-		    exit(1);
+		    exit(152);
 		}
 
 		if ( shear ) {
@@ -1293,23 +1303,22 @@ void read_and_assemble_loads(
 	  sfrv=fscanf(fp,"%d", &nT[lc] );	/* thermal loads	*/
 	  if (sfrv != 1) sferr("nT value in load data");
 	  if ( verbose ) {
-	  	printf("  number of temperature changes ");
-	  	dots(stdout,21);
-	  	printf(" nT = %3d\n", nT[lc] );
+	  	fprintf(stdout,"  number of temperature changes ");
+	  	dots(stdout,21); fprintf(stdout," nT = %3d\n", nT[lc] );
 	  }
 	  if ( nT[lc] < 0 || nT[lc] > nE ) {
 	  	fprintf(stderr,"  number of temperature changes ");
 	  	dots(stderr,21);
 	  	fprintf(stderr," nT = %3d\n", nT[lc] );
 		fprintf(stderr,"\n  error: valid ranges for nT is 0 ... %d \n", nE );
-		exit(1);
+		exit(160);
 	  }
 	  for (i=1; i <= nT[lc]; i++) {	/* ! local element coordinates ! */
 		sfrv=fscanf(fp,"%d", &n );
 		if (sfrv != 1) sferr("frame element number in temperature load data");
 		if ( n < 1 || n > nE ) {
 		    fprintf(stderr,"\n  error in temperature loads: frame element number %d is out of range\n",n);
-		    exit(1);
+		    exit(161);
 		}
 		T[lc][i][1] = (double) n;
 		for (l=2; l<=8; l++) {
@@ -1323,7 +1332,7 @@ void read_and_assemble_loads(
 		if ( hy < 0 || hz < 0 ) {
 		    fprintf(stderr,"\n  error in thermal load data: section dimension < 0\n");
 		    fprintf(stderr,"  Frame element number: %d  hy: %f  hz: %f\n", n,hy,hz);
-		    exit(1);
+		    exit(162);
 		}
 
 		Nx2 = (a/4.0)*( T[lc][i][5]+T[lc][i][6]+T[lc][i][7]+T[lc][i][8])*E[n]*Ax[n];
@@ -1364,7 +1373,8 @@ void read_and_assemble_loads(
 			   printf(" feF %d = %9.2e ", l, feF_mech[lc][n][l] );
 		}
 		printf("\n"); 
-	  } */
+	  }
+	  */
 
 	  for (n=1; n<=nE; n++) {
 	     j1 = J1[n];	j2 = J2[n];
@@ -1377,9 +1387,8 @@ void read_and_assemble_loads(
 	  sfrv=fscanf(fp,"%d", &nD[lc] ); /* read prescribed displacements */
 	  if (sfrv != 1) sferr("nD value in load data");
 	  if ( verbose ) {
-	  	printf("  number of prescribed displacements ");
-	  	dots(stdout,16);
-	  	printf(" nD = %3d\n", nD[lc] );
+	  	fprintf(stdout,"  number of prescribed displacements ");
+	  	dots(stdout,16);	fprintf(stdout," nD = %3d\n", nD[lc] );
 	  }
 	  for (i=1; i <= nD[lc]; i++) {
 		sfrv=fscanf(fp,"%d", &j);
@@ -1388,11 +1397,11 @@ void read_and_assemble_loads(
 			sfrv=fscanf(fp,"%f", &Dp[lc][6*j-l] );
 			if (sfrv != 1) sferr("prescribed displacement value");
 			if ( R[6*j-l] == 0 && Dp[lc][6*j-l] != 0.0 ) {
-			    printf(" Initial displacements can be prescribed");
-			    printf(" only at restrained coordinates\n");
-			    printf(" joint: %d  dof: %d  R: %d\n",
+			    fprintf(stderr," Initial displacements can be prescribed");
+			    fprintf(stderr," only at restrained coordinates\n");
+			    fprintf(stderr," joint: %d  dof: %d  R: %d\n",
 							j, 6-l, R[6*j-l] );
-			    exit(1);
+			    exit(171);
 			}
 		}
 	  }
@@ -1436,9 +1445,8 @@ void read_mass_data(
 	if (sfrv != 1) sferr("nM value in mass data");
 
 	if ( verbose ) {
-		printf(" number of dynamic modes ");
-		dots(stdout,28);
-		printf(" nM = %3d\n", *nM);
+		fprintf(stdout," number of dynamic modes ");
+		dots(stdout,28);	fprintf(stdout," nM = %3d\n", *nM);
 	}
 
 	if ( *nM < 1 || sfrv != 1 ) {
@@ -1451,11 +1459,10 @@ void read_mass_data(
 	if ( modal_flag != -1 )	*Mmethod = modal_flag;
 
 	if ( verbose ) {
-		printf(" modal analysis method ");
-		dots(stdout,30);
-		printf(" %3d ",*Mmethod);
-		if ( *Mmethod == 1 ) printf(" (Subspace-Jacobi)\n");
-		if ( *Mmethod == 2 ) printf(" (Stodola)\n");
+		fprintf(stdout," modal analysis method ");
+		dots(stdout,30);	fprintf(stdout," %3d ",*Mmethod);
+		if ( *Mmethod == 1 ) fprintf(stdout," (Subspace-Jacobi)\n");
+		if ( *Mmethod == 2 ) fprintf(stdout," (Stodola)\n");
 	}
 
 
@@ -1464,7 +1471,7 @@ void read_mass_data(
 	mf = fopen("MassData.txt","w");		// open mass data file
 	if ((mf = fopen ("MassData.txt", "w")) == NULL) {
 	  fprintf (stderr,"\n  error: cannot open file 'MassData.txt'\n");
-	  exit(1);
+	  exit(29);
 	}
 	fprintf(mf,"%% structural mass data \n");
 	fprintf(mf,"%% element\tAx\t\tlength\t\tdensity\t\tmass \n");
@@ -1488,9 +1495,8 @@ void read_mass_data(
 	sfrv=fscanf(fp,"%d", nI );
 	if (sfrv != 1) sferr("nI value in mass data");
 	if ( verbose ) {
-		printf(" number of joints with extra lumped inertia ");
-		dots(stdout,9);
-		printf(" nI = %3d\n",*nI);
+		fprintf(stdout," number of joints with extra lumped inertia ");
+		dots(stdout,9);		fprintf(stdout," nI = %3d\n",*nI);
 	}
 	for (j=1; j <= *nI; j++) {
 		sfrv=fscanf(fp, "%d", &jnt );
@@ -1501,7 +1507,7 @@ void read_mass_data(
 	    		fprintf(stderr,"  Perhaps you did not specify %d extra masses \n", *nI );
 			fprintf(stderr,
 			"  or perhaps the Input Data file is missing expected data.\n");
-	    		exit(1);
+	    		exit(86);
 		}
 		sfrv=fscanf(fp, "%f %f %f %f",
 			&JMs[jnt], &JMx[jnt], &JMy[jnt], &JMz[jnt] );
@@ -1516,9 +1522,8 @@ void read_mass_data(
 	sfrv=fscanf(fp,"%d", nX );
 	if (sfrv != 1) sferr("nX value in mass data");
 	if ( verbose ) {
-		printf(" number of frame elements with extra mass ");
-		dots(stdout,11);
-		printf(" nX = %3d\n",*nX);
+		fprintf(stdout," number of frame elements with extra mass ");
+		dots(stdout,11);	fprintf(stdout," nX = %3d\n",*nX);
 		if (sfrv != 1) sferr("element value in extra element mass data");
 	}
 	for (m=1; m <= *nX; m++) {
@@ -1530,7 +1535,7 @@ void read_mass_data(
 	    		fprintf(stderr,"  Perhaps you did not specify %d extra masses \n", *nX );
 			fprintf(stderr,
 			"  or perhaps the Input Data file is missing expected data.\n");
-	    		exit(1);
+	    		exit(87);
 		}
 		sfrv=fscanf(fp, "%f", &BMs[b] );
 		if (sfrv != 1) sferr("extra element mass value in mass data");
@@ -1555,26 +1560,23 @@ void read_mass_data(
 	    if ( d[m] < 0.0 || BMs[m] < 0.0 || d[m]+BMs[m] <= 0.0 ) {
 		fprintf(stderr,"\n  error: Non-positive mass or density\n");
 		fprintf(stderr,"  d[%d]= %f  BMs[%d]= %f\n",m,d[m],m,BMs[m]);
-		exit(1);
+		exit(88);
 	    }
 	}
 /*	for (m=1;m<=nE;m++) ms += BMs[m]; // consistent mass doesn't agree  */
 /*	if ( ms > 0.0 )	    *lump = 1;    // with concentrated masses, BMs  */
 
 	if ( verbose ) {
-		printf(" structural mass ");
-		dots(stdout,36);
-		printf("  %12.4e\n",*struct_mass);
-		printf(" total mass ");
-		dots(stdout,41);
-		printf("  %12.4e\n",*total_mass);
+		fprintf(stdout," structural mass ");
+		dots(stdout,36);	fprintf(stdout,"  %12.4e\n",*struct_mass);
+		fprintf(stdout," total mass ");
+		dots(stdout,41);	fprintf(stdout,"  %12.4e\n",*total_mass);
 	}
 	sfrv=fscanf ( fp, "%d", &nA );
 	if (sfrv != 1) sferr("nA value in mode animation data");
 	if ( verbose ) {
-		printf(" number of modes to be animated ");
-		dots(stdout,21);
-		printf(" nA = %3d\n",nA);
+		fprintf(stdout," number of modes to be animated ");
+		dots(stdout,21);	fprintf(stdout," nA = %3d\n",nA);
 	}
 	if (nA > 20)
 	  fprintf(stderr," nA = %d, only 20 or fewer modes may be animated\n", nA );
@@ -1640,12 +1642,11 @@ void read_condensation_data (
 
 	if ( *Cmethod > 3 ) *Cmethod = 1;	/* default */
 	if ( verbose ) {
-		printf(" condensation method ");
-		dots(stdout,32);
-		printf(" %d ", *Cmethod );
-		if ( *Cmethod == 1 )	printf(" (static only) \n");
-		if ( *Cmethod == 2 )	printf(" (Guyan) \n");
-		if ( *Cmethod == 3 )	printf(" (dynamic) \n");
+		fprintf(stdout," condensation method ");
+		dots(stdout,32);	fprintf(stdout," %d ", *Cmethod );
+		if ( *Cmethod == 1 )	fprintf(stdout," (static only) \n");
+		if ( *Cmethod == 2 )	fprintf(stdout," (Guyan) \n");
+		if ( *Cmethod == 3 )	fprintf(stdout," (dynamic) \n");
 	}
 
 	if ( (sfrv=fscanf ( fp, "%d", nC )) != 1 )  {
@@ -1654,9 +1655,8 @@ void read_condensation_data (
 	}
 
 	if ( verbose ) {
-		printf(" number of joints with condensed DoF's ");
-		dots(stdout,14);
-		printf(" nC = %3d\n", *nC );
+		fprintf(stdout," number of joints with condensed DoF's ");
+		dots(stdout,14);	fprintf(stdout," nC = %3d\n", *nC );
 	}
 
 	if ( (*nC) > nJ ) {
@@ -1664,7 +1664,7 @@ void read_condensation_data (
 	  fprintf(stderr,"  error: nC > nJ ... nC=%d; nJ=%d;\n",*nC,nJ);
 	  fprintf(stderr,"  The number of joints with condensed DoF's ");
 	  fprintf(stderr,"may not exceed the total number of joints.\n");
-	  exit(1);
+	  exit(90);
 	}
 
 	qm = imatrix( 1, *nC, 1,7 );
@@ -1678,7 +1678,7 @@ void read_condensation_data (
 	  fprintf(stderr,"\n  error in matrix condensation data: ");
 	  fprintf(stderr,"\n  condensed joint number out of range\n");
 	  fprintf(stderr,"  cj[%d] = %d  ... nJ = %d  \n", i, qm[i][1], nJ );
-	  exit(1);
+	  exit(91);
 	 }
 	}
 
@@ -1702,7 +1702,7 @@ void read_condensation_data (
 	  fprintf(stderr,"\n  error: m[%d] = %d \n",i,m[i]);
 	  fprintf(stderr,"  The condensed mode number must be between ");
 	  fprintf(stderr,"  1 and %d (modes).\n", nM);
-	  exit(1);
+	  exit(92);
 	 }
 	}
 
@@ -2041,7 +2041,7 @@ void write_static_csv(
 
 	if ((fpcsv = fopen (CSV_file, wa)) == NULL) {
 	  fprintf (stderr,"\n  error: cannot open CSV file %s\n", CSV_file);
-	  exit(1);
+	  exit(17);
 	}
 
 
@@ -2212,7 +2212,7 @@ void write_static_mfile (
 
 	if ((fpm = fopen (M_file, wa)) == NULL) {
 	  fprintf (stderr,"\n  error: cannot open file %s\n", M_file );
-	  exit(1);
+	  exit(18);
 	}
 
 	if ( lc == 1 ) {
@@ -2327,10 +2327,10 @@ void write_internal_forces(
 		xy1,xy2, wy1,wy2,	/* trapz load data, local y dir */
 		xz1,xz2, wz1,wz2;	/* trapz load data, local z dir */
 
-	double	wx, wy, wz,	/* distributed loads in local coords at x[i] */
-		wx_, wy_, wz_,	/* distributed loads in local coords at x[i-1]*/
-		wxg, wyg, wzg,	/* gravity loads in local x, y, z coord's */
-		tx=0.0, tx_=0.0;/* distributed torque about local x coord */
+	double	wx=0, wy=0, wz=0, // distributed loads in local coords at x[i] 
+		wx_=0,wy_=0,wz_=0,// distributed loads in local coords at x[i-1]
+		wxg=0,wyg=0,wzg=0,// gravity loads in local x, y, z coord's
+		tx=0.0, tx_=0.0;  // distributed torque about local x coord 
 
 	double	xp;		/* location of internal point loads	*/
 
@@ -2362,7 +2362,7 @@ void write_internal_forces(
 	/* open the interior force data file */
 	if ((fpif = fopen (fnif, "w")) == NULL) {
          fprintf (stderr,"\n ERROR: cannot open interior force data file '%s'\n",fnif);
-         exit(1);
+         exit(19);
 	}
 
 	fprintf(fpif,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
@@ -2764,7 +2764,7 @@ void static_mesh(
 	 // open the undeformed mesh data file for writing
 	 if ((fpm = fopen (meshpath, "w")) == NULL) {
 		printf ("\n  error: cannot open meshpath: %s\n", meshpath );
-		exit(1);
+		exit(21);
 	 }
 
 	 fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
@@ -2795,8 +2795,8 @@ void static_mesh(
 
 	// open the deformed mesh data file for writing 
 	if ((fpm = fopen (meshfl, "w")) == NULL) {
-		printf ("\n  error: cannot open meshpath: %s\n", meshfl );
-		exit(1);
+		fprintf (stderr,"\n  error: cannot open meshpath: %s\n", meshfl );
+		exit(22);
 	}
 
 	fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
@@ -2815,7 +2815,7 @@ void static_mesh(
 	if ( dx > 0 ) {
 	 if ((fpif = fopen (fnif, "r")) == NULL) {
           fprintf (stderr,"\n ERROR: cannot open interior force data file '%s'\n",fnif);
-          exit(1);
+          exit(20);
 	 }
 	}
 
@@ -2832,10 +2832,12 @@ void static_mesh(
 			 &frel, &j1, &j2, &x1, &y1, &z1, &x2, &y2, &z2, &nx);
 			if (sfrv != 10) sferr(fnif);
 			if ( frel != m || J1[m] != j1 || J2[m] != j2 ) {
-			 printf(" error in static_mesh parsing\n");
-			 printf("  frel = %d; m = %d; nx = %d \n", frel,m,nx );
+			 fprintf(stderr," error in static_mesh parsing\n");
+			 fprintf(stderr,"  frel = %d; m = %d; nx = %d \n", frel,m,nx );
 			}
-//			printf("  frel = %3d; m = %3d; j1 =%4d; j2 = %4d; nx = %3d L = %f \n", frel,m,j1,j2,nx,L[m] ); /* debug */
+			/* debugging ... check mesh data 
+			printf("  frel = %3d; m = %3d; j1 =%4d; j2 = %4d; nx = %3d L = %f \n", frel,m,j1,j2,nx,L[m] );
+			*/
 			while ( ch != '~' )	ch = getc(fpif);
 			force_bent_beam ( fpm, fpif, fnif, nx, 
 				J1[m],J2[m], xyz, L[m],p[m], D, exagg_static );
@@ -2859,13 +2861,13 @@ void static_mesh(
 
 	if (lc == 1) {	// open plotting script file for writing
 	    if ((fpm = fopen (plotpath, "w")) == NULL) {
-		printf ("\n  error: cannot open plot file: %s\n", plotpath);
-		exit(1);
+		fprintf (stderr,"\n  error: cannot open plot file: %s\n", plotpath);
+		exit(23);
 	    }
 	} else {	// open plotting script file for appending
 	    if ((fpm = fopen (plotpath, "a")) == NULL) {
-		printf ("\n  error: cannot open plot file: %s\n", plotpath);
-		exit(1);
+		fprintf (stderr,"\n  error: cannot open plot file: %s\n", plotpath);
+		exit(24);
 	    }
 	}
 
@@ -2985,8 +2987,8 @@ void modal_mesh(
 		sprintf( modefl,"%s-%02d-", modepath, m );
 
 		if ((fpm = fopen (modefl, "w")) == NULL) {
-			printf ("\n  error: cannot open modal mesh file: %s\n", modefl);
-			exit(1);
+			fprintf (stderr,"\n  error: cannot open modal mesh file: %s\n", modefl);
+			exit(27);
 		}
 
 		fprintf(fpm,"# FRAME3DD ANALYSIS RESULTS  http://frame3dd.sf.net/");
@@ -3026,8 +3028,8 @@ void modal_mesh(
 
 
 		if ((fpm = fopen (plotpath, "a")) == NULL) {
-			printf ("\n  error: cannot append plot file: %s\n",plotpath);
-			exit(1);
+			fprintf (stderr,"\n  error: cannot append plot file: %s\n",plotpath);
+			exit(25);
 		}
 
 		fprintf(fpm,"pause -1\n");
@@ -3122,8 +3124,8 @@ void animate(
 
 
 	if ((fpm = fopen (plotpath, "a")) == NULL) {
-		printf ("\n  error: cannot append plot file: %s\n",plotpath);
-		exit(1);
+		fprintf (stderr,"\n  error: cannot append plot file: %s\n",plotpath);
+		exit(26);
 	}
 	i = 0;
 	while ( (m = anim[i]) != 0 && i < 20) {
@@ -3239,8 +3241,8 @@ void animate(
 	    sprintf(modefl,"%s-%02d.%03d", modepath, m, fr  );
 
 	    if ((fpm = fopen (modefl, "w")) == NULL) {
-		printf ("\n  error: cannot open modal mesh file: %s\n", modefl);
-		exit(1);
+		fprintf (stderr,"\n  error: cannot open modal mesh file: %s\n", modefl);
+		exit(28);
 	    }
 
 	    ex = exagg_modal*cos( PI*fr/frames );
@@ -3332,7 +3334,7 @@ void cubic_bent_beam(
 
 	if (!pd) {
 	 fprintf(stderr," j1 = %d  j2 = %d  L = %e  u7 = %e \n", j1,j2,L,u7);
-	 exit(1);
+	 exit(30);
 	}
 
 	lu_dcmp ( A, 4, b, 0, 1, &pd );		/* solve for cubic coef's */
@@ -3479,10 +3481,11 @@ int get_file_ext( char *filename, char *ext )
 
 	for ( i=0; len < full_len; i++,len++ ) ext[i] = tolower(filename[len]);
 
-	/* test */
-//	printf(" filename '%s' has length %d and extension = '%s' \n",
-//							filename, len, ext);
-//	printf(" Is .CSV? ... = %d \n", !strcmp(ext,".csv") );
+	/* debugging ... check file names
+	printf(" filename '%s' has length %d and extension = '%s' \n",
+							filename, len, ext);
+	printf(" Is .CSV? ... = %d \n", !strcmp(ext,".csv") );
+	*/
 
 	if ( !strcmp(ext,".csv") ) return (1);
 	if ( !strcmp(ext,".fmm") ) return (2);
@@ -3510,16 +3513,16 @@ void evaluate ( float error ) {
 	if ( error < 1e-5 ) {
 
 	    switch ( r ) {
-		case 0: printf(" ...  awesome!  \n"); break; 
-		case 1: printf(" ...  excellent!  \n"); break; 
-		case 2: printf(" ...  woo-hoo!  \n"); break; 
-		case 3: printf(" ...  yipee!  \n"); break; 
-		case 4: printf(" ...  hoo-ray!  \n"); break; 
-		case 5: printf(" ...  outstanding!  \n"); break; 
-		case 6: printf(" ...  job well done!  \n"); break; 
-		case 7: printf(" ...  priceless!  \n"); break; 
-		case 8: printf(" ...  very nice!  \n"); break; 
-		case 9: printf(" ...  very good!  \n"); break; 
+		case 0: fprintf(stdout," ...  awesome!  \n"); break; 
+		case 1: fprintf(stdout," ...  excellent!  \n"); break; 
+		case 2: fprintf(stdout," ...  woo-hoo!  \n"); break; 
+		case 3: fprintf(stdout," ...  yipee!  \n"); break; 
+		case 4: fprintf(stdout," ...  hoo-ray!  \n"); break; 
+		case 5: fprintf(stdout," ...  outstanding!  \n"); break; 
+		case 6: fprintf(stdout," ...  job well done!  \n"); break; 
+		case 7: fprintf(stdout," ...  priceless!  \n"); break; 
+		case 8: fprintf(stdout," ...  very nice!  \n"); break; 
+		case 9: fprintf(stdout," ...  very good!  \n"); break; 
 	    }
 	    return;
 	}
@@ -3527,16 +3530,16 @@ void evaluate ( float error ) {
 	if ( error < 1e-3 ) {
 
 	    switch ( r ) {
-		case 0: printf(" ...  certainly acceptable!  \n"); break; 
-		case 1: printf(" ...  bling!  \n"); break; 
-		case 2: printf(" ...  that will certainly do!  \n"); break; 
-		case 3: printf(" ...  not at all shabby!  \n"); break; 
-		case 4: printf(" ...  quite reasonable!  \n"); break; 
-		case 5: printf(" ...  and there's nothing wrong with that!  \n"); break; 
-		case 6: printf(" ...  up to snuff!  \n"); break; 
-		case 7: printf(" ...  bully!  \n"); break; 
-		case 8: printf(" ...  nice!  \n"); break; 
-		case 9: printf(" ...  good!  \n"); break; 
+		case 0: fprintf(stdout," ...  certainly acceptable!  \n"); break; 
+		case 1: fprintf(stdout," ...  bling!  \n"); break; 
+		case 2: fprintf(stdout," ...  that will certainly do!  \n"); break; 
+		case 3: fprintf(stdout," ...  not at all shabby!  \n"); break; 
+		case 4: fprintf(stdout," ...  quite reasonable!  \n"); break; 
+		case 5: fprintf(stdout," ...  and there's nothing wrong with that!  \n"); break; 
+		case 6: fprintf(stdout," ...  up to snuff!  \n"); break; 
+		case 7: fprintf(stdout," ...  bully!  \n"); break; 
+		case 8: fprintf(stdout," ...  nice!  \n"); break; 
+		case 9: fprintf(stdout," ...  good!  \n"); break; 
 	    }
 	    return;
 	}
@@ -3544,16 +3547,16 @@ void evaluate ( float error ) {
 	if ( error < 1e-2 ) {
 
 	    switch ( r ) {
-		case 0: printf(" ...  adequate.  \n"); break; 
-		case 1: printf(" ...  passable.  \n"); break; 
-		case 2: printf(" ...  all right.  \n"); break; 
-		case 3: printf(" ...  ok.  \n"); break; 
-		case 4: printf(" ...  not bad.  \n"); break; 
-		case 5: printf(" ...  fine.  \n"); break; 
-		case 6: printf(" ...  fair. \n"); break; 
-		case 7: printf(" ...  respectable.  \n"); break; 
-		case 8: printf(" ...  tolerable.  \n"); break; 
-		case 9: printf(" ...  just ok.  \n"); break; 
+		case 0: fprintf(stdout," ...  adequate.  \n"); break; 
+		case 1: fprintf(stdout," ...  passable.  \n"); break; 
+		case 2: fprintf(stdout," ...  all right.  \n"); break; 
+		case 3: fprintf(stdout," ...  ok.  \n"); break; 
+		case 4: fprintf(stdout," ...  not bad.  \n"); break; 
+		case 5: fprintf(stdout," ...  fine.  \n"); break; 
+		case 6: fprintf(stdout," ...  fair. \n"); break; 
+		case 7: fprintf(stdout," ...  respectable.  \n"); break; 
+		case 8: fprintf(stdout," ...  tolerable.  \n"); break; 
+		case 9: fprintf(stdout," ...  just ok.  \n"); break; 
 	    }
 	    return;
 	}
@@ -3561,16 +3564,16 @@ void evaluate ( float error ) {
 	if ( error > 1e-2 ) {
 
 	    switch ( r ) {
-		case 0: printf(" ...  abominable.  \n"); break; 
-		case 1: printf(" ...  cruddy.  \n"); break; 
-		case 2: printf(" ...  atrocious.  \n"); break; 
-		case 3: printf(" ...  not ok.  \n"); break; 
-		case 4: printf(" ...  garbage.  \n"); break; 
-		case 5: printf(" ...  crappy.  \n"); break; 
-		case 6: printf(" ...  oh noooo. \n"); break; 
-		case 7: printf(" ...  abominable.  \n"); break; 
-		case 8: printf(" ...  bummer.  \n"); break; 
-		case 9: printf(" ...  awful.  \n"); break; 
+		case 0: fprintf(stdout," ...  abominable.  \n"); break; 
+		case 1: fprintf(stdout," ...  cruddy.  \n"); break; 
+		case 2: fprintf(stdout," ...  atrocious.  \n"); break; 
+		case 3: fprintf(stdout," ...  not ok.  \n"); break; 
+		case 4: fprintf(stdout," ...  garbage.  \n"); break; 
+		case 5: fprintf(stdout," ...  crappy.  \n"); break; 
+		case 6: fprintf(stdout," ...  oh noooo. \n"); break; 
+		case 7: fprintf(stdout," ...  abominable.  \n"); break; 
+		case 8: fprintf(stdout," ...  bummer.  \n"); break; 
+		case 9: fprintf(stdout," ...  awful.  \n"); break; 
 	    }
 	    return;
 	}

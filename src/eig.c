@@ -90,7 +90,7 @@ void subspace(
 		fprintf(stderr," than the problem dimension.\n");
 		fprintf(stderr,"Desired number of eigen-values=%d \n", m);
 		fprintf(stderr,"Dimension of the problem= %d \n", n);
-		exit(1);
+		exit(32);
 	}
 
 	d  = dvector(1,n);
@@ -121,7 +121,7 @@ void subspace(
 	for (i=1; i<=n; i++) {
 		if ( M[i][i] <= 0.0 )  {
 		 fprintf(stderr," subspace: M[%d][%d] = %e \n", i,i, M[i][i] );
-		 exit(1);
+		 exit(32);
 		}
 		d[i] = K[i][i] / M[i][i];
 	}
@@ -148,11 +148,11 @@ void subspace(
 	    km_old = km;
 	}
 
-/*	for (k=1; k<=m; k++)    printf(" idx[%d] = %d \n", k, idx[k] );	*/
+//	for (k=1; k<=m; k++) printf(" idx[%d] = %d \n", k, idx[k] ); /*debug*/
 	for (k=1; k<=m; k++) {
 		V[idx[k]][k] = 1.0;
 		*ok = idx[k] % 6; 
-	/*	printf(" idx[%3d] = %3d   ok = %d \n", k , idx[k], *ok);  */
+//		printf(" idx[%3d] = %3d   ok = %d \n", k , idx[k], *ok); /*debug*/
 		switch ( *ok ) {
 			case 1:	i =  1;	j =  2;	break;
 			case 2:	i = -1;	j =  1;	break;
@@ -174,13 +174,13 @@ void subspace(
 			ldl_dcmp ( K, n, u, v, d, 0, 1, ok ); /* LDL bk-sub */
 
                                         /* improve the solution iteratively */
-			if ( disp ) printf("  RMS matrix error:");
+			if (disp) fprintf(stdout,"  RMS matrix error:");
 			error = *ok = 1;
 			do {
 				ldl_mprove ( K, n, u, v, d, &error, ok );
-				if ( disp ) printf("%9.2e", error );
+				if (disp) fprintf(stdout,"%9.2e", error );
 			} while ( *ok );
-			if ( disp ) printf("\n");
+			if (disp) fprintf(stdout,"\n");
 
 			for (i=1; i<=n; i++)	Xb[i][k] = d[i];
 		}
@@ -197,19 +197,19 @@ void subspace(
 		if (w[modes] == 0.0) {
 		 fprintf(stderr," subspace: Zero frequency found! \n");
 		 fprintf(stderr," subspace: w[%d] = %e \n", modes, w[modes] );
-		 exit(1);
+		 exit(32);
 		}
 		error = fabs( w[modes] - w_old ) / w[modes];
 
 		(*iter)++;
-		if ( disp ) printf(" iter = %d  w[%d] = %f error = %e\n",
+		if (disp) fprintf(stdout," iter = %d  w[%d] = %f error = %e\n",
 						*iter, modes, w[modes], error );
 		w_old = w[modes];
 
 		if ( *iter > 1000 ) {
 		    fprintf(stderr,"  subspace(): Iteration limit exceeded\n");
 		    fprintf(stderr," rel. error = %e > %e\n", error, tol );
-		    exit(1);
+		    exit(32);
 		}
 
 	} while	( error > tol );		/* End   sub-space iterations */
@@ -221,9 +221,9 @@ void subspace(
 	}
 
 	if ( verbose ) {
-		printf(" %4d sub-space iterations,   error: %.4e \n", *iter, error );
+		fprintf(stdout," %4d sub-space iterations,   error: %.4e \n", *iter, error );
 		for ( k=1; k<=m; k++ ) 
-			printf("  mode: %2d\tDoF: %5d\t %9.4lf Hz\n",
+			fprintf(stdout,"  mode: %2d\tDoF: %5d\t %9.4lf Hz\n",
 				k, idx[k], sqrt(w[k])/(2.0*PI) );
 	}
 
@@ -401,7 +401,7 @@ void stodola (
 	if (*ok<0) {
 		fprintf(stderr," Make sure that all six");
 		fprintf(stderr," rigid body translation are restrained.\n");
-		exit(1); 
+		exit(32); 
 	}
 						/* calculate  D = K^(-1) M */
 	for (j=1; j<=n; j++) {
@@ -410,13 +410,13 @@ void stodola (
 		ldl_dcmp ( K, n, u, v, d, 0, 1, ok );	/* L D L' bk-sub */
 
 					/* improve the solution iteratively */
-		if (disp) fprintf(stderr,"  RMS matrix error:");
+		if (disp) fprintf(stdout,"  RMS matrix error:");
 		error = *ok = 1;
 		do {
 			ldl_mprove ( K, n, u, v, d, &error, ok );
-			if (disp) fprintf(stderr,"%9.2e", error );
+			if (disp) fprintf(stdout,"%9.2e", error );
 		} while ( *ok );
-		if (disp) fprintf(stderr,"\n");
+		if (disp) fprintf(stdout,"\n");
 
 		for (i=1; i<=n; i++)	D[i][j] = d[i];
 	}
@@ -481,10 +481,10 @@ void stodola (
 		(*iter)++;
 
 		if ( *iter > 1000 ) {
-		    fprintf(stderr,"  stodola(): Iteration limit exceeded\n");
-		    fprintf(stderr," rel. error = %e > %e\n",
+		    fprintf(stdout,"  stodola(): Iteration limit exceeded\n");
+		    fprintf(stdout," rel. error = %e > %e\n",
 						(fabs(RQ - RQold)/RQ) , tol );
-		    exit(1);
+		    exit(32);
 		}
 
 	    } while ( (fabs(RQ - RQold)/RQ) > tol );
@@ -495,8 +495,8 @@ void stodola (
 	    if ( w[k] > shift )	w[k] = w[k] - shift;
 	    else		w[k] = shift - w[k];
 
-	    printf("  mode: %2d\tDoF: %5d\t", k, i_ex );
-	    printf(" %9.4f Hz\t iter: %4d   error: %.4e \n",
+	    fprintf(stdout,"  mode: %2d\tDoF: %5d\t", k, i_ex );
+	    fprintf(stdout," %9.4f Hz\t iter: %4d   error: %.4e \n",
 		sqrt(w[k])/(2.0*PI), *iter, (fabs(RQ - RQold)/RQ) );
 	}
 
@@ -674,14 +674,15 @@ int sturm(
 	ldl_dcmp ( K, n, d, d, d, 1, 0, &ok );
 
 	if ( verbose )
-	 printf("  There are %d modes below %f Hz.", -ok, sqrt(ws)/(2.0*PI) );
+	 fprintf(stdout,"  There are %d modes below %f Hz.", -ok, sqrt(ws)/(2.0*PI) );
 
 	if ( -ok > modes ) {
 		fprintf(stderr," ... %d modes were not found.\n", -ok-modes );
 		fprintf(stderr," Try increasing the number of modes in \n");
 		fprintf(stderr," order to get the missing modes below %f Hz.\n",
 							sqrt(ws)/(2.0*PI) );
-	} else if ( verbose )  printf("  All %d modes were found.\n",modes);
+	} else if ( verbose ) 
+		fprintf(stdout,"  All %d modes were found.\n",modes);
 
 	for (i=1; i<=n; i++) for (j=i; j<=n; j++) K[i][j] += ws_shift*M[i][j];
 
@@ -697,8 +698,8 @@ CHECK_NON_NEGATIVE -  checks that a value is non-negative
 void check_non_negative( double x, int i)
 {
 	if ( x <= 1.0e-100 )  {
-		printf(" value %e is less than or equal to zero ", x );
-		printf(" i = %d \n", i );
+		fprintf(stderr," value %e is less than or equal to zero ", x );
+		fprintf(stderr," i = %d \n", i );
 	} else {
 		return;
 	}

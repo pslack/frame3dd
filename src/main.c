@@ -183,25 +183,25 @@ For compilation/installation, see README.txt.
 			&pan_flag, &write_matrix, &axial_sign, &condense_flag, &verbose, &debug);
 
 	if ( verbose ) {
-		fprintf(stderr,"\n FRAME3DD version: %s\n", VERSION);
-		fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
-		fprintf(stderr," http://frame3dd.sf.net\n");
-		fprintf(stderr," GPL Copyright (C) 1992-2010, Henri P. Gavin\n");
-		fprintf(stderr," This is free software with absolutely no warranty.\n");
-		fprintf(stderr," For details, see the GPL license file, LICENSE.txt\n\n");
+		fprintf(stdout,"\n FRAME3DD version: %s\n", VERSION);
+		fprintf(stdout," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
+		fprintf(stdout," http://frame3dd.sf.net\n");
+		fprintf(stdout," GPL Copyright (C) 1992-2010, Henri P. Gavin\n");
+		fprintf(stdout," This is free software with absolutely no warranty.\n");
+		fprintf(stdout," For details, see the GPL license file, LICENSE.txt\n\n");
 	}
 
 	/* open the input data file */
 
 	if ((fp = fopen (IN_file, "r")) == NULL) {
-		fprintf (stderr,"\n ERROR: cannot open file '%s'\n\n", IN_file);
+		fprintf (stdout,"\n ERROR: cannot open file '%s'\n\n", IN_file);
 		display_help();
 		if ( argc == 1 ) {
 			fprintf(stderr," Press the 'Enter' key to close.\n");
 			(void) getchar();	// clear the buffer ?? 
 			while( !getchar() ) ;	// wait for the Enter key 
 		}
-		exit(1);
+		exit(11);
 	}
 
 	filetype = get_file_ext( IN_file, extn ); /* .CSV or .FMM or other? */
@@ -215,16 +215,17 @@ For compilation/installation, see README.txt.
 	/* open the clean input file */
 	if ((fp = fopen (temppath, "r")) == NULL) {
 		fprintf (stderr,"\n ERROR: cannot open cleaned input file '%s'\n",temppath);
-		exit(1);
+		exit(13);
 	}
 
 	frame3dd_getline(fp, title, 256);
-	if (verbose ) fprintf(stderr," ** %s ** \n\n", title );
+	if (verbose ) fprintf(stdout," ** %s ** \n\n", title );
 
 	sfrv=fscanf(fp, "%d", &nJ );		/* number of joints	*/
 	if (sfrv != 1)	sferr("nJ value for number of joints");
 	if ( verbose ) {
-	 printf(" number of joints "); dots(stdout,35); printf(" nJ =%4d ",nJ);
+		fprintf(stdout," number of joints ");
+		dots(stdout,35);	fprintf(stdout," nJ =%4d ",nJ);
 	}
 
 					/* allocate memory for joint data ... */
@@ -243,7 +244,8 @@ For compilation/installation, see README.txt.
 	sfrv=fscanf(fp, "%d", &nE );	/* number of frame elements	*/
 	if (sfrv != 1)	sferr("nE value for number of frame elements");
 	if ( verbose ) {
-	 printf(" number of frame elements"); dots(stdout,28); printf(" nE =%4d ",nE);
+		fprintf(stdout," number of frame elements");
+		dots(stdout,28);	fprintf(stdout," nE =%4d ",nE);
 	}
 	if ( nJ > nE + 1) {
 		fprintf(stderr,"\n  warning: %d joints and %d members...", nJ, nE );
@@ -282,17 +284,17 @@ For compilation/installation, see README.txt.
 	sfrv=fscanf(fp, "%d", &nL );	/* number of load cases		*/
 	if (sfrv != 1)	sferr("nL value for number of load cases");
 	if ( verbose ) {
-		printf(" number of load cases ");
-		dots(stdout,31); printf(" nL = %3d \n",nL);
+		fprintf(stdout," number of load cases ");
+		dots(stdout,31);	fprintf(stdout," nL = %3d \n",nL);
 	}
 
 	if ( nL < 1 ) {
 		fprintf(stderr,"\n ERROR: the number of load cases must be at least 1\n");
-		exit(1);
+		exit(101);
 	}
 	if ( nL >= _NL_ ) {
 		fprintf(stderr,"\n ERROR: maximum of %d load cases allowed\n", _NL_-1);
-		exit(1);
+		exit(102);
 	}
 					/* allocate memory for loads ... */
 	U   =  D3matrix(1,nL,1,nE,1,4);    /* uniform load on each member */
@@ -374,7 +376,7 @@ For compilation/installation, see README.txt.
 	if(fp==NULL){
 		fprintf(stderr,"Unable to append to output file '%s'!\n",
 								OUT_file);
-		exit(1);
+		exit(14);
 	}
 
 	write_input_data ( fp, title, nJ,nE,nL, nD,nR, nF,nU,nW,nP,nT,
@@ -628,7 +630,7 @@ For compilation/installation, see README.txt.
 			fprintf(stderr,"  The number of condensed degrees of freedom");
 			fprintf(stderr," may not exceed the number of computed modes");
 			fprintf(stderr," when using dynamic condensation.\n");
-			exit(1);
+			exit(94);
 		}
 
 		Kc = dmatrix(1,Cdof,1,Cdof);

@@ -212,13 +212,13 @@ void pseudo_inv(
 		ldl_dcmp( AtA, n, diag, b, x, 0, 1, &ok ); /* L D L' bksbtn */
 
 		if ( verbose )
-		 printf("  RMS matrix error:"); /*improve the solution*/
+		 fprintf(stdout,"  RMS matrix error:"); /*improve the solution*/
 		error = 1.0; ok = 1;
 		do {
 			ldl_mprove ( AtA, n, diag, b, x, &error, &ok );
-			if ( verbose ) printf("%9.2e", error );
+			if ( verbose ) fprintf(stdout,"%9.2e", error );
 		} while ( ok );
-		if ( verbose ) printf("\n");
+		if ( verbose ) fprintf(stdout,"\n");
 
 		for (k=1; k<=n; k++)  AtAi[k][j] = x[k];  /* save inv(AtA) */
         }

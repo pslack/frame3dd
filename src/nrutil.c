@@ -23,7 +23,7 @@ void nrerror(char error_text[])
 	fprintf(stderr,"Numerical Recipes run-time error...\n");
 	fprintf(stderr,"%s\n",error_text);
 	fprintf(stderr,"...now exiting to system...\n");
-	exit(1);
+	exit(200);
 }
 
 float *vector(long nl, long nh)
@@ -428,7 +428,7 @@ char error_text[];
 	fprintf(stderr,"Numerical Recipes run-time error...\n");
 	fprintf(stderr,"%s\n",error_text);
 	fprintf(stderr,"...now exiting to system...\n");
-	exit(1);
+	exit(200);
 }
 
 float *vector(nl,nh)
@@ -820,7 +820,7 @@ void save_vector( int n, float *V, char filename[] )
 
 	if ((fp_v = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: '%s' \n", filename );
-		exit(1);
+		exit(201);
 	}
         (void) time(&now);
 	fprintf(fp_v,"%% filename: %s - %s", filename, ctime(&now));
@@ -848,7 +848,7 @@ void save_ivector( int n, int *V, char filename[] )
 
 	if ((fp_v = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: '%s' \n", filename );
-		exit(1);
+		exit(202);
 	}
         (void) time(&now);
 	fprintf(fp_v,"%% filename: %s - %s", filename, ctime(&now));
@@ -876,7 +876,7 @@ void save_matrix ( int m, int n, float **A, char filename[] )
 
 	if ((fp_m = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: %s \n", filename );
-		exit(1);
+		exit(203);
 	}
         (void) time(&now);
 	fprintf(fp_m,"%% filename: %s - %s", filename, ctime(&now));
@@ -907,7 +907,7 @@ void save_dmatrix ( int m, int n, double **A, char filename[] )
 
 	if ((fp_m = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: %s \n", filename );
-		exit(1);
+		exit(204);
 	}
         (void) time(&now);
 	fprintf(fp_m,"%% filename: %s - %s", filename, ctime(&now));
@@ -940,7 +940,7 @@ void save_ut_matrix ( int n, float **A, char filename[] )
 
 	if ((fp_m = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: %s \n", filename );
-		exit(1);
+		exit(205);
 	}
         (void) time(&now);
 	fprintf(fp_m,"%% filename: %s - %s", filename, ctime(&now));
@@ -977,7 +977,7 @@ void save_ut_dmatrix ( int n, double **A, char filename[] )
 
 	if ((fp_m = fopen (filename, "w")) == NULL) {
 		printf (" error: cannot open file: %s \n", filename );
-		exit(1);
+		exit(206);
 	}
         (void) time(&now);
 	fprintf(fp_m,"%% filename: %s - %s\n", filename, ctime(&now));

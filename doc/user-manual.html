@@ -142,6 +142,7 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
 <li><a href="#Variables">Variable Definitions</a>
 <li><a href="#commandline">Command-line options</a>
 <li><a href="#sourcecode">Source code</a>
+<li><a href="#exitcodes">Exit code index</a>
 <li><a href="#enhancements">Enhancements projected for future versions</a>
 <li><a href="#references">References</a>
 </ol>
@@ -2549,7 +2550,108 @@ and the <a href="http://www.mingw.org/"> MinGW gcc compiler</a>.
 gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
 </pre>
 
-<a name="enhancements"/><h2>13. Enhancements projected for future versions</h2>
+<a name="exitcodes"/><h2>13. Exit code index</h2>
+
+<p>
+When Frame3DD exits it returns an integer value to the system calling Frame3DD. 
+An exit code of 0 (zero) indicates error-free completion.  
+Prior to exiting Frame3DD with a non-zero exit code, Frame3DD writes a 
+diagnostic error message to "stderr".
+Exit code values have the following meanings:
+<ul>
+<li>   0 : error-free completion
+<li>   1 : unknown error
+<li>   2 : error with the command line options (see Section 11, above)
+<li>   3 : error with the command line option for shear deformation -s
+<li>   4 : error with the command line option for geometric stiffness -g
+<li>   5 : error with the command line option for lumped mass -l
+<li>   6 : error with the command line option for modal analysis method -m
+<li>   7 : error with the command line option for modal analysis tolerance -t
+<li>   8 : error with the command line option for modal analysis shift -f
+<li>   9 : error with the command line option for pan rate -p
+<li> 10  : error with the command line option for matrix condensation -r
+<li> 11  : error in opening the Input Data file
+<li> 12  : error in opening the temporary cleaned input data file for writing
+<li> 13  : error in opening the temporary cleaned input data file for reading
+<li> 14  : error in opening the Output Data file
+<li> 15  : error in creating the path for temporary output data files
+<li> 16  : error in creating the temporary output data file path name
+<li> 17  : error in opening the .CSV (spread-sheet) output data file
+<li> 18  : error in opening the .M (matlab) output data file
+<li> 19  : error in opening the interior force output data file for writing 
+<li> 20  : error in opening the interior force output data file for reading 
+<li> 21  : error in opening the undeformed mesh ouput data file
+<li> 22  : error in opening the deformed mesh ouput data file
+<li> 23  : error in opening the plotting script file for writing first static load case plots
+<li> 24  : error in opening the plotting script file for appending second and higher static load case results
+<li> 25  : error in opening the plotting script file for appending modal plots
+<li> 26  : error in opening the plotting script file for appending modal animations
+<li> 27  : error in opening the modal mesh data file
+<li> 28  : error in opening the modal mesh animation data file
+<li> 29  : error in opening the mass data debugging file , MassData.txt
+<li> 30  : cubic curvefit system matrix for element deformation is not positive definite
+<li> 31  : non-positive definite structural static stiffness matrix 
+<li> 32  : error in eigen-problem analysis
+<li> 40  : error in input data file
+<li> 41  : input data formatting error in the joint data, joint number out of range
+<li> 51  : input data formatting error in the frame element data, frame element number out of range
+<li> 52  : input data formatting error in the frame element data, joint number out of range
+<li> 53  : input data formatting error in the frame element data, negative section value
+<li> 54  : input data formatting error in the frame element data, cross section area is 0 (zero)
+<li> 55  : input data formatting error in the frame element data, shear area and shear modulus are 0 (zero)
+<li> 56  : input data formatting error in the frame element data, torsional moment of inertia is 0 (zero)
+<li> 57  : input data formatting error in the frame element data, bending moment of inertia is 0 (zero)
+<li> 58  : input data formatting error in the frame element data, modulus value is non-positive 
+<li> 59  : input data formatting error in the frame element data, mass density value is non-positive 
+<li> 60  : input data formatting error in the frame element data, frame element starts and stops at the same joint
+<li> 61  : input data formatting error in the frame element data, frame element has length of zero
+<li> 71  : input data formatting error with the "shear" variable specifying shear deformation
+<li> 72  : input data formatting error with the "geom" variable specifying geometric stiffness 
+<li> 73  : input data formatting error with the "exagg_static" variable specifying static mesh exageration
+<li> 74  : input data formatting error with the "dx" variable specifying the length of the internal force x-axis increment
+<li> 80  : input data formatting error in reaction data, number of joints with reactions out of range
+<li> 81  : input data formatting error in reaction data, joint number out of range
+<li> 82  : input data formatting error in reaction data, reaction data is not 1 (one) or 0 (zero)
+<li> 83  : input data formatting error in reaction data, specified joint has no reactions
+<li> 84  : input data formatting error in reaction data, under-restrained structure
+<li> 85  : input data formatting error in reaction data, fully restrained structure
+<li> 86  : input data formatting error in extra joint inertia data, joint number out of range
+<li> 87  : input data formatting error in extra beam mass data, frame element number out of range
+<li> 88  : input data formatting error in mass data, frame element with non-positive mass
+<li> 90  : input data formatting error in matrix condensation data, number of joints with condensed degrees of freedom are less than the total number of joints
+<li> 91  : input data formatting error in matrix condensation data, joint number out of range
+<li> 92  : input data formatting error in matrix condensation data, mode number out of range
+<li> 94  : input data formatting error in matrix condensation data, number of condensed degrees of freedom greater than number of modes
+<li> 100 : input data formatting error in load data
+<li> 101 : number of static load cases must be greater than zero
+<li> 102 : number of static load cases must be less than 30
+<li> 121 : input data formatting error in joint load data, joint number out of range
+<li> 131 : input data formatting error in uniformly-distributed load data, number of uniform loads is greater than the number of frame elements
+<li> 132 : input data formatting error in uniformly-distributed load data, frame element number out of range
+<li> 140 : input data formatting error in trapezoidally-distributed load data, too many trapezoidally distributed loads
+<li> 141 : input data formatting error in trapezoidally-distributed load data, frame element number out of range
+<li> 142 : input data formatting error in trapezoidally-distributed load data, x1 < 0
+<li> 143 : input data formatting error in trapezoidally-distributed load data, x1 > x2
+<li> 144 : input data formatting error in trapezoidally-distributed load data, x2 > L
+<li> 150 : input data formatting error in internal concentrated load data, number concentrated loads greater than number of frame elements
+<li> 151 : input data formatting error in internal concentrated load data, frame element number out of range
+<li> 152 : input data formatting error in internal concentrated load data, x-location less than 0 or grater than L
+<li> 160 : input data formatting error in thermal load data, number thermal loads greater than number of frame elements
+<li> 161 : input data formatting error in thermal load data, frame element number out of range
+<li> 162 : input data formatting error in thermal load data, frame element number out of range
+<li> 171 : input data formatting error in prescribed displacement data, prescribed displacements may be applied only at coordinates with reactions
+<li> 200 : memory allocation error
+<li> 201 : error in opening an output data file saving a vector of "floats"
+<li> 202 : error in opening an output data file saving a vector of "ints"
+<li> 203 : error in opening an output data file saving a matrix of "floats"
+<li> 204 : error in opening an output data file saving a matrix of "doubles"
+<li> 205 : error in opening an output data file saving a symmetric matrix of "floats"
+<li> 206 : error in opening an output data file saving a symmetric matrix of "doubles"
+</ul>
+</p>
+
+
+<a name="enhancements"/><h2>14. Enhancements projected for future versions</h2>
 
 <ul>
 <li>       A GPL'able GUI<br>
@@ -2577,7 +2679,7 @@ and possibly
 <li>       ... your recommendations ... send me an e-mail!
 </ul>
 
-<a name="references"/><h2>14. References</h2>
+<a name="references"/><h2>15. References</h2>
 
 <p>This software was developed using methods described in the following texts.
 The two primary sources are the texts by
