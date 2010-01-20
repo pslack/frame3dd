@@ -1793,8 +1793,9 @@ may be read by Matlab or may be read by your own program
 for further post-processing or visualization.   An example
 of the first several lines of an internal force data file is shown here.
 In this example, the <i>x</i>-axis increment, <i>dx</i>, has a length of 10 mm.
-<img src="img/InternalForces.png" align="center" border="0"><br>
 </p>
+
+<img src="img/InternalForces.png" align="center" border="0"><br>
 
 <p>
 The header information for each frame element contains the element number
@@ -2555,7 +2556,7 @@ gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtra
 <p>
 When Frame3DD exits it returns an integer value to the system calling Frame3DD. 
 An exit code of 0 (zero) indicates error-free completion.  
-Prior to exiting Frame3DD with a non-zero exit code, Frame3DD writes a 
+Prior to exiting with a non-zero exit code, Frame3DD writes a 
 diagnostic error message to "stderr".
 Exit code values have the following meanings:
 <ul>
