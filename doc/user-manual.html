@@ -1764,6 +1764,8 @@ If the <i>x</i>-axis increment, <i>dx</i>, is specified as a value of "-1"
 then the calculation of internal frame element forces 
 and transverse displacements is skipped.  
 Otherwise a separate internal force output file is written for each load case.
+For frame elements of length shorter than <i>dx</i>, internal forces and
+displacements are calculated at <i>x</i>=0 and <i>x=L</i>.
 If the Frame3DD analysis Output Data file 
 is named <b>MyResultsA.out</b>, then the internal force output data 
 files are automatically named 

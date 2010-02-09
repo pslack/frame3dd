@@ -2380,6 +2380,7 @@ void write_internal_forces(
 		j1 = J1[m];	j2 = J2[m]; // joint 1 and joint 2 of elmnt m
 
 		nx = floor(L[m]/dx);	// number of x-axis increments
+		if (nx < 1) nx = 1;	// at least one x-axis increment
 
 	// allocate memory for interior force data for frame element "m"
 		x  = dvector(0,nx);

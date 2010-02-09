@@ -51,6 +51,7 @@ static int iminarg1,iminarg2;
 #define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
 */
 
+
 #if defined(__STDC__) || defined(ANSI) || defined(NRANSI) /* ANSI */
 
 void nrerror(char error_text[]);

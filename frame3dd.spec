@@ -67,6 +67,14 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+*Tue Feb 09 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- bug fix. Internal forces and displacments in elements shorter than the
+x-axis increment were previously calculated only at x=L.
+Now these values are calcualted at both x=0 and x=L.  
+
+*Wed Jan 20 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- small grammar correction in user-manual.html
+
 *Sat Jan 16 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
 - create a set of exit codes with an exit code index in user-manual
 - standardize usage of stderr prior to exit calls and stdout for "verbose"
