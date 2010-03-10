@@ -1108,6 +1108,20 @@ computed and are appended to the Output Data file.
 <h3> 7.3 Numbering of Frame Element Starting Joints and Ending Joints </h3>
 
 <p>
+Coordinate transformations in 3D are not unique and depend upon
+the sequence of rotations.
+In some cases the orientation of an element within a structure
+may not be obvious if the element has rotated by more than 90 degrees in going
+from the local system to the global system.
+For this reason it can be helpful to define end joints in a way that requires 
+rotations of less than 90 degrees about any axis.
+Coordinate transformations in 2D are unique
+and these potential ambiguities are not a concern. 
+For 3D structures the following recommendations can help in 
+avoiding ambiguous coordinate transformations.  
+</p> 
+
+<p>
 Frame elements connect pairs of joints.  Each frame element has a 
 "starting joint" (element joint 1, J1)
 and an "ending joint" (element joint 2, J2),
@@ -1115,7 +1129,7 @@ as described in the <a href="#InputData">Input Data format</a>.
 In principle, either joint of the frame element could be joint J1 
 and either joint could be J2.  
 The assignment of J1 and J2 to the frame element should not affect the results. 
-However, to avoid confusion in certain cases, the following guidelines are recommended: <br>
+However, to avoid confusion in certain 3D models, the following guidelines are recommended: <br>
 <ul>
 <li>In general joint J1 of the frame element should have more negative
 coordinates than joint J2 of the element.   </li>

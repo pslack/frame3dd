@@ -1,3 +1,6 @@
+*Wed Mar 10 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
+- improve documentaion on 3D coordinate transformations (manual section 7.3)
+
 *Tue Feb 09 2010 Henri Gavin <henri.gavin@duke.edu> 0.20100105
 - bug fix. Internal forces and displacments in elements shorter than the
 x-axis increment were previously calculated only at x=L.
