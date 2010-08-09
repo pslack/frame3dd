@@ -193,7 +193,7 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 0                               # 0: consistent mass ... 1: lumped mass matrix
 1.00e-6                         # mode shape tolerance
 0.0                             # shift value ... for unrestrained structures
-200                             # exaggerate modal mesh deformations
+2000                            # exaggerate modal mesh deformations
 
 
 
@@ -210,7 +210,7 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 
 5                               # number of modes to animate
  1  2  5  9  12                 # modes to animate
-2                               # pan rate during animation
+1.5                             # pan rate during animation
 
 
 2    # Condensation Method:  0= none 1= static  2= Guyan   3= Dynamic

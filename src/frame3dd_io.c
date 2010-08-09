@@ -81,7 +81,7 @@ void parse_options (
 
 	*shear_flag = *geom_flag  = *anlyz_flag = *lump_flag = *modal_flag = -1;
 	*exagg_flag = *tol_flag = *shift_flag = -1.0;
-	*D3_flag = -1;
+	*D3_flag = 0;
 	*pan_flag = *condense_flag = 0.0;
 	*write_matrix = 0;
 	*axial_sign = 1;
@@ -2886,6 +2886,7 @@ void static_mesh(
 	 fprintf(fpm,"# %s\n", title );
 	 fprintf(fpm,"# %s", ctime(&now) );
 	 fprintf(fpm,"# G N U P L O T   S C R I P T   F I L E \n");
+	 /* fprintf(fpm,"#  X=%d , Y=%d , Z=%d, D3=%d  \n", X,Y,Z,D3_flag); */
 
 	 fprintf(fpm,"set autoscale\n");
 	 fprintf(fpm,"set noborder\n");
@@ -3117,6 +3118,11 @@ void animate(
 		if (xyz[j].x != 0.0) X=1;
 		if (xyz[j].y != 0.0) Y=1;
 		if (xyz[j].z != 0.0) Z=1;
+		if (j==1) {
+			x_min = x_max = xyz[j].x;
+			y_min = y_max = xyz[j].y;
+			z_min = z_max = xyz[j].z;
+		}
 		if (xyz[j].x < x_min ) x_min = xyz[j].x;
 		if (xyz[j].y < y_min ) y_min = xyz[j].y;
 		if (xyz[j].z < z_min ) z_min = xyz[j].z;

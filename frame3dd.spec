@@ -69,6 +69,7 @@ rm -rf %{buildroot}
 #
 *Mon Aug 08 2010 Henri Gavin <.> 0.20100105
 - add plot formatting ... 'set size ratio -1'  for equal XY plot scaling
+- improve and simplify plot axis scaling for 3D animations
 - add "-z" command line option to force 3D plotting
 "-z" forces 3D plotting in Gnuplot
 - update documentation regarding -z flag

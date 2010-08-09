@@ -103,7 +103,7 @@ Example I: a triangular tower  (kip,in)
 0                               # 0: consistent mass ... 1: lumped mass matrix
 1e-6                            # mode shape tolerance
 0.0                             # shift value ... for unrestrained structures
-5.0                             # exaggerate modal mesh deformations
+0.1                             # exaggerate modal mesh deformations
 
 # concentrated mass inertia
 0                # number of joints with extra mass or inertia

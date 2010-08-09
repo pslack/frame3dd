@@ -6,6 +6,7 @@
 - update documentation regarding -z flag
 - change .plt file comment "# M E S H   A N N O T A T I O N   F I L E\n" to
 "# G N U P L O T   S C R I P T   F I L E \n"
+- re-run examples and tune mesh exageration parameters
 
 *Tue May 18 2010 Henri Gavin <.> 0.20100105
 - remove email address from web-pages to cut down on spam
