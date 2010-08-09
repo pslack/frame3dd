@@ -160,6 +160,7 @@ For compilation/installation, see README.txt.
 	int	shear_flag= -1,	/*   over-ride input file value		*/
 		geom_flag = -1,	/*   over-ride input file value		*/
 		anlyz_flag= -1,	/*   over-ride input file value		*/
+		D3_flag = -1,	/*   over-ride 3D plotting check	*/
 		lump_flag = -1,	/*   over-ride input file value		*/
 		modal_flag= -1,	/*   over-ride input file value		*/
 		write_matrix=-1,/*   write stiffness and mass matrix	*/
@@ -179,6 +180,7 @@ For compilation/installation, see README.txt.
 
 	parse_options ( argc, argv, IN_file, OUT_file, 
 			&shear_flag, &geom_flag, &anlyz_flag, &exagg_flag, 
+			&D3_flag, 
 			&lump_flag, &modal_flag, &tol_flag, &shift_flag, 
 			&pan_flag, &write_matrix, &axial_sign, &condense_flag, &verbose, &debug);
 
@@ -542,7 +544,8 @@ For compilation/installation, see README.txt.
 
 		static_mesh ( IN_file, infcpath, meshpath, plotpath, title,
 				nJ, nE, nL, lc, DoF,
-				xyz, L, J1,J2, p, D, exagg_static, anlyz, dx );
+				xyz, L, J1,J2, p, D,
+				exagg_static, D3_flag, anlyz, dx );
 
 	 } /* end load case loop */
 	} else {
@@ -553,7 +556,8 @@ For compilation/installation, see README.txt.
 	 }
 	 static_mesh ( IN_file, infcpath, meshpath, plotpath, title,
 			nJ, nE, nL, lc, DoF,
-			xyz, L, J1,J2, p, D, exagg_static, anlyz, dx );
+			xyz, L, J1,J2, p, D,
+			exagg_static, D3_flag, anlyz, dx );
 	}
 
 
@@ -612,12 +616,15 @@ For compilation/installation, see README.txt.
 	fprintf(fp,"\n");
 	fclose (fp);
 
-	if(nM > 0 && anlyz){
+	if(nM > 0 && anlyz) {
 
 		modal_mesh ( IN_file, meshpath, modepath, plotpath, title,
-		    nJ,nE, DoF, nM, xyz, L, J1,J2, p, M,f,V,exagg_modal,anlyz);
+				nJ,nE, DoF, nM, xyz, L, J1,J2, p,
+				M, f, V, exagg_modal, D3_flag, anlyz );
+
 		animate ( IN_file, meshpath, modepath, plotpath, title,anim,
-		    nJ,nE, DoF, nM, xyz, L, p, J1,J2, f,V, exagg_modal, pan );
+				nJ,nE, DoF, nM, xyz, L, p, J1,J2, f,
+				V, exagg_modal, D3_flag, pan );
 	}
 
 	if(nC > 0){		/* matrix condensation of stiffness and mass */

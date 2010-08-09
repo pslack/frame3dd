@@ -1,3 +1,12 @@
+*Mon Aug 08 2010 Henri Gavin <.> 0.20100105
+- add plot formatting ... 'set size ratio -1'  for equal XY plot scaling
+- improve and simplify plot axis scaling for 3D animations
+- add "-z" command line option to force 3D plotting
+"-z" forces 3D plotting in Gnuplot
+- update documentation regarding -z flag
+- change .plt file comment "# M E S H   A N N O T A T I O N   F I L E\n" to
+"# G N U P L O T   S C R I P T   F I L E \n"
+
 *Tue May 18 2010 Henri Gavin <.> 0.20100105
 - remove email address from web-pages to cut down on spam
 

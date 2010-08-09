@@ -42,6 +42,7 @@ void parse_options (
 	int *geom_flag,
 	int *anlyz_flag,
 	double *exagg_flag,
+	int *D3_flag,	/**< Force 3D plotting in Gnuplot		*/
 	int *lump_flag,
 	int *modal_flag,
 	double *tol_flag,
@@ -371,7 +372,7 @@ void static_mesh(
 	char *title, int nJ, int nE, int nL, int lc, int DoF,
 	vec3 *xyz, double *L,
 	int *J1, int *J2, float *p, double *D,
-	double exagg_static, int anlyz, float dx
+	double exagg_static, int D3_flag, int anlyz, float dx
 );
 
 
@@ -386,7 +387,7 @@ void modal_mesh(
 	vec3 *xyz, double *L,
 	int *J1, int *J2, float *p,
 	double **M, double *f, double **V,
-	double exagg_modal, int anlyz
+	double exagg_modal, int D3_flag, int anlyz
 );
 
 
@@ -403,7 +404,7 @@ void animate(
 	int nJ, int nE, int DoF, int nM,
 	vec3 *xyz, double *L, float *p,
 	int *J1, int *J2, double *f, double **V,
-	double exagg_modal, float pan
+	double exagg_modal, int D3_flag, float pan
 );
 
 

@@ -61,6 +61,7 @@ void parse_options (
 	int *geom_flag,
 	int *anlyz_flag,
 	double *exagg_flag,
+	int *D3_flag,
 	int *lump_flag,
 	int *modal_flag,
 	double *tol_flag, 
@@ -80,6 +81,7 @@ void parse_options (
 
 	*shear_flag = *geom_flag  = *anlyz_flag = *lump_flag = *modal_flag = -1;
 	*exagg_flag = *tol_flag = *shift_flag = -1.0;
+	*D3_flag = -1;
 	*pan_flag = *condense_flag = 0.0;
 	*write_matrix = 0;
 	*axial_sign = 1;
@@ -109,9 +111,9 @@ void parse_options (
 	 }
 	}
 
-	// remaining unused flags ... b j k n u y z
+	// remaining unused flags ... b j k n u y 
 
-	while ((option=getopt(argc,argv, "i:o:acdhqvwxs:e:f:g:l:m:p:r:t:")) != -1){
+	while ((option=getopt(argc,argv, "i:o:acdhqvwxzs:e:f:g:l:m:p:r:t:")) != -1){
 		switch ( option ) {
 			case 'i':		/* input data file name */
 				strcpy(IN_file,optarg);
@@ -149,7 +151,7 @@ void parse_options (
 				else if (strcmp(optarg,"On")==0)
 					*shear_flag = 1;
 				else {
-				 fprintf(stderr," frame3dd command-line error"); 
+				 fprintf(stderr," frame3dd command-line error");
 				 fprintf(stderr,": argument to -s option"); 
 				 fprintf(stderr," should be either On or Off\n");
 				 exit(3);
@@ -161,7 +163,7 @@ void parse_options (
 				else if (strcmp(optarg,"On")==0)
 					*geom_flag = 1;
 				else {
-				 fprintf(stderr," frame3dd command-line error"); 
+				 fprintf(stderr," frame3dd command-line error");
 				 fprintf(stderr,": argument to -g option"); 
 				 fprintf(stderr," should be either On or Off\n");
 				 exit(4);
@@ -169,6 +171,9 @@ void parse_options (
 				break;
 			case 'e':		/* exaggeration factor */
 				*exagg_flag = atof(optarg);
+				break;
+			case 'z':		/* force 3D plotting */
+				*D3_flag = 1;
 				break;
 			case 'l':		/* lumped or consistent mass */
 				if (strcmp(optarg,"Off")==0)
@@ -261,7 +266,7 @@ void display_help()
  fprintf(stderr,"\n Frame3DD version: %s\n", VERSION);
  fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
  fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
-/* fprintf(stderr,"  Usage: frame3dd -i<input> -o<output> [-hvcq] [-s<On|Off>] [-g<On|Off>] [-e<value>] [-l<On|Off>] [-f<value>] [-m J|S] [-t<value>] [-p<value>] \n");
+/* fprintf(stderr,"  Usage: frame3dd -i<input> -o<output> [-hvcqz] [-s<On|Off>] [-g<On|Off>] [-e<value>] [-l<On|Off>] [-f<value>] [-m J|S] [-t<value>] [-p<value>] \n");
  */
  fprintf(stderr,"  Frame3DD may be run with interactive prompting for file names by typing ...\n");
  fprintf(stderr,"       frame3dd \n\n");
@@ -287,6 +292,7 @@ void display_help()
  fprintf(stderr,"  -s  On|Off    On: include shear deformation or Off: neglect ...\n");
  fprintf(stderr,"  -g  On|Off    On: include geometric stiffness or Off: neglect ...\n");
  fprintf(stderr,"  -e <value>    level of deformation exaggeration for Gnuplot output\n");
+ fprintf(stderr,"  -z            force X-Y-Z plotting\n");
  fprintf(stderr,"  -l  On|Off    On: lumped mass matrix or Off: consistent mass matrix\n");
  fprintf(stderr,"  -f <value>    modal frequency shift for unrestrained structures\n");
  fprintf(stderr,"  -m   J|S      modal analysis method: J=Jacobi-Subspace or S=Stodola\n");
@@ -294,7 +300,6 @@ void display_help()
  fprintf(stderr,"  -p <value>    pan rate for mode shape animation\n");
  fprintf(stderr,"  -r <value>    matrix condensation method: 0, 1, 2, or 3 \n");
  fprintf(stderr," -------------------------------------------------------------------------\n");
-
 
 }
 
@@ -308,7 +313,7 @@ void display_usage()
  fprintf(stderr,"\n Frame3DD version: %s\n", VERSION);
  fprintf(stderr," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
  fprintf(stderr," http://frame3dd.sourceforge.net\n\n");
-/* fprintf(stderr,"  Usage: frame3dd -i<input> -o<output> [-hvcq] [-s<On|Off>] [-g<On|Off>] [-e<value>] [-l<On|Off>] [-f<value>] [-m J|S] [-t<value>] [-p<value>] \n");
+/* fprintf(stderr,"  Usage: frame3dd -i<input> -o<output> [-hvcqz] [-s<On|Off>] [-g<On|Off>] [-e<value>] [-l<On|Off>] [-f<value>] [-m J|S] [-t<value>] [-p<value>] \n");
  */
  fprintf(stderr,"  Usage: frame3dd -i <input> -o <output> [OPTIONS] \n\n");
 
@@ -2740,8 +2745,8 @@ void static_mesh(
 		char infcpath[], char meshpath[], char plotpath[],
 		char *title, int nJ, int nE, int nL, int lc, int DoF,
 		vec3 *xyz, double *L,
-		int *J1, int *J2, float *p, double *D,
-		double exagg_static, int anlyz, float dx
+		int *J1, int *J2, float *p, double *D, 
+		double exagg_static, int D3_flag, int anlyz, float dx
 ){
 	FILE	*fpif=NULL, *fpm=NULL;
 	double	mx, my, mz; /* coordinates of the frame element number labels */
@@ -2854,7 +2859,7 @@ void static_mesh(
 		if (xyz[j].y != 0.0) Y=1;
 		if (xyz[j].z != 0.0) Z=1;
 	}
-	if ( X && Y && Z ) {
+	if ( (X && Y && Z) || D3_flag ) {
 		D3 = ' '; D2 = '#';
 	} else {
 		D3 = '#'; D2 = ' ';
@@ -2880,7 +2885,7 @@ void static_mesh(
 	 fprintf(fpm," VERSION %s \n", VERSION);
 	 fprintf(fpm,"# %s\n", title );
 	 fprintf(fpm,"# %s", ctime(&now) );
-	 fprintf(fpm,"# M E S H   A N N O T A T I O N   F I L E \n");
+	 fprintf(fpm,"# G N U P L O T   S C R I P T   F I L E \n");
 
 	 fprintf(fpm,"set autoscale\n");
 	 fprintf(fpm,"set noborder\n");
@@ -2889,6 +2894,7 @@ void static_mesh(
 	 fprintf(fpm,"set nozeroaxis\n");
 	 fprintf(fpm,"set nokey\n");
 	 fprintf(fpm,"set nolabel\n");
+	 fprintf(fpm,"set size ratio -1\n");
 
  	 fprintf(fpm,"# NODE NUMBER LABELS\n");
 	 for (j=1; j<=nJ; j++)
@@ -2957,7 +2963,7 @@ void modal_mesh(
 		vec3 *xyz, double *L,
 		int *J1, int *J2, float *p,
 		double **M, double *f, double **V,
-		double exagg_modal, int anlyz
+		double exagg_modal, int D3_flag, int anlyz
 ){
 	FILE	*fpm;
 	double mpfX, mpfY, mpfZ;	/* mode participation factors	*/
@@ -3021,7 +3027,7 @@ void modal_mesh(
 			if (xyz[j].z != 0.0) Z=1;
 		}
 
-		if ( X && Y && Z ) {
+		if ( (X && Y && Z) || D3_flag ) {
 			D3 = ' '; D2 = '#';
 		} else {
 			D3 = '#'; D2 = ' ';
@@ -3079,7 +3085,7 @@ void animate(
 	int nJ, int nE, int DoF, int nM,
 	vec3 *xyz, double *L, float *p,
 	int *J1, int *J2, double *f, double **V,
-	double exagg_modal,
+	double exagg_modal, int D3_flag, 
 	float pan
 ){
 	FILE	*fpm;
@@ -3087,6 +3093,7 @@ void animate(
 	float	x_min = 0.0, x_max = 0.0,
 		y_min = 0.0, y_max = 0.0,
 		z_min = 0.0, z_max = 0.0,
+		Dxyz = 0.0, 		/* "diameter" of the structure	*/
 		rot_x_init  =  70.0,	/* inital x-rotation in 3D animation */
 		rot_x_final =  60.0,	/* final  x-rotation in 3D animation */
 		rot_z_init  = 100.0,	/* inital z-rotation in 3D animation */
@@ -3117,11 +3124,13 @@ void animate(
 		if ( y_max < xyz[j].y ) y_max = xyz[j].y;
 		if ( z_max < xyz[j].z ) z_max = xyz[j].z;
 	}
-	if ( X && Y && Z ) {
+	if ( (X && Y && Z) || D3_flag ) {
 		D3 = ' '; D2 = '#';
 	} else {
 		D3 = '#'; D2 = ' ';
 	}
+
+	Dxyz = sqrt( (x_max-x_min)*(x_max-x_min) + (y_max-y_min)*(y_max-y_min) + (z_max-z_min)*(z_max-z_min) );
 
 
 	if ((fpm = fopen (plotpath, "a")) == NULL) {
@@ -3145,21 +3154,35 @@ void animate(
 	   fprintf(fpm,"set autoscale\n");
 	   fprintf(fpm,"set noxtics; set noytics; set noztics; \n");
 	   fprintf(fpm,"set nokey\n");
-	   if ( x_min != x_max )
-		fprintf(fpm,"set xrange [ %lf : %lf ] \n",
-	 		x_min-0.2*(x_max-x_min), x_max+0.2*(x_max-x_min) );
-	   else fprintf(fpm,"set xrange [ %lf : %lf ] \n",
-			x_min-exagg_modal, x_max+exagg_modal );
-	   if (y_min != y_max)
-		fprintf(fpm,"set yrange [ %lf : %lf ] \n",
-	 		y_min-0.2*(y_max-y_min), y_max+0.2*(y_max-y_min) );
-	   else fprintf(fpm,"set yrange [ %lf : %lf ] \n",
-			y_min-exagg_modal, y_max+exagg_modal );
-	   if (z_min != z_max)
-	   	fprintf(fpm,"set zrange [ %lf : %lf ] \n",
-			z_min-0.2*(z_max-z_min), z_max+0.2*(z_max-z_min) );
-	   else fprintf(fpm,"set zrange [ %lf : %lf ] \n",
-			z_min-exagg_modal, z_max+exagg_modal );
+
+	   fprintf(fpm,"# x_min = %12.5e     x_max = %12.5e \n", x_min, x_max);
+	   fprintf(fpm,"# y_min = %12.5e     y_max = %12.5e \n", y_min, y_max);
+	   fprintf(fpm,"# z_min = %12.5e     z_max = %12.5e \n", z_min, z_max);
+	   fprintf(fpm,"# Dxyz = %12.5e \n", Dxyz );
+	   fprintf(fpm,"set xrange [ %lf : %lf ] \n",
+			x_min-0.1*Dxyz, x_max+0.1*Dxyz );
+	   fprintf(fpm,"set yrange [ %lf : %lf ] \n",
+			y_min-0.1*Dxyz, y_max+0.1*Dxyz );
+	   fprintf(fpm,"set zrange [ %lf : %lf ] \n",
+			z_min-0.1*Dxyz, z_max+0.1*Dxyz );
+
+/*
+ *	   if ( x_min != x_max )
+ *		fprintf(fpm,"set xrange [ %lf : %lf ] \n",
+ *	 		x_min-0.2*(x_max-x_min), x_max+0.2*(x_max-x_min) );
+ *	   else fprintf(fpm,"set xrange [ %lf : %lf ] \n",
+ *			x_min-exagg_modal, x_max+exagg_modal );
+ *	   if (y_min != y_max)
+ *		fprintf(fpm,"set yrange [ %lf : %lf ] \n",
+ *	 		y_min-0.2*(y_max-y_min), y_max+0.2*(y_max-y_min) );
+ *	   else fprintf(fpm,"set yrange [ %lf : %lf ] \n",
+ *			y_min-exagg_modal, y_max+exagg_modal );
+ *	   if (z_min != z_max)
+ *	   	fprintf(fpm,"set zrange [ %lf : %lf ] \n",
+ *			z_min-0.2*(z_max-z_min), z_max+0.2*(z_max-z_min) );
+ *	   else fprintf(fpm,"set zrange [ %lf : %lf ] \n",
+ *			z_min-exagg_modal, z_max+exagg_modal );
+ */
 
 	   fprintf(fpm,"%c set parametric\n", D3 );
 	   fprintf(fpm,"%c set view 60, 70, 1 \n", D3 );

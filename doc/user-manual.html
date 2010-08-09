@@ -2492,6 +2492,7 @@ frame3dd -i InFile -o OutFile [OPTIONS]
   -s  On|Off    On: include shear deformation or Off: neglect ...
   -g  On|Off    On: include geometric stiffness or Off: neglect ...
   -e  value     level of deformation exaggeration for Gnuplot output
+  -z            force X-Y-Z plotting 
   -l  On|Off    On: lumped mass matrix or Off: consistent mass matrix
   -f  value     modal frequency shift for unrestrained structures
   -m   J|S      modal analysis method: J=Jacobi-Subspace or S=Stodola
@@ -2523,10 +2524,11 @@ frame3dd -i InFile -o OutFile -sOn
 frame3dd -i InFile -o OutFile -e100 -gOn
 </pre>
 
-  Use consistent mass matrix, set deformed mesh exaggeration value, and
-set the animation pan rate, over-riding Input Data file values:
+  Use consistent mass matrix, set deformed mesh exaggeration value, 
+set the animation pan rate, over-riding Input Data file values,
+and force 3D plotting in Gnuplot:
 <pre>
-frame3dd -i InFile -o OutFile -lOff -e100 -p3.4
+frame3dd -i InFile -o OutFile -lOff -e100 -p3.4 -z
 </pre>
 </ul>
 
