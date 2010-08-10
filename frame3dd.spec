@@ -67,6 +67,12 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
+*Tue Aug 09 2010 Henri Gavin <.> 0.20100105
+- add extra beam mass to element mass matrix prior to coordinate transformation
+- better checking of symmetry of consistent mass matrix
+- better checking of symmetry of geometric stiffness matrix
+- debug option writes all element mass and stiffness matrices to disk
+
 *Mon Aug 08 2010 Henri Gavin <.> 0.20100105
 - add plot formatting ... 'set size ratio -1'  for equal XY plot scaling
 - improve and simplify plot axis scaling for 3D animations
@@ -75,6 +81,7 @@ rm -rf %{buildroot}
 - update documentation regarding -z flag
 - change .plt file comment "# M E S H   A N N O T A T I O N   F I L E\n" to
 "# G N U P L O T   S C R I P T   F I L E \n"
+- re-run examples and tune mesh exageration parameters
 
 *Tue May 18 2010 Henri Gavin <.> 0.20100105
 - remove email address from web-pages to cut down on spam

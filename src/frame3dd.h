@@ -49,7 +49,8 @@ void assemble_K(
 	float *p,		/**< roll angle, radians		*/
 	int shear,		/**< 1: include shear deformation, 0: don't */
 	int geom,		/**< 1: include goemetric stiffness, 0: don't */
-	double **Q		/**< frame element end forces		*/
+	double **Q,		/**< frame element end forces		*/
+	int debug		/**< 1: write element stiffness matrices*/
 );
 
 
@@ -126,7 +127,8 @@ void assemble_M(
 	float *BMs,	/**< extra frame element mass			*/
 	float *JMs,	/**< joint mass					*/
 	float *JMx, float *JMy, float *JMz,	/**< joint inertias	*/
-	int lump	/**< 1: lumped mass matrix, 0: consistent mass	*/
+	int lump,	/**< 1: lumped mass matrix, 0: consistent mass	*/
+	int debug	/**< 1: write element mass matrices	 	*/
 );
 
 

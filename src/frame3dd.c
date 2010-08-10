@@ -105,11 +105,13 @@ void assemble_K(
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz, float *Jx, float *Iy, float *Iz,
 	float *E, float *G, float *p,
-	int shear, int geom, double **Q
+	int shear, int geom, double **Q, int debug
 ){
 	double	**k;		/* element stiffness matrix in global coord */
 	int	**ind,		/* member-structure DoF index table	*/
+		res=0,
 		i, j, ii, jj, l, ll;
+	char	stiffness_fn[FILENMAX];
 
 	for (i=1; i<=DoF; i++)	for (j=1; j<=DoF; j++)	K[i][j] = 0.0;
 
@@ -136,6 +138,11 @@ void assemble_K(
 		           Ax[i], Asy[i],Asz[i], 
                            Jx[i], Iy[i], Iz[i], 
                            E[i],G[i], p[i], -Q[i][1], shear);
+
+		if (debug) {
+			res = sprintf(stiffness_fn,"k_%03d",i);
+			save_dmatrix(12,12,k,stiffness_fn);
+		}
 
 		for ( l=1; l <= 12; l++ ) {
 			ii = ind[l][i];
@@ -204,12 +211,11 @@ void elastic_K(
 
 	atma(t1,t2,t3,t4,t5,t6,t7,t8,t9, k, r[j1],r[j2]);	/* globalize */
 
-	/* check and enforce symmetry */ 
-
+	/* check and enforce symmetry of elastic element stiffness matrix */
 
 	for(i=1; i<=12; i++){
 	    for (j=i+1; j<=12; j++){
-			if(k[i][j] != k[j][i]){
+			if( k[i][j] != k[j][i] ) {
 				if(fabs(k[i][j]/k[j][i]-1.0) > 1.0e-6 
 					&&(fabs(k[i][j]/k[i][i]) > 1e-6 
 						|| fabs(k[j][i]/k[i][i]) > 1e-6
@@ -295,15 +301,28 @@ void geometric_K(
 
 	atma(t1,t2,t3,t4,t5,t6,t7,t8,t9, kg, r[j1],r[j2]);	/* globalize */
 
-	/* check and enforce symmetry */ 
+	/* check and enforce symmetry of geometric element stiffness matrix */ 
 
-	for (i=1; i<=12; i++)
-	    for (j=i+1; j<=12; j++) 
-		if ( kg[i][j] != kg[j][i] ) {
-			//fprintf(stderr,"kg[%2d][%2d]/kg[%2d][%2d] - 1 = %14.5e\n",
-			//i,j,j,i,kg[i][j]/kg[j][i]-1 ); 
-			kg[i][j] = kg[j][i] = 0.5 * ( kg[i][j] + kg[j][i] );
-		}
+	for(i=1; i<=12; i++){
+	    for (j=i+1; j<=12; j++){
+			if( kg[i][j] != kg[j][i] ) {
+				if(fabs(kg[i][j]/kg[j][i]-1.0) > 1.0e-6 
+					&&(fabs(kg[i][j]/kg[i][i]) > 1e-6 
+						|| fabs(kg[j][i]/kg[i][i]) > 1e-6
+					)
+				){
+					fprintf(stderr,"geometric_K element stiffness matrix not symetric ...\n" ); 
+					fprintf(stderr," ... kg[%d][%d] = %15.6e \n",i,j,kg[i][j] ); 
+					fprintf(stderr," ... kg[%d][%d] = %15.6e   ",j,i,kg[j][i] ); 
+					fprintf(stderr," ... relative error = %e \n",  fabs(kg[i][j]/kg[j][i]-1.0) ); 
+					fprintf(stderr," ... element matrix saved in file 'kg'\n");
+					save_dmatrix ( 12, 12, kg, "kg" ); 
+				}
+
+				kg[i][j] = kg[j][i] = 0.5 * ( kg[i][j] + kg[j][i] );
+			}
+	    }
+	}
 
 #ifdef MATRIX_DEBUG
 	save_dmatrix ( 12, 12, kg, "kgt" );   /* transformed element matx */
@@ -673,17 +692,19 @@ void assemble_M(
 		float *Ax, float *Jx, float *Iy, float *Iz, float *p,
 		float *d, float *BMs,
 		float *JMs, float *JMx, float *JMy, float *JMz,
-		int lump
+		int lump, int debug
 ){
-	double  **mass,	    /* element mass matrix in global coord */
+	double  **m,	    /* element mass matrix in global coord */
 		**dmatrix();
 	int     **ind,	  /* member-structure DoF index table     */
 		**imatrix(),
-		i, j, ii, jj, l, ll, m;
+		res=0, 
+		i, j, ii, jj, l, ll;
+	char	mass_fn[FILENMAX];
 
 	for (i=1; i<=DoF; i++)  for (j=1; j<=DoF; j++)  M[i][j] = 0.0;
 
-	mass   = dmatrix(1,12,1,12);
+	m      = dmatrix(1,12,1,12);
 	ind    = imatrix(1,12,1,nE);
 
 
@@ -696,22 +717,28 @@ void assemble_M(
 		ind[6][i] = ind[1][i] + 5;      ind[12][i] = ind[7][i] + 5;
 	}
 
-	for ( m = 1; m <= nE; m++ ) {
+	for ( i = 1; i <= nE; i++ ) {
 
-		if ( lump )	lumped_M ( mass, xyz, L[m], J1[m], J2[m],
-				Ax[m], Jx[m], Iy[m], Iz[m], d[m], BMs[m], p[m]);
-		else		consistent_M ( mass, xyz,r,L[m], J1[m], J2[m],
-				Ax[m], Jx[m], Iy[m], Iz[m], d[m], BMs[m], p[m]);
+		if ( lump )	lumped_M ( m, xyz, L[i], J1[i], J2[i],
+				Ax[i], Jx[i], Iy[i], Iz[i], d[i], BMs[i], p[i]);
+		else		consistent_M ( m, xyz,r,L[i], J1[i], J2[i],
+				Ax[i], Jx[i], Iy[i], Iz[i], d[i], BMs[i], p[i]);
+
+		if (debug) {
+			res = sprintf(mass_fn,"m_%03d",i);
+			save_dmatrix(12,12, m, mass_fn);
+		}
 
 		for ( l=1; l <= 12; l++ ) {
-			ii = ind[l][m];
+			ii = ind[l][i];
 			for ( ll=1; ll <= 12; ll++ ) {
-				jj = ind[ll][m];
-				M[ii][jj] += mass[l][ll];
+				jj = ind[ll][i];
+				M[ii][jj] += m[l][ll];
 			}
 		}
 	}
-	for ( j = 1; j <= nJ; j++ ) {
+
+	for ( j = 1; j <= nJ; j++ ) {		// add extra joint mass
 		i = 6*(j-1);
 		M[i+1][i+1] += JMs[j];
 		M[i+2][i+2] += JMs[j];
@@ -727,7 +754,7 @@ void assemble_M(
 			fprintf(stderr,"  M[%d][%d] = %lf\n", i,i, M[i][i] );
 		}
 	}
-	free_dmatrix ( mass,1,12,1,12);
+	free_dmatrix ( m, 1,12,1,12);
 	free_imatrix( ind,1,12,1,nE);
 }
 
@@ -820,22 +847,36 @@ void consistent_M(
 	save_dmatrix ( 12, 12, m, "mo" );	/* element mass matrix */
 #endif
 
-	atma(t1,t2,t3,t4,t5,t6,t7,t8,t9, m, r[j1],r[j2]);	/* globalize */
-
-	/* check and enforce symmetry */ 
-
-	for (i=1; i<=12; i++)
-	    for (j=i+1; j<=12; j++)
-		if ( m[i][j] != m[j][i] ) {
-			m[i][j] = m[j][i] = 0.5 * ( m[i][j] + m[j][i] );
-/*			fprintf(stderr,"m[%d][%d] = %e    ",i,j,m[i][j] ); */
-/*			fprintf(stderr,"m[%d][%d] = %e  \n",j,i,m[j][i] ); */
-		}
-
-			/* rotatory inertia of extra mass is neglected */
+			/* rotatory inertia of extra beam mass is neglected */
 
 	for (i=1; i<=3; i++)	m[i][i] += BMs/2.;
 	for (i=7; i<=9; i++)	m[i][i] += BMs/2.;
+
+	atma(t1,t2,t3,t4,t5,t6,t7,t8,t9, m, r[j1],r[j2]);	/* globalize */
+
+
+	/* check and enforce symmetry of consistent element mass matrix */ 
+
+	for(i=1; i<=12; i++){
+	    for (j=i+1; j<=12; j++){
+			if( m[i][j] != m[j][i] ) {
+				if(fabs(m[i][j]/m[j][i]-1.0) > 1.0e-6 
+					&&(fabs(m[i][j]/m[i][i]) > 1e-6 
+						|| fabs(m[j][i]/m[i][i]) > 1e-6
+					)
+				){
+					fprintf(stderr,"consistent_M: element mass matrix not symetric ...\n" ); 
+					fprintf(stderr," ... m[%d][%d] = %15.6e \n",i,j,m[i][j] ); 
+					fprintf(stderr," ... m[%d][%d] = %15.6e   ",j,i,m[j][i] ); 
+					fprintf(stderr," ... relative error = %e \n",  fabs(m[i][j]/m[j][i]-1.0) ); 
+					fprintf(stderr," ... element matrix saved in file 'mc'\n");
+					save_dmatrix ( 12, 12, m, "mc" ); 
+				}
+
+				m[i][j] = m[j][i] = 0.5 * ( m[i][j] + m[j][i] );
+			}
+		}
+	}
 
 #ifdef MATRIX_DEBUG
 	save_dmatrix ( 12, 12, m, "mt" );	/* transformed matrix */

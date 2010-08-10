@@ -397,7 +397,7 @@ For compilation/installation, see README.txt.
 
 		assemble_K ( K, DoF, nE, xyz,r, L, Le, J1, J2,
 					Ax, Asy, Asz, Jx,Iy,Iz, E, G, p,
-					shear, geom, Q );
+					shear, geom, Q, debug );
 
 #ifdef MATRIX_DEBUG
 		save_dmatrix ( DoF, DoF, K, "Kf" ); /* free stiffness matrix */
@@ -415,7 +415,8 @@ For compilation/installation, see README.txt.
 		}
 
 		assemble_K ( K, DoF, nE, xyz, r, L, Le, J1, J2,
-				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p, shear,geom, Q );
+				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
+				shear,geom, Q, debug );
 
 		/* then add mechanical loads ... */
 		if ( nF[lc]>0 || nU[lc]>0 || nW[lc]>0 || nP[lc]>0 || nD[lc]>0 || 
@@ -448,7 +449,8 @@ For compilation/installation, see README.txt.
 			++iter;
 
 			assemble_K ( K, DoF, nE, xyz, r, L, Le, J1, J2,
-				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p, shear,geom, Q );
+				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
+				shear,geom, Q, debug );
 
 			apply_reactions ( DoF, R, Dp[lc], Fo[lc], F, K, 'm' );
 
@@ -573,7 +575,7 @@ For compilation/installation, see README.txt.
 
 		assemble_M ( M, DoF, nJ, nE, xyz, r, L, J1,J2,
 				Ax, Jx,Iy,Iz, p, d, BMs, JMs, JMx, JMy, JMz,
-				lump );
+				lump, debug );
 
 #ifdef MATRIX_DEBUG
 		save_dmatrix ( DoF, DoF, M, "Mf" );	/* free mass matrix */
