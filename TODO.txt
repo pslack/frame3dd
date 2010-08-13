@@ -5,9 +5,11 @@ TODO LIST for FRAME3DD
 
 * Create structs to contain frame attributes, coordinates, etc, in order to migrate to a more object-oriented coding style, and simplify the passing of parameters to functions.
 
+* GPL gui using wxWidgets and OpenGL (??) http://www.wxwidgets.org/
+
 * Dynamic time-history analysis with the HHT-alpha method
 
-* Compute reactions forces along with joint displacements in solve_system funcion.  
+* Compute reactions forces along with joint displacements in solve_system function.  
 
 * Consistent mass matrix including the effects of shear deformation on rotatory inertia
 
