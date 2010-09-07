@@ -67,15 +67,15 @@ static void member_force(
 static void lumped_M(
 	double **m, vec3 *xyz,
 	double L, int j1, int j2,
-	float Ax, float Jx, float Iy, float Iz,
-	float d, float p, float BMs
+	float Ax, float Jx, float Iy, float Iz, float p, 
+	float d, float BMs
 );
 
 static void consistent_M(
 	double **m, vec3 *xyz, float *r, double L,
 	int j1, int j2,
-	float Ax, float Jx, float Iy, float Iz, float d,
-	float BMs, float p
+	float Ax, float Jx, float Iy, float Iz, float p, 
+	float d, float BMs
 );
 
 static void invAB(
@@ -103,7 +103,8 @@ void assemble_K(
 	int DoF, int nE,
 	vec3 *xyz, float *r, double *L, double *Le,
 	int *J1, int *J2,
-	float *Ax, float *Asy, float *Asz, float *Jx, float *Iy, float *Iz,
+	float *Ax, float *Asy, float *Asz,
+	float *Jx, float *Iy, float *Iz,
 	float *E, float *G, float *p,
 	int shear, int geom, double **Q, int debug
 ){
@@ -366,7 +367,7 @@ The load vector modified for prescribed displacements Dp is returned as F
 void apply_reactions(
 	int DoF, int *R, float *Dp, double *Fo,
 	double *F, double **K,
-	char	tm	/* 'm' means mech. loads, 't' means temp loads only */
+	char	tm /* 'm' means mech. loads, 't' means temp loads only */
 ){
 	int	i,j;
 
@@ -401,9 +402,9 @@ void apply_reactions(
 SOLVE_SYSTEM  -  solve {F} =   [K]{D} via L D L' decomposition        27dec01
 ----------------------------------------------------------------------------*/
 void solve_system( K, D, F, DoF, ok, verbose )
-double	**K, *D, *F; 
-int	DoF, *ok;
-int	verbose;
+	double	**K, *D, *F; 
+	int	DoF, *ok;
+	int	verbose;
 {
 	double	*diag,		/* diagonal vector of the L D L' decomp. */
 		error=1.0;	/* error in the solution		*/
@@ -469,10 +470,10 @@ void end_forces(
 MEMBER_FORCE  -  evaluate the end forces for a member			12nov02
 ------------------------------------------------------------------------------*/
 void member_force(
-		double *s, int M, vec3 *xyz, double L, double Le,
-		int j1, int j2, float Ax, float Asy, float Asz, float J,
-		float Iy, float Iz, float E, float G, float p, double *D,
-		int shear, int geom, double *axial_strain
+	double *s, int M, vec3 *xyz, double L, double Le,
+	int j1, int j2, float Ax, float Asy, float Asz, float J,
+	float Iy, float Iz, float E, float G, float p, double *D,
+	int shear, int geom, double *axial_strain
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord Xformn	*/
 		d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12,
@@ -590,10 +591,10 @@ void member_force(
 EQUILIBRIUM  -  perform an equilibrium check, F returned as reactions   18sep02
 ------------------------------------------------------------------------------*/
 void equilibrium(	
-		vec3 *xyz,
-		double *L, int *J1, int *J2, double *F, int *R, float *p,
-		double **Q, double **feF, int nE, int DoF, double *err,
-		int verbose
+	vec3 *xyz,
+	double *L, int *J1, int *J2, double *F, int *R, float *p,
+	double **Q, double **feF, int nE, int DoF, double *err,
+	int verbose
 ){
 	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
 		f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12,
@@ -686,13 +687,13 @@ void equilibrium(
 ASSEMBLE_M  -  assemble global mass matrix from element mass & inertia  24nov98
 ------------------------------------------------------------------------------*/
 void assemble_M(
-		double **M, int DoF, int nJ, int nE,
-		vec3 *xyz, float *r, double *L,
-		int *J1, int *J2,
-		float *Ax, float *Jx, float *Iy, float *Iz, float *p,
-		float *d, float *BMs,
-		float *JMs, float *JMx, float *JMy, float *JMz,
-		int lump, int debug
+	double **M, int DoF, int nJ, int nE,
+	vec3 *xyz, float *r, double *L,
+	int *J1, int *J2,
+	float *Ax, float *Jx, float *Iy, float *Iz, float *p,
+	float *d, float *BMs,
+	float *JMs, float *JMx, float *JMy, float *JMz,
+	int lump, int debug
 ){
 	double  **m,	    /* element mass matrix in global coord */
 		**dmatrix();
@@ -720,9 +721,9 @@ void assemble_M(
 	for ( i = 1; i <= nE; i++ ) {
 
 		if ( lump )	lumped_M ( m, xyz, L[i], J1[i], J2[i],
-				Ax[i], Jx[i], Iy[i], Iz[i], d[i], BMs[i], p[i]);
+				Ax[i], Jx[i], Iy[i], Iz[i], p[i], d[i], BMs[i]);
 		else		consistent_M ( m, xyz,r,L[i], J1[i], J2[i],
-				Ax[i], Jx[i], Iy[i], Iz[i], d[i], BMs[i], p[i]);
+				Ax[i], Jx[i], Iy[i], Iz[i], p[i], d[i], BMs[i]);
 
 		if (debug) {
 			res = sprintf(mass_fn,"m_%03d",i);
@@ -763,9 +764,9 @@ void assemble_M(
 LUMPED_M  -  space frame element lumped mass matrix in global coordnates 7apr94
 ------------------------------------------------------------------------------*/
 static void lumped_M(
-	double **m, vec3 *xyz,
-	double L, int j1, int j2, float Ax, float J, float Iy, float Iz,
-	float d, float p, float BMs
+	double **m, vec3 *xyz, double L,
+	int j1, int j2, float Ax, float J, float Iy, float Iz, float p,
+	float d, float BMs
 ){
 	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,     /* coord Xformn */
 		t, ry,rz, po;	/* translational, rotational & polar inertia */
@@ -800,9 +801,9 @@ CONSISTENT_M  -  space frame consistent mass matrix in global coordnates 2oct97
 		 does not include shear deformations
 ------------------------------------------------------------------------------*/
 void consistent_M(
-		double **m, vec3 *xyz, float *r, double L,
-		int j1, int j2, float Ax, float J, float Iy, float Iz, float d,
-		float BMs, float p
+	double **m, vec3 *xyz, float *r, double L,
+	int j1, int j2, float Ax, float J, float Iy, float Iz, float p, 
+	float d, float BMs
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9,     /* coord Xformn */
 		t, ry, rz, po;	/* translational, rotational & polar inertia */
@@ -843,14 +844,14 @@ void consistent_M(
 	m[11][5] = m[5][11]  = -L*L*t/140. - ry*L/30.;
 	m[12][6] = m[6][12]  = -L*L*t/140. - rz*L/30.;
 
+			/* rotatory inertia of extra beam mass is neglected */
+
+	for (i=1; i<=3; i++)	m[i][i] += 0.5*BMs;
+	for (i=7; i<=9; i++)	m[i][i] += 0.5*BMs;
+
 #ifdef MATRIX_DEBUG
 	save_dmatrix ( 12, 12, m, "mo" );	/* element mass matrix */
 #endif
-
-			/* rotatory inertia of extra beam mass is neglected */
-
-	for (i=1; i<=3; i++)	m[i][i] += BMs/2.;
-	for (i=7; i<=9; i++)	m[i][i] += BMs/2.;
 
 	atma(t1,t2,t3,t4,t5,t6,t7,t8,t9, m, r[j1],r[j2]);	/* globalize */
 
@@ -888,10 +889,10 @@ ATMA  -  perform the coordinate transformation from local to global 	6jan96
          include effects of a finite joint radii, r1 and r2.            9dec04
 ------------------------------------------------------------------------------*/
 void atma(
-		double t1, double t2, double t3,
-		double t4, double t5, double t6,
-		double t7, double t8, double t9,
-		double **m, float r1, float r2
+	double t1, double t2, double t3,
+	double t4, double t5, double t6,
+	double t7, double t8, double t9,
+	double **m, float r1, float r2
 ){
 	double	**a, **ma, **dmatrix();
 	int	i,j,k;
@@ -965,7 +966,7 @@ void atma(
 CONDENSE - static condensation of stiffness matrix from NxN to nxn    30aug01
 ------------------------------------------------------------------------------*/
 void condense(
-		double **A, int N, int *q, int n, double **Ac, int verbose
+	double **A, int N, int *q, int n, double **Ac, int verbose
 ){
 	double	**Arr, **Arq;
 	int	i,j,k, ri,rj,qi,qj, ok, 
@@ -1027,10 +1028,10 @@ GUYAN  -   generalized Guyan reduction of mass and stiffness matrices    6jun07
            AIAA Journal, Vol. 3, No. 2 (1965) p 380.
 -----------------------------------------------------------------------------*/
 void guyan(
-		double **M, double **K, int N,
-		int *q, int n,
-		double **Mc, double **Kc, double w2, 
-		int verbose
+	double **M, double **K, int N,
+	int *q, int n,
+	double **Mc, double **Kc, double w2, 
+	int verbose
 ){
 	double	**Drr, **Drq, **invDrrDrq, **T;
 	int	i,j,k, ri,rj,qj, ok, 
@@ -1106,9 +1107,9 @@ DYN_CONDEN - dynamic condensation of mass and stiffness matrices    8oct01
 WARNING: Kc and Mc may be ill-conditioned, and xyzsibly non-positive def.
 -----------------------------------------------------------------------------*/
 void dyn_conden(
-		double **M, double **K, int N, int *R, int *p, int n,
-		double **Mc, double **Kc, double **V, double *f, int *m,
-		int verbose
+	double **M, double **K, int N, int *R, int *p, int n,
+	double **Mc, double **Kc, double **V, double *f, int *m,
+	int verbose
 ){
 	double	**P, **invP,
 		traceM = 0, traceMc = 0, 
@@ -1253,9 +1254,9 @@ AIXAI  -  calculate quadratic form with inverse matrix    inv(A) * X * inv(A)
           A is n by n    X is n by n                                    15sep01
 ------------------------------------------------------------------------------*/
 void aixai ( A, X, n, verbose )
-double	**A, **X;
-int	n;
-int	verbose;
+	double	**A, **X;
+	int	n;
+	int	verbose;
 {
 	double	*diag, *b, *x, **Ai, **XAi, Aij, error;
 	int	i,j,k, ok; 

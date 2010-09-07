@@ -67,13 +67,16 @@ rm -rf %{buildroot}
 # ChangeLog is now maintained in ChangeLog.txt. Make your
 # changes there.
 #
-*Tue Aug 09 2010 Henri Gavin <.> 0.20100105
+*Wed Aug 12 2010 Henri Gavin <.> 0.20100105
+- add wxWidgets link to TODO.txt
+
+*Tue Aug 10 2010 Henri Gavin <.> 0.20100105
 - add extra beam mass to element mass matrix prior to coordinate transformation
 - better checking of symmetry of consistent mass matrix
 - better checking of symmetry of geometric stiffness matrix
 - debug option writes all element mass and stiffness matrices to disk
 
-*Mon Aug 08 2010 Henri Gavin <.> 0.20100105
+*Mon Aug 09 2010 Henri Gavin <.> 0.20100105
 - add plot formatting ... 'set size ratio -1'  for equal XY plot scaling
 - improve and simplify plot axis scaling for 3D animations
 - add "-z" command line option to force 3D plotting

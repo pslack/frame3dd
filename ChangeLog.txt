@@ -1,3 +1,6 @@
+*Tue Sep  7 2010 Henri Gavin <.> 0.20100105
+- bug fix in call to lumped_M (switched beam mass BMs and roll angle p) 
+
 *Wed Aug 12 2010 Henri Gavin <.> 0.20100105
 - add wxWidgets link to TODO.txt
 
