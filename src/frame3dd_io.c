@@ -291,7 +291,7 @@ void display_help()
  fprintf(stderr,"  -q            suppress screen output except for warning messages\n");
  fprintf(stderr,"  -s  On|Off    On: include shear deformation or Off: neglect ...\n");
  fprintf(stderr,"  -g  On|Off    On: include geometric stiffness or Off: neglect ...\n");
- fprintf(stderr,"  -e <value>    level of deformation exaggeration for Gnuplot output\n");
+ fprintf(stderr,"  -e <value>    static deformation exaggeration factor for Gnuplot output\n");
  fprintf(stderr,"  -z            force X-Y-Z plotting\n");
  fprintf(stderr,"  -l  On|Off    On: lumped mass matrix or Off: consistent mass matrix\n");
  fprintf(stderr,"  -f <value>    modal frequency shift for unrestrained structures\n");
