@@ -1,3 +1,6 @@
+*Wed Nov 10 2010 Henri Gavin <.> 0.20100105
+- improve comments and documentation on the '-e' command line flag
+
 *Tue Nov  9 2010 Henri Gavin <.> 0.20100105
 - added program name, description, url and author to LICENSE.txt
 

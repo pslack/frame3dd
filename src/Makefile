@@ -44,5 +44,5 @@ clean :
 	rm -rf *.o
 
 install :
-	mv frame3dd ..
+	mv frame3dd /usr/local/bin/.
 

@@ -2474,8 +2474,7 @@ frame3dd  InFile   OutFile
 frame3dd -i InFile -o OutFile [OPTIONS]
 </pre>
 
- ... where <tt>[OPTIONS]</tt> over-rides values in the Input Data file and includes
-     one or more of the following:
+ ... where <tt>[OPTIONS]</tt> over-rides values in the Input Data file and can include one or more of the following:
 </p>
 
 <pre>
@@ -2491,7 +2490,7 @@ frame3dd -i InFile -o OutFile [OPTIONS]
   -x            suppress writing of 't' or 'c' for sign of axial forces
   -s  On|Off    On: include shear deformation or Off: neglect ...
   -g  On|Off    On: include geometric stiffness or Off: neglect ...
-  -e  value     level of deformation exaggeration for Gnuplot output
+  -e  value     static deformation exaggeration factor for Gnuplot output
   -z            force X-Y-Z plotting 
   -l  On|Off    On: lumped mass matrix or Off: consistent mass matrix
   -f  value     modal frequency shift for unrestrained structures

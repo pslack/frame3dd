@@ -169,7 +169,7 @@ void parse_options (
 				 exit(4);
 				}
 				break;
-			case 'e':		/* exaggeration factor */
+			case 'e':		/* static mesh exagg. factor */
 				*exagg_flag = atof(optarg);
 				break;
 			case 'z':		/* force 3D plotting */

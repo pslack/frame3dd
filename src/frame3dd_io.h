@@ -140,7 +140,7 @@ void read_run_data (
 	char plotpath[],/**< file name for Gnuplot script		*/
 	char infcpath[],/**< file name for internal force data		*/
 	double *exagg_static,/**< factor for static displ. exaggeration	*/
-	double exagg_flag, /**< command-line over-ride			*/
+	double exagg_flag, /**< static exagg. command-line over-ride	*/
 	float *dx,	/**< frame element increment for internal forces*/
 	int *anlyz,	/**< 1: perform elastic analysis, 0: don't	*/
 	int anlyz_flag,	/**< command-line over-ride			*/
