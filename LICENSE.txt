@@ -1,3 +1,9 @@
+This is the License for: 
+FRAME3DD:
+static and dynamic structural analysis of 2D and 3D frames and trusses with elastic and geometric stiffness.
+
+Copyright (C) 1992  Henri P. Gavin
+
 GNU GENERAL PUBLIC LICENSE 
 
 Version 3, 29 June 2007 
