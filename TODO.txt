@@ -28,7 +28,7 @@ but we can not yet actually calculate using the parsed data.
 
 * Spectral modal superposition
 
-* Linearly tapered beam elements 
+* Linearly tapered frame elements 
 
 * Convert 'save_matrix' to output files in Matrix Market format for easier
 import into other programs.

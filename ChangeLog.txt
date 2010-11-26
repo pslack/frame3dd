@@ -1,3 +1,7 @@
+*Fri Nov 26 2010 Henri Gavin <.> 0.20100105
+- updated user-manual.html with Gnuplot links to www.gnuplot.info
+and removed links to http://www.duke.edu/~hpgavin/gnuplot.html
+
 *Wed Nov 10 2010 Henri Gavin <.> 0.20100105
 - improve comments and documentation on the '-e' command line flag
 
