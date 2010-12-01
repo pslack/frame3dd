@@ -92,7 +92,7 @@ zip -r Frame3DD_$(echo $VERSION)_src.zip Frame3DD/doc/*
 
 #rm Frame3DD_$(date +%Y%m%d).zip
 rm Frame3DD_$(echo $VERSION).zip
-rm -rf Frame3DD
+#rm -rf Frame3DD
 
 echo "Frame3DD executable .zip archive complete"
 
@@ -101,16 +101,15 @@ cd ..
 # assemble .ZIP files for Frame3dd source code distribution release
 
 # clean out prior distribution files
-echo "cleaning out prior distribution files ... "
-rm -rf dist/Frame3DD
+#echo "cleaning out prior distribution files ... "
+#rm -rf dist/Frame3DD
 
 # make directory structure for distribution .ZIP files in the ./dist directory
-echo "creating directory structure for new distribution ... "
-mkdir dist/Frame3DD
+echo "creating source code directory structure for new distribution ... "
 mkdir dist/Frame3DD/src
 mkdir dist/Frame3DD/src/microstran
 
-# copy documentation
+# copy source code
 echo "copying source code ... "
 cp --preserve=mode,timestamps src/*.c               dist/Frame3DD/src/.
 cp --preserve=mode,timestamps src/*.h               dist/Frame3DD/src/.
@@ -124,16 +123,13 @@ cp --preserve=mode,timestamps LICENSE.txt           dist/Frame3DD/.
 cp --preserve=mode,timestamps README.txt            dist/Frame3DD/.
 cp --preserve=mode,timestamps README-win32.txt      dist/Frame3DD/.
 
-# make a Frame3DD/temp directory
-mkdir dist/Frame3DD/temp
-
 # assemble the .zip file
 echo "assembling .zip file ... "
 cd dist
 # zip -r Frame3DD_$(date +%Y%m%d)_src.zip Frame3DD/*
 zip -r Frame3DD_$(echo $VERSION)_src.zip Frame3DD/*
 
-echo "Frame3DD .zip archive complete"
+echo "Frame3DD source code .zip archive complete"
 
 rm -rf Frame3DD
 
