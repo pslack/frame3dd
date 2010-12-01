@@ -1,11 +1,14 @@
 
-FRAME3DD - README for Windows users
------------------------------------
+FRAME3DD - README FOR WINDOWS USERS AND DEVELOPERS
+--------------------------------------------------
 
 This README file accompanies the binary packaged version of FRAME3DD for
 the Windows platform.
 
 See 'README.txt' for general information.
+
+NOTES FOR WINDOWS USERS
+-----------------------
 
 NOTE: FRAME3DD is a *command line* program. It processes an input text file
 and adds output data at the end of that file.
@@ -36,8 +39,30 @@ c:\Documents and Setttings\yourname\frame3dd
 (providing you have edited the input files so that they do not specify
 absolute paths).
 
-NOTES ON THE VIEWER PROGRAM
----------------------------
+
+NOTES FOR WINDOWS DEVELOPERS
+----------------------------
+
+As of December 2010 Frame3DD writes text to the terminal in color
+using ANSI.SYS Escape sequences.   The code for these Escape 
+sequences is in hpgUtils.c.   
+
+"Console windows in Windows versions based on NT (Windows NT 4.0, Windows 2000,
+Windows XP, Windows Server 2003, Windows Vista and Windows Server 2008)
+do not support ANSI Escape sequences at all."
+
+http://en.wikipedia.org/wiki/ANSI_escape_code#Windows_and_DOS
+
+Therefore, when compiling Windows executables of Frame3DD, line 28 of
+hpgUtils.h should be ...
+
+#define ANSI_SYS        0 
+
+... to disable the ANSI.SYS Escape sequences.  
+
+
+NOTES ON THE MICROSTRAN .ARC VIEWER PROGRAM
+-------------------------------------------
 
 The Windows installer includes a viewer for Microstran .ARC files. For this
 viewer to run correctly, you must do a bit of work.
