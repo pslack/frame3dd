@@ -23,7 +23,7 @@
 Import('env')
 
 srcs = [
-	'frame3dd.c','lu_dcmp.c','ldl_dcmp.c','nrutil.c','eig.c',
+	'frame3dd.c','lu_dcmp.c','ldl_dcmp.c','nrutil.c','eig.c','hpgUtils.c',
 	'frame3dd_io.c', 'coordtrans.c'
 ]
 

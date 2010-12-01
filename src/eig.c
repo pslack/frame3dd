@@ -36,6 +36,7 @@
 #include "eig.h"
 #include "ldl_dcmp.h"
 #include "common.h" 
+#include "hpgUtils.h"
 #include "nrutil.h"
 
 /* #define EIG_DEBUG */
@@ -84,12 +85,11 @@ void subspace(
 		modes,
 		disp = 0,	/* display convergence info.	*/
 		*idx;
+	char	errMsg[MAXL];
 	
 	if ( m > n ) {
-		fprintf(stderr,"SUBSPACE: Number of eigen-values must be less");
-		fprintf(stderr," than the problem dimension.\n");
-		fprintf(stderr,"Desired number of eigen-values=%d \n", m);
-		fprintf(stderr,"Dimension of the problem= %d \n", n);
+		sprintf(errMsg,"subspace: Number of eigen-values must be less than the problem dimension.\n Desired number of eigen-values=%d \n Dimension of the problem= %d \n", m, n);
+		errorMsg(errMsg);
 		exit(32);
 	}
 
@@ -120,7 +120,8 @@ void subspace(
 
 	for (i=1; i<=n; i++) {
 		if ( M[i][i] <= 0.0 )  {
-		 fprintf(stderr," subspace: M[%d][%d] = %e \n", i,i, M[i][i] );
+		 sprintf(errMsg," subspace: M[%d][%d] = %e \n", i,i, M[i][i] );
+		 errorMsg(errMsg);
 		 exit(32);
 		}
 		d[i] = K[i][i] / M[i][i];
@@ -195,8 +196,8 @@ void subspace(
 		eigsort ( w, V, n, m );
 
 		if (w[modes] == 0.0) {
-		 fprintf(stderr," subspace: Zero frequency found! \n");
-		 fprintf(stderr," subspace: w[%d] = %e \n", modes, w[modes] );
+		 sprintf(errMsg," subspace: Zero frequency found! \n w[%d] = %e \n", modes, w[modes] );
+		 errorMsg(errMsg);
 		 exit(32);
 		}
 		error = fabs( w[modes] - w_old ) / w[modes];
@@ -207,8 +208,8 @@ void subspace(
 		w_old = w[modes];
 
 		if ( *iter > 1000 ) {
-		    fprintf(stderr,"  subspace(): Iteration limit exceeded\n");
-		    fprintf(stderr," rel. error = %e > %e\n", error, tol );
+		    sprintf(errMsg,"  subspace: Iteration limit exceeded\n rel. error = %e > %e\n", error, tol );
+		    errorMsg(errMsg);
 		    exit(32);
 		}
 
@@ -386,6 +387,8 @@ void stodola (
 		disp = 0,	/* 1: display convergence error; 0: dont*/
 		i,j,k;
 
+	char	errMsg[MAXL];
+
 	D  = dmatrix(1,n,1,n);
 	d  = dvector(1,n);
 	u  = dvector(1,n);
@@ -399,8 +402,8 @@ void stodola (
 
 	ldl_dcmp ( K, n, u, v, v, 1, 0, ok );	/* use L D L' decomp	*/
 	if (*ok<0) {
-		fprintf(stderr," Make sure that all six");
-		fprintf(stderr," rigid body translation are restrained.\n");
+		sprintf(errMsg," Make sure that all six rigid body translation are restrained.\n");
+		errorMsg(errMsg);
 		exit(32); 
 	}
 						/* calculate  D = K^(-1) M */
@@ -481,9 +484,8 @@ void stodola (
 		(*iter)++;
 
 		if ( *iter > 1000 ) {
-		    fprintf(stdout,"  stodola(): Iteration limit exceeded\n");
-		    fprintf(stdout," rel. error = %e > %e\n",
-						(fabs(RQ - RQold)/RQ) , tol );
+		    sprintf(errMsg,"  stodola: Iteration limit exceeded\n  rel. error = %e > %e\n", (fabs(RQ - RQold)/RQ) , tol );
+		    errorMsg(errMsg);
 		    exit(32);
 		}
 

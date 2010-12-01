@@ -64,9 +64,29 @@ rm -rf %{buildroot}
 
 %changelog
 #
-# ChangeLog is now maintained in ChangeLog.txt. Make your
-# changes there.
+# ChangeLog is now maintained in ChangeLog.txt. Make your changes there.
 #
+*Wed Dec 1 2010 Henri Gavin <.> 0.20100105
+- fixed bug related to linear analysis of temperature loads
+- added ascii (ansi.sys) color to screen output hpgUtils.c hpgUtils.h
+
+*Fri Nov 26 2010 Henri Gavin <.> 0.20100105
+- updated user-manual.html with Gnuplot links to www.gnuplot.info
+and removed links to http://www.duke.edu/~hpgavin/gnuplot.html
+
+*Wed Nov 10 2010 Henri Gavin <.> 0.20100105
+- improve comments and documentation on the '-e' command line flag
+
+*Tue Nov  9 2010 Henri Gavin <.> 0.20100105
+- added program name, description, url and author to LICENSE.txt
+
+*Sat Oct 10 2010 Henri Gavin <.> 0.20100105
+- fix typo re: local section axes in section 7.6 of manual
+- set value of steel density in exA.3dd, exC.3dd, exD.3dd, and exG.3dd to 7.33e-7 k/in^3/g
+
+*Tue Sep  7 2010 Henri Gavin <.> 0.20100105
+- bug fix in call to lumped_M (switched beam mass BMs and roll angle p) 
+
 *Wed Aug 12 2010 Henri Gavin <.> 0.20100105
 - add wxWidgets link to TODO.txt
 

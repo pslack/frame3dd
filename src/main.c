@@ -50,6 +50,7 @@ For compilation/installation, see README.txt.
 #include "frame3dd.h"
 #include "frame3dd_io.h"
 #include "eig.h"
+#include "hpgUtils.h"
 #include "nrutil.h"
 
 
@@ -63,140 +64,145 @@ For compilation/installation, see README.txt.
  int main ( int argc, char *argv[] ) {
 #endif
 
-	char	IN_file[FILENMAX],	/* the input  data filename	*/
-		OUT_file[FILENMAX],	/* the output data filename	*/
-		title[256],		/* the title of the analysis	*/
-		meshpath[FRAME3DD_PATHMAX] = "EMPTY_MESH", /* mesh data path */
-		plotpath[FRAME3DD_PATHMAX] = "EMPTY_PLOT", /* plot file path */
-		infcpath[FRAME3DD_PATHMAX] = "EMPTY_INFC", /* int  file path */
-		modepath[FRAME3DD_PATHMAX] = "EMPTY_MODE", /* mode data path */
-		temppath[FRAME3DD_PATHMAX] = "EMPTY_TEMP"; /* temp data path */
+	char	IN_file[FILENMAX],	// the input  data filename
+		OUT_file[FILENMAX],	// the output data filename
+		title[MAXL],		// the title of the analysis
+		errMsg[MAXL],		// the text of an error message
+		meshpath[FRAME3DD_PATHMAX] = "EMPTY_MESH", // mesh data path
+		plotpath[FRAME3DD_PATHMAX] = "EMPTY_PLOT", // plot file path
+		infcpath[FRAME3DD_PATHMAX] = "EMPTY_INFC", // int  file path
+		modepath[FRAME3DD_PATHMAX] = "EMPTY_MODE", // mode data path
+		strippedInputFile[FRAME3DD_PATHMAX] = "EMPTY_TEMP"; // temp data path
 
-	FILE	*fp;		/* input and output file pointer	*/
+	FILE	*fp;		// input and output file pointer
 
-	vec3	*xyz;		/* X,Y,Z joint coordinates (global)	*/
+	vec3	*xyz;		// X,Y,Z joint coordinates (global)
 
-	float	*r,		/* joint size radius, for finite sizes	*/
-		*Ax,*Asy, *Asz,	/* cross section areas, incl. shear	*/
-		*Jx,*Iy,*Iz,	/* section inertias			*/
-		*E, *G,		/* elastic modulus and shear moduli	*/
-		*p,		/* roll of each member, radians		*/
-		***U,		/* uniform distributed member loads	*/
-		***W,		/* trapizoidal distributed member loads	*/
-		***P,		/* member concentrated loads		*/
-		***T,		/* member temperature  loads		*/
-		**Dp,		/* prescribed joint displacements	*/
-		*d, *BMs,	/* member densities and extra inertia	*/
-		*JMs, 		/* mass of a joint			*/
-		*JMx,*JMy,*JMz,	/* inertia of a joint in global coord	*/
-		gX[_NL_],	/* gravitational acceleration in global X */
-		gY[_NL_],	/* gravitational acceleration in global Y */
-		gZ[_NL_],	/* gravitational acceleration in global Z */
-		pan=1.0,	/* >0: pan during animation; 0: don't	*/
-		dx=1.0;		/* x-increment for internal force data	*/
+	float	*r,		// joint size radius, for finite sizes
+		*Ax,*Asy, *Asz,	// cross section areas, incl. shear
+		*Jx,*Iy,*Iz,	// section inertias		
+		*E, *G,		// elastic modulus and shear moduli
+		*p,		// roll of each member, radians	
+		***U,		// uniform distributed member loads
+		***W,		// trapizoidal distributed member loads
+		***P,		// member concentrated loads	
+		***T,		// member temperature  loads
+		**Dp,		// prescribed joint displacements
+		*d, *BMs,	// member densities and extra inertia
+		*JMs, 		// mass of a joint
+		*JMx,*JMy,*JMz,	// inertia of a joint in global coord	
+		gX[_NL_],	// gravitational acceleration in global X 
+		gY[_NL_],	// gravitational acceleration in global Y
+		gZ[_NL_],	// gravitational acceleration in global Z
+		pan=1.0,	// >0: pan during animation; 0: don't
+		dx=1.0;		// x-increment for internal force data
 
-	double	**K, **Ks=NULL,	/* global stiffness matrix		*/
-		traceK = 0.0,	/* trace of the global stiffness matrix	*/
-		**M = NULL,	/* global mass matrix			*/
-		traceM = 0.0,	/* trace of the global mass matrix	*/
-		**Fo_mech,	/* mechanical load vectors,  load cases	*/
-		**Fo_temp,	/* thermal load vectors, all load cases	*/
-		**Fo, *F,	/* general load vectors			*/
-		***feF_mech,	/* fixed end forces from mech loads	*/
-		***feF_temp,	/* fixed end forces from temp loads	*/
-		**feF,		/* a general set of fixed end forces	*/
-		*D, *dD,	/* displacement and displ increment	*/
-		//dDdD = 0.0,	/* dD' * dD				*/
-		*Fe = NULL,	/* equilibrium error in nonlinear anlys	*/
-		*L  = NULL,	/* joint-to-joint length of each element*/
-		*Le = NULL,	/* effcve lngth, accounts for joint size*/
-		**Q = NULL,	/* local member joint end-forces	*/
-		tol = 1.0e-9,	/* tolerance for modal convergence	*/
-		shift = 0.0,	/* shift-factor for rigid-body-modes	*/
-		struct_mass,	/* mass of structural system		*/
-		total_mass,	/* total structural mass and extra mass */
-		*f  = NULL,	/* resonant frequencies			*/
-		**V = NULL,	/* resonant mode-shapes			*/
-		error = 1.0,	/* rms equilibrium error and reactions	*/
-		Cfreq = 0.0,	/* frequency used for Guyan condensation*/
-		**Kc, **Mc,	/* condensed stiffness and mass matrices*/
-		exagg_static=10,/* exaggerate static displ. in mesh data*/
-		exagg_modal=10;	/* exaggerate modal displ. in mesh data	*/
+	double	**K=NULL, **Ks=NULL, // global stiffness matrix	
+		traceK = 0.0,	// trace of the global stiffness matrix
+		**M = NULL,	// global mass matrix
+		traceM = 0.0,	// trace of the global mass matrix
+		**Fo_mech,	// mechanical load vectors,  load cases	
+		**Fo_temp,	// thermal load vectors, all load cases
+		**Fo, *F,	// general load vectors	
+		***feF_mech,	// fixed end forces from mech loads
+		***feF_temp,	// fixed end forces from temp loads
+		**feF,		// a general set of fixed end forces
+		*D, *dD,	// displacement and displ increment
+		//dDdD = 0.0,	// dD' * dD
+		*Fe = NULL,	// equilibrium error in nonlinear anlys
+		*L  = NULL,	// joint-to-joint length of each element
+		*Le = NULL,	// effcve lngth, accounts for joint size
+		**Q = NULL,	// local member joint end-forces
+		tol = 1.0e-9,	// tolerance for modal convergence
+		shift = 0.0,	// shift-factor for rigid-body-modes
+		struct_mass,	// mass of structural system	
+		total_mass,	// total structural mass and extra mass 
+		*f  = NULL,	// resonant frequencies	
+		**V = NULL,	// resonant mode-shapes
+		error = 1.0,	// rms equilibrium error and reactions
+		Cfreq = 0.0,	// frequency used for Guyan condensation
+		**Kc, **Mc,	// condensed stiffness and mass matrices
+		exagg_static=10,// exaggerate static displ. in mesh data
+		exagg_modal=10;	// exaggerate modal displ. in mesh data
 
-	int	nJ=0,		/* number of Joints 			*/
-		nE=0,		/* number of frame Elements		*/
-		nL=0, lc=0,	/* number of Load cases			*/
-		DoF=0, i, j, n,	/* number of Degrees of Freedom		*/
-		nR=0,		/* number of restrained joints		*/
-		nD[_NL_],	/* number of prescribed nodal displ'nts	*/
-		nF[_NL_],	/* number of loaded joints		*/
-		nU[_NL_],	/* number of members w/ unifm dist loads*/
-		nW[_NL_],	/* number of members w/ trapz dist loads*/
-		nP[_NL_],	/* number of members w/ conc point loads*/
-		nT[_NL_],	/* number of members w/ temp. changes	*/
-		nI=0,		/* number of joints w/ extra inertia	*/
-		nX=0,		/* number of elemts w/ extra mass	*/
-		nC=0,		/* number of condensed joints		*/
-		*J1, *J2,	/* begin and end joint numbers		*/
-		shear=0,	/* indicates shear deformationi		*/
-		geom=0,		/* indicates  geometric nonlinearity	*/
-		anlyz=1,	/* 1: stiffness analysis, 0: data check	*/
-		*R, sumR,	/* reaction data, total no. of reactions*/
-		nM=0,		/* number of desired modes		*/
-		Mmethod,	/* 1: Subspace Jacobi, 2: Stodola	*/
-		nM_calc,	/* number of modes to calculate		*/
-		lump=1,		/* 1: lumped, 0: consistent mass matrix */
-		iter=0,		/* number of iterations			*/
-		ok=1,		/* number of (-ve) diag. terms of L D L' */
-		anim[20],	/* the modes to be animated		*/
-		Cdof=0,		/* number of condensed degrees o freedom*/
-		Cmethod=0,	/* matrix condensation method		*/
-		*q,		/* vector of DoF's to condense		*/
-		*m,		/* vector of modes to condense		*/
-		filetype=0,	/* 1 if .CSV, 2 if file is Matlab	*/
-		debug=0,	/* 1: debugging screen output, 0: none	*/
-		verbose=1;	/* 1: copious screen output, 0: none	*/
+	int	nJ=0,		// number of Joints
+		nE=0,		// number of frame Elements
+		nL=0, lc=0,	// number of Load cases
+		DoF=0, i, j, n,	// number of Degrees of Freedom
+		nR=0,		// number of restrained joints
+		nD[_NL_],	// number of prescribed nodal displ'nts
+		nF[_NL_],	// number of loaded joints
+		nU[_NL_],	// number of members w/ unifm dist loads
+		nW[_NL_],	// number of members w/ trapz dist loads
+		nP[_NL_],	// number of members w/ conc point loads
+		nT[_NL_],	// number of members w/ temp. changes
+		nI=0,		// number of joints w/ extra inertia
+		nX=0,		// number of elemts w/ extra mass
+		nC=0,		// number of condensed joints
+		*J1, *J2,	// begin and end joint numbers
+		shear=0,	// indicates shear deformation
+		geom=0,		// indicates  geometric nonlinearity
+		anlyz=1,	// 1: stiffness analysis, 0: data check	
+		*R, sumR,	// reaction data, total no. of reactions
+		nM=0,		// number of desired modes
+		Mmethod,	// 1: Subspace Jacobi, 2: Stodola
+		nM_calc,	// number of modes to calculate
+		lump=1,		// 1: lumped, 0: consistent mass matrix
+		iter=0,		// number of iterations	
+		ok=1,		// number of (-ve) diag. terms of L D L'
+		anim[20],	// the modes to be animated
+		Cdof=0,		// number of condensed degrees o freedom
+		Cmethod=0,	// matrix condensation method
+		*q,		// vector of DoF's to condense
+		*m,		// vector of modes to condense
+		filetype=0,	// 1 if .CSV, 2 if file is Matlab
+		debug=0,	// 1: debugging screen output, 0: none
+		verbose=1;	// 1: copious screen output, 0: none
 
-	int	shear_flag= -1,	/*   over-ride input file value		*/
-		geom_flag = -1,	/*   over-ride input file value		*/
-		anlyz_flag= -1,	/*   over-ride input file value		*/
-		D3_flag = -1,	/*   over-ride 3D plotting check	*/
-		lump_flag = -1,	/*   over-ride input file value		*/
-		modal_flag= -1,	/*   over-ride input file value		*/
-		write_matrix=-1,/*   write stiffness and mass matrix	*/
-		axial_sign=-1,  /*   suppress 't' or 'c' in output data */
-		condense_flag=-1; /* over-ride input file value		*/
+	int	shear_flag= -1,	//   over-ride input file value	
+		geom_flag = -1,	//   over-ride input file value
+		anlyz_flag= -1,	//   over-ride input file value
+		D3_flag = -1,	//   over-ride 3D plotting check
+		lump_flag = -1,	//   over-ride input file value
+		modal_flag= -1,	//   over-ride input file value	
+		write_matrix=-1,//   write stiffness and mass matrix
+		axial_sign=-1,  //   suppress 't' or 'c' in output data
+		condense_flag=-1; // over-ride input file value	
 
-	int	sfrv=0;		/* *scanf return value for err checking	*/
+	int	sfrv=0;		// *scanf return value for err checking
 
-	double	exagg_flag=-1.0, /*  over-ride input file value		*/
-		tol_flag  =-1.0, /*  over-ride input file value		*/
-		shift_flag=-1.0; /*  over-ride input file value		*/
+	double	exagg_flag=-1.0, // over-ride input file value
+		tol_flag  =-1.0, // over-ride input file value
+		shift_flag=-1.0; // over-ride input file value
 
-	float	pan_flag = -1.0; /*  over-ride input file value		*/
+	float	pan_flag = -1.0; // over-ride input file value
 
-	char	extn[16];	/* Input Data file name extension	*/
+	char	extn[16];	// Input Data file name extension
 
 
 	parse_options ( argc, argv, IN_file, OUT_file, 
 			&shear_flag, &geom_flag, &anlyz_flag, &exagg_flag, 
 			&D3_flag, 
 			&lump_flag, &modal_flag, &tol_flag, &shift_flag, 
-			&pan_flag, &write_matrix, &axial_sign, &condense_flag, &verbose, &debug);
+			&pan_flag, &write_matrix, &axial_sign, &condense_flag,
+			&verbose, &debug);
 
-	if ( verbose ) {
+	if ( verbose ) { /*  display program name, version and license type */
+		textColor('w','b','b','x');
 		fprintf(stdout,"\n FRAME3DD version: %s\n", VERSION);
 		fprintf(stdout," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
 		fprintf(stdout," http://frame3dd.sf.net\n");
 		fprintf(stdout," GPL Copyright (C) 1992-2010, Henri P. Gavin\n");
 		fprintf(stdout," This is free software with absolutely no warranty.\n");
-		fprintf(stdout," For details, see the GPL license file, LICENSE.txt\n\n");
+		fprintf(stdout," For details, see the GPL license file, LICENSE.txt\n");
+		color(0); fprintf(stdout,"\n");
 	}
 
 	/* open the input data file */
 
-	if ((fp = fopen (IN_file, "r")) == NULL) {
-		fprintf (stdout,"\n ERROR: cannot open file '%s'\n\n", IN_file);
+	if ((fp = fopen (IN_file, "r")) == NULL) { /* open input data file */
+		sprintf (errMsg,"\n ERROR: cannot open input data file '%s'\n", IN_file);
+		errorMsg(errMsg); 
 		display_help();
 		if ( argc == 1 ) {
 			fprintf(stderr," Press the 'Enter' key to close.\n");
@@ -208,24 +214,30 @@ For compilation/installation, see README.txt.
 
 	filetype = get_file_ext( IN_file, extn ); /* .CSV or .FMM or other? */
 
-//	temp_file_location("frame3dd.3dd",temppath,FRAME3DD_PATHMAX);
-	output_path("frame3dd.3dd",temppath,FRAME3DD_PATHMAX,NULL);
+//	temp_file_location("frame3dd.3dd",strippedInputFile,FRAME3DD_PATHMAX);
+	output_path("frame3dd.3dd",strippedInputFile,FRAME3DD_PATHMAX,NULL);
 
-	parse_input(fp, temppath);	/* strip comments from input data */
+	parse_input(fp, strippedInputFile);	/* strip comments from input data */
 	fclose(fp);
 
-	/* open the clean input file */
-	if ((fp = fopen (temppath, "r")) == NULL) {
-		fprintf (stderr,"\n ERROR: cannot open cleaned input file '%s'\n",temppath);
+	if ((fp = fopen (strippedInputFile, "r")) == NULL) { /* open stripped input file */
+		sprintf(errMsg,"\n ERROR: cannot open stripped input data file '%s'\n", strippedInputFile);
+		errorMsg(errMsg); 
 		exit(13);
 	}
 
-	frame3dd_getline(fp, title, 256);
-	if (verbose ) fprintf(stdout," ** %s ** \n\n", title );
+	frame3dd_getline(fp, title, MAXL);
+	if (verbose ) {	/*  display analysis title */
+		textColor('w','g','b','x');
+		fprintf(stdout,"\n");
+		fprintf(stdout," ** %s ** \n", title );
+		color(0);
+		fprintf(stdout,"\n");
+	}
 
 	sfrv=fscanf(fp, "%d", &nJ );		/* number of joints	*/
 	if (sfrv != 1)	sferr("nJ value for number of joints");
-	if ( verbose ) {
+	if ( verbose ) {	/* display nJ */
 		fprintf(stdout," number of joints ");
 		dots(stdout,35);	fprintf(stdout," nJ =%4d ",nJ);
 	}
@@ -245,13 +257,13 @@ For compilation/installation, see README.txt.
 
 	sfrv=fscanf(fp, "%d", &nE );	/* number of frame elements	*/
 	if (sfrv != 1)	sferr("nE value for number of frame elements");
-	if ( verbose ) {
+	if ( verbose ) {	/* display nE */
 		fprintf(stdout," number of frame elements");
 		dots(stdout,28);	fprintf(stdout," nE =%4d ",nE);
 	}
-	if ( nJ > nE + 1) {
+	if ( nJ > nE + 1) {	/* not enough elements */
 		fprintf(stderr,"\n  warning: %d joints and %d members...", nJ, nE );
-		fprintf(stderr," not enough members to connect all joints.\n");
+		fprintf(stderr," not enough elements to connect all joints.\n");
     	}
 
 				/* allocate memory for frame elements ... */
@@ -285,17 +297,18 @@ For compilation/installation, see README.txt.
 
 	sfrv=fscanf(fp, "%d", &nL );	/* number of load cases		*/
 	if (sfrv != 1)	sferr("nL value for number of load cases");
-	if ( verbose ) {
+	if ( verbose ) {	/* display nL */
 		fprintf(stdout," number of load cases ");
 		dots(stdout,31);	fprintf(stdout," nL = %3d \n",nL);
 	}
 
-	if ( nL < 1 ) {
-		fprintf(stderr,"\n ERROR: the number of load cases must be at least 1\n");
+	if ( nL < 1 ) {	/* not enough load cases */
+		errorMsg("\n ERROR: the number of load cases must be at least 1\n"); 
 		exit(101);
 	}
-	if ( nL >= _NL_ ) {
-		fprintf(stderr,"\n ERROR: maximum of %d load cases allowed\n", _NL_-1);
+	if ( nL >= _NL_ ) { /* too many load cases */
+		sprintf(errMsg,"\n ERROR: maximum of %d load cases allowed\n", _NL_-1);
+		errorMsg(errMsg); 
 		exit(102);
 	}
 					/* allocate memory for loads ... */
@@ -338,12 +351,12 @@ For compilation/installation, see README.txt.
 				Q, Fo_mech, Fo_temp, U, W, P, T,
 				Dp, feF_mech, feF_temp, verbose );
 
-	for (i=1; i<=DoF; i++){
+	for (i=1; i<=DoF; i++){	/* combine temp and mech loads into Fo */
 		for (lc=1; lc<=nL; lc++){
 			Fo[lc][i] = Fo_temp[lc][i] + Fo_mech[lc][i];
 		}
 	}
-	if ( verbose ) {
+	if ( verbose ) {	/* display load data complete */
 		printf("                                                     ");
 		printf(" load data ... complete\n");
 	}
@@ -357,7 +370,7 @@ For compilation/installation, see README.txt.
 			modepath,
 			anim, &pan, pan_flag, 
 			verbose, debug );
-	if ( verbose ) {
+	if ( verbose ) {	/* display mass data complete */
 		printf("                                                     ");
 		printf(" mass data ... complete\n");
 	}
@@ -365,7 +378,7 @@ For compilation/installation, see README.txt.
 	read_condensation_data( fp, nJ,nM, &nC, &Cdof, 
 			&Cmethod, condense_flag, q,m, verbose );
 
-	if( nC>0 && verbose ) {
+	if( nC>0 && verbose ) {	/*  display condensation data complete */
 		printf("                                      ");
 		printf(" matrix condensation data ... complete\n");
 	}
@@ -375,8 +388,8 @@ For compilation/installation, see README.txt.
 	/* open the output data file for appending */
 
 	fp = fopen(OUT_file, "a");
-	if(fp==NULL){
-		fprintf(stderr,"Unable to append to output file '%s'!\n",
+	if(fp==NULL) {	/* unable to append to output data file */
+		fprintf(stderr,"Unable to append to output data file '%s'!\n",
 								OUT_file);
 		exit(14);
 	}
@@ -388,10 +401,18 @@ For compilation/installation, see README.txt.
 
 	if ( anlyz ) {			/* solve the problem	*/
 	 srand(time(NULL));
-	 for (lc=1; lc<=nL; lc++) {	/* begin load case loop	*/
+	 for (lc=1; lc<=nL; lc++) {	/* begin load case analysis loop */
 
-		if ( verbose )
-			printf("\n Load Case %d of %d ... \n", lc,nL );
+		if ( verbose ) {	/*  display the load case number */
+			fprintf(stdout,"\n");
+			textColor('y','g','b','x');
+			fprintf(stdout," Load Case %d of %d ... ", lc,nL );
+			fprintf(stdout,"                                          ");
+
+			fflush(stdout);
+			color(0);
+			fprintf(stdout,"\n");
+		}
 
 		for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
 
@@ -403,7 +424,7 @@ For compilation/installation, see README.txt.
 		save_dmatrix ( DoF, DoF, K, "Kf" ); /* free stiffness matrix */
 #endif
 
-		/* apply temperature loads first ... */
+		/* apply temperature loads first, if there are any ... */
 		if (nT[lc] > 0) {
 			if ( verbose )
 				printf(" Linear Elastic Analysis ... Temperature Loads\n");
@@ -418,7 +439,7 @@ For compilation/installation, see README.txt.
 				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
 				shear,geom, Q, debug );
 
-		/* then add mechanical loads ... */
+		/* ... then add mechanical loads, if there are any ...  */
 		if ( nF[lc]>0 || nU[lc]>0 || nW[lc]>0 || nP[lc]>0 || nD[lc]>0 || 
 		     gX[lc] != 0 || gY[lc] != 0 || gZ[lc] != 0 ) {
 			if ( verbose )
@@ -468,9 +489,8 @@ For compilation/installation, see README.txt.
 			for (i=1; i<=DoF; i++)
 				for (j=1; j<=DoF; j++)
 					Ks[i][j] -= Fe[i]*dD[j] / dDdD;
-*/
-
 			apply_reactions ( DoF, R, Dp[lc], Fe, Fe, Ks, 'm' );
+*/
 
 			solve_system ( K, dD, Fe, DoF, &ok, verbose );
 
@@ -495,7 +515,7 @@ For compilation/installation, see README.txt.
 			}
 		}			/* end Newton-Raphson iteration */
 
-		if ( geom ) {
+		if ( geom ) {	/* dealocate Fe and Ks memory */
 			free_dvector(Fe, 1, DoF );
 			free_dmatrix(Ks, 1, DoF, 1, DoF );
 		}
@@ -552,7 +572,7 @@ For compilation/installation, see README.txt.
 	 } /* end load case loop */
 	} else {
 	
-	 if ( verbose ) {
+	 if ( verbose ) {	/* display data check only */
 	 	printf("\n * %s *\n", title );
 	 	printf("  DATA CHECK ONLY.\n");
 	 }
@@ -563,7 +583,7 @@ For compilation/installation, see README.txt.
 	}
 
 
-	if (nM > 0) { /* modal analysis */
+	if (nM > 0) { /* carry out modal analysis */
 
 		if ( verbose ) printf("\n\n Modal Analysis ...\n");
 
@@ -581,13 +601,13 @@ For compilation/installation, see README.txt.
 		save_dmatrix ( DoF, DoF, M, "Mf" );	/* free mass matrix */
 #endif
 
-		for (j=1; j<=DoF; j++) {
+		for (j=1; j<=DoF; j++) { /*  compute traceK and traceM */
 			if ( !R[j] ) {
 				traceK += K[j][j];
 				traceM += M[j][j];
 			}
 		}
-		for (i=1; i<=DoF; i++) {
+		for (i=1; i<=DoF; i++) { /*  modify K and M for reactions */
 			if ( R[i] ) {	/* apply reactions to upper triangle */
 				K[i][i] = traceK * 1e2;
 				M[i][i] = traceM;
@@ -596,12 +616,12 @@ For compilation/installation, see README.txt.
 		    }
 		}
 
-		if ( write_matrix ) {
+		if ( write_matrix ) {	/* write Kd and Md matrices */
 			save_ut_dmatrix ( DoF, K, "Kd" );/* dynamic stff matx */
 			save_ut_dmatrix ( DoF, M, "Md" );/* dynamic mass matx */
 		}
 
-		if(anlyz) {
+		if(anlyz) {	/* subspace or stodola methods */
 			if( Mmethod == 1 )
 				subspace( K, M, DoF, nM_calc, f, V, tol,shift,&iter,&ok, verbose );
 			if( Mmethod == 2 )
@@ -618,7 +638,7 @@ For compilation/installation, see README.txt.
 	fprintf(fp,"\n");
 	fclose (fp);
 
-	if(nM > 0 && anlyz) {
+	if(nM > 0 && anlyz) {	/* write modal analysis results */
 
 		modal_mesh ( IN_file, meshpath, modepath, plotpath, title,
 				nJ,nE, DoF, nM, xyz, L, J1,J2, p,
@@ -683,14 +703,14 @@ For compilation/installation, see README.txt.
 
 	if ( verbose ) printf("\n");
 
-	/* wait for keyboard entry to close the terminal */
-	if ( argc == 1 ) {
+	if ( argc == 1 ) { /* wait for keyboard entry to close the terminal */
 	 fprintf(stderr," The Output Data was appended to %s \n", OUT_file );
 	 fprintf(stderr," A Gnuplot script was written to %s \n", plotpath );
 	 fprintf(stderr," Press the 'Enter' key to close.\n");
 	 (void) getchar();	// clear the buffer ?? 
 	 while( !getchar() ) ;	// wait for the Enter key to be hit 
 	}
+	color(0);
 
 	return(0);
 }

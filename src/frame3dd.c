@@ -363,6 +363,7 @@ int	r;
 APPLY_REACTIONS -  apply fixed joint displacement boundary conditions	30dec08
 The original external load vector, Fo is returned unchanged;
 The load vector modified for prescribed displacements Dp is returned as F
+Prescribed displacements are "mechanican loads" not "temperature loads"  
 ------------------------------------------------------------------------------*/
 void apply_reactions(
 	int DoF, int *R, float *Dp, double *Fo,
@@ -373,20 +374,19 @@ void apply_reactions(
 
 	for (i=1; i<=DoF; i++)  F[i] = Fo[i];
 
-	for (i=1; i<=DoF; i++) {		/* modify the force vector */
+	for (i=1; i<=DoF; i++) {	/* modify the force vector */
 		if ( R[i] ) {
-			if (tm == 'm')	F[i] = Dp[i];
+			if (tm == 'm')	F[i] = Dp[i]; 
 			else		F[i] = 0.0;
 		} else {
-		    for (j=1; j<=DoF; j++) {
-			if ( R[j] ) {
-				if (tm == 'm')	F[i] -= K[i][j]*Dp[j];
-				else		F[i] = 0.0;
+			for (j=1; j<=DoF; j++) {
+				if ( R[j] && tm == 'm' ) {
+					F[i] -= K[i][j]*Dp[j];
 			}
 		    }
 		}
 	}
-			
+
 	for (i=1; i<=DoF; i++) {	/*  modify the stiffness matrix  */
 		if ( R[i] ) {
 			for (j=1; j<=DoF; j++) {

@@ -1,3 +1,7 @@
+*Wed Dec 1 2010 Henri Gavin <.> 0.20100105
+- fixed bug related to linear analysis of temperature loads
+- added ascii (ansi.sys) color to screen output hpgUtils.c hpgUtils.h
+
 *Fri Nov 26 2010 Henri Gavin <.> 0.20100105
 - updated user-manual.html with Gnuplot links to www.gnuplot.info
 and removed links to http://www.duke.edu/~hpgavin/gnuplot.html

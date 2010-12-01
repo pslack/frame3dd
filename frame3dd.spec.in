@@ -64,8 +64,7 @@ rm -rf %{buildroot}
 
 %changelog
 #
-# ChangeLog is now maintained in ChangeLog.txt. Make your
-# changes there.
+# ChangeLog is now maintained in ChangeLog.txt. Make your changes there.
 #
 @CHANGELOG@
 

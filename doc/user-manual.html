@@ -600,7 +600,7 @@ and save it in your home directory.
 <li> Unpack the source code, enter the source directory,
 and build the code, as follows:
 <pre>
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
 </pre>
 </ol>
 
@@ -765,7 +765,7 @@ and save it in your home directory.
 <li> Unpack the source code, enter the source directory,
 and build the code, as follows:
 <pre>
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
 </pre>
 </ol>
 
@@ -2546,6 +2546,7 @@ frame3dd -i InFile -o OutFile -lOff -e100 -p3.4 -z
     ldl_dcmp.c      LDL' decomposition
     lu_dcmp.c       LU decomposition
     coordtrans.c    coordinate transformation
+    hpgUtils.c      ansi.sys color functions
     nrutil.c        dynamic memory allocation
 </pre>
 
@@ -2560,7 +2561,7 @@ and the <a href="http://www.mingw.org/"> MinGW gcc compiler</a>.
 <p>Using GCC, the command to compile is:</p>
 
 <pre>
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c nrutil.c -lm
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
 </pre>
 
 <a name="exitcodes"/><h2>13. Exit code index</h2>
