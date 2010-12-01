@@ -4,6 +4,7 @@
 - The Win32 "Command Prompt" does not recognize ANSI.SYS escape sequences at
 all.
 - the .ZIP source code distribution now includes the examples
+- more efficient .ZIP archiving in .zipdist.sh
 
 *Fri Nov 26 2010 Henri Gavin <.> 0.20100105
 - updated user-manual.html with Gnuplot links to www.gnuplot.info
