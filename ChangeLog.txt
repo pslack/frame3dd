@@ -1,5 +1,5 @@
 *Wed Feb 2 2011 Henri Gavin <.> 0.20100105
-- re-commit after source-forge hack of Jan 28 2011.
+-   re-commit after source-forge hack of Jan 28 2011.
 
 *Thu Dec 23 2010 Henri Gavin <.> 0.20100105
 - add caveat on maximum shear stress in user manual
