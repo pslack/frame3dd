@@ -394,10 +394,29 @@ Or hit <b>CTRL-C</b> to stop the plots at the current plot.
 For Linux and Unix we currently only provide source-code tarball; you must
 build the software yourself.
 -->
-The following instructions work on Ubuntu 8.10 - 9.10
+The following instructions work on Ubuntu 8.10 - 10.10
 and should work with minor changes on any other recent Linux or Unix system.
+There are two options for compiling under Linux:
 </p>
 
+<ol> 
+<li> Compiling using make:
+<ol>
+<li><a href="https://sourceforge.net/projects/frame3dd/files/">
+Download</a> the Frame3DD source-code zip-file (frame3dd_VERSION_src.zip)
+and save it in your home directory.
+<li> If the .ZIP archive was not automatically unzipped, 
+double-click the icon to extract it to your <b>Desktop</b>. 
+<li> Open a Terminal window,
+(Right-click on an open part of the Desktop and select <b>Open Terminal</b>.) 
+and compile the code
+<pre>
+cd ~/Desktop/Frame3DD/src/
+make
+mv frame3dd ..
+</pre>
+</ol>
+<li> Compiling using SCONS: 
 <ol>
 <li>Ensure you have Python, SCons and GCC installed on your system. 
 On Debian-based systems it should suffice to 
@@ -436,11 +455,7 @@ sudo scons install INSTALL_PREFIX=/usr/bin/
 export LD_LIBRARY_PATH=~/frame3dd-VERSION/build
 export PATH=$PATH:~/frame3dd-VERSION/build
 </pre>
-
-<li>Copy one of the frame3dd-VERSION/examples/*.3dd files (e.g., <b>exE.3dd</b>) into your home directory, make sure you have write-privileges for the file, and run one of the examples
-<pre>
-frame3dd  exE.3dd  exE.out
-</pre>
+</ol>
 </ol>
 
 <a name="runosx"/><h3>3.2 Mac OS X</h3>
@@ -594,13 +609,15 @@ and animations until the <b>gnuplot></b> prompt returns.
 <ol>
 <li> Install the Xcode Developer Tools for your version of OS X 
 as described above.  
-<li><a href="https://sourceforge.net/projects/frame3dd/files/">
-Download</a> the Frame3DD source-code tarball (frame3dd-VERSION.tar.bz2)
+<li><a href="https://sourceforge.net/projects/frame3dd/files/">Download</a>
+the Frame3DD source-code zip file (frame3dd_VERSION_src.zip)
 and save it in your home directory.
-<li> Unpack the source code, enter the source directory,
-and build the code, as follows:
+<li> If the .ZIP archive was not automatically unzipped, 
+double-click the icon to extract it to your <b>Desktop</b>. 
+<li> Compile and install the code, as follows:
 <pre>
 gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
+mv frame3dd ..
 </pre>
 </ol>
 
@@ -760,12 +777,14 @@ the <a href="http://www.cs.virginia.edu/~lcc-win32/"> LCC-win32 compiler</a>,
 or the <a href="http://www.mingw.org/"> MinGW compiler</a>.
 <!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
-Download</a> the Frame3DD source-code tarball (frame3dd-VERSION.tar.bz2)
+Download</a> the Frame3DD source-code zip-file (frame3dd_VERSION_src.zip)
 and save it in your home directory.
-<li> Unpack the source code, enter the source directory,
-and build the code, as follows:
+<li> If the .ZIP archive was not automatically unzipped, 
+double-click the icon to extract it to your <b>Desktop</b>. 
+and compile the code, as follows:
 <pre>
 gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
+mv frame3dd ..
 </pre>
 </ol>
 
