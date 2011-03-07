@@ -376,7 +376,7 @@ void read_joint_data( FILE *fp, int nJ, vec3 *xyz, float *r )
 READ_FRAME_ELEMENT_DATA  -  read frame element property data		
 04 Jan 2009
 ------------------------------------------------------------------------------*/
-void read_frame_element_data(
+void read_frame_element_data (
 	FILE *fp,
 	int nJ, int nE, vec3 *xyz, float *r,
 	double *L, double *Le,
@@ -703,7 +703,7 @@ GETLINE_NO_COMMENT
  ignore all comma (,) characters, ignore all double quote (") characters
 09 Feb 2009
 -----------------------------------------------------------------------------*/
-void getline_no_comment(
+void getline_no_comment (
 	FILE *fp,   /**< pointer to the file from which to read */
 	char *s,    /**< pointer to the string to which to write */
 	int lim    /**< the longest anticipated line length  */
@@ -807,7 +807,7 @@ READ_AND_ASSEMBLE_LOADS  -
 read load information data, assemble un-restrained load vectors
 09 Sep 2008
 ------------------------------------------------------------------------------*/
-void read_and_assemble_loads(
+void read_and_assemble_loads (
 		FILE *fp,
 		int nJ, int nE, int nL, int DoF,
 		vec3 *xyz,
@@ -1415,7 +1415,7 @@ void read_and_assemble_loads(
 /*------------------------------------------------------------------------------
 READ_MASS_DATA  -  read element densities and extra inertial mass data	16aug01
 ------------------------------------------------------------------------------*/
-void read_mass_data(
+void read_mass_data (
 		FILE *fp,
 		char *OUT_file, 
 		int nJ, int nE, int *nI, int *nX, 
@@ -1709,7 +1709,7 @@ void read_condensation_data (
 /*------------------------------------------------------------------------------
 WRITE_INPUT_DATA  -  save input data					07nov02
 ------------------------------------------------------------------------------*/
-void write_input_data(
+void write_input_data (
 	FILE *fp,
 	char *title, int nJ, int nE, int nL,
 	int *nD, int nR,
@@ -1994,7 +1994,7 @@ void write_static_results (
 WRITE_STATIC_CSV -  save joint displacements and frame element end forces
 31 Dec 2008
 ------------------------------------------------------------------------------*/
-void write_static_csv(
+void write_static_csv (
 		char *OUT_file,
 		char *title,
 		int nJ, int nE, int nL, int lc, int DoF,
@@ -2307,9 +2307,9 @@ WRITE_INTERNAL_FORCES -
 calculate frame element internal forces, Nx, Vy, Vz, Tx, My, Mz
 calculate frame element local displacements, Rx, Dx, Dy, Dz
 write internal forces and local displacements to an output data file
-4jan10
+4jan10, 7mar11
 ------------------------------------------------------------------------------*/
-void write_internal_forces(
+void write_internal_forces (
 		char infcpath[], int lc, int nL, char title[], float dx,
 		vec3 *xyz, 
 		double **Q, int nJ, int nE, double *L, int *J1, int *J2, 
@@ -2438,7 +2438,7 @@ void write_internal_forces(
 		Mz[0] = -Q[m][6];	// positive Mz -> positive x-y curvature
 
 		dx_ = dx;
-		for (i=1; i<=nx; i++) {
+		for (i=1; i<=nx; i++) {	/*  accumulate interior span loads */
 
 			// start with gravitational plus uniform loads
 			wx = wxg;
@@ -2491,10 +2491,16 @@ void write_internal_forces(
 			    if ( (int) P[n][1] == m ) { // load n on element m
 				if (i==nx) ++cP;
 				xp = P[n][5];
-				if ( x[i]>xp && x[i]<=xp+dx_ ) {
-					Nx[i] -= P[n][2];
-					Vy[i] -= P[n][3];
-					Vz[i] -= P[n][4];
+				if ( x[i] <= xp && xp < x[i]+dx ) {
+					Nx[i] -= P[n][2] * 0.5 * (1.0 - (xp-x[i])/dx);
+					Vy[i] -= P[n][3] * 0.5 * (1.0 - (xp-x[i])/dx);
+					Vz[i] -= P[n][4] * 0.5 * (1.0 - (xp-x[i])/dx);
+					
+				}
+				if ( x[i]-dx <= xp && xp < x[i] ) {
+					Nx[i] -= P[n][2] * 0.5 * (1.0 - (x[i]-dx-xp)/dx);
+					Vy[i] -= P[n][3] * 0.5 * (1.0 - (x[i]-dx-xp)/dx);
+					Vz[i] -= P[n][4] * 0.5 * (1.0 - (x[i]-dx-xp)/dx);
 				}
 			    }
 			}
