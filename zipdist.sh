@@ -22,6 +22,7 @@ mkdir dist/Frame3DD/matlab
 echo "copying documentation ... "
 cp --preserve=mode,timestamps doc/*.html            dist/Frame3DD/doc/.
 cp --preserve=mode,timestamps doc/template.3dd      dist/Frame3DD/doc/.
+cp --preserve=mode,timestamps doc/template.csv      dist/Frame3DD/doc/.
 cp --preserve=mode,timestamps doc/img/*.png         dist/Frame3DD/doc/img/.
 cp --preserve=mode,timestamps doc/img/*.jpg         dist/Frame3DD/doc/img/.
 cp --preserve=mode,timestamps doc/img/*.gif         dist/Frame3DD/doc/img/.

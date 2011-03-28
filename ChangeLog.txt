@@ -1,3 +1,6 @@
+*Sun Mar 27 2011 Henri Gavin <.> 0.20100105
+- add .CSV input data template from Simon Fendall
+
 *Mon Mar 7 2011 Henri Gavin <.> 0.20100105
 - modify computation of internal forces from interior-span point loads, now the shear force drop due to interior point loads occurs over a span of 2*dx.
 
