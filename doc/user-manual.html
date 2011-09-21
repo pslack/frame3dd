@@ -1564,6 +1564,11 @@ in the structure's global <i>X-Y-Z</i> coordinate system.
 The magnitude of the gravity load applied to a frame element is the product
 of the frame element's mass density, its cross-sectional area,
 and the structure's gravitational acceleration resultant.  
+Density should be specified in units consistent with the other aspects of the model.   
+For example, if the elastic moduli are in MPa and dimensions are in mm, then
+the mass density will be Tonne/mm^3; if the elastic moduli are in ksi and
+the dimensions are in inches, then the mass density will be kip/in^3/g where
+the gravitational acceleration, g, is in inch/sec^2.  
 The direction of the gravity load is the same as the direction of the 
 gravitational acceleration resultant.  
 </li>
@@ -2376,7 +2381,7 @@ nC      # number of condensed joints
     Dxx          - Prescribed rotation in the global X direction
     Dyy          - Prescribed rotation in the global Y direction
     Dzz          - Prescribed rotation in the global Z direction
-    d            - mass density of a frame element
+    d            - mass density of a frame element (using consistent units).
     dx           - x-axis increment for frame element internal force data
     E            - Modulus of elasticity of a frame element
     exagg_modal  - Exaggeration factor for the modal  displacements in the plot
