@@ -1193,15 +1193,20 @@ of the material perpendicular to the local <i>x</i>-axis.
 <p>
 Shear strains in frame elements are distributed in a relatively complicated manner over the cross section.   
 Shear areas are effective cross-sectional areas corresponding to a uniform distribution of shear strain over the cross section.   
-The shear area values,  <i>Asy</i> and <i>Asz</i>, fully account for the non-uniform distribution of shear strain in the cross section.     
+The shear area values,  <i>Asy</i> and <i>Asz</i>, account for the non-uniform distribution of shear strain in the cross section.     
 For slender frame elements
 (in which the span-to-depth ratio is greater than 10)
 shear deformations contribute only slightly to the overall structural deformation.
 For stocky frame elements
 (in which the span-to-depth ratio is less than 5)
 shear deformations contribute significantly to the overall structural deformation.
-The shear area formulas below for circular, square, and rectangular, cross sections provide 
-accurate approximations of the exact values of these variables.    
+The shear area formulas below for circular, square, and rectangular tube cross sections provide good approximations for these cross section properties.    
+These approximations are computed without consideration of lateral strains due to the Poisson effect.  
+(See references <a href="http://www.sciencedirect.com/science/article/pii/S0020768310000685">6</a>, 
+<a href="http://iopscience.iop.org/0022-3727/11/14/010">8</a>, and <a href="http://iopscience.iop.org/0022-3727/10/11/009">16</a>.)
+
+The shear area approximations below for solid circular and rectangular sections
+having a Poisson ratio, <i>v</i>, from 0.16 to 0.38 account for Poisson's effect.  
 Regardless of the section shape, the shear areas <i>Asy</i> and <i>Asz</i> are less than the cross section area <i>Ax</i>. 
 </p>
 
@@ -1236,7 +1241,7 @@ where <i>A</i> is the area enclosed by the box.
 </p>
 
 <p>
-Restraints to <a href="http://www.archoneng.com/tptasm.html">warping deformation</a> are not considered in the analysis.
+Restraints to <a href="http://www.archoneng.com/tptasm.html">warping deformation</a> and the dynamic radial expansion of beams in torsion are not considered in the analysis.
 </p>
 
 <h4> 7.4.4 Bending Effects </h4>
@@ -1328,6 +1333,23 @@ Asz coefficients
  1.158912 -2.291419 1.223522 7.370911 0.964439 0.004778 0.718828 -5.417298
  1.10498  -1.98518           8.74762  0.99548           0.69146  -5.36255
 -->
+
+<p>
+Approximate formulae for the effective shear areas of solid circular and rectangular cross sections including the Poisson effect (for Poisson ratio, <i>v</i>,
+from 0.16 to 0.38) have been experimentally validated.  
+(See references <a href="http://iopscience.iop.org/0022-3727/11/14/010">8</a> and <a href="http://iopscience.iop.org/0022-3727/10/11/009">16</a>.)
+
+<ul>
+<li> <b> Solid Circular Section:</b> <i> Asy = Asz = Ax (6+12v+6v<sup>2</sup>)/(7+12v+4v<sup>2</sup>) </i>
+<li> <b> Solid Rectangular Section:</b>   <i> Asy = Asz = Ax (5+5v)/(6+5v) </i>
+</ul>
+</p>
+<p>
+For solid circular sections <i>Ax/As</i> ranges from 1.13 to 1.05 for <i>v</i> between 0.1 and 0.4.  
+For solid rectangular sections <i>Ax/As</i> ranges from 1.18 to 1.14 for <i>v</i> between 0.1 and 0.4.  
+Reference <a href="http://www.sciencedirect.com/science/article/pii/S0020768310000685">6</a>
+compares a number of methods for computing the shear correction factor.   
+</p>
 
 <h4> 7.4.6 Cross Section Properties Of Some Common Steel Sections</h4>
 
@@ -2751,9 +2773,21 @@ McGraw-Hill, 1993.   ASIN: 0070113920
 <a href="http://www.amazon.com/exec/obidos/ASIN/0486654079/qid=1003515697/sr=2-1/ref=sr_2_11_1/002-2386037-4350467">Advanced Strength of Materials</a>,
 Dover Press, 1987.   ISBN: 0486654079
 
+<a name="Dong-IJSS-2010">
+<li> S.B. Dong, C. Alpdogan, and E. Taciroglu, 
+<a href="http://www.sciencedirect.com/science/article/pii/S0020768310000685">
+Much ado about shear correction factors in Timoshenko beam theory</a>,
+<i>International Journal of Solids and Structures,</i>
+vol. 47, no. 13, pp. 1651-1665, 2010.
+
 <li> Thomas J. R. Hughes,
 <a href="http://www.amazon.com/exec/obidos/ASIN/0486411818/ref=pd_pym_sim_1_2/002-2386037-4350467">The Finite Element Method: Linear Static and Dynamic Finite Element Analysis</a>,
 Dover Press, 2000.   ISBN: 0486411818
+
+<li> T. Kaneko,
+<a href="http://iopscience.iop.org/0022-3727/11/14/010">
+An experimental study on the Timoshenko's shear coefficient for flexurally vibrating beams</a>,
+<i>Journal of Physics, D: Applied Physics</i>, vol 11, no 14, pp 1979-1988, (1978)
 
 <li> Aslam Kassimali,
 <a href="http://www.amazon.com/exec/obidos/tg/detail/-/0534206700/qid=1036162662/sr=1-4/ref=sr_1_4/002-7358683-1549619?v=glance">Matrix Analysis of Structures</a>,
@@ -2788,6 +2822,12 @@ Cambridge University Press, 1993.   ISBN: 0521431085
 <li> J.S. Przemieniecki,
 <a href="http://www.amazon.com/exec/obidos/ASIN/0486649482/qid=1003514977/sr=1-1/ref=sr_1_8_1/002-2386037-4350467">Theory of Matrix Structural Analysis</a>,
 Dover Press, 1985.   ISBN: 0486649482
+
+<a name="Rosinger-JPD-1977">
+<li> H.E. Rosinger and I.G. Ritchie, 
+<a href="http://iopscience.iop.org/0022-3727/10/11/009">
+On Timoshenko's correction for shear in vibrating isotropic beams</a>, 
+<i>Journal of Physics, D: Applied Physics</i>, vol. 10, no. 14, pp. 1461-1466, (1977). 
 
 <li> Robert E. Sennett,
 <a href="http://www.amazon.com/exec/obidos/ASIN/1577661435/qid=1003515858/sr=1-2/ref=sr_1_12_2/002-2386037-4350467">Matrix Analysis of Structures</a>,
