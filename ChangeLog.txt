@@ -1,5 +1,9 @@
+*Mon Oct 31 2011 Henri Gavin <.> 0.20100105
+- update user-manual.html regarding shear correction factors and torsion
+constants
+
 *Sun Oct 30 2011 Henri Gavin <.> 0.20100105
-- update user-manual.html regarding shear correction factors-
+- update user-manual.html regarding shear correction factors
 
 *Sun Mar 27 2011 Henri Gavin <.> 0.20100105
 - add .CSV input data template from Simon Fendall

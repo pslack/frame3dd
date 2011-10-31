@@ -1191,23 +1191,27 @@ of the material perpendicular to the local <i>x</i>-axis.
 <h4> 7.4.2 Shear Effects </h4>
 
 <p>
-Shear strains in frame elements are distributed in a relatively complicated manner over the cross section.   
-Shear areas are effective cross-sectional areas corresponding to a uniform distribution of shear strain over the cross section.   
-The shear area values,  <i>Asy</i> and <i>Asz</i>, account for the non-uniform distribution of shear strain in the cross section.     
-For slender frame elements
-(in which the span-to-depth ratio is greater than 10)
-shear deformations contribute only slightly to the overall structural deformation.
-For stocky frame elements
-(in which the span-to-depth ratio is less than 5)
-shear deformations contribute significantly to the overall structural deformation.
-The shear area formulas below for circular, square, and rectangular tube cross sections provide good approximations for these cross section properties.    
-These approximations are computed without consideration of lateral strains due to the Poisson effect.  
+For slender frame elements shear deformations contribute
+only slightly to the overall structural deformation
+(less than three percent for elements with a span-to-depth ratio greater than 10).
+For stocky frame elements shear deformations contribute
+significantly to the overall structural deformation 
+(more than seventy percent for elements with a span-to-depth ratio less than 2).
+Shear strains in frame elements are distributed in a relatively complicated manner over the cross section and   
+the shear area values, <i>Asy</i> and <i>Asz</i>, account for this non-uniform distributions of shear strain.  
+Shear areas may be thought of as effective cross-sectional areas corresponding to the average shear strain over the cross section, <i>V/(GAx)</i>.   
+The shear area formulas below for circular, square, and rectangular tube
+cross sections provide approximations for these cross section properties  
+(consistent with the self-contradictory assumptions of Timoshenko beam theory
+that plane sections remain plane,
+that shear stresses are constant across the width of a section 
+(shear stress is permissible at a free surface), and 
+without consideration of lateral strains due to the Poisson effect).  
+Additional shear area approximations (below) for solid circular and rectangular sections
+having a Poisson ratio, <i>v</i>, from 0.16 to 0.38 do account for Poisson's effect and have been experimentally validated.  
 (See references <a href="http://www.sciencedirect.com/science/article/pii/S0020768310000685">6</a>, 
 <a href="http://iopscience.iop.org/0022-3727/11/14/010">8</a>, and <a href="http://iopscience.iop.org/0022-3727/10/11/009">16</a>.)
-
-The shear area approximations below for solid circular and rectangular sections
-having a Poisson ratio, <i>v</i>, from 0.16 to 0.38 account for Poisson's effect.  
-Regardless of the section shape, the shear areas <i>Asy</i> and <i>Asz</i> are less than the cross section area <i>Ax</i>. 
+Regardless of the section shape and Poisson ratio, the shear areas <i>Asy</i> and <i>Asz</i> are less than the cross section area <i>Ax</i>. 
 </p>
 
 <h4> 7.4.3 Torsion Effects </h4>
@@ -1231,13 +1235,18 @@ For more details, see page 271 of Timoshenko and Goodier (1951).
 
 <p>
 For open sections made up of thin plates (length=<i>b</i>, thickness=<i>t</i>):   <br>
-<i>Jxx = &Sigma;<sub>i</sub> [  b<sub>i</sub> t<sub>i</sub><sup>3</sup> / 3 ] </i>
+<i>Jxx = &Sigma;<sub>i</sub> [  b<sub>i</sub> t<sub>i</sub><sup>3</sup> / 3 ]  - &Sigma;<sub>j v t<sub>j</sub><sup>4 </sup></i> <br> 
+where <i>v</i> is the Poissons ratio and <i>&Sigma;<sub>j</sub></i> is
+a summation over the free ends of the open cross section,
+which may be neglected in most cases.  
+<!-- the bt^3/3 assumes parabolic distribution of shear stress across 
+the wall thickness ... like a membrane -->
 </p>
 
 <p>
 For closed single-box sections made up of thin plates (length=<i>b</i>, thickness=<i>t</i>): <br>
 <i> Jxx = 4 A<sup>2</sup> / &Sigma;<sub>i</sub> [ b<sub>i</sub> / t<sub>i</sub> ] </i><br>
-where <i>A</i> is the area enclosed by the box.  
+where <i>A</i> is the area enclosed by the box. 
 </p>
 
 <p>
