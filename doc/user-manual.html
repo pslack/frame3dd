@@ -1207,11 +1207,17 @@ that plane sections remain plane,
 that shear stresses are constant across the width of a section 
 (shear stress is permissible at a free surface), and 
 without consideration of lateral strains due to the Poisson effect).  
+They are computed based upon an assumed uniform shear flow across the 
+wall of tube sections.  
 Additional shear area approximations (below) for solid circular and rectangular sections
 having a Poisson ratio, <i>v</i>, from 0.16 to 0.38 do account for Poisson's effect and have been experimentally validated.  
 (See references <a href="http://www.sciencedirect.com/science/article/pii/S0020768310000685">6</a>, 
 <a href="http://iopscience.iop.org/0022-3727/11/14/010">8</a>, and <a href="http://iopscience.iop.org/0022-3727/10/11/009">16</a>.)
+</p>
+<p>
 Regardless of the section shape and Poisson ratio, the shear areas <i>Asy</i> and <i>Asz</i> are less than the cross section area <i>Ax</i>. 
+For circular tube sections, <i>As/Ax</i> is approximately 0.50 to 0.53.  
+For square tube sections, <i>As/Ax</i> is approximately 0.42 to 0.45.  
 </p>
 
 <h4> 7.4.3 Torsion Effects </h4>
@@ -1279,8 +1285,7 @@ of inertia, <i>Iyy</i> and <i>Izz</i>, are the principle bending moments of iner
 Circular Tube (outer radius= <i>R<sub>o</sub></i>, inner radius = <i>R<sub>i</sub></i>):
 <ul>
 <li> <i>Ax = &pi; ( R<sub>o</sub><sup>2</sup> - R<sub>i</sub><sup>2</sup> )</i>
-<li> <i>Asy = Asz = Ax / ( 1.124235 + 0.055610(R<sub>i</sub>/R<sub>o</sub>) + 1.097134(R<sub>i</sub>/R<sub>o</sub>)<sup>2</sup> - 0.630057(R<sub>i</sub>/R<sub>o</sub>)<sup>3</sup> )</i> &plusmn; 0.5% 
-<li> <i>Asy = Asz = Ax / ( 1.06124 + 0.59546(R<sub>i</sub>/R<sub>o</sub>) ) </i> &plusmn; 2%
+<li> <i>Asy = Asz = Ax / ( 0.54414 + 2.97294(R<sub>i</sub>/R<sub>o</sub>) - 1.51899(R<sub>i</sub>/R<sub>o</sub>)<sup>2</sup> )</i> &plusmn; 0.05% 
 <li> <i>Jxx = (1/2) &pi; ( R<sub>o</sub><sup>4</sup> - R<sub>i</sub><sup>4</sup> )</i>
 <li> <i>Ixx = Iyy = (1/4) &pi; ( R<sub>o</sub><sup>4</sup> - R<sub>i</sub><sup>4</sup> )</i>
 </ul>
@@ -1291,8 +1296,7 @@ Circular Tube (outer radius= <i>R<sub>o</sub></i>, inner radius = <i>R<sub>i</su
 Square Tube (outer dimension = <i>b</i> x <i>b</i>, wall thickness = <i>t</i>):
 <ul>
 <li> <i> Ax = b<sup>2</sup> - (b - 2t)<sup>2</sup></i>
-<li> <i> Asy = Asz = Ax / ( 2.08334 - 0.70154(t/b) - 8.00313(t/b)<sup>2</sup> + 12.22572(t/b)<sup>3</sup> )</i> &plusmn; 0.5%
-<li> <i> Asy = Asz = Ax / ( 2.1186 - 1.9900(t/b) )</i> &plusmn; 2%
+<li> <i> Asy = Asz = Ax / ( 2.39573 - 0.25009(t/b) - 7.89675(t/b)<sup>2</sup> )</i> &plusmn; 0.05%
 <li> <i> Jxx =  (b - t)<sup>3</sup> t </i>
 <li> <i> Izz = Iyy = (1/12) ( b<sup>4</sup> - (b - 2t)<sup>4</sup> )</i>
 </ul>
@@ -1303,10 +1307,15 @@ Square Tube (outer dimension = <i>b</i> x <i>b</i>, wall thickness = <i>t</i>):
 Rectangular Tube (outer dimension = <i>a</i> x <i>b</i>, wall thickness = <i>t</i>):
 <ul>
 <li> <i> Ax = ab -  (a - 2t)(b - 2t)</i>
-<li> <i> Asy = Ax / ( 1.14766  + 0.28187(t/b) + 0.96199(b/a) - 2.17742(t/a) )</i> &plusmn; 1% ... <b>(a > b)</b>
-<li> <i> Asy = Ax / ( 1.10498 - 1.98518(t/a) + 8.74762(t/a)<sup>3</sup> + 0.99548(b/a) + 0.69146(tb/a<sup>2</sup>) - 5.36255(t<sup>2</sup>b/a<sup>3</sup>) )</i> &plusmn; 1% ... <b>(b > a)</b>
-<li> <i> Asz = Ax / ( 1.10498 - 1.98518(t/b) + 8.74762(t/b)<sup>3</sup> + 0.99548(a/b) + 0.69146(ta/b<sup>2</sup>) - 5.36255(t<sup>2</sup>a/b<sup>3</sup>) )</i> &plusmn; 1% ... <b>(a > b)</b>
-<li> <i> Asz = Ax / ( 1.14766  + 0.28187(t/a) + 0.96199(a/b) - 2.17742(t/b) )</i> &plusmn; 1% ... <b>(b > a)</b>
+
+<li> <i> Asy = Ax / ( 0.93498 - 1.28084(t/b) + 1.36441(b/a) + 0.00295(a/b)<sup>2</sup> + 0.25797(ta/b<sup>2</sup>) )</i> &plusmn; 1% ... <b>(a > b)</b>
+
+<li> <i> Asz = Ax / ( 1.63544 - 8.34935(t/b) + 0.60125(a/b) + 0.41403(a/b)<sup>2</sup> + 4.95373(ta/b<sup>2</sup>) )</i> &plusmn; 1% ... <b>(a > b)</b>
+
+<li> <i> Asy = Ax / ( 1.63544 - 8.34935(t/a) + 0.60125(b/a) + 0.41403(b/a)<sup>2</sup> + 4.95373(tb/a<sup>2</sup>) )</i> &plusmn; 1% ... <b>(b > a)</b>
+
+<li> <i> Asz = Ax / ( 0.93498 - 1.28084(t/a) + 1.36441(a/b) + 0.00295(b/a)<sup>2</sup> + 0.25797(tb/a<sup>2</sup>) )</i> &plusmn; 1% ... <b>(b > a)</b>
+
 <li> <i> Jxx =  2 t (a - t)<sup>2</sup>(b - t)<sup>2</sup> / (a + b - 2t) </i>
 <li> <i> Iyy = (1/12) ( ab<sup>3</sup> - (a - 2t)(b - 2t)<sup>3</sup> )</i>
 <li> <i> Izz = (1/12) ( a<sup>3</sup>b - (a - 2t)<sup>3</sup>(b - 2t) )</i>
