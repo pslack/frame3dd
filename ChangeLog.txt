@@ -1,4 +1,7 @@
 *Thu Nov 3 2011 Henri Gavin <.> 0.20100105
+- user-manual.html - small wordsmith edits regarding experimental validation of shear correction factors.
+
+*Thu Nov 3 2011 Henri Gavin <.> 0.20100105
 - update user-manual.html, add Cowper's 1966 paper to the list of references for shear correction factors
 
 *Tue Nov 1 2011 Henri Gavin <.> 0.20100105
