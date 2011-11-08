@@ -647,7 +647,7 @@ Alternatively, you may use
 <li>
 <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it to your <b>Desktop</b>.<br>
-<li> If the .ZIP archive was not automatically unzipped, 
+If the .ZIP archive was not automatically unzipped, 
 simply drag <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
 <li> <b>(<i>Optional</i>)</b>
 Put the <b>Frame3DD</b> directory in your path and set the 
@@ -691,10 +691,11 @@ using a good plain text editor
 or a spreadsheet program
 (<a href="http://docs.google.com/">GoogleDocs</a>,
  <a href="http://www.openoffice.org/">OpenOffice</a>).
-<li>Run your own Frame3DD analyses within the Command Prompt window using a command like ...
+<li>Proceed by running your own <b>Frame3DD</b> analyses using a command like ...
 <pre>
 frame3dd  MyFrame.3dd  MyResultsA.out
 </pre>
+(within the Command Prompt window).  
 <!-- <li> You may wish to delete all the files in the temporary file directory (c:\temp) after you have finished your analyses.  -->
 </ol>
 
@@ -709,14 +710,18 @@ Download</a> the MS-Windows version of Gnuplot
 and extract it to your <b>Desktop</b>.
 <li> Navigate to <b>Desktop > Gnuplot > bin</b>, 
 right click on the <b>wgnuplot</b> application icon, and create a shortcut to your <b>Desktop</b>.
-<li>Clicking on the <b>wgnuplot</b> icon on the Desktop will start Gnuplot.
-<li>To view the plot with Gnuplot, first change directory to to location of your output files, by clicking on the <b>ChDir</b> button at the top of the Gnuplot window and navigating to <b>Desktop > Frame3DD > examples</b>.
+<li>Clicking on the <b>wgnuplot</b> icon on the Desktop starts Gnuplot.
+<li>To view the plot with Gnuplot, first change directories to to location of your output files, by clicking on the <b>ChDir</b> button at the top of the Gnuplot window and navigating to <b>Desktop > Frame3DD > examples</b>.
 <li>Display the plots of your structure using Gnuplot with a command like ...
+<pre>
+      gnuplot>  load 'exE.plt'
+</pre>
+or
 <pre>
       gnuplot>  load 'MyResultsA.plt'
 </pre>
-where <b>MyResultsA.out</b> is the name of of the Output Data file 
-specified when running Frame3DD. 
+where <b>exE.out</b> or <b>MyResultsA.out</b>
+is the name of of the specified Output Data file. 
 <li>Click <b>OK</b> to see the next plot or <b>Cancel</b> to stop with the current plot.  
 <li> To save the current plot as a PostScript file in the Frame3DD/examples folder, use the <b>saveplot_w32</b> script included in the Frame3DD/examples folder.
 <pre>
