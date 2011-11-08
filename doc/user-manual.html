@@ -626,8 +626,9 @@ mv frame3dd ..
 
 <p>
 For Microsoft Windows, 
-you may install Frame3DD from a .ZIP archive, you may use a binary installer
-(which may sometimes be out of date), or you may compile from the source code.
+you may install Frame3DD from a .ZIP archive (recommended),
+you may use a binary installer (which is currently out of date),
+or you may compile from the source code.
 The following instructions install Frame3DD to the <b>Desktop</b> but other directories may be substituted, if so desired.  
 </p>
 
@@ -647,8 +648,8 @@ Alternatively, you may use
 <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it to your <b>Desktop</b>.<br>
 <li> If the .ZIP archive was not automatically unzipped, 
-double-click the icon to extract it to your <b>Desktop</b>. 
-<li> <b>(<i>Recommended</i>)</b>
+simply drag <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
+<li> <b>(<i>Optional</i>)</b>
 Put the <b>Frame3DD</b> directory in your path and set the 
 <b>PATH</b> and <b>FRAME3DD_OUTDIR</b> environment variables.<br>
 To do this,
@@ -660,7 +661,15 @@ with variable value <b>%HOMEPATH%\Desktop\Frame3DD\temp</b></br>
 (The <b>Desktop\Frame3DD\temp</b> folder should already exist.)<br>
 Detailed information on how to set environment variables in Windows is <a href="http://vlaurie.com/computers2/Articles/environment.htm">here</a>, if you need it.  
 
-<li>Open a 
+<li> Go to the <b>Desktop > Frame3DD</b> folder,
+double-click on the <b>frame3dd</b> application icon and
+enter the Input Data file name and Output Data file name when prompted, as follows:
+<pre>
+Please enter the  input data file name:  examples/exE.3dd
+Please enter the output data file name:  examples/exE.out
+</pre>
+
+Alternatively, you may open a 
 "<a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">command prompt window</a>" 
 <!-- <a href="http://en.wikipedia.org/wiki/Windows_command_line">Command Prompt</a> window -->
 (<b>Start > All Programs > Accessories > Command Prompt</b>),
@@ -669,15 +678,11 @@ change to the directory of example files, and run an example, as follows:
 chdir %HOMEPATH%\Desktop\Frame3DD\examples
 frame3dd  exE.3dd  exE.out
 </pre>
-Alternatively, you may double-click on the <b>frame3dd</b> program icon and
-enter the Input Data file name and Output Data file name when prompted, as follows:
-<pre>
-Please enter the  input data file name:  examples/exE.3dd
-Please enter the output data file name:  examples/exE.out
-</pre>
-Some run-time information will be displayed on the Command Prompt window and
+
+Either way you run <b>Frame3DD</b>, run-time information will be displayed on the Command Prompt window and
 the results of your Frame3DD analysis will have been appended to the end of the <b>exE.out</b> Output Data file.
 Data files used primarily for plotting are stored in the <b>Desktop\Frame3DD\temp</b> folder.
+
 <li>       You may view Output Data files and edit Input Data files
 using a good plain text editor
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
@@ -694,19 +699,18 @@ frame3dd  MyFrame.3dd  MyResultsA.out
 </ol>
 
 <p>
-Use <a href="http://www.gnuplot.info/">Gnuplot</a> 
-to view the graphical output.  
+Use <a href="http://www.gnuplot.info/">Gnuplot</a> to view the graphical output.  
 </p>
 
 <ol>
 <li>
 <a href="http://downloads.sourceforge.net/gnuplot/gp426win32.zip">
 Download</a> the MS-Windows version of Gnuplot
-and save it to your <b>Desktop</b>.
-<li> Navigate to <b>Desktop > Gnuplot > bin</b> and 
-right click on <b>wgnuplot</b> to create a shortcut to your <b>Desktop</b>.
+and extract it to your <b>Desktop</b>.
+<li> Navigate to <b>Desktop > Gnuplot > bin</b>, 
+right click on the <b>wgnuplot</b> application icon, and create a shortcut to your <b>Desktop</b>.
 <li>Clicking on the <b>wgnuplot</b> icon on the Desktop will start Gnuplot.
-<li>To load the plot into Gnuplot, first change directory to to location of your output files, by clicking on the <b>ChDir</b> button at the top of the Gnuplot window and navigating to <b>Desktop > Frame3DD > examples</b>.
+<li>To view the plot with Gnuplot, first change directory to to location of your output files, by clicking on the <b>ChDir</b> button at the top of the Gnuplot window and navigating to <b>Desktop > Frame3DD > examples</b>.
 <li>Display the plots of your structure using Gnuplot with a command like ...
 <pre>
       gnuplot>  load 'MyResultsA.plt'
