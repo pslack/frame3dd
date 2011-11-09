@@ -1,4 +1,7 @@
 *Tue Nov 8 2011 Henri Gavin <.> 0.20100105
+- user-manual.html - simplification of installation instructions
+
+*Tue Nov 8 2011 Henri Gavin <.> 0.20100105
 - user-manual.html - slight simplification of Windows installation instructions
 
 *Thu Nov 3 2011 Henri Gavin <.> 0.20100105

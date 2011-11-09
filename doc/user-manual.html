@@ -274,13 +274,6 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <h4>3.1.1 Installing from the .ZIP archive for Linux</h4>
 
 <ol>
-<li> Linux and Unix systems have good plain text editors pre-installed 
-(<a href="http://www.jerrywang.net/vi/">vim</a>,
- <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
- <a href="http://www.nano-editor.org/">nano</a>).
-There should be no need to install another editor.
-A tutorial for vim is <a href="http://www.jerrywang.net/vi/">here</a>.
-<!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li>
 <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it in your <b>Desktop</b>.<br>
@@ -351,6 +344,15 @@ on the Data File and select the editor of your choice.
 <pre>
 frame3dd  MyFrame.3dd  MyResultsA.out
 </pre>
+<li>     You may view Output Data files and edit Input Data files using a good plain text editor
+(<a href="http://www.jerrywang.net/vi/">vim</a>,
+ <a href="http://www.gnome.org/projects/gedit/">gedit</a>,
+ <a href="http://www.nano-editor.org/">nano</a>).
+or a spreadsheet program
+(<a href="http://docs.google.com/">GoogleDocs</a>,
+<a href="http://www.openoffice.org/">OpenOffice</a>).<br>
+There should be no need to install another editor.
+A tutorial for vim is <a href="http://www.jerrywang.net/vi/">here</a>.
 <!-- <li> You may wish to delete all the files in the temporary file directory (c:\temp) after you have finished your analyses.  -->
 </ol>
 
@@ -394,7 +396,7 @@ Or hit <b>CTRL-C</b> to stop the plots at the current plot.
 For Linux and Unix we currently only provide source-code tarball; you must
 build the software yourself.
 -->
-The following instructions work on Ubuntu 8.10 - 10.10
+The following instructions work on Ubuntu 8.10 - 11.10
 and should work with minor changes on any other recent Linux or Unix system.
 There are two options for compiling under Linux:
 </p>
@@ -476,27 +478,19 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <h4> 3.2.1 Installing from the .ZIP archive for OS X</h4>
 
 <ol>
-<li> Install a good plain text editor for OS X:
- <a href="http://www.jedit.org/index.php">jEdit</a>, or
-<!--  <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>, or -->
- <a href="http://macvim.org/OSX/index.php">Vim</a>. 
-A tutorial for Vim is <a href="http://www.jerrywang.net/vi/">here</a>. 
-Alternatively, you may use
-<a href="http://support.apple.com/kb/HT2523">TextEdit</a>.
-<!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
-<li>
-<a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
+<li> <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_osx.zip) and save it in your <b>Desktop</b>.<br>
 If the .ZIP archive was not automatically unzipped, 
 simply drag the <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
 <li><b>(<i>Recommended</i>)</b>
 Put the <b>Frame3DD</b> directory in your path and set the <b>FRAME3DD_OUTDIR</b> location.<br>
-To do this, open your <b>~/.profile</b> file using your good text editor.<br>
-* Using TextEdit, open a Terminal <b>Applications > Utilities > Terminal</b> and type: <b>open  -a  TextEdit  .profile</b><br>
-* Using jEdit, <b>File > Open </b> and type <b>~/.profile</b> in the <b>File Name:</b> text entry bar.<br>
-* Using Vim, <b>File > Open</b> and select <b>.profile</b> from your home directory.<br>
-<!-- * Using TextWrangler, <b>File > Open Hidden</b> and select <b>.profile</b> from your home directory.<br> -->
-Copy-and-paste the following ten lines into the beginning of <b>~/.profile</b> 
+<ul>
+<li> Open your <b>~/.profile</b> file ... <br>
+Open a Terminal (<b>Applications > Utilities > Terminal</b>) and type:
+<pre>
+open  -a  TextEdit  ~/.profile
+</pre>
+<li> Copy-and-paste the following ten lines into the beginning of <b>~/.profile</b> 
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
 # add Frame3DD executable directory to the path
@@ -509,10 +503,10 @@ fi
 # specify the Frame3DD output directory
 export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER
 </pre>
-... save, and exit the editor.   
+<li> Save and Quit <b>TextEdit</b>.   
+</ul>
 
-<li>
-Open a Terminal (Applications > Utilities > Terminal),  
+<li> Open a Terminal (<b>Applications > Utilities > Terminal</b>),  
 change to the directory of example files and run an example.
 <pre>
 cd  ~/Desktop/Frame3DD/examples/   
@@ -522,7 +516,7 @@ Some run-time information will be displayed on the Terminal and
 the results of your Frame3DD analysis will have been appended to the end of the 
 <b>exE.out</b> Output Data file. Data files used primarily for plotting are stored in the <b>/tmp/frame3dd_temp_$USER</b> directory. 
 
-<li>     You may view Output Data files and edit Input Data files using your plain text editor
+<li>     You may view Output Data files and edit Input Data files using a good plain text editor
 (<a href="http://www.jedit.org/index.php">jEdit</a>, 
 <!-- <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a>,-->
  <a href="http://macvim.org/OSX/index.php">Vim</a>, 
@@ -530,8 +524,9 @@ the results of your Frame3DD analysis will have been appended to the end of the
 or a spreadsheet program
 (<a href="http://docs.google.com/">GoogleDocs</a>,
 <a href="http://www.openoffice.org/">OpenOffice</a>).<br>
+A tutorial for Vim is <a href="http://www.jerrywang.net/vi/">here</a>. 
 If you use Apple's TextEdit,
-make sure you are in Plain Text mode  ...  [SHIFT] [APPLE] [T] ...  or ...   Format > Make Plain Text ... <br>
+make sure you are in Plain Text mode  ...  [SHIFT] [APPLE] [T] ...  or ...   <b>Format > Make Plain Text </b> ... <br>
 <li>
 Run your own Frame3DD analyses within the Terminal window using a command like ...
 <pre>
@@ -540,8 +535,7 @@ frame3dd  MyFrame.3dd  MyResultsA.out
 </ol>
 
 <p>
-Use <a href="http://www.gnuplot.info/">Gnuplot</a> 
-to view the graphical output.  
+Use <a href="http://www.gnuplot.info/">Gnuplot</a> to view the graphical output.  
 </p>
 
 <!--
@@ -635,17 +629,7 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <h4> 3.3.1 Installing from the .ZIP archive for Windows</h4>
 
 <ol>
-<!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
-<li>Install a good plain text editor for Windows:
- <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>, or
- <a href="http://www.jedit.org/index.php">jEdit</a>, or
-<!-- <a href="http://www.pcshareware.com/anotepad.htm">Notepad</a>, or -->
- <a href="ftp://ftp.vim.org/pub/vim/pc/gvim72.exe">gvim</a>.
-A tutorial for gvim is <a href="http://www.jerrywang.net/vi/">here</a>. 
-Alternatively, you may use
-<a href="http://en.wikipedia.org/wiki/Notepad_(Windows)">NotePad</a>.
-<li>
-<a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
+<li> <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it to your <b>Desktop</b>.<br>
 If the .ZIP archive was not automatically unzipped, 
 simply drag <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
@@ -688,9 +672,11 @@ using a good plain text editor
 (<a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>,
  <a href="http://www.jedit.org/index.php">jEdit</a>,
  <a href="http://www.vim.org/about.php">gvim</a>),
+ <a href="http://en.wikipedia.org/wiki/Notepad_(Windows)">NotePad</a>.
 or a spreadsheet program
 (<a href="http://docs.google.com/">GoogleDocs</a>,
  <a href="http://www.openoffice.org/">OpenOffice</a>).
+A tutorial for gvim is <a href="http://www.jerrywang.net/vi/">here</a>. 
 <li>Proceed by running your own <b>Frame3DD</b> analyses using a command like ...
 <pre>
 frame3dd  MyFrame.3dd  MyResultsA.out
@@ -734,15 +720,6 @@ is the name of of the specified Output Data file.
 <h4> 3.3.2 Installing from the binary installer </h4>
 
 <ol>
-<li>Install a good plain text editor for Windows:
- <a href="http://notepad-plus.sourceforge.net/uk/site.htm">NotePad++</a>, or
- <a href="http://www.jedit.org/index.php">jEdit</a>, or
-<!-- <a href="http://www.pcshareware.com/anotepad.htm">Notepad</a>, or -->
- <a href="ftp://ftp.vim.org/pub/vim/pc/gvim72.exe">gvim</a>.
-A tutorial for gvim is <a href="http://www.jerrywang.net/vi/">here</a>. 
-Alternatively, you may use
-<a href="http://en.wikipedia.org/wiki/Notepad_(Windows)">NotePad</a>.
-<!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">
 Download</a> and run the binary installer (frame3dd-VERSION.exe).
 <!--
