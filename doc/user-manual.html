@@ -170,7 +170,7 @@ Continue to hit the Return (or Enter) key until the last plot is displayed.
 <p>
 The <b>Input Data file</b> is a plain text file and must adhere to the format
 <a href="#InputData">described below</a>.
-Several examples are given at <a href="http://frame3dd.sourceforge.net/">http://frame3dd.sourceforge.net/</a>. When writing your own input files, note the following points:</p>
+Several examples are given at <a href="http://frame3dd.sourceforge.net/">http://frame3dd.sourceforge.net/</a>. When writing your own Input Data files, note the following points:</p>
 
 <ul>
 <li>Comments may be placed anywhere in the file and are helpful in organizing the Input Data.
@@ -216,9 +216,8 @@ Details regarding the spreadsheet interface to Frame3DD are <a href="#CSV">here<
 </p>
 <p>
 It might take a few tries to get your Input Data just right.
-Frame3DD checks the Input Data for errors prior to analyzing the system
-and, where possible, displays descriptive diagnostic messages when errors are
-found with the Input Data.
+Frame3DD checks the Input Data for errors and, where possible,
+displays descriptive diagnostic messages when errors are found.   
 </p>
 
 <!-- <div class=note> 
@@ -232,7 +231,9 @@ On Windows, the location of this folder defaults to <b>C:\WINDOWS\Temp</b>.
 <!--
 or the user's <b>Local Settings\Temp</b> (XP) or <b>AppData\Local\Temp</b> (Vista).  
 -->
-If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <b>FRAME3DD_OUTDIR</b> with the path to your desired temporary output directory. The additional output files will then appear in the folder you have specified.
+If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <b>FRAME3DD_OUTDIR</b> with the path to your
+desired temporary output directory (instructions below).
+The additional output files will then appear in the folder you have specified.
 </p>
 <!-- </div> -->
 
@@ -846,7 +847,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 
 <p>
 The <b>Frame3DD</b> executable program
-(<b>frame3dd</b> on Linux or OS X, <b>frame3dd.exe</b> on Windows)
+(<b>frame3dd</b> on Linux and OS X, <b>frame3dd.exe</b> on Windows)
 and the matlab interface function, <b>frame_3dd.m</b>
 must be saved to directories within your Matlab path.    
 <!-- 
@@ -875,7 +876,7 @@ path([ getenv('USERPROFILE') '/Desktop/Frame3DD/matlab' ],path)
 
 <p>
 The matlab interface function, <a href="../matlab/frame_3dd.m">frame_3dd.m</a>, executes the system command
-(<b>frame3dd</b> on Linux or OS X, <b>frame3dd.exe</b> on Windows) to compute the solution.
+(<b>frame3dd</b> on Linux and OS X, <b>frame3dd.exe</b> on Windows) to compute the solution.
 <ol>
 <li> The Matlab file for your problem first sets up the various matrices defining the problem for analysis and calls frame_3dd.m <br>
 A <a href="../matlab/exA.m">Matlab version of Example A</a> illustrates
