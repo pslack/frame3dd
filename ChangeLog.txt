@@ -1,3 +1,6 @@
+*Fri Nov 11 2011 Henri Gavin <.> 0.20100105
+- user-manual.html - improved installation instructions
+
 *Wed Nov 9 2011 Henri Gavin <.> 0.20100105
 - user-manual.html - update suggested text editors and links
 
