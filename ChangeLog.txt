@@ -1,3 +1,7 @@
+*Thu Nov 17 2011 Henri Gavin <.> 0.20100105
+- user-manual.html - gnuplot link for Win32 to the 4.2.6 version ... the 4.4.4
+version seems to have trouble.    
+
 *Fri Nov 11 2011 Henri Gavin <.> 0.20100105
 - user-manual.html - improved installation instructions
 

@@ -2903,7 +2903,8 @@ void static_mesh(
 	 fprintf(fpm,"set nozeroaxis\n");
 	 fprintf(fpm,"set nokey\n");
 	 fprintf(fpm,"set nolabel\n");
-	 fprintf(fpm,"set size ratio -1\n");
+	 fprintf(fpm,"set size ratio -1    # 1:1 2D axis scaling \n");	
+	 fprintf(fpm,"# set view equal xyz # 1:1 3D axis scaling \n");	
 
  	 fprintf(fpm,"# NODE NUMBER LABELS\n");
 	 for (j=1; j<=nJ; j++)
