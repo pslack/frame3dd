@@ -24,6 +24,7 @@
 #include <math.h>
 
 #include "coordtrans.h"
+#include "nrutil.h"
 
 /* -------------------------------------------------------------------------
 COORD_TRANS - calculate the 9 elements of the block-diagonal 12-by-12
@@ -122,3 +123,80 @@ void coord_trans(
 	return;
 }
 
+
+/* ------------------------------------------------------------------------------
+ * ATMA  -  perform the coordinate transformation from local to global     6jan96
+ *	  include effects of a finite joint radii, r1 and r2.	    9dec04
+ *	  ------------------------------------------------------------------------------*/
+void atma(
+	double t1, double t2, double t3,
+	double t4, double t5, double t6,
+	double t7, double t8, double t9,
+	double **m, float r1, float r2
+){
+	double  **a, **ma, **dmatrix();
+	int     i,j,k;
+
+	a  = dmatrix(1,12,1,12);
+	ma = dmatrix(1,12,1,12);
+
+	for (i=1; i<=12; i++)
+	    for (j=i; j<=12; j++) 
+		ma[j][i] = ma[i][j] = a[j][i] = a[i][j] = 0.0;
+
+	for (i=0; i<=3; i++) {
+		a[3*i+1][3*i+1] = t1;
+		a[3*i+1][3*i+2] = t2;
+		a[3*i+1][3*i+3] = t3;
+		a[3*i+2][3*i+1] = t4;
+		a[3*i+2][3*i+2] = t5;
+		a[3*i+2][3*i+3] = t6;
+		a[3*i+3][3*i+1] = t7;
+		a[3*i+3][3*i+2] = t8;
+		a[3*i+3][3*i+3] = t9;
+	}
+
+
+/*  effect of finite joint radius on coordinate transformation  ... */
+/*  this needs work ... */
+/*
+ 	a[5][1] =  r1*t7; 
+  	a[5][2] =  r1*t8; 
+  	a[5][3] =  r1*t9; 
+  	a[6][1] = -r1*t4; 
+  	a[6][2] = -r1*t5; 
+  	a[6][3] = -r1*t6; 
+ 
+  	a[11][7] = -r2*t7; 
+  	a[11][8] = -r2*t8; 
+  	a[11][9] = -r2*t9; 
+  	a[12][7] =  r2*t4; 
+  	a[12][8] =  r2*t5; 
+  	a[12][9] =  r2*t6; 
+*/
+
+#ifdef MATRIX_DEBUG
+	save_dmatrix( 12, 12, a, "aa");	 /*  save cord xfmtn */
+#endif
+
+	for (j=1; j <= 12; j++)			 /*  MT = M T     */
+	    for (i=1; i <= 12; i++)
+		for (k=1; k <= 12; k++)    ma[i][j] += m[i][k] * a[k][j];
+
+#ifdef MATRIX_DEBUG
+	save_dmatrix( 12, 12, ma, "ma");	/*  partial transformation */
+#endif
+
+	for (i=1; i<=12; i++)   for (j=i; j<=12; j++)   m[j][i] = m[i][j] = 0.0;
+
+	for (j=1; j <= 12; j++)			 /*  T'MT = T' MT */
+	    for (i=1; i <= 12; i++)
+		for (k=1; k <= 12; k++)    m[i][j] += a[k][i] * ma[k][j];
+
+#ifdef MATRIX_DEBUG
+	save_dmatrix( 12, 12, m, "atma");	       /*  debug atma */
+#endif
+
+	free_dmatrix(a, 1,12,1,12);
+	free_dmatrix(ma,1,12,1,12);
+}

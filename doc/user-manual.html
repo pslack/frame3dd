@@ -646,7 +646,7 @@ If the .ZIP archive was not automatically unzipped,
 simply drag the <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
 <li> Compile and install the code, as follows:
 <pre>
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c matrix.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
 mv frame3dd ..
 </pre>
 </ol>
@@ -823,7 +823,7 @@ If the .ZIP archive was not automatically unzipped,
 double-click the icon to extract it to your <b>Desktop</b>. 
 and compile the code, as follows:
 <pre>
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c matrix.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
 mv frame3dd ..
 </pre>
 </ol>
@@ -2658,8 +2658,7 @@ frame3dd -i InFile -o OutFile -lOff -e100 -p3.4 -z
     frame3dd.c      frame analysis
     frame3dd_io.c   input-output functions
     eig.c           generalized eigenvalue analysis
-    ldl_dcmp.c      LDL' decomposition
-    lu_dcmp.c       LU decomposition
+    matrix.c        LU decomposition, LDL' decomposition, pseudo-inverse, 
     coordtrans.c    coordinate transformation
     hpgUtils.c      ansi.sys color functions
     nrutil.c        dynamic memory allocation
@@ -2676,7 +2675,7 @@ and the <a href="http://www.mingw.org/"> MinGW gcc compiler</a>.
 <p>Using GCC, the command to compile is:</p>
 
 <pre>
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c ldl_dcmp.c lu_dcmp.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c matrix.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
 </pre>
 
 <a name="exitcodes"/><h2>13. Exit code index</h2>

@@ -35,7 +35,7 @@
 #include "common.h"
 #include "frame3dd_io.h"
 #include "coordtrans.h"
-#include "lu_dcmp.h"
+#include "matrix.h"
 #include "hpgUtils.h"
 #include "nrutil.h"
 

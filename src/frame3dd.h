@@ -204,13 +204,6 @@ void deallocate(
 	int *q, int *m
 );
 
-/**
-	relative norm
-	compute the relative 2-norm between two vectors N and D
-	return  ( sqrt(sum(N[i]*N[i]) / sqrt(D[i]*D[i]) )
- */
-double rel_norm( double *N, double *D, int n );
-
 
 #endif /* FRAME_FRAME_H */
 

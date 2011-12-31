@@ -28,7 +28,7 @@ SHELL = /bin/sh
 CC = gcc
 CFLAGS = -Wall -c -O 
 LDFLAGS = -lm
-SOURCES =  main.c frame3dd.c frame3dd_io.c coordtrans.c eig.c ldl_dcmp.c lu_dcmp.c hpgUtils.c nrutil.c 
+SOURCES =  main.c frame3dd.c frame3dd_io.c coordtrans.c eig.c matrix.c hpgUtils.c nrutil.c 
 OBJECTS = $(SOURCES:.c=.o)
 EXECUTEABLE = frame3dd
 

@@ -50,6 +50,7 @@ For compilation/installation, see README.txt.
 #include "frame3dd.h"
 #include "frame3dd_io.h"
 #include "eig.h"
+#include "matrix.h"
 #include "hpgUtils.h"
 #include "nrutil.h"
 

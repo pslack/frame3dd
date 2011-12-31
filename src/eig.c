@@ -34,7 +34,7 @@
 #include <stdlib.h>
 
 #include "eig.h"
-#include "ldl_dcmp.h"
+#include "matrix.h"
 #include "common.h" 
 #include "hpgUtils.h"
 #include "nrutil.h"
