@@ -20,8 +20,8 @@
  You should have received a copy of the GNU General Public License
  along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 *//**
-        @file
-        matrix decomposition, back-substitution, and multiplication
+	@file
+	matrix decomposition, back-substitution, and multiplication
 */
 
 /*
@@ -329,15 +329,51 @@ void pseudo_inv(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * PRODABj -  matrix-matrix multiplication for symmetric A	      27apr01
+ *		 u = A * B(:,j)
+ * --------------------------------------------------------------------------*/
+void prodABj ( double **A, double **B, double *u, int n, int j )
+{
+	int     i, k;
+
+	for (i=1; i<=n; i++)    u[i] = 0.0;
+
+	for (i=1; i<=n; i++) {
+		for (k=1; k<=n; k++) {
+			if ( i <= k )   u[i] += A[i][k]*B[k][j];
+			else	    u[i] += A[k][i]*B[k][j];
+		}
+	}
+	return;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * prodAB - matrix-matrix multiplication      C = A * B			27apr01
+ * --------------------------------------------------------------------------*/
+void prodAB ( double **A, double **B, double **C, int I, int J, int K )
+{
+	int     i, j, k;
+
+	for (i=1; i<=I; i++)
+		for (k=1; k<=K; k++)
+			C[i][k] = 0.0;
+
+	for (i=1; i<=I; i++)
+		for (k=1; k<=K; k++)
+			for (j=1; j<=J; j++)
+				C[i][k] += A[i][j]*B[j][k];
+	return;
+}
+
+
 /* ---------------------------------------------------------------------------
 INVAB  -  calculate product inv(A) * B  
 	 A is n by n      B is n by m				    6jun07
 ----------------------------------------------------------------------------*/
-void invAB(
-	double **A, double **B,
-	int n, int m, double **AiB,
-	int *ok, int verbose
-){
+void invAB( double **A, double **B, int n, int m, double **AiB, int *ok, int verbose)
+{
 	double  *diag, *b, *x, error;
 	int     i,j,k;
 
@@ -376,10 +412,10 @@ void invAB(
 
 
 /* ---------------------------------------------------------------------------
- * XTAIY  -  calculate quadratic form with inverse matrix   X' * inv(A) * Y   
+ * XTinvAY  -  calculate quadratic form with inverse matrix   X' * inv(A) * Y   
  *	   A is n by n    X is n by m     Y is n by m		    15sep01
  * --------------------------------------------------------------------------*/
-void xtaiy(
+void xtinvAy(
 	double **X, double **A, double **Y, int n, int m, double **Ac, int verbose
 ){
 	double  *diag, *x, *y, error;
@@ -418,11 +454,71 @@ void xtaiy(
 }
 
 
+/*-----------------------------------------------------------------------------
+ * xtAx - carry out matrix-matrix-matrix multiplication for symmetric A  7nov02
+ *	 C = X' A X     C is J by J      X is N by J     A is N by N      
+ * ---------------------------------------------------------------------------*/
+void xtAx(double **A, double **X, double **C, int N, int J)
+{
+
+	double  **AX;
+	int     i,j,k;
+
+	AX = dmatrix(1,N,1,J);
+
+	for (i=1; i<=J; i++)    for (j=1; j<=J; j++)     C[i][j] = 0.0;
+	for (i=1; i<=N; i++)    for (j=1; j<=J; j++)    AX[i][j] = 0.0;
+		
+	for (i=1; i<=N; i++) {	  /*  use upper triangle of A */
+		for (j=1; j<=J; j++) {
+			for (k=1; k<=N; k++) {
+				if ( i <= k )   AX[i][j] += A[i][k] * X[k][j];
+				else	    AX[i][j] += A[k][i] * X[k][j];
+			}
+		} 
+	}       
+		
+	for (i=1; i<=J; i++)    
+		for (j=1; j<=J; j++)
+			for (k=1; k<=N; k++) 
+				C[i][j] += X[k][i] * AX[k][j];
+			
+	for (i=1; i<=J; i++)	    /*  make  C  symmetric */
+		for (j=i; j<=J; j++)
+			C[i][j] = C[j][i] = 0.5 * ( C[i][j] + C[j][i] );
+
+	free_dmatrix(AX,1,N,1,J);
+	return;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * xtAy - carry out vector-matrix-vector multiplication for symmetric A  7apr94
+ * ------------------------------------------------------------------------- */
+double xtAy(double *x, double **A, double *y, int n, double *d)
+{
+
+	double  xtAy = 0.0;
+	int     i,j;
+
+	for (i=1; i<=n; i++) {				/*  d = A y  */
+		d[i]  = 0.0;    
+		for (j=1; j<=n; j++) {	  //  A in upper triangle only 
+			if ( i <= j )   d[i] += A[i][j] * y[j];
+			else	    d[i] += A[j][i] * y[j];
+		}
+	}
+	for (i=1; i<=n; i++)    xtAy += x[i] * d[i];	/*  xAy = x' A y  */
+	return ( xtAy );
+}
+
+
 /* ---------------------------------------------------------------------------
- * AIXAI  -  calculate quadratic form with inverse matrix    inv(A) * X * inv(A)
- *	   A is n by n    X is n by n				    15sep01
+ * invAXinvA -  calculate quadratic form with inverse matrix 
+ *	   replace X with inv(A) * X * inv(A) 
+ *	   A is n by n and symmetric   X is n by n and symmetric    15sep01
  * -------------------------------------------------------------------------*/
-void aixai ( double **A, double **X, int n, int verbose )
+void invAXinvA ( double **A, double **X, int n, int verbose )
 {
 	double  *diag, *b, *x, **Ai, **XAi, Aij, error;
 	int     i,j,k, ok;
@@ -492,7 +588,7 @@ void aixai ( double **A, double **X, int n, int verbose )
 /* ---------------------------------------------------------------------------
  *  REL_NORM -  compute the relative 2-norm between two vectors       26dec01 
  *       compute the relative 2-norm between two vectors N and D
- *               return  ( sqrt(sum(N[i]*N[i]) / sqrt(D[i]*D[i]) )
+ *	       return  ( sqrt(sum(N[i]*N[i]) / sqrt(D[i]*D[i]) )
  *
  * ------------------------------------------------------------------------- */
 double rel_norm( double *N, double *D, int n )

@@ -913,7 +913,7 @@ void condense(
 		}
 	}
 
-	xtaiy( Arq, Arr, Arq, N-n, n, Ac, verbose );
+	xtinvAy( Arq, Arr, Arq, N-n, n, Ac, verbose );
 
 	for (i=1; i<=n; i++) {
 		for (j=i; j<=n; j++) { /* use only upper triangle of A */

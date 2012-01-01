@@ -123,6 +123,19 @@ void pseudo_inv(
 
 #endif /*  FRAME_LDL_DCMP_H */
 
+/*  ----------------------------------------------------------------------------
+ * PRODABj -  matrix-matrix multiplication for symmetric A            27apr01
+ *               u = A * B(:,j)
+ * --------------------------------------------------------------------------*/
+void prodABj ( double **A, double **B, double *u, int n, int j );
+
+
+/* ----------------------------------------------------------------------------
+ * prodAB - matrix-matrix multiplication      C = A * B                 27apr01
+ * --------------------------------------------------------------------------*/
+void prodAB ( double **A, double **B, double **C, int I, int J, int K );
+
+
 /** 
 	INVAB  -  calculate product inv(A) * B  
        	   A is n by n      B is n by m                               6jun07
@@ -136,15 +149,29 @@ void invAB(
   XTAIY  -  calculate quadratic form with inverse matrix   X' * inv(A) * Y   
    A is n by n    X is n by m     Y is n by m               15sep01
 */
-void xtaiy(
+void xtinvAy(
         double **X, double **A, double **Y, int n, int m, double **Ac, int verbose );
 
 
-/** 
-  AIXAI  -  calculate quadratic form with inverse matrix    inv(A) * X * inv(A)
-          A is n by n    X is n by n                               15sep01
-*/ 
-void aixai ( double **A, double **X, int n, int verbose );
+/* ----------------------------------------------------------------------------
+ * xtAx - carry out matrix-matrix-matrix multiplication for symmetric A  7nov02
+ *       C = X' A X     C is J by J      X is N by J     A is N by N      
+ * --------------------------------------------------------------------------*/
+void xtAx(double **A, double **X, double **C, int N, int J);
+
+
+/* ----------------------------------------------------------------------------
+ * xAy1 - carry out vector-matrix-vector multiplication for symmetric A  7apr94
+ * ------------------------------------------------------------------------- */
+double xtAy(double *x, double **A, double *y, int n, double *d);
+
+
+/*  ---------------------------------------------------------------------------
+ * invAXinvA -  calculate quadratic form with inverse matrix 
+ *         replace X with inv(A) * X * inv(A) 
+ *         A is n by n and symmetric   X is n by n and symmetric    15sep01
+ * --------------------------------------------------------------------------*/
+void invAXinvA ( double **A, double **X, int n, int verbose );
 
 /** 
 REL_NORM -  compute the relative 2-norm between two vectors       26dec01 

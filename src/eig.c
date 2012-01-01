@@ -47,12 +47,6 @@ static void jacobi( double **K, double **M, double *E, double **V, int n );
 
 static void rotate ( double **A, int n,double alpha, double beta, int i,int j);
 
-static double xAy1 ( double *x, double **A, double *y, int n, double *d );
-
-static void mat_mult1 ( double **A, double **B, double *u, int n, int j );
-
-void mat_mult2 ( double **A, double **B, double **C, int I, int J, int K);
-
 void eigsort ( double *e, double **v, int n, int m);
 
 int sturm ( double **K, double **M, int n, int m, double shift, double ws, int verbose );
@@ -171,7 +165,7 @@ void subspace(
 	do { 					/* Begin sub-space iterations */
 
 		for (k=1; k<=m; k++) {		/* K Xb = M V	(12.10) */
-			mat_mult1 ( M, V, v, n, k );
+			prodABj ( M, V, v, n, k );
 			ldl_dcmp ( K, n, u, v, d, 0, 1, ok ); /* LDL bk-sub */
 
                                         /* improve the solution iteratively */
@@ -191,7 +185,7 @@ void subspace(
 
 		jacobi ( Kb, Mb, w, Qb, m );		/* (12.13) */
 
-		mat_mult2 ( Xb, Qb, V, n,m,m );		/* V = Xb Qb (12.14) */
+		prodAB ( Xb, Qb, V, n,m,m );		/* V = Xb Qb (12.14) */
 
 		eigsort ( w, V, n, m );
 
@@ -322,7 +316,8 @@ ROTATE - rotate an n by n symmetric matrix A such that A[i][j] = A[j][i] = 0
      A = P' * A * P  where diag(P) = 1 and P[i][j] = alpha and P[j][i] = beta.
      Since P is sparse, this matrix multiplcation can be done efficiently.  
 -----------------------------------------------------------------------------*/
-void rotate ( double **A, int n, double alpha, double beta, int i, int j ){
+void rotate ( double **A, int n, double alpha, double beta, int i, int j )
+{
 	double	Aii, Ajj, Aij,			/* elements of A	*/
 		*Ai, *Aj;		/* i-th and j-th rows of A */
 	int	k;
@@ -446,19 +441,19 @@ void stodola (
 	    u[i_ex] = 1.0;  u[i_ex+1] = 1.e-4; 
 	    d_old = d_max;
 
-	    vMv = xAy1 ( u, M, u, n, d );		/* mass-normalize */
+	    vMv = xtAy ( u, M, u, n, d );		/* mass-normalize */
 	    for (i=1; i<=n; i++)	u[i] /= sqrt ( vMv ); 
 
 	    for (j=1; j<k; j++) {			/* purge lower modes */
 		for (i=1; i<=n; i++)	v[i] = V[i][j];
-		c[j] = xAy1 ( v, M, u, n, d );
+		c[j] = xtAy ( v, M, u, n, d );
 	    }
 	    for (j=1; j<k; j++)
 		for (i=1; i<=n; i++)	u[i] -= c[j] * V[i][j];
 			
-	    vMv = xAy1 ( u, M, u, n, d );		/* mass-normalize */
+	    vMv = xtAy ( u, M, u, n, d );		/* mass-normalize */
 	    for (i=1; i<=n; i++)	u[i] /= sqrt ( vMv ); 
-	    RQ  = xAy1 ( u, K, u, n, d );		/* Raleigh quotient */
+	    RQ  = xtAy ( u, K, u, n, d );		/* Raleigh quotient */
 
 	    do {					/* iterate	*/
 		for (i=1; i<=n; i++) {			/* v = D u	*/
@@ -466,21 +461,21 @@ void stodola (
 			for (j=1; j<=n; j++)	v[i] += D[i][j] * u[j];
 		}
 
-		vMv = xAy1 ( v, M, v, n, d );		/* mass-normalize */
+		vMv = xtAy ( v, M, v, n, d );		/* mass-normalize */
 		for (i=1; i<=n; i++)	v[i] /= sqrt ( vMv ); 
 
 		for (j=1; j<k; j++) {			/* purge lower modes */
 			for (i=1; i<=n; i++)	u[i] = V[i][j];
-			c[j] = xAy1 ( u, M, v, n, d );
+			c[j] = xtAy ( u, M, v, n, d );
 		}
 		for (j=1; j<k; j++)
 			for (i=1; i<=n; i++)	v[i] -= c[j] * V[i][j];
 
-		vMv = xAy1 ( v, M, v,  n, d );		/* mass-normalize */
+		vMv = xtAy ( v, M, v,  n, d );		/* mass-normalize */
 		for (i=1; i<=n; i++)	u[i] = v[i] / sqrt ( vMv ); 
 
 		RQold = RQ;
-		RQ = xAy1 ( u, K, u, n, d );		/* Raleigh quotient */
+		RQ = xtAy ( u, K, u, n, d );		/* Raleigh quotient */
 		(*iter)++;
 
 		if ( *iter > 1000 ) {
@@ -493,7 +488,7 @@ void stodola (
 
 	    for (i=1; i<=n; i++)	V[i][k] = v[i];
 
-	    w[k] = xAy1 ( u, K, u, n, d );
+	    w[k] = xtAy ( u, K, u, n, d );
 	    if ( w[k] > shift )	w[k] = w[k] - shift;
 	    else		w[k] = shift - w[k];
 
@@ -521,108 +516,13 @@ void stodola (
 
 
 /*------------------------------------------------------------------------------
-xAy1  -  carry out vector-matrix-vector multiplication for symmetric A	7apr94
-------------------------------------------------------------------------------*/
-double xAy1(double *x, double **A, double *y, int n, double *d){
-
-	double	xtAy = 0.0;
-	int	i,j;
-
-	for (i=1; i<=n; i++) {				/* d = A y	*/
-		d[i]  = 0.0;
-		for (j=1; j<=n; j++) {		/* A in upper triangle only */
-			if ( i <= j )	d[i] += A[i][j] * y[j];
-			else		d[i] += A[j][i] * y[j];
-		}
-	}
-	for (i=1; i<=n; i++)	xtAy += x[i] * d[i];	/* xAy = x' A y	*/
-	return ( xtAy );
-}
-
-
-/*------------------------------------------------------------------------------
-xtAx -  carry out matrix-matrix-matrix multiplication for symmetric A	7nov02
-	C = X' A X     C is J by J	X is N by J	A is N by N	 
-------------------------------------------------------------------------------*/
-void xtAx(double **A, double **X, double **C, int N, int J){
-
-	double	**AX;
-	int	i,j,k;
-	/* ,l; -- unused */
-
-	AX = dmatrix(1,N,1,J);
-
-	for (i=1; i<=J; i++)	for (j=1; j<=J; j++)	 C[i][j] = 0.0;
-	for (i=1; i<=N; i++)	for (j=1; j<=J; j++)	AX[i][j] = 0.0;
-
-	for (i=1; i<=N; i++) {		/* use upper triangle of A */
-		for (j=1; j<=J; j++) {
-			for (k=1; k<=N; k++) {
-				if ( i <= k )	AX[i][j] += A[i][k] * X[k][j];
-				else		AX[i][j] += A[k][i] * X[k][j];
-			}
-		}
-	}
-
-	for (i=1; i<=J; i++) 
-		for (j=1; j<=J; j++) 
-			for (k=1; k<=N; k++) 
-				C[i][j] += X[k][i] * AX[k][j];
-
-        for (i=1; i<=J; i++)            /* make  C  symmetric */
-                for (j=i; j<=J; j++) 
-                        C[i][j] = C[j][i] = 0.5 * ( C[i][j] + C[j][i] );
-
-	free_dmatrix(AX,1,N,1,J);
-	return;
-}
-
-
-/*------------------------------------------------------------------------------
-mat_mult1  -  matrix-matrix multiplication for symmetric A		27apr01
-		u = A * B(:,j)
-------------------------------------------------------------------------------*/
-void mat_mult1 ( double **A, double **B, double *u, int n, int j ){
-        int     i, k;
-
-        for (i=1; i<=n; i++)	u[i] = 0.0;
-
-        for (i=1; i<=n; i++) {
-                for (k=1; k<=n; k++) {
-                        if ( i <= k )	u[i] += A[i][k]*B[k][j];
-                        else		u[i] += A[k][i]*B[k][j];
-		}
-        }
-	return;
-}
-
-
-/*------------------------------------------------------------------------------
-mat_mult2  -  matrix-matrix multiplication 	C = A * B		27apr01
-------------------------------------------------------------------------------*/
-void mat_mult2 ( double **A, double **B, double **C, int I, int J, int K ){
-	int     i, j, k;
-
-	for (i=1; i<=I; i++)  
-		for (k=1; k<=K; k++)  
-			C[i][k] = 0.0;
-
-	for (i=1; i<=I; i++) 
-		for (k=1; k<=K; k++) 
-			for (j=1; j<=J; j++) 
-				C[i][k] += A[i][j]*B[j][k];
-	return;
-}
-
-
-
-/*------------------------------------------------------------------------------
 EIGSORT  -  Given the eigenvallues e[1..m] and eigenvectors v[1..n][1..m],
 this routine sorts the eigenvalues into ascending order, and rearranges
 the columns of v correspondingly.  The method is straight insertion.
 Adapted from Numerical Recipes in C, Ch 11
 ------------------------------------------------------------------------------*/
-void eigsort ( double *e, double **v, int n, int m ){
+void eigsort ( double *e, double **v, int n, int m )
+{
 	int	k,j,i;
 	double   p=0;
 
@@ -644,6 +544,7 @@ void eigsort ( double *e, double **v, int n, int m ){
 	}
 	return;
 }
+
 
 /*-----------------------------------------------------------------------------
 STURM  -  Determine the number of eigenvalues, w, of the general eigen-problem
