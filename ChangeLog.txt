@@ -1,4 +1,7 @@
 *Sun Jan 01 2012 Henri Gavin <.> 0.20100105
+- user-manual.html - add link to the vim charity, iccf-holland 
+
+*Sun Jan 01 2012 Henri Gavin <.> 0.20100105
 - source-code re-organization, moved matrix multiplication routines from eig.c to matrix.c
 
 *Thu Dec 30 2011 Henri Gavin <.> 0.20100105
