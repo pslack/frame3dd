@@ -1844,7 +1844,7 @@ void write_input_data (
 	  }
 
 	  if ( nP[lc] > 0 ) {
-	    fprintf(fp," C O N C E T R A T E D   P O I N T   L O A D S");
+	    fprintf(fp," C O N C E N T R A T E D   P O I N T   L O A D S");
 	    fprintf(fp,"\t\t\t\t(local)\n");
 	    fprintf(fp,"  Elmnt       Px          Py          Pz          x\n");
 	    for (n=1; n<=nP[lc]; n++) {
@@ -3386,7 +3386,7 @@ void cubic_bent_beam(
 
 	lu_dcmp ( A, 4, b, 0, 1, &pd );		/* solve for cubic coef's */
 
-	for ( s = u1; s <= 1.01*(L+u7); s += (L+u7-u1) / 10.0 ) {
+	for ( s = u1; fabs(s) <= 1.01*fabs(L+u7); s += (L+u7-u1) / 10.0 ) {
 
 			/* deformed shape in local coordinates */
 		v = a[1] + a[2]*s + a[3]*s*s + a[4]*s*s*s;

@@ -610,7 +610,7 @@ For compilation/installation, see README.txt.
 		}
 		for (i=1; i<=DoF; i++) { /*  modify K and M for reactions */
 			if ( R[i] ) {	/* apply reactions to upper triangle */
-				K[i][i] = traceK * 1e2;
+				K[i][i] = traceK * 1e4;
 				M[i][i] = traceM;
 				for (j=i+1; j<=DoF; j++)
 					K[j][i]=K[i][j]=M[j][i]=M[i][j] = 0.0;
@@ -691,6 +691,7 @@ For compilation/installation, see README.txt.
 		free_dmatrix(Kc, 1,Cdof,1,Cdof );
 		free_dmatrix(Mc, 1,Cdof,1,Cdof );
 	}
+
 
 	/* deallocate memory used for each frame analysis variable */
 	deallocate ( nJ, nE, nL, nF, nU, nW, nP, nT, DoF, nM,

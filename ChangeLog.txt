@@ -1,3 +1,9 @@
+*Mon Apr 09 2012 Henri Gavin <.> 0.20100105
+- frame3dd_io.c ... fix spelling of "C O N C E N T R A T E D"
+
+*Fri Apr 06 2012 Henri Gavin <.> 0.20100105
+- frame3dd_io.c ... in function animate, prevent overflow from excessive EXG factor
+
 *Sun Jan 01 2012 Henri Gavin <.> 0.20100105
 - user-manual.html - add link to the vim charity, iccf-holland 
 

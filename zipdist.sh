@@ -61,6 +61,7 @@ zip -r Frame3DD_$(echo $VERSION).zip Frame3DD/*
 #cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_osx56.zip
 #cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_win32.zip
 
+cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_DukeOIT.zip
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_linux.zip
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx34.zip
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx56.zip
@@ -75,6 +76,12 @@ echo "adding Linux executable ... "
 cp --preserve=mode,timestamps ../build/frame3dd        Frame3DD/.
 # zip Frame3DD_$(date +%Y%m%d)_linux.zip Frame3DD/frame3dd
 zip Frame3DD_$(echo $VERSION)_linux.zip Frame3DD/frame3dd
+rm Frame3DD/frame3dd
+
+# add Duke OIT executable  
+echo "adding OS X executable ... "
+cp --preserve=mode,timestamps ../build/frame3dd_oit     Frame3DD/frame3dd
+zip Frame3DD_$(echo $VERSION)_DukeOIT.zip Frame3DD/frame3dd
 rm Frame3DD/frame3dd
 
 # add OS X 10.3 10.4 10.5 10.6 executables  

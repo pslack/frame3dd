@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis (N mm ton) 
-Fri Dec 30 18:59:32 2011
+Fri Nov 11 17:46:34 2011
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -39,7 +39,7 @@ L O A D   C A S E   1   O F   3  ...
    0 prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
-     1    1000.000   -2000.000   -1009.992       0.000       0.000       0.000
+     1    1000.000   -2000.000   -1009.992       0.000      -0.000       0.000
      2       0.000       0.000      -2.498    -374.698     499.598       0.000
      3       0.000       0.000      -2.498    -374.698    -499.598       0.000
      4       0.000       0.000      -2.498     374.698    -499.598       0.000
@@ -88,7 +88,7 @@ L O A D   C A S E   3   O F   3  ...
    0 prescribed displacements
  J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
-     1      69.513     -34.167    -106.454   26196.117 -114629.272  -52275.957
+     1      69.513     -34.167    -106.454   26196.117 -114629.273  -52275.957
      2     251.622     281.392    -557.698 -156439.366  183895.925   22220.907
      3     -12.999     -94.251      66.729   40848.692   17951.709   32861.892
      4       0.000       0.000      -2.498     374.698    -499.598       0.000
