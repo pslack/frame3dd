@@ -6,14 +6,14 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example E: a three dimensional structure showing lateral-torsional dynamic modes (units: kip  in) 
-Fri Nov 11 17:46:35 2011
+Mon Apr  9 15:07:23 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
    12 JOINTS             3 FIXED JOINTS      15 FRAME ELEMENTS   1 LOAD CASES   
 ________________________________________________________________________________
-J O I N T   D A T A                                         R E S T R A I N T S
-  Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
+N O D E   D A T A                                           R E S T R A I N T S
+  Node       X              Y              Z         radius  Fx Fy Fz Mx My Mz
     1       0.000000       0.000000       0.000000    0.000   0  0  0  0  0  0
     2      72.000000       0.000000       0.000000    0.000   0  0  0  0  0  0
     3     144.000000       0.000000       0.000000    0.000   0  0  0  0  0  0
@@ -55,8 +55,8 @@ L O A D   C A S E   1   O F   1  ...
    0 concentrated point loads
    0 temperature loads
    0 prescribed displacements
- J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
-  Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
+ N O D A L   L O A D S  +  E Q U I V A L E N T   N O D A L   L O A D S  (global)
+  Node        Fx          Fy          Fz          Mxx         Myy         Mzz
      1      -8.400       0.000       0.000       0.000     143.993       0.000
      3     -12.600     500.000    -500.000       0.000     215.990       0.000
      6     -16.800       0.000       0.000       0.000     287.986       0.000
@@ -80,8 +80,8 @@ E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 
 L O A D   C A S E   1   O F   1  ... 
 
-J O I N T   D I S P L A C E M E N T S					(global)
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+N O D E   D I S P L A C E M E N T S  					(global)
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    2.522821   -1.425467    0.000808    0.009636    0.000086    0.143923
      2    2.522826    8.937177    0.007634   -0.000027   -0.000061    0.143950
      3    2.522827   19.304915   -0.000882   -0.011442    0.000402    0.143960
@@ -92,7 +92,7 @@ J O I N T   D I S P L A C E M E N T S					(global)
      8   -2.658615   -1.425468    0.347340    0.009548    0.004576    0.143928
     12   -2.658615    8.937176    0.006357   -0.000080    0.005099    0.143941
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
+  Elmnt  Node       Nx          Vy         Vz        Txx        Myy        Mzz
      1      1    -76.278t      0.220   -109.895   1543.378   4975.446    221.842
      1      2     76.278t     -0.220    109.895  -1543.378   2936.507    584.418
      2      2    -18.857t    -45.645    -53.509   1823.108  -1287.935  -1614.527
@@ -124,7 +124,7 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
     15     12     -1.177t      8.975    104.573   1537.822  -7397.107    423.028
     15      8      1.177t     -8.975   -104.573  -1537.822   -132.579    235.377
 R E A C T I O N S							(global)
-  Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
+  Node        Fx          Fy          Fz         Mxx         Myy         Mzz
      9     -57.577      21.622    -214.909   -1420.973   -3305.982     -13.793
     10     -44.030    -367.323     234.551   24580.711   -3127.397     -13.796
     11     155.607    -154.298     480.368   11416.374   10767.992     -13.795
@@ -132,8 +132,8 @@ R M S   E Q U I L I B R I U M    E R R O R: 3.484e-05
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  4.164160e+00     Structural Mass:  7.761600e-01 
-J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
-  Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
+N O D A L   M A S S E S	(diagonal of the mass matrix)			(global)
+  Node  X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
      1 6.31084e-02 6.41586e-02 6.17055e-02 1.30339e+01 1.54221e+01 3.08436e+00
      2 4.72677e-02 5.04357e-02 5.15033e-02 3.77424e-01 5.48942e+00 5.82485e+00
      3 6.31084e-02 6.41586e-02 6.17055e-02 1.30339e+01 1.54221e+01 3.08436e+00
@@ -154,7 +154,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =  -1.9132e+00 
 		Y- modal participation factor =   5.9943e-01 
 		Z- modal participation factor =   4.0755e-04 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1  -4.105e-01   1.788e-02  -3.074e-05  -2.127e-04  -3.189e-05   1.822e-03
      2  -4.105e-01   1.489e-01   1.821e-04  -1.272e-06   1.113e-05   1.820e-03
      3  -4.105e-01   2.798e-01   6.055e-05   1.828e-04  -2.432e-05   1.821e-03
@@ -163,15 +163,15 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      6  -5.416e-01   1.489e-01  -2.979e-05  -9.768e-06  -2.246e-04   1.819e-03
      7  -5.416e-01   1.788e-02  -1.548e-02  -2.149e-04  -2.087e-04   1.819e-03
      8  -4.761e-01   1.788e-02  -7.723e-03  -2.143e-04  -1.122e-04   1.820e-03
-     9  -3.211e-13   9.202e-15  -3.124e-17  -2.716e-13  -9.277e-12   1.683e-18
-    10  -3.213e-13   2.235e-13   6.153e-17  -6.452e-12  -9.282e-12   1.682e-18
-    11  -4.195e-13   1.165e-13  -3.027e-17  -3.367e-12  -1.212e-11   1.680e-18
+     9  -3.211e-15   9.202e-17  -3.124e-19  -2.716e-15  -9.277e-14   1.683e-20
+    10  -3.213e-15   2.235e-15   6.153e-19  -6.452e-14  -9.282e-14   1.682e-20
+    11  -4.195e-15   1.165e-15  -3.027e-19  -3.367e-14  -1.212e-13   1.680e-20
     12  -4.761e-01   1.489e-01   1.317e-04  -2.100e-06  -1.027e-04   1.820e-03
   MODE     2:   f= 0.622295 Hz,  T= 1.606954 sec
 		X- modal participation factor =   6.0339e-01 
 		Y- modal participation factor =   1.9228e+00 
 		Z- modal participation factor =   1.0480e-03 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   1.540e-01   4.692e-01   6.361e-05   5.902e-05   2.677e-06   1.159e-04
      2   1.540e-01   4.777e-01   4.417e-04  -2.019e-06  -4.188e-06   1.143e-04
      3   1.540e-01   4.857e-01   3.332e-05  -1.579e-04   1.874e-05   1.120e-04
@@ -180,15 +180,15 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      6   1.457e-01   4.777e-01  -9.687e-05  -2.951e-05   1.138e-04   1.148e-04
      7   1.457e-01   4.692e-01   6.314e-03   9.673e-05   7.716e-05   1.169e-04
      8   1.499e-01   4.692e-01   2.883e-03   8.960e-05   2.654e-05   1.151e-04
-     9   1.290e-13   3.946e-13   6.911e-17  -1.140e-11   3.726e-12   1.144e-19
-    10   1.286e-13   4.032e-13   3.620e-17  -1.165e-11   3.715e-12   1.106e-19
-    11   1.194e-13   3.996e-13  -1.052e-16  -1.155e-11   3.452e-12   1.134e-19
+     9   1.290e-15   3.946e-15   6.911e-19  -1.140e-13   3.726e-14   1.144e-21
+    10   1.286e-15   4.032e-15   3.620e-19  -1.165e-13   3.715e-14   1.106e-21
+    11   1.194e-15   3.996e-15  -1.052e-18  -1.155e-13   3.452e-14   1.134e-21
     12   1.499e-01   4.777e-01   3.540e-04  -4.782e-06   5.475e-05   1.144e-04
   MODE     3:   f= 1.601568 Hz,  T= 0.624388 sec
 		X- modal participation factor =  -1.9004e-01 
 		Y- modal participation factor =   7.0072e-02 
 		Z- modal participation factor =   1.0546e-04 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1  -7.133e-01   1.364e+00  -2.266e-05  -1.638e-03  -5.578e-05  -1.871e-02
      2  -7.133e-01   1.742e-02   7.200e-05  -1.153e-06   1.880e-05  -1.871e-02
      3  -7.133e-01  -1.330e+00   2.833e-05   1.631e-03  -5.176e-05  -1.871e-02
@@ -197,15 +197,15 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      6   6.337e-01   1.742e-02  -5.637e-06  -1.585e-06  -1.542e-03  -1.871e-02
      7   6.337e-01   1.364e+00  -1.128e-01  -1.525e-03  -1.567e-03  -1.871e-02
      8  -3.986e-02   1.364e+00  -5.741e-02  -1.558e-03  -7.990e-04  -1.871e-02
-     9  -3.951e-12   7.310e-12  -1.630e-16  -2.115e-10  -1.141e-10  -1.224e-16
-    10  -3.951e-12  -7.119e-12   2.039e-16   2.060e-10  -1.142e-10  -1.224e-16
-    11   3.765e-12   9.644e-14  -4.057e-17  -2.787e-12   1.085e-10  -1.224e-16
+     9  -3.951e-14   7.310e-14  -1.630e-18  -2.115e-12  -1.141e-12  -1.224e-18
+    10  -3.951e-14  -7.119e-14   2.039e-18   2.060e-12  -1.142e-12  -1.224e-18
+    11   3.765e-14   9.644e-16  -4.057e-19  -2.787e-14   1.085e-12  -1.224e-18
     12  -3.986e-02   1.742e-02   3.248e-05  -9.823e-07  -7.957e-04  -1.872e-02
   MODE     4:   f= 9.650854 Hz,  T= 0.103618 sec
 		X- modal participation factor =   3.1972e-02 
 		Y- modal participation factor =  -5.0785e-04 
 		Z- modal participation factor =   1.2140e-03 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1  -1.670e-02   2.736e-02  -2.505e-03  -4.598e-02  -3.169e-04  -3.866e-04
      2  -1.670e-02  -1.372e-04   3.428e-04  -1.511e-08  -5.500e-05  -3.832e-04
      3  -1.670e-02  -2.758e-02   2.489e-03   4.603e-02  -3.031e-04  -3.862e-04
@@ -214,9 +214,9 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      6   1.160e-02  -1.372e-04   3.319e-05  -8.262e-06  -4.619e-02  -3.855e-04
      7   1.160e-02   2.736e-02  -3.320e+00  -4.575e-02  -4.570e-02  -3.908e-04
      8  -2.650e-03   2.736e-02  -1.665e+00  -4.607e-02  -2.305e-02  -3.895e-04
-     9  -1.551e-12  -2.622e-10  -6.537e-13   7.256e-09  -4.700e-11  -9.203e-17
-    10  -1.624e-12   2.625e-10   6.503e-13  -7.262e-09  -4.902e-11  -9.190e-17
-    11   2.713e-10  -7.695e-14   8.050e-15   2.164e-12   7.517e-09  -9.165e-17
+     9  -1.551e-14  -2.622e-12  -6.537e-15   7.256e-11  -4.700e-13  -9.203e-19
+    10  -1.624e-14   2.625e-12   6.503e-15  -7.262e-11  -4.902e-13  -9.190e-19
+    11   2.713e-12  -7.694e-16   8.054e-17   2.164e-14   7.516e-11  -9.164e-19
     12  -2.650e-03  -1.372e-04   2.991e-04  -4.283e-06  -2.320e-02  -3.984e-04
 M A T R I X    I T E R A T I O N S: 3
 There are 4 modes below 9.650854 Hz. ... All 4 modes were found.

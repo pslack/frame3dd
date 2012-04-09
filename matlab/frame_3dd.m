@@ -1,23 +1,23 @@
-function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
-% [D,R,F,L,Ks] = frame_3dd (XYZ,JTS,RCT,EAIJ,P,U,D)
+function [D,R,F,L,Ks] = frame_3dd(XYZ,ELT,RCT,EAIJ,P,U,D)
+% [D,R,F,L,Ks] = frame_3dd (XYZ,ELT,RCT,EAIJ,P,U,D)
 %
 % Solve a a three-dimensional frame analysis problem 
 %
 % INPUT DATA:
 %
-%  XYZ : a 4xJ matrix containing the XYZ coordinate of each joint
-%          row 1 = X-axis coordinate  for each joint
-%          row 2 = Y-axis coordinate  for each joint
-%          row 3 = Z-axis coordinate  for each joint
-%          row 4 = rigid radius       for each joint     
+%  XYZ : a 4xJ matrix containing the XYZ coordinate of each node
+%          row 1 = X-axis coordinate  for each node
+%          row 2 = Y-axis coordinate  for each node
+%          row 3 = Z-axis coordinate  for each node
+%          row 4 = rigid radius       for each node     
 %
-%  JTS : a 2xB matrix indicating which 2 joints each frame element connects
-%          row 1 = the 'starting' joint  for each frame element 
-%          row 2 = the 'ending'   joint  for each frame element
+%  ELT : a 2xB matrix indicating which 2 nodes each frame element connects
+%          row 1 = the 'starting' node  for each frame element 
+%          row 2 = the 'ending'   node  for each frame element
 %
-%  RCT : a 6xJ matrix indicated which joints have reactions
-%        0: the joint has no reaction in that degree of freedom,
-%        1: the joint does have a reaction in that degree of freedom.
+%  RCT : a 6xJ matrix indicated which nodes have reactions
+%        0: the node has no reaction in that degree of freedom,
+%        1: the node does have a reaction in that degree of freedom.
 %
 % EAIJ : a 10xB containing the section and modulus properties of each frame el.
 %         row 1 = Ax  cross section area                   for each frame el.
@@ -31,14 +31,14 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %         row 9 = p   roll angle                           for each frame el.
 %         row 10 = d  mass density                         for each frame el.
 %         
-%    P : a 6xJ matrix containing the components of the external 
-%        forces and moments applied to each joint.
-%          row 1 = Joint Force in X-direction    for each joint
-%          row 2 = Joint Force in Y-direction    for each joint
-%          row 3 = Joint Force in Z-direction    for each joint
-%          row 4 = Joint Moment about X-axis     for each joint
-%          row 5 = Joint Moment about Y-axis     for each joint
-%          row 6 = Joint Moment about Z-axis     for each joint
+%    P : a 6xJ matrix containing the components of the externally applied 
+%        forces and moments applied to each node.
+%          row 1 = Nodal Force in X-direction    for each node
+%          row 2 = Nodal Force in Y-direction    for each node
+%          row 3 = Nodal Force in Z-direction    for each node
+%          row 4 = Nodal Moment about X-axis     for each node
+%          row 5 = Nodal Moment about Y-axis     for each node
+%          row 6 = Nodal Moment about Z-axis     for each node
 %
 %    U : a 3xB matrix containing the unif. dist. load on each frame element
 %          row 1 = uniform distributed load along the local element x axis
@@ -46,16 +46,16 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %          row 3 = uniform distributed load in    the local element z axis
 %
 %    D : a 6xJ matrix of prescribed displacements at the reaction DoF's
-%          row 1 = prescribed joint displ. in the X-direction for each joint
-%          row 2 = prescribed joint displ. in the Y-direction for each joint
-%          row 3 = prescribed joint displ. in the Z-direction for each joint
-%          row 4 = prescribed joint rot'n  about the X-axis   for each joint
-%          row 5 = prescribed joint rot'n  about the Y-axis   for each joint
-%          row 6 = prescribed joint rot'n  about the Z-axis   for each joint
+%          row 1 = prescribed node displ. in the X-direction for each node
+%          row 2 = prescribed node displ. in the Y-direction for each node
+%          row 3 = prescribed node displ. in the Z-direction for each node
+%          row 4 = prescribed node rot'n  about the X-axis   for each node
+%          row 5 = prescribed node rot'n  about the Y-axis   for each node
+%          row 6 = prescribed node rot'n  about the Z-axis   for each node
 %
 % OUTPUT DATA:
 %
-%    D : a 6xJ matrix   of the deflections and rotations of each joint
+%    D : a 6xJ matrix   of the deflections and rotations of each node
 %    R : a 6xJ matrix   of the reaction forces and moments 
 %    F : a 12xB matrix  of the end forces of each frame element 
 %    L : a 1xB vector   of the length of each frame element 
@@ -68,7 +68,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 % to compute the solution.  This m-function interface to frame3dd does not 
 % (yet) implement the following features of frame3dd:
 %   gravitational loading 
-%   point forces applied between the joints of a member
+%   point forces applied between the nodes of a member
 %   temperature loads
 %   multiple load cases
 %   modal analysis
@@ -95,7 +95,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %    You should have received a copy of the GNU General Public License
 %    along with FRAME3DD.  If not, see <http://www.gnu.org/licenses/>.
 
-% H.P. Gavin, Dept. Civil & Environ. Eng'g, Duke Univ., March 31, 2009
+% H.P. Gavin, Dept. Civil & Environ. Eng'g, Duke Univ., Mar 31 2009, Apr 8 2011
 % *** Please email extensions and enhancements of this function to me. ***
 
   shear = 0;		     % 1: include shear deformation effects, 0: don't
@@ -110,19 +110,19 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
          return
   end
 
-  [x,J] = size(XYZ);                    % number of joints
-  [x,B] = size(JTS);                    % number of frame elements
+  [x,J] = size(XYZ);                    % number of nodes
+  [x,B] = size(ELT);                    % number of frame elements
 
   % --- error checking
 
   if any(~(size(RCT)==[6,J]))
-     error('The dimension of RCT must be 6 by # of joints.')
+     error('The dimension of RCT must be 6 by # of nodes.')
   end
   if any(~(size(EAIJ)==[10,B]))
      error('The dimension of EAIJ must be 10 by # of frame elements.')
   end
   if any(~(size(P)==[6,J]))
-     error('The dimension of P must be 6 by # of joints.')
+     error('The dimension of P must be 6 by # of nodes.')
   end
   if any(~(size(U)==[3,B]))
      error('The dimension of U must be 3 by # of frame elements.')
@@ -136,9 +136,9 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 
   fprintf(fp,'frame analysis via Matlab interface\n\n');
 
-  fprintf(fp,'%% joint data ...\n');
-  fprintf(fp,'%d\t\t%% number of joints  \n', J);
-  fprintf(fp,'%% J\t\tX\t\tY\t\tZ\t\tr\t\tjoint coordinates \n');
+  fprintf(fp,'%% node data ...\n');
+  fprintf(fp,'%d\t\t%% number of nodes  \n', J);
+  fprintf(fp,'%% J\t\tX\t\tY\t\tZ\t\tr\t\tnode coordinates \n');
   for j=1:J
       fprintf(fp,'%d\t%e\t%e\t%e\t%e\n',j,XYZ(1,j),XYZ(2,j),XYZ(3,j),0);
   end
@@ -146,7 +146,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 
   fprintf(fp,'%% reaction data ...\n');
   nR = sum(max(abs(RCT))~=0);
-  fprintf(fp,'%d    %% number of joints with reaction forces\n', nR);
+  fprintf(fp,'%d    %% number of nodes with reaction forces\n', nR);
   fprintf(fp,'%% j\tRx\tRy\tRz\tRxx\tRyy\tRzz\n'); 
   idx = find(max(abs(RCT)));
   for i=1:nR
@@ -158,10 +158,10 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 
   fprintf(fp,'%% frame element section property data ...\n');
   fprintf(fp,'%d\t\t%% number of frame elements\n', B);
-  fprintf(fp,'%% m\tj1\tj2\t\tAx\t\tAsy\t\tAsz\t\tJxx\t\tIyy\t\tIzz\t\tE\t\tG\t\tp\tdensity\n');
+  fprintf(fp,'%% m\tn1\tn2\t\tAx\t\tAsy\t\tAsz\t\tJxx\t\tIyy\t\tIzz\t\tE\t\tG\t\tp\tdensity\n');
   for b=1:B
       fprintf(fp,'%d\t%d\t%d\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n', ...
-	b, JTS(1,b), JTS(2,b), ...
+	b, ELT(1,b), ELT(2,b), ...
 	EAIJ(1,b), EAIJ(2,b), EAIJ(3,b), ...
 	EAIJ(4,b), EAIJ(5,b), EAIJ(6,b), ...
         EAIJ(7,b), EAIJ(8,b), EAIJ(9,b), EAIJ(10,b) );
@@ -184,7 +184,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
   fprintf(fp,'  0.0        0.0        0.0\n\n');
 
   nF = sum(max(abs(P))~=0);
-  fprintf(fp,'%d\t\t%% number of loaded joints\n', nF);
+  fprintf(fp,'%d\t\t%% number of loaded nodes\n', nF);
   fprintf(fp,'%% j\t\tFx\t\tFy\t\tFz\t\tMxx\t\tMyy\t\tMzz\n'); 
   idx = find(max(abs(P)));
   for i=1:nF
@@ -218,7 +218,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
   fprintf(fp,'\n');
 
   nD = sum(max(abs(D))~=0);
-  fprintf(fp,'%d\t\t%% number of joints with prescribed displacements\n', nD);
+  fprintf(fp,'%d\t\t%% number of nodes with prescribed displacements\n', nD);
   fprintf(fp,'%% j\t\tDx\t\tDy\t\tDz\t\tDxx\t\tDyy\t\tDzz\n'); 
   idx = find(max(abs(D)));
   for i=1:nD
@@ -239,11 +239,11 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
   % compute lengths of each frame element
   L = zeros(1,B);
   for b=1:B
-      j1 = JTS(1,b);                          % joint 1 of bar b
-      j2 = JTS(2,b);                          % joint 2 of bar b
+      n1 = ELT(1,b);                          % node 1 of element b
+      n2 = ELT(2,b);                          % node 2 of element b
 
-      x1 = XYZ(1,j1); y1 = XYZ(2,j1); z1 = XYZ(3,j1); % coordinates of joint 1
-      x2 = XYZ(1,j2); y2 = XYZ(2,j2); z2 = XYZ(3,j2); % coordinates of joint 2
+      x1 = XYZ(1,n1); y1 = XYZ(2,n1); z1 = XYZ(3,n1); % coordinates of node 1
+      x2 = XYZ(1,n2); y2 = XYZ(2,n2); z2 = XYZ(3,n2); % coordinates of node 2
 
       L(b) = sqrt((x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2);
   end

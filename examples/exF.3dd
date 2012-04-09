@@ -1,8 +1,8 @@
 Example F: a seismically-isolated building model (units: N, mm, ton)
 
-# joint data ...
-36		# number of joints 
-#.joint    x      y     z        r
+# node data ...
+36		# number of nodes 
+#.node    x      y     z        r
 #          mm     mm    mm       mm
 
 1	 2000	-1500	0	150
@@ -50,8 +50,8 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 
 
 # reaction data ...
-14                              # number of joints with reactions
-#.J     x       y       z      xx      yy      zz          1=fixed, 0=free
+14                              # number of nodes with reactions
+#.n     x       y       z      xx      yy      zz          1=fixed, 0=free
 
   1	1	0	1	0	0	1
   2     1       0       0       0       0       0
@@ -72,7 +72,7 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 
 # frame element data ...
 58		# number of frame elements
-#.m j1  j2     Ax   Asy   Asz   Jxx         Iyy       Izz     E      G   roll density
+#.m n1  n2     Ax   Asy   Asz   Jxx         Iyy       Izz     E      G   roll density
 #   .   .     mm^2  mm^2  mm^2  mm^4        mm^4      mm^4    MPa    MPa  deg T/mm^3
 
 1    1  16   2592  1200   900  8.7160e4   10.108e6   1.502e6  200000 79300 0  7.85e-9
@@ -150,8 +150,8 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 1		# number of static load cases
 				# Begin Static Load Case 1 of 1
 0  0   -9806.33			# gravity in X Y Z directions (global)
-25                              # number of loaded joints
-#..J    Fx        Fy         Fz     Mxx    Myy     Mzz
+25                              # number of loaded nodes
+#..n    Fx        Fy         Fz     Mxx    Myy     Mzz
 #       N         N          N      N.mm   N.mm    N.mm
 
   33     0       100          0     0      0       0
@@ -197,8 +197,8 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 
 
 
-4                     # number of joints with extra mass or inertia
-#.j      M      Ixx      Iyy      Izz - joints and concentrated mass and inertia
+4                     # number of nodes with extra mass or inertia
+#.n      M      Ixx      Iyy      Izz - nodes and concentrated mass and inertia
 #       ton     ton.mm^2 ton.mm^2 ton.mm^2
 
 6	4.0    	4.75e6	 3.62e6	 26.53e6
@@ -214,9 +214,9 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 
 
 2    # Condensation Method:  0= none 1= static  2= Guyan   3= Dynamic
-4				# number of joints to condense
+4				# number of nodes to condense
 
-#.j   x   y   z  xx  yy  zz     # 1: condense dof, 0: don't
+#.n   x   y   z  xx  yy  zz     # 1: condense dof, 0: don't
   6   1   1   0   0   0   1
  19   1   1   0   0   0   1
  26   1   1   0   0   0   1

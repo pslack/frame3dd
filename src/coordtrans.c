@@ -42,16 +42,16 @@ Element matrix coordinate transformations are carried out by function ATMA
 in frame3dd.c
 
 Currently coordinate transformations do not consider the effect of 
-finite joint sizes ... this needs work, and could require a substantial
+finite node sizes ... this needs work, and could require a substantial
 re-write of much of the code.  
 
-Currently the effect of finite joint sizes is used only in the calculation
+Currently the effect of finite node sizes is used only in the calculation
 of the element stiffness matrices.  
 ------------------------------------------------------------------------- */
 void coord_trans(
 		vec3 *xyz,
 		double L,
-		int j1, int j2,
+		int n1, int n2,
 		double *t1, double *t2, double *t3, double *t4, double *t5,
 		double *t6, double *t7, double *t8, double *t9,
 		float p			/**< the roll angle (radians) */
@@ -59,9 +59,9 @@ void coord_trans(
 	double	Cx, Cy, Cz, den,		/* direction cosines	*/
 		Cp, Sp;			/* cosine and sine of roll angle */
 
-	Cx = (xyz[j2].x - xyz[j1].x) / L;
-	Cy = (xyz[j2].y - xyz[j1].y) / L;
-	Cz = (xyz[j2].z - xyz[j1].z) / L;
+	Cx = (xyz[n2].x - xyz[n1].x) / L;
+	Cy = (xyz[n2].y - xyz[n1].y) / L;
+	Cz = (xyz[n2].z - xyz[n1].z) / L;
 
 	*t1 = *t2 = *t3 = *t4 = *t5 = *t6 = *t7 = *t8 = *t9 = 0.0;
 
@@ -126,7 +126,7 @@ void coord_trans(
 
 /* ------------------------------------------------------------------------------
  * ATMA  -  perform the coordinate transformation from local to global     6jan96
- *	  include effects of a finite joint radii, r1 and r2.	    9dec04
+ *	  include effects of a finite node radii, r1 and r2.	    9dec04
  *	  ------------------------------------------------------------------------------*/
 void atma(
 	double t1, double t2, double t3,
@@ -157,7 +157,7 @@ void atma(
 	}
 
 
-/*  effect of finite joint radius on coordinate transformation  ... */
+/*  effect of finite node radius on coordinate transformation  ... */
 /*  this needs work ... */
 /*
  	a[5][1] =  r1*t7; 

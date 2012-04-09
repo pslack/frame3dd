@@ -12,7 +12,7 @@ In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
    12 JOINTS            12 FIXED JOINTS      21 FRAME ELEMENTS   1 LOAD CASES   
 ________________________________________________________________________________
-J O I N T   D A T A                                         R E S T R A I N T S
+N O D E   D A T A                                           R E S T R A I N T S
   Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
     1       0.000000       0.000000       0.000000    0.000   1  1  1  1  1  0
     2      12.000000       0.000000       0.000000    0.000   0  0  1  1  1  0
@@ -61,7 +61,7 @@ L O A D   C A S E   1   O F   1  ...
    0 concentrated point loads
    0 temperature loads
    1 prescribed displacements
- J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
+ N O D A L   L O A D S  +  E Q U I V A L E N T   N O D A L   L O A D S  (global)
   Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
      2       0.000     -20.000       0.000       0.000       0.000       0.000
      3       0.000     -40.000       0.000       0.000       0.000       0.000
@@ -78,7 +78,7 @@ E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 
 L O A D   C A S E   1   O F   1  ... 
 
-J O I N T   D I S P L A C E M E N T S					(global)
+N O D A L   D I S P L A C E M E N T S					(global)
   Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.0         0.0         0.0         0.0         0.0        -0.001712
      2    0.000646   -0.021756    0.0         0.0         0.0        -0.001339

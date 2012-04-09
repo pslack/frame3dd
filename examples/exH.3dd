@@ -1,12 +1,12 @@
 Example H: a pedestrian ramp  (kip, in)
 
-# joint data ...
+# node data ...
 
-148                     # number of joints 
+148                     # number of nodes 
 
 # CENTER BAY
 
-#.joint  x       y       z       r	 units:  inches and kips
+#.node  x       y       z       r	 units:  inches and kips
 #        in      in      in      in
 
 1	-661	0	0	0
@@ -63,7 +63,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # LEFT BAY
 
-#.joint  x       y       z       r
+#.node  x       y       z       r
 #        in      in      in      in
 
 51	-661	-240	0	0
@@ -120,7 +120,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # RIGHT BAY
 
-#.joint  x       y       z       r
+#.node  x       y       z       r
 #        in      in      in      in
 
 101	-661	240	0	0
@@ -176,8 +176,8 @@ Example H: a pedestrian ramp  (kip, in)
 
 # reaction data ...
 
-36                              # number of joints with reactions
-#.J     x  y  z  xx yy zz       1=fixed, 0=free
+36                              # number of nodes with reactions
+#.n     x  y  z  xx yy zz       1=fixed, 0=free
 
  1	1  1  1  1  1  1
  2	1  1  1  1  1  1
@@ -223,7 +223,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # CENTER-BAY six main columns		tube 14 x 14 x 1/2
 
-#.m  j1 j2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#.m  n1 n2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
 #    .  .   in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
  1    1  7  28.1  14.2  14.2  28.2  821.1  821.2  29000  11500 0 7.324e-7
@@ -273,7 +273,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # CENTER BAY horizontal floor beams   tube 10 x 10 x 1/2
 
-#.m  j1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#.m  n1 n2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
 #           in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
 45   7  8   20.1  10.2  10.2  20.2  286.6  286.6  29000  11500 0 7.324e-7
@@ -290,7 +290,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # CENTER BAY inclined floor beams    tube 10 x 10 x 1/2
 
-#.m  j1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#.m  n1 n2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
 #           in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
 56   5  29  20.1  10.2  10.2  20.2  286.6  286.6  29000  11500 0 7.324e-7
@@ -330,7 +330,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # LEFT-BAY six main columns    tube 14 x 14 x 1/2
 
-#.m  j1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#.m  n1 n2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
 #           in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
 89   51 57  28.1  14.2  14.2  28.2  821.1  821.2  29000  11500 0 7.324e-7
@@ -380,7 +380,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # LEFT BAY horizontal floor beams    tube 10 x 10 x 1/2
 
-#.m  j1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#.m  n1 n2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
 #           in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
 133  57 58  20.1  10.2  10.2  20.2  286.6  286.6  29000  11500 0 7.324e-7
@@ -397,7 +397,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # LEFT BAY inclined floor beams    tube 10 x 10 x 1/2
 
-#.m  j1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#.m  n1 n2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
 #           in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
 144   55 79  20.1  10.2  10.2  20.2  286.6  286.6  29000  11500 0 7.324e-7
@@ -467,7 +467,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # RIGHT BAY horizontal floor beams    tube 10 x 10 x 1/2
 
-#.m  j1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#.m  n1 n2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
 #           in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
 204   107 108  20.1  10.2  10.2  20.2  286.6  286.6  29000  11500 0 7.324e-7
@@ -484,7 +484,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # RIGHT BAY inclined floor beams    tube 10 x 10 x 1/2
 
-#.m  j1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#.m  n1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
 #           in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
 215   108 131  20.1  10.2  10.2  20.2  286.6  286.6  29000  11500 0 7.324e-7
@@ -506,7 +506,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # LATERAL floor beams  -  horizontal sections  8 x 8 x 1/2
 
-#.m  j1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#.m  n1 n2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
 #           in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
 230     7  57  16.1   8.2   8.2  16.3  141.2  141.2  29000  11500 0 7.324e-7
@@ -557,7 +557,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # LATERAL floor beams  -  CENTER to LEFT on inclined sections  8 x 8 x 1/2
 
-#.m  j1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#.m  n1 n2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
 #           in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
 274    29  79  16.1   8.2   8.2  16.3  141.2  141.2  29000  11500 0 7.324e-7
@@ -575,7 +575,7 @@ Example H: a pedestrian ramp  (kip, in)
 
 # LATERAL floor beams  -  CENTER to RIGHT on inclined sections  8 x 8 x 1/2
 
-#.m  j1 j   Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
+#.m  n1 n2  Ax    Asy   Asz   Jxx   Iyy    Izz    E      G   roll density
 #           in^2  in^2  in^2  in^4  in^4   in^4   ksi    ksi  deg k/in^2/g
 
 286    31 131  16.1   8.2   8.2  16.3  141.2  141.2  29000  11500 0 7.324e-7
@@ -600,7 +600,7 @@ Example H: a pedestrian ramp  (kip, in)
 				# Begin Static Load Case 1 of 1
 0  0  -386.4			# gravity in X Y Z directions (global)		
 
-0                               # number of loaded joints
+0                               # number of loaded nodes
 
 166				# number of uniform distributed loads
 #.m   Ux  Uy  Uz		# vertical gravity load k/in; concrete floor = 
@@ -790,7 +790,7 @@ Example H: a pedestrian ramp  (kip, in)
 1.0                             # shift value ... for unrestrained structures
 100.0                           # exaggerate modal mesh deformations
 
-0                                # number of joints with extra mass or inertia
+0                               # number of nodes with extra mass or inertia
 163				# number of frame elements with extra mass
 
 #.M             mass

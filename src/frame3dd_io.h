@@ -98,13 +98,13 @@ void parse_input(FILE *fp, const char *tpath);
 
 
 /**
-	Read joint coordinate data
+	Read node coordinate data
 */
-void read_joint_data (
+void read_node_data (
 	FILE *fp,	/**< input data file pointer			*/
-	int nJ, 	/**< number of joints				*/
-	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
-	float *r	/**< rigid radius of each joint			*/
+	int nN, 	/**< number of nodes				*/
+	vec3 *xyz,	/**< XYZ coordinates of each node		*/
+	float *r	/**< rigid radius of each node			*/
 );
 
 /**
@@ -112,12 +112,12 @@ void read_joint_data (
 */
 void read_frame_element_data (
 	FILE *fp,	/**< input data file pointer			*/
-	int nJ,		/**< number of joints				*/
+	int nN,		/**< number of nodes				*/
 	int nE,		/**< number of frame elements			*/
-	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
-	float *r,	/**< rigid radius of each joint			*/
+	vec3 *xyz,	/**< XYZ coordinates of each node		*/
+	float *r,	/**< rigid radius of each node			*/
 	double *L, double *Le,	/**< length of each frame element, effective */
-	int *J1, int *J2, 	/**< joint connectivity			*/
+	int *N1, int *N2, 	/**< node connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
 	float *Jx, float *Iy, float *Iz,	/**< section inertias	*/
 	float *E, float *G,	/**< elastic moduli and shear moduli	*/
@@ -149,13 +149,13 @@ void read_run_data (
 
 
 /**
-	Read fixed joint displacement boundary conditions
+	Read fixed node displacement boundary conditions
 */
 void read_reaction_data(
 	FILE *fp,	/**< input data file pointer			*/
 	int DoF,	/**< number of degrees of freedom		*/
-	int nJ,		/**< number of joints				*/
-	int *nR,	/**< number of joints with reactions		*/
+	int nN,		/**< number of nodes				*/
+	int *nR,	/**< number of nodes with reactions		*/
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
 	int *sumR,	/**< sum of vector R				*/
 	int verbose	/**< 1: copious screen output; 0: none		*/
@@ -167,13 +167,13 @@ void read_reaction_data(
 */
 void read_and_assemble_loads(
 	FILE *fp,	/**< input data file pointer			*/
-	int nJ,		/**< number of joints				*/
+	int nN,		/**< number of nodes				*/
 	int nE,		/**< number of frame elements			*/
 	int nL,		/**< number of load cases			*/
 	int DoF,	/**< number of degrees of freedom		*/
-	vec3 *xyz,	/**< XYZ coordinates of each joint		*/
+	vec3 *xyz,	/**< XYZ coordinates of each node		*/
 	double *L, double *Le,	/**< length of each frame element, effective */
-	int *J1, int *J2, 	/**< joint connectivity			*/
+	int *N1, int *N2, 	/**< node connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
 	float *Iy, float *Iz,	/**< section inertias			*/
 	float *E, float *G,	/**< elastic moduli and shear moduli	*/
@@ -184,7 +184,7 @@ void read_and_assemble_loads(
 	float *gZ, /**< gravitational acceleration in global Z each load case */
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
 	int shear,	/**< 1: include shear deformations, 0: don't	*/
-	int *nF, 		/**< number of concentrated joint loads */
+	int *nF, 		/**< number of concentrated node loads */
 	int *nU, 		/**< number of uniformly distributed loads */
 	int *nW,		/**< number of trapezoidaly distributed loads */
 	int *nP, 		/**< number of concentrated point loads	*/
@@ -210,11 +210,11 @@ void read_and_assemble_loads(
 void read_mass_data(
 	FILE *fp,	/**< input data file pointer			*/
 	char *OUT_file,	/**< input output data file name 		*/
-	int nJ, int nE,	/**< number of joints, number of frame elements */
-	int *nI,	/**< number of joints with extra inertia	*/
+	int nN, int nE,	/**< number of nodes, number of frame elements */
+	int *nI,	/**< number of nodes with extra inertia	*/
 	int *nX,	/**< number of elements with extra mass		*/
-	float *d, float *BMs, /**< density, extra frame element mass	*/
-	float *JMs, float *JMx, float *JMy, float *JMz, /**< joint inertia*/
+	float *d, float *EMs, /**< density, extra frame element mass	*/
+	float *NMs, float *NMx, float *NMy, float *NMz, /**< node inertia*/
 	double *L,	/**< length of each frame element		*/
 	float *Ax, 	/**< cross section area of each frame element	*/
 	double *total_mass,	/**< total mass of structure and extra mass */
@@ -243,8 +243,8 @@ void read_mass_data(
 */
 void read_condensation_data(
 	FILE *fp,	/**< input data file pointer			*/
-	int nJ, int nM, 	/**< number of joints, number of modes	*/
-	int *nC,	/**< number of joints with condensed DoF's	*/
+	int nN, int nM, 	/**< number of nodes, number of modes	*/
+	int *nC,	/**< number of nodes with condensed DoF's	*/
 	int *Cdof,	/**< list of DoF's retained in condensed model	*/
 	int *Cmethod,	/**< matrix conden'n method, static, Guyan, dynamic*/
 	int condense_flag, /** command-line over-ride			*/
@@ -259,11 +259,11 @@ void read_condensation_data(
 */
 void write_input_data(
 	FILE *fp,	/**< input data file pointer			*/
-	char *title, int nJ, int nE,  int nL,
+	char *title, int nN, int nE,  int nL,
 	int *nD, int nR,
 	int *nF, int *nU, int *nW, int *nP, int *nT,
 	vec3 *xyz, float *r,
-	int *J1, int *J2,
+	int *N1, int *N2,
 	float *Ax, float *Asy, float *Asz,
 	float *Jx, float *Iy, float *Iz,
 	float *E, float *G, float *p,
@@ -276,36 +276,36 @@ void write_input_data(
 
 
 /**
-	save joint displacements and member end forces in a text file	9sep08
+	save node displacements and member end forces in a text file	9sep08
 */
 void write_static_results(
 	FILE *fp,
-	int nJ, int nE, int nL, int lc, int DoF,
-	int *J1, int *J2,
+	int nN, int nE, int nL, int lc, int DoF,
+	int *N1, int *N2,
 	double *F, double *D, int *R, double **Q,
 	double err, int ok, int axial_sign
 );
 
 
 /**
-	save joint displacements and member end forces in a .CSV file   31dec08
+	save node displacements and member end forces in a .CSV file   31dec08
 */
 void write_static_csv(
 	char *OUT_file, char *title,
-	int nJ, int nE, int nL, int lc, int DoF,
-	int *J1, int *J2,
+	int nN, int nE, int nL, int lc, int DoF,
+	int *N1, int *N2,
 	double *F, double *D, int *R, double **Q,
 	double err, int ok
 );
 
 
 /**
-	save joint displacements and member end forces in an m-file	9sep08
+	save node displacements and member end forces in an m-file	9sep08
 */
 void write_static_mfile(
 	char *OUT_file, char *title,
-	int nJ, int nE, int nL, int lc, int DoF,
-	int *J1, int *J2,
+	int nN, int nE, int nL, int lc, int DoF,
+	int *N1, int *N2,
 	double *F, double *D, int *R, double **Q,
 	double err, int ok
 );
@@ -323,12 +323,12 @@ void write_internal_forces(
 	int nL,		/**< number of static load cases		*/
 	char title[],	/**< title of the analysis			*/
 	float dx,	/**< increment distance along local x axis      */
-	vec3 *xyz,	/**< XYZ locations of each joint                */
+	vec3 *xyz,	/**< XYZ locations of each node                */
 	double **Q,	/**< frame element end forces                   */
-	int nJ,		/**< number of joints                           */
+	int nN,		/**< number of nodes                           */
 	int nE,		/**< number of frame elements                   */
 	double *L,	/**< length of each frame element               */
-	int *J1, int *J2, /**< joint connectivity                       */
+	int *N1, int *N2, /**< node connectivity                       */
 	float *Ax,	/**< cross sectional area                       */
 	float *Asy, float *Asz,	/**< effective shear area               */
 	float *Jx, 	/**< torsional moment of inertia 	         */
@@ -343,7 +343,7 @@ void write_internal_forces(
 	float **W,	/**< trapezoidally distributed load data        */
 	int nP,		/**< number of internal point loads		*/
 	float **P,	/**< internal point load data                   */
-	double *D,	/**< joint displacements                        */
+	double *D,	/**< node displacements                        */
 	int shear,	/**< shear deformation flag                     */
 	double error	/**< RMS equilibrium error			*/
 );
@@ -354,7 +354,7 @@ void write_internal_forces(
 */
 void write_modal_results(
 	FILE *fp,
-	int nJ, int nE, int nI, int DoF,
+	int nN, int nE, int nI, int DoF,
 	double **M, double *f, double **V,
 	double total_mass, double struct_mass,
 	int iter, int sumR, int nM,
@@ -369,9 +369,9 @@ void write_modal_results(
 void static_mesh(
 	char OUT_file[],
 	char infcpath[], char meshpath[], char plotpath[],
-	char *title, int nJ, int nE, int nL, int lc, int DoF,
+	char *title, int nN, int nE, int nL, int lc, int DoF,
 	vec3 *xyz, double *L,
-	int *J1, int *J2, float *p, double *D,
+	int *N1, int *N2, float *p, double *D,
 	double exagg_static, int D3_flag, int anlyz, float dx
 );
 
@@ -383,9 +383,9 @@ void static_mesh(
 void modal_mesh(
 	char OUT_file[], char meshpath[], char modepath[],
 	char plotpath[], char *title,
-	int nJ, int nE, int DoF, int nM,
+	int nN, int nE, int DoF, int nM,
 	vec3 *xyz, double *L,
-	int *J1, int *J2, float *p,
+	int *N1, int *N2, float *p,
 	double **M, double *f, double **V,
 	double exagg_modal, int D3_flag, int anlyz
 );
@@ -401,9 +401,9 @@ void animate(
 	char OUT_file[], char meshpath[], char modepath[], char plotpath[],
 	char *title,
 	int anim[],
-	int nJ, int nE, int DoF, int nM,
+	int nN, int nE, int DoF, int nM,
 	vec3 *xyz, double *L, float *p,
-	int *J1, int *J2, double *f, double **V,
+	int *N1, int *N2, double *f, double **V,
 	double exagg_modal, int D3_flag, float pan
 );
 
@@ -412,15 +412,15 @@ void animate(
 	computes cubic deflection functions from end deflections
 	and end rotations.  Saves deflected shapes to a file.
 	These bent shapes are exact for mode-shapes, and for frames
-	loaded at their joints.
+	loaded at their nodes.
 */
 void cubic_bent_beam(
 	FILE *fpm,	/**< deformed mesh data file pointer	*/
-	int j1, int j2,	/**< joint 1 and joint 2 of the frame element */
-	vec3 *xyz,	/**< joint coordinates			*/
+	int n1, int n2,	/**< node 1 and node 2 of the frame element */
+	vec3 *xyz,	/**< node coordinates			*/
 	double L,	/**< frame element lengths		*/
 	float p,	/**< frame element local rotations	*/
-	double *D,	/**< joint displacements		*/
+	double *D,	/**< node displacements		*/
 	double exagg	/**< mesh exaggeration factor		*/
 );
 
@@ -435,11 +435,11 @@ void force_bent_beam(
 	FILE *fpif,	/**< internal force data file pointer	*/
 	char fnif[],	/**< internal force data file name	*/
 	int nx,		/**< number of x-axis increments	*/
-	int j1, int j2,	/**< joint 1 and joint 2 of the frame element */
-	vec3 *xyz,	/**< joint coordinates			*/
+	int n1, int n2,	/**< node 1 and node 2 of the frame element */
+	vec3 *xyz,	/**< node coordinates			*/
 	double L,	/**< frame element lengths		*/
 	float p,	/**< frame element local rotations	*/
-	double *D,	/**< joint displacements		*/
+	double *D,	/**< node displacements		*/
 	double exagg	/**< mesh exaggeration factor		*/
 );
 

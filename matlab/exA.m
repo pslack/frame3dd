@@ -2,7 +2,7 @@
 % linear static analysis of a 2D truss with support settlement
 % Matlab results are written to IOdata_m.m
 
-%         x       y       z       r		joint coordinates
+%         x       y       z       r		node coordinates
 XYZ = [ 0.0	0.0	0.0	0.0 ;
  	12.0	0.0	0.0	0.0 ;
  	24.0	0.0	0.0	0.0 ;
@@ -34,10 +34,10 @@ RCT(:,10) = [ 0 0 1  1  1  0 ]';
 RCT(:,11) = [ 0 0 1  1  1  0 ]';
 RCT(:,12) = [ 0 0 1  1  1  0 ]';
 
-JTS = [ 1  2  3  4  5  6  1  2  2  3  4  4  4  5  6  6  7  8  9 10 11 ;
-        2  3  4  5  6  7  8  8  9  9  9 10 11 11 11 12 12  9 10 11 12 ];
+ELTS = [ 1  2  3  4  5  6  1  2  2  3  4  4  4  5  6  6  7  8  9 10 11 ;
+         2  3  4  5  6  7  8  8  9  9  9 10 11 11 11 12 12  9 10 11 12 ];
 
-[x,B] = size(JTS);
+[x,B] = size(ELTS);
 
 %         Ax    Asy     Asz     Jxx     Iyy     Izz          E     G  p dens.
 
@@ -78,5 +78,5 @@ D = zeros(6,J);			% prescribed displacements
 %    J         Dx     Dy      Dz      Dxx     Dyy     Dzz
 D(:, 8) = [  0.01    0.0      0.0	0.0	0.0	0.0 ]';
 
-[D,R,F,L,Ks] = frame_3dd ( XYZ,JTS,RCT,EAIJ,P,W,D );  % analyze it!
+[D,R,F,L,Ks] = frame_3dd ( XYZ,ELTS,RCT,EAIJ,P,W,D );  % analyze it!
 

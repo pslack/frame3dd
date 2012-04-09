@@ -6,14 +6,14 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example A: linear static analysis of a 2D truss with support settlement (kips in)  
-Fri Nov 11 17:46:34 2011
+Mon Apr  9 15:07:22 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
    12 JOINTS            12 FIXED JOINTS      21 FRAME ELEMENTS   2 LOAD CASES   
 ________________________________________________________________________________
-J O I N T   D A T A                                         R E S T R A I N T S
-  Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
+N O D E   D A T A                                           R E S T R A I N T S
+  Node       X              Y              Z         radius  Fx Fy Fz Mx My Mz
     1       0.000000       0.000000       0.000000    0.000   1  1  1  1  1  0
     2     120.000000       0.000000       0.000000    0.000   0  0  1  1  1  0
     3     240.000000       0.000000       0.000000    0.000   0  0  1  1  1  0
@@ -61,8 +61,8 @@ L O A D   C A S E   1   O F   2  ...
    0 concentrated point loads
    0 temperature loads
    1 prescribed displacements
- J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
-  Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
+ N O D A L   L O A D S  +  E Q U I V A L E N T   N O D A L   L O A D S  (global)
+  Node        Fx          Fy          Fz          Mxx         Myy         Mzz
      1       0.000      -0.410       0.000       0.000       0.000      -8.205
      2       0.000     -10.750       0.000       0.000       0.000      -4.807
      3       0.000     -20.510       0.000       0.000       0.000       0.000
@@ -77,7 +77,7 @@ L O A D   C A S E   1   O F   2  ...
     12       0.000      -0.580       0.000       0.000       0.000      -1.408
 
  P R E S C R I B E D   D I S P L A C E M E N T S                        (global)
-  Joint       Dx          Dy          Dz          Dxx         Dyy         Dzz
+  Node        Dx          Dy          Dz          Dxx         Dyy         Dzz
      8       0.100       0.000       0.000       0.000       0.000       0.000
 
 L O A D   C A S E   2   O F   2  ... 
@@ -89,8 +89,8 @@ L O A D   C A S E   2   O F   2  ...
    0 concentrated point loads
    3 temperature loads
    2 prescribed displacements
- J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
-  Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
+ N O D A L   L O A D S  +  E Q U I V A L E N T   N O D A L   L O A D S  (global)
+  Node        Fx          Fy          Fz          Mxx         Myy         Mzz
      1       0.000      -0.410       0.000       0.000       0.000      -8.205
      2       0.000      -0.750       0.000       0.000       0.000      -4.807
      3      20.000      -0.510       0.000       0.000       0.000       0.000
@@ -110,7 +110,7 @@ L O A D   C A S E   2   O F   2  ...
     15  6.00e-12     5.000     5.000    17.000    17.000    17.000    17.000
 
  P R E S C R I B E D   D I S P L A C E M E N T S                        (global)
-  Joint       Dx          Dy          Dz          Dxx         Dyy         Dzz
+  Node        Dx          Dy          Dz          Dxx         Dyy         Dzz
      1       0.000      -1.000       0.000       0.000       0.000       0.000
      8       0.100       0.000       0.000       0.000       0.000       0.000
 
@@ -119,8 +119,8 @@ E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 
 L O A D   C A S E   1   O F   2  ... 
 
-J O I N T   D I S P L A C E M E N T S					(global)
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+N O D E   D I S P L A C E M E N T S  					(global)
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.0         0.0         0.0         0.0         0.0        -0.501728
      2    0.010776   -0.171344    0.0         0.0         0.0        -0.087383
      3    0.035528   -0.297816    0.0         0.0         0.0         0.015516
@@ -134,7 +134,7 @@ J O I N T   D I S P L A C E M E N T S					(global)
     11    0.029563   -0.291133    0.0         0.0         0.0         0.011062
     12    0.012122   -0.166951    0.0         0.0         0.0        -0.136029
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
+  Elmnt  Node       Nx          Vy         Vz        Txx        Myy        Mzz
      1      1    -26.042t      0.099      0.0        0.0        0.0       -1.853
      1      2     26.042t      0.241      0.0        0.0        0.0       -6.648
      2      2    -59.816t      0.162      0.0        0.0        0.0        2.644
@@ -178,7 +178,7 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
     21     11     42.149c      0.155      0.0        0.0        0.0        2.833
     21     12    -42.149c      0.185      0.0        0.0        0.0       -4.675
 R E A C T I O N S							(global)
-  Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
+  Node        Fx          Fy          Fz         Mxx         Myy         Mzz
      1      19.168      45.519       0.0         0.0         0.0         0.0  
      2       0.0         0.0         0.0         0.0         0.0         0.0  
      3       0.0         0.0         0.0         0.0         0.0         0.0  
@@ -195,8 +195,8 @@ R M S   E Q U I L I B R I U M    E R R O R: 9.272e-15
 
 L O A D   C A S E   2   O F   2  ... 
 
-J O I N T   D I S P L A C E M E N T S					(global)
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+N O D E   D I S P L A C E M E N T S  					(global)
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.0        -1.000000    0.0         0.0         0.0        -0.501206
      2    0.071965   -1.067463    0.0         0.0         0.0        -0.086438
      3    0.134909   -1.018927    0.0         0.0         0.0         0.016991
@@ -210,7 +210,7 @@ J O I N T   D I S P L A C E M E N T S					(global)
     11   -0.016502   -0.615495    0.0         0.0         0.0         0.012588
     12   -0.027973   -0.314444    0.0         0.0         0.0        -0.134603
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
+  Elmnt  Node       Nx          Vy         Vz        Txx        Myy        Mzz
      1      1   -173.916t      0.099      0.0        0.0        0.0       -1.856
      1      2    173.916t      0.241      0.0        0.0        0.0       -6.649
      2      2   -152.115t      0.161      0.0        0.0        0.0        2.639
@@ -254,7 +254,7 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
     21     11     27.723c      0.155      0.0        0.0        0.0        2.834
     21     12    -27.723c      0.185      0.0        0.0        0.0       -4.675
 R E A C T I O N S							(global)
-  Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
+  Node        Fx          Fy          Fz         Mxx         Myy         Mzz
      1    -194.280     -20.056       0.0         0.0         0.0         0.0  
      2       0.0         0.0         0.0         0.0         0.0         0.0  
      3       0.0         0.0         0.0         0.0         0.0         0.0  

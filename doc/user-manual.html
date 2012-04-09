@@ -65,7 +65,7 @@ frame3dd inputfile.3dd outputfile.txt
 
 <!-- 3D frames , 3D frames , 3D frames , 3D frames , 3D frames , 3D frames  -->
 
-<p><b>Frame3DD</b> reads a plain-text <b>Input Data file</b>, containing joint coordinates, frame element geometry, material moduli, fixed joints, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.
+<p><b>Frame3DD</b> reads a plain-text <b>Input Data file</b>, containing node coordinates, frame element geometry, material moduli, fixed nodes, prescribed displacements, load information, and optionally, mass information if a modal analysis is to be carried out.
 <!-- (The Input Data file is not a Matlab file.   Values are not input using Matlab matrix notation with square brackets.)-->
 </p>
 
@@ -75,7 +75,7 @@ frame3dd inputfile.3dd outputfile.txt
 Results from the most recent analysis
 are appended to the <b>end</b> of the Output Data file.
 Each section of the Output Data gives the date and time of the analysis,
-recapitulates the input information, gives joint displacements in global coordinates, frame element end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
+recapitulates the input information, gives node displacements in global coordinates, frame element end-forces in local coordinates, reactions in global coordinates, and natural frequencies and mode shapes in global coordinates.
 </p>
 
 <p><b>Frame3DD</b> writes a
@@ -850,19 +850,19 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %
 % INPUT DATA:
 %
-%  XYZ : a 4xJ matrix containing the XYZ coordinate of each joint
-%          row 1 = X-axis coordinate  for each joint
-%          row 2 = Y-axis coordinate  for each joint
-%          row 3 = Z-axis coordinate  for each joint
-%          row 4 = rigid radius       for each joint
+%  XYZ : a 4xJ matrix containing the XYZ coordinate of each node
+%          row 1 = X-axis coordinate  for each node
+%          row 2 = Y-axis coordinate  for each node
+%          row 3 = Z-axis coordinate  for each node
+%          row 4 = rigid radius       for each node
 %
-%  JTS : a 2xB matrix indicating which 2 joints each frame element connects
-%          row 1 = the 'starting' joint  for each frame element
-%          row 2 = the 'ending'   joint  for each frame element
+%  JTS : a 2xB matrix indicating which 2 nodes each frame element connects
+%          row 1 = the 'starting' node  for each frame element
+%          row 2 = the 'ending'   node  for each frame element
 %
-%  RCT : a 6xJ matrix indicated which joints have reactions
-%        0: the joint has no reaction in that degree of freedom,
-%        1: the joint does have a reaction in that degree of freedom.
+%  RCT : a 6xJ matrix indicated which nodes have reactions
+%        0: the node has no reaction in that degree of freedom,
+%        1: the node does have a reaction in that degree of freedom.
 %
 % EAIJ : a 10xB containing the section and modulus properties of each frame el.
 %         row  1 = Ax  cross section area    for each frame el.
@@ -877,13 +877,13 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %         row 10 = d   mass density          for each frame el.
 %
 %    P : a 6xJ matrix containing the components of the external
-%        forces and moments applied to each joint.
-%          row 1 = Joint Force in X-direction    for each joint
-%          row 2 = Joint Force in Y-direction    for each joint
-%          row 3 = Joint Force in Z-direction    for each joint
-%          row 4 = Joint Moment about X-axis     for each joint
-%          row 5 = Joint Moment about Y-axis     for each joint
-%          row 6 = Joint Moment about Z-axis     for each joint
+%        forces and moments applied to each node.
+%          row 1 = External nodal force in X-direction    for each node
+%          row 2 = External nodal force in Y-direction    for each node
+%          row 3 = External nodal force in Z-direction    for each node
+%          row 4 = External nodal moment about X-axis     for each node
+%          row 5 = External nodal moment about Y-axis     for each node
+%          row 6 = External nodal moment about Z-axis     for each node
 %
 %    U : a 3xB matrix containing the unif. dist. load on each frame element
 %          row 1 = uniform distributed load along the local element x axis
@@ -891,16 +891,16 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,JTS,RCT,EAIJ,P,U,D)
 %          row 3 = uniform distributed load in    the local element z axis
 %
 %    D : a 6xJ matrix of prescribed displacements at the reaction DoF's
-%          row 1 = prescribed joint displ. in the X-direction for each joint
-%          row 2 = prescribed joint displ. in the Y-direction for each joint
-%          row 3 = prescribed joint displ. in the Z-direction for each joint
-%          row 4 = prescribed joint rot'n  about the X-axis   for each joint
-%          row 5 = prescribed joint rot'n  about the Y-axis   for each joint
-%          row 6 = prescribed joint rot'n  about the Z-axis   for each joint
+%          row 1 = prescribed node displ. in the X-direction for each node
+%          row 2 = prescribed node displ. in the Y-direction for each node
+%          row 3 = prescribed node displ. in the Z-direction for each node
+%          row 4 = prescribed node rot'n  about the X-axis   for each node
+%          row 5 = prescribed node rot'n  about the Y-axis   for each node
+%          row 6 = prescribed node rot'n  about the Z-axis   for each node
 %
 % OUTPUT DATA:
 %
-%    D : a 6xJ matrix   of the deflections and rotations of each joint
+%    D : a 6xJ matrix   of the deflections and rotations of each node
 %    R : a 6xJ matrix   of the reaction forces and moments
 %    F : a 12xB matrix  of the end forces of each frame element
 %    L : a 1xB vector   of the length of each frame element
@@ -964,7 +964,8 @@ It does not (yet) implement the following features of <b>Frame3DD</b>:
 <ul>
   <li> Matlab functions for graphical display of the results
   <li> gravity loading 
-  <li> point forces applied between the joints of a frame element
+  <li> concentrated point forces applied at a point along a frame element 
+  <li> trapezoidally-distributed loads
   <li> temperature loads
   <li> multiple load cases
   <li> modal analysis
@@ -1033,15 +1034,15 @@ For any <b>Frame3DD</b> .CSV results file, the spreadsheet cells containing the 
 row numbers are given in the following table.<br>
 <table border="1">
 <tr> <th>Load Case 1</th> <th>First Row</th> <th>Last Row</th></tr>
-<tr> <td>Joint Displacements</td> <td>C-10</td><td>C-11</td></tr>
+<tr> <td>Node Displacements</td> <td>C-10</td><td>C-11</td></tr>
 <tr><td>Frame Element End Forces</td> <td>D-10</td><td>D-11</td></tr>
 <tr><td>Reaction Forces</td> <td>E-10</td><td>E-11</td></tr>
 <tr> <th>Load Case 2</th> <th>First Row</th> <th>Last Row</th></tr>
-<tr> <td>Joint Displacements</td> <td>C-12</td><td>C-13</td></tr>
+<tr> <td>Node Displacements</td> <td>C-12</td><td>C-13</td></tr>
 <tr><td>Frame Element End Forces</td> <td>D-12</td><td>D-13</td></tr>
 <tr><td>Reaction Forces</td> <td>E-12</td><td>E-13</td></tr>
 <tr> <th>Load Case 3</th> <th>First Row</th> <th>Last Row</th></tr>
-<tr> <td>Joint Displacements</td> <td>C-14</td><td>C-15</td></tr>
+<tr> <td>Node Displacements</td> <td>C-14</td><td>C-15</td></tr>
 <tr><td>Frame Element End Forces</td> <td>D-14</td><td>D-15</td></tr>
 <tr><td>Reaction Forces</td> <td>E-14</td><td>E-15</td></tr>
 <tr> <td><i>et cetera</i></td> </tr>
@@ -1082,7 +1083,7 @@ Modal analysis results are not (yet) written to the .CSV formatted output file.
  <li> The 2002 version does not support multiple load cases.
  <li> The 2002 version does not support roll angles for frame element orientation.
  <li> The 2002 version uses the Jacobi method for modal analysis.
- <li> The 2002 version requires specification of joint masses and inertias for every joint.
+ <li> The 2002 version requires specification of node masses and inertias for every node.
  <li> The 2002 version does not support panning of the animation.
  <li> The 2002 version uses Guyan reduction for matrix condensation,
 to match the first mode.
@@ -1125,21 +1126,21 @@ as is done in the example Input Data files.
 </ul>
 </p>
 
-<h3> 7.2 Joints, Coordinates, Support Conditions and Reactions </h3>
+<h3> 7.2 Nodes, Coordinates, Support Conditions and Reactions </h3>
 
 <p>
-Joint positions are specified by locations in a three-dimensional
+Node positions are specified by locations in a three-dimensional
 Cartesian coordinate system.
-Each joint has six coordinates: three translations
+Each node has six coordinates: three translations
 in the global <i>X</i>, <i>Y</i>, and <i>Z</i> directions and three rotations about the
 global <i>X</i>, <i>Y</i>, and <i>Z</i> axes.
 Optionally,
-joints may be modeled as "rigid" within a sphere of radius <i>r</i>.
-The effects of finite joint sizes are modeled approximately
+nodes may be modeled as "rigid" within a sphere of radius <i>r</i>.
+The effects of finite node sizes are modeled approximately
 in the calculation of the frame element stiffness
-through the use of an <i>effective beam length</i>, which is the joint-to-joint
+through the use of an <i>effective beam length</i>, which is the node-to-node
 length of the frame element less the rigid radii on each end.
-All joints are fully moment resisting.   
+All nodes are fully moment resisting.   
 Semi-rigid connections may be modeled through the use of short frame elements
 at the ends of longer members.  
 </p>
@@ -1151,11 +1152,11 @@ For three-dimensional structures the global <i>X</i> and <i>Y</i> directions are
 </p>
 
 <p>
-Joint numbers should be assigned in a systematic way, moving from
+Node numbers should be assigned in a systematic way, moving from
 one end of the structural system to the opposite end.  
 <!--
 Ideally a frame element
-will connect every pair of joints with sequential numbers.
+will connect every pair of nodes with sequential numbers.
 -->
 </p>
 
@@ -1172,7 +1173,7 @@ computed and are appended to the Output Data file.
 </p>
 
 
-<h3> 7.3 Numbering of Frame Element Starting Joints and Ending Joints </h3>
+<h3> 7.3 Numbering of Frame Element Starting Nodes and Ending Nodes </h3>
 
 <p>
 Coordinate transformations in 3D are not unique and depend upon
@@ -1180,7 +1181,7 @@ the sequence of rotations.
 In some cases the orientation of an element within a structure
 may not be obvious if the element has rotated by more than 90 degrees in going
 from the local system to the global system.
-For this reason it can be helpful to define end joints in a way that requires 
+For this reason it can be helpful to define end nodes in a way that requires 
 rotations of less than 90 degrees about any axis.
 Coordinate transformations in 2D are unique
 and these potential ambiguities are not a concern. 
@@ -1189,31 +1190,31 @@ avoiding ambiguous coordinate transformations.
 </p> 
 
 <p>
-Frame elements connect pairs of joints.  Each frame element has a 
-"starting joint" (element joint 1, J1)
-and an "ending joint" (element joint 2, J2),
+Frame elements connect pairs of nodes.  Each frame element has a 
+"starting node" (element node 1, N1)
+and an "ending node" (element node 2, N2),
 as described in the <a href="#InputData">Input Data format</a>.
-In principle, either joint of the frame element could be joint J1 
-and either joint could be J2.  
-The assignment of J1 and J2 to the frame element should not affect the results. 
+In principle, either node of the frame element could be node N1 
+and either node could be N2.  
+The assignment of N1 and N2 to the frame element should not affect the results. 
 However, to avoid confusion in certain 3D models, the following guidelines are recommended: <br>
 <ul>
-<li>In general joint J1 of the frame element should have more negative
-coordinates than joint J2 of the element.   </li>
+<li>In general node N1 of the frame element should have more negative
+coordinates than node N2 of the element.   </li>
 </ul>
 </p>
 <p>
 More specifically, 
-specifying element joint 1 location as (<i>x1, y1, z1</i>) and 
-element joint 2 location as (<i>x2, y2, z2</i>), 
+specifying element node 1 location as (<i>x1, y1, z1</i>) and 
+element node 2 location as (<i>x2, y2, z2</i>), 
 <ul>
 <li>If <i>x1 &#8800; x2</i> then <i>x1</i> should be less then <i>x2</i>.
-Joint J2 should be toward the more positive side of the <i>X</i>-axis.  
+Node N2 should be toward the more positive side of the <i>X</i>-axis.  
  
 <li>If <i>x1=x2</i> and <i>y1 &#8800; y2</i> then <i>y1</i> should be less then <i>y2</i>. 
-Joint J2 should be toward the more positive side of the <i>Y</i>-axis.  
+Node N2 should be toward the more positive side of the <i>Y</i>-axis.  
 <li> If <i>x1=x2</i> and <i>y1=y2</i> and <i>z1 &#8800; z2</i> then <i>z1</i> should be less then <i>z2</i>.
-Joint J2 should be toward the more positive side of the <i>Z</i>-axis.  
+Node N2 should be toward the more positive side of the <i>Z</i>-axis.  
 </ul>
 </p>
 <p>
@@ -1571,7 +1572,7 @@ and for structures made entirely of bars with Iyy=Izz, the roll angle, <i>p</i> 
 
 <p>
 Coordinate transformations do not currently consider the effect of
-finite joint sizes, and are based on joint-to-joint lengths of each
+finite node sizes, and are based on node-to-node lengths of each
 frame element.
 </p>
 
@@ -1587,10 +1588,10 @@ Such semi-rigid connections may be modeled through the inclusion of short
 frame elements with appropriate section and material properties to model
 the behavior of the connection.   
 Frame elements may be considered infinitely rigid within a sphere of a specified radius,
-<i>r</i> around a joint.
-The effects of finite joint sizes are modeled approximately
+<i>r</i> around a node.
+The effects of finite node sizes are modeled approximately
 in the calculation of frame element stiffness
-through the use of an <i>effective beam length</i>, which is the joint-to-joint
+through the use of an <i>effective beam length</i>, which is the node-to-node
 length of the frame element less the rigid radii on each end.
 </p>
 
@@ -1628,8 +1629,8 @@ load.
 <p>
 If geometric stiffness effects are included in the analysis and if the loads
 are close to the buckling load of the structure, then it is recommended to put
-two or three joints along each frame element.  (i.e. divide each frame element
-into three or four segments).   Including these extra joints is strongly
+two or three nodes along each frame element.  (i.e. divide each frame element
+into three or four segments).   Including these extra nodes is strongly
 recommended if a buckling analysis is to be performed.
 </p>
 
@@ -1666,10 +1667,10 @@ the gravitational acceleration, g, is in inch/sec^2.
 The direction of the gravity load is the same as the direction of the 
 gravitational acceleration resultant.  
 </li>
-<li><b>Joint Loads</b><br>
+<li><b>Nodal Loads</b><br>
 Concentrated static force loads and concentrated static moments may be applied
-to individual joints.  These loads are specified as
-values of point forces and concentrated moments applied to joints
+to individual nodes.  These loads are specified as
+values of point forces and concentrated moments applied to nodes
 in the directions of the structure's global <i>X-Y-Z</i> coordinate system.  
 </li>
 <li><b>Uniformly-Distributed Loads</b><br>
@@ -1680,11 +1681,11 @@ in the local <i>x</i> direction,
 the local <i>y</i> direction, and the local <i>z</i> direction.
 </li>
 <li><b>Frame Element Point Loads</b><br>
-Concentrated static force loads may be applied to frame elements between the joints.
+Concentrated static force loads may be applied at a point along a frame element.
 Up to ten frame element point loads may be specified per frame element.  
 These loads are specified as values of point forces applied to the frame element
 in the directions of the frame element's local coordinate system
-at a distance <i>x</i> from joint <i>J1</i> of the frame element.  
+at a distance <i>x</i> from node <i>N1</i> of the frame element.  
 </li>
 <li><b>Trapezoidally-Distributed Loads</b><br>
 Trapezoidally distributed loads may be applied
@@ -1716,8 +1717,8 @@ the <i>-z</i> surface.
 Thermal loads are applied over the entire frame element.  
 </li>
 <li><b>Prescribed Displacements</b><br>
-Static joint displacements and rotations may be prescribed only at reaction degrees of freedom.
-Static joint displacements and rotations are specified in the structure's global <i>X-Y-Z</i>
+Static node displacements and rotations may be prescribed only at reaction degrees of freedom.
+Static node displacements and rotations are specified in the structure's global <i>X-Y-Z</i>
 coordinate system.  
 </li>
 </ul>
@@ -1734,7 +1735,7 @@ and by specifying the seven types of loads for each load case, as shown in
 </p>
 
 <p>
-More than one load of the same type on the same element or joint may be specified.   
+More than one load of the same type on the same element or node may be specified.   
 For example, one or more trapezoidally distributed loads may be applied to
 the same frame element in the same load case.   
 </p>
@@ -1778,10 +1779,11 @@ lumped mass matrix.
 <p>
 The natural frequencies and mode-shapes of the structural frame may be computed from the stiffness and mass matrices using either the Stodola method or
 the Jacobi method.    The solution method and the convergence tolerance for these iterative methods is specified in the Input Data file.
+Mass density of each element is specified along with other element data.  
 If a dynamic modal analysis is to be carried out,
-the Input Data file must also specify the mass density of each frame element,
-additional mass carried by the frame element, and extra mass or inertia
-carried by the joints.
+the Input Data file may also specify
+any additional mass carried by frame elements, and extra mass or inertia
+concentrated at nodal points. 
 A specified set of modes may be animated within Gnuplot.
 </p>
 
@@ -1854,8 +1856,8 @@ conditioning of the condensed mass and stiffness matrices.
 <p>
 The frame element end forces listed in the Output data file adhere to a
 sign convention determined by the local coordinate system of the frame element.
-The local coordinate system of the frame element has its origin at joint 1 of the frame element.   
-The local <i>x</i>-axis lies along the element, from joint 1 to joint 2.  
+The local coordinate system of the frame element has its origin at node 1 of the frame element.   
+The local <i>x</i>-axis lies along the element, from node 1 to node 2.  
 The local <i>y</i> and <i>z</i> axes are aligned with the principle axes of the frame element cross section.   
 The frame element end forces are designated as
 <i>Nx</i>, <i>Vy</i>, <i>Vz</i> for the axial force and end shears 
@@ -1871,15 +1873,15 @@ The double-headed arrows adhere to the "right hand rule."
 The mathematical signs of the member end forces are 
 relative to the local <i>x-y-z</i> axes of the frame element
 and designate the direction of the force along those axes.  
-A positive <i>Nx</i> at joint 1
-of the member is compressive, while a negative <i>Nx</i> at joint 2 is also
+A positive <i>Nx</i> at node 1
+of the member is compressive, while a negative <i>Nx</i> at node 2 is also
 compressive.  The opposite is true for tension.
 The Output Data lists a "t" or a "c" along with the axial forces (<i>Nx</i>)
 in order to help clarify whether the end force is putting the frame element
 into <b>t</b>ension or <b>c</b>ompression.  
-A frame element with positive <i>My</i> at joint 1 and a negative <i>My</i> at joint 2
+A frame element with positive <i>My</i> at node 1 and a negative <i>My</i> at node 2
 has positive curvature in the <i>x-z</i> plane.  
-A frame element with negative <i>Mz</i> at joint 1 and a positive <i>Mz</i> at joint 2
+A frame element with negative <i>Mz</i> at node 1 and a positive <i>Mz</i> at node 2
 has positive curvature in the <i>x-y</i> plane.  
 </p>
 
@@ -1933,7 +1935,7 @@ In this example, the <i>x</i>-axis increment, <i>dx</i>, has a length of 10 mm.
 <p>
 The header information for each frame element contains the element number
 (column B),
-the element's end joints (columns C and D), the end joint coordinates
+the element's end nodes (columns C and D), the end node coordinates
 (columns E - J),
 and the number of <i>x</i>-axis increments for the frame element
 (column K).   
@@ -1974,7 +1976,7 @@ are computed using numerical integration of the
 distributed loads on the frame elements.   
 A corrected trapezoidal integration method is implemented 
 so that the internal force and transverse displacement data match the 
-known internal forces and joint displacements at both ends of each frame element.  
+known internal forces and node displacements at both ends of each frame element.  
 Internal forces and displacements computed with 
 a smaller increment length, <i>dx</i>, are more accurate.  
 In general, a value of <i>dx</i> equal to one percent to ten percent of the
@@ -2109,7 +2111,7 @@ For each load case <b>Frame3DD</b> carries out the following nine steps:
 <ol>
 <li> Assemble the structural stiffness matrix for the un-stressed structure.
 
-<li>Compute the joint displacements due to temperature loads using a linear elastic analysis.
+<li>Compute the node displacements due to temperature loads using a linear elastic analysis.
 
 <li>Compute frame element end forces from the displacements due to temperature loads.
 
@@ -2118,9 +2120,9 @@ If goemetric stiffness effects are to be considered,
 the assembly process makes use of
 the axial frame element forces arising from the temperature loads.
 
-<li>Compute the joint displacements due to mechanical loads.
+<li>Compute the node displacements due to mechanical loads.
 
-<li>Add the joint displacements due to mechanical loads to the joint displacements due to temperature loads.
+<li>Add the node displacements due to mechanical loads to the node displacements due to temperature loads.
 
 <li>Compute frame element end forces from the displacements due to the combined temperature and mechanical loads.
 
@@ -2248,34 +2250,34 @@ Template Input Data file for Frame3DD - 3D structural frame analysis (N,mm,ton)
 # other units may be specified as desired      
 
 
-# joint data ...
+# node data ...
 
-nJ                        # number of joints
-#.joint       X-coord  Y-coord  Z-coord  radius 
+nN                        # number of nodes
+#.node       X-coord  Y-coord  Z-coord  radius 
 #                mm       mm       mm      mm
-  J[1]           x[1]     y[1]     z[1]    r[1]    
+  N[1]           x[1]     y[1]     z[1]    r[1]    
     :              :        :        :       :  
-  J[nJ]          x[nJ]    y[nJ]    z[nJ]   r[nJ]
+  N[nN]          x[nN]    y[nN]    z[nN]   r[nN]
 
 
 # reaction data ...
 
-nR                           # number of joints with reactions
-#.joint    X      Y      Z       XX      YY      ZZ       0:free, 1:fixed
-  J[1]    Rx[1]  Ry[1]  Rz[1]   Rxx[1]  Ryy[1]  Rzz[1]
+nR                           # number of nodes with reactions
+#.node    X      Y      Z       XX      YY      ZZ       0:free, 1:fixed
+  N[1]    Rx[1]  Ry[1]  Rz[1]   Rxx[1]  Ryy[1]  Rzz[1]
     :        :      :      :        :       :       :          
-  J[nR]   Rx[nR] Ry[nR] Rz[nR]  Rxx[nR] Ryy[nR] Rzz[nR]
+  N[nR]   Rx[nR] Ry[nR] Rz[nR]  Rxx[nR] Ryy[nR] Rzz[nR]
 
 
 # frame element data ...
 
 nE                        # number of frame elements 
 
-#.elmnt j1     j2    Ax     Asy     Asz     Jx     Iy     Iz     E     G     roll  density
+#.elmnt n1     n2    Ax     Asy     Asz     Jx     Iy     Iz     E     G     roll  density
 #       .      .     mm^2   mm^2    mm^2    mm^4   mm^4   mm^4   MPa   MPa   deg   tonne/mm^3
- M[1]  J1[1]  J2[1]  Ax[1]  Asy[1]  Asz[1]  Jx[1]  Iy[1]  Iz[1]  E[1]  G[1]  p[1]  d[1]
+EL[1]  N1[1]  N2[1]  Ax[1]  Asy[1]  Asz[1]  Jx[1]  Iy[1]  Iz[1]  E[1]  G[1]  p[1]  d[1]
    :      :      :      :       :       :      :      :      :     :     :     :     :
- M[nE] J1[nE] J2[nE] Ax[nE] Asy[nE] Asz[nE] Jx[nE] Iy[nE] Iz[nE] E[nE] G[nE] p[nE] d[nE]
+EL[nE] N1[nE] N2[nE] Ax[nE] Asy[nE] Asz[nE] Jx[nE] Iy[nE] Iz[nE] E[nE] G[nE] p[nE] d[nE]
 
 shear        # 1=Do, 0=Don't include shear deformation effects
 geom         # 1=Do, 0=Don't include geometric stiffness effects
@@ -2295,51 +2297,51 @@ nL                        # number of static load cases,  1..30
 #   mm/s^2     mm/s^2     mm/s^2
     gX         gY         gZ   
 
-nF                   # number of loaded joints (global)
-#.joint  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
+nF                   # number of loaded nodes (global)
+#.node  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
 #         N        N        N        N.mm      N.mm      N.mm
-  J[1]    Fx[1]    Fy[1]    Fz[1]    Mxx[1]    Myy[1]    Mzz[1]
+  N[1]    Fx[1]    Fy[1]    Fz[1]    Mxx[1]    Myy[1]    Mzz[1]
     :        :        :        :         :         :         :  
-  J[nF]   Fx[nF]   Fy[nF]   Fz[nF]   Mxx[nF]   Myy[nF]   Mzz[nF]
+  N[nF]   Fx[nF]   Fy[nF]   Fz[nF]   Mxx[nF]   Myy[nF]   Mzz[nF]
 
 nU                   # number of uniformly-distributed element loads (local)
 #.elmnt  X-load   Y-load   Z-load   uniform member loads in member coordinates
 #         N/mm     N/mm     N/mm
-  M[1]    Ux[1]    Uy[1]    Uz[1]
+ EL[1]    Ux[1]    Uy[1]    Uz[1]
     :        :        :        :  
-  M[nU]   Ux[nU]   Uy[nU]   Uz[nU]
+ EL[nU]   Ux[nU]   Uy[nU]   Uz[nU]
 
 nW                   # number of trapezoidally-distributed element loads (local)
 #       start    stop     start    stop
 #.elmnt loc'n    loc'n    load     load
 #       mm       mm       N/mm     N/mm
-  M[1]  xx1[1]   xx2[2]   wx1[1]   wx2[1]  # locations and loads - local x-axis
+ EL[1]  xx1[1]   xx2[2]   wx1[1]   wx2[1]  # locations and loads - local x-axis
         xy1[1]   xy2[2]   wy1[1]   wy2[1]  # locations and loads - local y-axis
         xz1[1]   xz2[2]   wz1[1]   wz2[1]  # locations and loads - local z-axis
     :       :        :        :        :
-  M[nW] xx1[nW]  xx2[nW]  wx1[nW]  wx2[nW] # x1 and x2: start and end locations
+ EL[nW] xx1[nW]  xx2[nW]  wx1[nW]  wx2[nW] # x1 and x2: start and end locations
         xy1[nW]  xy2[nW]  wy1[nW]  wy2[nW] # w1 and w2: start load and end load
         xz1[nW]  xz2[nW]  wz1[nW]  wz2[nW] # 0 < x1 < x2 < L
 
 nP                   # number of concentrated interior point loads (local)
 #.elmnt  X-load   Y-load   Z-load    x-loc'n  point loads in member coordinates 
-  M[1]    Px[1]    Py[1]    Pz[1]    x[1]      
-    :        :        :        :       :    # x=distance from coordinate J1 
-  M[nP]   Px[nP]   Py[nP]   Pz[nP]   x[nP]  # 0 < x < L
+ EL[1]    Px[1]    Py[1]    Pz[1]    x[1]      
+    :        :        :        :       :    # x=distance from coordinate N1 
+ EL[nP]   Px[nP]   Py[nP]   Pz[nP]   x[nP]  # 0 < x < L
 
 nT                   # number of frame elements with temperature changes (local)
 #.elmnt   coef.  y-depth  z-depth  deltaTy+  deltaTy-  deltaTz+  deltaTz-
 #         /deg.C  mm       mm       deg.C     deg.C     deg.C     deg.C
-  M[1]    a[1]    hy[1]    hz[1]    Ty+[1]    Ty-[1]    Tz+[1]    Tz-[1] 
+ EL[1]    a[1]    hy[1]    hz[1]    Ty+[1]    Ty-[1]    Tz+[1]    Tz-[1] 
     :       :        :        :         :         :         :         :   
-  M[nT]   a[nT]   hy[nT]   hz[nT]   Ty+[nT]   Ty-[nT]   Tz+[nT]   Tz-[nT] 
+ EL[nT]   a[nT]   hy[nT]   hz[nT]   Ty+[nT]   Ty-[nT]   Tz+[nT]   Tz-[nT] 
 
 nD                   # number of prescribed displacements nD<=nR (global)
-#.jnt    X-displ  Y-displ  Z-displ  X-rot'n   Y-rot'n   Z-rot'n
+#.node   X-displ  Y-displ  Z-displ  X-rot'n   Y-rot'n   Z-rot'n
 #         mm       mm       mm       radian    radian    radian
-  J[1]    Dx[1]    Dy[1]    Dz[3]    Dxx[1]    Dyy[1]    Dzz[1]
+  N[1]    Dx[1]    Dy[1]    Dz[3]    Dxx[1]    Dyy[1]    Dzz[1]
     :        :        :        :         :         :         : 
-  J[nD]   Dx[nD]   Dy[nD]   Dz[nD]   Dxx[nD]   Dyy[nD]   Dzz[nD]
+  N[nD]   Dx[nD]   Dy[nD]   Dz[nD]   Dxx[nD]   Dyy[nD]   Dzz[nD]
 
 # End Static Load Case 1
 
@@ -2350,51 +2352,51 @@ nD                   # number of prescribed displacements nD<=nR (global)
 #   mm/s^2     mm/s^2     mm/s^2
     gX         gY         gZ   
 
-nF                   # number of loaded joints (global)
-#.joint  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
+nF                   # number of loaded nodes (global)
+#.node  X-load   Y-load   Z-load   X-mom     Y-mom     Z-mom
 #         N        N        N        N.mm      N.mm      N.mm
-  J[1]    Fx[1]    Fy[1]    Fz[1]    Mxx[1]    Myy[1]    Mzz[1]
+  N[1]    Fx[1]    Fy[1]    Fz[1]    Mxx[1]    Myy[1]    Mzz[1]
     :        :        :        :         :         :         :  
-  J[nF]   Fx[nF]   Fy[nF]   Fz[nF]   Mxx[nF]   Myy[nF]   Mzz[nF]
+  N[nF]   Fx[nF]   Fy[nF]   Fz[nF]   Mxx[nF]   Myy[nF]   Mzz[nF]
 
 nU                   # number of uniformly-distributed element loads (local)
 #.elmnt  X-load   Y-load   Z-load   uniform member loads in member coordinates
 #         N/mm     N/mm     N/mm
-  M[1]    Ux[1]    Uy[1]    Uz[1]
+ EL[1]    Ux[1]    Uy[1]    Uz[1]
     :        :        :        :  
-  M[nU]   Ux[nU]   Uy[nU]   Uz[nU]
+ EL[nU]   Ux[nU]   Uy[nU]   Uz[nU]
 
 nW                   # number of trapezoidally-distributed element loads (local)
 #       start    stop     start    stop
 #.elmnt loc'n    loc'n    load     load
 #       mm       mm       N/mm     N/mm
-  M[1]  xx1[1]   xx2[2]   wx1[1]   wx2[1]  # locations and loads - local x-axis
+ EL[1]  xx1[1]   xx2[2]   wx1[1]   wx2[1]  # locations and loads - local x-axis
         xy1[1]   xy2[2]   wy1[1]   wy2[1]  # locations and loads - local y-axis
         xz1[1]   xz2[2]   wz1[1]   wz2[1]  # locations and loads - local z-axis
     :       :        :        :        :
-  M[nW] xx1[nW]  xx2[nW]  wx1[nW]  wx2[nW] # x1 and x2: start and end locations
+ EL[nW] xx1[nW]  xx2[nW]  wx1[nW]  wx2[nW] # x1 and x2: start and end locations
         xy1[nW]  xy2[nW]  wy1[nW]  wy2[nW] # w1 and w2: start load and end load
         xz1[nW]  xz2[nW]  wz1[nW]  wz2[nW] # 0 < x1 < x2 < L
 
 nP                   # number of concentrated interior point loads (local)
 #.elmnt  X-load   Y-load   Z-load    x-loc'n  point loads in member coordinates 
-  M[1]    Px[1]    Py[1]    Pz[1]    x[1]      
-    :        :        :        :       :    # x=distance from coordinate J1 
-  M[nP]   Px[nP]   Py[nP]   Pz[nP]   x[nP]  # 0 < x < L
+ EL[1]    Px[1]    Py[1]    Pz[1]    x[1]      
+    :        :        :        :       :    # x=distance from coordinate N1 
+ EL[nP]   Px[nP]   Py[nP]   Pz[nP]   x[nP]  # 0 < x < L
 
 nT                   # number of frame elements with temperature changes (local)
 #.elmnt   coef.  y-depth  z-depth  deltaTy+  deltaTy-  deltaTz+  deltaTz-
 #         /deg.C  mm       mm       deg.C     deg.C     deg.C     deg.C
-  M[1]    a[1]    hy[1]    hz[1]    Ty+[1]    Ty-[1]    Tz+[1]    Tz-[1] 
+ EL[1]    a[1]    hy[1]    hz[1]    Ty+[1]    Ty-[1]    Tz+[1]    Tz-[1] 
     :       :        :        :         :         :         :         :   
-  M[nT]   a[nT]   hy[nT]   hz[nT]   Ty+[nT]   Ty-[nT]   Tz+[nT]   Tz-[nT] 
+ EL[nT]   a[nT]   hy[nT]   hz[nT]   Ty+[nT]   Ty-[nT]   Tz+[nT]   Tz-[nT] 
 
 nD                   # number of prescribed displacements nD<=nR (global)
-#.jnt    X-displ  Y-displ  Z-displ  X-rot'n   Y-rot'n   Z-rot'n
+#.node   X-displ  Y-displ  Z-displ  X-rot'n   Y-rot'n   Z-rot'n
 #         mm       mm       mm       radian    radian    radian
-  J[1]    Dx[1]    Dy[1]    Dz[3]    Dxx[1]    Dyy[1]    Dzz[1]
+  N[1]    Dx[1]    Dy[1]    Dz[3]    Dxx[1]    Dyy[1]    Dzz[1]
     :        :        :        :         :         :         : 
-  J[nD]   Dx[nD]   Dy[nD]   Dz[nD]   Dxx[nD]   Dyy[nD]   Dzz[nD]
+  N[nD]   Dx[nD]   Dy[nD]   Dz[nD]   Dxx[nD]   Dyy[nD]   Dzz[nD]
 
 # End Static Load Case 2
 
@@ -2414,22 +2416,22 @@ shift   # frequency shift-factor for rigid body modes, make 0 for pos.def. [K]
 exagg_modal  # exaggerate modal mesh deformations
 
 
-# extra joint inertia data ...
-nI      # number of joints with extra joint mass or rotatory inertia
-#.jnt   mass      XX-inertia   YY-inertia   ZZ-inertia
+# extra node inertia data ...
+nI      # number of nodes with extra node mass or rotatory inertia
+#.node  mass      XX-inertia   YY-inertia   ZZ-inertia
 #       tonne     tonne.mm^2   tonne.mm^2   tonne.mm^2
- J[1]   JMs[1]    JMx[1]       JMy[1]       JMz[1]  
+ N[1]   EMs[1]    EMx[1]       EMy[1]       EMz[1]  
    :        :         :            :            :    # (global coordinates)
- J[nI]  JMs[nI]   JMx[nI]      JMy[nI]      JMz[nI]
+ N[nI]  EMs[nI]   EMx[nI]      EMy[nI]      EMz[nI]
 
 
 # extra frame element mass data ...
 nX      # number of frame elements with extra mass 
 #.elmnt   extra mass
 #         tonne
-  M[1]    BMs[1]
+ EL[1]    EMs[1]
     :         :   
-  M[nX]   BMs[nE]
+ EL[nX]   EMs[nE]
 
 
 # mode shape animation data ...
@@ -2441,11 +2443,11 @@ pan                       # pan rate of the animation 0 = no panning
 # matrix condensation data ...
 
 Cmethod # matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
-nC      # number of condensed joints
-#.jnt   X      Y      Z       XX      YY     ZZ   1: condense; 0: don't
- J[1]  cx[1]  cy[1]  cz[1]   cxx[1]  cyy[1] czz[1]
+nC      # number of condensed nodes
+#.node  X      Y      Z       XX      YY     ZZ   1: condense; 0: don't
+ N[1]  cx[1]  cy[1]  cz[1]   cxx[1]  cyy[1] czz[1]
    :      :      :      :        :       :       :    
- J[nC] cx[nC] cy[nC] cz[nC]  cxx[nC] cyy[nC] czz[nC]
+ N[nC] cx[nC] cy[nC] cz[nC]  cxx[nC] cyy[nC] czz[nC]
 
   m[1]   m[2]   m[3]  ...      # list of modes matched in dynamic condensation
                                # if Cmethod == 1, only mode m[1] is matched.
@@ -2461,14 +2463,13 @@ nC      # number of condensed joints
                    (The x-axis is along the element length, in local coordinates)
     Asy          - Shear area in the local y-axis of a prismatic frame element
     Asz          - Shear area in the local z-axis of a prismatic frame element
-    BMs          - extra mass on a frame element, not including self mass
     Cmethod      -  matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
-    cx           - 1: retain X d.o.f. in condensed system at joint J;  0: don't
-    cy           - 1: retain Y d.o.f. in condensed system at joint J;  0: don't
-    cz           - 1: retain Z d.o.f. in condensed system at joint J;  0: don't
-    cxx             - 1: retain X axis rotation at joint J;  0: don't
-    cyy          - 1: retain Y axis rotation at joint J;  0: don't
-    czz          - 1: retain Z axis rotation at joint J;  0: don't
+    cx           - 1: retain X d.o.f. in condensed system at node J;  0: don't
+    cy           - 1: retain Y d.o.f. in condensed system at node J;  0: don't
+    cz           - 1: retain Z d.o.f. in condensed system at node J;  0: don't
+    cxx             - 1: retain X axis rotation at node J;  0: don't
+    cyy          - 1: retain Y axis rotation at node J;  0: don't
+    czz          - 1: retain Z axis rotation at node J;  0: don't
     Dx           - Prescribed displacement in the global X direction
     Dy           - Prescribed displacement in the global Y direction
     Dz           - Prescribed displacement in the global Z direction
@@ -2478,11 +2479,13 @@ nC      # number of condensed joints
     d            - mass density of a frame element (using consistent units).
     dx           - x-axis increment for frame element internal force data
     E            - Modulus of elasticity of a frame element
+    EL           - Element number
+    EMs          - extra mass on a frame element, not including self mass
     exagg_modal  - Exaggeration factor for the modal  displacements in the plot
     exagg_static - Exaggeration factor for the static displacements in the plot
-    Fx           - Joint load in the global X direction
-    Fy           - Joint load in the global Y direction
-    Fz           - Joint load in the global Z direction
+    Fx           - Externally applied nodal force in the global X direction
+    Fy           - Externally applied nodal force in the global Y direction
+    Fz           - Externally applied nodal force in the global Z direction
     G            -  Shear modulus of elasticity of frame element i
     gX           - gravitational acceleration in the global X direction
     gY           - gravitational acceleration in the global Y direction          
@@ -2492,32 +2495,31 @@ nC      # number of condensed joints
     hz           - cross-section dimension in the local z coordinate dir.
     Iy           - Moment of inertia for bending about the local y axis
     Iz           - Moment of inertia for bending about the local z axis
-    J            - Joint number
-    J1           - Joint 1 of a frame element
-    J2           - Joint 2 of a frame element
-    JMs          - extra mass of a joint for translational motion
-    JMx          - extra rotatory inertia of a joint about global x coord. dir.
-    JMy          - extra rotatory inertia of a joint about global y coord. dir.
-    JMz          - extra rotatory inertia of a joint about global z coord. dir.
     Jx           - Torsional moment of inertia of a frame element
     lump         - 1: use lumped mass matrix, 0: use consistent mass matrix
-    M            - Member number
-    Mxx          - Joint Moment about the global X axis
-    Myy          - Joint Moment about the global Y axis
-    Mzz          - Joint Moment about the global Z axis
+    Mxx          - Externally applied nodal Moment about the global X axis
+    Myy          - Externally applied nodal Moment about the global Y axis
+    Mzz          - Externally applied nodal Moment about the global Z axis
     m            - list of modes to match in dynamic condensation
     Mmethod      - the modal analysis method 1: Subspace Jacobi, 2: Stodola
+    N            - Node number
+    N1           - Node 1 of a frame element
+    N2           - Node 2 of a frame element
+    NMs          - extra mass of a node for translational motion
+    NMx          - extra rotatory inertia of a node about global x coord. dir.
+    NMy          - extra rotatory inertia of a node about global y coord. dir.
+    NMz          - extra rotatory inertia of a node about global z coord. dir.
     nA           - number of mode shapes to Animate must be less than 20
-    nC           - number of joints for matrix Condensation
-    nD           - number of joints with prescribed Displacements (nD <= nR)
+    nC           - number of nodes for matrix Condensation
+    nD           - number of nodes with prescribed Displacements (nD <= nR)
     nE           - number of frame Elements
-    nF           - number of joints with point Forces or concentrated moments
-    nI           - number of joints with extra joint mass or Inertia
-    nJ           - number of Joints
+    nF           - number of nodes with point Forces or concentrated moments
+    nI           - number of nodes with extra node mass or Inertia
     nL           - number of static Load cases
     nM           - number of Modes to be calculated
+    nN           - number of Nodes in the model
     nP           - number of frame elements with concentrated point loads
-    nR           - number of joints with Reaction forces
+    nR           - number of nodes with Reaction forces
     nT           - number of frame elements with Temperature changes
     nU           - number of uniformly distributed loads
     nW           - number of trapezoidally distributed loads
@@ -2532,7 +2534,7 @@ nC      # number of condensed joints
     Rxx          - 1: reactoin moment about the global X axis, 0: free
     Ryy          - 1: reaction moment about the global Y axis, 0: free
     Rzz          - 1: reaction moment about the global Z axis, 0: free
-    r            - r radius of rigid joint sphere around joint i
+    r            - r radius of rigid node sphere around node i
     shear        - 1: include shear deformations, 0: do not.
     shift        - shift factor for non-definite stiffness matrices
     tol          - tolerance for finding mode shapes ~ 1.e-4
@@ -2567,10 +2569,10 @@ nC      # number of condensed joints
                    trapezoidally-distributed loads in the z-direction
     xz2          - distance along a frame element for stopping
                    trapezoidally-distributed loads in the z-direction
-    x            - x coordinate of a joint in global coordinates
-    y            - y coordinate of a joint in global coordinates
-    z            - y coordinate of a joint in global coordinates
-    xP           - distance from J1 to the concentrated point load
+    x            - x coordinate of a node in global coordinates
+    y            - y coordinate of a node in global coordinates
+    z            - y coordinate of a node in global coordinates
+    xP           - distance from N1 to the concentrated point load
 
 </pre>
 
@@ -2730,9 +2732,9 @@ Exit code values have the following meanings:
 <li> 31  : non-positive definite structural static stiffness matrix 
 <li> 32  : error in eigen-problem analysis
 <li> 40  : error in input data file
-<li> 41  : input data formatting error in the joint data, joint number out of range
+<li> 41  : input data formatting error in the node data, node number out of range
 <li> 51  : input data formatting error in the frame element data, frame element number out of range
-<li> 52  : input data formatting error in the frame element data, joint number out of range
+<li> 52  : input data formatting error in the frame element data, node number out of range
 <li> 53  : input data formatting error in the frame element data, negative section value
 <li> 54  : input data formatting error in the frame element data, cross section area is 0 (zero)
 <li> 55  : input data formatting error in the frame element data, shear area and shear modulus are 0 (zero)
@@ -2740,29 +2742,29 @@ Exit code values have the following meanings:
 <li> 57  : input data formatting error in the frame element data, bending moment of inertia is 0 (zero)
 <li> 58  : input data formatting error in the frame element data, modulus value is non-positive 
 <li> 59  : input data formatting error in the frame element data, mass density value is non-positive 
-<li> 60  : input data formatting error in the frame element data, frame element starts and stops at the same joint
+<li> 60  : input data formatting error in the frame element data, frame element starts and stops at the same node
 <li> 61  : input data formatting error in the frame element data, frame element has length of zero
 <li> 71  : input data formatting error with the "shear" variable specifying shear deformation
 <li> 72  : input data formatting error with the "geom" variable specifying geometric stiffness 
 <li> 73  : input data formatting error with the "exagg_static" variable specifying static mesh exageration
 <li> 74  : input data formatting error with the "dx" variable specifying the length of the internal force x-axis increment
-<li> 80  : input data formatting error in reaction data, number of joints with reactions out of range
-<li> 81  : input data formatting error in reaction data, joint number out of range
+<li> 80  : input data formatting error in reaction data, number of nodes with reactions out of range
+<li> 81  : input data formatting error in reaction data, node number out of range
 <li> 82  : input data formatting error in reaction data, reaction data is not 1 (one) or 0 (zero)
-<li> 83  : input data formatting error in reaction data, specified joint has no reactions
+<li> 83  : input data formatting error in reaction data, specified node has no reactions
 <li> 84  : input data formatting error in reaction data, under-restrained structure
 <li> 85  : input data formatting error in reaction data, fully restrained structure
-<li> 86  : input data formatting error in extra joint inertia data, joint number out of range
+<li> 86  : input data formatting error in extra node inertia data, node number out of range
 <li> 87  : input data formatting error in extra beam mass data, frame element number out of range
 <li> 88  : input data formatting error in mass data, frame element with non-positive mass
-<li> 90  : input data formatting error in matrix condensation data, number of joints with condensed degrees of freedom are less than the total number of joints
-<li> 91  : input data formatting error in matrix condensation data, joint number out of range
+<li> 90  : input data formatting error in matrix condensation data, number of nodes with condensed degrees of freedom are less than the total number of nodes
+<li> 91  : input data formatting error in matrix condensation data, node number out of range
 <li> 92  : input data formatting error in matrix condensation data, mode number out of range
 <li> 94  : input data formatting error in matrix condensation data, number of condensed degrees of freedom greater than number of modes
 <li> 100 : input data formatting error in load data
 <li> 101 : number of static load cases must be greater than zero
 <li> 102 : number of static load cases must be less than 30
-<li> 121 : input data formatting error in joint load data, joint number out of range
+<li> 121 : input data formatting error in nodal load data, node number out of range
 <li> 131 : input data formatting error in uniformly-distributed load data, number of uniform loads is greater than the number of frame elements
 <li> 132 : input data formatting error in uniformly-distributed load data, frame element number out of range
 <li> 140 : input data formatting error in trapezoidally-distributed load data, too many trapezoidally distributed loads
@@ -2808,7 +2810,7 @@ and possibly
 <li>       Consistent mass matrix including the effects of shear deformation on rotatory inertia
 <li>       Dynamic time-history analysis with the HHT-alpha method
 <li>       Spectral modal superposition
-<li>       Member end joint releases
+<li>       Member end node releases
 <li>       Linearly tapered frame elements
 <!-- <li>       Membrane elements  -->
 <!-- <li>       Plate elements   -->

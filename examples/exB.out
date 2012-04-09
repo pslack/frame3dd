@@ -6,14 +6,14 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis (N mm ton) 
-Fri Nov 11 17:46:34 2011
+Mon Apr  9 15:07:22 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
     5 JOINTS             4 FIXED JOINTS       4 FRAME ELEMENTS   3 LOAD CASES   
 ________________________________________________________________________________
-J O I N T   D A T A                                         R E S T R A I N T S
-  Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
+N O D E   D A T A                                           R E S T R A I N T S
+  Node       X              Y              Z         radius  Fx Fy Fz Mx My Mz
     1       0.000000       0.000000    1000.000000    0.000   0  0  0  0  0  0
     2   -1200.000000    -900.000000       0.000000    0.000   1  1  1  1  1  1
     3    1200.000000    -900.000000       0.000000    0.000   1  1  1  1  1  1
@@ -37,8 +37,8 @@ L O A D   C A S E   1   O F   3  ...
    0 concentrated point loads
    0 temperature loads
    0 prescribed displacements
- J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
-  Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
+ N O D A L   L O A D S  +  E Q U I V A L E N T   N O D A L   L O A D S  (global)
+  Node        Fx          Fy          Fz          Mxx         Myy         Mzz
      1    1000.000   -2000.000   -1009.992       0.000      -0.000       0.000
      2       0.000       0.000      -2.498    -374.698     499.598       0.000
      3       0.000       0.000      -2.498    -374.698    -499.598       0.000
@@ -54,8 +54,8 @@ L O A D   C A S E   2   O F   3  ...
    0 concentrated point loads
    1 temperature loads
    0 prescribed displacements
- J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
-  Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
+ N O D A L   L O A D S  +  E Q U I V A L E N T   N O D A L   L O A D S  (global)
+  Node        Fx          Fy          Fz          Mxx         Myy         Mzz
      1     445.809     369.104     429.727   -1999.332   14487.114   21477.158
      2    -471.335    -353.501    -286.944   16768.270  -23449.343     982.485
      3      54.083      72.111      -2.498  -12393.203    8514.281  -22534.696
@@ -86,14 +86,14 @@ L O A D   C A S E   3   O F   3  ...
    2 concentrated point loads
    0 temperature loads
    0 prescribed displacements
- J O I N T   L O A D S  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)
-  Joint       Fx          Fy          Fz          Mxx         Myy         Mzz
+ N O D A L   L O A D S  +  E Q U I V A L E N T   N O D A L   L O A D S  (global)
+  Node        Fx          Fy          Fz          Mxx         Myy         Mzz
      1      69.513     -34.167    -106.454   26196.117 -114629.273  -52275.957
      2     251.622     281.392    -557.698 -156439.366  183895.925   22220.907
      3     -12.999     -94.251      66.729   40848.692   17951.709   32861.892
      4       0.000       0.000      -2.498     374.698    -499.598       0.000
      5       0.000       0.000      -2.498     374.698     499.598       0.000
- C O N C E T R A T E D   P O I N T   L O A D S				(local)
+ C O N C E N T R A T E D   P O I N T   L O A D S				(local)
   Elmnt       Px          Py          Pz          x
      1       0.000     100.000    -900.000     600.000
      2       0.000    -200.000     200.000     800.000
@@ -103,11 +103,11 @@ E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 
 L O A D   C A S E   1   O F   3  ... 
 
-J O I N T   D I S P L A C E M E N T S					(global)
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+N O D E   D I S P L A C E M E N T S  					(global)
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.141295   -0.502427   -0.205510    0.000651    0.000086    0.000118
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
+  Elmnt  Node       Nx          Vy         Vz        Txx        Myy        Mzz
      1      2   1082.803c     -0.268      2.068    -23.811   -685.439     -2.388
      1      1  -1080.031c      0.268      2.089     23.811    632.999     44.907
      2      1   1831.287c      0.322      2.019     14.294   -726.371    -79.106
@@ -117,7 +117,7 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
      4      5   -920.721t      0.214      2.280    -20.047   -709.625     78.132
      4      1    923.493t     -0.214      1.877     20.047    716.643     15.507
 R E A C T I O N S							(global)
-  Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
+  Node        Fx          Fy          Fz         Mxx         Myy         Mzz
      2     720.000     539.665     602.351     396.473    -559.444     -15.195
      3   -1220.068     914.648    1019.131     460.738     561.023      73.734
      4     113.693      85.358     -92.254    -425.169     490.402     -36.285
@@ -126,11 +126,11 @@ R M S   E Q U I L I B R I U M    E R R O R: 2.053e-04
 
 L O A D   C A S E   2   O F   3  ... 
 
-J O I N T   D I S P L A C E M E N T S					(global)
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+N O D E   D I S P L A C E M E N T S  					(global)
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.064021    0.093055    0.087227   -0.000479    0.018973    0.028437
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
+  Elmnt  Node       Nx          Vy         Vz        Txx        Myy        Mzz
      1      2    100.411c      4.132    -91.725  -1096.496  30000.763    147.186
      1      1    -97.639c     -4.132    -84.395   1096.496 -23400.693   7321.889
      2      1   -209.968t    -86.631     -0.913  -1124.543   3358.465 -22461.399
@@ -140,7 +140,7 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
      4      5   -176.513t     -0.410     -3.692   -263.187   3688.358   2123.218
      4      1    179.284t     -6.140      0.349    263.187   2217.089   7948.263
 R E A C T I O N S							(global)
-  Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
+  Node        Fx          Fy          Fz         Mxx         Myy         Mzz
      2     105.062      83.962     -20.622  -18795.645   23404.220    -485.761
      3      83.981    -180.043    -110.714   14740.704   -8494.789   23306.856
      4    -106.211     -85.815      90.853    1687.777    1430.648    2787.886
@@ -149,11 +149,11 @@ R M S   E Q U I L I B R I U M    E R R O R: 9.529e-06
 
 L O A D   C A S E   3   O F   3  ... 
 
-J O I N T   D I S P L A C E M E N T S					(global)
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+N O D E   D I S P L A C E M E N T S  					(global)
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1    0.000249   -0.013374   -0.021701    0.048620   -0.171582   -0.081460
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
+  Elmnt  Node       Nx          Vy         Vz        Txx        Myy        Mzz
      1      2     75.466c    -79.757    698.344   4331.974 -259887.105 -30367.209
      1      1    -72.694c    -20.243    205.813  -4331.974  87174.466   6860.943
      2      1     74.020c    118.696    -95.906   7179.169  27244.042  51683.823
@@ -163,7 +163,7 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
      4      5     22.134c    -26.294     21.490  -3203.906 -12559.396 -16163.728
      4      1    -19.363c     26.294    -17.334   3203.906 -22436.567 -31239.064
 R E A C T I O N S							(global)
-  Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
+  Node        Fx          Fy          Fz         Mxx         Myy         Mzz
      2    -211.810    -258.554     622.918  172291.557 -195640.214  -22864.098
      3     -46.681     136.641     -40.556  -52448.602  -24606.486  -27850.054
      4     -39.065      -6.127     -10.100    5826.025  -17824.657   -9694.032
@@ -172,8 +172,8 @@ R M S   E Q U I L I B R I U M    E R R O R: 1.783e-06
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  1.020379e-01     Structural Mass:  2.037858e-03 
-J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
-  Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
+N O D A L   M A S S E S	(diagonal of the mass matrix)			(global)
+  Node  X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
      1 1.00723e-01 1.00738e-01 1.00733e-01 3.51392e+01 4.73634e+01 4.36768e+01
      2 1.26482e+02 1.26482e+02 1.26482e+02 1.26482e+02 1.26482e+02 1.26482e+02
      3 1.26482e+02 1.26482e+02 1.26482e+02 1.26482e+02 1.26482e+02 1.26482e+02
@@ -183,66 +183,66 @@ J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
  convergence tolerance: 1.000e-04 
-  MODE     1:   f= 18.802048 Hz,  T= 0.053186 sec
-		X- modal participation factor =  -2.5536e-02 
-		Y- modal participation factor =  -6.1224e-05 
-		Z- modal participation factor =  -6.3679e-07 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -2.606e-02  -1.254e-04  -6.323e-06  -2.848e-04   1.343e-01  -5.723e-02
-     2  -2.239e-07   8.232e-08   1.944e-07   2.137e-05  -1.055e-04   6.930e-05
-     3  -2.239e-07  -8.300e-08  -1.937e-07  -2.109e-05  -1.053e-04   6.948e-05
-     4  -9.985e-08  -8.302e-08  -1.943e-07   5.954e-05  -7.685e-05   2.242e-06
-     5  -9.985e-08   8.234e-08   1.937e-07  -5.925e-05  -7.668e-05   2.052e-06
-  MODE     2:   f= 19.099253 Hz,  T= 0.052358 sec
-		X- modal participation factor =  -1.0483e-02 
-		Y- modal participation factor =   2.2644e-04 
-		Z- modal participation factor =  -4.4358e-07 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -1.105e-02   4.817e-04  -4.400e-06   1.043e-03   5.493e-02   1.400e-01
-     2   8.819e-08  -2.074e-07   8.073e-08   6.464e-05  -1.996e-06  -7.574e-05
-     3   8.818e-08   2.100e-07  -8.306e-08  -6.572e-05  -2.642e-06  -7.645e-05
-     4  -2.248e-07   2.100e-07  -8.072e-08  -3.169e-05  -7.424e-05  -1.048e-04
-     5  -2.248e-07  -2.074e-07   8.306e-08   3.061e-05  -7.489e-05  -1.041e-04
-  MODE     3:   f= 19.683606 Hz,  T= 0.050804 sec
-		X- modal participation factor =   2.1734e-05 
-		Y- modal participation factor =   3.7337e-02 
-		Z- modal participation factor =  -2.6813e-05 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1   2.440e-05   8.556e-02  -2.654e-04   1.682e-01  -1.130e-04  -9.639e-04
-     2  -9.502e-10   2.242e-07  -2.001e-07  -9.329e-05   5.521e-05   6.230e-05
-     3  -1.042e-09   2.211e-07  -1.997e-07  -9.250e-05  -5.556e-05  -6.104e-05
-     4   1.341e-09   2.211e-07   2.001e-07  -9.258e-05   5.573e-05  -6.098e-05
-     5   1.248e-09   2.242e-07   1.997e-07  -9.321e-05  -5.503e-05   6.236e-05
-  MODE     4:   f= 31.711400 Hz,  T= 0.031534 sec
-		X- modal participation factor =  -3.2107e-09 
+  MODE     1:   f= 18.808348 Hz,  T= 0.053168 sec
+		X- modal participation factor =  -2.5465e-02 
+		Y- modal participation factor =  -6.1085e-05 
+		Z- modal participation factor =  -6.3920e-07 
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+     1  -2.609e-02  -1.255e-04  -6.328e-06  -2.850e-04   1.344e-01  -5.727e-02
+     2  -2.220e-09   8.165e-10   1.928e-09   2.120e-07  -1.046e-06   6.873e-07
+     3  -2.220e-09  -8.233e-10  -1.922e-09  -2.092e-07  -1.045e-06   6.892e-07
+     4  -9.905e-10  -8.235e-10  -1.928e-09   5.906e-07  -7.624e-07   2.224e-08
+     5  -9.905e-10   8.167e-10   1.922e-09  -5.877e-07  -7.607e-07   2.035e-08
+  MODE     2:   f= 19.105860 Hz,  T= 0.052340 sec
+		X- modal participation factor =  -1.0453e-02 
+		Y- modal participation factor =   2.2592e-04 
+		Z- modal participation factor =  -4.4484e-07 
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+     1  -1.106e-02   4.823e-04  -4.404e-06   1.043e-03   5.497e-02   1.401e-01
+     2   8.745e-10  -2.056e-09   8.005e-10   6.410e-07  -1.979e-08  -7.510e-07
+     3   8.745e-10   2.082e-09  -8.237e-10  -6.517e-07  -2.619e-08  -7.581e-07
+     4  -2.229e-09   2.082e-09  -8.005e-10  -3.143e-07  -7.362e-07  -1.040e-06
+     5  -2.229e-09  -2.056e-09   8.237e-10   3.035e-07  -7.426e-07  -1.032e-06
+  MODE     3:   f= 19.690832 Hz,  T= 0.050785 sec
+		X- modal participation factor =   2.1670e-05 
+		Y- modal participation factor =   3.7249e-02 
+		Z- modal participation factor =  -2.6839e-05 
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+     1   2.443e-05   8.568e-02  -2.657e-04   1.684e-01  -1.131e-04  -9.647e-04
+     2  -9.417e-12   2.222e-09  -1.983e-09  -9.246e-07   5.471e-07   6.175e-07
+     3  -1.033e-11   2.192e-09  -1.980e-09  -9.169e-07  -5.507e-07  -6.050e-07
+     4   1.329e-11   2.192e-09   1.983e-09  -9.176e-07   5.524e-07  -6.044e-07
+     5   1.237e-11   2.222e-09   1.980e-09  -9.239e-07  -5.455e-07   6.181e-07
+  MODE     4:   f= 31.711469 Hz,  T= 0.031534 sec
+		X- modal participation factor =  -3.8846e-09 
 		Y- modal participation factor =   3.1627e-01 
-		Z- modal participation factor =   7.1601e-06 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -1.462e-08   3.155e+00   7.083e-05  -1.414e-02   1.257e-08   2.495e-06
-     2   4.506e-09  -2.559e-10   4.812e-08   9.596e-06  -1.229e-05  -4.630e-07
-     3  -4.487e-09  -2.382e-10   4.809e-08   9.585e-06   1.228e-05   4.545e-07
-     4   4.488e-09  -2.384e-10  -4.809e-08   9.584e-06  -1.228e-05   4.547e-07
-     5  -4.503e-09  -2.594e-10  -4.809e-08   9.590e-06   1.228e-05  -4.636e-07
-  MODE     5:   f= 35.158946 Hz,  T= 0.028442 sec
-		X- modal participation factor =  -1.1565e-07 
-		Y- modal participation factor =  -3.9437e-06 
-		Z- modal participation factor =   3.1832e-01 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -5.909e-07  -6.371e-05   3.151e+00   1.447e-05   3.304e-07  -7.104e-10
-     2   6.174e-09   4.693e-09   6.154e-08   1.221e-05  -1.629e-05   1.717e-08
-     3  -6.170e-09   4.690e-09   6.147e-08   1.219e-05   1.627e-05  -1.722e-08
-     4  -6.170e-09  -4.565e-09   6.159e-08  -1.224e-05   1.631e-05  -1.732e-08
-     5   6.170e-09  -4.565e-09   6.159e-08  -1.224e-05  -1.631e-05   1.724e-08
-  MODE     6:   f= 42.248750 Hz,  T= 0.023669 sec
-		X- modal participation factor =   3.1726e-01 
-		Y- modal participation factor =   3.3097e-09 
-		Z- modal participation factor =   7.3509e-08 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1   3.155e+00   1.599e-09   5.140e-07   7.152e-09   8.402e-03   1.740e-05
-     2   4.072e-08   8.027e-09   7.284e-08   1.328e-05  -9.947e-06  -6.977e-06
-     3   4.062e-08  -8.010e-09  -7.268e-08  -1.325e-05  -9.929e-06  -6.958e-06
-     4   4.042e-08   8.276e-09  -7.268e-08   1.319e-05  -9.973e-06   6.843e-06
-     5   4.042e-08  -8.271e-09   7.268e-08  -1.319e-05  -9.974e-06   6.845e-06
+		Z- modal participation factor =   7.1675e-06 
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+     1  -1.390e-08   3.155e+00   7.095e-05  -1.416e-02   1.460e-08   2.507e-06
+     2   4.385e-11  -3.212e-12   4.689e-10   9.367e-08  -1.198e-07  -4.706e-09
+     3  -4.370e-11  -3.008e-12   4.689e-10   9.362e-08   1.198e-07   4.618e-09
+     4   4.370e-11  -3.010e-12  -4.689e-10   9.362e-08  -1.198e-07   4.618e-09
+     5  -4.385e-11  -3.214e-12  -4.689e-10   9.367e-08   1.198e-07  -4.706e-09
+  MODE     5:   f= 35.159052 Hz,  T= 0.028442 sec
+		X- modal participation factor =  -1.1662e-07 
+		Y- modal participation factor =  -3.9808e-06 
+		Z- modal participation factor =   3.1829e-01 
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+     1  -5.898e-07  -6.381e-05   3.151e+00   1.452e-05   3.359e-07  -6.761e-10
+     2   5.971e-11   4.539e-11   5.951e-10   1.180e-07  -1.575e-07   1.674e-10
+     3  -5.974e-11   4.539e-11   5.950e-10   1.180e-07   1.575e-07  -1.616e-10
+     4  -5.974e-11  -4.420e-11   5.961e-10  -1.185e-07   1.578e-07  -1.674e-10
+     5   5.971e-11  -4.420e-11   5.961e-10  -1.185e-07  -1.578e-07   1.616e-10
+  MODE     6:   f= 42.248817 Hz,  T= 0.023669 sec
+		X- modal participation factor =   3.1724e-01 
+		Y- modal participation factor =   3.0950e-11 
+		Z- modal participation factor =   5.2866e-08 
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+     1   3.155e+00   3.905e-09   5.233e-07  -2.140e-09   8.415e-03   1.752e-05
+     2   3.870e-10   7.645e-11   6.945e-10   1.266e-07  -9.514e-08  -6.626e-08
+     3   3.870e-10  -7.645e-11  -6.945e-10  -1.266e-07  -9.514e-08  -6.626e-08
+     4   3.851e-10   7.898e-11  -6.945e-10   1.260e-07  -9.558e-08   6.517e-08
+     5   3.851e-10  -7.899e-11   6.945e-10  -1.260e-07  -9.558e-08   6.517e-08
 M A T R I X    I T E R A T I O N S: 2
-There are 6 modes below 42.248750 Hz. ... All 6 modes were found.
+There are 6 modes below 42.248817 Hz. ... All 6 modes were found.
 

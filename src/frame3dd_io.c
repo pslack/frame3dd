@@ -346,25 +346,25 @@ void display_version_about()
 
 
 /*------------------------------------------------------------------------------
-READ_JOINT_DATA  -  read joint location data		
+READ_JOINT_DATA  -  read node location data		
 04 Jan 2009
 ------------------------------------------------------------------------------*/
-void read_joint_data( FILE *fp, int nJ, vec3 *xyz, float *r )
+void read_node_data( FILE *fp, int nN, vec3 *xyz, float *r )
 {
 	int	i, j,
 		sfrv=0;		/* *scanf return value	*/
 	char	errMsg[MAXL];
 
-	for (i=1;i<=nJ;i++) {		/* read joint coordinates	*/
+	for (i=1;i<=nN;i++) {		/* read node coordinates	*/
 		sfrv=fscanf(fp, "%d", &j );
-		if (sfrv != 1) sferr("joint number in joint data");
-		if ( j <= 0 || j > nJ ) {
-		    sprintf(errMsg,"\nERROR: in joint coordinate data, joint number out of range\n(joint number %d is <= 0 or > %d)\n", j, nJ);
+		if (sfrv != 1) sferr("node number in node data");
+		if ( j <= 0 || j > nN ) {
+		    sprintf(errMsg,"\nERROR: in node coordinate data, node number out of range\n(node number %d is <= 0 or > %d)\n", j, nN);
 		    errorMsg(errMsg);
 		    exit(41);
 		}
 		sfrv=fscanf(fp, "%lf %lf %lf %f", &xyz[j].x, &xyz[j].y, &xyz[j].z, &r[j]);
-		if (sfrv != 4) sferr("joint coordinates in joint data");
+		if (sfrv != 4) sferr("node coordinates in node data");
 		/* fprintf(stderr,"\nj = %d, pos = (%lf, %lf, %lf), r = %f", j, xyz[j].x, xyz[j].y, xyz[j].z, r[j]); */
 		r[j] = fabs(r[j]);
 	}
@@ -378,13 +378,13 @@ READ_FRAME_ELEMENT_DATA  -  read frame element property data
 ------------------------------------------------------------------------------*/
 void read_frame_element_data (
 	FILE *fp,
-	int nJ, int nE, vec3 *xyz, float *r,
+	int nN, int nE, vec3 *xyz, float *r,
 	double *L, double *Le,
 	int *J1, int *J2,
 	float *Ax, float *Asy, float *Asz,
 	float *Jx, float *Iy, float *Iz, float *E, float *G, float *p, float *d
 ){
-	int	j1, j2, i, b;
+	int	n1, n2, i, b;
 	int	sfrv=0;		/* *scanf return value */
 	char	errMsg[MAXL];
 
@@ -397,9 +397,9 @@ void read_frame_element_data (
 		    exit(51);
 		}
 		sfrv=fscanf(fp, "%d %d", &J1[b], &J2[b] );
-		if (sfrv != 2) sferr("joint numbers in frame element data");
-		if ( J1[b] <= 0 || J1[b] > nJ || J2[b] <= 0 || J2[b] > nJ ) {
-		    sprintf(errMsg,"\n  error in frame element property data: joint number out of range  \n Frame element number: %d \n", b);
+		if (sfrv != 2) sferr("node numbers in frame element data");
+		if ( J1[b] <= 0 || J1[b] > nN || J2[b] <= 0 || J2[b] > nN ) {
+		    sprintf(errMsg,"\n  error in frame element property data: node number out of range  \n Frame element number: %d \n", b);
 		    errorMsg(errMsg);
 		    exit(52);
 		}
@@ -456,27 +456,27 @@ void read_frame_element_data (
 	}
 
 	for (b=1;b<=nE;b++) {		/* calculate frame element lengths */
-		j1 = J1[b];
-		j2 = J2[b];
+		n1 = J1[b];
+		n2 = J2[b];
 
 #define SQ(X) ((X)*(X))
-		L[b] =	SQ( xyz[j2].x - xyz[j1].x ) +
-			SQ( xyz[j2].y - xyz[j1].y ) +
-			SQ( xyz[j2].z - xyz[j1].z );
+		L[b] =	SQ( xyz[n2].x - xyz[n1].x ) +
+			SQ( xyz[n2].y - xyz[n1].y ) +
+			SQ( xyz[n2].z - xyz[n1].z );
 #undef SQ
 
 		L[b] = sqrt( L[b] );
-		Le[b] = L[b] - r[j1] - r[j2];
-		if ( j1 == j2 || L[b] == 0.0 ) {
+		Le[b] = L[b] - r[n1] - r[n2];
+		if ( n1 == n2 || L[b] == 0.0 ) {
 		   sprintf(errMsg,
-			" Frame elements must start and stop at different joints\n  frame element %d  J1= %d J2= %d L= %e\n   Perhaps frame element number %d has not been specified.\n  or perhaps the Input Data file is missing expected data.\n",
-		   b, j1,j2, L[b], i );
+			" Frame elements must start and stop at different nodes\n  frame element %d  J1= %d J2= %d L= %e\n   Perhaps frame element number %d has not been specified.\n  or perhaps the Input Data file is missing expected data.\n",
+		   b, n1,n2, L[b], i );
 		   errorMsg(errMsg);
 		   exit(60);
 		}
 		if ( Le[b] <= 0.0 ) {
-		   sprintf(errMsg, " Joint radii are too large.\n  frame element %d  J1= %d J2= %d L= %e \n  r1= %e r2= %e Le= %e \n",
-		   b, j1,j2, L[b], r[j1], r[j2], Le[b] );
+		   sprintf(errMsg, " Node  radii are too large.\n  frame element %d  J1= %d J2= %d L= %e \n  r1= %e r2= %e Le= %e \n",
+		   b, n1,n2, L[b], r[n1], r[n2], Le[b] );
 		   errorMsg(errMsg);
 		   exit(61);
 		}
@@ -730,11 +730,11 @@ void getline_no_comment (
 
 
 /*------------------------------------------------------------------------------
-READ_REACTION_DATA - Read fixed joint displacement boundary conditions
+READ_REACTION_DATA - Read fixed node displacement boundary conditions
 29 Dec 2009
 ------------------------------------------------------------------------------*/
 void read_reaction_data (
-	FILE *fp, int DoF, int nJ, int *nR, int *R, int *sumR, int verbose
+	FILE *fp, int DoF, int nN, int *nR, int *R, int *sumR, int verbose
 ){
 	int	i,j,l;
 	int	sfrv=0;		/* *scanf return value */
@@ -745,13 +745,13 @@ void read_reaction_data (
 	sfrv=fscanf(fp,"%d", nR );	/* read restrained degrees of freedom */
 	if (sfrv != 1) sferr("number of reactions in reaction data");
 	if ( verbose ) {
-		fprintf(stdout," number of joints with reactions ");
-		dots(stdout,20);
+		fprintf(stdout," number of nodes with reactions ");
+		dots(stdout,21);
 		fprintf(stdout," nR =%4d ", *nR );
 	}
 	if ( *nR < 0 || *nR > DoF/6 ) {
-		fprintf(stderr," number of joints with reactions ");
-		dots(stderr,20);
+		fprintf(stderr," number of nodes with reactions ");
+		dots(stderr,21);
 		fprintf(stderr," nR = %3d ", *nR );
 		sprintf(errMsg,"\n  error: valid ranges for nR is 0 ... %d \n", DoF/6 );
 		errorMsg(errMsg);
@@ -760,19 +760,19 @@ void read_reaction_data (
 
 	for (i=1; i <= *nR; i++) {
 	    sfrv=fscanf(fp,"%d", &j);
-	    if (sfrv != 1) sferr("joint number in reaction data");
+	    if (sfrv != 1) sferr("node number in reaction data");
 	    for (l=5; l >=0; l--) {
 
 		sfrv=fscanf(fp,"%d", &R[6*j-l] );
 		if (sfrv != 1) sferr("reaction value in reaction data");
 
-		if ( j > nJ ) {
-		    sprintf(errMsg,"\n  error in reaction data: joint number %d is greater than the number of joints, %d \n", j, nJ );
+		if ( j > nN ) {
+		    sprintf(errMsg,"\n  error in reaction data: node number %d is greater than the number of nodes, %d \n", j, nN );
 		    errorMsg(errMsg);
 		    exit(81);
 		}
 		if ( R[6*j-l] != 0 && R[6*j-l] != 1 ) {
-		    sprintf(errMsg,"\n  error in reaction data: Reaction data must be 0 or 1\n   Data for joint %d, DoF %d is %d\n", j, 6-l, R[6*j-l] );
+		    sprintf(errMsg,"\n  error in reaction data: Reaction data must be 0 or 1\n   Data for node %d, DoF %d is %d\n", j, 6-l, R[6*j-l] );
 		    errorMsg(errMsg);
 		    exit(82);
 		}
@@ -780,7 +780,7 @@ void read_reaction_data (
 	    *sumR = 0;
 	    for (l=5; l >=0; l--) 	*sumR += R[6*j-l];
 	    if ( *sumR == 0 ) {
-		sprintf(errMsg,"\n  error: joint %3d has no reactions\n   Remove joint %3d from the list of reactions\n   and set nR to %3d \n",
+		sprintf(errMsg,"\n  error: node %3d has no reactions\n   Remove node %3d from the list of reactions\n   and set nR to %3d \n",
 		j, j, *nR-1 );
 		errorMsg(errMsg);
 		exit(83);
@@ -809,7 +809,7 @@ read load information data, assemble un-restrained load vectors
 ------------------------------------------------------------------------------*/
 void read_and_assemble_loads (
 		FILE *fp,
-		int nJ, int nE, int nL, int DoF,
+		int nN, int nE, int nL, int DoF,
 		vec3 *xyz,
 		double *L, double *Le,
 		int *J1, int *J2,
@@ -836,7 +836,7 @@ void read_and_assemble_loads (
 		Ksy, Ksz, 		/* shear deformatn coefficients	*/
 		a, b,			/* point load locations */
 		t1, t2, t3, t4, t5, t6, t7, t8, t9;	/* 3D coord Xfrm coeffs */
-	int	i,j,l, lc, n, j1, j2;
+	int	i,j,l, lc, n, n1, n2;
 	int	sfrv=0;		/* *scanf return value */
 
 	char	errMsg[MAXL];
@@ -870,9 +870,9 @@ void read_and_assemble_loads (
 
 	  for (n=1; n<=nE; n++) {
 
-		j1 = J1[n];	j2 = J2[n];
+		n1 = J1[n];	n2 = J2[n];
 
-		coord_trans ( xyz, L[n], j1, j2,
+		coord_trans ( xyz, L[n], n1, n2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		feF_mech[lc][n][1]  = d[n]*Ax[n]*L[n]*gX[lc] / 2.0;
@@ -908,17 +908,17 @@ void read_and_assemble_loads (
 	  }					/* end gravity loads */
 
 
-	  sfrv=fscanf(fp,"%d", &nF[lc] );	/* joint point loads	*/
+	  sfrv=fscanf(fp,"%d", &nF[lc] );	/* node point loads	*/
 	  if (sfrv != 1) sferr("nF value in load data");
 	  if ( verbose ) {
-		fprintf(stdout,"  number of loaded joints ");
-	  	dots(stdout,27);	fprintf(stdout," nF = %3d\n", nF[lc]);
+		fprintf(stdout,"  number of loaded nodes ");
+	  	dots(stdout,28);	fprintf(stdout," nF = %3d\n", nF[lc]);
 	  }
 	  for (i=1; i <= nF[lc]; i++) {	/* ! global structural coordinates ! */
 		sfrv=fscanf(fp,"%d", &j);
-		if (sfrv != 1) sferr("joint value in point load data");
-		if ( j < 1 || j > nJ ) {
-		    sprintf(errMsg,"\n  error in joint load data: joint number out of range ... Joint: %d\n   Perhaps you did not specify %d joint loads \n  or perhaps the Input Data file is missing expected data.\n", j, nF[lc] );
+		if (sfrv != 1) sferr("node value in point load data");
+		if ( j < 1 || j > nN ) {
+		    sprintf(errMsg,"\n  error in node load data: node number out of range ... Node : %d\n   Perhaps you did not specify %d node loads \n  or perhaps the Input Data file is missing expected data.\n", j, nF[lc] );
 		    errorMsg(errMsg);
 		    exit(121);
 		}
@@ -929,8 +929,8 @@ void read_and_assemble_loads (
 		}
 
 		if ( F_mech[lc][6*j-5]==0 && F_mech[lc][6*j-4]==0 && F_mech[lc][6*j-3]==0 && F_mech[lc][6*j-2]==0 && F_mech[lc][6*j-1]==0 && F_mech[lc][6*j]==0 )
-		    fprintf(stderr,"\n   Warning: All joint loads applied at joint %d  are zero\n", j );
-	  }					/* end joint point loads  */
+		    fprintf(stderr,"\n   Warning: All node loads applied at node %d  are zero\n", j );
+	  }					/* end node point loads  */
 
 	  sfrv=fscanf(fp,"%d", &nU[lc] );	/* uniformly distributed loads */
 	  if (sfrv != 1) sferr("nU value in uniform load data");
@@ -975,9 +975,9 @@ void read_and_assemble_loads (
 						n, Vy1,Vz1, My1,Mz1 );
 		*/
 
-		j1 = J1[n];	j2 = J2[n];
+		n1 = J1[n];	n2 = J2[n];
 
-		coord_trans ( xyz, L[n], j1, j2,
+		coord_trans ( xyz, L[n], n1, n2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		/* debugging ... check coordinate transform coefficients
@@ -1172,9 +1172,9 @@ void read_and_assemble_loads (
 				n, Nx1,Nx2,Vy1,Vy2,Vz1,Vz2, My1,My2,Mz1,Mz2 );
 		*/
 
-		j1 = J1[n];	j2 = J2[n];
+		n1 = J1[n];	n2 = J2[n];
 
-		coord_trans ( xyz, Ln, j1, j2,
+		coord_trans ( xyz, Ln, n1, n2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		/* debugging ... check coordinate transformation coefficients
@@ -1278,9 +1278,9 @@ void read_and_assemble_loads (
 		Mz2 = -(1./(1.+Ksz))  * P[lc][i][3]*a*a*b / ( Ln*Ln ) -
 			(Ksz/(1.+Ksz))* P[lc][i][3]*a*b   / (2.*Ln);
 
-		j1 = J1[n];	j2 = J2[n];
+		n1 = J1[n];	n2 = J2[n];
 
-		coord_trans ( xyz, Ln, j1, j2,
+		coord_trans ( xyz, Ln, n1, n2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		/* {F} = [T]'{Q} */
@@ -1345,9 +1345,9 @@ void read_and_assemble_loads (
 		Mz1 =  (a/hy)*(T[lc][i][5]-T[lc][i][6])*E[n]*Iz[n];
 		Mz2 = -Mz1;
 
-		j1 = J1[n];	j2 = J2[n];
+		n1 = J1[n];	n2 = J2[n];
 
-		coord_trans ( xyz, L[n], j1, j2,
+		coord_trans ( xyz, L[n], n1, n2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[n] );
 
 		/* {F} = [T]'{Q} */
@@ -1378,11 +1378,11 @@ void read_and_assemble_loads (
 	  */
 
 	  for (n=1; n<=nE; n++) {
-	     j1 = J1[n];	j2 = J2[n];
-	     for (i=1; i<= 6; i++) F_mech[lc][6*j1- 6+i] += feF_mech[lc][n][i];
-	     for (i=7; i<=12; i++) F_mech[lc][6*j2-12+i] += feF_mech[lc][n][i];
-	     for (i=1; i<= 6; i++) F_temp[lc][6*j1- 6+i] += feF_temp[lc][n][i];
-	     for (i=7; i<=12; i++) F_temp[lc][6*j2-12+i] += feF_temp[lc][n][i];
+	     n1 = J1[n];	n2 = J2[n];
+	     for (i=1; i<= 6; i++) F_mech[lc][6*n1- 6+i] += feF_mech[lc][n][i];
+	     for (i=7; i<=12; i++) F_mech[lc][6*n2-12+i] += feF_mech[lc][n][i];
+	     for (i=1; i<= 6; i++) F_temp[lc][6*n1- 6+i] += feF_temp[lc][n][i];
+	     for (i=7; i<=12; i++) F_temp[lc][6*n2-12+i] += feF_temp[lc][n][i];
 	  }
 
 	  sfrv=fscanf(fp,"%d", &nD[lc] ); /* read prescribed displacements */
@@ -1393,12 +1393,12 @@ void read_and_assemble_loads (
 	  }
 	  for (i=1; i <= nD[lc]; i++) {
 		sfrv=fscanf(fp,"%d", &j);
-		if (sfrv != 1) sferr("joint number value in prescribed displacement data");
+		if (sfrv != 1) sferr("node number value in prescribed displacement data");
 		for (l=5; l >=0; l--) {
 			sfrv=fscanf(fp,"%f", &Dp[lc][6*j-l] );
 			if (sfrv != 1) sferr("prescribed displacement value");
 			if ( R[6*j-l] == 0 && Dp[lc][6*j-l] != 0.0 ) {
-			    sprintf(errMsg," Initial displacements can be prescribed only at restrained coordinates\n  joint: %d  dof: %d  R: %d\n",
+			    sprintf(errMsg," Initial displacements can be prescribed only at restrained coordinates\n  node: %d  dof: %d  R: %d\n",
 			    j, 6-l, R[6*j-l] );
 			    errorMsg(errMsg);
 			    exit(171);
@@ -1418,9 +1418,9 @@ READ_MASS_DATA  -  read element densities and extra inertial mass data	16aug01
 void read_mass_data (
 		FILE *fp,
 		char *OUT_file, 
-		int nJ, int nE, int *nI, int *nX, 
-		float *d, float *BMs,
-		float *JMs, float *JMx, float *JMy, float *JMz,
+		int nN, int nE, int *nI, int *nX, 
+		float *d, float *EMs,
+		float *NMs, float *NMx, float *NMy, float *NMz,
 		double *L, float *Ax,
 		double *total_mass, double *struct_mass,
 		int *nM, int *Mmethod, int modal_flag, 
@@ -1492,29 +1492,29 @@ void read_mass_data (
 	if ( shift_flag != -1.0 )	*shift = shift_flag;
 
 
-	/* number of joints with extra inertias */
+	/* number of nodes with extra inertias */
 	sfrv=fscanf(fp,"%d", nI );
 	if (sfrv != 1) sferr("nI value in mass data");
 	if ( verbose ) {
-		fprintf(stdout," number of joints with extra lumped inertia ");
-		dots(stdout,9);		fprintf(stdout," nI = %3d\n",*nI);
+		fprintf(stdout," number of nodes with extra lumped inertia ");
+		dots(stdout,10);	fprintf(stdout," nI = %3d\n",*nI);
 	}
 	for (j=1; j <= *nI; j++) {
 		sfrv=fscanf(fp, "%d", &jnt );
-		if (sfrv != 1) sferr("joint value in extra joint mass data");
-		if ( jnt < 1 || jnt > nJ ) {
-	    		sprintf(errMsg,"\n  error in joint mass data: joint number out of range    Joint: %d  \n   Perhaps you did not specify %d extra masses \n   or perhaps the Input Data file is missing expected data.\n",
+		if (sfrv != 1) sferr("node value in extra node mass data");
+		if ( jnt < 1 || jnt > nN ) {
+	    		sprintf(errMsg,"\n  error in node mass data: node number out of range    Node : %d  \n   Perhaps you did not specify %d extra masses \n   or perhaps the Input Data file is missing expected data.\n",
 			jnt, *nI );
 			errorMsg(errMsg);
 	    		exit(86);
 		}
 		sfrv=fscanf(fp, "%f %f %f %f",
-			&JMs[jnt], &JMx[jnt], &JMy[jnt], &JMz[jnt] );
-		if (sfrv != 4) sferr("joint inertia in extra mass data");
-		*total_mass += JMs[jnt];
+			&NMs[jnt], &NMx[jnt], &NMy[jnt], &NMz[jnt] );
+		if (sfrv != 4) sferr("node inertia in extra mass data");
+		*total_mass += NMs[jnt];
 
-		if ( JMs[jnt]==0 && JMx[jnt]==0 && JMy[jnt]==0 && JMz[jnt]==0 )
-	    	fprintf(stderr,"\n  Warning: All extra joint inertia at joint %d  are zero\n", jnt );
+		if ( NMs[jnt]==0 && NMx[jnt]==0 && NMy[jnt]==0 && NMz[jnt]==0 )
+	    	fprintf(stderr,"\n  Warning: All extra node inertia at node %d  are zero\n", jnt );
 	}
 
 	/* number of frame elements with extra beam mass */
@@ -1534,14 +1534,14 @@ void read_mass_data (
 			errorMsg(errMsg);
 	    		exit(87);
 		}
-		sfrv=fscanf(fp, "%f", &BMs[b] );
+		sfrv=fscanf(fp, "%f", &EMs[b] );
 		if (sfrv != 1) sferr("extra element mass value in mass data");
 	}
 
 
 	/* calculate the total mass and the structural mass */
 	for (b=1; b <= nE; b++) {
-		*total_mass  += d[b]*Ax[b]*L[b] + BMs[b];
+		*total_mass  += d[b]*Ax[b]*L[b] + EMs[b];
 		*struct_mass += d[b]*Ax[b]*L[b];
 #ifdef MASSDATA_DEBUG
 		fprintf(mf," %4d\t\t%12.5e\t%12.5e\t%12.5e\t%12.5e \n",
@@ -1554,14 +1554,14 @@ void read_mass_data (
 #endif
 
 	for (m=1;m<=nE;m++) {			/* check inertia data	*/
-	    if ( d[m] < 0.0 || BMs[m] < 0.0 || d[m]+BMs[m] <= 0.0 ) {
-		sprintf(errMsg,"\n  error: Non-positive mass or density\n  d[%d]= %f  BMs[%d]= %f\n",m,d[m],m,BMs[m]);
+	    if ( d[m] < 0.0 || EMs[m] < 0.0 || d[m]+EMs[m] <= 0.0 ) {
+		sprintf(errMsg,"\n  error: Non-positive mass or density\n  d[%d]= %f  EMs[%d]= %f\n",m,d[m],m,EMs[m]);
 		errorMsg(errMsg);
 		exit(88);
 	    }
 	}
-/*	for (m=1;m<=nE;m++) ms += BMs[m]; // consistent mass doesn't agree  */
-/*	if ( ms > 0.0 )	    *lump = 1;    // with concentrated masses, BMs  */
+/*	for (m=1;m<=nE;m++) ms += EMs[m]; // consistent mass doesn't agree  */
+/*	if ( ms > 0.0 )	    *lump = 1;    // with concentrated masses, EMs  */
 
 	if ( verbose ) {
 		fprintf(stdout," structural mass ");
@@ -1616,7 +1616,7 @@ READ_CONDENSE   -  read matrix condensation information 	        30aug01
 ------------------------------------------------------------------------------*/
 void read_condensation_data (
 		FILE *fp,
-		int nJ, int nM,
+		int nN, int nM,
 		int *nC, int *Cdof,
 		int *Cmethod, int condense_flag, int *q, int *m, int verbose
 ){
@@ -1653,13 +1653,13 @@ void read_condensation_data (
 	}
 
 	if ( verbose ) {
-		fprintf(stdout," number of joints with condensed DoF's ");
-		dots(stdout,14);	fprintf(stdout," nC = %3d\n", *nC );
+		fprintf(stdout," number of nodes with condensed DoF's ");
+		dots(stdout,15);	fprintf(stdout," nC = %3d\n", *nC );
 	}
 
-	if ( (*nC) > nJ ) {
-	  sprintf(errMsg,"\n  error in matrix condensation data: \n error: nC > nJ ... nC=%d; nJ=%d;\n The number of joints with condensed DoF's may not exceed the total number of joints.\n", 
-	  *nC, nJ );
+	if ( (*nC) > nN ) {
+	  sprintf(errMsg,"\n  error in matrix condensation data: \n error: nC > nN ... nC=%d; nN=%d;\n The number of nodes with condensed DoF's may not exceed the total number of nodes.\n", 
+	  *nC, nN );
 	  errorMsg(errMsg);
 	  exit(90);
 	}
@@ -1671,8 +1671,8 @@ void read_condensation_data (
 	 &qm[i][1],
 	 &qm[i][2], &qm[i][3], &qm[i][4], &qm[i][5], &qm[i][6], &qm[i][7]);
 	 if (sfrv != 7) sferr("DoF numbers in condensation data");
-	 if ( qm[i][1] < 1 || qm[i][1] > nJ ) {		/* error check */
-	  sprintf(errMsg,"\n  error in matrix condensation data: \n  condensed joint number out of range\n  cj[%d] = %d  ... nJ = %d  \n", i, qm[i][1], nJ );
+	 if ( qm[i][1] < 1 || qm[i][1] > nN ) {		/* error check */
+	  sprintf(errMsg,"\n  error in matrix condensation data: \n  condensed node number out of range\n  cj[%d] = %d  ... nN = %d  \n", i, qm[i][1], nN );
 	  errorMsg(errMsg);
 	  exit(91);
 	 }
@@ -1711,7 +1711,7 @@ WRITE_INPUT_DATA  -  save input data					07nov02
 ------------------------------------------------------------------------------*/
 void write_input_data (
 	FILE *fp,
-	char *title, int nJ, int nE, int nL,
+	char *title, int nN, int nE, int nL,
 	int *nD, int nR,
 	int *nF, int *nU, int *nW, int *nP, int *nT,
 	vec3 *xyz, float *r,
@@ -1752,18 +1752,18 @@ void write_input_data (
 
 	for (i=1; i<=80; i++)	fprintf(fp,"_");	fprintf(fp,"\n");
 
-	fprintf(fp,"%5d JOINTS         ", nJ ); 
+	fprintf(fp,"%5d JOINTS         ", nN ); 
 	fprintf(fp,"%5d FIXED JOINTS   ", nR );
 	fprintf(fp,"%5d FRAME ELEMENTS ", nE ); 
 	fprintf(fp,"%3d LOAD CASES   \n", nL );
 
 	for (i=1; i<=80; i++)	fprintf(fp,"_"); fprintf(fp,"\n");
 
-	fprintf(fp,"J O I N T   D A T A     ");
+	fprintf(fp,"N O D E   D A T A       ");
 	fprintf(fp,"                                    R E S T R A I N T S\n");
-	fprintf(fp,"  Joint      X              Y              Z");
+	fprintf(fp,"  Node       X              Y              Z");
 	fprintf(fp,"         radius  Fx Fy Fz Mx My Mz\n");
-	for (i=1; i<=nJ; i++) {
+	for (i=1; i<=nN; i++) {
 	 j = 6*(i-1);
 	 fprintf(fp,"%5d %14.6f %14.6f %14.6f %8.3f  %2d %2d %2d %2d %2d %2d\n",
 		i, xyz[i].x, xyz[i].y, xyz[i].z, r[i],
@@ -1800,11 +1800,11 @@ void write_input_data (
 	  fprintf(fp," %3d temperature loads\n", nT[lc] );
 	  fprintf(fp," %3d prescribed displacements\n", nD[lc] );
 	  if ( nF[lc] > 0 || nU[lc] > 0 || nW[lc] > 0 || nP[lc] > 0 || nT[lc] > 0 ) {
-	    fprintf(fp," J O I N T   L O A D S");
-	    fprintf(fp,"  +  E Q U I V A L E N T   J O I N T   L O A D S  (global)\n");
-	    fprintf(fp,"  Joint       Fx          Fy          Fz");
+	    fprintf(fp," N O D A L   L O A D S");
+	    fprintf(fp,"  +  E Q U I V A L E N T   N O D A L   L O A D S  (global)\n");
+	    fprintf(fp,"  Node        Fx          Fy          Fz");
 	    fprintf(fp,"          Mxx         Myy         Mzz\n");
-	    for (j=1; j<=nJ; j++) {
+	    for (j=1; j<=nN; j++) {
 		i = 6*(j-1);
 		if ( F[lc][i+1]!=0.0 || F[lc][i+2]!=0.0 || F[lc][i+3]!=0.0 ||
 		     F[lc][i+4]!=0.0 || F[lc][i+5]!=0.0 || F[lc][i+6]!=0.0 ) {
@@ -1870,9 +1870,9 @@ void write_input_data (
 	  if ( nD[lc] > 0 ) {
 	    fprintf(fp,"\n P R E S C R I B E D   D I S P L A C E M E N T S");
 	    fprintf(fp,"                        (global)\n");
-	    fprintf(fp,"  Joint       Dx          Dy          Dz");
+	    fprintf(fp,"  Node        Dx          Dy          Dz");
 	    fprintf(fp,"          Dxx         Dyy         Dzz\n");
-	    for (j=1; j<=nJ; j++) {
+	    for (j=1; j<=nN; j++) {
 		i = 6*(j-1);
 		if ( Dp[lc][i+1]!=0.0 || Dp[lc][i+2]!=0.0 || Dp[lc][i+3]!=0.0 ||
 		     Dp[lc][i+4]!=0.0 || Dp[lc][i+5]!=0.0 || Dp[lc][i+6]!=0.0 ){
@@ -1897,12 +1897,12 @@ void write_input_data (
 
 
 /*------------------------------------------------------------------------------
-WRITE_STATIC_RESULTS -  save joint displacements and frame element end forces
+WRITE_STATIC_RESULTS -  save node displacements and frame element end forces
 09 Sep 2008
 ------------------------------------------------------------------------------*/
 void write_static_results (
 		FILE *fp,
-		int nJ, int nE, int nL, int lc, int DoF,
+		int nN, int nE, int nL, int lc, int DoF,
 		int *J1, int *J2,
 		double *F, double *D, int *R, double **Q,
 		double err, int ok, int axial_sign
@@ -1919,11 +1919,11 @@ void write_static_results (
 
 	fprintf(fp,"\nL O A D   C A S E   %d   O F   %d  ... \n\n", lc, nL);
 
-	fprintf(fp,"J O I N T   D I S P L A C E M E N T S");
+	fprintf(fp,"N O D E   D I S P L A C E M E N T S  ");
 	fprintf(fp,"\t\t\t\t\t(global)\n");
-	fprintf(fp,"  Joint   X-dsp       Y-dsp       Z-dsp");
+	fprintf(fp,"  Node    X-dsp       Y-dsp       Z-dsp");
 	fprintf(fp,"       X-rot       Y-rot       Z-rot\n");
-	for (j=1; j<= nJ; j++) {
+	for (j=1; j<= nN; j++) {
 	    disp = 0.0;
 	    for ( i=5; i>=0; i-- ) disp += fabs( D[6*j-i] );
 	    if ( disp > 0.0 ) {
@@ -1938,7 +1938,7 @@ void write_static_results (
 	}
 	fprintf(fp,"F R A M E   E L E M E N T   E N D   F O R C E S");
 	fprintf(fp,"\t\t\t\t(local)\n");
-	fprintf(fp,"  Elmnt  Joint      Nx          Vy         Vz");
+	fprintf(fp,"  Elmnt  Node       Nx          Vy         Vz");
 	fprintf(fp,"        Txx        Myy        Mzz\n");
 	for (n=1; n<= nE; n++) {
 		fprintf(fp," %5d  %5d", n, J1[n]);
@@ -1969,9 +1969,9 @@ void write_static_results (
 		fprintf(fp,"\n");
 	}
 	fprintf(fp,"R E A C T I O N S\t\t\t\t\t\t\t(global)\n");
-	fprintf(fp,"  Joint       Fx          Fy          Fz");
+	fprintf(fp,"  Node        Fx          Fy          Fz");
 	fprintf(fp,"         Mxx         Myy         Mzz\n");
-	for (j=1; j<=nJ; j++) {
+	for (j=1; j<=nN; j++) {
 		i = 6*(j-1);
 		if ( R[i+1] || R[i+2] || R[i+3] ||
 		     R[i+4] || R[i+5] || R[i+6] ) {
@@ -1991,13 +1991,13 @@ void write_static_results (
 
 
 /*------------------------------------------------------------------------------
-WRITE_STATIC_CSV -  save joint displacements and frame element end forces
+WRITE_STATIC_CSV -  save node displacements and frame element end forces
 31 Dec 2008
 ------------------------------------------------------------------------------*/
 void write_static_csv (
 		char *OUT_file,
 		char *title,
-		int nJ, int nE, int nL, int lc, int DoF,
+		int nN, int nE, int nL, int lc, int DoF,
 		int *J1, int *J2,
 		double *F, double *D, int *R, double **Q,
 		double err, int ok
@@ -2058,14 +2058,14 @@ void write_static_csv (
 	 for (i = 1; i <= nL; i++) {
 	 	fprintf(fpcsv," First Row , %d , %d , %d , %d  \n",
 			i,
-			15+(i-1)*(nJ*2+nE*2+10) + 2*nL,
-			17+(i-1)*(nJ*2+nE*2+10) + 2*nL+ nJ,
-			19+(i-1)*(nJ*2+nE*2+10) + 2*nL+ nJ + 2*nE );
+			15+(i-1)*(nN*2+nE*2+10) + 2*nL,
+			17+(i-1)*(nN*2+nE*2+10) + 2*nL+ nN,
+			19+(i-1)*(nN*2+nE*2+10) + 2*nL+ nN + 2*nE );
 	 	fprintf(fpcsv," Last Row , %d , %d , %d , %d  \n",
 			i,
-			15+(i-1)*(nJ*2+nE*2+10) + 2*nL + nJ - 1,
-			17+(i-1)*(nJ*2+nE*2+10) + 2*nL + nJ + 2*nE - 1,
-			19+(i-1)*(nJ*2+nE*2+10) + 2*nL + 2*nJ + 2*nE - 1 );
+			15+(i-1)*(nN*2+nE*2+10) + 2*nL + nN - 1,
+			17+(i-1)*(nN*2+nE*2+10) + 2*nL + nN + 2*nE - 1,
+			19+(i-1)*(nN*2+nE*2+10) + 2*nL + 2*nN + 2*nE - 1 );
 	 }
 
 	}
@@ -2081,11 +2081,11 @@ void write_static_csv (
 
 	fprintf(fpcsv,"\n\"L O A D   C A S E   %d   O F   %d  ... \"\n\n", lc, nL);
 
-	fprintf(fpcsv,"\"J O I N T   D I S P L A C E M E N T S");
-	fprintf(fpcsv,"  (global)\"\n");
-	fprintf(fpcsv,"Joint ,  X-dsp   ,   Y-dsp  ,    Z-dsp");
+	fprintf(fpcsv,"\"N O D E   D I S P L A C E M E N T S");
+	fprintf(fpcsv,"    (global)\"\n");
+	fprintf(fpcsv,"Node  ,  X-dsp   ,   Y-dsp  ,    Z-dsp");
 	fprintf(fpcsv," ,     X-rot  ,    Y-rot   ,   Z-rot\n");
-	for (j=1; j<= nJ; j++) {
+	for (j=1; j<= nN; j++) {
 		fprintf(fpcsv," %5d,", j);
 		for ( i=5; i>=0; i-- ) {
 			if ( fabs(D[6*j-i]) < 1.e-8 )
@@ -2096,7 +2096,7 @@ void write_static_csv (
 	}
 	fprintf(fpcsv,"\"F R A M E   E L E M E N T   E N D   F O R C E S");
 	fprintf(fpcsv,"  (local)\"\n");
-	fprintf(fpcsv,"Elmnt , Joint ,    Nx     ,    Vy   ,     Vz");
+	fprintf(fpcsv,"Elmnt , Node  ,    Nx     ,    Vy   ,     Vz");
 	fprintf(fpcsv,"   ,     Txx   ,    Myy  ,     Mzz\n");
 	for (n=1; n<= nE; n++) {
 		fprintf(fpcsv," %5d, %5d,", n, J1[n]);
@@ -2121,9 +2121,9 @@ void write_static_csv (
 		fprintf(fpcsv,"\n");
 	}
 	fprintf(fpcsv,"\"R E A C T I O N S  (global)\"\n");
-	fprintf(fpcsv," Joint  ,    Fx      ,   Fy   ,      Fz");
+	fprintf(fpcsv," Node   ,    Fx      ,   Fy   ,      Fz");
 	fprintf(fpcsv,"   ,     Mxx    ,    Myy    ,    Mzz\n");
-	for (j=1; j<=nJ; j++) {
+	for (j=1; j<=nN; j++) {
 		i = 6*(j-1);
 		fprintf(fpcsv, " %5d,", j);
 		for (i=5; i>=0; i--) {
@@ -2166,13 +2166,13 @@ void write_value (
 
 /*------------------------------------------------------------------------------
 WRITE_STATIC_MFILE -  						
-save joint displacements and frame element end forces in an m-file
+save node displacements and frame element end forces in an m-file
 this function interacts with frame_3dd.m, an m-file interface to frame3dd
 09 Sep 2008
 ------------------------------------------------------------------------------*/
 void write_static_mfile (
 		char *OUT_file, char *title,
-		int nJ, int nE, int nL, int lc, int DoF,
+		int nN, int nE, int nL, int lc, int DoF,
 		int *J1, int *J2,
 		double *F, double *D, int *R, double **Q,
 		double err, int ok
@@ -2239,17 +2239,17 @@ void write_static_mfile (
 
 	fprintf(fpm,"\n%% L O A D   C A S E   %d   O F   %d  ... \n\n", lc, nL);
 
-	fprintf(fpm,"%% J O I N T   D I S P L A C E M E N T S");
+	fprintf(fpm,"%% N O D E   D I S P L A C E M E N T S  ");
 	fprintf(fpm,"\t\t(global)\n");
 	fprintf(fpm,"%%\tX-dsp\t\tY-dsp\t\tZ-dsp\t\tX-rot\t\tY-rot\t\tZ-rot\n");
 	fprintf(fpm,"D%d=[",lc);
-	for (j=1; j<= nJ; j++) {
+	for (j=1; j<= nN; j++) {
 		for ( i=5; i>=0; i-- ) {
 			if ( fabs(D[6*j-i]) < 1.e-8 )
 				fprintf (fpm, "\t0.0\t");
 			else    fprintf (fpm, "\t%13.6e",  D[6*j-i] );
 		}
-		if ( j < nJ )	fprintf(fpm," ; \n");
+		if ( j < nN )	fprintf(fpm," ; \n");
 		else		fprintf(fpm," ]'; \n\n");
 	}
 
@@ -2282,14 +2282,14 @@ void write_static_mfile (
 	fprintf(fpm,"%% R E A C T I O N S\t\t\t\t(global)\n");
 	fprintf(fpm,"%%\tFx\t\tFy\t\tFz\t\tMxx\t\tMyy\t\tMzz\n");
 	fprintf(fpm,"R%d=[",lc);
-	for (j=1; j<=nJ; j++) {
+	for (j=1; j<=nN; j++) {
 		i = 6*(j-1);
 		for (i=5; i>=0; i--) {
 			if ( !R[6*j-i] || fabs(F[6*j-i]) < 0.0001 )
 				fprintf (fpm, "\t0.0\t");
 			else    fprintf (fpm, "\t%13.6e", -F[6*j-i] );
 		}
-		if ( j < nJ )	fprintf(fpm," ; \n");
+		if ( j < nN )	fprintf(fpm," ; \n");
 		else		fprintf(fpm," ]'; \n\n");
 	}
 
@@ -2312,7 +2312,7 @@ write internal forces and local displacements to an output data file
 void write_internal_forces (
 		char infcpath[], int lc, int nL, char title[], float dx,
 		vec3 *xyz, 
-		double **Q, int nJ, int nE, double *L, int *J1, int *J2, 
+		double **Q, int nN, int nE, double *L, int *J1, int *J2, 
 		float *Ax,float *Asy,float *Asz,float *Jx,float *Iy,float *Iz,
 		float *E, float *G, float *p,
 		float *d, float gX, float gY, float gZ,
@@ -2345,7 +2345,7 @@ void write_internal_forces (
 	int	n, m,		/* frame element number			*/
 		cU=0, cW=0, cP=0, /* counters for U, W, and P loads	*/
 		i, nx,		/* number of sections alont x axis	*/
-		j1,j2,i1,i2;	/* starting and stopping joint no's	*/
+		n1,n2,i1,i2;	/* starting and stopping node no's	*/
 
 	char	fnif[FILENMAX];/* file name    for internal force data	*/
 	char	errMsg[MAXL];
@@ -2378,7 +2378,7 @@ void write_internal_forces (
 
 	for ( m=1; m <= nE; m++ ) {	// loop over all frame elements
 
-		j1 = J1[m];	j2 = J2[m]; // joint 1 and joint 2 of elmnt m
+		n1 = J1[m];	n2 = J2[m]; // node 1 and node 2 of elmnt m
 
 		nx = floor(L[m]/dx);	// number of x-axis increments
 		if (nx < 1) nx = 1;	// at least one x-axis increment
@@ -2406,12 +2406,12 @@ void write_internal_forces (
 	// write header information for each frame element
 
 		fprintf(fpif,"#\tElmnt\tJ1\tJ2\t\tX1\t\tY1\t\tZ1\t\tX2\t\tY2\t\tZ2\tnx\n");
-		fprintf(fpif,"# @\t%5d\t%5d\t%5d\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%5d\n",m, j1, j2, xyz[j1].x, xyz[j1].y, xyz[j1].z, xyz[j2].x, xyz[j2].y, xyz[j2].z, nx+1 );
+		fprintf(fpif,"# @\t%5d\t%5d\t%5d\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%5d\n",m, n1, n2, xyz[n1].x, xyz[n1].y, xyz[n1].z, xyz[n2].x, xyz[n2].y, xyz[n2].z, nx+1 );
 		fprintf(fpif,"#.x\t\t\tNx\t\tVy\t\tVz\t\tTx\t\tMy\t\tMz\t\tDx\t\tDy\t\tDz\t\tRx\t~\n");
 
 	// find interior axial force, shear forces, torsion and bending moments
 
-		coord_trans ( xyz, L[m], j1, j2,
+		coord_trans ( xyz, L[m], n1, n2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[m] );
 
 		// distributed gravity load in local x, y, z coordinates
@@ -2529,7 +2529,7 @@ void write_internal_forces (
 
 	// find interior transverse displacements 
 
-		i1 = 6*(j1-1);	i2 = 6*(j2-1);
+		i1 = 6*(n1-1);	i2 = 6*(n2-1);
 
 		/* compute end deflections in local coordinates */
 
@@ -2551,12 +2551,12 @@ void write_internal_forces (
 
 
 		// rotations and displacements for frame element "m" at (x=0)
-		Dx[0] =  u1;	// displacement in  local x dir  at joint J1
-		Dy[0] =  u2;	// displacement in  local y dir  at joint J1
-		Dz[0] =  u3;	// displacement in  local z dir  at joint J1
-		Rx[0] =  u4;	// rotationin about local x axis at joint J1
-		Sy[0] =  u6;	// slope in  local y  direction  at joint J1
-		Sz[0] = -u5;	// slope in  local z  direction  at joint J1
+		Dx[0] =  u1;	// displacement in  local x dir  at node J1
+		Dy[0] =  u2;	// displacement in  local y dir  at node J1
+		Dz[0] =  u3;	// displacement in  local z dir  at node J1
+		Rx[0] =  u4;	// rotationin about local x axis at node J1
+		Sy[0] =  u6;	// slope in  local y  direction  at node J1
+		Sz[0] = -u5;	// slope in  local z  direction  at node J1
 
 		// axial displacement along frame element "m"
 		dx_ = dx;
@@ -2651,7 +2651,7 @@ WRITE_MODAL_RESULTS -  save modal frequencies and mode shapes
 ------------------------------------------------------------------------------*/
 void write_modal_results(
 		FILE *fp,
-		int nJ, int nE, int nI, int DoF,
+		int nN, int nE, int nI, int DoF,
 		double **M, double *f, double **V,
 		double total_mass, double struct_mass,
 		int iter, int sumR, int nM,
@@ -2679,18 +2679,18 @@ void write_modal_results(
 	fprintf(fp,"\nM O D A L   A N A L Y S I S   R E S U L T S\n");
 	fprintf(fp,"  Total Mass:  %e   ", total_mass );
 	fprintf(fp,"  Structural Mass:  %e \n", struct_mass );
-	fprintf(fp,"J O I N T   M A S S E S");
+	fprintf(fp,"N O D A L   M A S S E S");
 	fprintf(fp,"\t(diagonal of the mass matrix)\t\t\t(global)\n");
-	fprintf(fp,"  Joint X-mass      Y-mass      Z-mass");
+	fprintf(fp,"  Node  X-mass      Y-mass      Z-mass");
 	fprintf(fp,"      X-inrta     Y-inrta     Z-inrta\n");
-	for (j=1; j <= nJ; j++) {
+	for (j=1; j <= nN; j++) {
 		k = 6*(j-1);
 		fprintf(fp," %5d", j);
 		for ( i=1; i<=6; i++ )
 			fprintf (fp, " %11.5e", M[k+i][k+i] );
 		fprintf(fp,"\n");
 	}
-	if ( lump )	fprintf(fp,"  Lump masses at joints.\n");
+	if ( lump )	fprintf(fp,"  Lump masses at nodes.\n");
 	else		fprintf(fp,"  Use consistent mass matrix.\n");
 	fprintf(fp,"N A T U R A L   F R E Q U E N C I E S   & \n");
 	fprintf(fp,"M A S S   N O R M A L I Z E D   M O D E   S H A P E S \n");
@@ -2704,9 +2704,9 @@ void write_modal_results(
 	    fprintf(fp,"\t\tY- modal participation factor = %12.4e \n", mpfY);
 	    fprintf(fp,"\t\tZ- modal participation factor = %12.4e \n", mpfZ);
 
-	    fprintf(fp,"  Joint   X-dsp       Y-dsp       Z-dsp");
+	    fprintf(fp,"  Node    X-dsp       Y-dsp       Z-dsp");
 	    fprintf(fp,"       X-rot       Y-rot       Z-rot\n");
-	    for (j=1; j<= nJ; j++) {
+	    for (j=1; j<= nN; j++) {
 		fprintf(fp," %5d", j);
 		for ( i=5; i>=0; i-- )	fprintf (fp, " %11.3e", V[6*j-i][m] );
 		fprintf(fp,"\n");
@@ -2745,7 +2745,7 @@ torsion, and internal bending moment diagrams.
 void static_mesh(
 		char IN_file[],
 		char infcpath[], char meshpath[], char plotpath[],
-		char *title, int nJ, int nE, int nL, int lc, int DoF,
+		char *title, int nN, int nE, int nL, int lc, int DoF,
 		vec3 *xyz, double *L,
 		int *J1, int *J2, float *p, double *D, 
 		double exagg_static, int D3_flag, int anlyz, float dx
@@ -2758,9 +2758,9 @@ void static_mesh(
 		ch = 'a';
 	int	sfrv=0,		/* *scanf return value			*/
 		frel, nx,	/* frame element number, number of increments */
-		j1, j2;		/* joint numbers			*/
-	float	x1, y1, z1,	/* coordinates of joint j1		*/
-		x2, y2, z2;	/* coordinates of joint j2		*/
+		n1, n2;		/* node numbers			*/
+	float	x1, y1, z1,	/* coordinates of node n1		*/
+		x2, y2, z2;	/* coordinates of node n2		*/
 	int	i, j, m,
 		X=0, Y=0, Z=0;
 	time_t  now;		/* modern time variable type		*/
@@ -2782,7 +2782,7 @@ void static_mesh(
 	 fprintf(fpm,"# %s\n", title );
 	 fprintf(fpm,"# %s", ctime(&now) );
 	 fprintf(fpm,"# U N D E F O R M E D   M E S H   D A T A   (global coordinates)\n");
-	 fprintf(fpm,"# Joint       X            Y            Z \n");
+	 fprintf(fpm,"# Node        X            Y            Z \n");
 
 	 for (m=1; m<=nE; m++) {
 		j = J1[m];	i = 6*(j-1);
@@ -2841,14 +2841,14 @@ void static_mesh(
 		} else {
 			while ( ch != '@' )	ch = getc(fpif);
 			sfrv=fscanf(fpif,"%d %d %d %f %f %f %f %f %f %d",
-			 &frel, &j1, &j2, &x1, &y1, &z1, &x2, &y2, &z2, &nx);
+			 &frel, &n1, &n2, &x1, &y1, &z1, &x2, &y2, &z2, &nx);
 			if (sfrv != 10) sferr(fnif);
-			if ( frel != m || J1[m] != j1 || J2[m] != j2 ) {
+			if ( frel != m || J1[m] != n1 || J2[m] != n2 ) {
 			 fprintf(stderr," error in static_mesh parsing\n");
 			 fprintf(stderr,"  frel = %d; m = %d; nx = %d \n", frel,m,nx );
 			}
 			/* debugging ... check mesh data 
-			printf("  frel = %3d; m = %3d; j1 =%4d; j2 = %4d; nx = %3d L = %f \n", frel,m,j1,j2,nx,L[m] );
+			printf("  frel = %3d; m = %3d; n1 =%4d; n2 = %4d; nx = %3d L = %f \n", frel,m,n1,n2,nx,L[m] );
 			*/
 			while ( ch != '~' )	ch = getc(fpif);
 			force_bent_beam ( fpm, fpif, fnif, nx, 
@@ -2860,7 +2860,7 @@ void static_mesh(
 
 	// write gnuplot plotting script commands
 
-	for ( j=1; j<=nJ; j++ ) { // check for three-dimensional frame 
+	for ( j=1; j<=nN; j++ ) { // check for three-dimensional frame 
 		if (xyz[j].x != 0.0) X=1;
 		if (xyz[j].y != 0.0) Y=1;
 		if (xyz[j].z != 0.0) Z=1;
@@ -2885,7 +2885,7 @@ void static_mesh(
 	    }
 	}
 
-	// write header, plot-setup cmds, joint label, and element label data
+	// write header, plot-setup cmds, node label, and element label data
 
 	if (lc == 1) {	
 
@@ -2907,16 +2907,16 @@ void static_mesh(
 	 fprintf(fpm,"# set view equal xyz # 1:1 3D axis scaling \n");	
 
  	 fprintf(fpm,"# NODE NUMBER LABELS\n");
-	 for (j=1; j<=nJ; j++)
+	 for (j=1; j<=nN; j++)
 		fprintf(fpm,"set label ' %d' at %12.4e, %12.4e, %12.4e\n",
 					j, xyz[j].x,xyz[j].y,xyz[j].z );
 
 	 fprintf(fpm,"# ELEMENT NUMBER LABELS\n");
 	 for (m=1; m<=nE; m++) {
-		j1 = J1[m];	j2 = J2[m];
-		mx = 0.5 * ( xyz[j1].x + xyz[j2].x );
-		my = 0.5 * ( xyz[j1].y + xyz[j2].y );
-		mz = 0.5 * ( xyz[j1].z + xyz[j2].z );
+		n1 = J1[m];	n2 = J2[m];
+		mx = 0.5 * ( xyz[n1].x + xyz[n2].x );
+		my = 0.5 * ( xyz[n1].y + xyz[n2].y );
+		mz = 0.5 * ( xyz[n1].z + xyz[n2].z );
 		fprintf(fpm,"set label ' %d' at %12.4e, %12.4e, %12.4e\n",
 								m, mx, my, mz );
 	 }
@@ -2969,7 +2969,7 @@ MODAL_MESH  -  create mesh data of the mode-shape meshes, use gnuplot	19oct98
 void modal_mesh(
 		char IN_file[], char meshpath[], char modepath[],
 		char plotpath[], char *title,
-		int nJ, int nE, int DoF, int nM,
+		int nN, int nE, int DoF, int nM,
 		vec3 *xyz, double *L,
 		int *J1, int *J2, float *p,
 		double **M, double *f, double **V,
@@ -3033,7 +3033,7 @@ void modal_mesh(
 
 		fclose(fpm);
 
-		for ( j=1; j<=nJ; j++ ) { // check for three-dimensional frame
+		for ( j=1; j<=nN; j++ ) { // check for three-dimensional frame
 			if (xyz[j].x != 0.0) X=1;
 			if (xyz[j].y != 0.0) Y=1;
 			if (xyz[j].z != 0.0) Z=1;
@@ -3095,7 +3095,7 @@ void animate(
 	char IN_file[], char meshpath[], char modepath[], char plotpath[],
 	char *title,
 	int anim[],
-	int nJ, int nE, int DoF, int nM,
+	int nN, int nE, int DoF, int nM,
 	vec3 *xyz, double *L, float *p,
 	int *J1, int *J2, double *f, double **V,
 	double exagg_modal, int D3_flag, 
@@ -3127,7 +3127,7 @@ void animate(
 		modefl[FILENMAX], framefl[FILENMAX];
 	char	errMsg[MAXL];
 
-	for (j=1; j<=nJ; j++) {		// check for three-dimensional frame
+	for (j=1; j<=nN; j++) {		// check for three-dimensional frame
 		if (xyz[j].x != 0.0) X=1;
 		if (xyz[j].y != 0.0) Y=1;
 		if (xyz[j].z != 0.0) Z=1;
@@ -3321,11 +3321,11 @@ void animate(
 /*------------------------------------------------------------------------------
 CUBIC_BENT_BEAM  -  computes cubic deflection functions from end deflections
 and end rotations.  Saves deflected shapes to a file.  These bent shapes
-are exact for mode-shapes, and for frames loaded at their joints.
+are exact for mode-shapes, and for frames loaded at their nodes.
 15 May 2009
 ------------------------------------------------------------------------------*/
 void cubic_bent_beam(
-	FILE *fpm, int j1, int j2, vec3 *xyz,
+	FILE *fpm, int n1, int n2, vec3 *xyz,
 	double L, float p, double *D, double exagg
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, 	/* coord xfmn	*/
@@ -3339,10 +3339,10 @@ void cubic_bent_beam(
 	a = dvector(1,4);
 	b = dvector(1,4);
 
-	coord_trans ( xyz, L, j1, j2,
+	coord_trans ( xyz, L, n1, n2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p );
 
-	i1 = 6*(j1-1);	i2 = 6*(j2-1);
+	i1 = 6*(n1-1);	i2 = 6*(n2-1);
 
 		/* compute end deflections in local coordinates */
 
@@ -3379,7 +3379,7 @@ void cubic_bent_beam(
 	lu_dcmp ( A, 4, a, 1, 1, &pd );		/* solve for cubic coef's */
 
 	if (!pd) {
-	 sprintf(errMsg," j1 = %d  j2 = %d  L = %e  u7 = %e \n", j1,j2,L,u7);
+	 sprintf(errMsg," n1 = %d  n2 = %d  L = %e  u7 = %e \n", n1,n2,L,u7);
 	 errorMsg(errMsg);
 	 exit(30);
 	}
@@ -3398,7 +3398,7 @@ void cubic_bent_beam(
 		dZ = t3*s + t6*v + t9*w;
 
 		fprintf (fpm," %12.4e %12.4e %12.4e\n",
-			xyz[j1].x + dX , xyz[j1].y + dY , xyz[j1].z + dZ );
+			xyz[n1].x + dX , xyz[n1].y + dY , xyz[n1].z + dZ );
 	}
 	fprintf(fpm,"\n\n");
 
@@ -3419,7 +3419,7 @@ internal axial force, shear force, torques, or bending moments.
 9 Jan 2010
 ------------------------------------------------------------------------------*/
 void force_bent_beam(
-	FILE *fpm, FILE *fpif, char fnif[], int nx, int j1, int j2, vec3 *xyz,
+	FILE *fpm, FILE *fpif, char fnif[], int nx, int n1, int n2, vec3 *xyz,
 	double L, float p, double *D, double exagg
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9; 	/* coord xfmn	*/
@@ -3429,11 +3429,11 @@ void force_bent_beam(
 	int	n;
 	int	sfrv=0;		/* *scanf return value	*/
 
-	Lx = xyz[j2].x - xyz[j1].x;
-	Ly = xyz[j2].y - xyz[j1].y;
-	Lz = xyz[j2].z - xyz[j1].z;
+	Lx = xyz[n2].x - xyz[n1].x;
+	Ly = xyz[n2].y - xyz[n1].y;
+	Lz = xyz[n2].z - xyz[n1].z;
 
-	coord_trans ( xyz, L, j1, j2,
+	coord_trans ( xyz, L, n1, n2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p );
 
 	x = -1.0;
@@ -3455,9 +3455,9 @@ void force_bent_beam(
 		dZ = exagg * ( t3*Dx + t6*Dy + t9*Dz );
 
 		fprintf (fpm," %12.4e %12.4e %12.4e\n",
-					xyz[j1].x + (x/L)*Lx + dX ,
-					xyz[j1].y + (x/L)*Ly + dY ,
-					xyz[j1].z + (x/L)*Lz + dZ );
+					xyz[n1].x + (x/L)*Lx + dX ,
+					xyz[n1].y + (x/L)*Ly + dY ,
+					xyz[n1].z + (x/L)*Lz + dZ );
 
 //		printf("...  x = %7.3f  n = %3d  Dx = %10.3e   Dy = %10.3e   Dz = %10.3e \n", x,n,Dx,Dy,Dz ); /* debug */
 //		printf("                           dX = %10.3e   dY = %10.3e   dZ = %10.3e \n", dX,dY,dZ ); /* debug */

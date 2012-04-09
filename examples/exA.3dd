@@ -1,8 +1,8 @@
 Example A: linear static analysis of a 2D truss with support settlement (kips,in) 
 
-# joint data ...
-12				# number of joints 
-#joint  x       y       z       r                 units: inches
+# node data ...
+12				# number of nodes 
+#.node  x       y       z       r                 units: inches
 
  1	0.0	0.0	0.0	0.0
  2	120.0	0.0	0.0	0.0
@@ -18,8 +18,8 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
 12	600.0	120.0	0.0	0.0
 
 # reaction data ...
-12				# number of joints with reactions
-#J     x y z xx yy zz		1=fixed, 0=free
+12				# number of nodes with reactions
+#.n     x y z xx yy zz		1=fixed, 0=free
 
   1	1 1 1  1  1  0
   2	0 0 1  1  1  0
@@ -36,8 +36,8 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
 
 # frame element data ...
 21				# number of frame elements
-#m j1 j2 Ax    Asy     Asz     Jxx     Iyy     Izz       E      G  roll density
-#        in^2  in^2    in^2    in^4    in^4    in^4      ksi    ksi deg k/in^3/g
+#e n1 n2 Ax    Asy     Asz     Jxx     Iyy     Izz       E      G  roll density
+#. .  .  in^2  in^2    in^2    in^4    in^4    in^4      ksi    ksi deg k/in^3/g
 
  1 1 2	10.0	1.0	1.0	1.0	1.0	0.01	29000 11500  0  7.33e-7
  2 2 3	10.0	1.0	1.0	1.0	1.0	0.01	29000 11500  0  7.33e-7
@@ -73,9 +73,9 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
 		
 0   -386.4   0			# gravity in the X, Y, Z directions (global)
 
-5				# number of loaded joints
-#J      Fx       Fy     Fz      Mxx     Myy     Mzz
-#       kip      kip    kip     in.k    in.k    in.k
+5				# number of loaded nodes
+#.n     Fx       Fy     Fz      Mxx     Myy     Mzz
+#.      kip      kip    kip     in.k    in.k    in.k
  2	0.0	-10.0	0.0	0.0	0.0	0.0
  3	0.0	-20.0	0.0	0.0	0.0	0.0
  4	0.0	-20.0  	0.0	0.0	0.0	0.0
@@ -88,8 +88,8 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
 0				# number of temperature loads
 
 1				# number of support settlements
-#J     Dx      Dy      Dz      Dxx     Dyy     Dzz
-#      in      in      in      rad.    rad.    rad.
+#.n    Dx      Dy      Dz      Dxx     Dyy     Dzz
+#.     in      in      in      rad.    rad.    rad.
   8 	0.1	0.0	0.0	0.0	0.0	0.0
 				# End   Static Load Case 1 of 2
 
@@ -97,9 +97,9 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
 
 0   -386.4   0			# gravity in the X, Y, Z directions (global)
 
-3				# number of loaded joints
-#J      Fx       Fy     Fz      Mxx     Myy     Mzz
-#       kip      kip    kip     in.k    in.k    in.k
+3				# number of loaded nodes
+#.n     Fx       Fy     Fz      Mxx     Myy     Mzz
+#.      kip      kip    kip     in.k    in.k    in.k
  3	20.0	 0.0	0.0	0.0	0.0	0.0
  4	10.0	 0.0  	0.0	0.0	0.0	0.0
  5	20.0	 0.0  	0.0	0.0	0.0	0.0
@@ -109,17 +109,19 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
 0				# number of internal concentrated loads
 
 3				# number of temperature loads
-#M  a      hy   hz   Ty+  Ty-  Tz+  Tz- 
-#   /.F    in   in   F    F    F    F
+#.e a      hy   hz   Ty+  Ty-  Tz+  Tz- 
+#.  /.F    in   in   F    F    F    F
 10 6e-12   5.0  5.0  10	  10   10   10
 13 6e-12   5.0  5.0  15   15   15   15  
 15 6e-12   5.0  5.0  17   17   17   17  
 
 2				# number of support settlements
-#J     Dx      Dy      Dz      Dxx     Dyy     Dzz
-#      in      in      in      rad     rad     rad
+#.n    Dx      Dy      Dz      Dxx     Dyy     Dzz
+#.     in      in      in      rad     rad     rad
   1 	0.0    -1.0	0.0	0.0	0.0	0.0
   8 	0.1	0.0	0.0	0.0	0.0	0.0
 				# End   Static Load Case 2 of 2
+			
+0				# number of dynamic modes
 
 # End of input file for example A

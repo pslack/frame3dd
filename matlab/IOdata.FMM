@@ -1,8 +1,8 @@
 frame analysis via Matlab interface
 
-% joint data ...
-12		% number of joints  
-% J		X		Y		Z		r		joint coordinates 
+% node data ...
+12		% number of nodes
+% J		X		Y		Z		r		node coordinates 
 1	0.000000e+00	0.000000e+00	0.000000e+00	0.000000e+00
 2	1.200000e+01	0.000000e+00	0.000000e+00	0.000000e+00
 3	2.400000e+01	0.000000e+00	0.000000e+00	0.000000e+00
@@ -17,7 +17,7 @@ frame analysis via Matlab interface
 12	6.000000e+01	1.200000e+01	0.000000e+00	0.000000e+00
 
 % reaction data ...
-12    % number of joints with reaction forces
+12    % number of nodes with reaction forces
 % j	Rx	Ry	Rz	Rxx	Ryy	Rzz
 1	1	1	1	1	1	0
 2	0	0	1	1	1	0
@@ -69,7 +69,7 @@ frame analysis via Matlab interface
 % gX         gY         gZ
   0.0        0.0        0.0
 
-5		% number of loaded joints
+5		% number of loaded nodes
 % j		Fx		Fy		Fz		Mxx		Myy		Mzz
 2	0.000000e+00	-2.000000e+01	0.000000e+00	0.000000e+00	0.000000e+00	0.000000e+00
 3	0.000000e+00	-4.000000e+01	0.000000e+00	0.000000e+00	0.000000e+00	0.000000e+00
@@ -86,7 +86,7 @@ frame analysis via Matlab interface
 
 0		% number of members with temperature loads 
 
-1		% number of joints with prescribed displacements
+1		% number of nodes with prescribed displacements
 % j		Dx		Dy		Dz		Dxx		Dyy		Dzz
 8	1.000000e-02	0.000000e+00	0.000000e+00	0.000000e+00	0.000000e+00	0.000000e+00
 

@@ -6,14 +6,14 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example D: dynamic properties of an un-restrained frame with a triangular section 
-Fri Nov 11 17:46:34 2011
+Mon Apr  9 15:07:23 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
    24 JOINTS             0 FIXED JOINTS      30 FRAME ELEMENTS   1 LOAD CASES   
 ________________________________________________________________________________
-J O I N T   D A T A                                         R E S T R A I N T S
-  Joint      X              Y              Z         radius  Fx Fy Fz Mx My Mz
+N O D E   D A T A                                           R E S T R A I N T S
+  Node       X              Y              Z         radius  Fx Fy Fz Mx My Mz
     1    -120.000000       0.000000    -210.000000   10.000   0  0  0  0  0  0
     2       0.000000       0.000000    -210.000000    0.000   0  0  0  0  0  0
     3     120.000000       0.000000    -210.000000   10.000   0  0  0  0  0  0
@@ -88,10 +88,10 @@ E L A S T I C   S T I F F N E S S   A N A L Y S I S   via  L D L'  decomposition
 
 L O A D   C A S E   1   O F   1  ... 
 
-J O I N T   D I S P L A C E M E N T S					(global)
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+N O D E   D I S P L A C E M E N T S  					(global)
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
-  Elmnt  Joint      Nx          Vy         Vz        Txx        Myy        Mzz
+  Elmnt  Node       Nx          Vy         Vz        Txx        Myy        Mzz
      1      1      0.0         0.0        0.0        0.0        0.0        0.0  
      1      2      0.0         0.0        0.0        0.0        0.0        0.0  
      2      2      0.0         0.0        0.0        0.0        0.0        0.0  
@@ -153,13 +153,13 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
     30     24      0.0         0.0        0.0        0.0        0.0        0.0  
     30     19      0.0         0.0        0.0        0.0        0.0        0.0  
 R E A C T I O N S							(global)
-  Joint       Fx          Fy          Fz         Mxx         Myy         Mzz
+  Node        Fx          Fy          Fz         Mxx         Myy         Mzz
 R M S   E Q U I L I B R I U M    E R R O R:      -nan
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  3.240350e-01     Structural Mass:  3.240350e-01 
-J O I N T   M A S S E S	(diagonal of the mass matrix)			(global)
-  Joint X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
+N O D A L   M A S S E S	(diagonal of the mass matrix)			(global)
+  Node  X-mass      Y-mass      Z-mass      X-inrta     Y-inrta     Z-inrta
      1 1.20980e-02 1.22665e-02 1.21985e-02 3.23954e+00 3.61323e+00 3.61989e+00
      2 7.33000e-03 8.20436e-03 8.20436e-03 2.93200e-01 3.07441e+00 3.07441e+00
      3 1.20980e-02 1.22665e-02 1.21985e-02 3.23954e+00 3.61323e+00 3.61989e+00
@@ -192,7 +192,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =  -4.6473e-02 
 		Y- modal participation factor =  -2.8530e-01 
 		Z- modal participation factor =  -2.5930e-02 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1  -1.434e-01   8.827e-01  -7.475e-01   9.280e-03   3.234e-11  -4.818e-14
      2  -1.434e-01   8.827e-01  -7.475e-01   9.280e-03   3.239e-11  -5.702e-14
      3  -1.434e-01   8.827e-01  -7.475e-01   9.280e-03   3.234e-11  -4.817e-14
@@ -221,7 +221,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =  -5.5211e-01 
 		Y- modal participation factor =  -1.9873e-03 
 		Z- modal participation factor =   1.3050e-01 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1  -1.704e+00  -1.741e-01   4.663e-01  -8.839e-04  -1.174e-11   9.626e-12
      2  -1.704e+00  -1.741e-01   4.663e-01  -8.839e-04  -1.175e-11   9.660e-12
      3  -1.704e+00  -1.741e-01   4.663e-01  -8.839e-04  -1.174e-11   9.626e-12
@@ -250,7 +250,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =  -1.0399e-01 
 		Y- modal participation factor =  -2.0280e-01 
 		Z- modal participation factor =  -4.9825e-01 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1  -3.209e-01  -1.182e+00  -1.327e+00  -2.926e-03  -1.416e-11   8.463e-13
      2  -3.209e-01  -1.182e+00  -1.327e+00  -2.926e-03  -1.418e-11   8.528e-13
      3  -3.209e-01  -1.182e+00  -1.327e+00  -2.926e-03  -1.416e-11   8.463e-13
@@ -279,7 +279,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =   7.8963e-02 
 		Y- modal participation factor =  -4.4889e-01 
 		Z- modal participation factor =   2.4100e-01 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   2.437e-01  -2.254e+00   1.073e+00  -4.572e-03  -2.020e-11   1.044e-12
      2   2.437e-01  -2.254e+00   1.073e+00  -4.572e-03  -2.023e-11   1.053e-12
      3   2.437e-01  -2.254e+00   1.073e+00  -4.572e-03  -2.020e-11   1.044e-12
@@ -308,7 +308,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =   4.3844e-10 
 		Y- modal participation factor =   2.4713e-10 
 		Z- modal participation factor =  -1.6627e-11 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   2.103e+00  -2.992e-03  -1.219e+00  -1.913e-05  -1.107e-02   2.513e-05
      2   2.103e+00   8.387e-09  -2.938e-09   4.013e-11  -1.109e-02   2.819e-05
      3   2.103e+00   2.992e-03   1.219e+00   1.913e-05  -1.107e-02   2.513e-05
@@ -337,7 +337,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =   3.3396e-10 
 		Y- modal participation factor =   4.0250e-11 
 		Z- modal participation factor =  -6.8402e-11 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   1.139e+00  -1.752e+00   9.781e-10   1.998e-08   1.195e-08   1.589e-02
      2   1.139e+00   3.059e-10  -2.799e-10   9.563e-13  -5.680e-09   1.594e-02
      3   1.139e+00   1.752e+00  -1.538e-09  -1.998e-08   1.195e-08   1.589e-02
@@ -366,7 +366,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =   7.4831e-16 
 		Y- modal participation factor =  -2.4575e-15 
 		Z- modal participation factor =  -1.3198e-16 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   1.486e+00  -2.412e+00  -1.982e-01  -5.703e-03  -4.468e-03   2.005e-02
      2   1.487e+00  -3.047e-13  -5.426e-14   1.027e-15  -5.350e-04   2.296e-02
      3   1.486e+00   2.412e+00   1.982e-01   5.703e-03  -4.468e-03   2.005e-02
@@ -395,7 +395,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =  -4.7738e-16 
 		Y- modal participation factor =  -4.0953e-15 
 		Z- modal participation factor =  -3.3110e-15 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   1.415e-03  -1.099e+00  -1.273e+00   4.737e-03  -1.681e-03  -1.909e-03
      2   2.465e-10  -1.262e+00  -1.239e+00   4.748e-03   7.303e-13  -2.517e-12
      3  -1.415e-03  -1.099e+00  -1.273e+00   4.737e-03   1.681e-03   1.909e-03
@@ -424,7 +424,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =  -4.1622e-16 
 		Y- modal participation factor =  -1.6547e-15 
 		Z- modal participation factor =  -2.0269e-15 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1  -1.117e+00   2.162e-01  -2.228e+00   2.074e-03  -8.140e-03  -4.180e-04
      2  -1.118e+00  -3.024e-10   3.262e-11  -3.518e-14  -2.633e-02  -2.733e-03
      3  -1.117e+00  -2.162e-01   2.228e+00  -2.074e-03  -8.140e-03  -4.180e-04
@@ -453,7 +453,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =   3.2194e-15 
 		Y- modal participation factor =   1.4247e-15 
 		Z- modal participation factor =  -4.0117e-16 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   1.475e+00   1.012e-01  -1.568e-02  -3.380e-03  -1.169e-02  -2.874e-03
      2   1.477e+00   4.266e-09   8.260e-10  -9.774e-12   5.424e-03   9.662e-06
      3   1.475e+00  -1.012e-01   1.568e-02   3.380e-03  -1.169e-02  -2.874e-03
@@ -482,7 +482,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =  -7.4060e-16 
 		Y- modal participation factor =  -5.4483e-15 
 		Z- modal participation factor =   3.8941e-16 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1  -1.146e-03   1.573e+00  -8.238e-03   1.760e-02   4.059e-03   3.302e-03
      2   8.807e-10   1.871e+00  -2.453e-01   1.766e-02   3.916e-12  -9.150e-12
      3   1.146e-03   1.573e+00  -8.238e-03   1.760e-02  -4.059e-03  -3.302e-03
@@ -511,7 +511,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =   7.1689e-16 
 		Y- modal participation factor =   6.6099e-16 
 		Z- modal participation factor =  -3.6400e-16 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   1.314e+00  -1.858e+00  -2.313e-03  -1.509e-02  -1.004e-02   1.328e-02
      2   1.317e+00  -1.179e-06  -8.826e-07   6.409e-09   4.862e-03   1.912e-02
      3   1.314e+00   1.858e+00   2.313e-03   1.509e-02  -1.004e-02   1.328e-02
@@ -540,7 +540,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =  -1.6126e-17 
 		Y- modal participation factor =   5.7494e-17 
 		Z- modal participation factor =  -1.0189e-16 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1  -3.823e-03   2.466e-02  -2.189e-01   2.651e-02  -2.158e-02   9.221e-04
      2   4.699e-04   9.940e-02   1.262e+00   2.687e-02   2.253e-06  -4.516e-06
      3   4.751e-03   2.455e-02  -2.189e-01   2.651e-02   2.156e-02  -9.083e-04
@@ -569,7 +569,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
 		X- modal participation factor =   2.4013e-17 
 		Y- modal participation factor =   6.1036e-17 
 		Z- modal participation factor =  -2.4218e-17 
-  Joint   X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
+  Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   9.691e-04  -1.778e-02   9.844e-02   2.841e-02  -2.666e-02   1.403e-04
      2  -2.581e-04  -1.505e-02   2.230e+00   2.889e-02   1.344e-06   1.594e-06
      3  -1.478e-03  -1.773e-02   9.783e-02   2.843e-02   2.668e-02  -1.443e-04

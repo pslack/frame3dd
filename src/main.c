@@ -77,9 +77,9 @@ For compilation/installation, see README.txt.
 
 	FILE	*fp;		// input and output file pointer
 
-	vec3	*xyz;		// X,Y,Z joint coordinates (global)
+	vec3	*xyz;		// X,Y,Z node coordinates (global)
 
-	float	*r,		// joint size radius, for finite sizes
+	float	*r,		// node size radius, for finite sizes
 		*Ax,*Asy, *Asz,	// cross section areas, incl. shear
 		*Jx,*Iy,*Iz,	// section inertias		
 		*E, *G,		// elastic modulus and shear moduli
@@ -88,10 +88,10 @@ For compilation/installation, see README.txt.
 		***W,		// trapizoidal distributed member loads
 		***P,		// member concentrated loads	
 		***T,		// member temperature  loads
-		**Dp,		// prescribed joint displacements
-		*d, *BMs,	// member densities and extra inertia
-		*JMs, 		// mass of a joint
-		*JMx,*JMy,*JMz,	// inertia of a joint in global coord	
+		**Dp,		// prescribed node displacements
+		*d, *EMs,	// member densities and extra inertia
+		*NMs, 		// mass of a node
+		*NMx,*NMy,*NMz,	// inertia of a node in global coord	
 		gX[_NL_],	// gravitational acceleration in global X 
 		gY[_NL_],	// gravitational acceleration in global Y
 		gZ[_NL_],	// gravitational acceleration in global Z
@@ -111,9 +111,9 @@ For compilation/installation, see README.txt.
 		*D, *dD,	// displacement and displ increment
 		//dDdD = 0.0,	// dD' * dD
 		*Fe = NULL,	// equilibrium error in nonlinear anlys
-		*L  = NULL,	// joint-to-joint length of each element
-		*Le = NULL,	// effcve lngth, accounts for joint size
-		**Q = NULL,	// local member joint end-forces
+		*L  = NULL,	// node-to-node length of each element
+		*Le = NULL,	// effcve lngth, accounts for node size
+		**Q = NULL,	// local member node end-forces
 		tol = 1.0e-9,	// tolerance for modal convergence
 		shift = 0.0,	// shift-factor for rigid-body-modes
 		struct_mass,	// mass of structural system	
@@ -126,21 +126,21 @@ For compilation/installation, see README.txt.
 		exagg_static=10,// exaggerate static displ. in mesh data
 		exagg_modal=10;	// exaggerate modal displ. in mesh data
 
-	int	nJ=0,		// number of Joints
+	int	nN=0,		// number of Nodes
 		nE=0,		// number of frame Elements
 		nL=0, lc=0,	// number of Load cases
 		DoF=0, i, j, n,	// number of Degrees of Freedom
-		nR=0,		// number of restrained joints
+		nR=0,		// number of restrained nodes
 		nD[_NL_],	// number of prescribed nodal displ'nts
-		nF[_NL_],	// number of loaded joints
+		nF[_NL_],	// number of loaded nodes
 		nU[_NL_],	// number of members w/ unifm dist loads
 		nW[_NL_],	// number of members w/ trapz dist loads
 		nP[_NL_],	// number of members w/ conc point loads
 		nT[_NL_],	// number of members w/ temp. changes
-		nI=0,		// number of joints w/ extra inertia
+		nI=0,		// number of nodes w/ extra inertia
 		nX=0,		// number of elemts w/ extra mass
-		nC=0,		// number of condensed joints
-		*J1, *J2,	// begin and end joint numbers
+		nC=0,		// number of condensed nodes
+		*N1, *N2,	// begin and end node numbers
 		shear=0,	// indicates shear deformation
 		geom=0,		// indicates  geometric nonlinearity
 		anlyz=1,	// 1: stiffness analysis, 0: data check	
@@ -236,24 +236,24 @@ For compilation/installation, see README.txt.
 		fprintf(stdout,"\n");
 	}
 
-	sfrv=fscanf(fp, "%d", &nJ );		/* number of joints	*/
-	if (sfrv != 1)	sferr("nJ value for number of joints");
-	if ( verbose ) {	/* display nJ */
-		fprintf(stdout," number of joints ");
-		dots(stdout,35);	fprintf(stdout," nJ =%4d ",nJ);
+	sfrv=fscanf(fp, "%d", &nN );		/* number of nodes	*/
+	if (sfrv != 1)	sferr("nN value for number of nodes");
+	if ( verbose ) {	/* display nN */
+		fprintf(stdout," number of nodes ");
+		dots(stdout,36);	fprintf(stdout," nN =%4d ",nN);
 	}
 
-					/* allocate memory for joint data ... */
-	r   =  vector(1,nJ);		/* rigid radius around each joint */
-	xyz = (vec3 *)malloc(sizeof(vec3)*(1+nJ));	/* joint coordinates */
+					/* allocate memory for node data ... */
+	r   =  vector(1,nN);		/* rigid radius around each node */
+	xyz = (vec3 *)malloc(sizeof(vec3)*(1+nN));	/* node coordinates */
 
-	read_joint_data ( fp, nJ, xyz, r );
+	read_node_data ( fp, nN, xyz, r );
 	if ( verbose )	printf(" ... complete\n");
 
-	DoF = 6*nJ;		/* total number of degrees of freedom	*/
+	DoF = 6*nN;		/* total number of degrees of freedom	*/
 
 	R   = ivector(1,DoF);	/* allocate memory for reaction data ... */
-	read_reaction_data ( fp, DoF, nJ, &nR, R, &sumR, verbose );
+	read_reaction_data ( fp, DoF, nN, &nR, R, &sumR, verbose );
 	if ( verbose )	printf(" ... complete\n");
 
 	sfrv=fscanf(fp, "%d", &nE );	/* number of frame elements	*/
@@ -262,17 +262,17 @@ For compilation/installation, see README.txt.
 		fprintf(stdout," number of frame elements");
 		dots(stdout,28);	fprintf(stdout," nE =%4d ",nE);
 	}
-	if ( nJ > nE + 1) {	/* not enough elements */
-		fprintf(stderr,"\n  warning: %d joints and %d members...", nJ, nE );
-		fprintf(stderr," not enough elements to connect all joints.\n");
+	if ( nN > nE + 1) {	/* not enough elements */
+		fprintf(stderr,"\n  warning: %d nodes and %d members...", nN, nE );
+		fprintf(stderr," not enough elements to connect all nodes.\n");
     	}
 
 				/* allocate memory for frame elements ... */
 	L   = dvector(1,nE);	/* length of each element		*/
 	Le  = dvector(1,nE);	/* effective length of each element	*/
 
-	J1  = ivector(1,nE);	/* joint #1 of each element		*/
-	J2  = ivector(1,nE);	/* joint #2 of each element		*/
+	N1  = ivector(1,nE);	/* node #1 of each element		*/
+	N2  = ivector(1,nE);	/* node #2 of each element		*/
 
 	Ax  =  vector(1,nE);	/* cross section area of each element	*/
 	Asy =  vector(1,nE);	/* shear area in local y direction 	*/
@@ -286,7 +286,7 @@ For compilation/installation, see README.txt.
 	p   =  vector(1,nE);	/* member rotation angle about local x axis */
 	d   =  vector(1,nE);	/* member rotation angle about local x axis */
 
-	read_frame_element_data( fp, nJ, nE, xyz,r, L, Le, J1, J2,
+	read_frame_element_data( fp, nN, nE, xyz,r, L, Le, N1, N2,
 					Ax, Asy, Asz, Jx, Iy, Iz, E, G, p, d );
 	if ( verbose) 	printf(" ... complete\n");
 
@@ -317,7 +317,7 @@ For compilation/installation, see README.txt.
 	W   =  D3matrix(1,nL,1,10*nE,1,13);/* trapezoidal load on each member */
 	P   =  D3matrix(1,nL,1,10*nE,1,5); /* internal point load each member */
 	T   =  D3matrix(1,nL,1,nE,1,8);    /* internal temp change each member*/
-	Dp  =  matrix(1,nL,1,DoF); /* prescribed displacement of each joint */
+	Dp  =  matrix(1,nL,1,DoF); /* prescribed displacement of each node */
 
 	Fo_mech  = dmatrix(1,nL,1,DoF);	/* mechanical load vector	*/
 	Fo_temp  = dmatrix(1,nL,1,DoF);	/* temperature load vector	*/
@@ -331,20 +331,20 @@ For compilation/installation, see README.txt.
 	K   = dmatrix(1,DoF,1,DoF);	/* global stiffness matrix	*/
 	Q   = dmatrix(1,nE,1,12);	/* end forces for each member	*/
 
-	D   = dvector(1,DoF);	/* displacments of each joint		*/
-	dD  = dvector(1,DoF);	/* incremental displ. of each joint	*/
+	D   = dvector(1,DoF);	/* displacments of each node		*/
+	dD  = dvector(1,DoF);	/* incremental displ. of each node	*/
 
-	BMs =  vector(1,nE);	/* lumped mass for each frame element	*/
-	JMs =  vector(1,nJ);	/* joint mass for each joint		*/
-	JMx =  vector(1,nJ);	/* joint inertia about global X axis	*/
-	JMy =  vector(1,nJ);	/* joint inertia about global Y axis	*/
-	JMz =  vector(1,nJ);	/* joint inertia about global Z axis	*/
+	EMs =  vector(1,nE);	/* lumped mass for each frame element	*/
+	NMs =  vector(1,nN);	/* node mass for each node		*/
+	NMx =  vector(1,nN);	/* node inertia about global X axis	*/
+	NMy =  vector(1,nN);	/* node inertia about global Y axis	*/
+	NMz =  vector(1,nN);	/* node inertia about global Z axis	*/
 
 	q = ivector(1,DoF); 	/* vector of condensed degrees of freedom */
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
 
 
-	read_and_assemble_loads( fp, nJ, nE, nL, DoF, xyz, L, Le, J1, J2,
+	read_and_assemble_loads( fp, nN, nE, nL, DoF, xyz, L, Le, N1, N2,
 				Ax,Asy,Asz, Iy,Iz, E, G, p,
 				d, gX, gY, gZ, 
 				R, shear,
@@ -362,8 +362,8 @@ For compilation/installation, see README.txt.
 		printf(" load data ... complete\n");
 	}
 
-	read_mass_data( fp, IN_file, nJ, nE, &nI, &nX,
-			d, BMs, JMs, JMx, JMy, JMz,
+	read_mass_data( fp, IN_file, nN, nE, &nI, &nX,
+			d, EMs, NMs, NMx, NMy, NMz,
 			L, Ax, &total_mass, &struct_mass, &nM,
 			&Mmethod, modal_flag, 
 			&lump, lump_flag, &tol, tol_flag, &shift, shift_flag,
@@ -376,7 +376,7 @@ For compilation/installation, see README.txt.
 		printf(" mass data ... complete\n");
 	}
 
-	read_condensation_data( fp, nJ,nM, &nC, &Cdof, 
+	read_condensation_data( fp, nN,nM, &nC, &Cdof, 
 			&Cmethod, condense_flag, q,m, verbose );
 
 	if( nC>0 && verbose ) {	/*  display condensation data complete */
@@ -395,8 +395,8 @@ For compilation/installation, see README.txt.
 		exit(14);
 	}
 
-	write_input_data ( fp, title, nJ,nE,nL, nD,nR, nF,nU,nW,nP,nT,
-				xyz, r, J1,J2, Ax,Asy,Asz, Jx,Iy,Iz, E,G, p,
+	write_input_data ( fp, title, nN,nE,nL, nD,nR, nF,nU,nW,nP,nT,
+				xyz, r, N1,N2, Ax,Asy,Asz, Jx,Iy,Iz, E,G, p,
 				d, gX, gY, gZ, 
 				Fo, Dp, R, U, W, P, T, shear, anlyz, geom );
 
@@ -417,7 +417,7 @@ For compilation/installation, see README.txt.
 
 		for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
 
-		assemble_K ( K, DoF, nE, xyz,r, L, Le, J1, J2,
+		assemble_K ( K, DoF, nE, xyz,r, L, Le, N1, N2,
 					Ax, Asy, Asz, Jx,Iy,Iz, E, G, p,
 					shear, geom, Q, debug );
 
@@ -432,11 +432,11 @@ For compilation/installation, see README.txt.
 			apply_reactions ( DoF, R, Dp[lc], Fo_temp[lc], F, K, 't' );
 			solve_system( K, dD, F, DoF, &ok, verbose );
 			for (i=1; i<=DoF; i++)	D[i] += dD[i];
-			end_forces ( Q, nE, xyz, L, Le, J1,J2,
+			end_forces ( Q, nE, xyz, L, Le, N1,N2,
 				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 		}
 
-		assemble_K ( K, DoF, nE, xyz, r, L, Le, J1, J2,
+		assemble_K ( K, DoF, nE, xyz, r, L, Le, N1, N2,
 				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
 				shear,geom, Q, debug );
 
@@ -448,7 +448,7 @@ For compilation/installation, see README.txt.
 			apply_reactions ( DoF, R, Dp[lc], Fo_mech[lc], F, K, 'm' );
 			solve_system( K, dD, F, DoF, &ok, verbose );
 			for (i=1; i<=DoF; i++)	D[i] += dD[i];
-			end_forces ( Q, nE, xyz, L, Le, J1,J2,
+			end_forces ( Q, nE, xyz, L, Le, N1,N2,
 				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 		}
 
@@ -470,7 +470,7 @@ For compilation/installation, see README.txt.
 		while ( geom && error > tol && iter < 10 && ok >= 0) {
 			++iter;
 
-			assemble_K ( K, DoF, nE, xyz, r, L, Le, J1, J2,
+			assemble_K ( K, DoF, nE, xyz, r, L, Le, N1, N2,
 				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
 				shear,geom, Q, debug );
 
@@ -503,7 +503,7 @@ For compilation/installation, see README.txt.
 
 			for (i=1; i<=DoF; i++)	D[i] += dD[i];	/* increment D */
 
-			end_forces ( Q, nE, xyz, L, Le, J1,J2, 
+			end_forces ( Q, nE, xyz, L, Le, N1,N2, 
 				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 
 					 /* convergence criteria:  */
@@ -528,7 +528,7 @@ For compilation/installation, see README.txt.
 		    for (n=1; n<=nE; n++)
 			feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
 
-		equilibrium ( xyz, L, J1,J2, Fo[lc], R, p, Q, feF,
+		equilibrium ( xyz, L, N1,N2, Fo[lc], R, p, Q, feF,
 						nE, DoF, &error, verbose );
 
 		if ( verbose ) {
@@ -537,17 +537,17 @@ For compilation/installation, see README.txt.
 		}
 
 
-		write_static_results ( fp, nJ,nE,nL,lc, DoF, J1,J2, Fo[lc],
+		write_static_results ( fp, nN,nE,nL,lc, DoF, N1,N2, Fo[lc],
 						 D,R,Q, error, ok, axial_sign );
 
 		if ( filetype == 1 ) {		// .CSV format output
 			write_static_csv(OUT_file, title,
-				nJ,nE,nL,lc, DoF, J1,J2, Fo[lc], D,R,Q, error, ok );
+				nN,nE,nL,lc, DoF, N1,N2, Fo[lc], D,R,Q, error, ok );
 		}
 
 		if ( filetype == 2 ) {		// matlab format output
-			write_static_mfile (OUT_file, title, nJ,nE,nL,lc, DoF,
-					J1,J2, Fo[lc], D,R,Q, error, ok );
+			write_static_mfile (OUT_file, title, nN,nE,nL,lc, DoF,
+					N1,N2, Fo[lc], D,R,Q, error, ok );
 		}
 
 /*
@@ -559,15 +559,15 @@ For compilation/installation, see README.txt.
  */
 
 		write_internal_forces ( infcpath, lc, nL, title, dx, xyz,
-					Q, nJ, nE, L, J1, J2, 
+					Q, nN, nE, L, N1, N2, 
 					Ax, Asy, Asz, Jx, Iy, Iz, E, G, p,
 					d, gX[lc], gY[lc], gZ[lc],
 					nU[lc],U[lc],nW[lc],W[lc],nP[lc],P[lc],
 					D, shear, error );
 
 		static_mesh ( IN_file, infcpath, meshpath, plotpath, title,
-				nJ, nE, nL, lc, DoF,
-				xyz, L, J1,J2, p, D,
+				nN, nE, nL, lc, DoF,
+				xyz, L, N1,N2, p, D,
 				exagg_static, D3_flag, anlyz, dx );
 
 	 } /* end load case loop */
@@ -578,8 +578,8 @@ For compilation/installation, see README.txt.
 	 	printf("  DATA CHECK ONLY.\n");
 	 }
 	 static_mesh ( IN_file, infcpath, meshpath, plotpath, title,
-			nJ, nE, nL, lc, DoF,
-			xyz, L, J1,J2, p, D,
+			nN, nE, nL, lc, DoF,
+			xyz, L, N1,N2, p, D,
 			exagg_static, D3_flag, anlyz, dx );
 	}
 
@@ -594,8 +594,8 @@ For compilation/installation, see README.txt.
 		f   = dvector(1,nM_calc);
 		V   = dmatrix(1,DoF,1,nM_calc);
 
-		assemble_M ( M, DoF, nJ, nE, xyz, r, L, J1,J2,
-				Ax, Jx,Iy,Iz, p, d, BMs, JMs, JMx, JMy, JMz,
+		assemble_M ( M, DoF, nN, nE, xyz, r, L, N1,N2,
+				Ax, Jx,Iy,Iz, p, d, EMs, NMs, NMx, NMy, NMz,
 				lump, debug );
 
 #ifdef MATRIX_DEBUG
@@ -630,7 +630,7 @@ For compilation/installation, see README.txt.
 
 			for (j=1; j<=nM_calc; j++)	f[j] = sqrt(f[j])/(2.*PI);
 
-			write_modal_results ( fp, nJ,nE,nI, DoF, M,f,V,
+			write_modal_results ( fp, nN,nE,nI, DoF, M,f,V,
 					total_mass, struct_mass,
 					iter, sumR, nM, shift, lump, tol, ok );
 		}
@@ -642,11 +642,11 @@ For compilation/installation, see README.txt.
 	if(nM > 0 && anlyz) {	/* write modal analysis results */
 
 		modal_mesh ( IN_file, meshpath, modepath, plotpath, title,
-				nJ,nE, DoF, nM, xyz, L, J1,J2, p,
+				nN,nE, DoF, nM, xyz, L, N1,N2, p,
 				M, f, V, exagg_modal, D3_flag, anlyz );
 
 		animate ( IN_file, meshpath, modepath, plotpath, title,anim,
-				nJ,nE, DoF, nM, xyz, L, p, J1,J2, f,
+				nN,nE, DoF, nM, xyz, L, p, N1,N2, f,
 				V, exagg_modal, D3_flag, pan );
 	}
 
@@ -694,13 +694,13 @@ For compilation/installation, see README.txt.
 
 
 	/* deallocate memory used for each frame analysis variable */
-	deallocate ( nJ, nE, nL, nF, nU, nW, nP, nT, DoF, nM,
-			xyz, r, L, Le, J1, J2, R,
+	deallocate ( nN, nE, nL, nF, nU, nW, nP, nT, DoF, nM,
+			xyz, r, L, Le, N1, N2, R,
 			Ax, Asy, Asz, Jx, Iy, Iz, E, G, p,
 			U,W,P,T, Dp, Fo_mech, Fo_temp,
 			feF_mech, feF_temp, feF, Fo, F,
 			K, Q, D, dD,
-			d,BMs,JMs,JMx,JMy,JMz, M,f,V, q, m
+			d,EMs,NMs,NMx,NMy,NMz, M,f,V, q, m
 	);
 
 	if ( verbose ) printf("\n");

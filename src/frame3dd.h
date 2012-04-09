@@ -39,10 +39,10 @@ void assemble_K(
 	double **K,		/**< stiffness matrix			*/
 	int DoF,		/**< number of degrees of freedom	*/
 	int nE,			/**< number of frame elements		*/
-	vec3 *xyz,		/**< XYZ locations of every joint	*/
-	float *r,		/**< rigid radius of every joint	*/
+	vec3 *xyz,		/**< XYZ locations of every node	*/
+	float *r,		/**< rigid radius of every node	*/
 	double *L, double *Le,	/**< length of each frame element, effective */
-	int *J1, int *J2,	/**< joint connectivity			*/
+	int *N1, int *N2,	/**< node connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
 	float *Jx, float *Iy, float *Iz,	/**< section inertias	*/
 	float *E, float *G,	/**< elastic and shear moduli		*/
@@ -81,9 +81,9 @@ void solve_system(
 void end_forces(
 	double **Q,	/**< frame element end forces			*/
 	int nE,		/**< number of frame elements			*/
-	vec3 *xyz,	/** XYZ locations of each joint			*/
+	vec3 *xyz,	/** XYZ locations of each node			*/
 	double *L, double *Le,	/**< length of each frame element, effective */
-	int *J1, int *J2,	/**< joint connectivity			*/
+	int *N1, int *N2,	/**< node connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
 	float *Jx, float *Iy, float *Iz,	/**< section area inertias */
 	float *E, float *G,	/**< elastic and shear moduli		*/
@@ -96,9 +96,9 @@ void end_forces(
 
 /** perform an equilibrium check, F returned as reactions */
 void equilibrium(	
-	vec3 *xyz,	/**< XYZ locations of each joint		*/
+	vec3 *xyz,	/**< XYZ locations of each node		*/
 	double *L,	/**< length of each frame element, effective	*/
-	int *J1, int *J2, /**< joint connectivity			*/
+	int *N1, int *N2, /**< node connectivity			*/
 	double *F,	/**< load vector				*/
 	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
 	float *p,	/**< roll angle, radians			*/
@@ -115,18 +115,18 @@ void equilibrium(
 void assemble_M(
 	double **M,	/**< mass matrix				*/
 	int DoF,	/**< number of degrees of freedom		*/
-	int nJ, int nE,	/**< number of joints, number of frame elements	*/
-	vec3 *xyz,	/** XYZ locations of each joint			*/
-	float *r,	/**< rigid radius of every joint		*/
+	int nN, int nE,	/**< number of nodes, number of frame elements	*/
+	vec3 *xyz,	/** XYZ locations of each node			*/
+	float *r,	/**< rigid radius of every node		*/
 	double *L,	/**< length of each frame element, effective	*/
-	int *J1, int *J2, /**< joint connectivity			*/
-	float *Ax,	/**< joint connectivity				*/
+	int *N1, int *N2, /**< node connectivity			*/
+	float *Ax,	/**< node connectivity				*/
 	float *Jx, float *Iy, float *Iz,	/**< section area inertias*/
 	float *p,	/**< roll angle, radians			*/
 	float *d,	/**< frame element density			*/
-	float *BMs,	/**< extra frame element mass			*/
-	float *JMs,	/**< joint mass					*/
-	float *JMx, float *JMy, float *JMz,	/**< joint inertias	*/
+	float *EMs,	/**< extra frame element mass			*/
+	float *NMs,	/**< node mass					*/
+	float *NMx, float *NMy, float *NMz,	/**< node inertias	*/
 	int lump,	/**< 1: lumped mass matrix, 0: consistent mass	*/
 	int debug	/**< 1: write element mass matrices	 	*/
 );
@@ -183,10 +183,10 @@ void dyn_conden(
 	release allocated memory
 */
 void deallocate( 
-	int nJ, int nE, int nL, int *nF, int *nU, int *nW, int *nP, int *nT, int DoF,
+	int nN, int nE, int nL, int *nF, int *nU, int *nW, int *nP, int *nT, int DoF,
 	int modes,
 	vec3 *xyz, float *r, double *L, double *Le,
-	int *J1, int *J2, int *R,
+	int *N1, int *N2, int *R,
 	float *Ax, float *Asy, float *Asz,
 	float *Jx, float *Iy, float *Iz,
 	float *E, float *G,
@@ -198,8 +198,8 @@ void deallocate(
 	double **Fo, double *F_lc,
 	double **K, double **Q,
 	double *D, double *dD,
-	float *d, float *BMs,
-	float *JMs, float *JMx, float *JMy, float *JMz,
+	float *d, float *EMs,
+	float *NMs, float *NMx, float *NMy, float *NMz,
 	double **M, double *f, double **V, 
 	int *q, int *m
 );

@@ -9,7 +9,7 @@
 
 % L O A D   C A S E   1   O F   1  ... 
 
-% J O I N T   D I S P L A C E M E N T S		(global)
+% N O D A L   D I S P L A C E M E N T S		(global)
 %	X-dsp		Y-dsp		Z-dsp		X-rot		Y-rot		Z-rot
 D1=[	0.0		0.0		0.0		0.0		0.0		-1.712305e-03 ; 
 	 6.455238e-04	-2.175619e-02	0.0		0.0		0.0		-1.338727e-03 ; 
