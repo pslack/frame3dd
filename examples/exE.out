@@ -6,11 +6,11 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example E: a three dimensional structure showing lateral-torsional dynamic modes (units: kip  in) 
-Mon Apr  9 15:07:23 2012
+Mon Apr  9 16:01:24 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
-   12 JOINTS             3 FIXED JOINTS      15 FRAME ELEMENTS   1 LOAD CASES   
+   12 NODES              3 FIXED NODES       15 FRAME ELEMENTS   1 LOAD CASES   
 ________________________________________________________________________________
 N O D E   D A T A                                           R E S T R A I N T S
   Node       X              Y              Z         radius  Fx Fy Fz Mx My Mz

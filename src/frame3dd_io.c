@@ -346,7 +346,7 @@ void display_version_about()
 
 
 /*------------------------------------------------------------------------------
-READ_JOINT_DATA  -  read node location data		
+READ_NODE_DATA  -  read node location data		
 04 Jan 2009
 ------------------------------------------------------------------------------*/
 void read_node_data( FILE *fp, int nN, vec3 *xyz, float *r )
@@ -1752,8 +1752,8 @@ void write_input_data (
 
 	for (i=1; i<=80; i++)	fprintf(fp,"_");	fprintf(fp,"\n");
 
-	fprintf(fp,"%5d JOINTS         ", nN ); 
-	fprintf(fp,"%5d FIXED JOINTS   ", nR );
+	fprintf(fp,"%5d NODES          ", nN ); 
+	fprintf(fp,"%5d FIXED NODES    ", nR );
 	fprintf(fp,"%5d FRAME ELEMENTS ", nE ); 
 	fprintf(fp,"%3d LOAD CASES   \n", nL );
 

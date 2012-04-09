@@ -6,11 +6,11 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis (N mm ton) 
-Mon Apr  9 15:07:22 2012
+Mon Apr  9 16:01:23 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
-    5 JOINTS             4 FIXED JOINTS       4 FRAME ELEMENTS   3 LOAD CASES   
+    5 NODES              4 FIXED NODES        4 FRAME ELEMENTS   3 LOAD CASES   
 ________________________________________________________________________________
 N O D E   D A T A                                           R E S T R A I N T S
   Node       X              Y              Z         radius  Fx Fy Fz Mx My Mz
