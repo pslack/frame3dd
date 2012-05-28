@@ -1216,11 +1216,11 @@ void read_and_assemble_loads (
 	  	fprintf(stdout,"  number of concentrated frame element point loads ");
 	  	dots(stdout,2);	fprintf(stdout," nP = %3d\n", nP[lc]);
 	  }
-	  if ( nP[lc] < 0 || nP[lc] > nE ) {
+	  if ( nP[lc] < 0 || nP[lc] > 10*nE ) {
 	  	fprintf(stderr,"  number of concentrated frame element point loads ");
 	  	dots(stderr,3);
 	  	fprintf(stderr," nP = %3d\n", nP[lc]);
-		sprintf(errMsg,"\n  error: valid ranges for nP is 0 ... %d \n", nE );
+		sprintf(errMsg,"\n  error: valid ranges for nP is 0 ... %d \n", 10*nE );
 		errorMsg(errMsg);
 		exit(150);
 	  }

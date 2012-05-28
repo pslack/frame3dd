@@ -1,3 +1,10 @@
+*Mon May 28 2012 Henri Gavin <.> 0.20100105
+- bug fix : allowable number of of interioir point forces, nP, is ten times the
+number of frame elements, nE.    The input data error message was triggered if
+nP > nE.   It has been changed to check if nP > 10*nE.   
+updated : frame3dd_io.c  and  user-manual.html
+(Thanks to Humberto Hassey.)
+
 *Mon Apr 09 2012 Henri Gavin <.> 0.20100105
 - change of terminology: "joint" to "node" throughout documentation and code
 

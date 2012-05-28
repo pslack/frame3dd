@@ -1680,9 +1680,10 @@ values of the load per unit length applied to the frame element
 in the local <i>x</i> direction,
 the local <i>y</i> direction, and the local <i>z</i> direction.
 </li>
-<li><b>Frame Element Point Loads</b><br>
+<li><b>Frame Element Interior Point Loads</b><br>
 Concentrated static force loads may be applied at a point along a frame element.
-Up to ten frame element point loads may be specified per frame element.  
+The number of interior frame element point loads in the model can be up to 
+ten times the number of frame elements.  
 These loads are specified as values of point forces applied to the frame element
 in the directions of the frame element's local coordinate system
 at a distance <i>x</i> from node <i>N1</i> of the frame element.  
@@ -2518,7 +2519,7 @@ nC      # number of condensed nodes
     nL           - number of static Load cases
     nM           - number of Modes to be calculated
     nN           - number of Nodes in the model
-    nP           - number of frame elements with concentrated point loads
+    nP           - number of concentrated interior point loads
     nR           - number of nodes with Reaction forces
     nT           - number of frame elements with Temperature changes
     nU           - number of uniformly distributed loads
@@ -2772,7 +2773,7 @@ Exit code values have the following meanings:
 <li> 142 : input data formatting error in trapezoidally-distributed load data, x1 < 0
 <li> 143 : input data formatting error in trapezoidally-distributed load data, x1 > x2
 <li> 144 : input data formatting error in trapezoidally-distributed load data, x2 > L
-<li> 150 : input data formatting error in internal concentrated load data, number concentrated loads greater than number of frame elements
+<li> 150 : input data formatting error in concentrated internal load data, number concentrated loads greater than number of frame elements
 <li> 151 : input data formatting error in internal concentrated load data, frame element number out of range
 <li> 152 : input data formatting error in internal concentrated load data, x-location less than 0 or grater than L
 <li> 160 : input data formatting error in thermal load data, number thermal loads greater than number of frame elements
