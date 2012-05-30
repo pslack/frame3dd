@@ -1,3 +1,7 @@
+*Wed May 30 2012 Henri Gavin <.> 0.20100105
+- user-manual.html and README-win32.txt - windows installaion - add recommendation for ansicon.
+- fresh build of Frame3DD for linux, OS X, and Win32
+
 *Mon May 28 2012 Henri Gavin <.> 0.20100105
 - bug fix : allowable number of of interioir point forces, nP, is ten times the
 number of frame elements, nE.    The input data error message was triggered if

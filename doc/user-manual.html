@@ -294,7 +294,7 @@ Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it 
 If the .ZIP archive was not automatically unzipped, 
 double-click the icon to extract it to your <b>Desktop</b>. 
 <li>
-<b>(<i>Recommended</i>)</b>
+<b><i>Recommended</i></b><br>
 Put the <b>Frame3DD</b> directory in your path and set the <b>FRAME3DD_OUTDIR</b> location.<br>
 To do this, double-click the <b>Home</b> icon on the Desktop, and select <b>View > Show Hidden Files</b><br><br>
 
@@ -506,7 +506,7 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_osx.zip) and save it in your <b>Desktop</b>.<br>
 If the .ZIP archive was not automatically unzipped, 
 simply drag the <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
-<li><b>(<i>Recommended</i>)</b>
+<li><b><i>Recommended</i></b><br>
 Put the <b>Frame3DD</b> directory in your path and set the <b>FRAME3DD_OUTDIR</b> location.<br>
 <ul>
 <li> Open your <b>~/.profile</b> file ... 
@@ -678,7 +678,7 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it to your <b>Desktop</b>.<br>
 If the .ZIP archive was not automatically unzipped, 
 simply drag <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
-<li> <b>(<i>Optional</i>)</b>
+<li> <b><i>Recommended</i></b><br>
 Put the <b>Frame3DD</b> directory in your path and set the 
 <b>PATH</b> and <b>FRAME3DD_OUTDIR</b> environment variables.<br>
 To do this,
@@ -689,6 +689,13 @@ Set a new user variable name <b>FRAME3DD_OUTDIR</b>
 with variable value <b>%HOMEPATH%\Desktop\Frame3DD\temp</b></br>
 (The <b>Desktop\Frame3DD\temp</b> folder should already exist.)<br>
 Detailed information on how to set environment variables in Windows is <a href="http://vlaurie.com/computers2/Articles/environment.htm">here</a>, if you need it. 
+<li> <b><i>Recommended</i></b><br>
+Install <a href="http://adoxa.110mb.com/ansicon/">ansicon</a>, a Windows console program that can display text in color.<br>
+Download and extract the
+<a href="http://adoxa.110mb.com/ansicon/dl.php?f=ansicon">
+ansicon .ZIP file</a> and copy the <b>x86</b> folder 
+into the <b>Desktop\Frame3DD\</b> folder.  <br>
+Make a shortcut from <b>Desktop\Frame3DD\x86\ansicon</b> to the <b>Desktop</b>.
 </ol>
 
 <h4> 3.3.2 Running Frame3DD in Windows</h4>
@@ -706,14 +713,13 @@ Alternatively, you may open a
 "<a href="http://www.bleepingcomputer.com/tutorials/tutorial76.html#intro">command prompt window</a>" 
 <!-- <a href="http://en.wikipedia.org/wiki/Windows_command_line">Command Prompt</a> window -->
 (<b>Start > All Programs > Accessories > Command Prompt</b>),
-change to the directory of example files, and run an example, as follows:
+or an <a href="http://adoxa.110mb.com/ansicon/">ansicon</a> window.<br> 
+Change to the directory of example files, and run an example, as follows:
 <pre>
 chdir %HOMEPATH%\Desktop\Frame3DD
 frame3dd  examples/exE.3dd  examples/exE.out
 </pre>
-
-Either way you run <b>Frame3DD</b>, run-time information will be displayed on the Command Prompt window and
-the results of your Frame3DD analysis will have been appended to the end of the <b>examples/exE.out</b> Output Data file.
+The results of your Frame3DD analysis will have been appended to the end of the <b>examples/exE.out</b> Output Data file.
 Data files used primarily for plotting are stored in the <b>Desktop\Frame3DD\temp</b> folder.
 
 <li>       You may view Output Data files and edit Input Data files
@@ -733,7 +739,7 @@ Three tutorials for vim/evim/gvim are <a href="http://www.jerrywang.net/vi/">her
 <pre>
 frame3dd  examples/MyFrame.3dd  examples/MyResultsA.out
 </pre>
-(within a Command Prompt window).  
+ ... within a Command Prompt or <a href="http://adoxa.110mb.com/ansicon/">ansicon</a> window.  
 <!-- <li> You may wish to delete all the files in the temporary file directory (c:\temp) after you have finished your analyses.  -->
 </ol>
 
@@ -787,7 +793,7 @@ Download</a> and run the binary installer (frame3dd-VERSION.exe).
 
 <li>Use the Start menu to access README information and this documentation.
 
-<li> <b>(<i>Recommended</i>)</b>
+<li> <b><i>Recommended</i></b><br>
 Put the <b>Frame3DD</b> directory in your path and set the 
 <b>PATH</b> and <b>FRAME3DD_OUTDIR</b> environment variables.<br> 
 To do this,
@@ -833,7 +839,7 @@ double-click the icon to extract it to your <b>Desktop</b>.
 and compile the code, as follows:
 <pre>
 gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c matrix.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
-mv frame3dd ..
+move frame3dd ..
 </pre>
 </ol>
 

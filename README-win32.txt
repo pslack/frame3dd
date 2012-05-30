@@ -7,58 +7,57 @@ the Windows platform.
 
 See 'README.txt' for general information.
 
+
 NOTES FOR WINDOWS USERS
 -----------------------
 
-NOTE: FRAME3DD is a *command line* program. It processes an input text file
+The user manual (doc/user-manual.html) includes instructions for installing
+and running Frame3DD under Windows.    Following these instructions will
+install Frame3DD to your Desktop.   
+
+FRAME3DD is a *command line* program. It processes an input text file
 and adds output data at the end of that file.
-It is best to run FRAME3DD from within a Command Prompt window.
 
-NOTE: FRAME3DD input files, such as those in the 'examples' directory
-currently include places where the file-paths for certain output files
-will be written. In some cases, the locations will not exist on Windows
-systems, so you will need to edit these input files before running the
-program.
-
-In order to keep your workspace 'clean', it is recommended to run
-FRAME3DD on windows as follows:
-
-  mkdir %HOMEPATH%\frame3dd
-  cd %PROGRAMFILES%\FRAME3DD
-  xcopy "examples\*" "%HOMEPATH%\frame3dd"
-  cd %HOMEPATH%\frame3dd
-  set PATH=%PATH%;%PROGRAMFILES%\FRAME3DD
-  set FRAME3DD_OUTDIR=%HOMEPATH%\frame3dd
-  frame3dd exA.3dd
-
-After running FRAME3DD in this way, all your output files will be located 
-in the the directory
-
-c:\Documents and Setttings\yourname\frame3dd
-
-(providing you have edited the input files so that they do not specify
-absolute paths).
+It is best to run FRAME3DD from within a Command Prompt (or Console) window.
 
 
-NOTES FOR WINDOWS DEVELOPERS
-----------------------------
 
-As of December 2010 Frame3DD writes text to the terminal in color
-using ANSI.SYS Escape sequences.   The code for these Escape 
-sequences is in hpgUtils.c.   
+NOTES REGARDING ANSI.SYS and COLORS 
+-----------------------------------
 
+Frame3DD displays text in color using ANSI.SYS escape sequences.
+Current versions (Windows 7, VISTA, etc) of the Microsoft
+"Command Prompt" do not render ANSI.SYS escape sequences correctly  ... 
 "Console windows in Windows versions based on NT (Windows NT 4.0, Windows 2000,
 Windows XP, Windows Server 2003, Windows Vista and Windows Server 2008)
 do not support ANSI Escape sequences at all."
-
 http://en.wikipedia.org/wiki/ANSI_escape_code#Windows_and_DOS
 
-Therefore, when compiling Windows executables of Frame3DD, line 28 of
-hpgUtils.h should be ...
+Instead of showing text in color, the Microsoft "Command Prompt" program   
+displays strange text sequences.   
+
+If these text sequences become annoying to look at, you have two options.
+
+
+ANSI.SYS option #1:
+
+Download an ANSI capable console for Windows ... ANSICON ... from
+  ... http://adoxa.110mb.com/ansicon/ ...
+Extract the .ZIP file and copy the folder "x86" into the Desktop\Frame3DD\ 
+Make a shortcut from Desktop/Frame3DD/x86/ansicon to the Desktop.
+Run ANSICON instead of the Microsoft "Command Prompt"
+
+
+ANSI.SYS option #2:
+
+Recompile Frame3DD without the ANSI.SYS escape sequences by changing
+line 28 of hpgUtils.h to ...
 
 #define ANSI_SYS        0 
 
-... to disable the ANSI.SYS Escape sequences.  
+... before compiling.    
+
+
 
 
 NOTES ON THE MICROSTRAN .ARC VIEWER PROGRAM
