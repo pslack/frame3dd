@@ -1,3 +1,7 @@
+*Wed Sep  5 2012 Henri Gavin <.> 0.20100105
+- user-manual.html - add link to Google Sketchup interface for Frame3DD
+http://rhin.crai.archi.fr/rld/plugin_details.php?id=1008
+
 *Thu Jun  7 2012 Henri Gavin <.> 0.20100105
 - frame3dd_io.c :  set tickslevel 0 to bring orgin of z axis to x-y plane
 
