@@ -29,7 +29,7 @@
 #include "microstran/vec3.h"
 
 #include "common.h" 
-#include "hpgUtils.h" 
+#include "HPGutil.h" 
 
 
 /**

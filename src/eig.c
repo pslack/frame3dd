@@ -34,10 +34,10 @@
 #include <stdlib.h>
 
 #include "eig.h"
-#include "matrix.h"
+#include "HPGmatrix.h"
 #include "common.h" 
-#include "hpgUtils.h"
-#include "nrutil.h"
+#include "HPGutil.h"
+#include "NRutil.h"
 
 /* #define EIG_DEBUG */
 

@@ -1,3 +1,11 @@
+*Tue Oct  2 2012 Henri Gavin <.> 0.20100105
+- delete: matrix.c hpgUtils.c nrutil.c  (matrix.c and hpgUtls.c were GPL)
+- add:   HPGmatrix.c HPGutil.c NRutil.c (none of these are GPL)
+- new functions in HPGmatrix.c for solving partitioned systems of equations.
+via LDL' decomposition.   These functions will be used in a forthcoming change
+in order to compute reaction forces directly from the equilibrium matrices.
+- this update is the first in a sequence of re-writes of Frame3DD.
+
 *Wed Sep  5 2012 Henri Gavin <.> 0.20100105
 - user-manual.html - add link to Google Sketchup interface for Frame3DD
 http://rhin.crai.archi.fr/rld/plugin_details.php?id=1008

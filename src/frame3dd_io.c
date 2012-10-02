@@ -35,9 +35,9 @@
 #include "common.h"
 #include "frame3dd_io.h"
 #include "coordtrans.h"
-#include "matrix.h"
-#include "hpgUtils.h"
-#include "nrutil.h"
+#include "HPGmatrix.h"
+#include "HPGutil.h"
+#include "NRutil.h"
 
 /* #define MASSDATA_DEBUG */
 
@@ -3467,17 +3467,6 @@ void force_bent_beam(
 
 	fprintf(fpm,"\n\n");
 
-	return;
-}
-
-
-/*------------------------------------------------------------------------------
-SFERR  -  Display error message upon an erronous *scanf operation
-------------------------------------------------------------------------------*/
-void sferr ( char s[] ) {
-	char	errMsg[MAXL];
-	sprintf(errMsg,">> Input Data file error while reading %s\n",s);
-	errorMsg(errMsg);
 	return;
 }
 
