@@ -2134,11 +2134,11 @@ If goemetric stiffness effects are to be considered,
 the assembly process makes use of
 the axial frame element forces arising from the temperature loads.
 
-<li>Compute the node displacements due to mechanical loads.
+<li>Compute the node displacements due to mechanical loads only, including prescribed joint displacements.
 
 <li>Add the node displacements due to mechanical loads to the node displacements due to temperature loads.
 
-<li>Compute frame element end forces from the displacements due to the combined temperature and mechanical loads.
+<li>Compute frame element end forces from the displacements due to the combined displacements from temperature and mechanical loads.
 
 <li>If geometric stiffness effects are to be considered, carry out quasi Newton-Raphson iterations to converge upon the displacements that satisfy equilibrium.<br>
 The assembly process makes use of
@@ -2150,7 +2150,30 @@ the axial frame element forces arising from the combined temperature and mechani
 </p>
 
 <p>
-Solutions of the matrix equation, <i>K d = f</i>, make use of LDL'
+Iterative solutions to the partitioned matrix equation, <br>
+<div class=eq>
+ K<sub>qq</sub>(D<sup>(i)</sup>) dD<sub>q</sub><sup>(i)</sup>
+=
+F<sub>q</sub> - K<sub>qq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup>
+- K<sub>qr</sub>(D<sup>(i)</sup>) D<sub>r</sub> </div>
+<div class=eq>F<sub>r</sub><sup>(i)</sup> = K<sub>rq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup> + K<sub>rr</sub>(D<sup>(i)</sup>) D<sub>r</sub></div>
+<div class=eq>D<sub>q</sub><sup>(i+1)</sup> = D<sub>q</sub><sup>(i)</sup> + dD<sub>q</sub><sup>(i)</sup></div>
+<p>
+where:
+</p>
+<ul>
+<li> <i>D<sub>q</sub><sup>(i)</sup> </i>   is the vector of unknown
+displacements at iteration <i>i</i> ,
+<li> <i>D<sub>r</sub></i>   is the vector of known prescribed displacements, 
+<li> <i>K(D<sup>(i)</sup>)</i> is the stiffness matrix, dependent upon
+displacements at iteration <i>i</i>.
+<li> <i>F<sub>q</sub> </i>     is the vector known applied loads ,
+<li> <i>F<sub>r</sub><sup>(i)</sup> </i>     is the vector unknown reaction forces at iteration <i>i</i>,
+<li> <i>dD<sub>q</sub><sup>(i)</sup></i>  is the incremental displacement vector at iteration <i>i</i> , and
+<li> <i>D<sub>q</sub><sup>(i+1)</sup></i>  is the vector of uknown displacements at iteration <i>i+1</i>
+</ul>
+<p>
+make use of LDL'
 decomposition/back-substitution with sparse-matrix short-cuts and
 iterative improvement for enhanced speed and accuracy.
 </p>
@@ -2158,47 +2181,21 @@ iterative improvement for enhanced speed and accuracy.
 <p>
 When the program is executed, various solution errors are displayed to the
 screen and are written to the Output Data file.   Iterative improvements
-to the LDL' back-substitution make use of a quasi Newton-Raphson method:<br>
-<div class=eq>K dD(i) = F - K D(i)</div>
-<div class=eq>D(i+1) = D(i) + dD(i)</div>
-<p>
-where
+to the LDL' back-substitution make use of a quasi Newton-Raphson method.<br>
 </p>
-<ul>
-<li> <i>D(i) </i>   is the displacement vector at iteration <i>i</i> ,
-<li> <i>K </i>     is the stiffness matrix ,
-<li> <i>F </i>     is the applied load vector ,
-<li> <i>dD(i) </i>  is the incremental displacement vector at iteration <i>i</i> , and
-<li> <i>D(i+1)</i>  is the displacement vector at iteration <i>i+1</i>
-</ul>
-
 <p>
 At each LDL' back-substitution iteration, the equilibrium error is displayed
 to the screen as the "RMS equilibrium precision."  This error is the root-mean-square of
-<i>dD(i)</i>.
+<i>dD<sup>(i)</sup></i>.
 Iterations are stopped when this error decreases by less than ten percent in an iteration.
 </p>
 
 <p>
-When geometric stiffness effects are included, the solution is obtained
-iteratively, using a quasi Newton-Raphson method:
-</p>
- <div class=eq>K(D(i)) dD(i) = F - K(D(i)) D(i)</div>
- <div class=eq>D(i+1)  =  D(i) + dD(i)</div>
-<p>
-where
-</p>
-<ul>
-<li>   <i>D(i)  </i>  is the displacement vector at iteration <i>i</i>,
-<li> <i>K(D(i))  </i>is the secant stiffness matrix at displacements <i>D(i)</i>
-<li> <i>F </i>     is the applied load vector ,
-<li> <i>dD(i) </i>  is the incremental displacement vector at iteration <i>i</i> , and
-<li> <i>D(i+1)</i>  is the displacement vector at iteration <i>i+1</i>
-</ul>
-<p>
 At each Newton-Raphson iteration, the relative equilibrium error is displayed
-to the screen.   This error is the root-mean-square of (<i>F - K(D(i)) D(i)</i>)
-divided by the root-mean-square of <i>F</i>.   Newton-Raphson iterations stop when
+to the screen.   This error is the root-mean-square of
+(<i>F - K(D<sup>(i)</sup>) D<sup>(i)</sup></i>)
+divided by the root-mean-square of <i>F</i>.
+Newton-Raphson iterations stop when
 this error is less than the convergence tolerance.  The convergence tolerance
 is specified as the convergence tolerance for the modal-analysis.
 The default value is 0.00001
@@ -2237,11 +2234,11 @@ or a Stodola iteration procedure.
 Jacobi-subspace iterations are stopped when the frequency convergence error is less than the specified
 frequency convergence tolerance.  The frequency convergence error is defined here as:
 </p>
- <div class=eq>error = | fN(i) - fN(i-1) | / fN(i) </div>
+ <div class=eq>error = | f<sub>N</sub><sup>(i)</sup> - f<sub>N</sub><sup>(i-1)</sup> | / f<sub>N</sub><sup>(i)</sup> </div>
 <p>where</p>
 <ul>
-<li><i> fN(i)</i>    is the highest natural frequency computed at iteration <i>i</i> ,
-<li><i>fN(i-1)</i>  is the highest natural frequency computed at iteration <i>i-1</i> ,
+<li><i> f<sub>N</sub><sup>(i)</sup></i>    is the highest natural frequency computed at iteration <i>i</i> ,
+<li><i>f<sub>N</sub><sup>(i-1)</sup></i>  is the highest natural frequency computed at iteration <i>i-1</i> ,
 </ul>
 
 <a name="InputData"><h2>9. Input Data Format</h2>
@@ -2269,9 +2266,9 @@ Template Input Data file for Frame3DD - 3D structural frame analysis (N,mm,ton)
 nN                        # number of nodes
 #.node       X-coord  Y-coord  Z-coord  radius 
 #                mm       mm       mm      mm
-  N[1]           x[1]     y[1]     z[1]    r[1]    
+  N[1]           x[1]     y[1]     z[1]    rj[1]    
     :              :        :        :       :  
-  N[nN]          x[nN]    y[nN]    z[nN]   r[nN]
+  N[nN]          x[nN]    y[nN]    z[nN]   rj[nN]
 
 
 # reaction data ...
@@ -2548,7 +2545,7 @@ nC      # number of condensed nodes
     Rxx          - 1: reactoin moment about the global X axis, 0: free
     Ryy          - 1: reaction moment about the global Y axis, 0: free
     Rzz          - 1: reaction moment about the global Z axis, 0: free
-    r            - r radius of rigid node sphere around node i
+    rj           - radius of rigid node sphere around node i
     shear        - 1: include shear deformations, 0: do not.
     shift        - shift factor for non-definite stiffness matrices
     tol          - tolerance for finding mode shapes ~ 1.e-4
@@ -2678,15 +2675,15 @@ frame3dd -i InFile -o OutFile -lOff -e100 -p3.4 -z
 
 <pre>
     file name       description
-    -----------     -------------------------------
+    -------------     -------------------------------
     main.c          main driver routines
     frame3dd.c      frame analysis
     frame3dd_io.c   input-output functions
     eig.c           generalized eigenvalue analysis
-    matrix.c        LU decomposition, LDL' decomposition, pseudo-inverse, 
+    HPGmatrix.c     LU decomposition, LDL' decomposition, pseudo-inverse, 
     coordtrans.c    coordinate transformation
-    hpgUtils.c      ansi.sys color functions
-    nrutil.c        dynamic memory allocation
+    HPGutil.c       ansi.sys color functions
+    NRutil.c        dynamic memory allocation
 </pre>
 
 <p>In addition to the recommended method using 
@@ -2700,7 +2697,7 @@ and the <a href="http://www.mingw.org/"> MinGW gcc compiler</a>.
 <p>Using GCC, the command to compile is:</p>
 
 <pre>
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c matrix.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c HPGmatrix.c coordtrans.c eig.c HPGutil.c NRutil.c -lm
 </pre>
 
 <a name="exitcodes"/><h2>13. Exit code index</h2>

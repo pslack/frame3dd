@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example G: a building with a set-back  (in kip) 
-Tue Oct  2 17:39:54 2012
+Mon Oct 15 23:00:07 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -170,10 +170,10 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
     24     13     83.041t      0.745    -33.401    399.598  -9626.180    -25.789
 R E A C T I O N S							(global)
   Node        Fx          Fy          Fz         Mxx         Myy         Mzz
-     1      33.379     -48.996     819.815    5935.588     854.819      -1.196
-     2     -33.379     -48.996     819.815    5935.588    -854.819       1.196
-     3       0.0      -102.008    2651.279    7513.290       0.0         0.0  
-R M S   E Q U I L I B R I U M    E R R O R: 4.450e-05
+     1      33.379     -48.996     818.451    5935.588     854.819      -1.195
+     2     -33.379     -48.996     818.451    5935.588    -854.819       1.195
+     3       0.0      -102.008    2647.724    7513.290       0.0         0.0  
+R M S   E Q U I L I B R I U M    E R R O R: 1.138e-24
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  2.423682e-01     Structural Mass:  2.423682e-01 

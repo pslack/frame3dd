@@ -9,9 +9,9 @@ Template Input Data file for Frame3DD - 3D structural frame analysis (N,mm,ton)
 nN                        # number of nodes
 #.node       X-coord  Y-coord  Z-coord  radius 
 #                mm       mm       mm      mm
-  N[1]           x[1]     y[1]     z[1]    r[1]    
+  N[1]           x[1]     y[1]     z[1]    rj[1]    
     :              :        :        :       :  
-  N[nN]          x[nN]    y[nN]    z[nN]   r[nN]
+  N[nN]          x[nN]    y[nN]    z[nN]   rj[nN]
 
 
 # reaction data ...
