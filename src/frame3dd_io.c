@@ -734,13 +734,13 @@ READ_REACTION_DATA - Read fixed node displacement boundary conditions
 29 Dec 2009
 ------------------------------------------------------------------------------*/
 void read_reaction_data (
-	FILE *fp, int DoF, int nN, int *nR, int *R, int *sumR, int verbose
+	FILE *fp, int DoF, int nN, int *nR, int *q, int *r, int *sumR, int verbose
 ){
 	int	i,j,l;
 	int	sfrv=0;		/* *scanf return value */
 	char	errMsg[MAXL];
 
-	for (i=1; i<=DoF; i++)	R[i] = 0;
+	for (i=1; i<=DoF; i++)	r[i] = 0;
 
 	sfrv=fscanf(fp,"%d", nR );	/* read restrained degrees of freedom */
 	if (sfrv != 1) sferr("number of reactions in reaction data");
@@ -763,7 +763,7 @@ void read_reaction_data (
 	    if (sfrv != 1) sferr("node number in reaction data");
 	    for (l=5; l >=0; l--) {
 
-		sfrv=fscanf(fp,"%d", &R[6*j-l] );
+		sfrv=fscanf(fp,"%d", &r[6*j-l] );
 		if (sfrv != 1) sferr("reaction value in reaction data");
 
 		if ( j > nN ) {
@@ -771,14 +771,14 @@ void read_reaction_data (
 		    errorMsg(errMsg);
 		    exit(81);
 		}
-		if ( R[6*j-l] != 0 && R[6*j-l] != 1 ) {
-		    sprintf(errMsg,"\n  error in reaction data: Reaction data must be 0 or 1\n   Data for node %d, DoF %d is %d\n", j, 6-l, R[6*j-l] );
+		if ( r[6*j-l] != 0 && r[6*j-l] != 1 ) {
+		    sprintf(errMsg,"\n  error in reaction data: Reaction data must be 0 or 1\n   Data for node %d, DoF %d is %d\n", j, 6-l, r[6*j-l] );
 		    errorMsg(errMsg);
 		    exit(82);
 		}
 	    }
 	    *sumR = 0;
-	    for (l=5; l >=0; l--) 	*sumR += R[6*j-l];
+	    for (l=5; l >=0; l--) 	*sumR += r[6*j-l];
 	    if ( *sumR == 0 ) {
 		sprintf(errMsg,"\n  error: node %3d has no reactions\n   Remove node %3d from the list of reactions\n   and set nR to %3d \n",
 		j, j, *nR-1 );
@@ -786,7 +786,7 @@ void read_reaction_data (
 		exit(83);
 	    }
 	}
-	*sumR=0;	for (i=1;i<=DoF;i++)	*sumR += R[i];
+	*sumR=0;	for (i=1;i<=DoF;i++)	*sumR += r[i];
 	if ( *sumR < 4 ) {
 	    sprintf(errMsg,"\n  Warning:  un-restrained structure   %d imposed reactions.\n  At least 4 reactions are required to support static loads.\n", *sumR );
 	    errorMsg(errMsg);
@@ -797,6 +797,8 @@ void read_reaction_data (
 	    errorMsg(errMsg);
 	    exit(85);
 	}
+
+	for (i=1; i<=DoF; i++)	if (r[i]) q[i] = 0;	else q[i] = 1;
 
 	return;
 }
@@ -817,11 +819,11 @@ void read_and_assemble_loads (
 		float *Iy, float *Iz, float *E, float *G,
 		float *p,
 		float *d, float *gX, float *gY, float *gZ, 
-		int *R,
+		int *r,
 		int shear,
 		int *nF, int *nU, int *nW, int *nP, int *nT, int *nD,
 		double **Q,
-		double **F_mech, double **F_temp,
+		double **F_temp, double **F_mech, double **Fo, 
 		float ***U, float ***W, float ***P, float ***T, float **Dp,
 		double ***feF_mech, double ***feF_temp, 
 		int verbose
@@ -843,7 +845,7 @@ void read_and_assemble_loads (
 
 	for (j=1; j<=DoF; j++)
 		for (lc=1; lc <= nL; lc++)
-			F_mech[lc][j] = F_temp[lc][j] = 0.0;
+			Fo[lc][j] = F_temp[lc][j] = F_mech[lc][j] = 0.0;
 	for (i=1; i<=12; i++)
 		for (n=1; n<=nE; n++)
 			for (lc=1; lc <= nL; lc++)
@@ -1397,9 +1399,9 @@ void read_and_assemble_loads (
 		for (l=5; l >=0; l--) {
 			sfrv=fscanf(fp,"%f", &Dp[lc][6*j-l] );
 			if (sfrv != 1) sferr("prescribed displacement value");
-			if ( R[6*j-l] == 0 && Dp[lc][6*j-l] != 0.0 ) {
-			    sprintf(errMsg," Initial displacements can be prescribed only at restrained coordinates\n  node: %d  dof: %d  R: %d\n",
-			    j, 6-l, R[6*j-l] );
+			if ( r[6*j-l] == 0 && Dp[lc][6*j-l] != 0.0 ) {
+			    sprintf(errMsg," Initial displacements can be prescribed only at restrained coordinates\n  node: %d  dof: %d  r: %d\n",
+			    j, 6-l, r[6*j-l] );
 			    errorMsg(errMsg);
 			    exit(171);
 			}
@@ -1618,9 +1620,9 @@ void read_condensation_data (
 		FILE *fp,
 		int nN, int nM,
 		int *nC, int *Cdof,
-		int *Cmethod, int condense_flag, int *q, int *m, int verbose
+		int *Cmethod, int condense_flag, int *c, int *m, int verbose
 ){
-	int	i,j,k,  **qm;
+	int	i,j,k,  **cm;
 	int	sfrv=0;		/* *scanf return value */
 	char	errMsg[MAXL];
 
@@ -1664,27 +1666,27 @@ void read_condensation_data (
 	  exit(90);
 	}
 
-	qm = imatrix( 1, *nC, 1,7 );
+	cm = imatrix( 1, *nC, 1,7 );
 
 	for ( i=1; i <= *nC; i++) {
 	 sfrv=fscanf( fp, "%d %d %d %d %d %d %d",
-	 &qm[i][1],
-	 &qm[i][2], &qm[i][3], &qm[i][4], &qm[i][5], &qm[i][6], &qm[i][7]);
+	 &cm[i][1],
+	 &cm[i][2], &cm[i][3], &cm[i][4], &cm[i][5], &cm[i][6], &cm[i][7]);
 	 if (sfrv != 7) sferr("DoF numbers in condensation data");
-	 if ( qm[i][1] < 1 || qm[i][1] > nN ) {		/* error check */
-	  sprintf(errMsg,"\n  error in matrix condensation data: \n  condensed node number out of range\n  cj[%d] = %d  ... nN = %d  \n", i, qm[i][1], nN );
+	 if ( cm[i][1] < 1 || cm[i][1] > nN ) {		/* error check */
+	  sprintf(errMsg,"\n  error in matrix condensation data: \n  condensed node number out of range\n  cj[%d] = %d  ... nN = %d  \n", i, cm[i][1], nN );
 	  errorMsg(errMsg);
 	  exit(91);
 	 }
 	}
 
-	for (i=1; i <= *nC; i++)  for (j=2; j<=7; j++)  if (qm[i][j]) (*Cdof)++;
+	for (i=1; i <= *nC; i++)  for (j=2; j<=7; j++)  if (cm[i][j]) (*Cdof)++;
 
 	k=1;
 	for (i=1; i <= *nC; i++) {
 		for (j=2; j<=7; j++) {
-			if (qm[i][j]) {
-				q[k] = 6*(qm[i][1]-1) + j-1;
+			if (cm[i][j]) {
+				c[k] = 6*(cm[i][1]-1) + j-1;
 				++k;
 			}
 		}
@@ -1701,7 +1703,7 @@ void read_condensation_data (
 	 }
 	}
 
-	free_imatrix(qm,1, *nC, 1,7);
+	free_imatrix(cm,1, *nC, 1,7);
 	return;
 }
 
@@ -1719,7 +1721,7 @@ void write_input_data (
 	float *Ax, float *Asy, float *Asz, float *Jx, float *Iy, float *Iz,
 	float *E, float *G, float *p, float *d, 
 	float *gX, float *gY, float *gZ, 
-	double **F, float **Dp,
+	double **Ft, double **Fm, float **Dp,
 	int *R,
 	float ***U, float ***W, float ***P, float ***T,
 	int shear, int anlyz, int geom
@@ -1806,10 +1808,10 @@ void write_input_data (
 	    fprintf(fp,"          Mxx         Myy         Mzz\n");
 	    for (j=1; j<=nN; j++) {
 		i = 6*(j-1);
-		if ( F[lc][i+1]!=0.0 || F[lc][i+2]!=0.0 || F[lc][i+3]!=0.0 ||
-		     F[lc][i+4]!=0.0 || F[lc][i+5]!=0.0 || F[lc][i+6]!=0.0 ) {
+		if ( Fm[lc][i+1]!=0.0 || Fm[lc][i+2]!=0.0 || Fm[lc][i+3]!=0.0 ||
+		     Fm[lc][i+4]!=0.0 || Fm[lc][i+5]!=0.0 || Fm[lc][i+6]!=0.0 ) {
 			fprintf(fp, " %5d", j);
-			for (i=5; i>=0; i--) fprintf(fp, " %11.3f", F[lc][6*j-i] );
+			for (i=5; i>=0; i--) fprintf(fp, " %11.3f", Fm[lc][6*j-i] );
 			fprintf(fp, "\n");
 		}
 	    }
@@ -1904,7 +1906,7 @@ void write_static_results (
 		FILE *fp,
 		int nN, int nE, int nL, int lc, int DoF,
 		int *J1, int *J2,
-		double *F, double *D, int *R, double **Q,
+		double *F, double *D, int *r, double **Q,
 		double err, int ok, int axial_sign
 ){
 	double	disp;
@@ -1973,13 +1975,13 @@ void write_static_results (
 	fprintf(fp,"         Mxx         Myy         Mzz\n");
 	for (j=1; j<=nN; j++) {
 		i = 6*(j-1);
-		if ( R[i+1] || R[i+2] || R[i+3] ||
-		     R[i+4] || R[i+5] || R[i+6] ) {
+		if ( r[i+1] || r[i+2] || r[i+3] ||
+		     r[i+4] || r[i+5] || r[i+6] ) {
 			fprintf(fp, " %5d", j);
 			for (i=5; i>=0; i--) {
-				if ( !R[6*j-i] || fabs(F[6*j-i]) < 0.0001 )
+				if ( !r[6*j-i] || fabs(F[6*j-i]) < 0.0001 )
 					fprintf (fp, "       0.0  ");
-				else    fprintf (fp, " %11.3f", -F[6*j-i] );
+				else    fprintf (fp, " %11.3f", F[6*j-i] );
 			}
 			fprintf(fp, "\n");
 		}
@@ -3472,6 +3474,18 @@ void force_bent_beam(
 
 
 /*------------------------------------------------------------------------------
+SFERR  -  Display error message upon an erronous *scanf operation
+------------------------------------------------------------------------------
+void sferr ( char s[] ) {
+	char	errMsg[MAXL];
+	sprintf(errMsg,">> Input Data file error while reading %s\n",s);
+	errorMsg(errMsg);
+	return;
+}
+*/
+
+
+/*------------------------------------------------------------------------------
 MY_ITOA  -  Convert an integer n to charcters in s, from K&R, 1978,   p. 59-60
 ... specialized for portability between GNU GCC and DJGPP GCC
 ------------------------------------------------------------------------------*/
@@ -3553,20 +3567,20 @@ void evaluate ( float error ) {
 	fprintf(stdout," ... ");
 	(void) fflush(stdout);
 
-	if ( error < 1e-5 ) {
+	if ( error < 1e-9 ) {
 
-	    textColor('y','g','b','x');
+	    textColor('y','b','b','x');
 	    switch ( r ) {
-		case 0: fprintf(stdout," awesome! "); break; 
-		case 1: fprintf(stdout," excellent! "); break; 
+		case 0: fprintf(stdout," brilliant! "); break; 
+		case 1: fprintf(stdout," chuffed! "); break; 
 		case 2: fprintf(stdout," woo-hoo! "); break; 
-		case 3: fprintf(stdout," yipee! "); break; 
-		case 4: fprintf(stdout," hoo-ray! "); break; 
-		case 5: fprintf(stdout," outstanding! "); break; 
-		case 6: fprintf(stdout," job well done! "); break; 
+		case 3: fprintf(stdout," wicked! "); break; 
+		case 4: fprintf(stdout," beaut! "); break; 
+		case 5: fprintf(stdout," flash! "); break; 
+		case 6: fprintf(stdout," box of budgies! "); break; 
 		case 7: fprintf(stdout," priceless! "); break; 
-		case 8: fprintf(stdout," very nice! "); break; 
-		case 9: fprintf(stdout," very good! "); break; 
+		case 8: fprintf(stdout," sweet as! "); break; 
+		case 9: fprintf(stdout," good as gold! "); break; 
 	    }
 	    (void) fflush(stdout);
 	    color(0);	
@@ -3574,9 +3588,9 @@ void evaluate ( float error ) {
 	    return;
 	}
 	
-	if ( error < 1e-3 ) {
+	if ( error < 1e-6 ) {
 
-	    textColor('y','b','b','x');
+	    textColor('y','g','b','x');
 	    switch ( r ) {
 		case 0: fprintf(stdout," certainly acceptable! "); break; 
 		case 1: fprintf(stdout," bling! "); break; 
@@ -3587,7 +3601,7 @@ void evaluate ( float error ) {
 		case 6: fprintf(stdout," up to snuff! "); break; 
 		case 7: fprintf(stdout," bully! "); break; 
 		case 8: fprintf(stdout," nice! "); break; 
-		case 9: fprintf(stdout," good! "); break; 
+		case 9: fprintf(stdout," choice! "); break; 
 	    }
 	    (void) fflush(stdout);
 	    color(0);	
@@ -3595,7 +3609,7 @@ void evaluate ( float error ) {
 	    return;
 	}
 
-	if ( error < 1e-2 ) {
+	if ( error < 1e-4 ) {
 
 	    textColor('y','c','b','x');
 	    switch ( r ) {
@@ -3621,14 +3635,14 @@ void evaluate ( float error ) {
 	    textColor('y','r','b','x');
 	    switch ( r ) {
 		case 0: fprintf(stdout," abominable. "); break; 
-		case 1: fprintf(stdout," cruddy. "); break; 
+		case 1: fprintf(stdout," puckeroo. "); break; 
 		case 2: fprintf(stdout," atrocious. "); break; 
 		case 3: fprintf(stdout," not ok. "); break; 
-		case 4: fprintf(stdout," garbage. "); break; 
+		case 4: fprintf(stdout," wonky. "); break; 
 		case 5: fprintf(stdout," crappy. "); break; 
 		case 6: fprintf(stdout," oh noooo."); break; 
 		case 7: fprintf(stdout," abominable. "); break; 
-		case 8: fprintf(stdout," bummer. "); break; 
+		case 8: fprintf(stdout," munted. "); break; 
 		case 9: fprintf(stdout," awful. "); break; 
 	    }
 	    (void) fflush(stdout);

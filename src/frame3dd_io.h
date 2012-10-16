@@ -104,7 +104,7 @@ void read_node_data (
 	FILE *fp,	/**< input data file pointer			*/
 	int nN, 	/**< number of nodes				*/
 	vec3 *xyz,	/**< XYZ coordinates of each node		*/
-	float *r	/**< rigid radius of each node			*/
+	float *rj	/**< rigid radius of each node			*/
 );
 
 /**
@@ -115,7 +115,7 @@ void read_frame_element_data (
 	int nN,		/**< number of nodes				*/
 	int nE,		/**< number of frame elements			*/
 	vec3 *xyz,	/**< XYZ coordinates of each node		*/
-	float *r,	/**< rigid radius of each node			*/
+	float *rj,	/**< rigid radius of each node			*/
 	double *L, double *Le,	/**< length of each frame element, effective */
 	int *N1, int *N2, 	/**< node connectivity			*/
 	float *Ax, float *Asy, float *Asz,	/**< section areas	*/
@@ -156,7 +156,8 @@ void read_reaction_data(
 	int DoF,	/**< number of degrees of freedom		*/
 	int nN,		/**< number of nodes				*/
 	int *nR,	/**< number of nodes with reactions		*/
-	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
+	int *q,		/**< q[i]=0: DoF i is fixed, q[i]=1: DoF i is free */
+	int *r,		/**< r[i]=1: DoF i is fixed, r[i]=0: DoF i is free */
 	int *sumR,	/**< sum of vector R				*/
 	int verbose	/**< 1: copious screen output; 0: none		*/
 );
@@ -182,7 +183,7 @@ void read_and_assemble_loads(
 	float *gX, /**< gravitational acceleration in global X each load case */
 	float *gY, /**< gravitational acceleration in global Y each load case */
 	float *gZ, /**< gravitational acceleration in global Z each load case */
-	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
+	int *r,		/**< r[i]=1: DoF i is fixed, r[i]=0: DoF i is free */
 	int shear,	/**< 1: include shear deformations, 0: don't	*/
 	int *nF, 		/**< number of concentrated node loads */
 	int *nU, 		/**< number of uniformly distributed loads */
@@ -191,8 +192,9 @@ void read_and_assemble_loads(
 	int *nT, 		/**< number of temperature loads	*/
 	int *nD,		/**< number of prescribed displacements */
 	double **Q,		/**< frame element end forces, every beam */
-	double **F_mech, 	/**< mechanical loads			*/
 	double **F_temp, 	/**< thermal loads			*/
+	double **F_mech, 	/**< mechanical loads			*/
+	double **Fo,	 	/**< thermal loads + mechanical loads	*/
 	float ***U,		/**< uniformally distributed loads	*/
 	float ***W,		/**< trapezoidally distributed loads	*/
 	float ***P,		/**< concentrated point loads		*/
@@ -248,7 +250,7 @@ void read_condensation_data(
 	int *Cdof,	/**< list of DoF's retained in condensed model	*/
 	int *Cmethod,	/**< matrix conden'n method, static, Guyan, dynamic*/
 	int condense_flag, /** command-line over-ride			*/
-	int *q,		/**< list of retained degrees of freedom	*/
+	int *c,		/**< list of retained degrees of freedom	*/
 	int *m,		/**< list of retained modes in dynamic condensation */
 	int verbose	/**< 1: copious output to screen, 0: none	*/
 );
@@ -262,14 +264,14 @@ void write_input_data(
 	char *title, int nN, int nE,  int nL,
 	int *nD, int nR,
 	int *nF, int *nU, int *nW, int *nP, int *nT,
-	vec3 *xyz, float *r,
+	vec3 *xyz, float *rj,
 	int *N1, int *N2,
 	float *Ax, float *Asy, float *Asz,
 	float *Jx, float *Iy, float *Iz,
 	float *E, float *G, float *p,
 	float *d, float *gX, float *gY, float *gZ, 
-	double **F, float **Dp,
-	int *R,
+	double **Ft, double **Fm, float **Dp,
+	int *r,
 	float ***U, float ***W, float ***P, float ***T,
 	int shear, int anlyz, int geom
 );
@@ -282,7 +284,7 @@ void write_static_results(
 	FILE *fp,
 	int nN, int nE, int nL, int lc, int DoF,
 	int *N1, int *N2,
-	double *F, double *D, int *R, double **Q,
+	double *F, double *D, int *r, double **Q,
 	double err, int ok, int axial_sign
 );
 
@@ -294,7 +296,7 @@ void write_static_csv(
 	char *OUT_file, char *title,
 	int nN, int nE, int nL, int lc, int DoF,
 	int *N1, int *N2,
-	double *F, double *D, int *R, double **Q,
+	double *F, double *D, int *r, double **Q,
 	double err, int ok
 );
 
@@ -306,7 +308,7 @@ void write_static_mfile(
 	char *OUT_file, char *title,
 	int nN, int nE, int nL, int lc, int DoF,
 	int *N1, int *N2,
-	double *F, double *D, int *R, double **Q,
+	double *F, double *D, int *r, double **Q,
 	double err, int ok
 );
 

@@ -34,8 +34,8 @@
 #include <stdlib.h>
 
 #include "eig.h"
-#include "HPGmatrix.h"
 #include "common.h" 
+#include "HPGmatrix.h"
 #include "HPGutil.h"
 #include "NRutil.h"
 

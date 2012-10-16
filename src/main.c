@@ -1,5 +1,5 @@
 /*
- This file is part of FRAME3DD:
+   This file is part of FRAME3DD:
  Static and dynamic structural analysis of 2D and 3D frames and trusses with
  elastic and geometric stiffness.
  ---------------------------------------------------------------------------
@@ -50,9 +50,9 @@ For compilation/installation, see README.txt.
 #include "frame3dd.h"
 #include "frame3dd_io.h"
 #include "eig.h"
-#include "matrix.h"
-#include "hpgUtils.h"
-#include "nrutil.h"
+#include "HPGmatrix.h"
+#include "HPGutil.h"
+#include "NRutil.h"
 
 
 // compile the Frame3DD analysis into another code, such as a GUI
@@ -79,7 +79,7 @@ For compilation/installation, see README.txt.
 
 	vec3	*xyz;		// X,Y,Z node coordinates (global)
 
-	float	*r,		// node size radius, for finite sizes
+	float	*rj,		// node size radius, for finite sizes
 		*Ax,*Asy, *Asz,	// cross section areas, incl. shear
 		*Jx,*Iy,*Iz,	// section inertias		
 		*E, *G,		// elastic modulus and shear moduli
@@ -102,9 +102,9 @@ For compilation/installation, see README.txt.
 		traceK = 0.0,	// trace of the global stiffness matrix
 		**M = NULL,	// global mass matrix
 		traceM = 0.0,	// trace of the global mass matrix
-		**Fo_mech,	// mechanical load vectors,  load cases	
-		**Fo_temp,	// thermal load vectors, all load cases
-		**Fo, *F,	// general load vectors	
+		**F_mech,	// mechanical load vectors,  load cases	
+		**F_temp,	// thermal load vectors, all load cases
+		**F, 		// general load vectors	for each load case
 		***feF_mech,	// fixed end forces from mech loads
 		***feF_temp,	// fixed end forces from temp loads
 		**feF,		// a general set of fixed end forces
@@ -120,6 +120,7 @@ For compilation/installation, see README.txt.
 		total_mass,	// total structural mass and extra mass 
 		*f  = NULL,	// resonant frequencies	
 		**V = NULL,	// resonant mode-shapes
+		rms_resid=1.0,	// root mean square of residual displ. error
 		error = 1.0,	// rms equilibrium error and reactions
 		Cfreq = 0.0,	// frequency used for Guyan condensation
 		**Kc, **Mc,	// condensed stiffness and mass matrices
@@ -144,7 +145,7 @@ For compilation/installation, see README.txt.
 		shear=0,	// indicates shear deformation
 		geom=0,		// indicates  geometric nonlinearity
 		anlyz=1,	// 1: stiffness analysis, 0: data check	
-		*R, sumR,	// reaction data, total no. of reactions
+		*q, *r, sumR,	// reaction data, total no. of reactions
 		nM=0,		// number of desired modes
 		Mmethod,	// 1: Subspace Jacobi, 2: Stodola
 		nM_calc,	// number of modes to calculate
@@ -154,7 +155,7 @@ For compilation/installation, see README.txt.
 		anim[20],	// the modes to be animated
 		Cdof=0,		// number of condensed degrees o freedom
 		Cmethod=0,	// matrix condensation method
-		*q,		// vector of DoF's to condense
+		*c,		// vector of DoF's to condense
 		*m,		// vector of modes to condense
 		filetype=0,	// 1 if .CSV, 2 if file is Matlab
 		debug=0,	// 1: debugging screen output, 0: none
@@ -244,16 +245,17 @@ For compilation/installation, see README.txt.
 	}
 
 					/* allocate memory for node data ... */
-	r   =  vector(1,nN);		/* rigid radius around each node */
+	rj  =  vector(1,nN);		/* rigid radius around each node */
 	xyz = (vec3 *)malloc(sizeof(vec3)*(1+nN));	/* node coordinates */
 
-	read_node_data ( fp, nN, xyz, r );
+	read_node_data ( fp, nN, xyz, rj );
 	if ( verbose )	printf(" ... complete\n");
 
 	DoF = 6*nN;		/* total number of degrees of freedom	*/
 
-	R   = ivector(1,DoF);	/* allocate memory for reaction data ... */
-	read_reaction_data ( fp, DoF, nN, &nR, R, &sumR, verbose );
+	q   = ivector(1,DoF);	/* allocate memory for reaction data ... */
+	r   = ivector(1,DoF);	/* allocate memory for reaction data ... */
+	read_reaction_data ( fp, DoF, nN, &nR, q, r, &sumR, verbose );
 	if ( verbose )	printf(" ... complete\n");
 
 	sfrv=fscanf(fp, "%d", &nE );	/* number of frame elements	*/
@@ -286,7 +288,7 @@ For compilation/installation, see README.txt.
 	p   =  vector(1,nE);	/* member rotation angle about local x axis */
 	d   =  vector(1,nE);	/* member rotation angle about local x axis */
 
-	read_frame_element_data( fp, nN, nE, xyz,r, L, Le, N1, N2,
+	read_frame_element_data( fp, nN, nE, xyz,rj, L, Le, N1, N2,
 					Ax, Asy, Asz, Jx, Iy, Iz, E, G, p, d );
 	if ( verbose) 	printf(" ... complete\n");
 
@@ -319,10 +321,9 @@ For compilation/installation, see README.txt.
 	T   =  D3matrix(1,nL,1,nE,1,8);    /* internal temp change each member*/
 	Dp  =  matrix(1,nL,1,DoF); /* prescribed displacement of each node */
 
-	Fo_mech  = dmatrix(1,nL,1,DoF);	/* mechanical load vector	*/
-	Fo_temp  = dmatrix(1,nL,1,DoF);	/* temperature load vector	*/
-	Fo  = dmatrix(1,nL,1,DoF);	/* external load vector		*/
-	F   = dvector(1,DoF);	/* external load vector with react'ns	*/
+	F_mech  = dmatrix(1,nL,1,DoF);	/* mechanical load vector	*/
+	F_temp  = dmatrix(1,nL,1,DoF);	/* temperature load vector	*/
+	F       = dmatrix(1,nL,1,DoF);	/* external load vectors	*/
 
 	feF_mech =  D3dmatrix(1,nL,1,nE,1,12); /* feF due to mech loads */
 	feF_temp =  D3dmatrix(1,nL,1,nE,1,12); /* feF due to temp loads */
@@ -340,23 +341,18 @@ For compilation/installation, see README.txt.
 	NMy =  vector(1,nN);	/* node inertia about global Y axis	*/
 	NMz =  vector(1,nN);	/* node inertia about global Z axis	*/
 
-	q = ivector(1,DoF); 	/* vector of condensed degrees of freedom */
+	c = ivector(1,DoF); 	/* vector of condensed degrees of freedom */
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
 
 
 	read_and_assemble_loads( fp, nN, nE, nL, DoF, xyz, L, Le, N1, N2,
-				Ax,Asy,Asz, Iy,Iz, E, G, p,
-				d, gX, gY, gZ, 
-				R, shear,
-				nF, nU, nW, nP, nT, nD,
-				Q, Fo_mech, Fo_temp, U, W, P, T,
-				Dp, feF_mech, feF_temp, verbose );
+			Ax,Asy,Asz, Iy,Iz, E, G, p,
+			d, gX, gY, gZ, 
+			r, shear,
+			nF, nU, nW, nP, nT, nD,
+			Q, F_temp, F_mech, F, U, W, P, T,
+			Dp, feF_mech, feF_temp, verbose );
 
-	for (i=1; i<=DoF; i++){	/* combine temp and mech loads into Fo */
-		for (lc=1; lc<=nL; lc++){
-			Fo[lc][i] = Fo_temp[lc][i] + Fo_mech[lc][i];
-		}
-	}
 	if ( verbose ) {	/* display load data complete */
 		printf("                                                     ");
 		printf(" load data ... complete\n");
@@ -377,7 +373,7 @@ For compilation/installation, see README.txt.
 	}
 
 	read_condensation_data( fp, nN,nM, &nC, &Cdof, 
-			&Cmethod, condense_flag, q,m, verbose );
+			&Cmethod, condense_flag, c,m, verbose );
 
 	if( nC>0 && verbose ) {	/*  display condensation data complete */
 		printf("                                      ");
@@ -396,9 +392,10 @@ For compilation/installation, see README.txt.
 	}
 
 	write_input_data ( fp, title, nN,nE,nL, nD,nR, nF,nU,nW,nP,nT,
-				xyz, r, N1,N2, Ax,Asy,Asz, Jx,Iy,Iz, E,G, p,
-				d, gX, gY, gZ, 
-				Fo, Dp, R, U, W, P, T, shear, anlyz, geom );
+			xyz, rj, N1,N2, Ax,Asy,Asz, Jx,Iy,Iz, E,G, p,
+			d, gX, gY, gZ, 
+			F_temp, F_mech, Dp, r, U, W, P, T,
+			shear, anlyz, geom );
 
 	if ( anlyz ) {			/* solve the problem	*/
 	 srand(time(NULL));
@@ -415,40 +412,53 @@ For compilation/installation, see README.txt.
 			fprintf(stdout,"\n");
 		}
 
-		for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
-
-		assemble_K ( K, DoF, nE, xyz,r, L, Le, N1, N2,
+		assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
 					Ax, Asy, Asz, Jx,Iy,Iz, E, G, p,
 					shear, geom, Q, debug );
 
 #ifdef MATRIX_DEBUG
-		save_dmatrix ( DoF, DoF, K, "Kf" ); /* free stiffness matrix */
+		save_dmatrix ( DoF, DoF, K, "Kf", 0 ); // free stiffness matrix
 #endif
+
+		for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;
 
 		/* apply temperature loads first, if there are any ... */
 		if (nT[lc] > 0) {
 			if ( verbose )
 				printf(" Linear Elastic Analysis ... Temperature Loads\n");
-			apply_reactions ( DoF, R, Dp[lc], Fo_temp[lc], F, K, 't' );
-			solve_system( K, dD, F, DoF, &ok, verbose );
-			for (i=1; i<=DoF; i++)	D[i] += dD[i];
-			end_forces ( Q, nE, xyz, L, Le, N1,N2,
+			/* add temp loads into F */
+			for (i=1; i<=DoF; i++)	F[lc][i] += F_temp[lc][i]; 
+
+			solve_system(K,dD,F[lc],DoF,q,r,&ok,verbose,&rms_resid);
+
+			/* increment D */
+			for (i=1; i<=DoF; i++)	if (q[i]) D[i] += dD[i];
+
+			element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
 				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 		}
 
-		assemble_K ( K, DoF, nE, xyz, r, L, Le, N1, N2,
-				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
-				shear,geom, Q, debug );
+		assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
+					Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
+					shear,geom, Q, debug );
 
-		/* ... then add mechanical loads, if there are any ...  */
+		/* ... then add in mechanical loads, if there are any ...  */
 		if ( nF[lc]>0 || nU[lc]>0 || nW[lc]>0 || nP[lc]>0 || nD[lc]>0 || 
 		     gX[lc] != 0 || gY[lc] != 0 || gZ[lc] != 0 ) {
 			if ( verbose )
 				printf(" Linear Elastic Analysis ... Mechanical Loads\n");
-			apply_reactions ( DoF, R, Dp[lc], Fo_mech[lc], F, K, 'm' );
-			solve_system( K, dD, F, DoF, &ok, verbose );
-			for (i=1; i<=DoF; i++)	D[i] += dD[i];
-			end_forces ( Q, nE, xyz, L, Le, N1,N2,
+			for (i=1; i<=DoF; i++)	F[lc][i] = F_mech[lc][i]; 
+			for (i=1; i<=DoF; i++)	if (r[i]) dD[i] = Dp[lc][i];
+
+			solve_system(K,dD,F[lc],DoF,q,r,&ok,verbose,&rms_resid);
+
+			/* increment D */
+			for (i=1; i<=DoF; i++) {
+				if (q[i])	D[i] += dD[i];
+				else		D[i] = Dp[lc][i];	  
+			}
+
+			element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
 				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 		}
 
@@ -456,7 +466,8 @@ For compilation/installation, see README.txt.
 		if ( geom ) {
 			Fe  = dvector( 1, DoF ); /* force equilibrium error  */
 			Ks  = dmatrix( 1, DoF, 1, DoF );
-			for (i=1;i<=DoF;i++){ /* initialize Broyden secant stiffness */
+			/* initialize Broyden secant stiffness */
+			for (i=1;i<=DoF;i++){
 				for(j=i;j<=DoF;j++){
 					Ks[i][j]=Ks[j][i]=K[i][j];
 				}
@@ -468,16 +479,15 @@ For compilation/installation, see README.txt.
 		/* Newton Raphson iteration for geometric nonlinearity */
 		ok = 0; iter = 0; error = 1.0;	/* re-initialize */
 		while ( geom && error > tol && iter < 10 && ok >= 0) {
+
 			++iter;
 
-			assemble_K ( K, DoF, nE, xyz, r, L, Le, N1, N2,
+			assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
 				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
 				shear,geom, Q, debug );
 
-			apply_reactions ( DoF, R, Dp[lc], Fo[lc], F, K, 'm' );
-
-			for (i=1; i<=DoF; i++) {	/* equilibrium error	*/
-				Fe[i] = F[i];
+			for (i=1; i<=DoF; i++) { /* equilibrium error	*/
+				Fe[i] = F[lc][i];
 				for (j=1; j<=DoF; j++)
 					if ( K[i][j] != 0.0 && D[j] != 0.0 )
 						Fe[i] -= K[i][j]*D[j];
@@ -490,25 +500,25 @@ For compilation/installation, see README.txt.
 			for (i=1; i<=DoF; i++)
 				for (j=1; j<=DoF; j++)
 					Ks[i][j] -= Fe[i]*dD[j] / dDdD;
-			apply_reactions ( DoF, R, Dp[lc], Fe, Fe, Ks, 'm' );
 */
 
-			solve_system ( K, dD, Fe, DoF, &ok, verbose );
+			solve_system(K,dD,Fe,DoF,q,r,&ok,verbose,&rms_resid);
 
-			if ( ok < 0 ) {
+			if ( ok < 0 ) { /*  K is not pos.def.  */
 				fprintf(stderr,"   The stiffness matrix is not pos-def. \n");
 				fprintf(stderr,"   Reduce loads and re-run the analysis.\n");
 				break;
 			}			/* end Newton Raphson iterations */
 
-			for (i=1; i<=DoF; i++)	D[i] += dD[i];	/* increment D */
+			/* increment D */
+			for (i=1; i<=DoF; i++)	if (q[i])	D[i] += dD[i];
 
-			end_forces ( Q, nE, xyz, L, Le, N1,N2, 
+			element_end_forces ( Q, nE, xyz, L, Le, N1,N2, 
 				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 
-					 /* convergence criteria:  */
-			//error = rel_norm ( dD, D, DoF ); /* displ. increment */
-			error = rel_norm ( Fe, F, DoF ); /* force balance   */
+			 /* convergence criteria:  */
+//			error = rel_norm ( dD, D, DoF ); /* displ. increment */
+  			error = rel_norm ( Fe, F[lc], DoF ); /* force balance */
 
 			if ( verbose ) { 
 				printf("   NR iteration %3d ---", iter);
@@ -516,38 +526,38 @@ For compilation/installation, see README.txt.
 			}
 		}			/* end Newton-Raphson iteration */
 
-		if ( geom ) {	/* dealocate Fe and Ks memory */
+		if ( geom ) {			/* dealocate Fe and Ks memory */
 			free_dvector(Fe, 1, DoF );
 			free_dmatrix(Ks, 1, DoF, 1, DoF );
 		}
 
-		if ( write_matrix ) /* write static stiffness matrix */
+		if ( write_matrix )	/* write static stiffness matrix */
 			save_ut_dmatrix ( DoF, K, "Ks" );
 
 		for (i=1; i<=12; i++)
 		    for (n=1; n<=nE; n++)
 			feF[n][i] = feF_temp[lc][n][i] + feF_mech[lc][n][i];
 
-		equilibrium ( xyz, L, N1,N2, Fo[lc], R, p, Q, feF,
-						nE, DoF, &error, verbose );
+		compute_reaction_forces( F[lc], K, D, DoF, r );
 
-		if ( verbose ) {
-			printf("  RMS relative equilibrium precision: %9.3e",error );
-			evaluate ( error );
+		add_feF ( xyz, L, N1,N2, p, Q, feF, nE, DoF, verbose );
+
+		if ( verbose ) { /*  display RMS equilibrium error */
+			printf("  RMS residual: %9.3e", rms_resid );
+			evaluate ( rms_resid );
 		}
 
-
-		write_static_results ( fp, nN,nE,nL,lc, DoF, N1,N2, Fo[lc],
-						 D,R,Q, error, ok, axial_sign );
+		write_static_results ( fp, nN,nE,nL,lc, DoF, N1,N2,
+				F[lc], D,r,Q, rms_resid, ok, axial_sign );
 
 		if ( filetype == 1 ) {		// .CSV format output
 			write_static_csv(OUT_file, title,
-				nN,nE,nL,lc, DoF, N1,N2, Fo[lc], D,R,Q, error, ok );
+			    nN,nE,nL,lc, DoF, N1,N2, F[lc], D,r,Q, error, ok );
 		}
 
-		if ( filetype == 2 ) {		// matlab format output
+		if ( filetype == 2 ) {		// .m matlab format output
 			write_static_mfile (OUT_file, title, nN,nE,nL,lc, DoF,
-					N1,N2, Fo[lc], D,R,Q, error, ok );
+					N1,N2, F[lc], D,r,Q, error, ok );
 		}
 
 /*
@@ -594,22 +604,22 @@ For compilation/installation, see README.txt.
 		f   = dvector(1,nM_calc);
 		V   = dmatrix(1,DoF,1,nM_calc);
 
-		assemble_M ( M, DoF, nN, nE, xyz, r, L, N1,N2,
+		assemble_M ( M, DoF, nN, nE, xyz, rj, L, N1,N2,
 				Ax, Jx,Iy,Iz, p, d, EMs, NMs, NMx, NMy, NMz,
 				lump, debug );
 
 #ifdef MATRIX_DEBUG
-		save_dmatrix ( DoF, DoF, M, "Mf" );	/* free mass matrix */
+		save_dmatrix ( DoF, DoF, M, "Mf", 0 );	/* free mass matrix */
 #endif
 
 		for (j=1; j<=DoF; j++) { /*  compute traceK and traceM */
-			if ( !R[j] ) {
+			if ( !r[j] ) {
 				traceK += K[j][j];
 				traceM += M[j][j];
 			}
 		}
 		for (i=1; i<=DoF; i++) { /*  modify K and M for reactions */
-			if ( R[i] ) {	/* apply reactions to upper triangle */
+			if ( r[i] ) {	/* apply reactions to upper triangle */
 				K[i][i] = traceK * 1e4;
 				M[i][i] = traceM;
 				for (j=i+1; j<=DoF; j++)
@@ -669,24 +679,24 @@ For compilation/installation, see README.txt.
 		if ( m[1] > 0 && nM > 0 )	Cfreq = f[m[1]];
 
 		if ( Cmethod == 1 ) {	/* static condensation only	*/
-			condense(K, DoF, q, Cdof, Kc, verbose );
+			condense(K, DoF, c, Cdof, Kc, verbose );
 			if ( verbose )
 				printf("   static condensation of K complete\n");
 		}
 		if ( Cmethod == 2 ) {
-			guyan(M, K, DoF, q, Cdof, Mc,Kc, Cfreq, verbose );
+			guyan(M, K, DoF, c, Cdof, Mc,Kc, Cfreq, verbose );
 			if ( verbose ) {
 				printf("   Guyan condensation of K and M complete");
 				printf(" ... dynamics matched at %f Hz.\n", Cfreq );
 			}
 		}
 		if ( Cmethod == 3 && nM > 0 ) {
-			dyn_conden(M,K, DoF, R, q, Cdof, Mc,Kc, V,f, m, verbose );
+			dyn_conden(M,K, DoF, r, c, Cdof, Mc,Kc, V,f, m, verbose );
 			if ( verbose ) 
 				printf("   dynamic condensation of K and M complete\n");
 		}
-		save_dmatrix(Cdof, Cdof, Kc, "Kc" );
-		save_dmatrix(Cdof, Cdof, Mc, "Mc" );
+		save_dmatrix(Cdof, Cdof, Kc, "Kc", 0 );
+		save_dmatrix(Cdof, Cdof, Mc, "Mc", 0 );
 
 		free_dmatrix(Kc, 1,Cdof,1,Cdof );
 		free_dmatrix(Mc, 1,Cdof,1,Cdof );
@@ -695,12 +705,12 @@ For compilation/installation, see README.txt.
 
 	/* deallocate memory used for each frame analysis variable */
 	deallocate ( nN, nE, nL, nF, nU, nW, nP, nT, DoF, nM,
-			xyz, r, L, Le, N1, N2, R,
+			xyz, rj, L, Le, N1, N2, q,r,
 			Ax, Asy, Asz, Jx, Iy, Iz, E, G, p,
-			U,W,P,T, Dp, Fo_mech, Fo_temp,
-			feF_mech, feF_temp, feF, Fo, F,
+			U,W,P,T, Dp, F_mech, F_temp,
+			feF_mech, feF_temp, feF, F, 
 			K, Q, D, dD,
-			d,EMs,NMs,NMx,NMy,NMz, M,f,V, q, m
+			d,EMs,NMs,NMx,NMy,NMz, M,f,V, c, m
 	);
 
 	if ( verbose ) printf("\n");

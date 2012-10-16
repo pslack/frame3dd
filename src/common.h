@@ -26,6 +26,9 @@
 #define FRAME_COMMON_H
 
 #define FRAME3DD_PATHMAX 512
+#ifndef MAXL
+#define MAXL    512
+#endif
 
 #define FILENMAX 128
 

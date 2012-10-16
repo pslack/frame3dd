@@ -24,7 +24,7 @@
 #include <math.h>
 
 #include "coordtrans.h"
-#include "nrutil.h"
+#include "NRutil.h"
 
 /* -------------------------------------------------------------------------
 COORD_TRANS - calculate the 9 elements of the block-diagonal 12-by-12

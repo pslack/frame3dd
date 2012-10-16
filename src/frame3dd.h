@@ -54,15 +54,14 @@ void assemble_K(
 );
 
 
-/** apply boundary conditions */
-void apply_reactions(
-	int DoF,	/**< number of degrees of freedom		*/
-	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
-	float *Dp,	/**< prescribed displacements, each DoF		*/	
-	double *Fo,	/**< fixed end forces for unrestrained frame	*/
-	double *F,	/**< load vector for restrained frame		*/
-	double **K,	/**< stiffness matrix				*/
-	char tm		/**< tm='t': thermal loads; tm='m': mech. loads	*/
+/* compute_reaction_forces --- comput [K(r,q)] * {D(q)} + [K(r,r)] * {D(r)} */
+ 
+void compute_reaction_forces( 
+	double *F,	/**<   vector of external loads and reaction forces  */
+	double **K,	/**<   stiffness matrix				 */
+	double *D,	/**< displacement vector to be solved		 */
+	int DoF,	/**<   number of degrees of freedom		 */
+	int *r		/**< 0: not a reaction; 1: a reaction coordinate */
 );
 
 
@@ -72,13 +71,16 @@ void solve_system(
 	double *D,	/**< displacement vector to be solved		*/
 	double *F,	/**< load vector				*/
 	int DoF,	/**< number of degrees of freedom		*/
+	int *q,		/**< 1: not a reaction; 0: a reaction coordinate */
+	int *r,		/**< 0: not a reaction; 1: a reaction coordinate */
 	int *ok,	/**< indicates positive definite stiffness matrix */
-	int verbose	/**< 1: copious screen output; 0: none		*/
+	int verbose,	/**< 1: copious screen output; 0: none		*/
+        double *rms_resid /**< the RMS error of the solution residual */
 );
 
 
 /** evaluate the member end forces for every member */
-void end_forces(
+void element_end_forces(
 	double **Q,	/**< frame element end forces			*/
 	int nE,		/**< number of frame elements			*/
 	vec3 *xyz,	/** XYZ locations of each node			*/
@@ -94,19 +96,16 @@ void end_forces(
 );
 
 
-/** perform an equilibrium check, F returned as reactions */
-void equilibrium(	
+/** add fixed end forces to internal element forces */
+void add_feF(	
 	vec3 *xyz,	/**< XYZ locations of each node		*/
 	double *L,	/**< length of each frame element, effective	*/
 	int *N1, int *N2, /**< node connectivity			*/
-	double *F,	/**< load vector				*/
-	int *R,		/**< R[i]=1: DoF i is fixed, R[i]=0: DoF i is free */
 	float *p,	/**< roll angle, radians			*/
 	double **Q,	/**< frame element end forces			*/
 	double **feF,	/**< fixed end forces for every frame element	*/
 	int nE,		/**< number of frame elements			*/
 	int DoF,	/**< number of degrees of freedom		*/
-	double *err,	/**< root mean squared equilibrium error	*/
 	int verbose	/**< 1: copious screen output; 0: none		*/
 );
 
@@ -185,23 +184,23 @@ void dyn_conden(
 void deallocate( 
 	int nN, int nE, int nL, int *nF, int *nU, int *nW, int *nP, int *nT, int DoF,
 	int modes,
-	vec3 *xyz, float *r, double *L, double *Le,
-	int *N1, int *N2, int *R,
+	vec3 *xyz, float *rj, double *L, double *Le,
+	int *N1, int *N2, int *q, int *r,
 	float *Ax, float *Asy, float *Asz,
 	float *Jx, float *Iy, float *Iz,
 	float *E, float *G,
 	float *p,
 	float ***U, float ***W, float ***P, float ***T,
 	float **Dp,
-	double **Fo_mech, double **Fo_temp,
+	double **F_mech, double **F_temp,
 	double ***feF_mech, double ***feF_temp, double **feF,
-	double **Fo, double *F_lc,
+	double **F,
 	double **K, double **Q,
 	double *D, double *dD,
 	float *d, float *EMs,
 	float *NMs, float *NMx, float *NMy, float *NMz,
 	double **M, double *f, double **V, 
-	int *q, int *m
+	int *c, int *m
 );
 
 
