@@ -1,3 +1,15 @@
+*Mon Oct 15 2012 Henri Gavin <.> 0.20100105
+- re-write of matrix-solving routines in HPGmatrix.c to solve partitioned
+systems of equations: ldl_dcmp_pm and ldl_mprv_pm.  
+- associated re-write of sections of main.c dealing with solving the
+equations.
+- associated edits of user-manual.doc
+- associated correction of the computation of reaction forces ...
+Frame3DD now passes the "patch" test.
+- rename matrix.c , matrix.h to HPGmatrix.c , HPGmatrix.h
+- rename hpgUtils.c , hpgUtils.h to HPGutil.c , HPGutil.h
+
+
 *Tue Oct  2 2012 Henri Gavin <.> 0.20100105
 - delete: matrix.c hpgUtils.c nrutil.c  (matrix.c and hpgUtls.c were GPL)
 - add:   HPGmatrix.c HPGutil.c NRutil.c (none of these are GPL)
