@@ -1,4 +1,4 @@
-# !bin/bash
+#!/bin/bash
 #
 # zipdist.sh
 # assemble .ZIP files for Frame3dd executable and source distribution release
@@ -58,13 +58,13 @@ zip -r Frame3DD_$(echo $VERSION).zip Frame3DD/*
 # make copies of .zip files for each operating system
 #cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_linux.zip
 #cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_osx34.zip
-#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_osx56.zip
+#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_osx567.zip
 #cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_win32.zip
 
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_DukeOIT.zip
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_linux.zip
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx34.zip
-cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx56.zip
+cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx567.zip
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_win32.zip
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_src.zip
 
@@ -88,8 +88,8 @@ rm Frame3DD/frame3dd
 echo "adding OS X executable ... "
 cp --preserve=mode,timestamps ../build/frame3ddosx34     Frame3DD/frame3dd
 zip Frame3DD_$(echo $VERSION)_osx34.zip Frame3DD/frame3dd
-cp --preserve=mode,timestamps ../build/frame3ddosx56       Frame3DD/frame3dd
-zip Frame3DD_$(echo $VERSION)_osx56.zip Frame3DD/frame3dd
+cp --preserve=mode,timestamps ../build/frame3dd-osx567   Frame3DD/frame3dd
+zip Frame3DD_$(echo $VERSION)_osx567.zip Frame3DD/frame3dd
 rm Frame3DD/frame3dd
 
 # add Windows executable

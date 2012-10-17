@@ -25,7 +25,7 @@
 */
 
 #include "common.h"
-#include "time.h"
+#include <time.h>
 #include "microstran/vec3.h"
 
 #include <stdio.h>
