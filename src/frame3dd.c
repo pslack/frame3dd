@@ -257,7 +257,7 @@ void geometric_K(
 	}
 
 
-        kg[1][1]  = kg[7][7]   = T/L;
+        kg[1][1]  = kg[7][7]   = 0.0; // T/L;
 
 	kg[2][2]  = kg[8][8]   = T/L*(1.2+2.0*Ksy+Ksy*Ksy)/Dsy;
 	kg[3][3]  = kg[9][9]   = T/L*(1.2+2.0*Ksz+Ksz*Ksz)/Dsz;
@@ -265,7 +265,7 @@ void geometric_K(
 	kg[5][5]  = kg[11][11] = T*L*(2.0/15.0+Ksz/6.0+Ksz*Ksz/12.0)/Dsz;
 	kg[6][6]  = kg[12][12] = T*L*(2.0/15.0+Ksy/6.0+Ksy*Ksy/12.0)/Dsy;
 
-        kg[1][7]  = kg[7][1]   = -T/L;
+        kg[1][7]  = kg[7][1]   = 0.0; // -T/L;
  
 	kg[5][3]  = kg[3][5]   =  kg[11][3] = kg[3][11] = -T/10.0/Dsz;
 	kg[9][5]  = kg[5][9]   =  kg[11][9] = kg[9][11] =  T/10.0/Dsz;
@@ -445,7 +445,7 @@ void member_force(
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord Xformn	*/
 		d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12,
 		x1, y1, z1, x2, y2, z2,	/* node coordinates	*/
-		//Ls,			/* stretched length of element */
+		Ls,			/* stretched length of element */
 		delta=0.0,		/* stretch in the frame element */
 		Ksy, Ksz, Dsy, Dsz,	/* shear deformation coeff's	*/
 		T = 0.0;		/* axial force for geometric stiffness */
@@ -478,10 +478,11 @@ void member_force(
 	delta = (d7-d1)*t1 + (d8-d2)*t2 + (d9-d3)*t3; 
 
 	/* finite strain ... (not consistent with formulation) */
-/* 
+/*  
  	delta += ( pow(((d7-d1)*t4 + (d8-d2)*t5 + (d9-d3)*t6),2.0) + 
  		   pow(((d7-d1)*t7 + (d8-d2)*t8 + (d9-d3)*t9),2.0) )/(2.0*L);
 */
+
 
 	/* true strain ... (not appropriate for structural materials) */
 /* 
@@ -489,13 +490,15 @@ void member_force(
   		pow((y2+d8-y1-d2),2.0) + 
   		pow((z2+d9-z1-d3),2.0);
   	Ls = sqrt(Ls) + Le - L;
+
+	delta = Le*log(Ls/Le);
 */
    	/* end of true strain calculation */
 
-	*axial_strain = delta / Le;
+	*axial_strain = delta - Le;	// log(Ls/Le);
 
-	if ( geom )	T = Ax*E/Le * delta;
-			//T  = Ax*E*log(Ls/Le); 	/* true strain */
+	if ( geom )	 T = Ax*E/Le * delta;
+			 // T  = Ax*E*log(Ls/Le); 	/* true strain */
 
 	if ( geom )
 		s[1] = -T;

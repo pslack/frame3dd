@@ -478,7 +478,7 @@ For compilation/installation, see README.txt.
 
 		/* Newton Raphson iteration for geometric nonlinearity */
 		ok = 0; iter = 0; error = 1.0;	/* re-initialize */
-		while ( geom && error > tol && iter < 10 && ok >= 0) {
+		while ( geom && error > tol && iter < 50 && ok >= 0) {
 
 			++iter;
 
