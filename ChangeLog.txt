@@ -1,3 +1,6 @@
+*Fri Oct 19 2012 Henri Gavin <.> 0.20100105
+- Terms (1,1), (7,7), (1,7) and (7,1) of Kg should be zero!
+
 *Mon Oct 15 2012 Henri Gavin <.> 0.20100105
 - re-write of matrix-solving routines in HPGmatrix.c to solve partitioned
 systems of equations: ldl_dcmp_pm and ldl_mprv_pm.  

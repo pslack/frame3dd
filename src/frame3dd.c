@@ -477,25 +477,23 @@ void member_force(
 	/* infinitessimal strain ... */
 	delta = (d7-d1)*t1 + (d8-d2)*t2 + (d9-d3)*t3; 
 
-	/* finite strain ... (not consistent with formulation) */
+	/* finite strain ... (not consistent with 2nd order formulation) */
 /*  
  	delta += ( pow(((d7-d1)*t4 + (d8-d2)*t5 + (d9-d3)*t6),2.0) + 
  		   pow(((d7-d1)*t7 + (d8-d2)*t8 + (d9-d3)*t9),2.0) )/(2.0*L);
 */
 
-
 	/* true strain ... (not appropriate for structural materials) */
 /* 
-  	Ls    = pow((x2+d7-x1-d1),2.0) + 
+  	Ls =	pow((x2+d7-x1-d1),2.0) + 
   		pow((y2+d8-y1-d2),2.0) + 
   		pow((z2+d9-z1-d3),2.0);
   	Ls = sqrt(Ls) + Le - L;
 
 	delta = Le*log(Ls/Le);
 */
-   	/* end of true strain calculation */
 
-	*axial_strain = delta - Le;	// log(Ls/Le);
+	*axial_strain = delta / Le;	// log(Ls/Le);
 
 	if ( geom )	 T = Ax*E/Le * delta;
 			 // T  = Ax*E*log(Ls/Le); 	/* true strain */
