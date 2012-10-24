@@ -3588,7 +3588,7 @@ void evaluate ( float error ) {
 	    return;
 	}
 	
-	if ( error < 1e-20 ) {
+	if ( error < 1e-16 ) {
 
 	    textColor('y','g','b','x');
 	    switch ( r ) {
@@ -3609,7 +3609,7 @@ void evaluate ( float error ) {
 	    return;
 	}
 
-	if ( error < 1e-16 ) {
+	if ( error < 1e-12 ) {
 
 	    textColor('y','c','b','x');
 	    switch ( r ) {

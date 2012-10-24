@@ -1,3 +1,11 @@
+*Wed Oct 24 2012 Henri Gavin <.> 0.20100105
+- Investigated Powell-Symmetric-Broyden update of secant stiffness matrix. 
+This quasi-Newton method does not seem to help very much.  In fact, in all
+tests convergence with the Powell-Symmetric-Broyden update is slower.  In some
+cases the solution does not converge.   So, Frame3DD is sticking with the
+standard full secant update method.   A function for Powell-Symmetric-Broyden
+updating is now in HPGmatrix.c, for possible future use.  
+
 *Fri Oct 19 2012 Henri Gavin <.> 0.20100105
 - Terms (1,1), (7,7), (1,7) and (7,1) of Kg should be zero!
 

@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example A: linear static analysis of a 2D truss with support settlement (kips in)  
-Tue Oct 16 21:40:12 2012
+Wed Oct 24 16:14:56 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -236,7 +236,7 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
     12      4      0.682c      0.0        0.0        0.0        0.0        0.003
     12     10     -0.342c      0.0        0.0        0.0        0.0        0.003
     13      4    -34.898t      0.171      0.0        0.0        0.0        4.842
-    13     11     35.238t      0.169      0.0        0.0        0.0       -4.734
+    13     11     35.237t      0.169      0.0        0.0        0.0       -4.734
     14      5     -0.350t     -0.001      0.0        0.0        0.0       -0.103
     14     11      0.690t      0.001      0.0        0.0        0.0        0.025
     15      6     37.356c     -0.164      0.0        0.0        0.0       -4.180
@@ -267,5 +267,5 @@ R E A C T I O N S							(global)
     10       0.0         0.0         0.0         0.0         0.0         0.0  
     11       0.0         0.0         0.0         0.0         0.0         0.0  
     12       0.0         0.0         0.0         0.0         0.0         0.0  
-R M S   E Q U I L I B R I U M    E R R O R: 2.027e-17
+R M S   E Q U I L I B R I U M    E R R O R: 1.932e-17
 

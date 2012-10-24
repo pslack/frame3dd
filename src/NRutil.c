@@ -869,8 +869,8 @@ void save_dvector( int n, double *V, char filename[] )
 	fprintf(fp_v,"%% rows: %d\n", 1 );
 	fprintf(fp_v,"%% columns: %d\n", n );
 	for (i=1; i <= n; i++) {
-		if (V[i] != 0)	fprintf(fp_v,"%15.6e", V[i] );
-		else		fprintf(fp_v,"    0         ");         
+		if (V[i] != 0)	fprintf(fp_v,"%21.12e", V[i] );
+		else	        fprintf(fp_v,"    0                ");
 		fprintf(fp_v,"\n");
 	}
 	fclose(fp_v);

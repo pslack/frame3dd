@@ -560,11 +560,12 @@ ADD_FEF -  add fixed end forces to internal element forces 18oct12
 void add_feF(	
 	vec3 *xyz,
 	double *L, int *N1, int *N2, float *p,
-	double **Q, double **feF, int nE, int DoF, 
+	double **Q, double **f_t, double **f_m, int nE, int DoF, 
 	int verbose
 ){
-	double   t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
-		 f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12;
+	double  t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
+		f1=0, f2=0, f3=0, f4=0,  f5=0,  f6=0, 
+		f7=0, f8=0, f9=0, f10=0, f11=0, f12=0;
 	int	m, n1, n2; //, J, x;
 
 	for (m=1; m <= nE; m++) {	/* loop over all frame elements */
@@ -576,13 +577,19 @@ void add_feF(
 
 		n1 = 6*(n1-1);	n2 = 6*(n2-1);
 
-		// add fixed end forces (-equivalent loads) to internal loads 
-	
-		f1 = feF[m][1];		f2 = feF[m][2];		f3 = feF[m][3];
-		f4 = feF[m][4];		f5 = feF[m][5];		f6 = feF[m][6];
-		f7 = feF[m][7];		f8 = feF[m][8];		f9 = feF[m][9];
-		f10= feF[m][10];	f11= feF[m][11];	f12= feF[m][12];
+		// break out temperature fixed-end-forces to variables f1-f12
+		f1  = f_t[m][1];   f2  = f_t[m][2];   f3  = f_t[m][3];
+		f4  = f_t[m][4];   f5  = f_t[m][5];   f6  = f_t[m][6];
+		f7  = f_t[m][7];   f8  = f_t[m][8];   f9  = f_t[m][9];
+		f10 = f_t[m][10];  f11 = f_t[m][11];  f12 = f_t[m][12];
 
+		// add mechanical load fixed-end-forces to variables f1-f12
+		f1  += f_m[m][1];  f2  += f_m[m][2];  f3  += f_m[m][3];
+		f4  += f_m[m][4];  f5  += f_m[m][5];  f6  += f_m[m][6];
+		f7  += f_m[m][7];  f8  += f_m[m][8];  f9  += f_m[m][9];
+		f10 += f_m[m][10]; f11 += f_m[m][11]; f12 += f_m[m][12];
+
+		// add fixed end forces (-equivalent loads) to internal loads 
 		// {Q} = [T]{F}
 		Q[m][1]  -= ( f1 *t1 + f2 *t2 + f3 *t3 );    
 		Q[m][2]  -= ( f1 *t4 + f2 *t5 + f3 *t6 );
@@ -1017,7 +1024,7 @@ void deallocate(
 	float ***U, float ***W, float ***P, float ***T,
 	float **Dp,
 	double **F_mech, double **F_temp, 
-	double ***feF_mech, double ***feF_temp, double **feF,
+	double ***feF_mech, double ***feF_temp, 
 	double **F, 
 	double **K, double **Q,
 	double *D, double *dD,
@@ -1069,7 +1076,6 @@ void deallocate(
 // printf("..G\n"); /* debug */
 	free_D3dmatrix(feF_mech,1,nL,1,nE,1,12);
 	free_D3dmatrix(feF_temp,1,nL,1,nE,1,12);
-	free_dmatrix(feF,1,nE,1,12);
 
 // printf("..H\n"); /* debug */
 	free_dmatrix(K,1,DoF,1,DoF);

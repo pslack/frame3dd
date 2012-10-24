@@ -103,7 +103,8 @@ void add_feF(
 	int *N1, int *N2, /**< node connectivity			*/
 	float *p,	/**< roll angle, radians			*/
 	double **Q,	/**< frame element end forces			*/
-	double **feF,	/**< fixed end forces for every frame element	*/
+	double **feF_temp, /**< temp. fixed end forces for every frame element*/
+	double **feF_mech, /**< mech. fixed end forces for every frame element*/
 	int nE,		/**< number of frame elements			*/
 	int DoF,	/**< number of degrees of freedom		*/
 	int verbose	/**< 1: copious screen output; 0: none		*/
@@ -193,7 +194,7 @@ void deallocate(
 	float ***U, float ***W, float ***P, float ***T,
 	float **Dp,
 	double **F_mech, double **F_temp,
-	double ***feF_mech, double ***feF_temp, double **feF,
+	double ***feF_mech, double ***feF_temp, 
 	double **F,
 	double **K, double **Q,
 	double *D, double *dD,
