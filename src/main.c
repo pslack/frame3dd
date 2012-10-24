@@ -75,6 +75,8 @@ For compilation/installation, see README.txt.
 		modepath[FRAME3DD_PATHMAX] = "EMPTY_MODE", // mode data path
 		strippedInputFile[FRAME3DD_PATHMAX] = "EMPTY_TEMP"; // temp data path
 
+	char	Ksfn[FILENMAX], Fefn[FILENMAX], dDfn[FILENMAX];
+
 	FILE	*fp;		// input and output file pointer
 
 	vec3	*xyz;		// X,Y,Z node coordinates (global)
@@ -436,13 +438,13 @@ For compilation/installation, see README.txt.
 
 			element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
 				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
+
+			assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
+						Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
+						shear,geom, Q, debug );
 		}
 
-		assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
-					Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
-					shear,geom, Q, debug );
-
-		/* ... then add in mechanical loads, if there are any ...  */
+		/* ... then add in mechanical loads, if there are any ... */
 		if ( nF[lc]>0 || nU[lc]>0 || nW[lc]>0 || nP[lc]>0 || nD[lc]>0 || 
 		     gX[lc] != 0 || gY[lc] != 0 || gZ[lc] != 0 ) {
 			if ( verbose )
@@ -455,15 +457,19 @@ For compilation/installation, see README.txt.
 			/* increment D */
 			for (i=1; i<=DoF; i++) {
 				if (q[i])	D[i] += dD[i];
-				else		D[i] = Dp[lc][i];	  
+				else {		D[i] = Dp[lc][i];	  dD[i] = 0.0; }
 			}
 
 			element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
 				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 		}
 
-		/* Newton-Raphson iterations for geometric non-linearity */
-		if ( geom ) {
+		assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
+				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
+				shear,geom, Q, debug );
+
+		/* quasi Newton-Raphson iteration for geometric nonlinearity */
+		if ( geom ) {	/*  initialize Fe and Ks	 */
 			Fe  = dvector( 1, DoF ); /* force equilibrium error  */
 			Ks  = dmatrix( 1, DoF, 1, DoF );
 			/* initialize Broyden secant stiffness */
@@ -476,47 +482,45 @@ For compilation/installation, see README.txt.
 				printf("\n Non-Linear Elastic Analysis ...\n");
 		}
 
-		/* Newton Raphson iteration for geometric nonlinearity */
+		/* quasi Newton-Raphson iteration for geometric nonlinearity */
 		ok = 0; iter = 0; error = 1.0;	/* re-initialize */
-		while ( geom && error > tol && iter < 50 && ok >= 0) {
+		while ( geom && error > tol && iter < 500 && ok >= 0) {
 
 			++iter;
-
-			assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
-				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
-				shear,geom, Q, debug );
 
 			for (i=1; i<=DoF; i++) { /* equilibrium error	*/
 				Fe[i] = F[lc][i];
 				for (j=1; j<=DoF; j++)
-					if ( K[i][j] != 0.0 && D[j] != 0.0 )
+					if ( q[i] && K[i][j] != 0.0 && D[j] != 0.0 )
 						Fe[i] -= K[i][j]*D[j];
 			}
 
-			/* Broyden secant stiffness matrix update */
-/*
-			dDdD = 0.0;
-			for (i=1; i<=DoF; i++) dDdD += dD[i]*dD[i];
-			for (i=1; i<=DoF; i++)
-				for (j=1; j<=DoF; j++)
-					Ks[i][j] -= Fe[i]*dD[j] / dDdD;
+/* 	sprintf(Ksfn,"Ks_%02d", iter); save_dmatrix( DoF, DoF, Ks, Ksfn, 0 );
+	sprintf(Fefn,"Fe_%02d", iter); save_dvector( DoF, Fe, Fefn );
+	sprintf(dDfn,"dD_%02d", iter); save_dvector( DoF, dD, dDfn );
 */
+
+			/* Powell-Symmetric-Broyden secant stiffness update */
+			PSB_update ( Ks, Fe, dD, DoF );
 
 			solve_system(K,dD,Fe,DoF,q,r,&ok,verbose,&rms_resid);
 
-			if ( ok < 0 ) { /*  K is not pos.def.  */
+			if ( ok < 0 ) {	/*  Ks is not pos.def.  */
 				fprintf(stderr,"   The stiffness matrix is not pos-def. \n");
 				fprintf(stderr,"   Reduce loads and re-run the analysis.\n");
 				break;
-			}			/* end Newton Raphson iterations */
+			}
 
 			/* increment D */
-			for (i=1; i<=DoF; i++)	if (q[i])	D[i] += dD[i];
+			for (i=1; i<=DoF; i++) {
+				if (q[i])	D[i] += dD[i];
+				else		dD[i] = 0.0;	
+			}
 
 			element_end_forces ( Q, nE, xyz, L, Le, N1,N2, 
 				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 
-			 /* convergence criteria:  */
+			/* convergence criteria:  */
 //			error = rel_norm ( dD, D, DoF ); /* displ. increment */
   			error = rel_norm ( Fe, F[lc], DoF ); /* force balance */
 
@@ -524,7 +528,12 @@ For compilation/installation, see README.txt.
 				printf("   NR iteration %3d ---", iter);
 				printf(" RMS equilibrium precision: %8.2e \n",error);
 			}
-		}			/* end Newton-Raphson iteration */
+
+			assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
+				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
+				shear,geom, Q, debug );
+
+		}			/* end quasi Newton-Raphson iteration */
 
 		if ( geom ) {			/* dealocate Fe and Ks memory */
 			free_dvector(Fe, 1, DoF );
@@ -542,7 +551,7 @@ For compilation/installation, see README.txt.
 
 		add_feF ( xyz, L, N1,N2, p, Q, feF, nE, DoF, verbose );
 
-		if ( verbose ) { /*  display RMS equilibrium error */
+		if ( verbose && ok >= 0 ) { /*  display RMS equilibrium error */
 			printf("  RMS residual: %9.3e", rms_resid );
 			evaluate ( rms_resid );
 		}

@@ -457,14 +457,14 @@ LDL_MPROVE_PM
  On output, only {x} is modified to an improved set of values.
 
  usage: double **A, *d, *b, *x, rms_resid;
-	int   n, ok;
-	ldl_mprove ( A, n, d, b, x, &rms_resid, &ok );
+	int   n, ok, *q, *r;
+	ldl_mprove_pm ( A, n, d, b, x, q, r, &rms_resid, &ok );
 
  H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  4 May 2001
 -----------------------------------------------------------------------------*/
 void ldl_mprove_pm (
 	double **A, int n, double *d, double *b, double *x, 
-	int *q, int*r,
+	int *q, int *r,
 	double *rms_resid, int *ok
 ){
 	double  sdp;		/* accumulate the r.h.s. in double precision */
@@ -515,6 +515,33 @@ void ldl_mprove_pm (
 }
 
 
+/*----------------------------------------------------------------------------
+PSB_UPDATE
+ Update secant stiffness matrix via the Powell-Symmetric-Broyden update eqn.
+
+        B = B - (f*d' + d*f') / (d' * d) + f'*d * d*d' / (d' * d)^2 ;
+
+ H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  24 Oct 2012
+-----------------------------------------------------------------------------*/
+void PSB_update ( 
+	double **B,	/**< secant stiffness matrix            */
+	double *f,	/**< out-of-balance force vector        */
+	double *d,	/**< incremental displacement vector    */
+	int n )		/**< matrix dimension is n-by-n         */
+{
+	int	i, j;
+	double	dtd = 0.0, ftd = 0.0, dtd2 = 0.0;
+
+	for (i=1; i<=n; i++)	dtd += d[i]*d[i];
+	dtd2 = dtd*dtd;
+
+	for (i=1; i<=n; i++)	ftd += f[i]*d[i];
+
+	for (i=1; i<=n; i++)	/*  update upper triangle of B[i][j] */
+	    for (j=i; j<=n; j++) 
+		B[i][j] -= ( (f[i]*d[j] + f[j]*d[i])/dtd - ftd*d[i]*d[j]/dtd2 );
+	
+}
 
 
 /*----------------------------------------------------------------------------

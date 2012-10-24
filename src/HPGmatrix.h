@@ -167,6 +167,19 @@ void ldl_mprove_pm (
 );
 
 
+/* ----------------------------------------------------------------------------
+ PSB_UPDATE
+ Update secant stiffness matrix via the Powell-Symmetric-Broyden update eqn.
+ 
+ B = B - (f*d' + d*f') / (d' * d) + f'*d * d*d' / (d' * d)^2 ;
+ 
+ H.P. Gavin, Civil Engineering, Duke University, hpgavin@duke.edu  24 Oct 2012
+ -----------------------------------------------------------------------------*/
+void PSB_update (
+	double **B,	/**< secant stiffness matrix		*/
+	double *f,	/**< out-of-balance force vector	*/
+	double *d, 	/**< incremental displacement vector	*/
+	int n );	/**< matrix dimension is n-by-n		*/
 
 /**
 	calculate the pseudo-inverse of A ,

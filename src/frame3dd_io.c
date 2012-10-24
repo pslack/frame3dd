@@ -2763,7 +2763,7 @@ void static_mesh(
 		n1, n2;		/* node numbers			*/
 	float	x1, y1, z1,	/* coordinates of node n1		*/
 		x2, y2, z2;	/* coordinates of node n2		*/
-	int	i, j, m,
+	int	j=0, m=0,
 		X=0, Y=0, Z=0;
 	time_t  now;		/* modern time variable type		*/
 
@@ -2787,10 +2787,10 @@ void static_mesh(
 	 fprintf(fpm,"# Node        X            Y            Z \n");
 
 	 for (m=1; m<=nE; m++) {
-		j = J1[m];	i = 6*(j-1);
+		j = J1[m];	// i = 6*(j-1);
 		fprintf (fpm,"%5d %12.4e %12.4e %12.4e \n",
 					j , xyz[j].x , xyz[j].y , xyz[j].z );
-		j = J2[m];	i = 6*(j-1);
+		j = J2[m];	// i = 6*(j-1);
 		fprintf (fpm,"%5d %12.4e %12.4e %12.4e",
 					j , xyz[j].x , xyz[j].y , xyz[j].z );
 		fprintf (fpm,"\n\n\n");
@@ -3567,7 +3567,7 @@ void evaluate ( float error ) {
 	fprintf(stdout," ... ");
 	(void) fflush(stdout);
 
-	if ( error < 1e-9 ) {
+	if ( error < 1e-24 ) {
 
 	    textColor('y','b','b','x');
 	    switch ( r ) {
@@ -3588,7 +3588,7 @@ void evaluate ( float error ) {
 	    return;
 	}
 	
-	if ( error < 1e-6 ) {
+	if ( error < 1e-20 ) {
 
 	    textColor('y','g','b','x');
 	    switch ( r ) {
@@ -3609,7 +3609,7 @@ void evaluate ( float error ) {
 	    return;
 	}
 
-	if ( error < 1e-4 ) {
+	if ( error < 1e-16 ) {
 
 	    textColor('y','c','b','x');
 	    switch ( r ) {
@@ -3619,7 +3619,7 @@ void evaluate ( float error ) {
 		case 3: fprintf(stdout," ok. "); break; 
 		case 4: fprintf(stdout," not bad. "); break; 
 		case 5: fprintf(stdout," fine. "); break; 
-		case 6: fprintf(stdout," fair."); break; 
+		case 6: fprintf(stdout," fair. "); break; 
 		case 7: fprintf(stdout," respectable. "); break; 
 		case 8: fprintf(stdout," tolerable. "); break; 
 		case 9: fprintf(stdout," just ok. "); break; 
@@ -3630,20 +3630,20 @@ void evaluate ( float error ) {
 	    return;
 	}
 
-	if ( error > 1e-2 ) {
+	if ( error > 1e-12 ) {
 
 	    textColor('y','r','b','x');
 	    switch ( r ) {
-		case 0: fprintf(stdout," abominable. "); break; 
-		case 1: fprintf(stdout," puckeroo. "); break; 
-		case 2: fprintf(stdout," atrocious. "); break; 
-		case 3: fprintf(stdout," not ok. "); break; 
-		case 4: fprintf(stdout," wonky. "); break; 
-		case 5: fprintf(stdout," crappy. "); break; 
-		case 6: fprintf(stdout," oh noooo."); break; 
-		case 7: fprintf(stdout," abominable. "); break; 
-		case 8: fprintf(stdout," munted. "); break; 
-		case 9: fprintf(stdout," awful. "); break; 
+		case 0: fprintf(stdout," abominable! "); break; 
+		case 1: fprintf(stdout," puckeroo! "); break; 
+		case 2: fprintf(stdout," atrocious! "); break; 
+		case 3: fprintf(stdout," not ok! "); break; 
+		case 4: fprintf(stdout," wonky! "); break; 
+		case 5: fprintf(stdout," crappy! "); break; 
+		case 6: fprintf(stdout," oh noooo! "); break; 
+		case 7: fprintf(stdout," abominable! "); break; 
+		case 8: fprintf(stdout," munted! "); break; 
+		case 9: fprintf(stdout," awful! "); break; 
 	    }
 	    (void) fflush(stdout);
 	    color(0);	
