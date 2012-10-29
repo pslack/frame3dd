@@ -365,16 +365,16 @@ void compute_reaction_forces( double *F, double **K, double *D, int DoF, int *r)
 
 /*----------------------------------------------------------------------------
 SOLVE_SYSTEM  -  solve {F} =   [K]{D} via L D L' decomposition        27dec01
-Prescribed displacements are "mechanican loads" not "temperature loads"  
+Prescribed displacements are "mechanical loads" not "temperature loads"  
 ----------------------------------------------------------------------------*/
 void solve_system(
 	double **K, double *D, double *F, int DoF, int *q, int *r,
 	int *ok, int verbose, double *rms_resid
 ){
 	double	*diag;		/* diagonal vector of the L D L' decomp. */
-
 	int	i;
-	verbose = 0;		/* suppress verbose output		*/
+
+	// verbose = 0;		/* suppress verbose output		*/
 
 	diag = dvector ( 1, DoF );
 
@@ -398,6 +398,31 @@ void solve_system(
 	
 	free_dvector( diag, 1, DoF );
 }
+
+
+/*----------------------------------------------------------------------------
+EQUILIBRIUM_ERROR -  compute {Fe} =   {F} - [K]{D}  and return ||Fe||/||F||
+----------------------------------------------------------------------------*/
+double equilibrium_error( double *Fe, double *F, double **K, double *D, int DoF, int *q )
+{
+	double	ss_Fe = 0.0,	//  sum of squares of Fe
+		ss_F  = 0.0;	//  sum of squares of F	
+	int	i,j;
+
+	for (i=1; i<=DoF; i++) { // compute equilibrium error
+		Fe[i] = F[i];
+		for (j=1; j<=DoF; j++) {
+			if ( q[i] && K[i][j] != 0.0 && D[j] != 0.0 )
+				Fe[i] -= K[i][j]*D[j];
+		}
+	}       
+
+	for (i=1; i<=DoF; i++)    ss_Fe += ( Fe[i] * Fe[i] );
+	for (i=1; i<=DoF; i++)    ss_F  += ( F[i]  * F[i] );
+
+	return ( sqrt(ss_Fe) / sqrt(ss_F) );	// convergence criterion
+}
+
 
 
 /*------------------------------------------------------------------------------
@@ -1024,8 +1049,7 @@ void deallocate(
 	float ***U, float ***W, float ***P, float ***T,
 	float **Dp,
 	double **F_mech, double **F_temp, 
-	double ***feF_mech, double ***feF_temp, 
-	double **F, 
+	double ***feF_mech, double ***feF_temp, double **F, double *Fe,
 	double **K, double **Q,
 	double *D, double *dD,
 	float *d, float *EMs, float *NMs, float *NMx, float *NMy, float *NMz,
@@ -1070,12 +1094,12 @@ void deallocate(
 	free_dmatrix(F_temp,1,nL,1,DoF);
 
 // printf("..F\n"); /* debug */
-	free_dmatrix(F,1,nL,1,DoF);
-//	free_dvector(F,1,DoF);
-
-// printf("..G\n"); /* debug */
 	free_D3dmatrix(feF_mech,1,nL,1,nE,1,12);
 	free_D3dmatrix(feF_temp,1,nL,1,nE,1,12);
+
+// printf("..G\n"); /* debug */
+	free_dmatrix(F,1,nL,1,DoF);
+	free_dvector(Fe,1,DoF);
 
 // printf("..H\n"); /* debug */
 	free_dmatrix(K,1,DoF,1,DoF);

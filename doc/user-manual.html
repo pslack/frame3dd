@@ -2141,7 +2141,7 @@ the axial frame element forces arising from the temperature loads.
 <li>Compute frame element end forces from the displacements due to the combined displacements from temperature and mechanical loads.
 
 <li>If geometric stiffness effects are to be considered, carry out quasi Newton-Raphson iterations to converge upon the displacements that satisfy equilibrium.<br>
-The assembly process makes use of
+The stiffness matrix assembly process makes use of
 the axial frame element forces arising from the combined temperature and mechanical loads.
 
 <li>Compute the "RMS relative equilibrium error."
@@ -2150,7 +2150,8 @@ the axial frame element forces arising from the combined temperature and mechani
 </p>
 
 <p>
-Iterative solutions to the partitioned matrix equation, <br>
+Iterative solutions to the partitioned matrix equation (step 8, above)
+are obtained via a quasi Newton-Raphson procedure: <br>
 <div class=eq>
  K<sub>qq</sub>(D<sup>(i)</sup>) dD<sub>q</sub><sup>(i)</sup>
 =
@@ -2162,56 +2163,71 @@ F<sub>q</sub> - K<sub>qq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup>
 where:
 </p>
 <ul>
+<li> subscript <i>q</i> indicates a displacement coordinate
+<li> subscript <i>r</i> indicates a reaction coordinate
+<li> superscript <i>(i)</i> indicates the iteration number
 <li> <i>D<sub>q</sub><sup>(i)</sup> </i>   is the vector of unknown
 displacements at iteration <i>i</i> ,
-<li> <i>D<sub>r</sub></i>   is the vector of known prescribed displacements, 
+<li> <i>D<sub>r</sub></i>   is the vector of known prescribed displacements 
+(at reaction coordinates),
 <li> <i>K(D<sup>(i)</sup>)</i> is the stiffness matrix, dependent upon
 displacements at iteration <i>i</i>.
-<li> <i>F<sub>q</sub> </i>     is the vector known applied loads ,
-<li> <i>F<sub>r</sub><sup>(i)</sup> </i>     is the vector unknown reaction forces at iteration <i>i</i>,
-<li> <i>dD<sub>q</sub><sup>(i)</sup></i>  is the incremental displacement vector at iteration <i>i</i> , and
+<li> <i>F<sub>q</sub> </i>     is the vector of known applied loads (at displacement coordinates), 
+<li> <i>F<sub>r</sub><sup>(i)</sup> </i>     is the vector of unknown reaction forces at iteration <i>i</i>,
+<li> <i>dD<sub>q</sub><sup>(i)</sup></i>  is the incremental displacement vector at iteration <i>i</i>, and
 <li> <i>D<sub>q</sub><sup>(i+1)</sup></i>  is the vector of uknown displacements at iteration <i>i+1</i>
 </ul>
 <p>
-make use of LDL'
+Solutions to linear matrix equations are obtained via an LDL'
 decomposition/back-substitution with sparse-matrix short-cuts and
 iterative improvement for enhanced speed and accuracy.
+Iterative improvements to the solution to <i>[K]{dD} = {dF}</i> 
+are obtained (for both linear elastic and geometrically nonlinear problems)
+by iteratively solving
+<i>[K]{r}<sup>(k)</sup>  = {dF}-[K]{dD}<sup>(k)</sup></i>
+with <i>{dD}<sup>(k+1)</sup> = {dD}<sup>(k)</sup> + {r}<sup>(k)</sup>.</i>
+Iterations are stopped when the root-mean-square of the residual incremental
+displacement vector (the root-mean-square of <i>{r}<sup>(k)</sup></i>)
+decreases by less than ten percent in an LDL' iteration.
+The superscript <i>(k)</i> is the LDL' iteration counter.  
+When converged, the root-mean-square of <i>{r}<sup>(k)</sup></i> is typically on the order of 10<sup>-20</sup>.  
+<p>
 </p>
 
 <p>
 When the program is executed, various solution errors are displayed to the
-screen and are written to the Output Data file.   Iterative improvements
-to the LDL' back-substitution make use of a quasi Newton-Raphson method.<br>
-</p>
-<p>
-At each LDL' back-substitution iteration, the equilibrium error is displayed
-to the screen as the "RMS equilibrium precision."  This error is the root-mean-square of
-<i>dD<sup>(i)</sup></i>.
-Iterations are stopped when this error decreases by less than ten percent in an iteration.
+screen and are written to the Output Data file.  
 </p>
 
 <p>
-At each Newton-Raphson iteration, the relative equilibrium error is displayed
-to the screen.   This error is the root-mean-square of
+<!-- At each LDL' back-substitution iteration,
+the root-mean-square of the residual vector (the root-mean-square of <i>r<sup>(k)</sup></i>) is displayed to the screen as the "LDL' RMS residual." -->
+</p>
+
+<p>
+At each Newton-Raphson iteration, the RMS relative equilibrium error is
+displayed to the screen.  This error is the root-mean-square of
 (<i>F - K(D<sup>(i)</sup>) D<sup>(i)</sup></i>)
 divided by the root-mean-square of <i>F</i>.
 Newton-Raphson iterations stop when
-this error is less than the convergence tolerance.  The convergence tolerance
+this error is less than the convergence tolerance.
+The convergence tolerance
 is specified as the convergence tolerance for the modal-analysis.
 The default value is 0.00001
 </p>
 
 <p>
-The accuracy of the final solution is checked using a global equilibrium check
-and the equilibrium error is reported.  The "RMS relative equilibrium precision" is
-the root-mean-square of internal frame element forces and external applied loads at
-every un-restrained degree of freedom normalized by the root-mean-square of
-the applied loads.   This equilibrium error is typically less than one part
-in one-billion when geometric stiffness effects are neglected.  If an analysis
-has an "RMS relative equilibrium precision" larger than 0.001, the results should not be
-trusted.
+The accuracy obtained at each Newton-Raphson iteration is reported as the
+"RMS relative equilibrium precision" which is defined as
+the root-mean-square of (<i>F - K(D<sup>(i)</sup>) D<sup>(i)</sup></i>)
+divided by the root-mean-square of <i>F</i>.
+The converged equilibrium error is typically less than one part in 10<sup>6</sup>.
+If an analysis
+has an "RMS relative equilibrium precision" larger than 10<sup>-3</sup>,
+the results should not be trusted.
 </p>
 
+<!-- 
 <p>
 If the "RMS relative equilibrium precision" is not adequately small
 and geometric stiffness effects <i>are not</i> included in the analysis,
@@ -2226,6 +2242,7 @@ the geometric stiffness variable <i>geom</i>
 in the Input Data file to <i>0</i> or by using the
 <a href="#commandline"><i>-gOff</i> command line option</a>.
 </p>
+-->
 
 <p>
 Natural frequencies and mass-normalized mode-shapes of the lower modes may be

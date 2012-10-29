@@ -79,6 +79,17 @@ void solve_system(
 );
 
 
+/** compute {Fe} = {F} - [K]{D} and return ||Fe|| / ||F||*/
+double equilibrium_error(
+        double *Fe,	/**< equilibrium error  {Fe} = {F} - [K]{D}	*/
+        double *F,	/**< load vector                                */
+        double **K,	/**< stiffness matrix for the restrained frame  */
+        double *D,	/**< displacement vector to be solved           */
+        int DoF,	/**< number of degrees of freedom               */
+        int *q		/**< 1: not a reaction; 0: a reaction coordinate */
+);
+
+
 /** evaluate the member end forces for every member */
 void element_end_forces(
 	double **Q,	/**< frame element end forces			*/
@@ -194,8 +205,7 @@ void deallocate(
 	float ***U, float ***W, float ***P, float ***T,
 	float **Dp,
 	double **F_mech, double **F_temp,
-	double ***feF_mech, double ***feF_temp, 
-	double **F,
+	double ***feF_mech, double ***feF_temp, double **F, double *Fe, 
 	double **K, double **Q,
 	double *D, double *dD,
 	float *d, float *EMs,

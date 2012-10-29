@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example I: a triangular tower  (kip in) 
-Wed Oct 24 16:15:01 2012
+Mon Oct 29 18:35:01 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -173,7 +173,7 @@ R E A C T I O N S							(global)
      1       4.806     -76.186     282.143   10345.105     122.085       1.244
      2      -4.806     -76.186     282.143   10345.105    -122.085      -1.244
      3       0.0       -47.599    3630.087   11320.925       0.0         0.0  
-R M S   E Q U I L I B R I U M    E R R O R: 4.781e-23
+R M S   R E L A T I V E   E Q U I L I B R I U M    E R R O R: 4.781e-23
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  7.935658e-05     Structural Mass:  7.935658e-05 

@@ -1986,7 +1986,7 @@ void write_static_results (
 			fprintf(fp, "\n");
 		}
 	}
-	fprintf(fp,"R M S   E Q U I L I B R I U M    E R R O R: %9.3e\n", err );
+	fprintf(fp,"R M S   R E L A T I V E   E Q U I L I B R I U M    E R R O R: %9.3e\n", err );
 	fflush(fp);
 	return;
 }
@@ -3558,7 +3558,8 @@ void dots ( FILE *fp, int n ) {
 /*------------------------------------------------------------------------------
 EVALUATE -  displays a randomly-generated goodbye message.  
 ------------------------------------------------------------------------------*/
-void evaluate ( float error ) {
+void evaluate ( float error, float rms_resid, float tol ) 
+{
 	int r;
 
 	r = rand() % 10;
@@ -3567,7 +3568,19 @@ void evaluate ( float error ) {
 	fprintf(stdout," ... ");
 	(void) fflush(stdout);
 
-	if ( error < 1e-24 ) {
+	if ( error < tol ) {
+		textColor('y','b','b','x');
+		fprintf(stdout," *** converged *** ");
+	} else {
+		textColor('y','r','b','x');
+		fprintf(stdout," !!! not converged !!! ");
+		(void) fflush(stdout);
+		color(0);	
+		fprintf(stdout,"\n\n");
+	}
+			
+
+	if ( rms_resid < 1e-24 ) {
 
 	    textColor('y','b','b','x');
 	    switch ( r ) {
@@ -3588,7 +3601,7 @@ void evaluate ( float error ) {
 	    return;
 	}
 	
-	if ( error < 1e-16 ) {
+	if ( rms_resid < 1e-16 ) {
 
 	    textColor('y','g','b','x');
 	    switch ( r ) {
@@ -3609,7 +3622,7 @@ void evaluate ( float error ) {
 	    return;
 	}
 
-	if ( error < 1e-12 ) {
+	if ( rms_resid < 1e-12 ) {
 
 	    textColor('y','c','b','x');
 	    switch ( r ) {
@@ -3630,7 +3643,7 @@ void evaluate ( float error ) {
 	    return;
 	}
 
-	if ( error > 1e-12 ) {
+	if ( rms_resid > 1e-12 ) {
 
 	    textColor('y','r','b','x');
 	    switch ( r ) {

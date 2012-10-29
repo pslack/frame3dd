@@ -100,7 +100,7 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 6				# number of desired dynamic modes of vibration
 1                               # 1: subspace Jacobi     2: Stodola
 0				# 0: consistent mass ... 1: lumped mass matrix
-1e-4				# mode shape tolerance
+1e-9				# mode shape tolerance
 0.0				# shift value ... for unrestrained structures
 10.0                            # exaggerate modal mesh deformations
 

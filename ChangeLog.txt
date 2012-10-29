@@ -1,3 +1,6 @@
+*Mon Oct 27 2012 Henri Gavin <.> 0.20100105
+- Improving documentation on numerical details.
+
 *Wed Oct 24 2012 Henri Gavin <.> 0.20100105
 - Investigated Powell-Symmetric-Broyden update of secant stiffness matrix. 
 This quasi-Newton method does not seem to help very much.  In fact, in all

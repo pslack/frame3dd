@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis (N mm ton) 
-Wed Oct 24 16:14:56 2012
+Mon Oct 29 18:34:57 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -110,7 +110,7 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
   Elmnt  Node       Nx          Vy         Vz        Txx        Myy        Mzz
      1      2   1082.535c     -0.268      2.068    -23.794   -685.356     -2.409
      1      1  -1079.764c      0.268      2.089     23.794    632.963     44.909
-     2      1   1830.925c      0.322      2.019     14.286   -726.315    -78.959
+     2      1   1830.925c      0.322      2.019     14.286   -726.315    -78.958
      2      3  -1833.696c     -0.322      2.138    -14.286    725.231     78.942
      3      1   -172.345t     -0.071      2.055     18.060   -653.139     10.925
      3      4    169.574t      0.071      2.101    -18.060    647.454    -55.687
@@ -122,7 +122,7 @@ R E A C T I O N S							(global)
      3   -1219.827     914.467    1016.432      85.969      61.441      73.603
      4     113.765      85.413     -94.812     -50.508      -9.184     -36.316
      5    -613.761     460.589    -511.333     -99.060     -32.087      53.890
-R M S   E Q U I L I B R I U M    E R R O R: 3.113e-25
+R M S   R E L A T I V E   E Q U I L I B R I U M    E R R O R: 1.329e-31
 
 L O A D   C A S E   2   O F   3  ... 
 
@@ -145,7 +145,7 @@ R E A C T I O N S							(global)
      3      29.875     -27.328     -24.024    2630.675    -287.781    1183.096
      4       5.008      -3.640       2.012     932.278    2713.311    2688.649
      5      -6.165      12.435     -11.062   -1064.438    2518.059    2856.160
-R M S   E Q U I L I B R I U M    E R R O R: 1.714e-25
+R M S   R E L A T I V E   E Q U I L I B R I U M    E R R O R: 2.114e-28
 
 L O A D   C A S E   3   O F   3  ... 
 
@@ -154,21 +154,21 @@ N O D E   D I S P L A C E M E N T S  					(global)
      1    0.000249   -0.013374   -0.021701    0.048620   -0.171582   -0.081460
 F R A M E   E L E M E N T   E N D   F O R C E S				(local)
   Elmnt  Node       Nx          Vy         Vz        Txx        Myy        Mzz
-     1      2     75.465c    -79.757    698.344   4331.979 -259887.122 -30367.216
-     1      1    -72.694c    -20.243    205.813  -4331.979  87174.394   6860.922
-     2      1     74.020c    118.696    -95.906   7179.179  27244.002  51683.827
-     2      3    -76.791c     81.304    -99.937  -7179.179 -51154.356 -38257.712
-     3      1     20.689c    -18.537     31.935   -356.710 -36069.655 -22005.561
-     3      4    -23.460c     18.537    -27.779    356.710 -17755.364 -11412.982
-     4      5     22.134c    -26.294     21.490  -3203.910 -12559.407 -16163.751
-     4      1    -19.363c     26.294    -17.334   3203.910 -22436.589 -31239.110
+     1      2     75.465c    -79.757    698.344   4331.973 -259887.091 -30367.208
+     1      1    -72.693c    -20.243    205.813  -4331.973  87174.447   6860.936
+     2      1     74.020c    118.696    -95.906   7179.167  27244.029  51683.821
+     2      3    -76.791c     81.304    -99.937  -7179.167 -51154.341 -38257.715
+     3      1     20.689c    -18.537     31.935   -356.711 -36069.596 -22005.531
+     3      4    -23.460c     18.537    -27.779    356.711 -17755.334 -11412.966
+     4      5     22.134c    -26.294     21.490  -3203.904 -12559.392 -16163.724
+     4      1    -19.363c     26.294    -17.334   3203.904 -22436.561 -31239.059
 R E A C T I O N S							(global)
   Node        Fx          Fy          Fz         Mxx         Myy         Mzz
-     2      39.812      22.838      65.220   15852.132  -11744.354    -643.257
-     3     -59.680      42.390      26.172  -11599.794   -6654.872    5011.739
-     4     -39.065      -6.127     -12.598    6200.728  -18324.280   -9694.040
-     5     -10.580     -24.933      27.661   -2120.753  -13328.072  -15226.251
-R M S   E Q U I L I B R I U M    E R R O R: 1.350e-22
+     2      39.812      22.838      65.220   15852.106  -11744.334    -643.253
+     3     -59.680      42.390      26.172  -11599.779   -6654.864    5011.729
+     4     -39.065      -6.127     -12.598    6200.718  -18324.250   -9694.028
+     5     -10.580     -24.933      27.661   -2120.752  -13328.054  -15226.225
+R M S   R E L A T I V E   E Q U I L I B R I U M    E R R O R: 5.260e-28
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  1.020379e-01     Structural Mass:  2.037858e-03 
@@ -182,23 +182,23 @@ N O D A L   M A S S E S	(diagonal of the mass matrix)			(global)
   Use consistent mass matrix.
 N A T U R A L   F R E Q U E N C I E S   & 
 M A S S   N O R M A L I Z E D   M O D E   S H A P E S 
- convergence tolerance: 1.000e-04 
+ convergence tolerance: 1.000e-09 
   MODE     1:   f= 18.808236 Hz,  T= 0.053168 sec
 		X- modal participation factor =  -2.5467e-02 
-		Y- modal participation factor =  -6.1091e-05 
-		Z- modal participation factor =  -6.3965e-07 
+		Y- modal participation factor =  -6.1093e-05 
+		Z- modal participation factor =  -6.3967e-07 
   Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -2.609e-02  -1.255e-04  -6.331e-06  -2.850e-04   1.344e-01  -5.727e-02
+     1  -2.609e-02  -1.255e-04  -6.331e-06  -2.851e-04   1.344e-01  -5.727e-02
      2  -5.705e-09  -7.082e-10   6.815e-10   4.135e-07  -1.724e-06   1.206e-06
      3  -5.685e-09   6.844e-10  -6.879e-10  -4.094e-07  -1.721e-06   1.210e-06
      4  -3.947e-09  -3.078e-09  -7.076e-10   1.142e-06  -1.155e-06  -9.324e-08
      5  -3.931e-09   3.055e-09   7.135e-10  -1.138e-06  -1.151e-06  -9.690e-08
-  MODE     2:   f= 19.105745 Hz,  T= 0.052340 sec
+  MODE     2:   f= 19.105746 Hz,  T= 0.052340 sec
 		X- modal participation factor =  -1.0453e-02 
 		Y- modal participation factor =   2.2595e-04 
-		Z- modal participation factor =  -4.4531e-07 
+		Z- modal participation factor =  -4.4533e-07 
   Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1  -1.106e-02   4.823e-04  -4.408e-06   1.043e-03   5.497e-02   1.401e-01
+     1  -1.106e-02   4.824e-04  -4.408e-06   1.043e-03   5.497e-02   1.401e-01
      2   2.203e-10  -3.701e-09   2.858e-10   1.236e-06   9.290e-08  -1.112e-06
      3   1.514e-10   3.788e-09  -2.613e-10  -1.252e-06   8.057e-08  -1.126e-06
      4  -4.231e-09   2.225e-09  -2.965e-10  -5.965e-07  -1.272e-06  -1.648e-06
@@ -214,7 +214,7 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      4   6.203e-09   7.732e-09  -2.352e-09  -1.299e-06   1.023e-06  -1.122e-06
      5  -6.162e-09   7.772e-09  -2.353e-09  -1.310e-06  -1.011e-06   1.142e-06
   MODE     4:   f= 31.711571 Hz,  T= 0.031534 sec
-		X- modal participation factor =  -3.8808e-09 
+		X- modal participation factor =  -3.8809e-09 
 		Y- modal participation factor =   3.1636e-01 
 		Z- modal participation factor =   1.4730e-06 
   Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
@@ -224,19 +224,19 @@ M A S S   N O R M A L I Z E D   M O D E   S H A P E S
      4   2.269e-07   1.701e-07  -1.896e-07   1.089e-07  -1.592e-07   2.796e-08
      5  -2.269e-07   1.701e-07  -1.896e-07   1.089e-07   1.591e-07  -2.803e-08
   MODE     5:   f= 35.159165 Hz,  T= 0.028442 sec
-		X- modal participation factor =  -3.7618e-08 
+		X- modal participation factor =  -3.7619e-08 
 		Y- modal participation factor =   1.6832e-06 
 		Z- modal participation factor =   3.1839e-01 
   Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
-     1   1.962e-07  -7.359e-06   3.151e+00   1.429e-05   3.382e-07  -6.385e-10
+     1   1.962e-07  -7.359e-06   3.151e+00   1.429e-05   3.382e-07  -6.386e-10
      2   2.518e-07   1.889e-07   2.104e-07   1.328e-07  -1.773e-07   2.134e-10
      3  -2.518e-07   1.889e-07   2.104e-07   1.328e-07   1.773e-07  -2.059e-10
      4  -2.518e-07  -1.889e-07   2.105e-07  -1.338e-07   1.783e-07  -2.124e-10
      5   2.518e-07  -1.889e-07   2.105e-07  -1.339e-07  -1.783e-07   2.050e-10
   MODE     6:   f= 42.248953 Hz,  T= 0.023669 sec
 		X- modal participation factor =   3.1739e-01 
-		Y- modal participation factor =   3.7637e-11 
-		Z- modal participation factor =  -2.6444e-08 
+		Y- modal participation factor =   3.7638e-11 
+		Z- modal participation factor =  -2.6445e-08 
   Node    X-dsp       Y-dsp       Z-dsp       X-rot       Y-rot       Z-rot
      1   3.155e+00   3.908e-09  -2.617e-07  -2.142e-09   8.415e-03   1.752e-05
      2   3.029e-07   2.270e-07   2.529e-07   1.506e-07  -1.125e-07  -6.129e-08
