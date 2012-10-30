@@ -241,12 +241,12 @@ double xtAy(double *x, double **A, double *y, int n, double *d);
 void invAXinvA ( double **A, double **X, int n, int verbose );
 
 /** 
-REL_NORM -  compute the relative 2-norm between two vectors       26dec01 
+RELATIVE_NORM -  compute the relative 2-norm between two vectors     
      compute the relative 2-norm between two vectors N and D
         return  ( sqrt(sum(N[i]*N[i]) / sqrt(D[i]*D[i]) )
-
+26dec01 
 */
-double rel_norm( double *N, double *D, int n );
+double relative_norm( double *N, double *D, int n );
 
 /* Legendre 
  * compute matrices of the Legendre polynomials and its first two derivitives

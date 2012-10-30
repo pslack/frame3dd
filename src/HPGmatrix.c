@@ -439,7 +439,7 @@ void ldl_dcmp_pm (
 		}
 	    }
 				
-	} 
+	}
 	return;
 }
 
@@ -885,12 +885,12 @@ void invAXinvA ( double **A, double **X, int n, int verbose )
 
 
 /* ---------------------------------------------------------------------------
- *  REL_NORM -  compute the relative 2-norm between two vectors       26dec01 
+ *  RELATIVE_NORM -  compute the relative 2-norm between two vectors       26dec01 
  *       compute the relative 2-norm between two vectors N and D
  *	       return  ( sqrt(sum(N[i]*N[i]) / sqrt(D[i]*D[i]) )
  *
  * ------------------------------------------------------------------------- */
-double rel_norm( double *N, double *D, int n )
+double relative_norm( double *N, double *D, int n )
 {
 	double  nN = 0.0, nD = 0.0;
 	int     i;

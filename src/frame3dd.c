@@ -374,7 +374,7 @@ void solve_system(
 	double	*diag;		/* diagonal vector of the L D L' decomp. */
 	int	i;
 
-	// verbose = 0;		/* suppress verbose output		*/
+	verbose = 0;		/* suppress verbose output		*/
 
 	diag = dvector ( 1, DoF );
 
@@ -401,28 +401,27 @@ void solve_system(
 
 
 /*----------------------------------------------------------------------------
-EQUILIBRIUM_ERROR -  compute {Fe} =   {F} - [K]{D}  and return ||Fe||/||F||
+EQUILIBRIUM_ERROR -  compute {dF} =   {F} - [K]{D}  and return ||dF||/||F||
 ----------------------------------------------------------------------------*/
-double equilibrium_error( double *Fe, double *F, double **K, double *D, int DoF, int *q )
+double equilibrium_error( double *dF, double *F, double **K, double *D, int DoF, int *q )
 {
-	double	ss_Fe = 0.0,	//  sum of squares of Fe
+	double	ss_dF = 0.0,	//  sum of squares of dF
 		ss_F  = 0.0;	//  sum of squares of F	
 	int	i,j;
 
 	for (i=1; i<=DoF; i++) { // compute equilibrium error
-		Fe[i] = F[i];
+		dF[i] = F[i];
 		for (j=1; j<=DoF; j++) {
 			if ( q[i] && K[i][j] != 0.0 && D[j] != 0.0 )
-				Fe[i] -= K[i][j]*D[j];
+				dF[i] -= K[i][j]*D[j];
 		}
 	}       
 
-	for (i=1; i<=DoF; i++)    ss_Fe += ( Fe[i] * Fe[i] );
-	for (i=1; i<=DoF; i++)    ss_F  += ( F[i]  * F[i] );
+	for (i=1; i<=DoF; i++) if (q[i]) ss_dF += ( dF[i] * dF[i] );
+	for (i=1; i<=DoF; i++) if (q[i]) ss_F  += ( F[i]  * F[i] );
 
-	return ( sqrt(ss_Fe) / sqrt(ss_F) );	// convergence criterion
+	return ( sqrt(ss_dF) / sqrt(ss_F) );	// convergence criterion
 }
-
 
 
 /*------------------------------------------------------------------------------
@@ -1049,7 +1048,7 @@ void deallocate(
 	float ***U, float ***W, float ***P, float ***T,
 	float **Dp,
 	double **F_mech, double **F_temp, 
-	double ***feF_mech, double ***feF_temp, double **F, double *Fe,
+	double ***feF_mech, double ***feF_temp, double **F, double *dF,
 	double **K, double **Q,
 	double *D, double *dD,
 	float *d, float *EMs, float *NMs, float *NMx, float *NMy, float *NMz,
@@ -1099,7 +1098,7 @@ void deallocate(
 
 // printf("..G\n"); /* debug */
 	free_dmatrix(F,1,nL,1,DoF);
-	free_dvector(Fe,1,DoF);
+	free_dvector(dF,1,DoF);
 
 // printf("..H\n"); /* debug */
 	free_dmatrix(K,1,DoF,1,DoF);

@@ -43,7 +43,7 @@ Example B: a pyramid-shaped frame --- static and dynamic analysis (N,mm,ton)
 1				# number of loaded nodes
 #.e      Fx       Fy     Fz      Mxx     Myy     Mzz
 #        N        N      N       N.mm    N.mm    N.mm
- 1	1000 	-2000 	-1000 	0.0	0.0	0.0
+ 1	100 	-200 	-100 	0.0	0.0	0.0
 0                               # number of uniform loads
 0                               # number of trapezoidal loads
 0                               # number of internal concentrated loads

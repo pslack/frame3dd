@@ -1,4 +1,8 @@
-*Mon Oct 27 2012 Henri Gavin <.> 0.20100105
+*Tue Oct 30 2012 Henri Gavin <.> 0.20100105
+- Cleaned up and documented Newton-Raphson code.  
+- Improved documentation on numerical details.
+
+*Mon Oct 29 2012 Henri Gavin <.> 0.20100105
 - Improving documentation on numerical details.
 
 *Wed Oct 24 2012 Henri Gavin <.> 0.20100105

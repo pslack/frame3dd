@@ -79,9 +79,9 @@ void solve_system(
 );
 
 
-/** compute {Fe} = {F} - [K]{D} and return ||Fe|| / ||F||*/
+/** compute {dF} = {F} - [K]{D} and return ||dF|| / ||F||*/
 double equilibrium_error(
-        double *Fe,	/**< equilibrium error  {Fe} = {F} - [K]{D}	*/
+        double *dF,	/**< equilibrium error  {dF} = {F} - [K]{D}	*/
         double *F,	/**< load vector                                */
         double **K,	/**< stiffness matrix for the restrained frame  */
         double *D,	/**< displacement vector to be solved           */
@@ -205,7 +205,7 @@ void deallocate(
 	float ***U, float ***W, float ***P, float ***T,
 	float **Dp,
 	double **F_mech, double **F_temp,
-	double ***feF_mech, double ***feF_temp, double **F, double *Fe, 
+	double ***feF_mech, double ***feF_temp, double **F, double *dF, 
 	double **K, double **Q,
 	double *D, double *dD,
 	float *d, float *EMs,

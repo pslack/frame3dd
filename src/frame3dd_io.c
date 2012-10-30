@@ -1986,7 +1986,7 @@ void write_static_results (
 			fprintf(fp, "\n");
 		}
 	}
-	fprintf(fp,"R M S   R E L A T I V E   E Q U I L I B R I U M    E R R O R: %9.3e\n", err );
+	fprintf(fp,"R M S    R E L A T I V E    E Q U I L I B R I U M    E R R O R: %9.3e\n", err );
 	fflush(fp);
 	return;
 }
@@ -2135,7 +2135,7 @@ void write_static_csv (
 		}
 		fprintf(fpcsv, "\n");
 	}
-	fprintf(fpcsv,"\"R M S   E Q U I L I B R I U M    E R R O R:\", %9.3e\n", err );
+	fprintf(fpcsv,"\"R M S    R E L A T I V E    E Q U I L I B R I U M    E R R O R:\", %9.3e\n", err );
 
 	fclose(fpcsv);
 
@@ -2295,7 +2295,7 @@ void write_static_mfile (
 		else		fprintf(fpm," ]'; \n\n");
 	}
 
-	fprintf(fpm,"%% R M S   E Q U I L I B R I U M    E R R O R: %9.3e\n", err );
+	fprintf(fpm,"%% R M S    R E L A T I V E    E Q U I L I B R I U M    E R R O R: %9.3e\n", err );
 	fprintf(fpm,"\n\n  load Ks \n\n");
 
 	fclose(fpm);
@@ -3565,20 +3565,23 @@ void evaluate ( float error, float rms_resid, float tol )
 	r = rand() % 10;
 
 	color(0);
-	fprintf(stdout," ... ");
-	(void) fflush(stdout);
-
+	fprintf(stdout,"  RMS relative equilibrium error  = %9.3e ", error );
 	if ( error < tol ) {
+		fprintf(stdout," < tol = %9.3e \n  ", tol );
+		(void) fflush(stdout);
 		textColor('y','b','b','x');
 		fprintf(stdout," *** converged *** ");
 	} else {
+		fprintf(stdout," > tol = %9.3e \n  ", tol );
+		(void) fflush(stdout);
 		textColor('y','r','b','x');
 		fprintf(stdout," !!! not converged !!! ");
-		(void) fflush(stdout);
-		color(0);	
-		fprintf(stdout,"\n\n");
 	}
-			
+	(void) fflush(stdout);
+	color(0);	
+	fprintf(stdout,"\n");
+	fprintf(stdout,"  RMS residual incremental displ. = %9.3e ... ", rms_resid);
+	(void) fflush(stdout);
 
 	if ( rms_resid < 1e-24 ) {
 
@@ -3600,7 +3603,7 @@ void evaluate ( float error, float rms_resid, float tol )
 	    fprintf(stdout,"\n");
 	    return;
 	}
-	
+
 	if ( rms_resid < 1e-16 ) {
 
 	    textColor('y','g','b','x');
@@ -3621,7 +3624,7 @@ void evaluate ( float error, float rms_resid, float tol )
 	    fprintf(stdout,"\n");
 	    return;
 	}
-
+	
 	if ( rms_resid < 1e-12 ) {
 
 	    textColor('y','c','b','x');

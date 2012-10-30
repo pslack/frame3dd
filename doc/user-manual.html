@@ -1767,7 +1767,7 @@ as described in sections 7.13 and 7.14 below.
 
 <p>
 The static stability of many structures depends upon a level of prestress
-within the structure.   In such goemetrically non-linear analyses,
+within the structure.   In such geometrically non-linear analyses,
 pre-stressed structres may be modeled by specifying a uniform temperature cooling in all pre-tensioned elements.   The value of the temperature change corresponding to a desired pre-stress tension force depends on the stiffness of the 
 components of the structural system and may be determined with a few iterations.
 As an initial guess, set the temperature change to be 
@@ -2121,7 +2121,7 @@ solving for the response to the combination of temperature loads and
 mechanical loads.
 In this way, temperature loads may be used to simulate the effect of
 pre-tension in structures, which can provide geometric stiffness.    
-For each load case <b>Frame3DD</b> carries out the following nine steps:
+For each load case <b>Frame3DD</b> carries out the following ten steps:
 <ol>
 <li> Assemble the structural stiffness matrix for the un-stressed structure.
 
@@ -2130,7 +2130,7 @@ For each load case <b>Frame3DD</b> carries out the following nine steps:
 <li>Compute frame element end forces from the displacements due to temperature loads.
 
 <li>Assemble the structural stiffness matrix again.<br>
-If goemetric stiffness effects are to be considered,
+If geometric stiffness effects are to be considered,
 the assembly process makes use of
 the axial frame element forces arising from the temperature loads.
 
@@ -2140,18 +2140,13 @@ the axial frame element forces arising from the temperature loads.
 
 <li>Compute frame element end forces from the displacements due to the combined displacements from temperature and mechanical loads.
 
-<li>If geometric stiffness effects are to be considered, carry out quasi Newton-Raphson iterations to converge upon the displacements that satisfy equilibrium.<br>
-The stiffness matrix assembly process makes use of
-the axial frame element forces arising from the combined temperature and mechanical loads.
+<li>Assemble the structural stiffness matrix again.<br>
+If geometric stiffness effects are to be considered,
+the assembly process makes use of the axial frame element forces arising from the combined temperature and mechanical loads.
 
 <li>Compute the "RMS relative equilibrium error."
 
-</ol>
-</p>
-
-<p>
-Iterative solutions to the partitioned matrix equation (step 8, above)
-are obtained via a quasi Newton-Raphson procedure: <br>
+<li>If geometric stiffness effects are to be considered, carry out quasi Newton-Raphson iterations to converge upon the displacements that satisfy equilibrium.<br>
 <div class=eq>
  K<sub>qq</sub>(D<sup>(i)</sup>) dD<sub>q</sub><sup>(i)</sup>
 =
@@ -2163,8 +2158,8 @@ F<sub>q</sub> - K<sub>qq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup>
 where:
 </p>
 <ul>
-<li> subscript <i>q</i> indicates a displacement coordinate
-<li> subscript <i>r</i> indicates a reaction coordinate
+<li> subscript <i>q</i> indicates the set of displacement coordinates
+<li> subscript <i>r</i> indicates the set of reaction coordinates
 <li> superscript <i>(i)</i> indicates the iteration number
 <li> <i>D<sub>q</sub><sup>(i)</sup> </i>   is the vector of unknown
 displacements at iteration <i>i</i> ,
@@ -2177,6 +2172,9 @@ displacements at iteration <i>i</i>.
 <li> <i>dD<sub>q</sub><sup>(i)</sup></i>  is the incremental displacement vector at iteration <i>i</i>, and
 <li> <i>D<sub>q</sub><sup>(i+1)</sup></i>  is the vector of uknown displacements at iteration <i>i+1</i>
 </ul>
+</ol>
+</p>
+
 <p>
 Solutions to linear matrix equations are obtained via an LDL'
 decomposition/back-substitution with sparse-matrix short-cuts and
@@ -2194,10 +2192,10 @@ When converged, the root-mean-square of <i>{r}<sup>(k)</sup></i> is typically on
 <p>
 </p>
 
-<p>
+<!-- <p>
 When the program is executed, various solution errors are displayed to the
 screen and are written to the Output Data file.  
-</p>
+</p> -->
 
 <p>
 <!-- At each LDL' back-substitution iteration,
@@ -2207,24 +2205,18 @@ the root-mean-square of the residual vector (the root-mean-square of <i>r<sup>(k
 <p>
 At each Newton-Raphson iteration, the RMS relative equilibrium error is
 displayed to the screen.  This error is the root-mean-square of
-(<i>F - K(D<sup>(i)</sup>) D<sup>(i)</sup></i>)
-divided by the root-mean-square of <i>F</i>.
+(<i>F<sub>q</sub> - K<sub>qq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup> - K<sub>qr</sub>(D<sup>(i)</sup>) D<sub>r</sub></i>)
+divided by the root-mean-square of <i>F<sub>q</sub></i>.
 Newton-Raphson iterations stop when
 this error is less than the convergence tolerance.
 The convergence tolerance
 is specified as the convergence tolerance for the modal-analysis.
-The default value is 0.00001
+The default value is 10<sup>-9</sup>.
 </p>
 
 <p>
-The accuracy obtained at each Newton-Raphson iteration is reported as the
-"RMS relative equilibrium precision" which is defined as
-the root-mean-square of (<i>F - K(D<sup>(i)</sup>) D<sup>(i)</sup></i>)
-divided by the root-mean-square of <i>F</i>.
-The converged equilibrium error is typically less than one part in 10<sup>6</sup>.
-If an analysis
-has an "RMS relative equilibrium precision" larger than 10<sup>-3</sup>,
-the results should not be trusted.
+The root-mean-square of the residual incremental displacement, <i>r<sup>(k)</sup></i>, 
+for the converged solution is also displayed.  
 </p>
 
 <!-- 
