@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example B: a pyramid-shaped frame --- static and dynamic analysis (N mm ton) 
-Tue Oct 30 01:11:15 2012
+Tue Oct 30 17:22:04 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -145,7 +145,7 @@ R E A C T I O N S							(global)
      3     138.074    -107.940    -113.220    2347.524      19.451     772.100
      4    -104.081     -84.218      92.256     676.634    2778.790    2787.884
      5    -113.507      92.609    -101.178    -595.361    2297.414    2307.609
-R M S    R E L A T I V E    E Q U I L I B R I U M    E R R O R: 4.023e-29
+R M S    R E L A T I V E    E Q U I L I B R I U M    E R R O R: 4.039e-29
 
 L O A D   C A S E   3   O F   3  ... 
 
@@ -168,7 +168,7 @@ R E A C T I O N S							(global)
      3     -59.680      42.390      26.172  -11599.779   -6654.864    5011.729
      4     -39.065      -6.127     -12.598    6200.718  -18324.250   -9694.028
      5     -10.580     -24.933      27.661   -2120.752  -13328.054  -15226.225
-R M S    R E L A T I V E    E Q U I L I B R I U M    E R R O R: 1.295e-29
+R M S    R E L A T I V E    E Q U I L I B R I U M    E R R O R: 1.772e-29
 
 M O D A L   A N A L Y S I S   R E S U L T S
   Total Mass:  1.020379e-01     Structural Mass:  2.037858e-03 

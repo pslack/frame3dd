@@ -1,6 +1,7 @@
 *Tue Oct 30 2012 Henri Gavin <.> 0.20100105
 - Cleaned up and documented Newton-Raphson code.  
-- Improved documentation on numerical details.
+- Improved documentation in the Numerical Details section.
+- Set internal force data to zero at start of each load case. 
 
 *Mon Oct 29 2012 Henri Gavin <.> 0.20100105
 - Improving documentation on numerical details.

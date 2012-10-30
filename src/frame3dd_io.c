@@ -3558,7 +3558,7 @@ void dots ( FILE *fp, int n ) {
 /*------------------------------------------------------------------------------
 EVALUATE -  displays a randomly-generated goodbye message.  
 ------------------------------------------------------------------------------*/
-void evaluate ( float error, float rms_resid, float tol ) 
+void evaluate ( float error, float rms_resid, float tol, int geom ) 
 {
 	int r;
 
@@ -3566,37 +3566,38 @@ void evaluate ( float error, float rms_resid, float tol )
 
 	color(0);
 	fprintf(stdout,"  RMS relative equilibrium error  = %9.3e ", error );
-	if ( error < tol ) {
-		fprintf(stdout," < tol = %9.3e \n  ", tol );
+	if ( error < tol && geom ) {
+		fprintf(stdout," < tol = %7.1e ", tol );
 		(void) fflush(stdout);
 		textColor('y','b','b','x');
-		fprintf(stdout," *** converged *** ");
-	} else {
-		fprintf(stdout," > tol = %9.3e \n  ", tol );
+		fprintf(stdout," ** converged ** ");
+	} if ( error > tol && geom ) {
+		fprintf(stdout," > tol = %7.1e ", tol );
 		(void) fflush(stdout);
 		textColor('y','r','b','x');
-		fprintf(stdout," !!! not converged !!! ");
+		fprintf(stdout," !! not converged !! ");
 	}
 	(void) fflush(stdout);
 	color(0);	
 	fprintf(stdout,"\n");
-	fprintf(stdout,"  RMS residual incremental displ. = %9.3e ... ", rms_resid);
+	fprintf(stdout,"  RMS residual incremental displ. = %9.3e ", rms_resid);
+	dots(stdout,17);
 	(void) fflush(stdout);
 
 	if ( rms_resid < 1e-24 ) {
 
 	    textColor('y','b','b','x');
 	    switch ( r ) {
-		case 0: fprintf(stdout," brilliant! "); break; 
-		case 1: fprintf(stdout," chuffed! "); break; 
-		case 2: fprintf(stdout," woo-hoo! "); break; 
-		case 3: fprintf(stdout," wicked! "); break; 
-		case 4: fprintf(stdout," beaut! "); break; 
-		case 5: fprintf(stdout," flash! "); break; 
-		case 6: fprintf(stdout," box of budgies! "); break; 
-		case 7: fprintf(stdout," priceless! "); break; 
-		case 8: fprintf(stdout," sweet as! "); break; 
-		case 9: fprintf(stdout," good as gold! "); break; 
+		case 0: fprintf(stdout," * brilliant!  * "); break; 
+		case 1: fprintf(stdout," *  chuffed!   * "); break; 
+		case 2: fprintf(stdout," *  woo-hoo!   * "); break; 
+		case 3: fprintf(stdout," *  wicked!    * "); break; 
+		case 4: fprintf(stdout," *   beaut!    * "); break; 
+		case 5: fprintf(stdout," *   flash!    * "); break; 
+		case 6: fprintf(stdout," *  well done! * "); break; 
+		case 7: fprintf(stdout," *  priceless! * "); break; 
+		case 8: fprintf(stdout," *  sweet as!  * "); break; 
+		case 9: fprintf(stdout," *good as gold!* "); break; 
 	    }
 	    (void) fflush(stdout);
 	    color(0);	
@@ -3608,16 +3609,16 @@ void evaluate ( float error, float rms_resid, float tol )
 
 	    textColor('y','g','b','x');
 	    switch ( r ) {
-		case 0: fprintf(stdout," certainly acceptable! "); break; 
-		case 1: fprintf(stdout," bling! "); break; 
-		case 2: fprintf(stdout," that will certainly do! "); break; 
-		case 3: fprintf(stdout," not at all shabby! "); break; 
-		case 4: fprintf(stdout," quite reasonable! "); break; 
-		case 5: fprintf(stdout," and there's nothing wrong with that! "); break; 
-		case 6: fprintf(stdout," up to snuff! "); break; 
-		case 7: fprintf(stdout," bully! "); break; 
-		case 8: fprintf(stdout," nice! "); break; 
-		case 9: fprintf(stdout," choice! "); break; 
+		case 0: fprintf(stdout,"   acceptable!   "); break; 
+		case 1: fprintf(stdout,"      bling!     "); break; 
+		case 2: fprintf(stdout,"  that will do!  "); break; 
+		case 3: fprintf(stdout,"   not shabby!   "); break; 
+		case 4: fprintf(stdout,"   reasonable!   "); break; 
+		case 5: fprintf(stdout,"   very good!    "); break; 
+		case 6: fprintf(stdout,"   up to snuff!  "); break; 
+		case 7: fprintf(stdout,"     bully!      "); break; 
+		case 8: fprintf(stdout,"      nice!      "); break; 
+		case 9: fprintf(stdout,"     choice!     "); break; 
 	    }
 	    (void) fflush(stdout);
 	    color(0);	

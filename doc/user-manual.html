@@ -1807,9 +1807,9 @@ and mode-shapes of frames that are
 fully restrained, partially restrained, or completely un-restrained.
 Partially restrained frames have up to six independent rigid body modes.
 A completely un-restrained frame has six independent rigid body modes.
-The stiffness matrix for
-partially restrained and completely unrestrained structures is not invertible.
-Such structural configurations can not carry static loads.
+Stiffness matrices for
+partially restrained and completely unrestrained structures are not invertible.
+Such structural configurations cannot carry static loads.
 Furthermore, the numerical methods used in computing the
 natural frequencies and mode shapes presume that the stiffness matrix
 is invertible.
@@ -1822,7 +1822,7 @@ with rigid-body modes, [<i>K</i>] is replaced by
 [[<i>K</i>]+s[<i>M</i>]].
 The desired natural frequencies
 are shifted by an amount equal to the "shift" variable, <i>s</i>,
-and are shifted back, after the natural frequencies and mode shapes are found.
+and can be shifted back, after the natural frequencies and mode shapes are found.
 The mode shapes are un-changed by this "shifting."
 If natural frequencies are computed as "nan" (not a number)
 try increasing the value of the frequency shift variable
@@ -2121,62 +2121,79 @@ solving for the response to the combination of temperature loads and
 mechanical loads.
 In this way, temperature loads may be used to simulate the effect of
 pre-tension in structures, which can provide geometric stiffness.    
-For each load case <b>Frame3DD</b> carries out the following ten steps:
+For each load case <b>Frame3DD</b> carries out the following eight steps:
 <ol>
-<li> Assemble the structural stiffness matrix for the un-stressed structure.
+<li> Assemble the elastic structural stiffness matrix for the un-stressed structure, <i>K(D=0)</i>.
 
-<li>Compute the node displacements due to temperature loads using a linear elastic analysis.
+<li>Compute the node displacements due to temperature loads, <i>F<sup>t</sup></i>,  using a linear elastic analysis,
+<i>K<sub>qq</sub> (0) D<sup>t</sup><sub>q</sub> = F<sup>t</sup><sub>q</sub></i>.
 
-<li>Compute frame element end forces from the displacements due to temperature loads.
+<li> If geometric stiffness effects are to be considered,
+<ul>
+<li>Compute frame element end forces from the displacements due to temperature loads, <i>Q(D<sup>t</sup>)</i>.
+<li>Assemble the structural stiffness matrix again
+making use of
+the axial frame element forces arising from the temperature loads, <i>K(D<sup>t</sup>)</i>.
+</ul>
 
-<li>Assemble the structural stiffness matrix again.<br>
-If geometric stiffness effects are to be considered,
-the assembly process makes use of
-the axial frame element forces arising from the temperature loads.
+<li>Compute the node displacements due to mechanical loads, <i>F<sup>m</sup></i>, only, including prescribed joint displacements, 
+<i>K<sub>qq</sub> (D<sup>t</sup>) D<sup>m</sup><sub>q</sub> = F<sup>m</sup><sub>q</sub> - K<sub>qr</sub> (D<sup>t</sup>) D<sub>r</sub></i>.
+<br>
+(For a linear-elastic analysis, neglecting geometric stiffness, <i>K = K(0)</i>.)
 
-<li>Compute the node displacements due to mechanical loads only, including prescribed joint displacements.
+<li>Add the node displacements due to mechanical loads to the node displacements due to temperature loads,
+<i>D<sup>1</sup> = D<sup>t</sup>  + D<sup>m</sup></i>, <br>
+and combine the temperature and mechanical loads, 
+<i>F = F<sup>t</sup>  + F<sup>m</sup></i>. 
 
-<li>Add the node displacements due to mechanical loads to the node displacements due to temperature loads.
+<li>Compute frame element end forces from the displacements due to the combined temperature and mechanical loads, <i>Q(D<sup>1</sup>)</i>.
 
-<li>Compute frame element end forces from the displacements due to the combined displacements from temperature and mechanical loads.
+<li> If geometric stiffness effects are to be considered,
+carry out quasi Newton-Raphson iterations to converge upon the displacements that satisfy equilibrium
+(starting with <i>i</i>=1).
+<ol>
+<li> Assemble the structural stiffness matrix again,
+now making use of the axial frame element forces arising from the combined temperature and mechanical loads,
+<i>K(D<sup>(i)</sup>)</i>,
+<li> Compute the equilibrium error at displacements <i>D<sup>(i)</sup></i>:
+<i>dF<sub>q</sub><sup>(i)</sup> = F<sub>q</sub> - K<sub>qq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup> - K<sub>qr</sub>(D<sup>(i)</sup>) D<sub>r</sub> </i>
+<li> Solve for the incremental displacements, <i>dD<sup>(i)</sup></i>:
+<i> K<sub>qq</sub>(D<sup>(i)</sup>) dD<sub>q</sub><sup>(i)</sup> = dF<sub>q</sub><sup>(i)</sup> </i>
 
-<li>Assemble the structural stiffness matrix again.<br>
-If geometric stiffness effects are to be considered,
-the assembly process makes use of the axial frame element forces arising from the combined temperature and mechanical loads.
-
-<li>Compute the "RMS relative equilibrium error."
-
-<li>If geometric stiffness effects are to be considered, carry out quasi Newton-Raphson iterations to converge upon the displacements that satisfy equilibrium.<br>
-<div class=eq>
- K<sub>qq</sub>(D<sup>(i)</sup>) dD<sub>q</sub><sup>(i)</sup>
-=
-F<sub>q</sub> - K<sub>qq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup>
-- K<sub>qr</sub>(D<sup>(i)</sup>) D<sub>r</sub> </div>
-<div class=eq>F<sub>r</sub><sup>(i)</sup> = K<sub>rq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup> + K<sub>rr</sub>(D<sup>(i)</sup>) D<sub>r</sub></div>
-<div class=eq>D<sub>q</sub><sup>(i+1)</sup> = D<sub>q</sub><sup>(i)</sup> + dD<sub>q</sub><sup>(i)</sup></div>
+<li> Increment the displacements: <i> D<sub>q</sub><sup>(i+1)</sup> = D<sub>q</sub><sup>(i)</sup> + dD<sub>q</sub><sup>(i)</sup></i>
+<li> Compute frame element end forces from the displacements due to the combined temperature and mechanical loads, <i>Q(D<sup>(i)</sup>)</i>.
+<li>The  Newton-Raphson iterations have converged when the root-mean-square relative equilibrium error (the root-mean-squre of <i>dF<sub>q</sub><sup>(i)</sup></i> divided by the root-mean-square of <i>F<sub>q</sup></i>) is less than the specified tolerance. <br>
+The convergence tolerance is taken as the convergence tolerance for the dynamic modal analysis.
+The default value is 10<sup>-9</sup>.
+</ol>
+<li> Once the solution has converged, compute the reaction forces: <i>F<sub>r</sub><sup>(i)</sup> = K<sub>rq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup> + K<sub>rr</sub>(D<sup>(i)</sup>) D<sub>r</sub></i>
 <p>
-where:
+Notation:
 </p>
 <ul>
 <li> subscript <i>q</i> indicates the set of displacement coordinates
 <li> subscript <i>r</i> indicates the set of reaction coordinates
 <li> superscript <i>(i)</i> indicates the iteration number
 <li> <i>D<sub>q</sub><sup>(i)</sup> </i>   is the vector of unknown
-displacements at iteration <i>i</i> ,
+displacements at iteration <i>i</i> 
 <li> <i>D<sub>r</sub></i>   is the vector of known prescribed displacements 
-(at reaction coordinates),
+(at reaction coordinates)
 <li> <i>K(D<sup>(i)</sup>)</i> is the stiffness matrix, dependent upon
-displacements at iteration <i>i</i>.
-<li> <i>F<sub>q</sub> </i>     is the vector of known applied loads (at displacement coordinates), 
-<li> <i>F<sub>r</sub><sup>(i)</sup> </i>     is the vector of unknown reaction forces at iteration <i>i</i>,
-<li> <i>dD<sub>q</sub><sup>(i)</sup></i>  is the incremental displacement vector at iteration <i>i</i>, and
+displacements at iteration <i>i</i>
+<li> <i>F<sub>q</sub> </i>     is the vector of known applied loads (at displacement coordinates) 
+<li> <i>F<sub>r</sub><sup>(i)</sup> </i>     is the vector of unknown reaction forces at iteration <i>i</i>
+<li> <i>dF<sub>q</sub><sup>(i)</sup></i>  is the equilibrium error vector at iteration <i>i</i> 
+<li> <i>dD<sub>q</sub><sup>(i)</sup></i>  is the incremental displacement vector at iteration <i>i</i> 
 <li> <i>D<sub>q</sub><sup>(i+1)</sup></i>  is the vector of uknown displacements at iteration <i>i+1</i>
+<li> <i>Q(D<sup>(i)</sup>)</i>  is the set of frame element end forces at iteration <i>i</i>
 </ul>
 </ol>
 </p>
 
+<img src="img/Newton-Raphson1.png" align="center" border="0"><br>
+
 <p>
-Solutions to linear matrix equations are obtained via an LDL'
+Solutions to linear matrix equations (steps 2., 4., and 7.3)  are obtained via an LDL'
 decomposition/back-substitution with sparse-matrix short-cuts and
 iterative improvement for enhanced speed and accuracy.
 Iterative improvements to the solution to <i>[K]{dD} = {dF}</i> 
@@ -2184,39 +2201,30 @@ are obtained (for both linear elastic and geometrically nonlinear problems)
 by iteratively solving
 <i>[K]{r}<sup>(k)</sup>  = {dF}-[K]{dD}<sup>(k)</sup></i>
 with <i>{dD}<sup>(k+1)</sup> = {dD}<sup>(k)</sup> + {r}<sup>(k)</sup>.</i>
+The superscript <i>(k)</i> is the LDL' iteration counter.  
 Iterations are stopped when the root-mean-square of the residual incremental
 displacement vector (the root-mean-square of <i>{r}<sup>(k)</sup></i>)
-decreases by less than ten percent in an LDL' iteration.
-The superscript <i>(k)</i> is the LDL' iteration counter.  
-When converged, the root-mean-square of <i>{r}<sup>(k)</sup></i> is typically on the order of 10<sup>-20</sup>.  
-<p>
+decreases by less than ten percent within an LDL' iteration.
+The stiffness matrix <i>[K]</i> does not change within these iterations.  
 </p>
+
 
 <!-- <p>
-When the program is executed, various solution errors are displayed to the
-screen and are written to the Output Data file.  
+At each LDL' back-substitution iteration,
+the root-mean-square of the residual vector (the root-mean-square of <i>r<sup>(k)</sup></i>) is displayed to the screen as the "LDL' RMS residual."
 </p> -->
 
-<p>
-<!-- At each LDL' back-substitution iteration,
-the root-mean-square of the residual vector (the root-mean-square of <i>r<sup>(k)</sup></i>) is displayed to the screen as the "LDL' RMS residual." -->
-</p>
 
 <p>
-At each Newton-Raphson iteration, the RMS relative equilibrium error is
+At each Newton-Raphson iteration, the root-mean-square relative equilibrium error is
 displayed to the screen.  This error is the root-mean-square of
-(<i>F<sub>q</sub> - K<sub>qq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup> - K<sub>qr</sub>(D<sup>(i)</sup>) D<sub>r</sub></i>)
-divided by the root-mean-square of <i>F<sub>q</sub></i>.
-Newton-Raphson iterations stop when
-this error is less than the convergence tolerance.
-The convergence tolerance
-is specified as the convergence tolerance for the modal-analysis.
-The default value is 10<sup>-9</sup>.
+<i>dF<sub>q</sub><sup>(i)</sup></i> divided by the root-mean-square of <i>F<sub>q</sub></i>.
 </p>
 
 <p>
-The root-mean-square of the residual incremental displacement, <i>r<sup>(k)</sup></i>, 
-for the converged solution is also displayed.  
+For the converged solution, the final value of the root-mean-square of the residual incremental displacement, <i>r<sup>(k)</sup></i>, 
+is displayed.  
+For converged solutions the root-mean-square of <i>r<sup>(k)</sup></i> is typically on the order of 10<sup>-20</sup>.  
 </p>
 
 <!-- 
@@ -2242,13 +2250,13 @@ obtained using a generalized Jacobi sub-space iteration procedure
 or a Stodola iteration procedure.
 Jacobi-subspace iterations are stopped when the frequency convergence error is less than the specified
 frequency convergence tolerance.  The frequency convergence error is defined here as:
-</p>
- <div class=eq>error = | f<sub>N</sub><sup>(i)</sup> - f<sub>N</sub><sup>(i-1)</sup> | / f<sub>N</sub><sup>(i)</sup> </div>
-<p>where</p>
+ <i> error = | f<sub>N</sub><sup>(i)</sup> - f<sub>N</sub><sup>(i-1)</sup> | / f<sub>N</sub><sup>(i)</sup> </i>, 
+where
 <ul>
 <li><i> f<sub>N</sub><sup>(i)</sup></i>    is the highest natural frequency computed at iteration <i>i</i> ,
 <li><i>f<sub>N</sub><sup>(i-1)</sup></i>  is the highest natural frequency computed at iteration <i>i-1</i> ,
 </ul>
+</p>
 
 <a name="InputData"><h2>9. Input Data Format</h2>
 <p>

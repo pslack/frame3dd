@@ -347,8 +347,7 @@ For compilation/installation, see README.txt.
 
 	read_and_assemble_loads( fp, nN, nE, nL, DoF, xyz, L, Le, N1, N2,
 			Ax,Asy,Asz, Iy,Iz, E, G, p,
-			d, gX, gY, gZ, 
-			r, shear,
+			d, gX, gY, gZ, r, shear,
 			nF, nU, nW, nP, nT, nD,
 			Q, F_temp, F_mech, F, U, W, P, T,
 			Dp, feF_mech, feF_temp, verbose );
@@ -363,9 +362,7 @@ For compilation/installation, see README.txt.
 			L, Ax, &total_mass, &struct_mass, &nM,
 			&Mmethod, modal_flag, 
 			&lump, lump_flag, &tol, tol_flag, &shift, shift_flag,
-			&exagg_modal,
-			modepath,
-			anim, &pan, pan_flag, 
+			&exagg_modal, modepath, anim, &pan, pan_flag, 
 			verbose, debug );
 	if ( verbose ) {	/* display mass data complete */
 		fprintf(stdout,"                                                     ");
@@ -380,11 +377,10 @@ For compilation/installation, see README.txt.
 		fprintf(stdout," matrix condensation data ... complete\n");
 	}
 
-	fclose(fp);
+	fclose(fp);		/* close the input data file */
 
-	/* open the output data file for appending */
+	fp = fopen(OUT_file, "a"); /* open the output data file for appending */
 
-	fp = fopen(OUT_file, "a");
 	if(fp==NULL) {	/* unable to append to output data file */
 		fprintf(stderr,"Unable to append to output data file '%s'!\n",
 								OUT_file);
@@ -401,7 +397,7 @@ For compilation/installation, see README.txt.
 	 srand(time(NULL));
 	 for (lc=1; lc<=nL; lc++) {	/* begin load case analysis loop */
 
-		if ( verbose ) {	/*  display the load case number */
+		if ( verbose ) {	/* display the load case number  */
 			fprintf(stdout,"\n");
 			textColor('y','g','b','x');
 			fprintf(stdout," Load Case %d of %d ... ", lc,nL );
@@ -415,8 +411,10 @@ For compilation/installation, see README.txt.
 		/*  initialize displacements and displ. increment to {0}  */
 		for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;	
 
+		/*  initialize internal forces to {0}	*/
+		for (i=1; i<=nE; i++)	for (j=1;j<=12;j++)	Q[i][j] = 0.0;
+
 		/*  assemble stiffness matrix [K({D}^(i))], {D}^(0)={0} (i=0) */
-		/*  ... at this stage {Q} = {0}				      */
 		assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
 					Ax, Asy, Asz, Jx,Iy,Iz, E, G, p,
 					shear, geom, Q, debug );
@@ -439,14 +437,16 @@ For compilation/installation, see README.txt.
 			/* increment {D_t} = {0} + {dD_t} temp.-induced displ. */
 			for (i=1; i<=DoF; i++)	if (q[i]) D[i] += dD[i];
 
-			/* compute   {Q}={Q_t} ... temp.-induced forces	*/
-			element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
+			if (geom) {
+			 /* compute   {Q}={Q_t} ... temp.-induced forces	*/
+			 element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
 				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 
-			/* assemble temp.-stressed stiffness [K({D_t})]	*/
-			assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
+			 /* assemble temp.-stressed stiffness [K({D_t})]	*/
+			 assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
 						Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
 						shear,geom, Q, debug );
+			}
 		}
 
 		/* ... then apply mechanical loads only, if there are any ... */
@@ -469,6 +469,10 @@ For compilation/installation, see README.txt.
 		/*  combine {F} = {F_t} + {F_m} */
 		for (i=1; i<=DoF; i++)	F[lc][i] = F_temp[lc][i] + F_mech[lc][i]; 
 
+		/*  element forces {Q} for displacements {D}	*/ 
+		element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
+				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
+
 		if ( geom && verbose )
 			fprintf(stdout,"\n Non-Linear Elastic Analysis ...\n");
 
@@ -486,13 +490,9 @@ For compilation/installation, see README.txt.
 
 		/* quasi Newton-Raphson iteration for geometric nonlinearity */
 		ok = 0; iter = 0; error = 1.0;	/* re-initialize */
-		while ( error > tol && iter < 500 && ok >= 0) {
+		while ( geom && error > tol && iter < 500 && ok >= 0) {
 
 			++iter;
-
-			/*  element forces {Q} for {D}^(i)	*/ 
-			element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
-				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 
 			/*  assemble stiffness matrix [K({D}^(i))]	*/
 			assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
@@ -502,8 +502,6 @@ For compilation/installation, see README.txt.
 			/*  {dF}^(i) = {F} - [K({D}^(i))]*{D}^(i) (i=0) */
 			/*  convergence criteria = || {dF}^(i) ||  /  || F || */
 			error = equilibrium_error ( dF, F[lc], K, D, DoF, q );
-
-			if (!geom)	break;
 
 			// Powell-Symmetric-Broyden secant stiffness update 
 			// PSB_update ( Ks, dF, dD, DoF );  /* not helpful? */
@@ -520,6 +518,9 @@ For compilation/installation, see README.txt.
 			/*  increment {D}^(i+1} = {D}^{i} + {dD}^(i) */
 			for (i=1; i<=DoF; i++)	if (q[i])	D[i] += dD[i];
 
+			/*  compute element forces {Q} for displacements {D}^(i) */ 
+			element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
+				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 
 			if ( verbose ) { 
 				fprintf(stdout,"   NR iteration %3d ---", iter);
@@ -527,19 +528,19 @@ For compilation/installation, see README.txt.
 			}
 		}			/* end quasi Newton-Raphson iteration */
 
-		/* dealocate Broyden secant stiffness matrix, Ks */
-		// if ( geom )	free_dmatrix(Ks, 1, DoF, 1, DoF );
-
-		if ( write_matrix )	/* write static stiffness matrix */
-			save_ut_dmatrix ( DoF, K, "Ks" );
-
 		compute_reaction_forces( F[lc], K, D, DoF, r );
 
 		add_feF ( xyz, L, N1,N2, p,
 			Q, feF_temp[lc], feF_mech[lc], nE, DoF, verbose );
 
+		/*  dealocate Broyden secant stiffness matrix, Ks */
+		// if ( geom )	free_dmatrix(Ks, 1, DoF, 1, DoF );
+
+		if ( write_matrix )	/* write static stiffness matrix */
+			save_ut_dmatrix ( DoF, K, "Ks" );
+
 		/*  display RMS equilibrium error */
-		if ( verbose && ok >= 0 ) evaluate ( error, rms_resid, tol );
+		if ( verbose && ok >= 0 ) evaluate ( error, rms_resid, tol, geom );
 
 		write_static_results ( fp, nN,nE,nL,lc, DoF, N1,N2,
 				F[lc], D,r,Q, rms_resid, ok, axial_sign );
@@ -570,9 +571,9 @@ For compilation/installation, see README.txt.
 					D, shear, error );
 
 		static_mesh ( IN_file, infcpath, meshpath, plotpath, title,
-				nN, nE, nL, lc, DoF,
-				xyz, L, N1,N2, p, D,
-				exagg_static, D3_flag, anlyz, dx );
+					nN, nE, nL, lc, DoF,
+					xyz, L, N1,N2, p, D,
+					exagg_static, D3_flag, anlyz, dx );
 
 	 } /* end load case loop */
 	} else {
