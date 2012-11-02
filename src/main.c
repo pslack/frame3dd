@@ -229,7 +229,7 @@ For compilation/installation, see README.txt.
 	}
 
 	frame3dd_getline(fp, title, MAXL);
-	if (verbose ) {	/*  display analysis title */
+	if ( verbose ) {	/*  display analysis title */
 		textColor('w','g','b','x');
 		fprintf(stdout,"\n");
 		fprintf(stdout," ** %s ** \n", title );
@@ -428,21 +428,18 @@ For compilation/installation, see README.txt.
 			if ( verbose )
 				fprintf(stdout," Linear Elastic Analysis ... Temperature Loads\n");
 
-			/* add temp loads into F */
-//			for (i=1; i<=DoF; i++)	F[lc][i] = F_temp[lc][i]; 
-
-			/*  solve {F_t} = [K({D=0})] * {dD_t} */
+			/*  solve {F_t} = [K({D=0})] * {D_t} */
 			solve_system(K,dD,F_temp[lc],DoF,q,r,&ok,verbose,&rms_resid);
 
-			/* increment {D_t} = {0} + {dD_t} temp.-induced displ. */
+			/* increment {D_t} = {0} + {D_t} temp.-induced displ */
 			for (i=1; i<=DoF; i++)	if (q[i]) D[i] += dD[i];
 
 			if (geom) {
-			 /* compute   {Q}={Q_t} ... temp.-induced forces	*/
+			 /* compute   {Q}={Q_t} ... temp.-induced forces     */
 			 element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
 				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
 
-			 /* assemble temp.-stressed stiffness [K({D_t})]	*/
+			 /* assemble temp.-stressed stiffness [K({D_t})]     */
 			 assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
 						Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
 						shear,geom, Q, debug );
@@ -499,7 +496,8 @@ For compilation/installation, see README.txt.
 				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
 				shear,geom, Q, debug );
 
-			/*  {dF}^(i) = {F} - [K({D}^(i))]*{D}^(i) (i=0) */
+			/*  compute equilibrium error, {dF}, at iteration i */
+			/*  {dF}^(i) = {F} - [K({D}^(i))]*{D}^(i) */
 			/*  convergence criteria = || {dF}^(i) ||  /  || F || */
 			error = equilibrium_error ( dF, F[lc], K, D, DoF, q );
 
@@ -542,7 +540,7 @@ For compilation/installation, see README.txt.
 		/*  display RMS equilibrium error */
 		if ( verbose && ok >= 0 ) evaluate ( error, rms_resid, tol, geom );
 
-		write_static_results ( fp, nN,nE,nL,lc, DoF, N1,N2,
+ 		write_static_results ( fp, nN,nE,nL, lc, DoF, N1,N2,
 				F[lc], D,r,Q, rms_resid, ok, axial_sign );
 
 		if ( filetype == 1 ) {		// .CSV format output
@@ -613,7 +611,7 @@ For compilation/installation, see README.txt.
 				traceM += M[j][j];
 			}
 		}
-		for (i=1; i<=DoF; i++) { /*  modify K and M for reactions */
+		for (i=1; i<=DoF; i++) { /*  modify K and M for reactions    */
 			if ( r[i] ) {	/* apply reactions to upper triangle */
 				K[i][i] = traceK * 1e4;
 				M[i][i] = traceM;
@@ -627,13 +625,13 @@ For compilation/installation, see README.txt.
 			save_ut_dmatrix ( DoF, M, "Md" );/* dynamic mass matx */
 		}
 
-		if(anlyz) {	/* subspace or stodola methods */
+		if ( anlyz ) {	/* subspace or stodola methods */
 			if( Mmethod == 1 )
 				subspace( K, M, DoF, nM_calc, f, V, tol,shift,&iter,&ok, verbose );
 			if( Mmethod == 2 )
 				stodola ( K, M, DoF, nM_calc, f, V, tol,shift,&iter,&ok, verbose );
 
-			for (j=1; j<=nM_calc; j++)	f[j] = sqrt(f[j])/(2.*PI);
+			for (j=1; j<=nM_calc; j++) f[j] = sqrt(f[j])/(2.0*PI);
 
 			write_modal_results ( fp, nN,nE,nI, DoF, M,f,V,
 					total_mass, struct_mass,
@@ -644,7 +642,7 @@ For compilation/installation, see README.txt.
 	fprintf(fp,"\n");
 	fclose (fp);
 
-	if(nM > 0 && anlyz) {	/* write modal analysis results */
+	if ( nM > 0 && anlyz ) {	/* write modal analysis results */
 
 		modal_mesh ( IN_file, meshpath, modepath, plotpath, title,
 				nN,nE, DoF, nM, xyz, L, N1,N2, p,
@@ -711,11 +709,11 @@ For compilation/installation, see README.txt.
 	if ( verbose ) fprintf(stdout,"\n");
 
 	if ( argc == 1 ) { /* wait for keyboard entry to close the terminal */
-	 fprintf(stderr," The Output Data was appended to %s \n", OUT_file );
-	 fprintf(stderr," A Gnuplot script was written to %s \n", plotpath );
-	 fprintf(stderr," Press the 'Enter' key to close.\n");
-	 (void) getchar();	// clear the buffer ?? 
-	 while( !getchar() ) ;	// wait for the Enter key to be hit 
+	   fprintf(stderr," The Output Data was appended to %s \n", OUT_file );
+	   fprintf(stderr," A Gnuplot script was written to %s \n", plotpath );
+	   fprintf(stderr," Press the 'Enter' key to close.\n");
+	   (void) getchar();	// clear the buffer ?? 
+	   while( !getchar() ) ;	// wait for the Enter key to be hit 
 	}
 	color(0);
 
