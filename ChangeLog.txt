@@ -1,3 +1,7 @@
+*Tue Nov  6 2012 Henri Gavin <.> 0.20100105
+- add reference to Wai-Fah Chen's text on Structural Stability in the section
+of user-manual.html on second-order analysis.
+
 *Fri Nov  2 2012 Henri Gavin <.> 0.20100105
 - small edits to comments in main.c
 

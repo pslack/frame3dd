@@ -41,7 +41,7 @@ Duke University</a> - Box 90287,
 
 <p><i>
 <font face="Verdana, Arial, Helvetica, sans-serif" size="2">
-Henri P. Gavin, P.E., Ph.D., </font></i></p>
+Henri P. Gavin, Ph.D., P.E., </font></i></p>
 
 <hr>
 <h1>FRAME3DD</h1>
@@ -1279,8 +1279,8 @@ Additional shear area approximations (below) for solid circular and rectangular 
 do account for Poisson's effect and have been experimentally validated  
 with prismatic beams of materials 
 having a Poisson ratio, <i>v</i>, of 0.16 to 0.38. 
-(See references <a href="http://www.sciencedirect.com/science/article/pii/S0020768310000685">7</a>, 
-<a href="http://iopscience.iop.org/0022-3727/11/14/010">9</a>, and <a href="http://iopscience.iop.org/0022-3727/10/11/009">17</a>.)
+(See references <a href="http://www.sciencedirect.com/science/article/pii/S0020768310000685">8</a>, 
+<a href="http://iopscience.iop.org/0022-3727/11/14/010">10</a>, and <a href="http://iopscience.iop.org/0022-3727/10/11/009">18</a>.)
 </p>
 <p>
 Regardless of the section shape and Poisson ratio, the shear areas <i>Asy</i> and <i>Asz</i> are less than the cross section area <i>Ax</i>. 
@@ -1422,7 +1422,7 @@ Asz coefficients
 
 <p>
 Approximate formulae for the effective shear areas of solid circular and rectangular cross sections including the Poisson effect have been experimentally validated for Poisson ratio, <i>v</i>, from 0.16 to 0.38.  
-(See references <a href="http://iopscience.iop.org/0022-3727/11/14/010">9</a> and <a href="http://iopscience.iop.org/0022-3727/10/11/009">17</a>.)
+(See references <a href="http://iopscience.iop.org/0022-3727/11/14/010">10</a> and <a href="http://iopscience.iop.org/0022-3727/10/11/009">18</a>.)
 
 <ul>
 <li> <b> Solid Circular Section:</b> <i> Asy = Asz = Ax (6+12v+6v<sup>2</sup>)/(7+12v+4v<sup>2</sup>) </i>
@@ -2149,7 +2149,8 @@ and combine the temperature and mechanical loads,
 <li>Compute frame element end forces from the displacements due to the combined temperature and mechanical loads, <i>Q(D<sup>1</sup>)</i>.
 
 <li> If geometric stiffness effects are to be considered,
-carry out quasi Newton-Raphson iterations to converge upon the displacements that satisfy equilibrium
+carry out a second-order analysis
+via quasi Newton-Raphson iterations in order to converge upon the displacements that satisfy equilibrium
 (starting with <i>i</i>=1).
 <ol>
 <li> Assemble the structural stiffness matrix again,
@@ -2191,6 +2192,11 @@ displacements at iteration <i>i</i>
 </p>
 
 <img src="img/Newton-Raphson1.png" align="center" border="0"><br>
+
+<p>
+The second-order analysis carried out in steps 7.1. - 7.6. is illustrated above and is described in more detail in
+section 4.5 of reference <a href="http://www.amazon.com/Structural-Stability-Implementation-Wai-Kai-Chen/dp/0135005396/">4</a>.
+</p>
 
 <p>
 Solutions to linear matrix equations (steps 2., 4., and 7.3)  are obtained via an LDL'
@@ -2891,6 +2897,12 @@ Prentice-Hall, 1995. ISBN: 0133014584
 <a href="http://www.amazon.com/exec/obidos/ASIN/0471551570/ref=pd_cp_nsr_b_1/002-2386037-4350467">Advanced Mechanics of Materials</a>,
 John Wiley & Sons, 1993.            ISBN: 0471551570
 
+<a name="Chen-1987"/>
+<li> Wai-Fah Chen and E.M. Lui,
+<a href="http://www.amazon.com/Structural-Stability-Implementation-Wai-Kai-Chen/dp/0135005396/">
+Structural Stability: Theory and Implementation</a>,
+Prentice-Hall, 1997, ISBN: 0135005396
+
 <li> Raymond W. Clough and Joseph Penzien,
 <a href="http://www.amazon.com/exec/obidos/ASIN/0070113920/qid%3D1003514837/ref%3Dsr%5F11%5F0%5F1/002-2386037-4350467">Dynamics of Structures</a>,
 McGraw-Hill, 1993.   ASIN: 0070113920
@@ -2904,7 +2916,7 @@ Shear coefficient in Timoshenko's Beam Theory</a>,
 <a href="http://www.amazon.com/exec/obidos/ASIN/0486654079/qid=1003515697/sr=2-1/ref=sr_2_11_1/002-2386037-4350467">Advanced Strength of Materials</a>,
 Dover Press, 1987.   ISBN: 0486654079
 
-<a name="Dong-IJSS-2010">
+<a name="Dong-IJSS-2010"/>
 <li> S.B. Dong, C. Alpdogan, and E. Taciroglu, 
 <a href="http://www.sciencedirect.com/science/article/pii/S0020768310000685">
 Much ado about shear correction factors in Timoshenko beam theory</a>,
@@ -2980,7 +2992,7 @@ Prentice-Hall, 1995. ISBN: 013137589X
 <p>Authors:</p>
 
 <pre>
-Henri P. Gavin, P.E., Ph.D.
+Henri P. Gavin, Ph.D., P.E.
 Department of Civil and Environmental Engineering
 Duke University, Box 90287
 Durham, NC  27708--0287
