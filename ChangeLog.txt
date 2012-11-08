@@ -1,3 +1,6 @@
+*Wed Nov  7 2012 Henri Gavin <.> 0.20100105
+- fix broken links to ansicon ...  http://adoxa.3eeweb.com/ansicon/
+
 *Tue Nov  6 2012 Henri Gavin <.> 0.20100105
 - add reference to Wai-Fah Chen's text on Structural Stability in the section
 of user-manual.html on second-order analysis.
