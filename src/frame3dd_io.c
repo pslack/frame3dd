@@ -3187,7 +3187,7 @@ void animate(
 			y_min-0.1*Dxyz, y_max+0.1*Dxyz );
 	   fprintf(fpm,"set zrange [ %lf : %lf ] \n",
 			z_min-0.1*Dxyz, z_max+0.1*Dxyz );
-	   fprintf(fpm,"set tickslevel 0 \n");
+	   fprintf(fpm,"set tickslevel 0 \n");	// requires Gnuplot >= 4.6
 
 /*
  *	   if ( x_min != x_max )
