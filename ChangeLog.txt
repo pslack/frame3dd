@@ -1,3 +1,8 @@
+*Mon Nov 26 22:35:36 EST 2012 <.> 0.20100105
+- add fixed end forces to reaction forces in frame3dd.c function add_feF().
+- comment-out "set tickslevel 0" in frame3dd_io.c function animate() for
+compatibility with gnuplot versions earlier than 4.6
+
 *Wed Nov  7 2012 Henri Gavin <.> 0.20100105
 - fix broken links to ansicon ...  http://adoxa.3eeweb.com/ansicon/
 

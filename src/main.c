@@ -528,8 +528,8 @@ For compilation/installation, see README.txt.
 
 		compute_reaction_forces( F[lc], K, D, DoF, r );
 
-		add_feF ( xyz, L, N1,N2, p,
-			Q, feF_temp[lc], feF_mech[lc], nE, DoF, verbose );
+		add_feF ( xyz, L, N1,N2, p, Q, feF_temp[lc], feF_mech[lc],
+				nE, DoF, F[lc], r, verbose );
 
 		/*  dealocate Broyden secant stiffness matrix, Ks */
 		// if ( geom )	free_dmatrix(Ks, 1, DoF, 1, DoF );

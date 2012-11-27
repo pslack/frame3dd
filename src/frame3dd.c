@@ -579,27 +579,40 @@ void member_force(
 
 
 /*----------------------------------------------------------------------------- 
-ADD_FEF -  add fixed end forces to internal element forces 18oct12
+ADD_FEF -  add fixed end forces to reactions and internal element forces 18oct12
 ------------------------------------------------------------------------------*/
 void add_feF(	
 	vec3 *xyz,
 	double *L, int *N1, int *N2, float *p,
 	double **Q, double **f_t, double **f_m, int nE, int DoF, 
+	double *F, int *r,
 	int verbose
 ){
 	double  t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
 		f1=0, f2=0, f3=0, f4=0,  f5=0,  f6=0, 
 		f7=0, f8=0, f9=0, f10=0, f11=0, f12=0;
-	int	m, n1, n2; //, J, x;
+	int	m, n1, n2, i, i1, i2; //, J, x;
 
 	for (m=1; m <= nE; m++) {	/* loop over all frame elements */
 
 		n1 = N1[m];	n2 = N2[m];
 
+		/* add fixed-end forces to reaction forces */
+		for (i=1; i<=6; i++) {
+			i1 = 6*(n1-1) + i;
+			if (r[i1])
+				F[i1] -= ( f_t[m][i] + f_m[m][i] );
+		}
+		for (i=1; i<=6; i++) {
+			i2 = 6*(n2-1) + i;
+			if (r[i2])
+				F[i2] -= ( f_t[m][i+6] + f_m[m][i+6] );
+		}
+
 		coord_trans ( xyz, L[m], n1, n2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[m] );
 
-		n1 = 6*(n1-1);	n2 = 6*(n2-1);
+		// n1 = 6*(n1-1);	n2 = 6*(n2-1);	// ??
 
 		// break out temperature fixed-end-forces to variables f1-f12
 		f1  = f_t[m][1];   f2  = f_t[m][2];   f3  = f_t[m][3];

@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example E: a three dimensional structure showing lateral-torsional dynamic modes (units: kip  in) 
-Tue Oct 30 17:22:05 2012
+Mon Nov 26 22:38:26 2012
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -125,9 +125,9 @@ F R A M E   E L E M E N T   E N D   F O R C E S				(local)
     15      8      1.177t     -8.975   -104.573  -1537.820   -132.579    235.377
 R E A C T I O N S							(global)
   Node        Fx          Fy          Fz         Mxx         Myy         Mzz
-     9     -61.177      21.622    -214.910   -1420.977   -3401.997     -13.793
-    10     -49.430    -367.323     234.550   24580.675   -3271.415     -13.796
-    11     148.407    -154.299     480.360   11416.361   10575.960     -13.795
+     9     -57.577      21.622    -214.910   -1420.977   -3305.990     -13.793
+    10     -44.030    -367.323     234.550   24580.675   -3127.404     -13.796
+    11     155.607    -154.299     480.360   11416.361   10767.974     -13.795
 R M S    R E L A T I V E    E Q U I L I B R I U M    E R R O R: 4.480e-20
 
 M O D A L   A N A L Y S I S   R E S U L T S

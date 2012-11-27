@@ -57,10 +57,10 @@ void assemble_K(
 /* compute_reaction_forces --- comput [K(r,q)] * {D(q)} + [K(r,r)] * {D(r)} */
  
 void compute_reaction_forces( 
-	double *F,	/**<   vector of external loads and reaction forces  */
-	double **K,	/**<   stiffness matrix				 */
-	double *D,	/**< displacement vector to be solved		 */
-	int DoF,	/**<   number of degrees of freedom		 */
+	double *F,	/**< vector of external loads and reaction forces  */
+	double **K,	/**< stiffness matrix				*/
+	double *D,	/**< displacement vector to be solved		*/
+	int DoF,	/**< number of structural coordinates		*/
 	int *r		/**< 0: not a reaction; 1: a reaction coordinate */
 );
 
@@ -118,6 +118,8 @@ void add_feF(
 	double **feF_mech, /**< mech. fixed end forces for every frame element*/
 	int nE,		/**< number of frame elements			*/
 	int DoF,	/**< number of degrees of freedom		*/
+	double *F,	/**< vector of external loads and reaction forces  */
+	int *r,		/**< 0: not a reaction; 1: a reaction coordinate */
 	int verbose	/**< 1: copious screen output; 0: none		*/
 );
 
