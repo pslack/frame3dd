@@ -89,6 +89,9 @@ void parse_options (
 	*axial_sign = 1;
 	*debug = 0; *verbose = 1;
 
+	strcpy(  IN_file , "\0" );
+	strcpy( OUT_file , "\0" );
+
 	/* set up file names for the the input data and the output data */
 
 	switch ( argc ) {
