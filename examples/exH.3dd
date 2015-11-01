@@ -1,4 +1,4 @@
-Example H: a pedestrian ramp  (kip, in)
+Example H: a pedestrian ramp  (units: kip, in)
 
 # node data ...
 
@@ -593,12 +593,18 @@ Example H: a pedestrian ramp  (kip, in)
 1                               # 1: include shear deformation
 1                               # 1: include geometric stiffness
 100.0                           # exaggerate static mesh deformations
+2.0				# zoom scale for 3D plotting
 -1.0                            # no internal force calculation
 
 
 1			# number of static load cases
+
 				# Begin Static Load Case 1 of 1
-0  0  -386.4			# gravity in X Y Z directions (global)		
+
+# gravitational acceleration for self-weight loading (global)
+#.gX            gY              gZ              
+#.in./s^2	in./s^2         in./s^2
+  0		0		-386.4		
 
 0                               # number of loaded nodes
 
@@ -779,7 +785,7 @@ Example H: a pedestrian ramp  (kip, in)
 0  				# number of trapezoidal distributed loads
 0                               # number of internal concentrated loads
 0                               # number of temperature loads
-0                               # number of support settlements
+0                               # number of nodes with prescribed displacements
 				# End   Static Load Case 1 of 1
 
 
@@ -965,8 +971,8 @@ Example H: a pedestrian ramp  (kip, in)
 294		0.026
 295		0.026
 
-5                               # number of modes to animate
- 1  2  3  4  5                 # modes to animate
+5                              # number of modes to animate, nA
+ 1  2  3  4  5                 # modes to animate, omit if nA == 0
 1                              # pan during animation
 
-
+# End of input data file for example H

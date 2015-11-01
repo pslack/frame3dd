@@ -5,7 +5,7 @@
  ---------------------------------------------------------------------------
  http://frame3dd.sourceforge.net/
  ---------------------------------------------------------------------------
- Copyright (C) 1992-2010  Henri P. Gavin
+ Copyright (C) 1992-2014  Henri P. Gavin
 
     FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ For more information go to http://frame3dd.sourceforge.net/
 
 The input file format for FRAME is defined in doc/user_manual.html
 
-Henri P. Gavin hpgavin@duke.edu (main FRAME3DD code) <br>
+Henri P. Gavin hpgavin@duke.edu (main FRAME3DD code) 
 John Pye john.pye@anu.edu.au (Microstran parser and viewer)
 
 For compilation/installation, see README.txt.
@@ -96,6 +96,7 @@ For compilation/installation, see README.txt.
 		gY[_NL_],	// gravitational acceleration in global Y
 		gZ[_NL_],	// gravitational acceleration in global Z
 		pan=1.0,	// >0: pan during animation; 0: don't
+		scale=1.0,	// zoom scale for 3D plotting in Gnuplot
 		dx=1.0;		// x-increment for internal force data
 
 	double	**K=NULL,	// equilibrium stiffness matrix
@@ -103,12 +104,15 @@ For compilation/installation, see README.txt.
 		traceK = 0.0,	// trace of the global stiffness matrix
 		**M = NULL,	// global mass matrix
 		traceM = 0.0,	// trace of the global mass matrix
-		**F_mech=NULL,	// mechanical load vectors,  load cases	
+		***eqF_mech=NULL,// equivalent end forces from mech loads global
+		***eqF_temp=NULL,// equivalent end forces from temp loads global
+		**F_mech=NULL,	// mechanical load vectors, all load cases	
 		**F_temp=NULL,	// thermal load vectors, all load cases
-		**F = NULL, 	// general load vectors	for each load case
-		***feF_mech=NULL,// fixed end forces from mech loads
-		***feF_temp=NULL,// fixed end forces from temp loads
-		*D=NULL, *dD=NULL,// displacement and displ increment
+		*F  = NULL, 	// total load vectors for a load case
+		*R  = NULL,	// total reaction force vector
+		*dR = NULL,	// incremental reaction force vector 
+		*D  = NULL,	// displacement vector
+		*dD = NULL,	// incremental displacement vector
 		//dDdD = 0.0,	// dD' * dD
 		*dF = NULL,	// equilibrium error in nonlinear anlys
 		*L  = NULL,	// node-to-node length of each element
@@ -126,6 +130,11 @@ For compilation/installation, see README.txt.
 		**Kc, **Mc,	// condensed stiffness and mass matrices
 		exagg_static=10,// exaggerate static displ. in mesh data
 		exagg_modal=10;	// exaggerate modal displ. in mesh data
+
+		// peak internal forces, moments, and displacments
+		// in each frame element and each load case 
+	double	**pkNx, **pkVy, **pkVz, **pkTx, **pkMy, **pkMz,
+		**pkDx, **pkDy, **pkDz, **pkRx, **pkSy, **pkSz;
 
 	int	nN=0,		// number of Nodes
 		nE=0,		// number of frame Elements
@@ -152,7 +161,7 @@ For compilation/installation, see README.txt.
 		lump=1,		// 1: lumped, 0: consistent mass matrix
 		iter=0,		// number of iterations	
 		ok=1,		// number of (-ve) diag. terms of L D L'
-		anim[20],	// the modes to be animated
+		anim[32],	// the modes to be animated
 		Cdof=0,		// number of condensed degrees o freedom
 		Cmethod=0,	// matrix condensation method
 		*c=NULL,	// vector of DoF's to condense
@@ -194,7 +203,7 @@ For compilation/installation, see README.txt.
 		fprintf(stdout,"\n FRAME3DD version: %s\n", VERSION);
 		fprintf(stdout," Analysis of 2D and 3D structural frames with elastic and geometric stiffness.\n");
 		fprintf(stdout," http://frame3dd.sf.net\n");
-		fprintf(stdout," GPL Copyright (C) 1992-2010, Henri P. Gavin\n");
+		fprintf(stdout," GPL Copyright (C) 1992-2014, Henri P. Gavin\n");
 		fprintf(stdout," This is free software with absolutely no warranty.\n");
 		fprintf(stdout," For details, see the GPL license file, LICENSE.txt\n");
 		color(0); fprintf(stdout,"\n");
@@ -285,8 +294,8 @@ For compilation/installation, see README.txt.
 
 	E   =  vector(1,nE);	/* frame element Young's modulus	*/
 	G   =  vector(1,nE);	/* frame element shear modulus		*/
-	p   =  vector(1,nE);	/* member rotation angle about local x axis */
-	d   =  vector(1,nE);	/* member rotation angle about local x axis */
+	p   =  vector(1,nE);	/* element rotation angle about local x axis */
+	d   =  vector(1,nE);	/* element mass density			*/
 
 	read_frame_element_data( fp, nN, nE, xyz,rj, L, Le, N1, N2,
 					Ax, Asy, Asz, Jx, Iy, Iz, E, G, p, d );
@@ -295,8 +304,8 @@ For compilation/installation, see README.txt.
 
 	read_run_data ( fp, OUT_file, &shear, shear_flag, &geom, geom_flag,
 			meshpath, plotpath, infcpath, 
-			&exagg_static, exagg_flag, &dx, &anlyz, anlyz_flag,
-			debug );
+			&exagg_static, exagg_flag, &scale, &dx,
+			&anlyz, anlyz_flag, debug );
 
 	sfrv=fscanf(fp, "%d", &nL );	/* number of load cases		*/
 	if (sfrv != 1)	sferr("nL value for number of load cases");
@@ -323,17 +332,19 @@ For compilation/installation, see README.txt.
 
 	F_mech  = dmatrix(1,nL,1,DoF);	/* mechanical load vector	*/
 	F_temp  = dmatrix(1,nL,1,DoF);	/* temperature load vector	*/
-	F       = dmatrix(1,nL,1,DoF);	/* external load vectors	*/
+	F       = dvector(1,DoF);	/* external load vector	*/
 	dF	= dvector(1,DoF);	/* equilibrium error {F} - [K]{D} */
 
-	feF_mech =  D3dmatrix(1,nL,1,nE,1,12); /* feF due to mech loads */
-	feF_temp =  D3dmatrix(1,nL,1,nE,1,12); /* feF due to temp loads */
+	eqF_mech =  D3dmatrix(1,nL,1,nE,1,12); /* eqF due to mech loads */
+	eqF_temp =  D3dmatrix(1,nL,1,nE,1,12); /* eqF due to temp loads */
 
 	K   = dmatrix(1,DoF,1,DoF);	/* global stiffness matrix	*/
 	Q   = dmatrix(1,nE,1,12);	/* end forces for each member	*/
 
 	D   = dvector(1,DoF);	/* displacments of each node		*/
 	dD  = dvector(1,DoF);	/* incremental displ. of each node	*/
+	R   = dvector(1,DoF);	/* reaction forces			*/
+	dR  = dvector(1,DoF);	/* incremental reaction forces		*/
 
 	EMs =  vector(1,nE);	/* lumped mass for each frame element	*/
 	NMs =  vector(1,nN);	/* node mass for each node		*/
@@ -344,13 +355,28 @@ For compilation/installation, see README.txt.
 	c = ivector(1,DoF); 	/* vector of condensed degrees of freedom */
 	m = ivector(1,DoF); 	/* vector of condensed mode numbers	*/
 
+	// peak axial forces, shears, torques, and moments along each element
+	pkNx = dmatrix(1,nL,1,nE);	
+	pkVy = dmatrix(1,nL,1,nE);
+	pkVz = dmatrix(1,nL,1,nE);
+	pkTx = dmatrix(1,nL,1,nE);
+	pkMy = dmatrix(1,nL,1,nE);
+	pkMz = dmatrix(1,nL,1,nE); 
+
+	// peak displacements and slopes along each element
+	pkDx = dmatrix(1,nL,1,nE);
+	pkDy = dmatrix(1,nL,1,nE);
+	pkDz = dmatrix(1,nL,1,nE);
+	pkRx = dmatrix(1,nL,1,nE);
+	pkSy = dmatrix(1,nL,1,nE);
+	pkSz = dmatrix(1,nL,1,nE); 
 
 	read_and_assemble_loads( fp, nN, nE, nL, DoF, xyz, L, Le, N1, N2,
 			Ax,Asy,Asz, Iy,Iz, E, G, p,
 			d, gX, gY, gZ, r, shear,
 			nF, nU, nW, nP, nT, nD,
 			Q, F_temp, F_mech, F, U, W, P, T,
-			Dp, feF_mech, feF_temp, verbose );
+			Dp, eqF_mech, eqF_temp, verbose );
 
 	if ( verbose ) {	/* display load data complete */
 		fprintf(stdout,"                                                     ");
@@ -393,6 +419,7 @@ For compilation/installation, see README.txt.
 			F_temp, F_mech, Dp, r, U, W, P, T,
 			shear, anlyz, geom );
 
+
 	if ( anlyz ) {			/* solve the problem	*/
 	 srand(time(NULL));
 	 for (lc=1; lc<=nL; lc++) {	/* begin load case analysis loop */
@@ -409,18 +436,19 @@ For compilation/installation, see README.txt.
 		}
 
 		/*  initialize displacements and displ. increment to {0}  */
-		for (i=1; i<=DoF; i++)	D[i] = dD[i] = 0.0;	
+		/*  initialize reactions     and react. increment to {0}  */
+		for (i=1; i<=DoF; i++)	D[i] = dD[i] = R[i] = dR[i] = 0.0;	
 
-		/*  initialize internal forces to {0}	*/
+		/*  initialize internal element end forces Q = {0}	*/
 		for (i=1; i<=nE; i++)	for (j=1;j<=12;j++)	Q[i][j] = 0.0;
 
-		/*  assemble stiffness matrix [K({D}^(i))], {D}^(0)={0} (i=0) */
+		/*  elastic stiffness matrix  [K({D}^(i))], {D}^(0)={0} (i=0) */
 		assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
 					Ax, Asy, Asz, Jx,Iy,Iz, E, G, p,
 					shear, geom, Q, debug );
 
 #ifdef MATRIX_DEBUG
-		save_dmatrix ( DoF, DoF, K, "Ku", 0 ); // unloaded stiffness matrix
+		save_dmatrix ( "Ku", K, 1,DoF, 1,DoF, 0, "w" ); // unloaded stiffness matrix
 #endif
 
 		/* first apply temperature loads only, if there are any ... */
@@ -429,15 +457,18 @@ For compilation/installation, see README.txt.
 				fprintf(stdout," Linear Elastic Analysis ... Temperature Loads\n");
 
 			/*  solve {F_t} = [K({D=0})] * {D_t} */
-			solve_system(K,dD,F_temp[lc],DoF,q,r,&ok,verbose,&rms_resid);
+			solve_system(K,dD,F_temp[lc],dR,DoF,q,r,&ok,verbose,&rms_resid);
 
 			/* increment {D_t} = {0} + {D_t} temp.-induced displ */
 			for (i=1; i<=DoF; i++)	if (q[i]) D[i] += dD[i];
+			/* increment {R_t} = {0} + {R_t} temp.-induced react */
+			for (i=1; i<=DoF; i++)	if (r[i]) R[i] += dR[i];
 
-			if (geom) {
+			if (geom) {	/* assemble K = Ke + Kg */
 			 /* compute   {Q}={Q_t} ... temp.-induced forces     */
 			 element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
-				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
+				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p,
+				eqF_temp[lc], eqF_mech[lc], D, shear, geom );
 
 			 /* assemble temp.-stressed stiffness [K({D_t})]     */
 			 assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
@@ -451,106 +482,111 @@ For compilation/installation, see README.txt.
 		     gX[lc] != 0 || gY[lc] != 0 || gZ[lc] != 0 ) {
 			if ( verbose )
 				fprintf(stdout," Linear Elastic Analysis ... Mechanical Loads\n");
+			/* incremental displ at react'ns = prescribed displ */
 			for (i=1; i<=DoF; i++)	if (r[i]) dD[i] = Dp[lc][i];
 
 			/*  solve {F_m} = [K({D_t})] * {D_m}	*/
-			solve_system(K,dD,F_mech[lc],DoF,q,r,&ok,verbose,&rms_resid);
+			solve_system(K,dD,F_mech[lc],dR,DoF,q,r,&ok,verbose,&rms_resid);
 
 			/* combine {D} = {D_t} + {D_m}	*/
 			for (i=1; i<=DoF; i++) {
 				if (q[i])	D[i] += dD[i];
-				else {		D[i] = Dp[lc][i]; dD[i] = 0.0; }
+				else {		D[i]  = Dp[lc][i]; dD[i] = 0.0; }
 			}
+			/* combine {R} = {R_t} + {R_m} --- for linear systems */
+			for (i=1; i<=DoF; i++)	if (r[i]) R[i] += dR[i];
 		}
 
+
 		/*  combine {F} = {F_t} + {F_m} */
-		for (i=1; i<=DoF; i++)	F[lc][i] = F_temp[lc][i] + F_mech[lc][i]; 
+		for (i=1; i<=DoF; i++)	F[i] = F_temp[lc][i] + F_mech[lc][i]; 
 
 		/*  element forces {Q} for displacements {D}	*/ 
 		element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
-				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
+				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, 
+				eqF_temp[lc], eqF_mech[lc], D, shear, geom );
+
+		/*  check the equilibrium error	*/
+		error = equilibrium_error ( dF, F, K, D, DoF, q,r );
 
 		if ( geom && verbose )
 			fprintf(stdout,"\n Non-Linear Elastic Analysis ...\n");
 
-		/* initialize Broyden secant stiffness matrix, Ks */
-/*  
-		if ( geom ) {	
-			Ks  = dmatrix( 1, DoF, 1, DoF );
-			for (i=1;i<=DoF;i++) {
-				for(j=i;j<=DoF;j++) {
-					Ks[i][j]=Ks[j][i]=K[i][j];
-				}
-			}
-		}
-*/
+/*
+ * 		if ( geom ) { // initialize Broyden secant stiffness matrix, Ks 
+ *			Ks  = dmatrix( 1, DoF, 1, DoF );
+ *			for (i=1;i<=DoF;i++) {
+ *				for(j=i;j<=DoF;j++) {
+ *					Ks[i][j]=Ks[j][i]=K[i][j];
+ *				}
+ *			}
+ *		}
+ */
 
-		/* quasi Newton-Raphson iteration for geometric nonlinearity */
-		ok = 0; iter = 0; error = 1.0;	/* re-initialize */
+		/* quasi Newton-Raphson iteration for geometric nonlinearity  */
+		if (geom) { error = 1.0; ok = 0; iter = 0; } /* re-initialize */
 		while ( geom && error > tol && iter < 500 && ok >= 0) {
 
 			++iter;
 
-			/*  assemble stiffness matrix [K({D}^(i))]	*/
+			/*  assemble stiffness matrix [K({D}^(i))]	      */
 			assemble_K ( K, DoF, nE, xyz, rj, L, Le, N1, N2,
 				Ax,Asy,Asz, Jx,Iy,Iz, E, G, p,
 				shear,geom, Q, debug );
 
-			/*  compute equilibrium error, {dF}, at iteration i */
-			/*  {dF}^(i) = {F} - [K({D}^(i))]*{D}^(i) */
+			/*  compute equilibrium error, {dF}, at iteration i   */
+			/*  {dF}^(i) = {F} - [K({D}^(i))]*{D}^(i)	      */
 			/*  convergence criteria = || {dF}^(i) ||  /  || F || */
-			error = equilibrium_error ( dF, F[lc], K, D, DoF, q );
+			error = equilibrium_error ( dF, F, K, D, DoF, q,r );
 
-			// Powell-Symmetric-Broyden secant stiffness update 
-			// PSB_update ( Ks, dF, dD, DoF );  /* not helpful? */
+			/*  Powell-Symmetric-Broyden secant stiffness update  */
+			// PSB_update ( Ks, dF, dD, DoF );  /* not helpful?   */
 
-			/*  solve {dF}^(i) = [K({D}^(i))] * {dD}^(i) */
-			solve_system(K,dD,dF,DoF,q,r,&ok,verbose,&rms_resid);
+			/*  solve {dF}^(i) = [K({D}^(i))] * {dD}^(i)	      */
+			solve_system(K,dD,dF,dR,DoF,q,r,&ok,verbose,&rms_resid);
 
-			if ( ok < 0 ) {	/*  K is not pos.def.  */
+			if ( ok < 0 ) {	/*  K is not positive definite	      */
 				fprintf(stderr,"   The stiffness matrix is not pos-def. \n");
 				fprintf(stderr,"   Reduce loads and re-run the analysis.\n");
 				break;
 			}
 
-			/*  increment {D}^(i+1} = {D}^{i} + {dD}^(i) */
-			for (i=1; i<=DoF; i++)	if (q[i])	D[i] += dD[i];
+			/*  increment {D}^(i+1) = {D}^(i) + {dD}^(i)	      */
+			for (i=1; i<=DoF; i++)	if ( q[i] )	D[i] += dD[i];
 
-			/*  compute element forces {Q} for displacements {D}^(i) */ 
+			/*  element forces {Q} for displacements {D}^(i)      */ 
 			element_end_forces ( Q, nE, xyz, L, Le, N1,N2,
-				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, D, shear, geom );
+				Ax, Asy,Asz, Jx,Iy,Iz, E,G, p, 
+				eqF_temp[lc], eqF_mech[lc], D, shear, geom );
 
-			if ( verbose ) { 
-				fprintf(stdout,"   NR iteration %3d ---", iter);
-				printf(" RMS relative equilibrium error = %8.2e \n",error);
+			if ( verbose ) { /*  display equilibrium error        */
+			 fprintf(stdout,"   NR iteration %3d ---", iter);
+			 fprintf(stdout," RMS relative equilibrium error = %8.2e \n",error);
 			}
 		}			/* end quasi Newton-Raphson iteration */
 
-		compute_reaction_forces( F[lc], K, D, DoF, r );
-
-		add_feF ( xyz, L, N1,N2, p, Q, feF_temp[lc], feF_mech[lc],
-				nE, DoF, F[lc], r, verbose );
+ 		if ( geom )	compute_reaction_forces( R,F,K, D, DoF, r );
 
 		/*  dealocate Broyden secant stiffness matrix, Ks */
 		// if ( geom )	free_dmatrix(Ks, 1, DoF, 1, DoF );
 
 		if ( write_matrix )	/* write static stiffness matrix */
-			save_ut_dmatrix ( DoF, K, "Ks" );
+			save_ut_dmatrix ( "Ks", K, DoF, "w" );
 
 		/*  display RMS equilibrium error */
 		if ( verbose && ok >= 0 ) evaluate ( error, rms_resid, tol, geom );
 
  		write_static_results ( fp, nN,nE,nL, lc, DoF, N1,N2,
-				F[lc], D,r,Q, rms_resid, ok, axial_sign );
+				F,D,R, r,Q, rms_resid, ok, axial_sign );
 
 		if ( filetype == 1 ) {		// .CSV format output
 			write_static_csv(OUT_file, title,
-			    nN,nE,nL,lc, DoF, N1,N2, F[lc], D,r,Q, error, ok );
+			    nN,nE,nL,lc, DoF, N1,N2, F,D,R, r,Q, error, ok );
 		}
 
 		if ( filetype == 2 ) {		// .m matlab format output
 			write_static_mfile (OUT_file, title, nN,nE,nL,lc, DoF,
-					N1,N2, F[lc], D,r,Q, error, ok );
+					N1,N2, F,D,R, r,Q, error, ok );
 		}
 
 /*
@@ -561,7 +597,7 @@ For compilation/installation, see README.txt.
  *		 " and re-run the analysis. \n");
  */
 
-		write_internal_forces ( infcpath, lc, nL, title, dx, xyz,
+		write_internal_forces ( OUT_file, fp, infcpath, lc, nL, title, dx, xyz,
 					Q, nN, nE, L, N1, N2, 
 					Ax, Asy, Asz, Jx, Iy, Iz, E, G, p,
 					d, gX[lc], gY[lc], gZ[lc],
@@ -571,10 +607,11 @@ For compilation/installation, see README.txt.
 		static_mesh ( IN_file, infcpath, meshpath, plotpath, title,
 					nN, nE, nL, lc, DoF,
 					xyz, L, N1,N2, p, D,
-					exagg_static, D3_flag, anlyz, dx );
+					exagg_static, D3_flag, anlyz,
+					dx, scale );
 
 	 } /* end load case loop */
-	} else {
+	} else {		/*  data check only  */
 	
 	 if ( verbose ) {	/* display data check only */
 	 	fprintf(stdout,"\n * %s *\n", title );
@@ -583,13 +620,13 @@ For compilation/installation, see README.txt.
 	 static_mesh ( IN_file, infcpath, meshpath, plotpath, title,
 			nN, nE, nL, lc, DoF,
 			xyz, L, N1,N2, p, D,
-			exagg_static, D3_flag, anlyz, dx );
+			exagg_static, D3_flag, anlyz, dx, scale );
 	}
 
 
 	if (nM > 0) { /* carry out modal analysis */
 
-		if ( verbose ) fprintf(stdout,"\n\n Modal Analysis ...\n");
+		if(verbose & anlyz) fprintf(stdout,"\n\n Modal Analysis ...\n");
 
 		nM_calc = (nM+8)<(2*nM) ? nM+8 : 2*nM;		/* Bathe */
 
@@ -602,7 +639,7 @@ For compilation/installation, see README.txt.
 				lump, debug );
 
 #ifdef MATRIX_DEBUG
-		save_dmatrix ( DoF, DoF, M, "Mf", 0 );	/* free mass matrix */
+		save_dmatrix ( "Mf", M, 1,DoF, 1,DoF, 0, "w" ); /* free mass matrix */
 #endif
 
 		for (j=1; j<=DoF; j++) { /*  compute traceK and traceM */
@@ -621,8 +658,8 @@ For compilation/installation, see README.txt.
 		}
 
 		if ( write_matrix ) {	/* write Kd and Md matrices */
-			save_ut_dmatrix ( DoF, K, "Kd" );/* dynamic stff matx */
-			save_ut_dmatrix ( DoF, M, "Md" );/* dynamic mass matx */
+			save_ut_dmatrix ( "Kd", K, DoF, "w" );/* dynamic stff matx */
+			save_ut_dmatrix ( "Md", M, DoF, "w" );/* dynamic mass matx */
 		}
 
 		if ( anlyz ) {	/* subspace or stodola methods */
@@ -650,7 +687,7 @@ For compilation/installation, see README.txt.
 
 		animate ( IN_file, meshpath, modepath, plotpath, title,anim,
 				nN,nE, DoF, nM, xyz, L, p, N1,N2, f,
-				V, exagg_modal, D3_flag, pan );
+				V, exagg_modal, D3_flag, pan, scale );
 	}
 
 	if ( nC > 0 ) {		/* matrix condensation of stiffness and mass */
@@ -672,24 +709,24 @@ For compilation/installation, see README.txt.
 		if ( m[1] > 0 && nM > 0 )	Cfreq = f[m[1]];
 
 		if ( Cmethod == 1 ) {	/* static condensation only	*/
-			condense(K, DoF, c, Cdof, Kc, verbose );
+			condense(K, DoF, c, Cdof, Kc, 0 );
 			if ( verbose )
 				fprintf(stdout,"   static condensation of K complete\n");
 		}
 		if ( Cmethod == 2 ) {
-			guyan(M, K, DoF, c, Cdof, Mc,Kc, Cfreq, verbose );
+			guyan(M, K, DoF, c, Cdof, Mc,Kc, Cfreq, 0 );
 			if ( verbose ) {
 				fprintf(stdout,"   Guyan condensation of K and M complete");
 				fprintf(stdout," ... dynamics matched at %f Hz.\n", Cfreq );
 			}
 		}
 		if ( Cmethod == 3 && nM > 0 ) {
-			dyn_conden(M,K, DoF, r, c, Cdof, Mc,Kc, V,f, m, verbose );
+			dyn_conden(M,K, DoF, r, c, Cdof, Mc,Kc, V,f, m, 0 );
 			if ( verbose ) 
 				fprintf(stdout,"   dynamic condensation of K and M complete\n");
 		}
-		save_dmatrix(Cdof, Cdof, Kc, "Kc", 0 );
-		save_dmatrix(Cdof, Cdof, Mc, "Mc", 0 );
+		save_dmatrix("Kc", Kc, 1,Cdof, 1,Cdof, 0, "w" );
+		save_dmatrix("Mc", Mc, 1,Cdof, 1,Cdof, 0, "w" );
 
 		free_dmatrix(Kc, 1,Cdof,1,Cdof );
 		free_dmatrix(Mc, 1,Cdof,1,Cdof );
@@ -701,9 +738,11 @@ For compilation/installation, see README.txt.
 			xyz, rj, L, Le, N1, N2, q,r,
 			Ax, Asy, Asz, Jx, Iy, Iz, E, G, p,
 			U,W,P,T, Dp, F_mech, F_temp,
-			feF_mech, feF_temp, F, dF, 
-			K, Q, D, dD,
-			d,EMs,NMs,NMx,NMy,NMz, M,f,V, c, m
+			eqF_mech, eqF_temp, F, dF, 
+			K, Q, D, dD, R, dR, 
+			d,EMs,NMs,NMx,NMy,NMz, M,f,V, c, m, 
+			pkNx, pkVy, pkVz, pkTx, pkMy, pkMz,
+			pkDx, pkDy, pkDz, pkRx, pkSy, pkSz
 	);
 
 	if ( verbose ) fprintf(stdout,"\n");

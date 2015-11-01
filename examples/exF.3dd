@@ -140,16 +140,22 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 58  10  15  17671  9000  9000   4.970e7    2.48e7    2.48e7   200e2  1.2e0 0  7.85e-9
   
 
-1                               # 1: include shear deformation
-1                               # 1: include geometric stiffness
-500                             # exaggerate static mesh deformations
-50.0                            # x-axis increment for internal force data, mm
-
-
+1               # 1: include shear deformation
+1               # 1: include geometric stiffness
+500             # exaggerate static mesh deformations
+1.2             # zoom scale for 3D plotting
+50.0            # x-axis increment for internal force data, mm
+                # if dx is -1 then internal force calculations are skipped.
 
 1		# number of static load cases
+
 				# Begin Static Load Case 1 of 1
-0  0   -9806.33			# gravity in X Y Z directions (global)
+
+# gravitational acceleration for self-weight loading (global)
+#.gX            gY              gZ              
+#.mm/s^2        mm/s^2          mm/s^2
+  0		0		-9806.33	
+
 25                              # number of loaded nodes
 #..n    Fx        Fy         Fz     Mxx    Myy     Mzz
 #       N         N          N      N.mm   N.mm    N.mm
@@ -184,7 +190,7 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 0                               # number of trapezoidal distributed loads
 0                               # number of internal concentrated loads
 0                               # number of temperature loads
-0                               # number of support settlements
+0                               # number of nodes with prescribed displacements
 				# End   Static Load Case 1 of 1
 
 
@@ -208,8 +214,8 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 
 0			# number of frame elements with extra mass
 
-5                               # number of modes to animate
- 1  2  5  9  12                 # modes to animate
+5                               # number of modes to animate, nA
+ 1  2  5  9  12                 # modes to animate, omit if nA == 0
 1.5                             # pan rate during animation
 
 
@@ -224,3 +230,4 @@ Example F: a seismically-isolated building model (units: N, mm, ton)
 
  1 2 3 4 5 6 7 8 9 10 11 12	# modes to match for dynamic condensation
 
+# End of input data file for example F

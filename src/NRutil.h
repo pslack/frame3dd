@@ -7,7 +7,7 @@
 #ifndef _FRAME_NRUTIL_H_
 #define _FRAME_NRUTIL_H_
 
-typedef struct FCOMPLEX {float r,i;} fcomplex; /* */
+typedef struct FCOMPLEX {float r,i;} fcomplex; // also in complex.h
 
 /*
 static float sqrarg;
@@ -53,7 +53,7 @@ static int iminarg1,iminarg2;
 
 #if defined(__STDC__) || defined(ANSI) || defined(NRANSI) /* ANSI */
 
-void nrerror(char error_text[]);
+void NRerror(char error_text[]);
 float *vector(long nl, long nh);
 int *ivector(long nl, long nh);
 unsigned char *cvector(long nl, long nh);
@@ -62,7 +62,7 @@ double *dvector(long nl, long nh);
 float **matrix(long nrl, long nrh, long ncl, long nch);
 double **dmatrix(long nrl, long nrh, long ncl, long nch);
 int **imatrix(long nrl, long nrh, long ncl, long nch);
-float **submatrix(float **a, long oldrl, long oldrh, long oldcl, long oldch,
+float **subMatrix(float **a, long oldrl, long oldrh, long oldcl, long oldch,
 	long newrl, long newcl);
 float **convert_matrix(float *a, long nrl, long nrh, long ncl, long nch);
 float ***f3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh);
@@ -74,7 +74,7 @@ void free_dvector(double *v, long nl, long nh);
 void free_matrix(float **m, long nrl, long nrh, long ncl, long nch);
 void free_dmatrix(double **m, long nrl, long nrh, long ncl, long nch);
 void free_imatrix(int **m, long nrl, long nrh, long ncl, long nch);
-void free_submatrix(float **b, long nrl, long nrh, long ncl, long nch);
+void free_subMatrix(float **b, long nrl, long nrh, long ncl, long nch);
 void free_convert_matrix(float **b, long nrl, long nrh, long ncl, long nch);
 void free_f3tensor(float ***t, long nrl, long nrh, long ncl, long nch,
 	long ndl, long ndh);
@@ -84,36 +84,37 @@ fcomplex **Cmatrix(int nrl, int nrh, int ncl, int nch);
 void free_Cvector(fcomplex *v, int nl, int nh);
 void free_Cmatrix(fcomplex **m, int nrl, int nrh, int ncl, int nch);
 
-void nrerror(char error_text[]);
+void NRerror(char error_text[]);
 
 float  ***D3matrix(int nrl,int nrh, int ncl, int nch, int nzl, int nzh);
 double ***D3dmatrix(int nrl,int nrh, int ncl, int nch, int nzl, int nzh);
 void   free_D3matrix(float ***m, int nrl, int nrh, int ncl, int nch, int nzl, int nzh);
 void free_D3dmatrix(double ***m, int nrl, int nrh, int ncl, int nch, int nzl, int nzh);
 
-void show_vector(int n, float *A);
-void show_dvector(int n, double *A);
-void show_ivector ( int n, int *A );
-void show_matrix(int m, int n, float **A);
-void show_dmatrix(int m, int n, double **A);
+void show_vector(float *A, int n);
+void show_dvector(double *A, int n );
+void show_matrix(float **A, int m, int n );
+void show_dmatrix(double **A, int m, int n );
 
-void save_vector(int n, float *V, char filename[]);
-void save_dvector( int n, double *V, char filename[] );
-void save_ivector(int n, int *V, char filename[]);
-void save_matrix (int ml, int mh, int nl, int nh, float **A, char filename[], int transpose );
+void save_vector(char filename[], float *V, int nl, int nh, const char *mode);
+void save_dvector(char filename[], double *V, int nl, int nh, const char *mode);
+void save_ivector(char filename[], int *V, int nl, int nh, const char *mode);
 
-void save_dmatrix (int m, int n, double **A, char filename[], int transpose );
-void save_ut_matrix (int n, float **A, char filename[]);
-void save_ut_dmatrix (int n, double **A, char filename[]);
+void save_matrix ( char filename[], float **A, int ml, int mh, int nl, int nh, int transpose, const char *mode );
+void save_dmatrix ( char filename[], double **A, int ml, int mh, int nl, int nh, int transpose, const char *mode );
+
+void save_ut_matrix ( char filename[], float **A, int n, const char *mode );
+void save_ut_dmatrix ( char filename[], double **A, int n, const char *mode );
+
 
 
 #else /* ANSI */
 /* traditional - K&R */
 
-void nrerror();
+void NRerror();
 float *vector();
 float **matrix();
-float **submatrix();
+float **subMatrix();
 float **convert_matrix();
 float ***f3tensor();
 double *dvector();
@@ -128,7 +129,7 @@ void free_ivector();
 void free_cvector();
 void free_lvector();
 void free_matrix();
-void free_submatrix();
+void free_subMatrix();
 void free_convert_matrix();
 void free_dmatrix();
 void free_imatrix();

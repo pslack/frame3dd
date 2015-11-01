@@ -23,7 +23,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
  10     1    1    1    1    1    1
  11     1    1    1    1    1    1
 
-15			# number of members
+15			# number of frame elements
 #.m   n1   n2    Ax      Asy   Asz    Jxx    Iyy    Izz    E      G    roll density
 #     .    .     in^2    in^2  in^2   in^4   in^4   in^4   ksi    ksi   deg
 
@@ -44,15 +44,16 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
  15   12    8    1100    800   800    1000    500    500   999000 11500 0   7e-7
  
 
-1                               # 1: include shear deformation
-1                               # 1: include geometric stiffness
-2.0                            # exaggerate static mesh deformations
-6.0                             # x-axis increment for internal force data, in
+1               # 1: include shear deformation
+1               # 1: include geometric stiffness
+2.0             # exaggerate static mesh deformations
+1.5             # zoom scale for 3D plotting
+6.0             # x-axis increment for internal force data, in
+                # if dx is -1 then internal force calculations are skipped.
+               
 
+1		# number of static load cases
 
-
-
-1			# number of static load cases
 				# Begin Static Load Case 1 of 1
 0 0 0  				# gravity in X Y Z directions (global)
 1                               # number of loaded nodes
@@ -76,7 +77,7 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 
 0                               # number of internal concentrated loads
 0                               # number of temperature loads
-0                               # number of support settlements
+0                               # number of nodes with prescribed displacements
 				# End   Static Load Case 1 of 1
 
 
@@ -94,8 +95,8 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 
 0				# number of frame elements with extra mass
 
-4                               # number of modes to animate
- 1  2  3  4                     # modes to animate
+4                               # number of modes to animate, nA
+ 1  2  3  4                     # list of modes to animate, omit if nA == 0
 0                               # don't pan during animation
 
 2    # Condensation Method:   0= none   1= static   2= Guyan   3= Dynamic
@@ -104,3 +105,4 @@ Example E: a three dimensional structure showing lateral-torsional dynamic modes
 
   1 2 3 			# modes to match for dynamic condensation
 
+# End of input data file for example E

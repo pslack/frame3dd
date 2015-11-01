@@ -176,7 +176,7 @@ void atma(
 */
 
 #ifdef MATRIX_DEBUG
-	save_dmatrix( 12, 12, a, "aa");	 /*  save cord xfmtn */
+	save_dmatrix( "aa", a, 1,12, 1,12, 0, "w");	 /*  save cord xfmtn */
 #endif
 
 	for (j=1; j <= 12; j++)			 /*  MT = M T     */
@@ -184,7 +184,7 @@ void atma(
 		for (k=1; k <= 12; k++)    ma[i][j] += m[i][k] * a[k][j];
 
 #ifdef MATRIX_DEBUG
-	save_dmatrix( 12, 12, ma, "ma");	/*  partial transformation */
+	save_dmatrix( "ma", ma, 1,12, 1,12, 0, "w");	/*  partial transformation */
 #endif
 
 	for (i=1; i<=12; i++)   for (j=i; j<=12; j++)   m[j][i] = m[i][j] = 0.0;
@@ -194,7 +194,7 @@ void atma(
 		for (k=1; k <= 12; k++)    m[i][j] += a[k][i] * ma[k][j];
 
 #ifdef MATRIX_DEBUG
-	save_dmatrix( 12, 12, m, "atma");	       /*  debug atma */
+	save_dmatrix( "atma", m, 1,12, 1,12, 0, "w");	       /*  debug atma */
 #endif
 
 	free_dmatrix(a, 1,12,1,12);

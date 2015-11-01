@@ -101,6 +101,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,ELT,RCT,EAIJ,P,U,D)
   shear = 0;		     % 1: include shear deformation effects, 0: don't
   geom  = 0;		     % 1: include geometric stiffness effects, 0: don't
   exagg = 10;		     % exaggeration factor for Gnuplot output
+  scale = 1.0;		     % zoom scale factor for Gnuplot plotting
   dx = 1.0;		     % x-axis increment for internal force calc's
   IOfilename = 'IOdata';     % name of the Input-Output data file, a text file 
   Mfilename  = 'IOdata_out'; % name of the Matlab results data file, a text file 
@@ -171,6 +172,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,ELT,RCT,EAIJ,P,U,D)
   fprintf(fp,'%d\t\t%% 1: include shear deformation, 0: do not\n', shear );
   fprintf(fp,'%d\t\t%% 1: include geometric stiffness, 0: do not\n', geom );
   fprintf(fp,'%e\t%% exagerate deformations in plotting \n', exagg );
+  fprintf(fp,'%e\t%% zoom scale factor for 3D plotting \n', scale );
   fprintf(fp,'%e\t%% x-axis increment for internal forces calc\n', dx );
   fprintf(fp,'\n');
 

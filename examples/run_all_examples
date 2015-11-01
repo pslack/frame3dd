@@ -1,5 +1,20 @@
 rm ex*.out
+rm ex*_out.CSV
 rm *.if*
+
+frame3dd -i exA.csv -o exA.out 
+frame3dd -i exB.csv -o exB.out 
+frame3dd -i exC.csv -o exC.out 
+frame3dd -i exD.csv -o exD.out 
+frame3dd -i exE.csv -o exE.out 
+frame3dd -i exF.csv -o exF.out 
+frame3dd -i exG.csv -o exG.out 
+frame3dd -i exH.csv -o exH.out 
+frame3dd -i exI.csv -o exI.out 
+frame3dd -i exJ.csv -o exJ.out 
+
+rm ex*.out
+
 frame3dd -i exA.3dd -o exA.out 
 frame3dd -i exB.3dd -o exB.out 
 frame3dd -i exC.3dd -o exC.out 

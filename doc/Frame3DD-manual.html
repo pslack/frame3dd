@@ -44,9 +44,11 @@ Duke University</a> - Box 90287,
 Henri P. Gavin, Ph.D., P.E., </font></i></p>
 
 <hr>
-<h1>FRAME3DD</h1>
+<h1>Frame3DD</h1>
 
-<iframe src="version.html" width="250" height="30" style="border:solid 1pt grey"></iframe>
+<h2>version 0.20140514+ </h2>
+
+<!-- iframe src="version.html" width="250" height="30" style="border:solid 1pt grey"></iframe -->
 
 <!-- <h4>DESCRIPTION </h4> -->
 <p><b>Frame3DD</b>  is a program for the static and dynamic structural analysis of two- and three-dimensional frames and trusses with elastic and geometric stiffness.
@@ -104,7 +106,7 @@ The software is distributed in the hope that it will be useful, but without any 
 </p>
 
 <p><b>Frame3DD</b> had a free <a href="http://www.sketchup.com/"><b>Sketchup</b></a> interface available 
-<a href="http://rhin.crai.archi.fr/rld/plugin_details.php?id=1008">here</a>.
+<a href="http://sketchucation.com/forums/viewtopic.php?t=46405">here</a>.
 
 <p>If you find <b>Frame3DD</b> to be useful please consider
 a donation to the vim charity, 
@@ -123,7 +125,7 @@ includes: frame analysis, LDL' decomposition, LU decomposition,
 Newton-Raphson iteration, sub-space iteration, Stodola iteration,
 Sturm eigenvalue check, and Static Condensation, Guyan Reduction,
 Dynamic Condensation.  Graphical output and mode shape animation
-via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.2.
+via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.6.
 <hr>
 <h4>SYNOPSIS </h4>
        frame3dd  <Input Data file>  <Output Data file>
@@ -191,8 +193,8 @@ Several examples are given at <a href="http://frame3dd.sourceforge.net/">http://
 <ul>
 <li>Comments may be placed anywhere in the file and are helpful in organizing the Input Data.
 <br>
-A comment begins with one of the following four characters <b># % ? ; </b> and continues to the end of the line.
-<li>All commas in the Input Data are ignored.
+A comment begins with one of the following three characters <b># % ?</b> and continues to the end of the line.
+<li>All commas and semi-colons in the Input Data are ignored.
 <li>Floating point numbers must be entered as 1.234 1234 or 1.234e3.
 <li>Arithmetic expressions such as 1.234*10^3 or 6*sin(pi/2) are <b>not</b> allowed
 in the Input Data (unless the <a href="#Matlab">Matlab interface</a> is used).
@@ -247,7 +249,7 @@ On Windows, the location of this folder defaults to <b>C:\WINDOWS\Temp</b>.
 <!--
 or the user's <b>Local Settings\Temp</b> (XP) or <b>AppData\Local\Temp</b> (Vista).  
 -->
-If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <b>FRAME3DD_OUTDIR</b> with the path to your
+If you would like your output files to be sent to another location, you can set the <a href="http://en.wikipedia.org/wiki/Environment_variable">environment variable</a> <b>Frame3DD</b> with the path to your
 desired temporary output directory (instructions below).
 The additional output files will then appear in the folder you have specified.
 </p>
@@ -302,9 +304,9 @@ Put the <b>Frame3DD</b> directory in your path and set the <b>FRAME3DD_OUTDIR</b
 To do this, double-click the <b>Home</b> icon on the Desktop, and select <b>View > Show Hidden Files</b><br><br>
 
 <ul>
-<li>If you have a file called <b>.bashrc</b> in your home directory,
+<li>If you have a file called <b>~/.profile</b> in your home directory,
 open it with a double-click.
-Copy-and-paste the following ten lines into the beginning of <b>.bashrc</b> 
+Copy-and-paste the following ten lines into the beginning of <b>~/.profile</b> 
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
 # add Frame3DD executable directory to the path
@@ -319,9 +321,9 @@ export FRAME3DD_OUTDIR=/tmp/frame3dd_temp_$USER
 </pre>
 ... save, and exit the editor.   
 
-<li>If you have a file named <b>.cshrc</b> in your home directory,
+<li>If you have a file named <b>~/.login</b> in your home directory,
 open it with a double-click. 
-Copy-and-paste the following ten lines into the beginning of <b>.cshrc</b> 
+Copy-and-paste the following ten lines into the beginning of <b>~/.login</b> 
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
 # add Frame3DD executable directory to the path
@@ -338,8 +340,8 @@ setenv FRAME3DD_OUTDIR /tmp/frame3dd_temp_$user
 
 <li> Open a Terminal window. (Right-click on an open part of the Desktop and select <b>Open Terminal</b>), and type:  
 <pre>
-source ~/.bashrc   # if you edited ~/.bashrc 
-source ~/.cshrc    # if you edited ~/.cshrc  
+source ~/.profile   # if you edited ~/.profile 
+source ~/.login     # if you edited ~/.login  
 </pre>
 </ul>
 </ol>
@@ -510,7 +512,8 @@ Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_osx.zip) and save it in
 If the .ZIP archive was not automatically unzipped, 
 simply drag the <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
 <li><b><i>Optional</i></b><br>
- Download the <b>Sketchup</b> interface for <b>Frame3DD</b>, now available <a href="http://rhin.crai.archi.fr/rld/plugin_details.php?id=1008">here</a>.
+ Download the <b>Sketchup</b> interface for <b>Frame3DD</b>, available
+<a href="http://sketchucation.com/forums/viewtopic.php?t=46405">here</a>.
 <li><b><i>Recommended</i></b><br>
 Put the <b>Frame3DD</b> directory in your path and set the <b>FRAME3DD_OUTDIR</b> location.<br>
 <ul>
@@ -590,12 +593,11 @@ install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href=
 <p>
 From you Mac's Administrator account, first install Xcode, then install MacPorts, and finally install Gnuplot.
 <ol>
-<li>To install Xcode, go to the
-<a href="http://connect.apple.com/"> Apple Developer Connection (ADC)</a>,
-join ADC to create an account, log in, and then click on <b>Downloads > Developer Tools</b>, and browse for the version of Xcode for your version of OS X.<br>
+<li>Install <a href="https://developer.apple.com/xcode/">Xcode</a>,
+<!-- join ADC to create an account, log in, and then click on <b>Downloads > Developer Tools</b>, and browse for the version of Xcode for your version of OS X.<br> 
 For OS X <b>10.4</b> Tiger, install Xcode <b>2.5</b> Developer Tools<br>
 For OS X <b>10.5</b> Leopard, install Xcode <b>3.1.4</b> Developer Tools<br>
-For OS X <b>10.6</b> Snow Leopard, install Xcode <b>3.2.1</b> Developer Tools<br>
+For OS X <b>10.6</b> Snow Leopard, install Xcode <b>3.2.1</b> Developer Tools<br> -->
 Make sure the "Unix Development" option is selected if installing Xcode 3.1.4 or 3.2.1. 
 <li> To install MacPorts
 for your version of OS X (10.4 Tiger, 10.5 Leopard, or 10.6 Snow Leopard),
@@ -651,8 +653,7 @@ and animations until the <b>gnuplot></b> prompt returns.
 <h4> 3.2.4 Compiling Frame3DD from source for OS X</h4>
 
 <ol>
-<li> Install the Xcode Developer Tools for your version of OS X 
-as described above.  
+<li>Install <a href="https://developer.apple.com/xcode/">Xcode</a>.
 <li><a href="https://sourceforge.net/projects/frame3dd/files/">Download</a>
 the Frame3DD source-code zip file (frame3dd_VERSION_src.zip)
 and save it in your home directory.<br>
@@ -660,7 +661,7 @@ If the .ZIP archive was not automatically unzipped,
 simply drag the <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
 <li> Compile and install the code, as follows:
 <pre>
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c matrix.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c HPGmatrix.c coordtrans.c eig.c HPGutil.c NRutil.c -lm
 mv frame3dd ..
 </pre>
 </ol>
@@ -684,7 +685,7 @@ Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it 
 If the .ZIP archive was not automatically unzipped, 
 simply drag <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
 <li><b><i>Optional</i></b><br>
- Download the <b>Sketchup</b> interface for <b>Frame3DD</b>, now available <a href="http://rhin.crai.archi.fr/rld/plugin_details.php?id=1008">here</a>.
+ Download the <b>Sketchup</b> interface for <b>Frame3DD</b>, now available <a href="http://sketchucation.com/forums/viewtopic.php?t=46405">here</a>.
 <li> <b><i>Recommended</i></b><br>
 Put the <b>Frame3DD</b> directory in your path and set the 
 <b>PATH</b> and <b>FRAME3DD_OUTDIR</b> environment variables.<br>
@@ -698,10 +699,10 @@ with variable value <b>%HOMEPATH%\Desktop\Frame3DD\temp</b></br>
 Detailed information on how to set environment variables in Windows is <a href="http://vlaurie.com/computers2/Articles/environment.htm">here</a>, if you need it. 
 <li> <b><i>Recommended</i></b><br>
 Install
-<a href="http://adoxa.3eeweb.com/ansicon/">
+<a href="https://github.com/adoxa/ansicon/downloads/">
 ansicon</a>, a Windows console program that can display text in color.<br>
 Download and extract the
-<a href="http://adoxa.3eeweb.com/ansicon/dl.php?f=ansicon">
+<a href="https://github.com/adoxa/ansicon/downloads/">
 ansicon .ZIP file</a> and copy the <b>x86</b> folder 
 into the <b>Desktop\Frame3DD\</b> folder.  <br>
 Make a shortcut from <b>Desktop\Frame3DD\x86\ansicon</b> to the <b>Desktop</b>.
@@ -723,7 +724,7 @@ Alternatively, you may open a
 <!-- <a href="http://en.wikipedia.org/wiki/Windows_command_line">Command Prompt</a> window -->
 (<b>Start > All Programs > Accessories > Command Prompt</b>),
 or an
-<a href="http://adoxa.3eeweb.com/ansicon/">ansicon</a> window.<br> 
+<a href="https://github.com/adoxa/aansicon/downloads/">ansicon</a> window.<br> 
 Change to the directory of example files, and run an example, as follows:
 <pre>
 chdir %HOMEPATH%\Desktop\Frame3DD
@@ -750,7 +751,7 @@ Three tutorials for vim/evim/gvim are <a href="http://www.jerrywang.net/vi/">her
 frame3dd  examples/MyFrame.3dd  examples/MyResultsA.out
 </pre>
  ... within a Command Prompt or
-<a href="http://adoxa.3eeweb.com/ansicon/">ansicon</a> window.  
+<a href="https://github.com/adoxa/ansicon/downloads/">ansicon</a> window.  
 <!-- <li> You may wish to delete all the files in the temporary file directory (c:\temp) after you have finished your analyses.  -->
 </ol>
 
@@ -761,8 +762,8 @@ frame3dd  examples/MyFrame.3dd  examples/MyResultsA.out
 
 <ol>
 <li>
-<a href="http://sourceforge.net/projects/gnuplot/files/gnuplot/4.2.6/gp426win32.zip/download">
-Download</a> the MS-Windows version of Gnuplot 4.2
+<a href="http://sourceforge.net/projects/gnuplot/files/gnuplot/4.6.3/gp463-win32-setup.exe/download">
+Download</a> the MS-Windows version of Gnuplot 4.6.3
 and extract it to your <b>Desktop</b>.
 <li> Navigate to <b>Desktop > Gnuplot > bin</b>, 
 right click on the <b>wgnuplot</b> application icon, and create a shortcut to your <b>Desktop</b>.
@@ -849,7 +850,7 @@ If the .ZIP archive was not automatically unzipped,
 double-click the icon to extract it to your <b>Desktop</b>. 
 and compile the code, as follows:
 <pre>
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c matrix.c coordtrans.c eig.c hpgUtils.c nrutil.c -lm
+gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c HPGmatrix.c coordtrans.c eig.c HPGutil.c NRutil.c -lm
 move frame3dd ..
 </pre>
 </ol>
@@ -994,6 +995,12 @@ It does not (yet) implement the following features of <b>Frame3DD</b>:
 Adding these features would require editing the matlab inteface function, frame_3dd.m.
 </p>
 
+<p>
+If you plan to run <b>frame_3dd.m</b> repeatedly, and in quick succession,
+(for example as part of a structural optimization, using Matlab's fmincon function), remove the IOdata_out.m file after each run of <b>frame_3dd.m</b> 
+in order to prevent asynchronous over-writing of the file. 
+</p>
+
 <a name="CSV"><h2>5. Spreadsheet Interface</h2>
 
 <p>
@@ -1037,13 +1044,18 @@ Sections of an example results spreadsheet are shown below.<br>
 This example has three load cases.  <br> <br>
 Displacements for load case 1 start at row 21 and end at row 25.<br>
 Frame element end forces for load case 1 start at row 28 and end at row 35.<br>
-Reaction forces for load case 1 start at row 38 and end at row 42.<br><br>
-Displacements for load case 2 start at row 49 and end at row 53.<br>
-Frame element end forces for load case 2 start at row 56 and end at row 63.<br>
-Reaction forces for load case 2 start at row 66 and end at row 70.<br><br>
-Displacements for load case 3 start at row 77 and end at row 81.<br>
-Frame element end forces for load case 3 start at row 84 and end at row 91.<br>
-Reaction forces for load case 3 start at row 94 and end at row 98.<br><br>
+Reaction forces for load case 1 start at row 38 and end at row 42.<br>
+Peak internal element forces for load case 1 start at row 47 and end at row 54.<br><br>
+
+Displacements for load case 2 start at row 60 and end at row 64.<br>
+Frame element end forces for load case 2 start at row 67 and end at row 74.<br>
+Reaction forces for load case 2 start at row 77 and end at row 81.<br>
+Peak internal element forces for load case 2 start at row 86 and end at row 93.<br><br>
+
+Displacements for load case 3 start at row 99 and end at row 103.<br>
+Frame element end forces for load case 3 start at row 106 and end at row 113.<br>
+Reaction forces for load case 3 start at row 116 and end at row 120.<br>
+Peak internal element forces for load case 3 start at row 125 and end at row 132.<br><br>
 </p>
 
 <p>
@@ -1054,14 +1066,17 @@ row numbers are given in the following table.<br>
 <tr> <td>Node Displacements</td> <td>C-10</td><td>C-11</td></tr>
 <tr><td>Frame Element End Forces</td> <td>D-10</td><td>D-11</td></tr>
 <tr><td>Reaction Forces</td> <td>E-10</td><td>E-11</td></tr>
+<tr><td>Peak Internal Forces</td> <td>F-10</td><td>F-11</td></tr>
 <tr> <th>Load Case 2</th> <th>First Row</th> <th>Last Row</th></tr>
 <tr> <td>Node Displacements</td> <td>C-12</td><td>C-13</td></tr>
 <tr><td>Frame Element End Forces</td> <td>D-12</td><td>D-13</td></tr>
 <tr><td>Reaction Forces</td> <td>E-12</td><td>E-13</td></tr>
+<tr><td>Peak Internal Forces</td> <td>F-12</td><td>F-13</td></tr>
 <tr> <th>Load Case 3</th> <th>First Row</th> <th>Last Row</th></tr>
 <tr> <td>Node Displacements</td> <td>C-14</td><td>C-15</td></tr>
 <tr><td>Frame Element End Forces</td> <td>D-14</td><td>D-15</td></tr>
 <tr><td>Reaction Forces</td> <td>E-14</td><td>E-15</td></tr>
+<tr><td>Peak Internal Forces</td> <td>F-14</td><td>F-15</td></tr>
 <tr> <td><i>et cetera</i></td> </tr>
 </table>
 </p>
@@ -1074,6 +1089,8 @@ Frame element end force results are in columns A through H:<br>
 <img src="img/CSV3.png" align="center" border="0"><br><br>
 Reaction results are in columns A through G:<br>
 <img src="img/CSV4.png" align="center" border="0"><br><br>
+Peak frame element internal force results are in columns A through H:<br>
+<img src="img/CSV5.png" align="center" border="0"><br><br>
 </p>
 
 <p>
@@ -1328,7 +1345,11 @@ where <i>A</i> is the area enclosed by the box.
 </p>
 
 <p>
-Restraints to <a href="http://www.archoneng.com/tptasm.html">warping deformation</a> and the dynamic radial expansion of beams in torsion are not considered in the analysis.
+Restraints to 
+<!-- a href="http://www.archoneng.com/tptasm.html" --> 
+warping deformation
+<!-- /a -->
+and the dynamic radial expansion of beams in torsion are not considered in the analysis.
 </p>
 
 <h4> 7.4.4 Bending Effects </h4>
@@ -1951,22 +1972,22 @@ In this example, the <i>x</i>-axis increment, <i>dx</i>, has a length of 10 mm.
 <img src="img/InternalForces.png" align="center" border="0"><br>
 
 <p>
-The header information for each frame element contains the element number
-(column B),
-the element's end nodes (columns C and D), the end node coordinates
-(columns E - J),
-and the number of <i>x</i>-axis increments for the frame element
-(column K).   
+The header information for each frame element contains the element number (column B),
+the element's end nodes (columns C and D), the end node coordinates (columns E - J),
+and the number of <i>x</i>-axis increments for the frame element (column K).   
+The header also includes a listing of the maximum and minimum internal forces and modments and the maximum and minimum element displacements.  
 The data for this part of the header information is preceded with a '@' character, to facilitate parsing of this data file.  
 The last header character prior to the the internal force data is a '~' character, again to facilitate parsing of the data. 
-In the figure above, <i>nx</i> is 181 (K,10), indicating
-that the following element data 
-is tabulated at 181 increments along the local <i>x</i>-axis.  
+In the figure above, <i>nx</i> is 181 (K,10), indicating that the following element data is tabulated at 181 increments along the local <i>x</i>-axis.  
 </p>
 
 <p>
-The data in this file is sufficient to plot the undeformed mesh, 
-the deformed mesh, and plots of internal forces, torisons, and moments
+The computation of internal element forces is consistent with linear elastic analysis.   
+Internal forces and displacements will have some error if geoemetric stiffness effects are significant, and are included in the analysis.
+</p>
+
+<p>
+The data in this file is sufficient to plot the undeformed mesh, the deformed mesh, and plots of internal forces, torisons, and moments
 super-imposed upon the structural mesh.
 </p>
 
@@ -1974,8 +1995,7 @@ super-imposed upon the structural mesh.
 The sign convention for internal forces and transverse displacements is as follows:
 <ul>
 <li> Positive internal axial force (Nx) is tensile.
-<li> Positive internal shear forces (Vy and Vz) are in the positive <i>y</i> and <i>z</i>
-directions on positive <i>x</i> surfaces.
+<li> Positive internal shear forces (Vy and Vz) are in the positive <i>y</i> and <i>z</i> directions on positive <i>x</i> surfaces.
 <li> Positive internal torsion (Tx) is counter-clockwise about the positive <i>x</i>-axis.  
 <li> Positive bending moments (My and Mz) produce positive curvature bending deformation in the <i>x-z</i> and <i>x-y</i> planes.  
 <li> Positive transverse displacements (Dy and Dz) are in the positive <i>y</i>
@@ -2162,16 +2182,18 @@ now making use of the axial frame element forces arising from the combined tempe
 <i>K(D<sup>(i)</sup>)</i>,
 <li> Compute the equilibrium error at displacements <i>D<sup>(i)</sup></i>:
 <i>dF<sub>q</sub><sup>(i)</sup> = F<sub>q</sub> - K<sub>qq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup> - K<sub>qr</sub>(D<sup>(i)</sup>) D<sub>r</sub> </i>
+<li> Compute the RMS relative equilibrium error criterion || <i>dF<sub>q</sub><sup>(i)</sup></i> || / || <i>F<sub>q</sub> </i> || 
 <li> Solve for the incremental displacements, <i>dD<sup>(i)</sup></i>:
 <i> K<sub>qq</sub>(D<sup>(i)</sup>) dD<sub>q</sub><sup>(i)</sup> = dF<sub>q</sub><sup>(i)</sup> </i>
 
 <li> Increment the displacements: <i> D<sub>q</sub><sup>(i+1)</sup> = D<sub>q</sub><sup>(i)</sup> + dD<sub>q</sub><sup>(i)</sup></i>
 <li> Compute frame element end forces from the displacements due to the combined temperature and mechanical loads, <i>Q(D<sup>(i)</sup>)</i>.
-<li>The  Newton-Raphson iterations have converged when the root-mean-square relative equilibrium error (the root-mean-squre of <i>dF<sub>q</sub><sup>(i)</sup></i> divided by the root-mean-square of <i>F<sub>q</sup></i>) is less than the specified tolerance. <br>
+<li>The  Newton-Raphson iterations have converged when the root-mean-square relative equilibrium error (the root-mean-squre of <i>dF<sub>q</sub><sup>(i)</sup></i> divided by the root-mean-square of <i>F<sub>q</sup></i> computed in step 3., above) is less than the specified tolerance. <br>
 The convergence tolerance is taken as the convergence tolerance for the dynamic modal analysis.
 The default value is 10<sup>-9</sup>.
 </ol>
-<li> Once the solution has converged, compute the reaction forces: <i>F<sub>r</sub><sup>(i)</sup> = K<sub>rq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup> + K<sub>rr</sub>(D<sup>(i)</sup>) D<sub>r</sub></i>
+<li> Compute the reaction forces for the converged solution:
+<i>R<sub>r</sub><sup></sup> = K<sub>rq</sub>(D<sup>(i)</sup>) D<sub>q</sub><sup>(i)</sup> + K<sub>rr</sub>(D<sup>(i)</sup>) D<sub>r</sub> - F<sub>r</sub> </i>
 <p>
 Notation:
 </p>
@@ -2186,7 +2208,8 @@ displacements at iteration <i>i</i>
 <li> <i>K(D<sup>(i)</sup>)</i> is the stiffness matrix, dependent upon
 displacements at iteration <i>i</i>
 <li> <i>F<sub>q</sub> </i>     is the vector of known applied loads (at displacement coordinates) 
-<li> <i>F<sub>r</sub><sup>(i)</sup> </i>     is the vector of unknown reaction forces at iteration <i>i</i>
+<li> <i>F<sub>r</sub> </i>     is the vector of known applied loads (at reaction coordinates) 
+<li> <i>R<sub>r</sub> </i>     is the vector of unknown reaction forces for the converged solution
 <li> <i>dF<sub>q</sub><sup>(i)</sup></i>  is the equilibrium error vector at iteration <i>i</i> 
 <li> <i>dD<sub>q</sub><sup>(i)</sup></i>  is the incremental displacement vector at iteration <i>i</i> 
 <li> <i>D<sub>q</sub><sup>(i+1)</sup></i>  is the vector of uknown displacements at iteration <i>i+1</i>
@@ -2209,7 +2232,8 @@ iterative improvement for enhanced speed and accuracy.
 Iterative improvements to the solution to <i>[K]{dD} = {dF}</i> 
 are obtained (for both linear elastic and geometrically nonlinear problems)
 by iteratively solving
-<i>[K]{r}<sup>(k)</sup>  = {dF}-[K]{dD}<sup>(k)</sup></i>
+<i>[K<sub>qq</sub>]{r<sub>q</sub>}<sup>(k)</sup>  = {dF<sub>q</sub>}-[K<sub>qq</sub>]{dD<sub>q</sub>}<sup>(k)</sup>
+-[K<sub>qr</sub>]{dD<sub>r</sub>}<sup>(k)</sup></i>
 with <i>{dD}<sup>(k+1)</sup> = {dD}<sup>(k)</sup> + {r}<sup>(k)</sup>.</i>
 The superscript <i>(k)</i> is the LDL' iteration counter.  
 Iterations are stopped when the root-mean-square of the residual incremental
@@ -2320,6 +2344,7 @@ EL[nE] N1[nE] N2[nE] Ax[nE] Asy[nE] Asz[nE] Jx[nE] Iy[nE] Iz[nE] E[nE] G[nE] p[n
 shear        # 1=Do, 0=Don't include shear deformation effects
 geom         # 1=Do, 0=Don't include geometric stiffness effects
 exagg_static # exaggeration factor for static mesh deformations
+scale        # zoom scale for 3D plotting
 dx           # length of x-axis increment for frame element internal force data, mm
              # if dx is -1 then internal force calculations are skipped
 
@@ -2473,9 +2498,9 @@ nX      # number of frame elements with extra mass
 
 
 # mode shape animation data ...
-nA                        # number of modes to be animated
+nA                        # number of modes to be animated, nA 
 # list of modes to be animated, sorted in increasing order 
- anim[0] ... anim[nA]
+ anim[1] ... anim[nA]	  # this list should be omitted if nA == 0
 pan                       # pan rate of the animation 0 = no panning
 
 # matrix condensation data ...
@@ -2573,6 +2598,7 @@ nC      # number of condensed nodes
     Ryy          - 1: reaction moment about the global Y axis, 0: free
     Rzz          - 1: reaction moment about the global Z axis, 0: free
     rj           - radius of rigid node sphere around node i
+    scale        - zoom scale for 3D plotting in Gnuplot
     shear        - 1: include shear deformations, 0: do not.
     shift        - shift factor for non-definite stiffness matrices
     tol          - tolerance for finding mode shapes ~ 1.e-4
@@ -2771,6 +2797,7 @@ Exit code values have the following meanings:
 <li> 32  : error in eigen-problem analysis
 <li> 40  : error in input data file
 <li> 41  : input data formatting error in the node data, node number out of range
+<li> 42  : input data formatting error in node or element data, unconnected node
 <li> 51  : input data formatting error in the frame element data, frame element number out of range
 <li> 52  : input data formatting error in the frame element data, node number out of range
 <li> 53  : input data formatting error in the frame element data, negative section value
@@ -2833,12 +2860,12 @@ Exit code values have the following meanings:
 <ul>
 <li>       A GPL'able GUI<br>
 <ul>
- <li> A <b>Sketchup</b> interface for <b>Frame3DD</b> is now available <a href="http://rhin.crai.archi.fr/rld/plugin_details.php?id=1008">here</a>. (July 2012)
+ <li> A <b>Sketchup</b> interface for <b>Frame3DD</b> is now available <a href="http://sketchucation.com/forums/viewtopic.php?t=46405">here</a>. (July 2012)
  <li> <b>FrameEd</b> is a Windows GUI for the 20020103 version of <b>Frame3DD</b> (Jan 3, 2002).
  (<a href="#FrameEd">See above</a>.)
  <li> Work has been done on a <a href="http://www.trolltech.com/products/qt">Qt</a> GUI (Fall 2004)<br>
  <li> A Microstran-Viewer interface is in the works
-<a href="http://frame3dd.svn.sourceforge.net/viewvc/frame3dd/trunk/src/microstran/">here</a>.
+<a href="http://svn.code.sourceforge.net/p/frame3dd/code/trunk/src/microstran/">here</a>.
 (Summer 2008)
  <li> A Google-sketchup interface is in the works <a href="http://www.steelweb.info/whatsnew.htm">here</a>
 and possibly
@@ -3003,13 +3030,13 @@ Durham, NC  27708--0287
 </pre>
 
 <pre>
-<a href="http://pye.dyndns.org">John Pye</a>
+John Pye
 Dept of Engineering
 Australian National University
 </pre>
 
 <p align="justify">
-<a href="http://sourceforge.net/projects/frame3dd/"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=221386&amp;type=16" align="left" border="0" width="150" height="40" style="margin:10px" alt="Get FRAME3DD at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
+<a href="http://sourceforge.net/projects/frame3dd/"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=221386&amp;type=16" align="left" border="0" width="150" height="40" style="margin:10px" alt="Get Frame3DD at SourceForge.net. Fast, secure and Free Open Source software downloads" /></a>
 Source code for this document as well as Frame3dd itself is available from
 <a href="http://sourceforge.net/projects/frame3dd/">
 http://sourceforge.net/projects/frame3dd/</a> <br>
@@ -3022,7 +3049,7 @@ m = "Last updated " + document.lastModified;
 document.write(m);
 // -->
 </SCRIPT>
-(See the full <a href="http://frame3dd.svn.sourceforge.net/viewvc/frame3dd/trunk/doc/user-manual.html?view=log">revision log</a>.)
+(See the full <a href="https://sourceforge.net/p/frame3dd/code/">revision log</a>.)
 </font>
 </p>
 

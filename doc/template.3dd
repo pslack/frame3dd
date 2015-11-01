@@ -36,6 +36,7 @@ EL[nE] N1[nE] N2[nE] Ax[nE] Asy[nE] Asz[nE] Jx[nE] Iy[nE] Iz[nE] E[nE] G[nE] p[n
 shear        # 1=Do, 0=Don't include shear deformation effects
 geom         # 1=Do, 0=Don't include geometric stiffness effects
 exagg_static # exaggeration factor for static mesh deformations
+scale        # zoom scale for 3D plotting
 dx           # length of x-axis increment for frame element internal force data, mm
              # if dx is -1 then internal force calculations are skipped
 
@@ -189,9 +190,9 @@ nX      # number of frame elements with extra mass
 
 
 # mode shape animation data ...
-nA                        # number of modes to be animated
+nA                        # number of modes to be animated, nA
 # list of modes to be animated, sorted in increasing order 
- anim[0] ... anim[nA]
+ anim[0] ... anim[nA]     # this list should be omitted if nA == 0
 pan                       # pan rate of the animation 0 = no panning
 
 # matrix condensation data ...

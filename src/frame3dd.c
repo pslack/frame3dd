@@ -5,7 +5,7 @@
  ---------------------------------------------------------------------------
  http://frame3dd.sourceforge.net/
  ---------------------------------------------------------------------------
- Copyright (C) 1992-2010  Henri P. Gavin
+ Copyright (C) 1992-2014  Henri P. Gavin
  
     FRAME3DD is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -56,11 +56,13 @@ static void geometric_K(
 	int shear
 );
 
-static void member_force(
-	double *s, int M, vec3 *xyz, double L, double Le,
+static void frame_element_force(
+	double *s, vec3 *xyz, double L, double Le,
 	int n1, int n2,
 	float Ax, float Asy, float Asz, float Jx, float Iy, float Iz,
-	float E, float G, float p, double *D,
+	float E, float G, float p,
+	double *f_t, double *f_m,
+	double *D,
 	int shear, int geom, double *axial_strain
 );
 
@@ -79,9 +81,9 @@ static void consistent_M(
 );
 
 
-/*------------------------------------------------------------------------------
-ASSEMBLE_K  -  assemble global stiffness matrix from individual elements 23feb94
-------------------------------------------------------------------------------*/
+/*
+ * ASSEMBLE_K  -  assemble global stiffness matrix from individual elements 23feb94
+ */
 void assemble_K(
 	double **K,
 	int DoF, int nE,
@@ -126,7 +128,7 @@ void assemble_K(
 
 		if (debug) {
 			res = sprintf(stiffness_fn,"k_%03d",i);
-			save_dmatrix(12,12,k,stiffness_fn,0);
+			save_dmatrix(stiffness_fn,k,1,12,1,12,0, "w");
 		}
 
 		for ( l=1; l <= 12; l++ ) {
@@ -143,9 +145,9 @@ void assemble_K(
 }
 
 
-/*------------------------------------------------------------------------------
-ELASTIC_K - space frame elastic stiffness matrix in global coordnates	22oct02
-------------------------------------------------------------------------------*/
+/*
+ * ELASTIC_K - space frame elastic stiffness matrix in global coordnates	22oct02
+ */
 void elastic_K(
 	double **k, vec3 *xyz, float *r,
 	double L, double Le,
@@ -191,7 +193,7 @@ void elastic_K(
 	k[12][6] = k[6][12]  = (2.-Ksy)*E*Iz / ( Le*(1.+Ksy) );
 
 #ifdef MATRIX_DEBUG
-	save_dmatrix ( 12, 12, k, "ke", 0 ); /* element elastic stiffness matrix */
+	save_dmatrix ( "ke", k, 1,12, 1,12, 0, "w" ); /* element elastic stiffness matrix */
 #endif
 
 	atma(t1,t2,t3,t4,t5,t6,t7,t8,t9, k, r[n1],r[n2]);	/* globalize */
@@ -211,7 +213,7 @@ void elastic_K(
 					fprintf(stderr," ... k[%d][%d] = %15.6e   ",j,i,k[j][i] ); 
 					fprintf(stderr," ... relative error = %e \n",  fabs(k[i][j]/k[j][i]-1.0) ); 
 					fprintf(stderr," ... element matrix saved in file 'kt'\n");
-					save_dmatrix ( 12, 12, k, "kt", 0 ); 
+					save_dmatrix ( "kt", k, 1,12, 1,12, 0, "w" ); 
 				}
 
 				k[i][j] = k[j][i] = 0.5 * ( k[i][j] + k[j][i] );
@@ -219,14 +221,14 @@ void elastic_K(
 		}
 	}
 #ifdef MATRIX_DEBUG
-	save_dmatrix ( 12, 12, k, "ket", 0 );   /* transformed element matx */
+	save_dmatrix ( "ket", k, 1,12, 1,12, 0, "w" ); /* transformed element matx */
 #endif
 }
 
 
-/*------------------------------------------------------------------------------
-GEOMETRIC_K - space frame geometric stiffness matrix, global coordnates 20dec07
-------------------------------------------------------------------------------*/
+/*
+ * GEOMETRIC_K - space frame geometric stiffness matrix, global coordnates 20dec07
+ */
 void geometric_K(
 	double **k, vec3 *xyz, float *r,
 	double L, double Le,
@@ -281,7 +283,7 @@ void geometric_K(
 	kg[12][6] = kg[6][12]  = -T*L*(1.0/30.0+Ksy/6.0+Ksy*Ksy/12.0)/Dsy;
 
 #ifdef MATRIX_DEBUG
-	save_dmatrix ( 12, 12, kg, "kg", 0 ); /* element geom. stiffness matrix */
+	save_dmatrix ( "kg", kg, 1,12, 1,12, 0, "w" ); /* element geom. stiffness matrix */
 #endif
 
 	atma(t1,t2,t3,t4,t5,t6,t7,t8,t9, kg, r[n1],r[n2]);	/* globalize */
@@ -301,7 +303,7 @@ void geometric_K(
 					fprintf(stderr," ... kg[%d][%d] = %15.6e   ",j,i,kg[j][i] ); 
 					fprintf(stderr," ... relative error = %e \n",  fabs(kg[i][j]/kg[j][i]-1.0) ); 
 					fprintf(stderr," ... element matrix saved in file 'kg'\n");
-					save_dmatrix ( 12, 12, kg, "kg", 0 ); 
+					save_dmatrix ( "kg", kg, 1,12, 1,12, 0, "w" ); 
 				}
 
 				kg[i][j] = kg[j][i] = 0.5 * ( kg[i][j] + kg[j][i] );
@@ -310,7 +312,7 @@ void geometric_K(
 	}
 
 #ifdef MATRIX_DEBUG
-	save_dmatrix ( 12, 12, kg, "kgt", 0 );   /* transformed element matx */
+	save_dmatrix ( "kgt", kg, 1,12, 1,12, 0, "w" );   /* transformed element matx */
 #endif
 
 	/* add geometric stiffness matrix to elastic stiffness matrix ... */
@@ -322,9 +324,9 @@ void geometric_K(
 
 
 #if 0 /* DISUSED CODE */
-/*------------------------------------------------------------------------------
-END_RELEASE - apply matrix condensation for one member end force release 20nov04
-------------------------------------------------------------------------------*/
+/*
+ * END_RELEASE - apply matrix condensation for one member end force release 20nov04
+ */
 void end_release ( X, r )
 double	**X;
 int	r;
@@ -343,54 +345,33 @@ int	r;
 #endif
 
 
-/*------------------------------------------------------------------------------
-COMPUTE_REACTION_FORCES -  12oct12
-Compute  [K(r,q)] * {D(q)} + [K(r,r)] * {D(r)}
-The load vector modified for prescribed displacements Dp is returned as F
-Prescribed displacements are "mechanican loads" not "temperature loads"  
-------------------------------------------------------------------------------*/
-void compute_reaction_forces( double *F, double **K, double *D, int DoF, int *r)
-{
-	int	i,j;
-
-	for (i=1; i<=DoF; i++) {
-		if (r[i]) {
-			F[i] = 0.0;
-			for (j=1; j<=DoF; j++)	F[i] += K[i][j]*D[j];
-		}
-	}
-
-}
-
-
-/*----------------------------------------------------------------------------
-SOLVE_SYSTEM  -  solve {F} =   [K]{D} via L D L' decomposition        27dec01
-Prescribed displacements are "mechanical loads" not "temperature loads"  
-----------------------------------------------------------------------------*/
+/*
+ * SOLVE_SYSTEM  -  solve {F} =   [K]{D} via L D L' decomposition        27dec01
+ * Prescribed displacements are "mechanical loads" not "temperature loads"  
+ */
 void solve_system(
-	double **K, double *D, double *F, int DoF, int *q, int *r,
+	double **K, double *D, double *F, double *R, int DoF, int *q, int *r,
 	int *ok, int verbose, double *rms_resid
 ){
 	double	*diag;		/* diagonal vector of the L D L' decomp. */
-	int	i;
 
 	verbose = 0;		/* suppress verbose output		*/
 
 	diag = dvector ( 1, DoF );
 
-	/*  L D L' decomp */
-	ldl_dcmp_pm ( K, DoF, diag, F, D, q,r, 1, 0, ok );
+	/*  L D L' decomposition of K[q,q] into lower triangle of K[q,q] and diag[q] */
+	/*  vectors F and D are unchanged */
+	ldl_dcmp_pm ( K, DoF, diag, F, D, R, q,r, 1, 0, ok );
 	if ( *ok < 0 ) {
 	 	fprintf(stderr," Make sure that all six");
 		fprintf(stderr," rigid body translations are restrained!\n");
 		/* exit(31); */
-	} else {				/* back substitute for D */
-		/* LDL'  back-sub */
-		ldl_dcmp_pm ( K, DoF, diag, F, D, q,r, 0, 1, ok );
+	} else {	/* LDL'  back-substitution for D[q] and R[r] */
+		ldl_dcmp_pm ( K, DoF, diag, F,D,R, q,r, 0, 1, ok );
 		if ( verbose ) fprintf(stdout,"    LDL' RMS residual:");
 		*rms_resid = *ok = 1;
-		do {					/* improve solution */
-			ldl_mprove_pm ( K, DoF, diag, F,D, q,r, rms_resid, ok );
+		do {	/* improve solution for D[q] and R[r] */
+			ldl_mprove_pm ( K, DoF, diag, F,D,R, q,r, rms_resid,ok);
 			if ( verbose ) fprintf(stdout,"%9.2e", *rms_resid );
 		} while ( *ok );
 	        if ( verbose ) fprintf(stdout,"\n");
@@ -400,56 +381,72 @@ void solve_system(
 }
 
 
-/*----------------------------------------------------------------------------
-EQUILIBRIUM_ERROR -  compute {dF} =   {F} - [K]{D}  and return ||dF||/||F||
-----------------------------------------------------------------------------*/
-double equilibrium_error( double *dF, double *F, double **K, double *D, int DoF, int *q )
+/*
+ * EQUILIBRIUM_ERROR -  compute {dF_q} =   {F_q} - [K_qq]{D_q} - [K_qr]{D_r} 
+ * use only the upper-triangle of [K_qq]
+ * return ||dF||/||F||
+ * 2014-05-16
+ */
+double equilibrium_error( double *dF, double *F, double **K, double *D, int DoF, int *q, int *r )
 {
 	double	ss_dF = 0.0,	//  sum of squares of dF
-		ss_F  = 0.0;	//  sum of squares of F	
+		ss_F  = 0.0,	//  sum of squares of F	
+		errF  = 0.0;
 	int	i,j;
 
-	for (i=1; i<=DoF; i++) { // compute equilibrium error
-		dF[i] = F[i];
-		for (j=1; j<=DoF; j++) {
-			if ( q[i] && K[i][j] != 0.0 && D[j] != 0.0 )
-				dF[i] -= K[i][j]*D[j];
+	// compute equilibrium error at free coord's (q)
+	for (i=1; i<=DoF; i++) {
+		errF = 0.0;
+		if (q[i]) {
+			errF = F[i];
+			for (j=1; j<=DoF; j++) {
+				if ( q[j] ) {	// K_qq in upper triangle only
+					if ( i <= j )   errF -= K[i][j] * D[j];
+					else            errF -= K[j][i] * D[j];
+				}
+			}
+			for (j=1; j<=DoF; j++) 
+				if ( r[j] )	errF -= K[i][j] * D[j];
 		}
-	}       
+		dF[i] = errF;
+	}
 
 	for (i=1; i<=DoF; i++) if (q[i]) ss_dF += ( dF[i] * dF[i] );
-	for (i=1; i<=DoF; i++) if (q[i]) ss_F  += ( F[i]  * F[i] );
+	for (i=1; i<=DoF; i++) if (q[i]) ss_F  += (  F[i] *  F[i] );
 
 	return ( sqrt(ss_dF) / sqrt(ss_F) );	// convergence criterion
 }
 
 
-/*------------------------------------------------------------------------------
-END_FORCES  -  evaluate the member end forces for every member		23feb94
-------------------------------------------------------------------------------*/
+/*
+ * ELEMENT_END_FORCES  -  evaluate the end forces for all elements
+ * 23feb94
+ */
 void element_end_forces(
 	double **Q, int nE, vec3 *xyz,
 	double *L, double *Le,
 	int *N1, int *N2,
 	float *Ax, float *Asy, float *Asz,
 	float *Jx, float *Iy, float *Iz, float *E, float *G, float *p,
+	double **eqF_temp, // equivalent element end forces from temp loads
+	double **eqF_mech, // equivalent element end forces from mech loads
 	double *D, int shear, int geom
 ){
 	double	*s, axial_strain;
-	int	i,j;
+	int	m,j;
 
 	s = dvector(1,12);
 
-	for(i=1; i <= nE; i++) {
+	for(m=1; m <= nE; m++) {
 
-     		member_force ( s, i, xyz, L[i], Le[i], N1[i], N2[i],
-			Ax[i], Asy[i], Asz[i], Jx[i], Iy[i], Iz[i],
-			E[i], G[i], p[i], D, shear, geom, &axial_strain );
+     	    frame_element_force ( s, xyz, L[m], Le[m], N1[m], N2[m],
+		Ax[m], Asy[m], Asz[m], Jx[m], Iy[m], Iz[m], E[m], G[m], p[m],
+		eqF_temp[m], eqF_mech[m], D, shear, geom, &axial_strain );
 
-		for(j=1; j<=12; j++)	Q[i][j] = s[j];
+		for(j=1; j<=12; j++)	Q[m][j] = s[j];
 
 		if ( fabs(axial_strain > 0.001) )
-		 fprintf(stderr," Warning! Frame element %2d has an average axial strain of %8.6f\n", i, axial_strain ); 
+		 fprintf(stderr," Warning! Frame element %2d has an average axial strain of %8.6f\n", m, axial_strain ); 
 
 	}
 
@@ -457,28 +454,30 @@ void element_end_forces(
 }
 
 
-/*------------------------------------------------------------------------------
-MEMBER_FORCE  -  evaluate the end forces for a member			12nov02
-------------------------------------------------------------------------------*/
-void member_force(
-	double *s, int M, vec3 *xyz, double L, double Le,
+/*
+ * FRAME_ELEMENT_FORCE  -  evaluate the end forces in local coord's
+ * 12nov02
+ */
+void frame_element_force(
+	double *s, vec3 *xyz, double L, double Le,
 	int n1, int n2, float Ax, float Asy, float Asz, float J,
-	float Iy, float Iz, float E, float G, float p, double *D,
-	int shear, int geom, double *axial_strain
+	float Iy, float Iz, float E, float G, float p,
+	double *f_t, double *f_m,
+	double *D, int shear, int geom, double *axial_strain
 ){
 	double	t1, t2, t3, t4, t5, t6, t7, t8, t9, /* coord Xformn	*/
 		d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12,
-		x1, y1, z1, x2, y2, z2,	/* node coordinates	*/
-		Ls,			/* stretched length of element */
+		// x1, y1, z1, x2, y2, z2,	/* node coordinates	*/
+		//  Ls,			/* stretched length of element */
 		delta=0.0,		/* stretch in the frame element */
 		Ksy, Ksz, Dsy, Dsz,	/* shear deformation coeff's	*/
 		T = 0.0;		/* axial force for geometric stiffness */
 
+	double	f1=0, f2=0, f3=0, f4=0,  f5=0,  f6=0, 
+		f7=0, f8=0, f9=0, f10=0, f11=0, f12=0;
+
 	coord_trans ( xyz, L, n1, n2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p );
-
-	x1 = xyz[n1].x;	y1 = xyz[n1].y;	z1 = xyz[n1].z;
-	x2 = xyz[n2].x;	y2 = xyz[n2].y;	z2 = xyz[n2].z;
 
 	n1 = 6*(n1-1);	n2 = 6*(n2-1);
 
@@ -498,34 +497,32 @@ void member_force(
 	}
 
 
-	/* infinitessimal strain ... */
-	delta = (d7-d1)*t1 + (d8-d2)*t2 + (d9-d3)*t3; 
-
 	/* finite strain ... (not consistent with 2nd order formulation) */
 /*  
- 	delta += ( pow(((d7-d1)*t4 + (d8-d2)*t5 + (d9-d3)*t6),2.0) + 
- 		   pow(((d7-d1)*t7 + (d8-d2)*t8 + (d9-d3)*t9),2.0) )/(2.0*L);
-*/
+ *	delta += ( pow(((d7-d1)*t4 + (d8-d2)*t5 + (d9-d3)*t6),2.0) + 
+ *		   pow(((d7-d1)*t7 + (d8-d2)*t8 + (d9-d3)*t9),2.0) )/(2.0*L);
+ */
 
 	/* true strain ... (not appropriate for structural materials) */
 /* 
-  	Ls =	pow((x2+d7-x1-d1),2.0) + 
-  		pow((y2+d8-y1-d2),2.0) + 
-  		pow((z2+d9-z1-d3),2.0);
-  	Ls = sqrt(Ls) + Le - L;
+ *	x1 = xyz[n1].x;	y1 = xyz[n1].y;	z1 = xyz[n1].z;
+ *	x2 = xyz[n2].x;	y2 = xyz[n2].y;	z2 = xyz[n2].z;
+ *
+ *  	Ls =	pow((x2+d7-x1-d1),2.0) + 
+ *		pow((y2+d8-y1-d2),2.0) + 
+ *		pow((z2+d9-z1-d3),2.0);
+ *	Ls = sqrt(Ls) + Le - L;
+ *
+ *	delta = Le*log(Ls/Le);
+ */
 
-	delta = Le*log(Ls/Le);
-*/
-
+	/* axial element displacement ... */
+	delta = (d7-d1)*t1 + (d8-d2)*t2 + (d9-d3)*t3; 
 	*axial_strain = delta / Le;	// log(Ls/Le);
 
-	if ( geom )	 T = Ax*E/Le * delta;
-			 // T  = Ax*E*log(Ls/Le); 	/* true strain */
+	s[1]  =  -(Ax*E/Le)*( (d7-d1)*t1 + (d8-d2)*t2 + (d9-d3)*t3 );
 
-	if ( geom )
-		s[1] = -T;
-	else
-		s[1]  =  -(Ax*E/Le)*( (d7-d1)*t1 + (d8-d2)*t2 + (d9-d3)*t3 );
+	if ( geom )	T = -s[1];
 
 	s[2]  = -( 12.*E*Iz/(Le*Le*Le*(1.+Ksy)) + 
 		   T/L*(1.2+2.0*Ksy+Ksy*Ksy)/Dsy ) *
@@ -575,81 +572,105 @@ void member_force(
 		+ ((2.-Ksy)*E*Iz/(Le*(1.+Ksy)) - 
 		    T*L*(1.0/30.0+Ksy/6.0+Ksy*Ksy/12.0)/Dsy ) * 
 				( d4 *t7 + d5 *t8 + d6 *t9 );
+
+	// add fixed end forces to internal element forces
+	// 18oct2012, 14may1204, 15may2014
+
+	// add temperature fixed-end-forces to variables f1-f12
+	// add mechanical load fixed-end-forces to variables f1-f12
+	// f1 ...  f12 are in the global element coordinate system
+	f1  = f_t[1] +f_m[1];   f2  = f_t[2] +f_m[2];   f3  = f_t[3]+f_m[3];
+	f4  = f_t[4] +f_m[4];   f5  = f_t[5] +f_m[5];   f6  = f_t[6]+f_m[6];
+	f7  = f_t[7] +f_m[7];   f8  = f_t[8] +f_m[8];   f9  = f_t[9]+f_m[9];
+	f10 = f_t[10]+f_m[10];  f11 = f_t[11]+f_m[11];  f12 = f_t[12]+f_m[12];
+
+	// transform f1 ... f12 to local element coordinate system and
+	// add local fixed end forces (-equivalent loads) to internal loads 
+	// {Q} = [T]{f}
+
+	s[1]  -= ( f1 *t1 + f2 *t2 + f3 *t3 );    
+	s[2]  -= ( f1 *t4 + f2 *t5 + f3 *t6 );
+	s[3]  -= ( f1 *t7 + f2 *t8 + f3 *t9 );
+	s[4]  -= ( f4 *t1 + f5 *t2 + f6 *t3 );
+	s[5]  -= ( f4 *t4 + f5 *t5 + f6 *t6 );
+	s[6]  -= ( f4 *t7 + f5 *t8 + f6 *t9 );
+
+	s[7]  -= ( f7 *t1 + f8 *t2 + f9 *t3 );
+	s[8]  -= ( f7 *t4 + f8 *t5 + f9 *t6 );
+	s[9]  -= ( f7 *t7 + f8 *t8 + f9 *t9 );
+	s[10] -= ( f10*t1 + f11*t2 + f12*t3 );
+	s[11] -= ( f10*t4 + f11*t5 + f12*t6 );
+	s[12] -= ( f10*t7 + f11*t8 + f12*t9 );
+
 }
 
 
-/*----------------------------------------------------------------------------- 
-ADD_FEF -  add fixed end forces to reactions and internal element forces 18oct12
-------------------------------------------------------------------------------*/
-void add_feF(	
+/*
+void add_feF(		// DISUSED CODE
 	vec3 *xyz,
 	double *L, int *N1, int *N2, float *p,
-	double **Q, double **f_t, double **f_m, int nE, int DoF, 
-	double *F, int *r,
+	double **Q,
+int nE, int DoF, 
 	int verbose
 ){
-	double  t1, t2, t3, t4, t5, t6, t7, t8, t9,	/* 3D coord Xformn */
-		f1=0, f2=0, f3=0, f4=0,  f5=0,  f6=0, 
-		f7=0, f8=0, f9=0, f10=0, f11=0, f12=0;
-	int	m, n1, n2, i, i1, i2; //, J, x;
+	double  t1, t2, t3, t4, t5, t6, t7, t8, t9,	// 3D coord Xformn 
+	int	m, n1, n2, i1, i2; //, J, x;
 
-	for (m=1; m <= nE; m++) {	/* loop over all frame elements */
+	for (m=1; m <= nE; m++) {	// loop over all frame elements 
 
 		n1 = N1[m];	n2 = N2[m];
 
-		/* add fixed-end forces to reaction forces */
-		for (i=1; i<=6; i++) {
-			i1 = 6*(n1-1) + i;
-			if (r[i1])
-				F[i1] -= ( f_t[m][i] + f_m[m][i] );
-		}
-		for (i=1; i<=6; i++) {
-			i2 = 6*(n2-1) + i;
-			if (r[i2])
-				F[i2] -= ( f_t[m][i+6] + f_m[m][i+6] );
-		}
-
+ * reaction calculations removed from Frame3DD on 2014-05-14 ... 
+ * these calculations are now in solve_system()
+ *		// add fixed-end forces to reaction forces 
+ *		for (i=1; i<=6; i++) {
+ *			i1 = 6*(n1-1) + i;
+ *			if (r[i1])
+ *				F[i1] -= ( f_t[m][i] + f_m[m][i] );
+ *		}
+ *		for (i=1; i<=6; i++) {
+ *			i2 = 6*(n2-1) + i;
+ *			if (r[i2])
+ *				F[i2] -= ( f_t[m][i+6] + f_m[m][i+6] );
+ *		}
+ * 
+ 
 		coord_trans ( xyz, L[m], n1, n2,
 			&t1, &t2, &t3, &t4, &t5, &t6, &t7, &t8, &t9, p[m] );
 
 		// n1 = 6*(n1-1);	n2 = 6*(n2-1);	// ??
 
-		// break out temperature fixed-end-forces to variables f1-f12
-		f1  = f_t[m][1];   f2  = f_t[m][2];   f3  = f_t[m][3];
-		f4  = f_t[m][4];   f5  = f_t[m][5];   f6  = f_t[m][6];
-		f7  = f_t[m][7];   f8  = f_t[m][8];   f9  = f_t[m][9];
-		f10 = f_t[m][10];  f11 = f_t[m][11];  f12 = f_t[m][12];
-
-		// add mechanical load fixed-end-forces to variables f1-f12
-		f1  += f_m[m][1];  f2  += f_m[m][2];  f3  += f_m[m][3];
-		f4  += f_m[m][4];  f5  += f_m[m][5];  f6  += f_m[m][6];
-		f7  += f_m[m][7];  f8  += f_m[m][8];  f9  += f_m[m][9];
-		f10 += f_m[m][10]; f11 += f_m[m][11]; f12 += f_m[m][12];
-
-		// add fixed end forces (-equivalent loads) to internal loads 
-		// {Q} = [T]{F}
-		Q[m][1]  -= ( f1 *t1 + f2 *t2 + f3 *t3 );    
-		Q[m][2]  -= ( f1 *t4 + f2 *t5 + f3 *t6 );
-		Q[m][3]  -= ( f1 *t7 + f2 *t8 + f3 *t9 );
-		Q[m][4]  -= ( f4 *t1 + f5 *t2 + f6 *t3 );
-		Q[m][5]  -= ( f4 *t4 + f5 *t5 + f6 *t6 );
-		Q[m][6]  -= ( f4 *t7 + f5 *t8 + f6 *t9 );
-
-		Q[m][7]  -= ( f7 *t1 + f8 *t2 + f9 *t3 );
-		Q[m][8]  -= ( f7 *t4 + f8 *t5 + f9 *t6 );
-		Q[m][9]  -= ( f7 *t7 + f8 *t8 + f9 *t9 );
-		Q[m][10] -= ( f10*t1 + f11*t2 + f12*t3 );
-		Q[m][11] -= ( f10*t4 + f11*t5 + f12*t6 );
-		Q[m][12] -= ( f10*t7 + f11*t8 + f12*t9 );
 
 	}
+}
+*/
 
+
+/*
+ * COMPUTE_REACTION_FORCES : R(r) = [K(r,q)]*{D(q)} + [K(r,r)]*{D(r)} - F(r)
+ * reaction forces satisfy equilibrium in the solved system
+ * only really needed for geometric-nonlinear problems
+ * 2012-10-12  , 2014-05-16
+ */
+void compute_reaction_forces(
+	 double *R, double *F, double **K, double *D, int DoF, int *r
+){
+	int	i,j;
+
+	for (i=1; i<=DoF; i++) {
+		R[i] = 0;
+		if (r[i]) {		// coordinate "i" is a reaction coord.
+			R[i] = -F[i];	// negative of equiv loads at coord i
+			// reactions are relaxed through system deformations
+			for (j=1; j<=DoF; j++)  R[i] += K[i][j]*D[j];
+		}
+	}
 }
 
 
-/*------------------------------------------------------------------------------
-ASSEMBLE_M  -  assemble global mass matrix from element mass & inertia  24nov98
-------------------------------------------------------------------------------*/
+/*
+ * ASSEMBLE_M  -  assemble global mass matrix from element mass & inertia  24nov98
+ */
 void assemble_M(
 	double **M, int DoF, int nN, int nE,
 	vec3 *xyz, float *r, double *L,
@@ -691,7 +712,7 @@ void assemble_M(
 
 		if (debug) {
 			res = sprintf(mass_fn,"m_%03d",i);
-			save_dmatrix(12,12, m, mass_fn, 0);
+			save_dmatrix(mass_fn, m, 1,12, 1,12, 0, "w");
 		}
 
 		for ( l=1; l <= 12; l++ ) {
@@ -724,9 +745,9 @@ void assemble_M(
 }
 
 
-/*------------------------------------------------------------------------------
-LUMPED_M  -  space frame element lumped mass matrix in global coordnates 7apr94
-------------------------------------------------------------------------------*/
+/*
+ * LUMPED_M  -  space frame element lumped mass matrix in global coordnates 7apr94
+ */
 static void lumped_M(
 	double **m, vec3 *xyz, double L,
 	int n1, int n2, float Ax, float J, float Iy, float Iz, float p,
@@ -760,10 +781,10 @@ static void lumped_M(
 }
 
 
-/*------------------------------------------------------------------------------
-CONSISTENT_M  -  space frame consistent mass matrix in global coordnates 2oct97
-		 does not include shear deformations
-------------------------------------------------------------------------------*/
+/*
+ * CONSISTENT_M  -  space frame consistent mass matrix in global coordnates 2oct97
+ *		 does not include shear deformations
+ */
 void consistent_M(
 	double **m, vec3 *xyz, float *r, double L,
 	int n1, int n2, float Ax, float J, float Iy, float Iz, float p, 
@@ -814,7 +835,7 @@ void consistent_M(
 	for (i=7; i<=9; i++)	m[i][i] += 0.5*EMs;
 
 #ifdef MATRIX_DEBUG
-	save_dmatrix ( 12, 12, m, "mo", 0 );	/* element mass matrix */
+	save_dmatrix ( "mo", m, 1,12, 1,12, 0, "w" ); /* element mass matrix */
 #endif
 
 	atma(t1,t2,t3,t4,t5,t6,t7,t8,t9, m, r[n1],r[n2]);	/* globalize */
@@ -835,7 +856,7 @@ void consistent_M(
 					fprintf(stderr," ... m[%d][%d] = %15.6e   ",j,i,m[j][i] ); 
 					fprintf(stderr," ... relative error = %e \n",  fabs(m[i][j]/m[j][i]-1.0) ); 
 					fprintf(stderr," ... element matrix saved in file 'mc'\n");
-					save_dmatrix ( 12, 12, m, "mc", 0 ); 
+					save_dmatrix ( "mc", m, 1,12, 1,12, 0, "w" ); 
 				}
 
 				m[i][j] = m[j][i] = 0.5 * ( m[i][j] + m[j][i] );
@@ -844,15 +865,14 @@ void consistent_M(
 	}
 
 #ifdef MATRIX_DEBUG
-	save_dmatrix ( 12, 12, m, "mt", 0 );	/* transformed matrix */
+	save_dmatrix ( "mt", m, 1,12, 1,12, 0, "w" );/* transformed matrix */
 #endif
 }
 
 
-
-/*------------------------------------------------------------------------------
-CONDENSE - static condensation of stiffness matrix from NxN to nxn    30aug01
-------------------------------------------------------------------------------*/
+/*
+ * CONDENSE - static condensation of stiffness matrix from NxN to nxn    30aug01
+ */
 void condense(
 	double **A, int N, int *c, int n, double **Ac, int verbose
 ){
@@ -909,12 +929,12 @@ void condense(
 }
 
 
-/*---------------------------------------------------------------------------- 
-GUYAN  -   generalized Guyan reduction of mass and stiffness matrices    6jun07
-           matches the response at a particular frequency, sqrt(L)/2/pi
-           Guyan, Robert J., ``Reduction of Stiffness and Mass Matrices,''
-           AIAA Journal, Vol. 3, No. 2 (1965) p 380.
------------------------------------------------------------------------------*/
+/*
+ * GUYAN  -   generalized Guyan reduction of mass and stiffness matrices    6jun07
+ *          matches the response at a particular frequency, sqrt(L)/2/pi
+ *          Guyan, Robert J., ``Reduction of Stiffness and Mass Matrices,''
+ *          AIAA Journal, Vol. 3, No. 2 (1965) p 380.
+ */
 void guyan(
 	double **M, double **K, int N,
 	int *c, int n,
@@ -967,7 +987,7 @@ void guyan(
 		}
 	}
 
-	invAB(Drr, Drc, N-n, n, invDrrDrc, &ok, verbose); /* inv(Drr) * Drc */
+	invAB(Drr, Drc, N-n, n, invDrrDrc, &ok, verbose ); /* inv(Drr) * Drc */
 
 	/* coordinate transformation matrix	*/	
 	for (i=1; i<=n; i++) {
@@ -989,11 +1009,11 @@ void guyan(
 }
 
 
-/*---------------------------------------------------------------------------- 
-DYN_CONDEN - dynamic condensation of mass and stiffness matrices    8oct01
-	     matches the response at a set of frequencies
-WARNING: Kc and Mc may be ill-conditioned, and xyzsibly non-positive def.
------------------------------------------------------------------------------*/
+/*
+ * DYN_CONDEN - dynamic condensation of mass and stiffness matrices    8oct01
+ * 	     matches the response at a set of frequencies
+ * WARNING: Kc and Mc may be ill-conditioned, and xyzsibly non-positive def.
+ */
 void dyn_conden(
 	double **M, double **K, int N, int *R, int *p, int n,
 	double **Mc, double **Kc, double **V, double *f, int *m,
@@ -1048,9 +1068,9 @@ void dyn_conden(
 }
 
 
-/*------------------------------------------------------------------------------
-DEALLOCATE  -  release allocated memory					9sep08
-------------------------------------------------------------------------------*/
+/*
+ * DEALLOCATE  -  release allocated memory					9sep08
+ */
 void deallocate( 
 	int nN, int nE, int nL, int *nF, int *nU, int *nW, int *nP, int *nT,
 	int DoF, int nM,
@@ -1061,12 +1081,15 @@ void deallocate(
 	float ***U, float ***W, float ***P, float ***T,
 	float **Dp,
 	double **F_mech, double **F_temp, 
-	double ***feF_mech, double ***feF_temp, double **F, double *dF,
+	double ***eqF_mech, double ***eqF_temp, double *F, double *dF,
 	double **K, double **Q,
 	double *D, double *dD,
+	double *R, double *dR,
 	float *d, float *EMs, float *NMs, float *NMx, float *NMy, float *NMz,
 	double **M, double *f, double **V,
-	int *c, int *m
+	int *c, int *m, 
+	double **pkNx, double **pkVy, double **pkVz, double **pkTx, double **pkMy, double **pkMz, 
+	double **pkDx, double **pkDy, double **pkDz, double **pkRx, double **pkSy, double **pkSz 
 ){
 
 	void	free();
@@ -1077,13 +1100,13 @@ void deallocate(
 	free_dvector(L,1,nE);
 	free_dvector(Le,1,nE);
 
-// printf("..B\n"); /* debug */
+// printf("..B..element connectivity\n"); /* debug */
 	free_ivector(N1,1,nE);
 	free_ivector(N2,1,nE);
 	free_ivector(q,1,DoF);
 	free_ivector(r,1,DoF);
 
-// printf("..C\n"); /* debug */
+// printf("..C..section properties \n"); /* debug */
 	free_vector(Ax,1,nE);
 	free_vector(Asy,1,nE);
 	free_vector(Asz,1,nE);
@@ -1094,34 +1117,36 @@ void deallocate(
 	free_vector(G,1,nE);
 	free_vector(p,1,nE);
 
-// printf("..D\n"); /* debug */
+// printf("..D.. U W P T Dp\n"); /* debug */
 	free_D3matrix(U,1,nL,1,nE,1,4);
 	free_D3matrix(W,1,nL,1,10*nE,1,13);
 	free_D3matrix(P,1,nL,1,10*nE,1,5);
 	free_D3matrix(T,1,nL,1,nE,1,8);
 	free_matrix(Dp,1,nL,1,DoF);
 
-// printf("..E\n"); /* debug */
+// printf("..E..F_mech & F_temp\n"); /* debug */
 	free_dmatrix(F_mech,1,nL,1,DoF);
 	free_dmatrix(F_temp,1,nL,1,DoF);
 
-// printf("..F\n"); /* debug */
-	free_D3dmatrix(feF_mech,1,nL,1,nE,1,12);
-	free_D3dmatrix(feF_temp,1,nL,1,nE,1,12);
+// printf("..F.. eqF_mech & eqF_temp\n"); /* debug */
+	free_D3dmatrix(eqF_mech,1,nL,1,nE,1,12);
+	free_D3dmatrix(eqF_temp,1,nL,1,nE,1,12);
 
-// printf("..G\n"); /* debug */
-	free_dmatrix(F,1,nL,1,DoF);
+// printf("..G.. F & dF\n"); /* debug */
+	free_dvector( F,1,DoF);
 	free_dvector(dF,1,DoF);
 
-// printf("..H\n"); /* debug */
+// printf("..H.. K & Q\n"); /* debug */
 	free_dmatrix(K,1,DoF,1,DoF);
 	free_dmatrix(Q,1,nE,1,12);
 
-// printf("..I\n"); /* debug */
-	free_dvector(D,1,DoF);
+// printf("..I.. D  dD R dR \n"); /* debug */
+	free_dvector( D,1,DoF);
 	free_dvector(dD,1,DoF);
+	free_dvector( R,1,DoF);
+	free_dvector(dR,1,DoF);
 
-// printf("..J\n"); /* debug */
+// printf("..J.. extra mass\n"); /* debug */
 	free_vector(d,1,nE);
 	free_vector(EMs,1,nE);
 	free_vector(NMs,1,nN);
@@ -1129,11 +1154,25 @@ void deallocate(
 	free_vector(NMy,1,nN);
 	free_vector(NMz,1,nN);
 
-// printf("..K\n"); /* debug */
+// printf("..K.. peak stats\n"); /* debug */
 	free_ivector(c,1,DoF);
 	free_ivector(m,1,DoF);
 
-// printf("..L\n"); /* debug */
+	free_dmatrix(pkNx,1,nL,1,nE);
+	free_dmatrix(pkVy,1,nL,1,nE);
+	free_dmatrix(pkVz,1,nL,1,nE);
+	free_dmatrix(pkTx,1,nL,1,nE);
+	free_dmatrix(pkMy,1,nL,1,nE);
+	free_dmatrix(pkMz,1,nL,1,nE);
+
+	free_dmatrix(pkDx,1,nL,1,nE);
+	free_dmatrix(pkDy,1,nL,1,nE);
+	free_dmatrix(pkDz,1,nL,1,nE);
+	free_dmatrix(pkRx,1,nL,1,nE);
+	free_dmatrix(pkSy,1,nL,1,nE);
+	free_dmatrix(pkSz,1,nL,1,nE);
+
+// printf("..L.. M f V\n"); /* debug */
 	if ( nM > 0 ) {
 		free_dmatrix(M,1,DoF,1,DoF);
 		free_dvector(f,1,nM);

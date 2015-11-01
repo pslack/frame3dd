@@ -420,7 +420,7 @@ void stodola (
 	}
 
 #ifdef EIG_DEBUG
-	save_dmatrix ( n, n, D, "D" );		/* save dynamics matrix */
+	save_dmatrix ( "D", D, 1,n, 1,n, 0, "w" ); /* save dynamics matrix */
 #endif
 
 	*iter = 0;
@@ -502,7 +502,7 @@ void stodola (
 	*ok = sturm ( K, M, n, m, shift, w[modes]+tol, verbose );
 
 #ifdef EIG_DEBUG
-	save_dmatrix ( n, m, V, "V" );	/* save mode shape matrix */
+	save_dmatrix ( "V", V, 1,n, 1,m, 0, "w" ); /* save mode shape matrix */
 #endif
 
 	free_dmatrix(D,1,n,1,n);

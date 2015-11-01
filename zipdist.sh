@@ -3,7 +3,11 @@
 # zipdist.sh
 # assemble .ZIP files for Frame3dd executable and source distribution release
 
-export VERSION=20100105
+# NOTE: this version number should preferably be synchronised with the version
+# number in file 'SConstruct'. Note the alternative packaging instructions in 
+# the file 'PACKAGING.txt' which builds DEB, RPM and EXE packages, but nothing
+# for Mac users :-( 
+export VERSION=20140514+
 echo $VERSION
 
 # clean out prior distribution files
@@ -34,10 +38,12 @@ cp --preserve=mode,timestamps LICENSE.txt           dist/Frame3DD/.
 cp --preserve=mode,timestamps README.txt            dist/Frame3DD/.
 cp --preserve=mode,timestamps README-win32.txt      dist/Frame3DD/.
 
-# copy example files
+# copy example files (text and .csv formats)
 echo "copying example files ... "
 cp --preserve=mode,timestamps examples/ex*.3dd      dist/Frame3DD/examples/.
 cp --preserve=mode,timestamps examples/ex*.out      dist/Frame3DD/examples/.
+cp --preserve=mode,timestamps examples/ex*.csv      dist/Frame3DD/examples/.
+cp --preserve=mode,timestamps examples/ex*_out.CSV  dist/Frame3DD/examples/.
 cp --preserve=mode,timestamps examples/saveplot     dist/Frame3DD/examples/.
 cp --preserve=mode,timestamps examples/saveplot_w32 dist/Frame3DD/examples/.
 
@@ -56,15 +62,10 @@ cd dist                                           # change to trunk/dist
 zip -r Frame3DD_$(echo $VERSION).zip Frame3DD/*
 
 # make copies of .zip files for each operating system
-#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_linux.zip
-#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_osx34.zip
-#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_osx567.zip
-#cp Frame3DD_$(date +%Y%m%d).zip Frame3DD_$(date +%Y%m%d)_win32.zip
 
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_DukeOIT.zip
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_linux.zip
-cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx34.zip
-cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx567.zip
+cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_osx789.zip
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_win32.zip
 cp Frame3DD_$(echo $VERSION).zip Frame3DD_$(echo $VERSION)_src.zip
 
@@ -84,12 +85,10 @@ cp --preserve=mode,timestamps ../build/frame3dd_oit     Frame3DD/frame3dd
 zip Frame3DD_$(echo $VERSION)_DukeOIT.zip Frame3DD/frame3dd
 rm Frame3DD/frame3dd
 
-# add OS X 10.3 10.4 10.5 10.6 executables  
+# add OS X  10.6 10.7 10.8 executables  
 echo "adding OS X executable ... "
-cp --preserve=mode,timestamps ../build/frame3ddosx34     Frame3DD/frame3dd
-zip Frame3DD_$(echo $VERSION)_osx34.zip Frame3DD/frame3dd
-cp --preserve=mode,timestamps ../build/frame3dd-osx567   Frame3DD/frame3dd
-zip Frame3DD_$(echo $VERSION)_osx567.zip Frame3DD/frame3dd
+cp --preserve=mode,timestamps ../build/frame3dd-osx789   Frame3DD/frame3dd
+zip Frame3DD_$(echo $VERSION)_osx789.zip Frame3DD/frame3dd
 rm Frame3DD/frame3dd
 
 # add Windows executable
@@ -130,10 +129,10 @@ rm -rf Frame3DD
 
 # To upload distribution files to sourceforge.net ...
 #
-# rsync -uav *.zip hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20100105/.
+# rsync -uav Frame3DD*_*.zip hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20140514+/.
 #
-# rsync -uav *.bz2  hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20100105/.
+##rsync -uav *.bz2  hpgavin,frame3dd@frs.sourceforge.net:/home/frs/project/f/fr/frame3dd/frame3dd/0.20140514+/.
 
-# ----------------------------------------------------------- zipdist.sh
-# Henri P. Gavin  2009.10.20
-# updated: 2009.10.22, 2009.10.25, 2009.10.27, 2009.10.29, 2010.01.05, 2010.12.1
+# ----------------------------------------------------------------- zipdist.sh
+# Henri P. Gavin  2009-10-20
+# updated: 2009-10-22, 2009-10-25, 2009-10-27, 2009-10-29, 2010-01-05, 2010-12-1, 2013-03-18, 2014-01-21, 2014-05-14, 2014-05-17

@@ -8,7 +8,7 @@ Summary:	Structural analysis of 2D/3D frames
 
 # This version number is filled in automatically when you run 'scons dist'.
 # You should update it in the 'SConstruct' file, rather than here.
-Version:	0.20100105
+Version:	0.20130318
 
 # Use release 0.* so that other users can do patch releases with a higher number
 # and still have the update occur automatically.
@@ -66,9 +66,172 @@ rm -rf %{buildroot}
 #
 # ChangeLog is now maintained in ChangeLog.txt. Make your changes there.
 #
+*Mon 17 Mar 2013 <john.pye@anu.edu.au> 0.20130317
+- Update SCons build for renamed files eg HPGmatrix.c
+
+*Sat Mar 9 2013 <.> 0.02100105
+- frame3dd_io.c - fix bug in writing undeformed mesh with data check only
+
+*Wed Mar 6 2013 <.> 0.02100105
+- add error check on input data for unconnected nodes, with output error code 42
+
+*Wed Feb 20 2013 <.> 0.02100105
+- sourceforge upgrade:
+- svn switch --relocate
+- ... https://frame3dd.svn.sourceforge.net/svnroot/frame3dd
+- ... https://svn.code.sf.net/p/frame3dd/code/
+
+*Wed Feb 20 2013 <.> 0.02100105
+- frame3dd_io.c and user-manual.html - update gnuplot to version 4.6 
+
+*Mon Feb 11 2013 <.> 0.02100105
+- frame3dd_io.c --- add comment in plot data files for element numbers
+
+*Sat Feb 8 2013 <.> 0.02100105
+- frame3dd_io.c --- add variable for gnuplot line width
+
+*Tue Jan  22 2013 <.> 0.02100105
+- NRutil.c --- change definition of save_ functions
+
+*Thu Dec  6 20:02:21 EST 2012 <.> 0.02100105
+- frame3dd_io.c --- improve handling of input data when nM=0 is omitted.
+- frame3dd_io.c --- improve handling of missing flags in command line args
+
+*Mon Nov 26 22:35:36 EST 2012 <.> 0.20100105
+- add fixed end forces to reaction forces in frame3dd.c function add_feF().
+- comment-out "set tickslevel 0" in frame3dd_io.c function animate() for
+compatibility with gnuplot versions earlier than 4.6
+
+*Wed Nov  7 2012 Henri Gavin <.> 0.20100105
+- fix broken links to ansicon ...  http://adoxa.3eeweb.com/ansicon/
+
+*Tue Nov  6 2012 Henri Gavin <.> 0.20100105
+- add reference to Wai-Fah Chen's text on Structural Stability in the section of user-manual.html on second-order analysis.
+
+*Fri Nov  2 2012 Henri Gavin <.> 0.20100105
+- small edits to comments in main.c
+
+*Tue Oct 30 2012 Henri Gavin <.> 0.20100105
+- Cleaned up and documented Newton-Raphson code.  
+- Improved documentation in the Numerical Details section.
+- Set internal force data to zero at start of each load case. 
+
+*Mon Oct 29 2012 Henri Gavin <.> 0.20100105
+- Improving documentation on numerical details.
+
+*Wed Oct 24 2012 Henri Gavin <.> 0.20100105
+- Investigated Powell-Symmetric-Broyden update of secant stiffness matrix. This quasi-Newton method does not seem to help very much.  In fact, in all tests convergence with the Powell-Symmetric-Broyden update is slower.  In some cases the solution does not converge.   So, Frame3DD is sticking with the standard full secant update method.   A function for Powell-Symmetric-Broyden updating is now in HPGmatrix.c, for possible future use.  
+
+*Fri Oct 19 2012 Henri Gavin <.> 0.20100105
+- Terms (1,1), (7,7), (1,7) and (7,1) of Kg should be zero!
+
+*Mon Oct 15 2012 Henri Gavin <.> 0.20100105
+- re-write of matrix-solving routines in HPGmatrix.c to solve partitioned
+systems of equations: ldl_dcmp_pm and ldl_mprv_pm.  
+- associated re-write of sections of main.c dealing with solving the
+equations.
+- associated edits of user-manual.doc
+- associated correction of the computation of reaction forces ...
+Frame3DD now passes the "patch" test.
+- rename matrix.c , matrix.h to HPGmatrix.c , HPGmatrix.h
+- rename hpgUtils.c , hpgUtils.h to HPGutil.c , HPGutil.h
+
+
+*Tue Oct  2 2012 Henri Gavin <.> 0.20100105
+- delete: matrix.c hpgUtils.c nrutil.c  (matrix.c and hpgUtls.c were GPL)
+- add:   HPGmatrix.c HPGutil.c NRutil.c (none of these are GPL)
+- new functions in HPGmatrix.c for solving partitioned systems of equations via LDL' decomposition.   These functions will be used in a forthcoming change in order to compute reaction forces directly from the equilibrium matrices.
+- this update is the first in a sequence of re-writes of Frame3DD.
+
+*Wed Sep  5 2012 Henri Gavin <.> 0.20100105
+- user-manual.html - add link to Google Sketchup interface for Frame3DD
+http://rhin.crai.archi.fr/rld/plugin_details.php?id=1008
+
+*Thu Jun  7 2012 Henri Gavin <.> 0.20100105
+- frame3dd_io.c :  set tickslevel 0 to bring orgin of z axis to x-y plane
+
+*Wed May 30 2012 Henri Gavin <.> 0.20100105
+- user-manual.html and README-win32.txt - windows installaion - add recommendation for ansicon.
+- fresh build of Frame3DD for linux, OS X, and Win32
+
+*Mon May 28 2012 Henri Gavin <.> 0.20100105
+- bug fix : allowable number of of interioir point forces, nP, is ten times the number of frame elements, nE. The input data error message was triggered if nP > nE. It has been changed to check if nP > 10*nE.   
+- updated : frame3dd_io.c  and  user-manual.html (Thanks to Humberto Hassey.)
+
+*Mon Apr 09 2012 Henri Gavin <.> 0.20100105
+- change of terminology: "joint" to "node" throughout documentation and code
+
+*Mon Apr 09 2012 Henri Gavin <.> 0.20100105
+- frame3dd_io.c ... fix spelling of "C O N C E N T R A T E D"
+
+*Fri Apr 06 2012 Henri Gavin <.> 0.20100105
+- frame3dd_io.c ... in function animate, prevent overflow from excessive EXG factor
+
+*Sun Jan 01 2012 Henri Gavin <.> 0.20100105
+- user-manual.html - add link to the vim charity, iccf-holland 
+
+*Sun Jan 01 2012 Henri Gavin <.> 0.20100105
+- source-code re-organization, moved matrix multiplication routines from eig.c to matrix.c
+
+*Thu Dec 30 2011 Henri Gavin <.> 0.20100105
+- source-code re-organization, new matrix.c, matrix.h contains lu_dcmp, ldl_dcmp, pseudo-inverse, and other matrix math functions 
+
+*Wed Dec 21 2011 Henri Gavin <.> 0.20100105
+- user-manual.html - Add acknowledgment section, small edit to 7.4.2 shear effects.  
+
+*Thu Nov 17 2011 Henri Gavin <.> 0.20100105
+- user-manual.html - gnuplot link for Win32 to the 4.2.6 version ... the 4.4.4 version seems to have trouble.    
+
+*Fri Nov 11 2011 Henri Gavin <.> 0.20100105
+- user-manual.html - improved installation instructions
+
+*Wed Nov 9 2011 Henri Gavin <.> 0.20100105
+- user-manual.html - update suggested text editors and links
+
+*Tue Nov 8 2011 Henri Gavin <.> 0.20100105
+- user-manual.html - simplification of installation instructions
+
+*Tue Nov 8 2011 Henri Gavin <.> 0.20100105
+- user-manual.html - slight simplification of Windows installation instructions
+
+*Thu Nov 3 2011 Henri Gavin <.> 0.20100105
+- user-manual.html - small wordsmith edits regarding experimental validation of shear correction factors.
+
+*Thu Nov 3 2011 Henri Gavin <.> 0.20100105
+- update user-manual.html, add Cowper's 1966 paper to the list of references for shear correction factors
+
+*Tue Nov 1 2011 Henri Gavin <.> 0.20100105
+- wordsmithing in user-manual.html regarding shear effects
+
+*Tue Nov 1 2011 Henri Gavin <.> 0.20100105
+- correction to user-manual.html regarding shear correction factor equations 
+
+*Mon Oct 31 2011 Henri Gavin <.> 0.20100105
+- update user-manual.html regarding shear correction factors and torsion
+constants
+
+*Sun Oct 30 2011 Henri Gavin <.> 0.20100105
+- update user-manual.html regarding shear correction factors
+
+*Sun Mar 27 2011 Henri Gavin <.> 0.20100105
+- add .CSV input data template from Simon Fendall
+
+*Mon Mar 7 2011 Henri Gavin <.> 0.20100105
+- modify computation of internal forces from interior-span point loads, now the shear force drop due to interior point loads occurs over a span of 2*dx.
+
+*Wed Feb 2 2011 Henri Gavin <.> 0.20100105
+-   re-commit after source-forge hack of Jan 28 2011.
+
+*Thu Dec 23 2010 Henri Gavin <.> 0.20100105
+- add caveat on maximum shear stress in user manual
+
 *Wed Dec 1 2010 Henri Gavin <.> 0.20100105
 - fixed bug related to linear analysis of temperature loads
-- added ascii (ansi.sys) color to screen output hpgUtils.c hpgUtils.h
+- added ascii (ANSI.SYS) color to screen output hpgUtils.c hpgUtils.h
+- The Win32 "Command Prompt" does not recognize ANSI.SYS escape sequences at
+all.
+- the .ZIP source code distribution now includes the examples
+- more efficient .ZIP archiving in .zipdist.sh
 
 *Fri Nov 26 2010 Henri Gavin <.> 0.20100105
 - updated user-manual.html with Gnuplot links to www.gnuplot.info
@@ -550,7 +713,5 @@ and doc/user-manual.html to reflect change in name. The URL has not changed.
 
 * Fri Jan 01 1993 Henri Gavin <.> 19930101
 - initiation of program at the University of Michigan
-
-
 
 

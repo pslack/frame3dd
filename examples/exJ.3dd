@@ -76,6 +76,7 @@ Example J: tesseract  (N, mm, ton)
 1                               # 1: include shear deformation
 0                               # 1: include geometric stiffness
 1.0                             # exaggerate static mesh deformations
+1.0 				# zoom scale for 3D plotting
 -1                              # no internal force calculation
 
 
@@ -87,7 +88,7 @@ Example J: tesseract  (N, mm, ton)
 0                               # number of trapezoidal distributed loads
 0                               # number of internal concentrated loads
 0                               # number of temperature loads
-0                               # number of support settlements
+0                               # number of nodes with prescribed displacements
 				# End   Static Load Case 1 of 1
 
 22                              # number of desired dynamic modes of vibration
@@ -95,13 +96,13 @@ Example J: tesseract  (N, mm, ton)
 0                               # 0: consistent mass ... 1: lumped mass matrix
 1e-6                            # mode shape tolerance
 10.0				# modal frequency shift factor
-1.0                             # exaggerate modal mesh deformations
+0.8                             # exaggerate modal mesh deformations
 
 0                # number of nodes with extra mass or inertia
 0                # number of frame elements with extra mass
 
-8                               # number of modes to animate
- 7  10  12  13 15  18  20  22   # modes to animate
+8                               # number of modes to animate, nA
+ 7  10  12  13 15  18  20  22   # modes to animate, omit of nA == 0
 3                               # pan during animation
 
-
+# End of input data file for example J

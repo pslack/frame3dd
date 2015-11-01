@@ -1,8 +1,172 @@
-*Thu Dec  6 20:02:21 EST 2012 <.> 0.02100105
+* Sun Oct 31 15:15:00 EST 2015 Henri Gavin <hpgavin> 0.20140514+
+- add the peak element internal forces to the .CSV output data file
+- update Frame3DD-manual.html re. the inclusion of peak element internal
+forces in the .CSV output data file
+
+* Tue Oct 20 15:53:00 EST 2015 Henri Gavin <hpgavin> 0.20140514+
+- in testing for large average strains, check for large positive _and_
+negative strains 
+frame3dd.c line 450 changed ... 
+if ( fabs(axial_strain > 0.001 ) ) {
+... to ... 
+if ( fabs(axial_strain) > 0.001 ) {
+- new Exit Codes:
+181 : stiffness matrix not positive definite
+182 : large strain
+183 : stiffness matrix not positive definite _and_ large strains
+- Frame3DD-manual.html updated with new Exit Codes
+
+* Fri Jun  5 16:33:00 EST 2015 Henri Gavin <hpgavin> 0.20140514+
+- changed format of the .zip file distributions.  now all binary applications
+are in a single distribution .zip file.   
+- change installation instructions to comply with the new distribution file
+structure
+- change sourceforge location of download .zip archive to
+https://sourceforge.net/projects/frame3dd/files/
+- did not change the link used to the download .zip archive ... still ...
+http://sourceforge.net/project/platformdownload.php?group_id=221386
+... this link finds the latest .zip file in the archive.
+... not yet sure if the download stats are updating correctly.
+- small style formatting changes to user manual
+
+
+* Thu Jun  4 16:33:00 EST 2015 Henri Gavin <hpgavin> 0.20140514+
+- increase limit on number of animated modes from 20 to 100.
+- function name changes in main.c frame3dd_io.c frame3dd.c ...
+-- rename conden to static_condensation
+-- rename guyan to paz_condensation
+-- rename dynamic_conden to modal_condensation
+- associated updates to user manual
+- replace links with platformdownload in the user manual with links to list of
+download .zip files ... the platformdownload option at sourceforge appears to
+be no longer implemented.
+
+
+* Fri Dec  5 13:11:00 EST 2014 Henri Gavin <hpgavin> 0.20140514+
+- require "anlyz ~= 0" in order to run matrix condensation
+
+
+* Fri Nov  7 13:11:00 EST 2014 Henri Gavin <hpgavin> 0.20140514+
+- update Frame3DD-manual.html with instructions on how to zoom, pan, and shift
+3D images in gnuplot.
+- update saveplot and saveplot_w32 for gnuplot version 4.6
+
+
+* Sat May 17 07:00:00 EST 2014 Henri Gavin <hpgavin> 0.20140514
+- clear a few warnings when compiling with -Wall
+- add more precision to the description of the numerical method in the
+user-manual.html
+- rename user-manual.html to Frame3DD-manual.html
+- fix link in website/index.html
+- add Frame3DD-manual.html to sourceforge repository and distributions
+- add scale variable to Input Data File to scale 3D plots in gnuplot 4.6
+
+* Fri May 16 07:00:00 EST 2014 Henri Gavin <hpgavin> 0.20140514
+- Reaction forces reflect the presence of loads applied directly on reaction coordinates
+- Reactions are computed and updating for partitioned matrix systems
+within ldl_dcmp_pm and ldl_mprove_pm. computing reactions in this way
+is valid only for linear elastic analyses
+- function compute_reaction_forces() was re-introduced ... 
+The superposition of incremental reaction forces dR does not 
+work in problems with geometric stiffness, since
+the stiffness changes at each iteration.    
+So the reactions are re-computed only for problems with geometric stiffness.    
+- Compute RMS equilibrium error for linear elastic analyses
+- The RMS equilibrium error makes use of only the upper triangle of [K_qq]
+- RMS equilibrium values are assessed for linear elastic analyses
+
+* Thu May 15 07:00:00 EST 2014 Henri Gavin <hpgavin> 0.20140514
+- merge add_feF() into element_end_forces()
+
+* Wed May 14 07:00:00 EST 2014 Henri Gavin <hpgavin> 0.20140514
+- include the effect of applied point loads at reaction coordinates on the computed reaction forces
+This change has simplified the calculations by eliminating the need for 
+the entire function: compute_reaction_forces() and 
+the reaction-related calcluations in the function: add_feF().   
+Instead, the correct reaction forces are now computed within ldl_dcmp_pm.    
+The relevant changes to main.c, frame3dd.c, and HPGmatrix.c are 
+commented with the date of the change: 2014-05-14.
+Because this change affects computed results,
+the version number is updated to 20140514.
+Step 8 of section 8 of the user manual is updated to reflect
+this change in the method.
+- these changes do not affect the formatting of the input or output data
+- changed all gnuplot commands "set nofoobar" to "unset foobar"
+- caught and fixed bug affecting smoothness of mode-shape animations
+- updated links to ansicon and Sketchup interface in user-manual.html
+
+* Fri Jan 24 08:00:00 EST 2014 Henri Gavin <hpgavin> 0.20140121
+- update zipdist.sh for OSX versions "789"
+
+* Tue Jan 21 16:00:00 EST 2014 Henri Gavin <hpgavin> 0.20140121
+- correction in computation of internal element transverse displacements
+- apply linear correction to integrated (M/EI) *before* adding in V/GA
+- update version numbers to 20140121 in code and documentation
+
+* Mon Dec 30 15:58:18 EST 2013 Henri Gavin <hpgavin> 0.20130317
+- sign of reaction forces in .CSV output is negative of what it should be.
+- source-code and examples updated
+
+*Thu Dec 19 22:19:21 EST 2013 Henri Gavin <hpgavin> 0.20130317
+- add .csv versions of all examples to web site and to download collection
+- remove semicolon (;) from list of comment delimiters for "csv" compatability
+- add semicolon (;) to list of ignored characters for "csv" compatability
+
+*Tue Dec 17 22:19:21 EST 2013 Henri Gavin <hpgavin> 0.20130317
+- user_manual.html ... change .bash_profile to .profile
+
+*Mon Dec 16 22:19:21 EST 2013 Henri Gavin <hpgavin> 0.20130317
+- user_manual.html ... change .bashrc to .bash_profile
+- user_manual.html ... change .cshrc  to .login
+
+*Tue Jun 18 14:17:15 EDT 2013 Henri Gavin <hpgavin> 0.20130317
+- new function peak_internal_forces
+- write peak internal element forces to output data file
+
+*Mon Jun 17 11:47:25 EDT 2013 Henri Gavin <hpgavin> 0.20130317
+- add listing of maximum and minimum element forces, moments, and displacements to the internal force output data file
+- updated usr-manual.html with these changes
+
+*Wed Apr 17 14:27:47 EDT 2013 Henri Gavin <hpgavin> 0.20130317
+- bug blocking matrix condensation calculations found and fixed
+- more verbose run-time output to help find input data problems in condensation data
+- if the number of animated modes, omit the line with the list of modes to anmimate, nA, is set to 0 (zero).
+ 
+*Mon 20 Mar 2013 <john.pye@anu.edu.au> 0.20130317
+- Small edit to user-manual (John Pye email)
+
+*Mon 17 Mar 2013 <john.pye@anu.edu.au> 0.20130317
+- Update SCons build for renamed files eg HPGmatrix.c
+
+*Sat Mar 9 2013 Henri Gavin <.> 0.02100105
+- frame3dd_io.c - fix bug in writing undeformed mesh with data check only
+
+*Wed Mar 6 2013 Henri Gavin <.> 0.02100105
+- add error check on input data for unconnected nodes, with output error code 42
+
+*Wed Feb 20 2013 Henri Gavin <.> 0.02100105
+- sourceforge upgrade:
+- svn switch --relocate
+- ... https://frame3dd.svn.sourceforge.net/svnroot/frame3dd
+- ... https://svn.code.sf.net/p/frame3dd/code/
+
+*Wed Feb 20 2013 Henri Gavin <.> 0.02100105
+- frame3dd_io.c and user-manual.html - update gnuplot to version 4.6 
+
+*Mon Feb 11 2013 Henri Gavin <.> 0.02100105
+- frame3dd_io.c --- add comment in plot data files for element numbers
+
+*Sat Feb 8 2013 Henri Gavin <.> 0.02100105
+- frame3dd_io.c --- add variable for gnuplot line width
+
+*Tue Jan  22 2013 Henri Gavin <.> 0.02100105
+- NRutil.c --- change definition of save_ functions
+
+*Thu Dec  6 20:02:21 EST 2012 Henri Gavin <.> 0.02100105
 - frame3dd_io.c --- improve handling of input data when nM=0 is omitted.
 - frame3dd_io.c --- improve handling of missing flags in command line args
 
-*Mon Nov 26 22:35:36 EST 2012 <.> 0.20100105
+*Mon Nov 26 22:35:36 EST 2012 Henri Gavin <.> 0.20100105
 - add fixed end forces to reaction forces in frame3dd.c function add_feF().
 - comment-out "set tickslevel 0" in frame3dd_io.c function animate() for
 compatibility with gnuplot versions earlier than 4.6
@@ -11,8 +175,7 @@ compatibility with gnuplot versions earlier than 4.6
 - fix broken links to ansicon ...  http://adoxa.3eeweb.com/ansicon/
 
 *Tue Nov  6 2012 Henri Gavin <.> 0.20100105
-- add reference to Wai-Fah Chen's text on Structural Stability in the section
-of user-manual.html on second-order analysis.
+- add reference to Wai-Fah Chen's text on Structural Stability in the section of user-manual.html on second-order analysis.
 
 *Fri Nov  2 2012 Henri Gavin <.> 0.20100105
 - small edits to comments in main.c
@@ -26,12 +189,7 @@ of user-manual.html on second-order analysis.
 - Improving documentation on numerical details.
 
 *Wed Oct 24 2012 Henri Gavin <.> 0.20100105
-- Investigated Powell-Symmetric-Broyden update of secant stiffness matrix. 
-This quasi-Newton method does not seem to help very much.  In fact, in all
-tests convergence with the Powell-Symmetric-Broyden update is slower.  In some
-cases the solution does not converge.   So, Frame3DD is sticking with the
-standard full secant update method.   A function for Powell-Symmetric-Broyden
-updating is now in HPGmatrix.c, for possible future use.  
+- Investigated Powell-Symmetric-Broyden update of secant stiffness matrix. This quasi-Newton method does not seem to help very much.  In fact, in all tests convergence with the Powell-Symmetric-Broyden update is slower.  In some cases the solution does not converge.   So, Frame3DD is sticking with the standard full secant update method.   A function for Powell-Symmetric-Broyden updating is now in HPGmatrix.c, for possible future use.  
 
 *Fri Oct 19 2012 Henri Gavin <.> 0.20100105
 - Terms (1,1), (7,7), (1,7) and (7,1) of Kg should be zero!
@@ -51,9 +209,7 @@ Frame3DD now passes the "patch" test.
 *Tue Oct  2 2012 Henri Gavin <.> 0.20100105
 - delete: matrix.c hpgUtils.c nrutil.c  (matrix.c and hpgUtls.c were GPL)
 - add:   HPGmatrix.c HPGutil.c NRutil.c (none of these are GPL)
-- new functions in HPGmatrix.c for solving partitioned systems of equations.
-via LDL' decomposition.   These functions will be used in a forthcoming change
-in order to compute reaction forces directly from the equilibrium matrices.
+- new functions in HPGmatrix.c for solving partitioned systems of equations via LDL' decomposition.   These functions will be used in a forthcoming change in order to compute reaction forces directly from the equilibrium matrices.
 - this update is the first in a sequence of re-writes of Frame3DD.
 
 *Wed Sep  5 2012 Henri Gavin <.> 0.20100105
@@ -68,11 +224,8 @@ http://rhin.crai.archi.fr/rld/plugin_details.php?id=1008
 - fresh build of Frame3DD for linux, OS X, and Win32
 
 *Mon May 28 2012 Henri Gavin <.> 0.20100105
-- bug fix : allowable number of of interioir point forces, nP, is ten times the
-number of frame elements, nE.    The input data error message was triggered if
-nP > nE.   It has been changed to check if nP > 10*nE.   
-updated : frame3dd_io.c  and  user-manual.html
-(Thanks to Humberto Hassey.)
+- bug fix : allowable number of of interioir point forces, nP, is ten times the number of frame elements, nE. The input data error message was triggered if nP > nE. It has been changed to check if nP > 10*nE.   
+- updated : frame3dd_io.c  and  user-manual.html (Thanks to Humberto Hassey.)
 
 *Mon Apr 09 2012 Henri Gavin <.> 0.20100105
 - change of terminology: "joint" to "node" throughout documentation and code
@@ -629,5 +782,3 @@ and doc/user-manual.html to reflect change in name. The URL has not changed.
 
 * Fri Jan 01 1993 Henri Gavin <.> 19930101
 - initiation of program at the University of Michigan
-
-

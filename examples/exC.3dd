@@ -87,10 +87,12 @@ Example C: a tetrahedral frame - static and dynamic analysis (in, kip)
 47  17  18   10.0  7.0  5.0  50.0  100.0  200.0  29000   11500 0  7.33e-7
 48  16  18   20.0  8.0  5.0  50.0  100.0  200.0  29000   11500 0  7.33e-7
 
-1                               # 1: include shear deformation
-1                               # 1: include geometric stiffness
-10.0                            # exaggerate static mesh deformations
-12.0                            # x-axis increment for internal forces, in
+1               # 1: include shear deformation
+1               # 1: include geometric stiffness
+10.0            # exaggerate static mesh deformations
+2.5             # zoom scale for 3D plotting
+12.0            # x-axis increment for internal forces, in
+		# if dx is -1 then internal force calculations are skipped.
 
 
 
@@ -98,7 +100,10 @@ Example C: a tetrahedral frame - static and dynamic analysis (in, kip)
 
 				# Begin Static Load Case 1 of 1
 				
-0  0  -386.4			# gravity in X, Y, Z directions (global)
+# gravitational acceleration for self-weight loading (global)
+#.gX		gY		gZ              
+#.in./s^2	in./s^2		in./s^2
+   0              0             -386.4	
 			
 0                               # number of loaded nodes
 
@@ -127,7 +132,8 @@ Example C: a tetrahedral frame - static and dynamic analysis (in, kip)
 0                         # number of nodes with extra mass or inertia
 0                         # number of elements with extra mass 
 
-5                               # number of modes to animate
- 1  2  3  4   5                 # modes to animate
+5                               # number of modes to animate, nA
+ 1  2  3  4   5                 # list of modes to animate, omit if nA == 0
 2                               # pan rate during animation
 
+# End of input data file for example C

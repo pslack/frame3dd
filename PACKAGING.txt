@@ -29,13 +29,14 @@ Last tested with Fedora 9.
 To build a Debian package (e.g. suitable for Ubuntu), first get hold of the
 'dtar' tool:
 
-http://ascendwiki.cheme.cmu.edu/Building_a_Debian_package_from_a_source_tarball
+http://ascend4.org/Dtar
 
 Install the debhelper package and the fakeroot package
 
   sudo apt-get install fakeroot debhelper
 
-Then, assuming you installed dtar somewhere on your path,
+Then, assuming you installed dtar somewhere on your path, (change below
+according to current version number):
 
   cd ~/frame3dd
   scons dist
@@ -80,5 +81,4 @@ To upload files to Sourceforge.net for distribution:
 
 -- 
 John Pye
-20 Oct 2009
-
+18 Mar 2013

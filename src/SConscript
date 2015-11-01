@@ -23,8 +23,8 @@
 Import('env')
 
 srcs = [
-	'frame3dd.c','lu_dcmp.c','ldl_dcmp.c','nrutil.c','eig.c','hpgUtils.c',
-	'frame3dd_io.c', 'coordtrans.c'
+	'frame3dd.c','eig.c','HPGmatrix.c','HPGutil.c','NRutil.c'
+	,'frame3dd_io.c', 'coordtrans.c'
 ]
 
 prog_env = env.Clone()

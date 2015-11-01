@@ -62,16 +62,21 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
 21 11 12 10.0	1.0	1.0	1.0	1.0	0.01	29000 11500  0  7.33e-7
 
  
-0                               # 1: include shear deformation
-0                               # 1: include geometric stiffness
-10.0                            # exaggerate mesh deformations
-10.0				# x-axis increment for internal forces
+0		# 1: include shear deformation
+0		# 1: include geometric stiffness
+50.0 		# exaggerate mesh deformations
+1.0             # zoom scale for 3D plotting
+-1.0		# x-axis increment for internal forces
+		# if dx is -1 then internal force calculations are skipped.
 
 
 2				# number of static load cases
 				# Begin Static Load Case 1 of 2
 		
-0   -386.4   0			# gravity in the X, Y, Z directions (global)
+# gravitational acceleration for self-weight loading (global)
+#.gX		gY		gZ		
+#.in./s^2	in./s^2		in./s^2
+  0  		0		0
 
 5				# number of loaded nodes
 #.n     Fx       Fy     Fz      Mxx     Myy     Mzz
@@ -87,7 +92,7 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
 0				# number of internal concentrated loads
 0				# number of temperature loads
 
-1				# number of support settlements
+1				# number of nodes with prescribed displacements
 #.n    Dx      Dy      Dz      Dxx     Dyy     Dzz
 #.     in      in      in      rad.    rad.    rad.
   8 	0.1	0.0	0.0	0.0	0.0	0.0
@@ -95,11 +100,14 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
 
 				# Begin Static Load Case 2 of 2
 
-0   -386.4   0			# gravity in the X, Y, Z directions (global)
+# gravitational acceleration for self-weight loading (global)
+#.gX		gY		gZ		
+#.in./s^2	in./s^2		in./s^2
+   0		0		0
 
 3				# number of loaded nodes
 #.n     Fx       Fy     Fz      Mxx     Myy     Mzz
-#.      kip      kip    kip     in.k    in.k    in.k
+#       kip      kip    kip     in.k    in.k    in.k
  3	20.0	 0.0	0.0	0.0	0.0	0.0
  4	10.0	 0.0  	0.0	0.0	0.0	0.0
  5	20.0	 0.0  	0.0	0.0	0.0	0.0
@@ -109,19 +117,19 @@ Example A: linear static analysis of a 2D truss with support settlement (kips,in
 0				# number of internal concentrated loads
 
 3				# number of temperature loads
-#.e a      hy   hz   Ty+  Ty-  Tz+  Tz- 
-#.  /.F    in   in   F    F    F    F
-10 6e-12   5.0  5.0  10	  10   10   10
-13 6e-12   5.0  5.0  15   15   15   15  
-15 6e-12   5.0  5.0  17   17   17   17  
+#.e a      hy   hz   Ty+    Ty-    Tz+    Tz- 
+#.  /degF  in   in   deg.F  deg.F  deg.F  deg.F
+10 6e-12   5.0  5.0  10	    10     10     10
+13 6e-12   5.0  5.0  15     15     15     15  
+15 6e-12   5.0  5.0  17     17     17     17  
 
-2				# number of support settlements
+2				# number of nodes with prescribed displacements
 #.n    Dx      Dy      Dz      Dxx     Dyy     Dzz
 #.     in      in      in      rad     rad     rad
   1 	0.0    -1.0	0.0	0.0	0.0	0.0
   8 	0.1	0.0	0.0	0.0	0.0	0.0
 				# End   Static Load Case 2 of 2
-			
+
 0				# number of dynamic modes
 
-# End of input file for example A
+# End of input data file for example A
