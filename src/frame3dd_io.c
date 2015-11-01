@@ -2077,9 +2077,7 @@ void CSV_filename( char CSV_file[], char wa[], char OUT_file[], int lc )
 	if (lc == 1) wa[0] = 'w';
 	wa[1] = '\0';
 
-fprintf(stderr," 1. CSV_file = %s  wa = %s \n", CSV_file, wa );
-
-
+//	fprintf(stderr," 1. CSV_file = %s  wa = %s \n", CSV_file, wa );
 }
 
 

@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example I: a triangular tower  (kip in) 
-Sat May 17 15:28:26 2014
+Sun Nov  1 15:23:30 2015
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -175,8 +175,8 @@ R E A C T I O N S							(global)
      3      -0.000     -47.598    3630.087   11320.920       0.000       0.000
 R M S    R E L A T I V E    E Q U I L I B R I U M    E R R O R: 5.504e-23
 
-P E A K   F R A M E   E L E M E N T   I N T E R N A L   F O R C E S	(local)
-  Elmnt             Nx          Vy         Vz        Txx        Myy        Mzz
+P E A K   F R A M E   E L E M E N T   I N T E R N A L   F O R C E S(local)", 
+  Elmnt   .         Nx          Vy         Vz        Txx        Myy        Mzz
      1   max    -282.144      76.186      4.806     -1.245    122.085  10345.100
      1   min    -282.144      76.186      4.806     -1.245   -262.240   3503.048
      2   max    -282.143      76.186     -4.806      1.245    262.240  10345.100

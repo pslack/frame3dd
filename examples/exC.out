@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example C: a tetrahedral frame - static and dynamic analysis (in  kip) 
-Sat May 17 15:28:17 2014
+Sun Nov  1 15:23:14 2015
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -253,8 +253,8 @@ R E A C T I O N S							(global)
     18      37.106      -1.716       3.508       0.0         0.0         0.0  
 R M S    R E L A T I V E    E Q U I L I B R I U M    E R R O R: 1.081e-27
 
-P E A K   F R A M E   E L E M E N T   I N T E R N A L   F O R C E S	(local)
-  Elmnt             Nx          Vy         Vz        Txx        Myy        Mzz
+P E A K   F R A M E   E L E M E N T   I N T E R N A L   F O R C E S(local)", 
+  Elmnt   .         Nx          Vy         Vz        Txx        Myy        Mzz
      1   max    -262.040      15.609      0.844     15.882    -13.301    676.776
      1   min    -262.040      15.609      0.561     15.882    -70.994   -839.607
      2   max       6.780       0.845     -0.537     12.992     19.861     39.080

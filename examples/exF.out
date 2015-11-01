@@ -6,7 +6,7 @@ For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example F: a seismically-isolated building model (units: N  mm  ton) 
-Sat May 17 15:28:18 2014
+Sun Nov  1 15:23:17 2015
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________
@@ -336,8 +336,8 @@ R E A C T I O N S							(global)
     15       0.007     -25.186    1718.746   -4881.933   -1174.233       0.000
 R M S    R E L A T I V E    E Q U I L I B R I U M    E R R O R: 2.846e-19
 
-P E A K   F R A M E   E L E M E N T   I N T E R N A L   F O R C E S	(local)
-  Elmnt             Nx          Vy         Vz        Txx        Myy        Mzz
+P E A K   F R A M E   E L E M E N T   I N T E R N A L   F O R C E S(local)", 
+  Elmnt   .         Nx          Vy         Vz        Txx        Myy        Mzz
      1   max  -32273.728     -26.219    -40.476     -0.268  36145.029  29531.073
      1   min  -32655.231     -26.219    -40.476     -0.268 -31120.798 -13275.706
      2   max  -21395.096     -53.722    -50.245     -2.767  39648.881  41173.040

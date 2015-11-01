@@ -3,13 +3,13 @@
 "Frame3DD is distributed in the hope that it will be useful but with no warranty."
 "For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html"
 "  Example J: tesseract (N  mm  ton)               "
-" Sat May 17 15:28:16 2014
+" Sun Nov  1 15:23:14 2015
  "
 " .CSV formatted results of Frame3DD analysis "
 
- , Load Case , Displacements , End Forces , Reactions 
- First Row , 1 , 17 , 35 , 101  
- Last Row , 1 , 32 , 98 , 116  
+ , Load Case , Displacements , End Forces , Reactions , Internal Forces 
+ First Row , 1 , 17 , 35 , 101  , 121  
+ Last Row , 1 , 32 , 98 , 116 , 184 
 
 "L O A D   C A S E   1   O F   1  ... "
 
