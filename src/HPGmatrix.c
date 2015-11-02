@@ -41,6 +41,10 @@
 
 #define SWAP(a,b) {temp=(a);(a)=(b);(b)=temp;}
 
+#define sind(x) (sin(fmod((x),360) * M_PI / 180))
+#define cosd(x) (cos(fmod((x),360) * M_PI / 180))
+
+
 /* 
  * GAUSSJ
  * Linear equation solution by Gauss-Jordan elimination, [A][X]=[B] above. A[1..n][1..n]
@@ -773,6 +777,25 @@ void xtinvAy(
 	free_dvector(diag,1,n);
 	free_dvector(x,1,n);
 	free_dvector(y,1,n);
+}
+
+
+/*  COORD_XFRM - coordinate transform of a matrix of column 2-vectors
+ * 
+ * Rr  = [ cosd(theta) -sind(theta) ; sind(theta) cosd(theta) ]*[ Rx ; Ry ];
+ */
+void coord_xfrm ( float **Rr, float **R, float theta, int n )
+{
+	float	R1, R2;
+	int	i;
+
+	for ( i = 1; i<=n; i++ ) {
+		R1 =  cosd(theta)*R[1][i] - sind(theta)*R[2][i];
+		R2 =  sind(theta)*R[1][i] + cosd(theta)*R[2][i];
+		Rr[1][i] = R1;
+		Rr[2][i] = R2;
+	}
+	return;
 }
 
 

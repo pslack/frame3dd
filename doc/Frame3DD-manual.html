@@ -5,14 +5,15 @@
 
 <META NAME="Description" CONTENT=" Free software for static and dynamic structural analysis of 3D moment-resisting frames with elastic and geometric stiffness. Written in ANSI C.  
 Source code includes:  frame analysis, LDL' decomposition, LU decomposition, sub-space iteration, Stodola iteration, Sturm eigenvalue checking,
-Static Condensation, Guyan Reduction and Dynamic Condensation.
+Static Condensation, Dynamic Paz Condensation, Paz Condensation.
+Modal Condensation, Matlab interface.
 Matlab interface.
 Graphical output and mode shape animation via Gnuplot.">
 
 <META NAME="Keywords" CONTENT="Frame3DD, Structural Dynamics, Structural Analysis, Frame Analysis, 3D Frames, 3D Trusses, Structural Analysis Software, Geometric Stiffness, Geometric Stiffness Matrix, Modal Analysis, Modal Analysis Software, Structural Dynamics, Structural Dynamics Software, LDL Decomposition, LDL Decomposition, LU Decomposition, Subspace Iteration, Gnuplot, Matlab, Octave, Henri Gavin, Duke">
 
 <style>
-h1 {font: bold xx-large sans-serif}
+h1 {font: bold x-large sans-serif}
 h2 {font: bold x-large sans-serif}
 h3 {font: bold large sans-serif}
 h4 {font: bold small sans-serif}
@@ -26,9 +27,9 @@ iframe {background-color: #000000; margin-top: 5px; margin-bottom: 5px, border:0
 <body>
 
 <img src="img/psoe.jpg" height="100" align="left" border="0">
-<font face="Arial, Helvetica, sans-serif" size="3">
+<font face="Arial, Helvetica, sans-serif" size="4">
 <nobr><b>User manual and reference for <a href="http://frame3dd.sourceforge.net/">Frame3DD: A Structural Frame Analysis Program</a></b>
-</nobr><br>
+</nobr><br></font>
 <a href="http://cee.duke.edu/">
 Department of Civil and Environmental Engineering</a><br>
 <a href="http://pratt.duke.edu/">
@@ -36,17 +37,15 @@ Edmund T. Pratt School of Engineering</a><br>
 <a href="http://www.duke.edu/">
 Duke University</a> - Box 90287,
 <a href="http://www.durham-nc.com/"> Durham</a>,
-<a href="http://www.visitnc.com/"> NC</a> 27708-0287
+<a href="http://www.visitnc.com/"> NC</a> 27708-0287</nobr></br>
 </font>
 
-<p><i>
+<i>
 <font face="Verdana, Arial, Helvetica, sans-serif" size="2">
-Henri P. Gavin, Ph.D., P.E., </font></i></p>
+Henri P. Gavin, Ph.D., P.E., </font></i>
 
 <hr>
-<h1>Frame3DD</h1>
-
-<h2>version 0.20140514+ </h2>
+<h1>Frame3DD version 0.20140514+ </h1>
 
 <!-- iframe src="version.html" width="250" height="30" style="border:solid 1pt grey"></iframe -->
 
@@ -81,11 +80,11 @@ recapitulates the input information, gives node displacements in global coordina
 </p>
 
 <p><b>Frame3DD</b> writes a
-<a href="http://www.gnuplot.info/">Gnuplot</a>
+<a href="http://www.gnuplot.info/">gnuplot</a>
 script file used for viewing deformed frames and dynamic mode shapes.
 If the Output Data is written to a file called <b>MyResultsA.out</b>,
-the Gnuplot script is written to a file called <b>MyResultsA.plt</b>.
-Graphical output may be viewed by starting Gnuplot and typing:
+the gnuplot script is written to a file called <b>MyResultsA.plt</b>.
+Graphical output may be viewed by starting gnuplot and typing:
 <b> load 'MyResultsA.plt'</b>.
 </p>
 
@@ -123,9 +122,10 @@ factors of two- and three- dimensional elastic structures using
 direct stiffness and mass assembly.  Written in  C.  Source code
 includes: frame analysis, LDL' decomposition, LU decomposition,
 Newton-Raphson iteration, sub-space iteration, Stodola iteration,
-Sturm eigenvalue check, and Static Condensation, Guyan Reduction,
-Dynamic Condensation.  Graphical output and mode shape animation
-via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.6.
+Sturm eigenvalue check, and Static Condensation, Dynamic Guyan Reduction,
+Dynamic Condensation, Modal Condensation.
+Graphical output and mode shape animation
+via <a href="http://www.gnuplot.info/">gnuplot</a> version 4.6.
 <hr>
 <h4>SYNOPSIS </h4>
        frame3dd  <Input Data file>  <Output Data file>
@@ -163,16 +163,19 @@ via <a href="http://www.gnuplot.info/">Gnuplot</a> version 4.6.
 <ol>
 <li>Read the User Manual and Reference (this file).
 <li>
-<a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
-Download</a> Frame3DD and save the Frame3DD folder to your Desktop (more details below).
-<li>Optionally, obtain a copy of Gnuplot for your operating system (more details below).
+<!-- a href="https://sourceforge.net/projects/frame3dd/files/"-->
+<!-- a href="https://sourceforge.net/projects/frame3dd/files/latest/download?source=files" -->
+<a href="http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
+Download</a>
+Frame3DD and save the Frame3DD folder to your Desktop (more details below).
+<li>Optionally, obtain a copy of gnuplot for your operating system (more details below).
 <li>Open a terminal window, go to the Frame3DD directory, and run the program on one of the examples using a command like ...
 <pre>
 cd ~/Desktop/Frame3DD
 frame3dd  examples/exE.3dd  examples/exE.out
 </pre>
 <li>Open the Output Data file using a <a href="http://en.wikipedia.org/wiki/Vim_(text_editor)">good text editor</a> and view the Output Data.
-<li>Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.gnuplot.info/">Gnuplot</a>, and typing
+<li>Plot the structural configuration, the deformed structural shape, and mode-shapes, by starting <a href="http://www.gnuplot.info/">gnuplot</a>, and typing
 <pre>
      gnuplot>   cd 'Desktop/Frame3DD/examples'
      gnuplot>   load 'exE.plt'
@@ -260,17 +263,18 @@ The additional output files will then appear in the folder you have specified.
 <p>
 Compiled executable programs are updated with some regularity.  
 Frame3DD installation packages are available for download for Linux,
-for OS X, and for Windows operating systems as .ZIP archives.
-These installation .ZIP archives include:
+for OS X, and for Windows operating systems as a .ZIP archive.
+This installation .ZIP archive include:
 <ul>
 <li> A copy of the GPL license (LICENSE.txt)
-<li> The executable program (frame3dd) for the selected operating system (Linux, OS X, or Windows)
+<li> Executable programs (frame3dd) for Linux, OS X, and Windows
 <li> This manual, (doc/user-manual.html) 
 <li> Some general information (README.txt)
 <li> Some Windows-specific issues (README-win32.txt)
 <li> The Matlab interface code (matlab/)
 <li> A summary of recent updates to the program (ChangeLog.txt)
 <li> A set of example Input Data files (examples/)
+<li> The complete source code (src/)
 </ul>
 </p>
 
@@ -285,8 +289,8 @@ The date stamp at the beginning of the manual corresponds to the release date of
 <a name="runlinux"/><h3>3.1 Linux</h3>
 
 <p>
-For Linux you may install Frame3DD from a .ZIP archive 
-or you may compile for Linux or Unix from the source code.
+You may install Frame3DD from the .ZIP archive 
+or you may compile Frame3DD from the source code.
 The following instructions install Frame3DD to the <b>Desktop</b> but other directories may be substituted, if so desired.  
 </p>
 
@@ -294,8 +298,11 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 
 <ol>
 <li>
+<!-- a href="https://sourceforge.net/projects/frame3dd/files/"-->
+<!-- a href="https://sourceforge.net/projects/frame3dd/files/latest/download?source=files" -->
 <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
-Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_linux.zip) and save it in your <b>Desktop</b>.<br>
+Download</a>
+the Frame3DD .ZIP archive (Frame3DD_VERSION.zip) and save it in your <b>Desktop</b>.<br>
 If the .ZIP archive was not automatically unzipped, 
 double-click the icon to extract it to your <b>Desktop</b>. 
 <li>
@@ -310,7 +317,7 @@ Copy-and-paste the following ten lines into the beginning of <b>~/.profile</b>
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
 # add Frame3DD executable directory to the path
-export PATH=$PATH:$HOME/Desktop/Frame3DD/       
+export PATH=$PATH:$HOME/Desktop/Frame3DD/linux/ 
 # create a Frame3DD output directory
 if [ ! -d /tmp/frame3dd_temp_$USER ]; then
     mkdir /tmp/frame3dd_temp_$USER
@@ -327,7 +334,7 @@ Copy-and-paste the following ten lines into the beginning of <b>~/.login</b>
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
 # add Frame3DD executable directory to the path
-set path = ( $path $home/Desktop/Frame3DD )
+set path = ( $path $home/Desktop/Frame3DD/linux )
 # create a Frame3DD output directory
 if ( ! -d /tmp/frame3dd_temp_$user ) then
     mkdir /tmp/frame3dd_temp_$user
@@ -387,18 +394,18 @@ frame3dd  examples/MyFrame.3dd  examples/MyResultsA.out
 </ol>
 
 
-<h4>3.1.3 Plotting Results with <a href="http://www.gnuplot.info/">Gnuplot</a> in Linux </h4>
+<h4>3.1.3 Plotting Results with <a href="http://www.gnuplot.info/">gnuplot</a> in Linux </h4>
 
 <ol>
 <li> Gnuplot is commonly pre-installed on Linux systems.
 If it is not, you may install it only if you have root privileges using a command like ... <tt> sudo apt-get install gnuplot </tt> ... or by using the package manager GUI installed on your system.
 
-<li>Change directories to your Frame3DD directory and Start Gnuplot in the Terminal with the command:
+<li>Change directories to your Frame3DD directory and Start gnuplot in the Terminal with the command:
 <pre>
 cd ~/Desktop/Frame3DD/examples
 gnuplot
 </pre>
-<li>Change directories to Display the plots of your structure using Gnuplot with a command like ...
+<li>Change directories to Display the plots of your structure using gnuplot with a command like ...
 <pre>
       gnuplot>  load 'MyResultsA.plt'
 </pre>
@@ -407,12 +414,25 @@ specified when running Frame3DD.
 <li>Hit the 'Return' key in the Terminal window to see the sequence of plots
 and animations until the <b>gnuplot></b> prompt returns.
 Or hit <b>CTRL-C</b> to stop the plots at the current plot.  
+<li> In examining plots of 3D structures with gnuplot, it is convenient to use a scroll-mouse to zoom, pan, and shift the image.  
+<pre>
+      zoom                           :  hold Alt + scroll   ... or ...    hold the scroll button and drag left-right
+      pan                            :  hold Left mouse button + drag the mouse  ... or ...   arrow key (up, down, left, right)  ... or ... shift + arrow key
+      shift X                        :  hold shift + scroll
+      shift Y                        :  scroll
+      shift Z                        :  hold shift + hold the scroll wheel + drag up-down
+      autoscale                      :  the 'a' key
+      toggle border                  :  the 'b' key
+      toggle grid                    :  the 'g' key
+      toggle mouse functions on/off  :  the 'm' key
+      undo shift                     :  the 'u' key
+</pre>
 <li> To save the current plot as a PostScript file in the Frame3DD/examples directory, use the <b>saveplot</b> script included in the Frame3DD/examples directory.
 <pre>
      gnuplot>  load 'saveplot'
      gnuplot>  !cp my-plot.ps PlotFileA.ps
 </pre>
-<li>After finishing with your plots, you can exit Gnuplot by typing  ...
+<li>After finishing with your plots, you can exit gnuplot by typing  ...
 <pre>
      gnuplot>  quit
 </pre>
@@ -425,26 +445,21 @@ Or hit <b>CTRL-C</b> to stop the plots at the current plot.
 For Linux and Unix we currently only provide source-code tarball; you must
 build the software yourself.
 -->
-The following instructions work on Ubuntu 8.10 - 11.10
+The following instructions work on Ubuntu 8.10 - 14.04
 and should work with minor changes on any other recent Linux or Unix system.
 There are two options for compiling under Linux:
 </p>
 
 <ol> 
-<li> Compiling using make:
+<li> Compiling using <b>make:</b>
 <ol>
-<li><a href="https://sourceforge.net/projects/frame3dd/files/">
-Download</a> the Frame3DD source-code zip-file (frame3dd_VERSION_src.zip)
-and save it in your home directory.<br>
-If the .ZIP archive was not automatically unzipped, 
-double-click the icon to extract it to your <b>Desktop</b>. 
 <li> Open a Terminal window,
 (Right-click on an open part of the Desktop and select <b>Open Terminal</b>.) 
 and compile the code
 <pre>
 cd ~/Desktop/Frame3DD/src/
 make
-mv frame3dd ..
+mv frame3dd ../linux/
 </pre>
 </ol>
 <li> Compiling using SCONS: 
@@ -459,10 +474,11 @@ sudo apt-get install build-essential scons
 <pre>
 sudo apt-get install libsoqt-dev4
 </pre>
-<!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
-<li><a href="https://sourceforge.net/projects/frame3dd/files/">
+<!--
+<a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">Download</a>
 Download</a> the Frame3DD source-code tarball (frame3dd-VERSION.tar.bz2)
 and save it in your home directory.
+-->
 
 <li>Open a Terminal, unpack the source code, enter the source directory,
 and build the code, as follows:
@@ -479,7 +495,7 @@ sudo scons install
 or you may install frame3dd in another system directory if your choosing, 
 such as, ...
 <pre>
-sudo scons install INSTALL_PREFIX=/usr/bin/
+sudo scons install INSTALL_PREFIX=/usr/local/bin/
 </pre>
 <li>If you do not have root privileges, you can run Frame3dd directly from the build tree:
 <pre>
@@ -498,8 +514,7 @@ from source following the instructions for Linux or Unix.</div>
 -->
 
 <p>
-For OS X running on an Intel processor,
-you may install Frame3DD from a .ZIP archive 
+For OS X running on an Intel processor, you may install Frame3DD from the .ZIP archive 
 or you may compile from the source code.
 The following instructions install Frame3DD to the <b>Desktop</b> but other directories may be substituted, if so desired.  
 </p>
@@ -507,12 +522,16 @@ The following instructions install Frame3DD to the <b>Desktop</b> but other dire
 <h4> 3.2.1 Installing Frame3DD from the .ZIP archive for OS X</h4>
 
 <ol>
-<li> <a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
-Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_osx.zip) and save it in your <b>Desktop</b>.<br>
+<li>
+<!-- a href="https://sourceforge.net/projects/frame3dd/files/" -->
+<!-- a href="https://sourceforge.net/projects/frame3dd/files/latest/download?source=files" -->
+<a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
+Download</a>
+the Frame3DD .ZIP archive (Frame3DD_VERSION.zip) and save it in your <b>Desktop</b>.<br>
 If the .ZIP archive was not automatically unzipped, 
 simply drag the <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
 <li><b><i>Optional</i></b><br>
- Download the <b>Sketchup</b> interface for <b>Frame3DD</b>, available
+Download the <b>Sketchup</b> interface for <b>Frame3DD</b>, available
 <a href="http://sketchucation.com/forums/viewtopic.php?t=46405">here</a>.
 <li><b><i>Recommended</i></b><br>
 Put the <b>Frame3DD</b> directory in your path and set the <b>FRAME3DD_OUTDIR</b> location.<br>
@@ -528,7 +547,7 @@ open  -a  TextEdit  ~/.profile
 <pre>
 # for Frame3DD ... http://frame3dd.sourceforge.net/
 # add Frame3DD executable directory to the path
-export PATH=$PATH:$HOME/Desktop/Frame3DD/
+export PATH=$PATH:$HOME/Desktop/Frame3DD/osx/
 # create a Frame3DD output directory
 if [ ! -d /tmp/frame3dd_temp_$USER ]; then
     mkdir /tmp/frame3dd_temp_$USER
@@ -577,21 +596,21 @@ frame3dd  examples/MyFrame.3dd  examples/MyResultsA.out
 (within a Terminal window).  
 </ol>
 
-<h4>3.2.3 Plotting Results with <a href="http://www.gnuplot.info/">Gnuplot</a> in OS X</h4>
+<h4>3.2.3 Plotting Results with <a href="http://www.gnuplot.info/">gnuplot</a> in OS X</h4>
 
 <!--
 <p>
-For a version of Gnuplot for OS X-Intel, or for a version with mouse-scrolling and panning features,
-install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href="http://developer.apple.com/tools/">Apple Development Tools</a>, and then <a href="http://maba.wordpress.com/2006/08/02/scientific-plotting-on-mac-os-x-using-gnuplot-and-plot/">compile Gnuplot from sources</a>.
+For a version of gnuplot for OS X-Intel, or for a version with mouse-scrolling and panning features,
+install <a href="http://www.apple.com/macosx/features/x11/">X11</a> and <a href="http://developer.apple.com/tools/">Apple Development Tools</a>, and then <a href="http://maba.wordpress.com/2006/08/02/scientific-plotting-on-mac-os-x-using-gnuplot-and-plot/">compile gnuplot from sources</a>.
 </p>
 -->
 
 <p>
-<b>Installing <a href="http://www.gnuplot.info/">Gnuplot</a> for OS X</b>
+<b>Installing <a href="http://www.gnuplot.info/">gnuplot</a> for OS X</b>
 </p>
 
 <p>
-From you Mac's Administrator account, first install Xcode, then install MacPorts, and finally install Gnuplot.
+From you Mac's Administrator account, first install Xcode, then install MacPorts, and finally install gnuplot.
 <ol>
 <li>Install <a href="https://developer.apple.com/xcode/">Xcode</a>,
 <!-- join ADC to create an account, log in, and then click on <b>Downloads > Developer Tools</b>, and browse for the version of Xcode for your version of OS X.<br> 
@@ -603,7 +622,7 @@ Make sure the "Unix Development" option is selected if installing Xcode 3.1.4 or
 for your version of OS X (10.4 Tiger, 10.5 Leopard, or 10.6 Snow Leopard),
 follow <a href="http://www.macports.org/install.php#pkg">
 these instructions</a>.
-<li> To install Gnuplot, open a terminal window and type:
+<li> To install gnuplot, open a terminal window and type:
 <pre>
 sudo port install gnuplot
 </pre>
@@ -611,7 +630,7 @@ If this is your first MacPorts package installation, it will take several minute
 </ol>
 </p>
 <!--
-<li>        Test that Gnuplot works.
+<li>        Test that gnuplot works.
          Open a Terminal window (Applications > Utilities > Terminal) and 
 <pre>
 gnuplot
@@ -621,7 +640,7 @@ gnuplot
 -->
 
 <p>
-<b>Running <a href="http://www.gnuplot.info/">Gnuplot</a> in OS X</b>
+<b>Running <a href="http://www.gnuplot.info/">gnuplot</a> in OS X</b>
 </p>
 
 <p>
@@ -637,12 +656,25 @@ where <b>MyResultsA.out</b> is the name of of the Output Data file specified
 when running frame3dd.
 <li>Hit the 'Return' key in the Terminal window to see the sequence of plots
 and animations until the <b>gnuplot></b> prompt returns.
+<li> In examining plots of 3D structures with gnuplot, it is convenient to use a scroll-mouse to zoom, pan, and shift the image. 
+<pre>
+      zoom                           :  hold command + scroll   ... or ...    hold the scroll button and drag left-right
+      pan                            :  hold Left mouse button + drag the mouse  ... or ...   arrow key (up, down, left, right)  ... or ... shift + arrow key
+      shift X                        :  hold shift + scroll
+      shift Y                        :  scroll
+      shift Z                        :  hold shift + hold the scroll wheel + drag up-down
+      autoscale                      :  the 'a' key
+      toggle border                  :  the 'b' key
+      toggle grid                    :  the 'g' key
+      toggle mouse functions on/off  :  the 'm' key
+      undo shift                     :  the 'u' key
+</pre>
 <li> To save the current plot as a PDF file in the Frame3DD/examples directory, use the <b>saveplot_osx</b> script included in the Frame3DD/examples directory.
 <pre>
      gnuplot>  load 'saveplot_osx'
      gnuplot>  !cp my-plot.pdf PlotFileA.pdf
 </pre>
-<li>After finishing with your plots, you can exit Gnuplot by typing  ...
+<li>After finishing with your plots, you can exit gnuplot by typing  ...
 <pre>
      gnuplot>  quit
 </pre>
@@ -654,15 +686,11 @@ and animations until the <b>gnuplot></b> prompt returns.
 
 <ol>
 <li>Install <a href="https://developer.apple.com/xcode/">Xcode</a>.
-<li><a href="https://sourceforge.net/projects/frame3dd/files/">Download</a>
-the Frame3DD source-code zip file (frame3dd_VERSION_src.zip)
-and save it in your home directory.<br>
-If the .ZIP archive was not automatically unzipped, 
-simply drag the <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
 <li> Compile and install the code, as follows:
 <pre>
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c HPGmatrix.c coordtrans.c eig.c HPGutil.c NRutil.c -lm
-mv frame3dd ..
+    cd ~/Desktop/Frame3DD/src/
+    make
+    mv frame3dd ../osx/
 </pre>
 </ol>
 
@@ -671,7 +699,7 @@ mv frame3dd ..
 
 <p>
 For Microsoft Windows, 
-you may install Frame3DD from a .ZIP archive
+you may install Frame3DD from the .ZIP archive
 <!-- (recommended), you may use a binary installer (which is currently out of date), -->
 or you may compile from the source code.
 The following instructions install Frame3DD to the <b>Desktop</b> but other directories may be substituted, if so desired.  
@@ -685,14 +713,14 @@ Download</a> the Frame3DD .ZIP archive (Frame3DD_VERSION_win32.zip) and save it 
 If the .ZIP archive was not automatically unzipped, 
 simply drag <b>Frame3DD</b> folder icon to your <b>Desktop</b>. 
 <li><b><i>Optional</i></b><br>
- Download the <b>Sketchup</b> interface for <b>Frame3DD</b>, now available <a href="http://sketchucation.com/forums/viewtopic.php?t=46405">here</a>.
+Download the <b>Sketchup</b> interface for <b>Frame3DD</b>, now available <a href="http://sketchucation.com/forums/viewtopic.php?t=46405">here</a>.
 <li> <b><i>Recommended</i></b><br>
 Put the <b>Frame3DD</b> directory in your path and set the 
 <b>PATH</b> and <b>FRAME3DD_OUTDIR</b> environment variables.<br>
 To do this,
 <b> right-click My Computer > Properties > Advanced > Environment Variables</b><br>
 Set a new user variable name <b>PATH</b>
-with variable value <b>%HOMEPATH%\Desktop\Frame3DD</b></br>
+with variable value <b>%HOMEPATH%\Desktop\Frame3DD\windows</b></br>
 Set a new user variable name <b>FRAME3DD_OUTDIR</b> 
 with variable value <b>%HOMEPATH%\Desktop\Frame3DD\temp</b></br>
 (The <b>Desktop\Frame3DD\temp</b> folder should already exist.)<br>
@@ -755,28 +783,28 @@ frame3dd  examples/MyFrame.3dd  examples/MyResultsA.out
 <!-- <li> You may wish to delete all the files in the temporary file directory (c:\temp) after you have finished your analyses.  -->
 </ol>
 
-<h4>3.3.3 Plotting Results with <a href="http://www.gnuplot.info/">Gnuplot</a> in Windows</h4>
+<h4>3.3.3 Plotting Results with <a href="http://www.gnuplot.info/">gnuplot</a> in Windows</h4>
 
 <p>
-<b>Installing <a href="http://www.gnuplot.info/">Gnuplot</a> for Windows</b>
+<b>Installing <a href="http://www.gnuplot.info/">gnuplot</a> for Windows</b>
 
 <ol>
 <li>
 <a href="http://sourceforge.net/projects/gnuplot/files/gnuplot/4.6.3/gp463-win32-setup.exe/download">
-Download</a> the MS-Windows version of Gnuplot 4.6.3
+Download</a> the MS-Windows version of gnuplot 4.6.3
 and extract it to your <b>Desktop</b>.
-<li> Navigate to <b>Desktop > Gnuplot > bin</b>, 
+<li> Navigate to <b>Desktop > gnuplot > bin</b>, 
 right click on the <b>wgnuplot</b> application icon, and create a shortcut to your <b>Desktop</b>.
 </ol>
 </p>
 
 <p>
-<b>Running <a href="http://www.gnuplot.info/">Gnuplot</a> in Windows</b>
+<b>Running <a href="http://www.gnuplot.info/">gnuplot</a> in Windows</b>
 
 <ol>
-<li>Clicking on the <b>wgnuplot</b> icon on the Desktop starts Gnuplot.
-<li>To view the plot with Gnuplot, first change directories to to location of your output files, by clicking on the <b>ChDir</b> button at the top of the Gnuplot window and navigating to <b>Desktop > Frame3DD > examples</b>.
-<li>Display the plots of your structure using Gnuplot with a command like ...
+<li>Clicking on the <b>wgnuplot</b> icon on the Desktop starts gnuplot.
+<li>To view the plot with gnuplot, first change directories to to location of your output files, by clicking on the <b>ChDir</b> button at the top of the gnuplot window and navigating to <b>Desktop > Frame3DD > examples</b>.
+<li>Display the plots of your structure using gnuplot with a command like ...
 <pre>
       gnuplot>  load 'exE.plt'
 </pre>
@@ -787,10 +815,27 @@ or
 where <b>exE.out</b> or <b>MyResultsA.out</b>
 is the name of of the specified Output Data file. 
 <li>Click <b>OK</b> to see the next plot or <b>Cancel</b> to stop with the current plot.  
+<li> In examining plots of 3D structures with gnuplot, it is convenient to use a scroll-mouse to zoom, pan, and shift the image. 
+<pre>
+      zoom                           :  hold Alt + scroll   ... or ...    hold the scroll button and drag left-right
+      pan                            :  hold Left mouse button + drag the mouse  ... or ...   arrow key (up, down, left, right)  ... or ... shift + arrow key
+      shift X                        :  hold shift + scroll
+      shift Y                        :  scroll
+      shift Z                        :  hold shift + hold the scroll wheel + drag up-down
+      autoscale                      :  the 'a' key
+      toggle border                  :  the 'b' key
+      toggle grid                    :  the 'g' key
+      toggle mouse functions on/off  :  the 'm' key
+      undo shift                     :  the 'u' key
+</pre>
 <li> To save the current plot as a PostScript file in the Frame3DD/examples folder, use the <b>saveplot_w32</b> script included in the Frame3DD/examples folder.
 <pre>
      gnuplot>  load 'saveplot_w32'
      gnuplot>  !copy my-plot.ps PlotFileA.ps
+</pre>
+<li>After finishing with your plots, you can exit gnuplot by typing  ...
+<pre>
+     gnuplot>  quit
 </pre>
 </ol>
 </p>
@@ -830,7 +875,7 @@ frame3dd  examples/exE.3dd  examples/exE.out
 Some run-time information will be displayed on the Command Prompt window and
 the results of your Frame3DD analysis will have been appended to the end of the <b>examples/exE.out</b> Output Data file.
 Data files used primarily for plotting are stored in the <b>Desktop\Frame3DD\temp</b> folder.
-<li> You may run <b>Frame3DD</b>, examine the analysis results, visualize the results using Gnuplot, and edit Input Data files
+<li> You may run <b>Frame3DD</b>, examine the analysis results, visualize the results using gnuplot, and edit Input Data files
  as described above.  
 </ol>
 -->
@@ -842,16 +887,18 @@ Data files used primarily for plotting are stored in the <b>Desktop\Frame3DD\tem
 <a href="http://www.delorie.com/djgpp/"> DJGPP gcc compiler</a>,
 the <a href="http://www.cs.virginia.edu/~lcc-win32/"> LCC-win32 compiler</a>,
 or the <a href="http://www.mingw.org/"> MinGW compiler</a>.
-<!-- http://sourceforge.net/project/platformdownload.php?group_id=221386" -->
-<li><a href="https://sourceforge.net/projects/frame3dd/files/">
-Download</a> the Frame3DD source-code zip-file (frame3dd_VERSION_src.zip)
-and save it in your home directory.<br>
+<!-- a href="https://sourceforge.net/projects/frame3dd/files/" -->
+<!-- a href="https://sourceforge.net/projects/frame3dd/files/latest/download?source=files" -->
+<a href="http://sourceforge.net/project/platformdownload.php?group_id=221386">
++Download</a>
+the Frame3DD .ZIP archive (Frame3DD_VERSION.zip) and save it to your <b>Desktop</b>.<br>
 If the .ZIP archive was not automatically unzipped, 
 double-click the icon to extract it to your <b>Desktop</b>. 
 and compile the code, as follows:
 <pre>
-gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c HPGmatrix.c coordtrans.c eig.c HPGutil.c NRutil.c -lm
-move frame3dd ..
+chdir Desktop\Frame3DD\src\
+make
+move frame3dd ..\windows\.
 </pre>
 </ol>
 
@@ -1301,7 +1348,7 @@ do account for Poisson's effect and have been experimentally validated
 with prismatic beams of materials 
 having a Poisson ratio, <i>v</i>, of 0.16 to 0.38. 
 (See references <a href="http://www.sciencedirect.com/science/article/pii/S0020768310000685">8</a>, 
-<a href="http://iopscience.iop.org/0022-3727/11/14/010">10</a>, and <a href="http://iopscience.iop.org/0022-3727/10/11/009">18</a>.)
+<a href="http://iopscience.iop.org/0022-3727/11/14/010">10</a>, and <a href="http://iopscience.iop.org/0022-3727/10/11/009">19</a>.)
 </p>
 <p>
 Regardless of the section shape and Poisson ratio, the shear areas <i>Asy</i> and <i>Asz</i> are less than the cross section area <i>Ax</i>. 
@@ -1447,7 +1494,7 @@ Asz coefficients
 
 <p>
 Approximate formulae for the effective shear areas of solid circular and rectangular cross sections including the Poisson effect have been experimentally validated for Poisson ratio, <i>v</i>, from 0.16 to 0.38.  
-(See references <a href="http://iopscience.iop.org/0022-3727/11/14/010">10</a> and <a href="http://iopscience.iop.org/0022-3727/10/11/009">18</a>.)
+(See references <a href="http://iopscience.iop.org/0022-3727/11/14/010">10</a> and <a href="http://iopscience.iop.org/0022-3727/10/11/009">19</a>.)
 
 <ul>
 <li> <b> Solid Circular Section:</b> <i> Asy = Asz = Ax (6+12v+6v<sup>2</sup>)/(7+12v+4v<sup>2</sup>) </i>
@@ -1565,7 +1612,7 @@ about the local <i>x</i>-axis.   If the roll angle, <i>p</i>, is zero, this proc
 in a transformation for which loads in the global <i>Z</i>-direction will cause no
 cross-axis bending.   In this code, this type of coordinate transformation is
 called "<i>Z</i>-axis is vertical" and is selected primarily for the sake of visualization
-with Gnuplot, in which the <i>Z</i>-axis is vertical for all three-dimensional plots.
+with gnuplot, in which the <i>Z</i>-axis is vertical for all three-dimensional plots.
 </p>
 
 <p>
@@ -1823,7 +1870,7 @@ If a dynamic modal analysis is to be carried out,
 the Input Data file may also specify
 any additional mass carried by frame elements, and extra mass or inertia
 concentrated at nodal points. 
-A specified set of modes may be animated within Gnuplot.
+A specified set of modes may be animated within gnuplot.
 </p>
 
 <p>
@@ -1879,11 +1926,13 @@ below.)
 
 <p>
 Reduced order stiffness and mass matrices may be computed via a static
-condensation, Guyan reduction, or dynamic condensation.  The condensed mass
+condensation, dynamic condensation, or modal condensation.  The condensed mass
 and stiffness matrices are saved as text files called Kc and Mc.  
-The Guyan reduction
-method is generalized so that the condensed matrices match the fundamental
-frequency of the original structure exactly.  The dynamic condensation method
+The dynamic condensation 
+method is Paz's generalization of Guyan condensation so that the condensed matrices match the fundamental
+frequency of the original structure exactly. 
+(See reference <a href="http://dx.doi.org/10.2514/3.48498">15</a>.)
+The modal condensation method
 is a pseudo-inverse-modal-matrix method, and the resulting condensed mass and
 stiffness matrices may be ill-conditioned.  The pseudo-inverse of the modal
 matrix is computed using a regularization method which somewhat improves the
@@ -1962,7 +2011,7 @@ Each section has eleven columns, as follows:
 <p>
 The data in the frame element internal force data file is tab-delimitted.  
 The frame element internal force data file may be 
-plotted with Gnuplot, may be read by a spreadsheet program,
+plotted with gnuplot, may be read by a spreadsheet program,
 may be read by Matlab or may be read by your own program
 for further post-processing or visualization.   An example
 of the first several lines of an internal force data file is shown here.
@@ -2505,7 +2554,7 @@ pan                       # pan rate of the animation 0 = no panning
 
 # matrix condensation data ...
 
-Cmethod # matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
+Cmethod # matrix condensation method ...  0=none, 1=static, 2=dynamic, 3=modal
 nC      # number of condensed nodes
 #.node  X      Y      Z       XX      YY     ZZ   1: condense; 0: don't
  N[1]  cx[1]  cy[1]  cz[1]   cxx[1]  cyy[1] czz[1]
@@ -2526,7 +2575,7 @@ nC      # number of condensed nodes
                    (The x-axis is along the element length, in local coordinates)
     Asy          - Shear area in the local y-axis of a prismatic frame element
     Asz          - Shear area in the local z-axis of a prismatic frame element
-    Cmethod      -  matrix condensation method ...  0=none, 1=static, 2=Guyan, 3=dynamic
+    Cmethod      -  matrix condensation method ...  0=none, 1=static, 2=dynamic, 3=modal
     cx           - 1: retain X d.o.f. in condensed system at node J;  0: don't
     cy           - 1: retain Y d.o.f. in condensed system at node J;  0: don't
     cz           - 1: retain Z d.o.f. in condensed system at node J;  0: don't
@@ -2598,7 +2647,7 @@ nC      # number of condensed nodes
     Ryy          - 1: reaction moment about the global Y axis, 0: free
     Rzz          - 1: reaction moment about the global Z axis, 0: free
     rj           - radius of rigid node sphere around node i
-    scale        - zoom scale for 3D plotting in Gnuplot
+    scale        - zoom scale for 3D plotting in gnuplot
     shear        - 1: include shear deformations, 0: do not.
     shift        - shift factor for non-definite stiffness matrices
     tol          - tolerance for finding mode shapes ~ 1.e-4
@@ -2680,7 +2729,7 @@ frame3dd -i InFile -o OutFile [OPTIONS]
   -x            suppress writing of 't' or 'c' for sign of axial forces
   -s  On|Off    On: include shear deformation or Off: neglect ...
   -g  On|Off    On: include geometric stiffness or Off: neglect ...
-  -e  value     static deformation exaggeration factor for Gnuplot output
+  -e  value     static deformation exaggeration factor for gnuplot output
   -z            force X-Y-Z plotting 
   -l  On|Off    On: lumped mass matrix or Off: consistent mass matrix
   -f  value     modal frequency shift for unrestrained structures
@@ -2715,7 +2764,7 @@ frame3dd -i InFile -o OutFile -e100 -gOn
 
   Use consistent mass matrix, set static deformation exaggeration factor, 
 set the animation pan rate, over-riding Input Data file values,
-and force 3D plotting in Gnuplot:
+and force 3D plotting in gnuplot:
 <pre>
 frame3dd -i InFile -o OutFile -lOff -e100 -p3.4 -z
 </pre>
@@ -2724,7 +2773,7 @@ frame3dd -i InFile -o OutFile -lOff -e100 -p3.4 -z
 
 <a name="sourcecode"/><h2>12. Source code</h2>
 
-<p>The source code is written in ANSI C and is extensively commented. The source code includes functions for frame analysis, LDL' decomposition, LU decomposition, Newton-Raphson iteration, sub-space iteration, Stodola iteration, Sturm eigen-value check, static condensation, Guyan reduction, and dynamic condensation.</p>
+<p>The source code is written in ANSI C and is extensively commented. The source code includes functions for frame analysis, LDL' decomposition, LU decomposition, Newton-Raphson iteration, sub-space iteration, Stodola iteration, Sturm eigen-value check, static condensation, dynamic condensation, and modal condensation.</p>
 
 <pre>
     file name       description
@@ -2747,7 +2796,7 @@ the <a href="http://www.cs.virginia.edu/~lcc-win32/"> LCC-win32 compiler</a>,
 and the <a href="http://www.mingw.org/"> MinGW gcc compiler</a>.
 </p>
 
-<p>Using GCC, the command to compile is:</p>
+<p>Using GCC, the command to compile without using the Makefile is:</p>
 
 <pre>
 gcc -O -o frame3dd main.c frame3dd.c frame3dd_io.c HPGmatrix.c coordtrans.c eig.c HPGutil.c NRutil.c -lm
@@ -2844,6 +2893,9 @@ Exit code values have the following meanings:
 <li> 161 : input data formatting error in thermal load data, frame element number out of range
 <li> 162 : input data formatting error in thermal load data, frame element number out of range
 <li> 171 : input data formatting error in prescribed displacement data, prescribed displacements may be applied only at coordinates with reactions
+<li> 181 : elastic instability (elastic + geometric stiffness matrix not positive definite)
+<li> 182 : large strain (the average axial strain in one or more elements is greater than 0.001)
+<li> 183 : large strain and elastic instability
 <li> 200 : memory allocation error
 <li> 201 : error in opening an output data file saving a vector of "floats"
 <li> 202 : error in opening an output data file saving a vector of "ints"
@@ -2984,6 +3036,10 @@ Engineering Computations, vol. 17, no. 3, pp. 274-351,  2000.
 Matrix Structural Analysis, 2nd ed.</a> John Wiley, 1999.
 ISBN: 0471376515
 
+<li> M. Paz,
+<a href="http://dx.doi.org/10.2514/3.48498">
+Dynamic condensation</a>, AIAA Journal, vol. 22, no. 5, pp. 724-727, 1984.
+ 
 <li> W.D. Pilkey, Weize Kang and Uwe Schramm,
 <a href="http://www.sciencedirect.com/science?_ob=ArticleURL&_udi=B6V36-3YB56X8-9&_user=10&_coverDate=02%2F28%2F1995&_rdoc=5&_fmt=high&_orig=browse&_srch=doc-info(%23toc%235722%231995%23999809998%23154123%23FLP%23display%23Volume)&_cdi=5722&_sort=d&_docanchor=&_ct=11&_acct=C000050221&_version=1&_urlVersion=0&_userid=10&md5=6e4bfbc9d1ce188436efb35e9a9e444d">
 New structural matrices for a beam element with shear deformation</a>,

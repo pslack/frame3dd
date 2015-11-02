@@ -262,7 +262,7 @@ time_t getTime( char s[], int y, int m, int d, int hr, int mn, int sc, int os )
 /*
  * SHOW_PROGRESS  -   show the progress of long computations
  */
-void showProgress ( int i, int n )
+void showProgress ( int i, int n, int count )
 {
 	int	k,j, line_length = 55;
 	float	percent_done;
@@ -271,10 +271,11 @@ void showProgress ( int i, int n )
 
 	j = (int) ceil(percent_done*line_length);
 
-	for (k=1;k<=line_length+7;k++)	fprintf(stderr,"\b");
+	for (k=1;k<=line_length+13;k++)	fprintf(stderr,"\b");
 	for (k=1;k<j;k++)		fprintf(stderr,">");
 	for (k=j;k<line_length;k++)	fprintf(stderr," ");
 	fprintf(stderr," %5.1f%%", percent_done*100.0 );
+	fprintf(stderr," %5d", count );
 	fflush(stderr);
 
 	return;

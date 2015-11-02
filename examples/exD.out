@@ -1,12 +1,12 @@
 ________________________________________________________________________________
 Frame3DD version: 20140514+               http://frame3dd.sf.net/
-GPL Copyright (C) 1992-2014, Henri P. Gavin 
+GPL Copyright (C) 1992-2015, Henri P. Gavin 
 Frame3DD is distributed in the hope that it will be useful but with no warranty.
 For details see the GNU Public Licence: http://www.fsf.org/copyleft/gpl.html
 ________________________________________________________________________________
 
 Example D: dynamic properties of an un-restrained frame with a triangular section 
-Sun Nov  1 15:23:15 2015
+Sun Nov  1 19:51:14 2015
 ________________________________________________________________________________
 In 2D problems the Y-axis is vertical.  In 3D problems the Z-axis is vertical.
 ________________________________________________________________________________

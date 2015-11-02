@@ -1,45 +1,58 @@
-# File name: saveplot 
-#  creates a PostScript file using  Gnuplot version 4.2 on Linux and OS X
+# File name: saveplot
+#  creates a PostScript file using  Gnuplot version 4.6 on Linux and OS X
 #  to save the current plot as a postscript file issue the commands:
 #   gnuplot>   load 'saveplot'
 #   gnuplot>   !cp  my-plot.ps plotfileA.ps
 
 # set size 1.0, 0.6
 
-# ... for PostScript plots ...
-set terminal postscript portrait enhanced color solid lw 2 "Helvetica,10" 
-set output "my-plot.ps"
-
+# ... for .eps plots ...
+#set terminal postscript landscape enhanced color solid lw 1 font "Helvetica,10" 
+#set terminal postscript portrait  enhanced color solid lw 1 font "Helvetica,10" 
+ set terminal postscript eps       enhanced color solid lw 1 font "Helvetica,10" 
+set output "my-plot.eps"
 replot
-set terminal x11
+
+# ... for .png plots ...
+set terminal png enhanced notransparent lw 1 large font "Helvetica,10"
+set output "my-plot.png"
+replot
+
+set terminal wxt
 set size 1,1
 
+#      set terminal postscript {default}
 #      set terminal postscript {landscape | portrait | eps}
 #                              {enhanced | noenhanced}
 #                              {defaultplex | simplex | duplex}
+#                              {fontfile [add | delete] "<filename>"
+#                               | nofontfiles} {{no}adobeglyphnames}
 #                              {level1 | leveldefault}
 #                              {color | colour | monochrome}
+#                              {background <rgbcolor> | nobackground}
 #                              {solid | dashed}
 #                              {dashlength | dl <DL>}
 #                              {linewidth | lw <LW>}
 #                              {rounded | butt}
+#                              {clip | noclip}
 #                              {palfuncparam <samples>{,<maxdeviation>}}
 #                              {size <XX>{unit},<YY>{unit}}
 #                              {blacktext | colortext | colourtext}
 #                              {{font} "fontname{,fontsize}" {<fontsize>}}
-
+#                              {fontscale <scale>}
 
 #     set terminal gif {transparent} {interlace}
 #                       {tiny | small | medium | large | giant}
 #                       {size <x>,<y>}
 #                       {<color0> <color1> <color2> ...}
 
-#     set terminal png
-#             {{no}transparent} {{no}interlace}
-#             {tiny | small | medium | large | giant}
-#             {font <face> {<pointsize>}}
-#             {size <x>,<y>} {{no}crop}
+#      set terminal png 
 #             {{no}enhanced}
-#             {<color0> <color1> <color2> ...}
-
+#             {{no}transparent} {{no}interlace}
+#             {{no}truecolor} {rounded|butt}
+#             {linewidth <lw>} {dashlength <dl>}
+#             {tiny | small | medium | large | giant}
+#             {font "<face> {,<pointsize>}"} {fontscale <scale>}
+#             {size <x>,<y>} {{no}crop}
+#             {background <rgb_color>}
 

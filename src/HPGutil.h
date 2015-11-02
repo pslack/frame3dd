@@ -9,7 +9,6 @@
 
 #define ANSI_SYS	1	/*  compile for ANSI_SYS driver; 0: don't */
 // ... requires ANSI.SYS and the line   DEVICE = C:\ANSI.SYS  in  C:\CONFIG.SYS
-// #define MAXL 128
 
 
 /* ---------------------------------------------------------------------------
@@ -81,7 +80,7 @@ time_t getTime( char s[], int y, int m, int d, int hr, int mn, int sc, int os );
 /*  ---------------------------------------------------------------------------
 SHOW_PROGRESS  -   show the progress of long computations
 --------------------------------------------------------------------------- */
-void showProgress ( int i, int n );
+void showProgress ( int i, int n, int count );
 
 
 /*  ---------------------------------------------------------------------------
