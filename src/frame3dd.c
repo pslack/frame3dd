@@ -432,11 +432,12 @@ void element_end_forces(
 	double **eqF_mech, // equivalent element end forces from mech loads
 	double *D, int shear, int geom, int *axial_strain_warning
 ){
-	double	*s, axial_strain;
+	double	*s, axial_strain = 0;
 	int	m,j;
 
 	s = dvector(1,12);
 
+	*axial_strain_warning = 0;
 	for(m=1; m <= nE; m++) {
 
      	    frame_element_force ( s, xyz, L[m], Le[m], N1[m], N2[m],
@@ -445,8 +446,10 @@ void element_end_forces(
 
 		for(j=1; j<=12; j++)	Q[m][j] = s[j];
 
-		if ( fabs(axial_strain) > 0.001 )
+		if ( fabs(axial_strain) > 0.001 ) {
 		 fprintf(stderr," Warning! Frame element %2d has an average axial strain of %8.6f\n", m, axial_strain ); 
+		 ++(*axial_strain_warning);
+		}
 
 	}
 
