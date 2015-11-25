@@ -138,30 +138,30 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,ELT,RCT,EAIJ,P,U,D)
   fprintf(fp,'frame analysis via Matlab interface\n\n');
 
   fprintf(fp,'%% node data ...\n');
-  fprintf(fp,'%d\t\t%% number of nodes  \n', J);
+  fprintf(fp,'%4d\t\t%% number of nodes  \n', J);
   fprintf(fp,'%% J\t\tX\t\tY\t\tZ\t\tr\t\tnode coordinates \n');
   for j=1:J
-      fprintf(fp,'%d\t%e\t%e\t%e\t%e\n',j,XYZ(1,j),XYZ(2,j),XYZ(3,j),0);
+      fprintf(fp,'%4d\t%14.6e\t%14.6e\t%14.6e\t%14.6e\n',j,XYZ(1,j),XYZ(2,j),XYZ(3,j),0);
   end
   fprintf(fp,'\n');
 
   fprintf(fp,'%% reaction data ...\n');
   nR = sum(max(abs(RCT))~=0);
-  fprintf(fp,'%d    %% number of nodes with reaction forces\n', nR);
+  fprintf(fp,'%4d    %% number of nodes with reaction forces\n', nR);
   fprintf(fp,'%% j\tRx\tRy\tRz\tRxx\tRyy\tRzz\n'); 
   idx = find(max(abs(RCT)));
   for i=1:nR
       j = idx(i);
-      fprintf(fp,'%d\t%d\t%d\t%d\t%d\t%d\t%d\n', ...
+      fprintf(fp,'%4d\t%4d\t%4d\t%4d\t%4d\t%4d\t%4d\n', ...
 		j, RCT(1,j), RCT(2,j), RCT(3,j), RCT(4,j), RCT(5,j), RCT(6,j) );
   end
   fprintf(fp,'\n');
 
   fprintf(fp,'%% frame element section property data ...\n');
-  fprintf(fp,'%d\t\t%% number of frame elements\n', B);
+  fprintf(fp,'%4d\t\t%% number of frame elements\n', B);
   fprintf(fp,'%% m\tn1\tn2\t\tAx\t\tAsy\t\tAsz\t\tJxx\t\tIyy\t\tIzz\t\tE\t\tG\t\tp\tdensity\n');
   for b=1:B
-      fprintf(fp,'%d\t%d\t%d\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\t%e\n', ...
+      fprintf(fp,'%4d\t%4d\t%4d\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\n', ...
 	b, ELT(1,b), ELT(2,b), ...
 	EAIJ(1,b), EAIJ(2,b), EAIJ(3,b), ...
 	EAIJ(4,b), EAIJ(5,b), EAIJ(6,b), ...
@@ -169,15 +169,15 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,ELT,RCT,EAIJ,P,U,D)
   end
   fprintf(fp,'\n');
 
-  fprintf(fp,'%d\t\t%% 1: include shear deformation, 0: do not\n', shear );
-  fprintf(fp,'%d\t\t%% 1: include geometric stiffness, 0: do not\n', geom );
-  fprintf(fp,'%e\t%% exagerate deformations in plotting \n', exagg );
-  fprintf(fp,'%e\t%% zoom scale factor for 3D plotting \n', scale );
-  fprintf(fp,'%e\t%% x-axis increment for internal forces calc\n', dx );
+  fprintf(fp,'%4d\t\t%% 1: include shear deformation, 0: do not\n', shear );
+  fprintf(fp,'%4d\t\t%% 1: include geometric stiffness, 0: do not\n', geom );
+  fprintf(fp,'%14.6e\t%% exagerate deformations in plotting \n', exagg );
+  fprintf(fp,'%14.6e\t%% zoom scale factor for 3D plotting \n', scale );
+  fprintf(fp,'%14.6e\t%% x-axis increment for internal forces calc\n', dx );
   fprintf(fp,'\n');
 
   fprintf(fp,'%% static load data ...\n');
-  fprintf(fp,'%d\t\t%% number of static load cases \n', 1);
+  fprintf(fp,'%4d\t\t%% number of static load cases \n', 1);
   fprintf(fp,'\t\t%% begin static load case 1 of 1 \n\n');
 
 
@@ -186,46 +186,46 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,ELT,RCT,EAIJ,P,U,D)
   fprintf(fp,'  0.0        0.0        0.0\n\n');
 
   nF = sum(max(abs(P))~=0);
-  fprintf(fp,'%d\t\t%% number of loaded nodes\n', nF);
+  fprintf(fp,'%4d\t\t%% number of loaded nodes\n', nF);
   fprintf(fp,'%% j\t\tFx\t\tFy\t\tFz\t\tMxx\t\tMyy\t\tMzz\n'); 
   idx = find(max(abs(P)));
   for i=1:nF
       j = idx(i);
-      fprintf(fp,'%d\t%e\t%e\t%e\t%e\t%e\t%e\n', ...
+      fprintf(fp,'%4d\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\n', ...
 		j, P(1,j), P(2,j), P(3,j), P(4,j), P(5,j), P(6,j) );
   end
   fprintf(fp,'\n');
             
   nU = sum(max(abs(U))~=0);
-  fprintf(fp,'%d\t\t%% number of members with uniform distributed loads \n', nU);
+  fprintf(fp,'%4d\t\t%% number of members with uniform distributed loads \n', nU);
   fprintf(fp,'%% j\t\tUx\t\tUy\t\tUz\n');
   idx = find(max(abs(U)));
   for i=1:nU
       m = idx(i);
-      fprintf(fp,'%d\t%e\t%e\t%e\n', ...
+      fprintf(fp,'%4d\t%14.6e\t%14.6e\t%14.6e\n', ...
 		m, U(1,m), U(2,m), U(3,m) );
   end
   fprintf(fp,'\n');
 
   nW = 0;
-  fprintf(fp,'%d\t\t%% number of members with trapezoidal loads \n', nW);
+  fprintf(fp,'%4d\t\t%% number of members with trapezoidal loads \n', nW);
   fprintf(fp,'\n');
 
   nP = 0;
-  fprintf(fp,'%d\t\t%% number of members with internal point loads \n', nP);
+  fprintf(fp,'%4d\t\t%% number of members with internal point loads \n', nP);
   fprintf(fp,'\n');
 
   nT = 0;
-  fprintf(fp,'%d\t\t%% number of members with temperature loads \n', nT);
+  fprintf(fp,'%4d\t\t%% number of members with temperature loads \n', nT);
   fprintf(fp,'\n');
 
   nD = sum(max(abs(D))~=0);
-  fprintf(fp,'%d\t\t%% number of nodes with prescribed displacements\n', nD);
+  fprintf(fp,'%4d\t\t%% number of nodes with prescribed displacements\n', nD);
   fprintf(fp,'%% j\t\tDx\t\tDy\t\tDz\t\tDxx\t\tDyy\t\tDzz\n'); 
   idx = find(max(abs(D)));
   for i=1:nD
       j = idx(i);
-      fprintf(fp,'%d\t%e\t%e\t%e\t%e\t%e\t%e\n', ...
+      fprintf(fp,'%4d\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\t%14.6e\n', ...
 		j, D(1,j), D(2,j), D(3,j), D(4,j), D(5,j), D(6,j) );
   end
   fprintf(fp,'\n');
@@ -233,7 +233,7 @@ function [D,R,F,L,Ks] = frame_3dd(XYZ,ELT,RCT,EAIJ,P,U,D)
 
   fprintf(fp,'%% inertial load data ...\n');
   nM = 0;
-  fprintf(fp,'%d\t\t%% number of dynamic modes to analyze \n', nM);
+  fprintf(fp,'%4d\t\t%% number of dynamic modes to analyze \n', nM);
   fprintf(fp,'\n');
  
   fclose(fp);			% close the frame3dd input file

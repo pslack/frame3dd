@@ -1,3 +1,7 @@
+* Wed Nov 25 14:06:00 EST 2015 Henri Gavin <hpgavin> 0.20140514+
+- changed Matlab interface function frame_3dd.m so that 
+floating point values in the .FMM file have aligned decimal points.
+
 * Sun Oct 31 15:15:00 EST 2015 Henri Gavin <hpgavin> 0.20140514+
 - add the peak element internal forces to the .CSV output data file
 - update Frame3DD-manual.html re. the inclusion of peak element internal
