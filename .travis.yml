@@ -4,7 +4,7 @@ language: cpp
 
 before_script:
   - sudo apt-get install libcppunit-dev
-  - sudo apt-get install libsoqt20 libsoqt-dev
+  - sudo apt-get install libsoqt4-dev
 script: scons
 compiler: gcc
 
