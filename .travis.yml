@@ -1,6 +1,9 @@
 
 
 language: cpp
+
+before_script:
+  - sudo apt-get install libcppunit-dev
 script: scons
 compiler: gcc
 
