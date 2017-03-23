@@ -31,3 +31,48 @@
 # Debug files
 *.dSYM/
 *.su
+
+
+
+
+#scons stuff
+.sconsign.dblite
+
+#Python files
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+
+
+#ant specific
+dist/
+
+
+#netbeans specific
+core
+nbproject/*
+!nbproject/project.properties
+!nbproject/project.xml
+
+#java specific
+*.class
+
+#general swap/backup files
+*.so
+*.log
+*.out
+*~
+*.swp
+*.DS_Store
+*.lock
+
+.sconf_temp
+options.cache
+
+
